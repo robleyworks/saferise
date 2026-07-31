@@ -3898,6 +3898,19 @@ const READER_QUOTES = {
 };
 let readerVisited = new Set();
 
+function protocolGuideVideoHTML(protoTitle){
+  const label = protoTitle.replace(/ Protocol$/, '');
+  return '<div class="media-block" style="margin-bottom:24px;">' +
+      '<div class="video-placeholder">' +
+        '<div class="video-inner">' +
+          '<div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"></path></svg></div>' +
+          '<p class="video-title">' + label + ' — Protocol Walkthrough</p>' +
+        '</div>' +
+      '</div>' +
+      '<div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">12:00</span></div>' +
+    '</div>';
+}
+
 function openReader(protocolKey, initialKey){
   const proto = READER_PROTOCOLS[protocolKey];
   if (!proto) return;
@@ -3979,6 +3992,12 @@ function openReader(protocolKey, initialKey){
       if (bodyEl) {
         bodyEl.insertAdjacentHTML('beforeend', safetyWidgetHTML(key));
         safetyRefreshAll(key);
+      }
+    }
+    if (data.kind === 'Protocol Guide') {
+      const bodyEl = page.querySelector('.reader-page-body');
+      if (bodyEl) {
+        bodyEl.insertAdjacentHTML('afterbegin', protocolGuideVideoHTML(proto.title));
       }
     }
   });
@@ -4168,31 +4187,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
             <div class="hero-player">
-              <div class="hero-tabs">
-                <div class="hero-tab active" data-hero="p1-walkthrough"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Protocol Walkthrough</span></div>
-                <div class="hero-tab" data-hero="p1-story"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Why I Built This One</span></div>
-              </div>
-              <div class="hero-slide active" data-hero-slide="p1-walkthrough">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Anxiety Protocol — Full Guided Session</p>
-                    </div>
+              <div class="media-block">
+                <div class="video-placeholder">
+                  <div class="video-inner">
+                    <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
+                    <p class="video-title">Why I Built The Anxiety Reset</p>
                   </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">18:42</span></div>
                 </div>
-              </div>
-              <div class="hero-slide" data-hero-slide="p1-story">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Why I Built The Anxiety Reset</p>
-                    </div>
-                  </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">2:50</span></div>
-                </div>
+                <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">2:50</span></div>
               </div>
             </div>
           </div>
@@ -4423,31 +4425,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
             <div class="hero-player">
-              <div class="hero-tabs">
-                <div class="hero-tab active" data-hero="p2-walkthrough"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Protocol Walkthrough</span></div>
-                <div class="hero-tab" data-hero="p2-story"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Why I Built This One</span></div>
-              </div>
-              <div class="hero-slide active" data-hero-slide="p2-walkthrough">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Anger Alchemy — Full Guided Session</p>
-                    </div>
+              <div class="media-block">
+                <div class="video-placeholder">
+                  <div class="video-inner">
+                    <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
+                    <p class="video-title">Why I Built The Anger Alchemy</p>
                   </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">16:55</span></div>
                 </div>
-              </div>
-              <div class="hero-slide" data-hero-slide="p2-story">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Why I Built The Anger Alchemy</p>
-                    </div>
-                  </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">3:10</span></div>
-                </div>
+                <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">3:10</span></div>
               </div>
             </div>
           </div>
@@ -4691,31 +4676,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
             <div class="hero-player">
-              <div class="hero-tabs">
-                <div class="hero-tab active" data-hero="p3-walkthrough"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Protocol Walkthrough</span></div>
-                <div class="hero-tab" data-hero="p3-story"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Why I Built This One</span></div>
-              </div>
-              <div class="hero-slide active" data-hero-slide="p3-walkthrough">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Overwhelm Threshold — Full Guided Session</p>
-                    </div>
+              <div class="media-block">
+                <div class="video-placeholder">
+                  <div class="video-inner">
+                    <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
+                    <p class="video-title">Why I Built The Overwhelm Threshold</p>
                   </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">14:20</span></div>
                 </div>
-              </div>
-              <div class="hero-slide" data-hero-slide="p3-story">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Why I Built The Overwhelm Threshold</p>
-                    </div>
-                  </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">2:35</span></div>
-                </div>
+                <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">2:35</span></div>
               </div>
             </div>
           </div>
@@ -4957,31 +4925,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
             <div class="hero-player">
-              <div class="hero-tabs">
-                <div class="hero-tab active" data-hero="p4-walkthrough"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Protocol Walkthrough</span></div>
-                <div class="hero-tab" data-hero="p4-story"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Why I Built This One</span></div>
-              </div>
-              <div class="hero-slide active" data-hero-slide="p4-walkthrough">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Abandonment Wound — Full Guided Session</p>
-                    </div>
+              <div class="media-block">
+                <div class="video-placeholder">
+                  <div class="video-inner">
+                    <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
+                    <p class="video-title">Why I Built The Abandonment Wound</p>
                   </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">22:10</span></div>
                 </div>
-              </div>
-              <div class="hero-slide" data-hero-slide="p4-story">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Why I Built The Abandonment Wound</p>
-                    </div>
-                  </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">3:40</span></div>
-                </div>
+                <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">3:40</span></div>
               </div>
             </div>
           </div>
@@ -5225,31 +5176,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
             <div class="hero-player">
-              <div class="hero-tabs">
-                <div class="hero-tab active" data-hero="p5-walkthrough"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Protocol Walkthrough</span></div>
-                <div class="hero-tab" data-hero="p5-story"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Why I Built This One</span></div>
-              </div>
-              <div class="hero-slide active" data-hero-slide="p5-walkthrough">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Shame Dissolution — Full Guided Session</p>
-                    </div>
+              <div class="media-block">
+                <div class="video-placeholder">
+                  <div class="video-inner">
+                    <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
+                    <p class="video-title">Why I Built The Shame Dissolution</p>
                   </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">19:30</span></div>
                 </div>
-              </div>
-              <div class="hero-slide" data-hero-slide="p5-story">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Why I Built The Shame Dissolution</p>
-                    </div>
-                  </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">3:05</span></div>
-                </div>
+                <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">3:05</span></div>
               </div>
             </div>
           </div>
@@ -5488,31 +5422,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
             <div class="hero-player">
-              <div class="hero-tabs">
-                <div class="hero-tab active" data-hero="p6-walkthrough"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Protocol Walkthrough</span></div>
-                <div class="hero-tab" data-hero="p6-story"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Why I Built This One</span></div>
-              </div>
-              <div class="hero-slide active" data-hero-slide="p6-walkthrough">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Grief Integration — Full Guided Session</p>
-                    </div>
+              <div class="media-block">
+                <div class="video-placeholder">
+                  <div class="video-inner">
+                    <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
+                    <p class="video-title">Why I Built The Grief Integration</p>
                   </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">24:00</span></div>
                 </div>
-              </div>
-              <div class="hero-slide" data-hero-slide="p6-story">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Why I Built The Grief Integration</p>
-                    </div>
-                  </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">4:15</span></div>
-                </div>
+                <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">4:15</span></div>
               </div>
             </div>
           </div>
@@ -5751,31 +5668,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
             <div class="hero-player">
-              <div class="hero-tabs">
-                <div class="hero-tab active" data-hero="p7-walkthrough"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Protocol Walkthrough</span></div>
-                <div class="hero-tab" data-hero="p7-story"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Why I Built This One</span></div>
-              </div>
-              <div class="hero-slide active" data-hero-slide="p7-walkthrough">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Shutdown Recovery — Full Guided Session</p>
-                    </div>
+              <div class="media-block">
+                <div class="video-placeholder">
+                  <div class="video-inner">
+                    <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
+                    <p class="video-title">Why I Built The Shutdown Recovery</p>
                   </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">20:15</span></div>
                 </div>
-              </div>
-              <div class="hero-slide" data-hero-slide="p7-story">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Why I Built The Shutdown Recovery</p>
-                    </div>
-                  </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">3:20</span></div>
-                </div>
+                <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">3:20</span></div>
               </div>
             </div>
           </div>
@@ -6014,31 +5914,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
             <div class="hero-player">
-              <div class="hero-tabs">
-                <div class="hero-tab active" data-hero="p8-walkthrough"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Protocol Walkthrough</span></div>
-                <div class="hero-tab" data-hero="p8-story"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Why I Built This One</span></div>
-              </div>
-              <div class="hero-slide active" data-hero-slide="p8-walkthrough">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Jealousy Release — Full Guided Session</p>
-                    </div>
+              <div class="media-block">
+                <div class="video-placeholder">
+                  <div class="video-inner">
+                    <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
+                    <p class="video-title">Why I Built The Jealousy Release</p>
                   </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">17:40</span></div>
                 </div>
-              </div>
-              <div class="hero-slide" data-hero-slide="p8-story">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Why I Built The Jealousy Release</p>
-                    </div>
-                  </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">2:50</span></div>
-                </div>
+                <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">2:50</span></div>
               </div>
             </div>
           </div>
@@ -6282,31 +6165,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
             <div class="hero-player">
-              <div class="hero-tabs">
-                <div class="hero-tab active" data-hero="p9-walkthrough"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Protocol Walkthrough</span></div>
-                <div class="hero-tab" data-hero="p9-story"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Why I Built This One</span></div>
-              </div>
-              <div class="hero-slide active" data-hero-slide="p9-walkthrough">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Insecurity Anchor — Full Guided Session</p>
-                    </div>
+              <div class="media-block">
+                <div class="video-placeholder">
+                  <div class="video-inner">
+                    <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
+                    <p class="video-title">Why I Built The Insecurity Anchor</p>
                   </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">18:20</span></div>
                 </div>
-              </div>
-              <div class="hero-slide" data-hero-slide="p9-story">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Why I Built The Insecurity Anchor</p>
-                    </div>
-                  </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">3:00</span></div>
-                </div>
+                <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">3:00</span></div>
               </div>
             </div>
           </div>
@@ -6554,31 +6420,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
             <div class="hero-player">
-              <div class="hero-tabs">
-                <div class="hero-tab active" data-hero="p10-walkthrough"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Protocol Walkthrough</span></div>
-                <div class="hero-tab" data-hero="p10-story"><span class="hero-tab-label">Watch</span><span class="hero-tab-name">Why I Built This One</span></div>
-              </div>
-              <div class="hero-slide active" data-hero-slide="p10-walkthrough">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Powerlessness & Despair — Full Guided Session</p>
-                    </div>
+              <div class="media-block">
+                <div class="video-placeholder">
+                  <div class="video-inner">
+                    <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
+                    <p class="video-title">Why I Built The Powerlessness & Despair</p>
                   </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">25:30</span></div>
                 </div>
-              </div>
-              <div class="hero-slide" data-hero-slide="p10-story">
-                <div class="media-block">
-                  <div class="video-placeholder">
-                    <div class="video-inner">
-                      <div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div>
-                      <p class="video-title">Why I Built The Powerlessness & Despair</p>
-                    </div>
-                  </div>
-                  <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">4:30</span></div>
-                </div>
+                <div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">4:30</span></div>
               </div>
             </div>
           </div>
@@ -6811,11 +6660,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
     <!-- Join a Monthly Workshop / Book a Premium 1:1 -->
-    <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:8px;">
+    <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:8px;">
       <div style="background:var(--card);border:1px solid var(--border);border-top:2px solid var(--primary);padding:26px 24px;display:flex;flex-direction:column;">
         <p style="font-size:9px;letter-spacing:3px;color:var(--primary);font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Join A Monthly Workshop</p>
         <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;color:var(--text2);line-height:1.65;margin-bottom:18px;flex:1;">Work a protocol live, in real time, alongside a small group — Andre facilitating the same Four-Step framework, together.</p>
-        <button onclick="showProg('workshops')" style="width:100%;background:none;border:1px solid var(--primary);color:var(--primary);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;">Discover More ◆</button>
+        <button onclick="showProg('workshops')" style="width:100%;background:var(--primary);border:1px solid var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;">Discover More ◆</button>
       </div>
       <div style="background:var(--card);border:1px solid var(--border);border-top:2px solid var(--primary);padding:26px 24px;display:flex;flex-direction:column;">
         <p style="font-size:9px;letter-spacing:3px;color:var(--primary);font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Book A Premium 1:1</p>
@@ -7503,11 +7352,11 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
 
     <!-- Join a Monthly Workshop / Book a Premium 1:1 -->
-    <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:8px;">
+    <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:8px;">
       <div style="background:var(--card);border:1px solid var(--border);border-top:2px solid #E87090;padding:26px 24px;display:flex;flex-direction:column;">
         <p style="font-size:9px;letter-spacing:3px;color:#E87090;font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Join A Monthly Workshop</p>
         <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;color:var(--text2);line-height:1.65;margin-bottom:18px;flex:1;">Work a protocol live, in real time, alongside a small group — Andre facilitating the same Four-Step framework, together.</p>
-        <button onclick="showProg('workshops')" style="width:100%;background:none;border:1px solid #E87090;color:#E87090;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;">Discover More ◆</button>
+        <button onclick="showProg('workshops')" style="width:100%;background:#E87090;border:1px solid #E87090;color:var(--bg);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;">Discover More ◆</button>
       </div>
       <div style="background:var(--card);border:1px solid var(--border);border-top:2px solid #E87090;padding:26px 24px;display:flex;flex-direction:column;">
         <p style="font-size:9px;letter-spacing:3px;color:#E87090;font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Book A Premium 1:1</p>
@@ -8181,11 +8030,11 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
 
     <!-- Join a Monthly Workshop / Book a Premium 1:1 -->
-    <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:8px;">
+    <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:8px;">
       <div style="background:var(--card);border:1px solid var(--border);border-top:2px solid #38C8BE;padding:26px 24px;display:flex;flex-direction:column;">
         <p style="font-size:9px;letter-spacing:3px;color:#38C8BE;font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Join A Monthly Workshop</p>
         <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;color:var(--text2);line-height:1.65;margin-bottom:18px;flex:1;">Work a protocol live, in real time, alongside a small group — Andre facilitating the same Four-Step framework, together.</p>
-        <button onclick="showProg('workshops')" style="width:100%;background:none;border:1px solid #38C8BE;color:#38C8BE;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;">Discover More ◆</button>
+        <button onclick="showProg('workshops')" style="width:100%;background:#38C8BE;border:1px solid #38C8BE;color:var(--bg);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;">Discover More ◆</button>
       </div>
       <div style="background:var(--card);border:1px solid var(--border);border-top:2px solid #38C8BE;padding:26px 24px;display:flex;flex-direction:column;">
         <p style="font-size:9px;letter-spacing:3px;color:#38C8BE;font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Book A Premium 1:1</p>
@@ -8257,11 +8106,11 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
 
     <!-- Join a Monthly Workshop / Book a Premium 1:1 -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:32px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;">
       <div style="background:var(--card);border:1px solid var(--border);border-top:2px solid #9B7FD4;padding:26px 24px;display:flex;flex-direction:column;">
         <p style="font-size:9px;letter-spacing:3px;color:#9B7FD4;font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Join A Monthly Workshop</p>
         <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;color:var(--text2);line-height:1.65;margin-bottom:18px;flex:1;">Work a protocol live, in real time, alongside a small group — Andre facilitating the same Four-Step framework, together.</p>
-        <button onclick="showProg('workshops')" style="width:100%;background:none;border:1px solid #9B7FD4;color:#9B7FD4;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;">Discover More ◆</button>
+        <button onclick="showProg('workshops')" style="width:100%;background:#9B7FD4;border:1px solid #9B7FD4;color:var(--bg);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;">Discover More ◆</button>
       </div>
       <div style="background:var(--card);border:1px solid var(--border);border-top:2px solid #9B7FD4;padding:26px 24px;display:flex;flex-direction:column;">
         <p style="font-size:9px;letter-spacing:3px;color:#9B7FD4;font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Book A Premium 1:1</p>
