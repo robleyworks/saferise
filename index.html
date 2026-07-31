@@ -9844,168 +9844,6 @@ window.addEventListener('load', function(){
 </script>
 
 
-<style id="somatic-specificity-v12">
-.somatic-specific-block{margin:2px 0 0}
-.somatic-specific-block .sm-kicker{
-  display:block;margin:0 0 10px;
-  font:700 10px/1.2 'DM Sans',sans-serif;letter-spacing:1.8px;text-transform:uppercase;color:#B8860B;
-}
-.somatic-specific-block .sm-title{
-  font-family:'Cinzel',serif;font-size:31px;line-height:1.18;color:#2B2620;margin:0 0 12px;
-}
-.somatic-specific-block .sm-lead{
-  font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;line-height:1.7;color:#3A342C;margin:0 0 20px;
-}
-.somatic-specific-block .sm-map-wrap{
-  display:grid;grid-template-columns:190px minmax(360px,1fr) 190px;gap:18px;align-items:center;
-  margin:18px 0 16px;
-}
-.somatic-specific-block .sm-side{display:flex;flex-direction:column;gap:12px}
-.somatic-specific-block .sm-zone{
-  position:relative;padding:10px 12px;border:1px solid rgba(43,38,32,.12);border-radius:6px;background:#FCFAF5;
-  box-shadow:0 8px 24px rgba(0,0,0,.03);
-}
-.somatic-specific-block .sm-zone.left{text-align:right}
-.somatic-specific-block .sm-zone.left::after,
-.somatic-specific-block .sm-zone.right::before{
-  content:'';position:absolute;top:50%;width:16px;border-top:1px dotted rgba(184,134,11,.55)
-}
-.somatic-specific-block .sm-zone.left::after{left:100%}
-.somatic-specific-block .sm-zone.right::before{right:100%}
-.somatic-specific-block .sm-zone b{
-  display:block;margin-bottom:4px;font:700 10.5px/1.15 'DM Sans',sans-serif;letter-spacing:1.5px;text-transform:uppercase;color:#B8860B
-}
-.somatic-specific-block .sm-zone span{
-  display:block;font:400 12px/1.45 'DM Sans',sans-serif;color:#5C5448
-}
-.somatic-specific-block .sm-image{
-  overflow:hidden;border-radius:8px;border:1px solid rgba(43,38,32,.10);
-  box-shadow:0 16px 30px rgba(0,0,0,.10);
-}
-.somatic-specific-block .sm-image img{display:block;width:100%;height:auto}
-.somatic-specific-block .sm-note-box{
-  margin:18px 0 8px;padding:14px 16px;border-left:3px solid #D4A843;background:rgba(212,168,67,.07)
-}
-.somatic-specific-block .sm-note-box b{
-  display:block;margin-bottom:5px;font:700 10px/1.2 'DM Sans',sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:#B8860B
-}
-.somatic-specific-block .sm-note-box p,
-.somatic-specific-block .sm-foot{
-  margin:0;font:400 13px/1.6 'DM Sans',sans-serif;color:#5E574B
-}
-.somatic-specific-block .sm-foot{margin-top:6px}
-.somatic-specific-block .sm-practices{
-  margin-top:22px;padding-top:18px;border-top:1px solid rgba(43,38,32,.12)
-}
-.somatic-specific-block .sm-practices h4{
-  margin:0 0 10px;font-family:'Cinzel',serif;font-size:18px;line-height:1.3;color:#2B2620
-}
-.somatic-specific-block .sm-practice-list{display:grid;gap:8px}
-.somatic-specific-block .sm-practice{
-  display:grid;grid-template-columns:180px 1fr;gap:14px;padding:8px 0;border-bottom:1px solid rgba(43,38,32,.08)
-}
-.somatic-specific-block .sm-practice:last-child{border-bottom:0}
-.somatic-specific-block .sm-practice b{
-  font:700 12px/1.4 'DM Sans',sans-serif;color:#B8860B
-}
-.somatic-specific-block .sm-practice span{
-  font:400 13px/1.55 'DM Sans',sans-serif;color:#5C5448
-}
-@media (max-width: 980px){
-  .somatic-specific-block .sm-map-wrap{grid-template-columns:1fr}
-  .somatic-specific-block .sm-zone.left{text-align:left}
-  .somatic-specific-block .sm-zone.left::after,
-  .somatic-specific-block .sm-zone.right::before{display:none}
-  .somatic-specific-block .sm-side{display:grid;grid-template-columns:1fr 1fr}
-}
-@media (max-width: 640px){
-  .somatic-specific-block .sm-side{grid-template-columns:1fr}
-  .somatic-specific-block .sm-practice{grid-template-columns:1fr;gap:2px}
-}
-</style>
-
-
-<script id="somatic-specificity-v12-runtime">
-(function(){
-  const SOMATIC_DATA = {"p1-companion": {"protocol": "Anxiety Reset", "lead": "Anxiety often shows up as a body that is preparing for danger before the mind has caught up.", "left": [["JAW & FACE", "Tight face, clenched jaw, difficulty softening."], ["THROAT", "Tight throat, urge to swallow, trouble speaking."], ["CHEST", "Shallow breath, pressure, racing or fluttering."], ["STOMACH", "Knotted, unsettled, queasy or heavy feeling."]], "right": [["HANDS", "Restlessness, shaking, gripping, difficulty keeping still."], ["NECK & SHOULDERS", "Raised shoulders, neck tension, feeling braced."], ["UPPER BACK", "Tension between the shoulder blades from holding yourself together."]], "practices": [["Long-exhale breathing", "Breathe in for 4, out for 6 to 8, to help the body downshift."], ["Ground through touch", "Press your feet into the floor or hold something solid."], ["Walk it out slowly", "A slow, steady walk can help the body complete the stress response."], ["Hand to chest", "Add warmth and pressure while you name what feels unsafe right now."], ["Release the shoulders", "Lift and drop the shoulders a few times, then let the jaw soften."]]}, "p2-companion": {"protocol": "Anger Alchemy", "lead": "Anger often arrives in the body as heat, clenching and a surge toward action.", "left": [["JAW & FACE", "Tight jaw, gritted teeth, heat in the face."], ["THROAT", "Tightness, a lump, or effort to hold words back."], ["CHEST", "Pressure, heat, tight breathing, urge to push forward."], ["STOMACH", "Knotted or charged feeling low in the body."]], "right": [["HANDS", "Clenched fists, tingling, urge to hit or grip."], ["NECK & SHOULDERS", "Rigid neck, raised shoulders, braced posture."], ["UPPER BACK", "Tension between the shoulder blades from holding intensity."]], "practices": [["Shake out the hands", "Release gripping and let some charge move out of the body."], ["Wall press", "Press into a wall for 10 to 20 seconds, then release."], ["Fast walk", "Use brisk movement to reduce the urge to explode in place."], ["Exhale breathing", "Longer exhales help take the edge off the surge."], ["Unclench the jaw", "Loosen the mouth, jaw and shoulders before speaking."]]}, "p3-companion": {"protocol": "Overwhelm Threshold", "lead": "Overwhelm can feel like the whole system is bracing against too much input at once.", "left": [["JAW & FACE", "Tight face, squinting, clenched jaw."], ["CHEST", "Shallow breath, pressure, difficulty taking a full breath."], ["STOMACH", "Queasy, knotted or heavy sensation."], ["HANDS", "Restlessness, gripping, difficulty keeping still."]], "right": [["NECK & SHOULDERS", "Rigid neck, raised shoulders, feeling compressed."], ["UPPER BACK", "Tension between the shoulder blades."]], "practices": [["Reduce the input", "Lower noise, step away, or narrow the number of things in front of you."], ["One long exhale", "Let the out-breath be longer than the in-breath several times."], ["Sit with support", "Lean back or against a wall so the body is not doing all the holding."], ["Open and close the hands", "A simple repetition can interrupt scattered tension."], ["One-task reset", "Name only the next small action instead of the full list."]]}, "p4-companion": {"protocol": "Abandonment Wound", "lead": "Abandonment distress often feels like the body tightening around the fear of being left alone or not chosen.", "left": [["THROAT", "Tight throat, urge to call, text or plead."], ["CHEST", "Ache, pressure, longing, or a sudden drop in steadiness."], ["STOMACH", "Sinking, hollow or nauseous sensation."], ["JAW & FACE", "Tension from trying not to cry or panic."]], "right": [["HANDS", "Compulsive checking, grasping, difficulty being still."], ["NECK & SHOULDERS", "Shoulders drawn up, body on alert."], ["UPPER BACK", "Bracing and holding through uncertainty."]], "practices": [["Contain with pressure", "Hold a pillow or weighted blanket for physical reassurance."], ["Name the fear clearly", "Say the fear out loud so the body is not carrying it alone."], ["Soften the grip", "Put the phone down and relax the hands before responding."], ["Lengthen the exhale", "Give the chest more room by slowing the out-breath."], ["Anchor to contact that is real", "Name one person, fact or support that is actually available."]]}, "p5-companion": {"protocol": "Shame Dissolution", "lead": "Shame often pulls the body inward, downward or out of sight.", "left": [["FACE", "Heat in the face, wanting to hide or look away."], ["CHEST", "Constriction, collapsing, urge to fold in."], ["STOMACH", "Sinking, dropping, hollow or sick feeling."], ["THROAT", "Tightness that makes it hard to speak honestly."]], "right": [["SHOULDERS", "Rounded posture, making yourself smaller."], ["UPPER BACK", "Protective tension from bracing against exposure."]], "practices": [["Lift the posture gently", "Open the chest a little and let the spine lengthen."], ["Look at one safe point", "Bring the gaze up rather than dropping it."], ["Hand to sternum", "Use warmth and pressure to counter the collapse response."], ["Name one human truth", "Choose one simple sentence that reduces isolation."], ["Walk without hiding", "A short walk can help interrupt the freeze-collapse loop."]]}, "p6-companion": {"protocol": "Grief Integration", "lead": "Grief can register as heaviness, constriction and a body that is carrying sorrow even when words are not there.", "left": [["EYES & FACE", "Tired eyes, facial heaviness, pressure from holding tears."], ["THROAT", "A lump, constriction, trouble swallowing or speaking."], ["CHEST", "Heavy, aching, hollow or tight feeling."], ["STOMACH", "Low appetite, heaviness or unsettled feeling."]], "right": [["SHOULDERS", "Weighted or drooping shoulders."], ["UPPER BACK", "Tension from holding yourself together through pain."]], "practices": [["Let the breath be natural", "Focus on softening, not controlling the breath."], ["Gentle rocking", "Simple rhythmic movement can help grief move rather than stick."], ["Warmth on the chest", "A hand or warm compress can be grounding."], ["Walk somewhere meaningful", "Movement plus memory can help process loss."], ["Loosen the throat", "Yawn, hum or sigh to reduce held tension."]]}, "p7-companion": {"protocol": "Shutdown Recovery", "lead": "Shutdown often shows up as heaviness, numbness and a body that has pulled back to conserve energy.", "left": [["CHEST", "Flat breathing, compressed or numb feeling."], ["STOMACH", "Heavy, shut down, no appetite or no signal."], ["HANDS", "Cold, flat, low energy or hard to mobilise."], ["THROAT", "Difficulty speaking, muted voice, little expression."]], "right": [["NECK & SHOULDERS", "Locked or collapsed posture from going offline."], ["UPPER BACK", "Stiffness from staying small or braced for too long."]], "practices": [["Start with tiny movement", "Wiggle fingers, roll shoulders, or stand up slowly."], ["Add warmth", "Blanket, tea or a warm shower can help the body come back online."], ["Orient to the room", "Look around and name what is here now."], ["Hum or sigh", "Gentle sound can help bring the system out of collapse."], ["Micro-walk", "A short, slow walk often does more than forcing big effort."]]}, "p8-companion": {"protocol": "Jealousy Release", "lead": "Jealousy often feels like activation around comparison, scarcity and threat to worth.", "left": [["JAW & FACE", "Tension, tightening, trying to hold the reaction in."], ["CHEST", "Heat, constriction or emotional charge."], ["STOMACH", "Sinking or knotted feeling when comparison lands."], ["THROAT", "Tightness around saying what is really there."]], "right": [["HANDS", "Restless, scrolling, gripping, urge to act immediately."], ["NECK & SHOULDERS", "Bracing and carrying the emotional charge."], ["UPPER BACK", "Protective tension while comparing yourself against others."]], "practices": [["Stop the scroll", "Interrupt the input that is feeding the activation."], ["Drop the shoulders", "Create physical space before making meaning."], ["Name the lack story", "Say what feels threatened underneath the jealousy."], ["Move the body", "Walk or stretch before responding or comparing more."], ["Return to your lane", "Choose one action that strengthens your own life."]]}, "p9-companion": {"protocol": "Insecurity Anchor", "lead": "Insecurity often shows up as a body searching for reassurance and scanning for signs that you are not enough.", "left": [["THROAT", "Tightness around asking for reassurance or speaking clearly."], ["CHEST", "Pressure, unease or quick shifts in steadiness."], ["STOMACH", "Knotted, dropped or uncertain feeling."], ["JAW & FACE", "Tension from overthinking or monitoring reactions."]], "right": [["HANDS", "Checking, fidgeting, restlessness."], ["NECK & SHOULDERS", "Held tension from staying on alert."], ["UPPER BACK", "Bracing while trying to keep yourself together."]], "practices": [["Pause the checking", "Put space between the feeling and the reassurance habit."], ["Steady the breath", "Use long, even exhales to reduce the scan response."], ["Loosen the face", "Unclench jaw and relax the brow."], ["Touch something solid", "Use contact with the body or environment as an anchor."], ["Name one steady truth", "Return to something real rather than the fear story."]]}, "p10-companion": {"protocol": "Powerlessness & Despair", "lead": "Powerlessness can feel like a body carrying defeat, collapse or tension without a clear place to put it.", "left": [["CHEST", "Heavy, sunken or constricted feeling."], ["STOMACH", "Dropped, heavy or drained sensation."], ["HANDS", "Flat, low energy or difficulty initiating action."], ["THROAT", "Muted voice, tightness around speaking up."]], "right": [["NECK & SHOULDERS", "Strain from carrying too much with too little support."], ["UPPER BACK", "Bracing, fatigue or protective holding."], ["LOW BACK", "Aching, weariness, the body feeling burdened."]], "practices": [["One act of control", "Do one small action that restores agency."], ["Stand and press the feet down", "Reclaim contact and support through the floor."], ["Release the exhale", "Let the body drop a little of what it is carrying."], ["Lean on something literal", "Chair, wall or table to reduce the effort of holding."], ["Choose the next step only", "Do not ask the body to solve the whole future at once."]]}};
-  const MAP_IMG = "assets/media-01.webp";
-
-  Object.keys(SOMATIC_DATA).forEach(key => {
-    if (typeof RESOURCE_CONTENT !== 'undefined' && RESOURCE_CONTENT[key]) {
-      RESOURCE_CONTENT[key].kind = 'Somatic Release';
-      RESOURCE_CONTENT[key].title = 'Somatic Release — specific tension points linked to this protocol';
-      RESOURCE_CONTENT[key].meta = 'Body map · protocol-specific tension points · practical release options';
-    }
-  });
-
-  function makeZone(zone, side){
-    return `<div class="sm-zone ${side}"><b>${zone[0]}</b><span>${zone[1]}</span></div>`;
-  }
-
-  function blockHtml(spec){
-    const left = spec.left.map(z => makeZone(z,'left')).join('');
-    const right = spec.right.map(z => makeZone(z,'right')).join('');
-    const practices = spec.practices.map(p => `<div class="sm-practice"><b>${p[0]}</b><span>${p[1]}</span></div>`).join('');
-    return `
-      <div class="somatic-specific-block">
-        <span class="sm-kicker">Common tension points in this protocol</span>
-        <h3 class="sm-title">Where stress may show up in your body</h3>
-        <p class="sm-lead">${spec.lead}</p>
-
-        <div class="sm-map-wrap">
-          <div class="sm-side">${left}</div>
-          <div class="sm-image">
-            <img src="${MAP_IMG}" alt="Front and back body map showing physical tension zones associated with emotional stress">
-          </div>
-          <div class="sm-side">${right}</div>
-        </div>
-
-        <div class="sm-note-box">
-          <b>What this map is showing</b>
-          <p>Only the tension points relevant to this protocol are labelled. Use them as cues to notice where your body is bracing — not as a diagnosis or a rule for where an emotion must be felt.</p>
-        </div>
-        <p class="sm-foot">These are common places people may notice muscle tension, pressure, bracing, heat or heaviness during emotional stress. They are not a diagnosis, and your body may signal distress differently.</p>
-
-        <div class="sm-practices">
-          <h4>Release options for this protocol</h4>
-          <div class="sm-practice-list">${practices}</div>
-        </div>
-      </div>
-    `;
-  }
-
-  function enhanceSomaticPage(key){
-    const spec = SOMATIC_DATA[key];
-    if (!spec) return;
-    const page = document.querySelector('.reader-page[data-reader-page="' + key + '"]');
-    if (!page || page.dataset.smReady === '1') return;
-    const body = page.querySelector('.reader-page-body');
-    if (!body) return;
-    body.innerHTML = blockHtml(spec);
-    page.dataset.smReady = '1';
-  }
-
-  const originalOpenReader = window.openReader;
-  window.openReader = function(protocolKey, initialKey){
-    originalOpenReader(protocolKey, initialKey);
-    setTimeout(() => {
-      Object.keys(SOMATIC_DATA).forEach(enhanceSomaticPage);
-    }, 20);
-  };
-
-  const originalSelectReaderTab = window.selectReaderTab;
-  window.selectReaderTab = function(protocolKey, key){
-    originalSelectReaderTab(protocolKey, key);
-    setTimeout(() => enhanceSomaticPage(key), 10);
-  };
-
-  window.addEventListener('load', function(){
-    Object.keys(SOMATIC_DATA).forEach(enhanceSomaticPage);
-  });
-})();
-</script>
-
-
 <style id="sr-all-source-six-grid-style">
 /* Six-perspective editorial grid for every Source Insights resource */
 .reader-page[data-source-grid="1"] .reader-page-body{max-width:none!important;}
@@ -10789,368 +10627,12 @@ window.addEventListener('load', function(){
 </script>
 
 
-<style id="sr-v18-somatic-refresh">
-.reader-page[data-somatic-refresh="1"] .reader-page-body{max-width:none!important;}
-.reader-page[data-somatic-refresh="1"] .somatic-v18{max-width:980px;}
-.reader-page[data-somatic-refresh="1"] .sv-kicker{
-  display:inline-block;margin:0 0 14px;padding:7px 14px;
-  border:1px solid rgba(212,168,67,.34);border-radius:999px;
-  background:linear-gradient(180deg,rgba(118,85,155,.62),rgba(90,66,128,.62));
-  font:700 11px/1 'DM Sans',sans-serif;letter-spacing:2px;text-transform:uppercase;color:#F6EBFF;
-}
-.reader-page[data-somatic-refresh="1"] .sv-title{
-  margin:0 0 10px;
-  font:500 56px/1.04 'Cormorant Garamond',Georgia,serif;
-  color:#F5EDD8;
-}
-.reader-page[data-somatic-refresh="1"] .sv-meta{
-  margin:0 0 20px;
-  font:700 11px/1.3 'DM Sans',sans-serif;
-  letter-spacing:2.2px;text-transform:uppercase;color:#ECC96A;
-}
-.reader-page[data-somatic-refresh="1"] .sv-intro-grid{
-  display:grid;grid-template-columns:1.25fr .95fr;gap:20px;align-items:start;
-  margin:0 0 26px;
-}
-.reader-page[data-somatic-refresh="1"] .sv-intro-copy p,
-.reader-page[data-somatic-refresh="1"] .sv-side-note p,
-.reader-page[data-somatic-refresh="1"] .sv-map-lead,
-.reader-page[data-somatic-refresh="1"] .sv-zone span,
-.reader-page[data-somatic-refresh="1"] .sv-foot,
-.reader-page[data-somatic-refresh="1"] .sv-practice span{
-  font:400 15px/1.72 'DM Sans',sans-serif;color:#DDD5E2;
-}
-.reader-page[data-somatic-refresh="1"] .sv-intro-copy p{margin:0 0 14px;}
-.reader-page[data-somatic-refresh="1"] .sv-side-note{
-  padding:18px 18px 16px;border:1px solid rgba(245,237,216,.10);
-  border-radius:12px;background:rgba(255,255,255,.02);
-}
-.reader-page[data-somatic-refresh="1"] .sv-side-note h4,
-.reader-page[data-somatic-refresh="1"] .sv-map-title,
-.reader-page[data-somatic-refresh="1"] .sv-practices h4{
-  margin:0 0 8px;font:500 28px/1.18 'Cormorant Garamond',Georgia,serif;color:#F5EDD8;
-}
-.reader-page[data-somatic-refresh="1"] .sv-side-note h4{font-size:24px}
-.reader-page[data-somatic-refresh="1"] .sv-map-head{margin:6px 0 18px;padding-top:6px;border-top:1px solid rgba(245,237,216,.10);}
-.reader-page[data-somatic-refresh="1"] .sv-map-wrap{
-  display:grid;grid-template-columns:220px minmax(360px,1fr) 220px;gap:18px;align-items:center;
-  margin:14px 0 16px;
-}
-.reader-page[data-somatic-refresh="1"] .sv-side{display:flex;flex-direction:column;gap:12px}
-.reader-page[data-somatic-refresh="1"] .sv-zone{
-  position:relative;padding:12px 13px;border:1px solid rgba(212,168,67,.22);
-  border-radius:10px;background:linear-gradient(180deg,rgba(58,58,84,.68),rgba(47,47,69,.68));
-  box-shadow:none;
-}
-.reader-page[data-somatic-refresh="1"] .sv-zone.left{text-align:right}
-.reader-page[data-somatic-refresh="1"] .sv-zone.left::after,
-.reader-page[data-somatic-refresh="1"] .sv-zone.right::before{
-  content:'';position:absolute;top:50%;width:18px;border-top:1px dotted rgba(236,201,106,.58)
-}
-.reader-page[data-somatic-refresh="1"] .sv-zone.left::after{left:100%}
-.reader-page[data-somatic-refresh="1"] .sv-zone.right::before{right:100%}
-.reader-page[data-somatic-refresh="1"] .sv-zone b{
-  display:block;margin:0 0 5px;font:700 11px/1.2 'DM Sans',sans-serif;
-  letter-spacing:1.8px;text-transform:uppercase;color:#F4C861;
-}
-.reader-page[data-somatic-refresh="1"] .sv-image{
-  overflow:hidden;border-radius:14px;border:1px solid rgba(212,168,67,.16);
-  background:radial-gradient(circle at 50% 45%,rgba(88,83,122,.24),rgba(16,18,34,0) 70%);
-  box-shadow:none;padding:8px;
-}
-.reader-page[data-somatic-refresh="1"] .sv-image img{display:block;width:100%;height:auto}
-.reader-page[data-somatic-refresh="1"] .sv-note-box{
-  margin:18px 0 8px;padding:18px 18px 16px;border-left:3px solid #D4A843;
-  background:rgba(255,255,255,.02);border-radius:0 10px 10px 0;
-}
-.reader-page[data-somatic-refresh="1"] .sv-note-box b{
-  display:block;margin:0 0 5px;font:700 11px/1.2 'DM Sans',sans-serif;
-  letter-spacing:1.8px;text-transform:uppercase;color:#ECC96A;
-}
-.reader-page[data-somatic-refresh="1"] .sv-practices{margin-top:24px;padding-top:18px;border-top:1px solid rgba(245,237,216,.10)}
-.reader-page[data-somatic-refresh="1"] .sv-practice-list{display:grid;gap:8px}
-.reader-page[data-somatic-refresh="1"] .sv-practice{
-  display:grid;grid-template-columns:190px 1fr;gap:14px;padding:8px 0;border-bottom:1px solid rgba(245,237,216,.08)
-}
-.reader-page[data-somatic-refresh="1"] .sv-practice:last-child{border-bottom:0}
-.reader-page[data-somatic-refresh="1"] .sv-practice b{font:700 12px/1.45 'DM Sans',sans-serif;color:#F4C861}
-@media (max-width: 980px){
-  .reader-page[data-somatic-refresh="1"] .sv-title{font-size:46px}
-  .reader-page[data-somatic-refresh="1"] .sv-intro-grid{grid-template-columns:1fr}
-  .reader-page[data-somatic-refresh="1"] .sv-map-wrap{grid-template-columns:1fr}
-  .reader-page[data-somatic-refresh="1"] .sv-zone.left{text-align:left}
-  .reader-page[data-somatic-refresh="1"] .sv-zone.left::after,
-  .reader-page[data-somatic-refresh="1"] .sv-zone.right::before{display:none}
-  .reader-page[data-somatic-refresh="1"] .sv-side{display:grid;grid-template-columns:1fr 1fr}
-}
-@media (max-width: 640px){
-  .reader-page[data-somatic-refresh="1"] .sv-title{font-size:38px}
-  .reader-page[data-somatic-refresh="1"] .sv-side{grid-template-columns:1fr}
-  .reader-page[data-somatic-refresh="1"] .sv-practice{grid-template-columns:1fr;gap:2px}
-}
-</style>
-
-<script id="sr-v18-somatic-refresh-runtime">
-(function(){
-  const MAP_IMG = "assets/sr-v18-somatic-refresh-runtime.webp";
-  const SOMATIC_DATA = {
-    "p1-companion": {"protocol": "Anxiety Reset", "lead": "Anxiety often shows up as a body that is preparing for danger before the mind has caught up.", "left": [["JAW & FACE", "Tight face, clenched jaw, difficulty softening."], ["THROAT", "Tight throat, urge to swallow, trouble speaking."], ["CHEST", "Shallow breath, pressure, racing or fluttering."], ["STOMACH", "Knotted, unsettled, queasy or heavy feeling."]], "right": [["HANDS", "Restlessness, shaking, gripping, difficulty keeping still."], ["NECK & SHOULDERS", "Raised shoulders, neck tension, feeling braced."], ["UPPER BACK", "Tension between the shoulder blades from holding yourself together."]], "practices": [["Long-exhale breathing", "Breathe in for 4, out for 6 to 8, to help the body downshift."], ["Ground through touch", "Press your feet into the floor or hold something solid."], ["Walk it out slowly", "A slow, steady walk can help the body complete the stress response."], ["Hand to chest", "Add warmth and pressure while you name what feels unsafe right now."], ["Release the shoulders", "Lift and drop the shoulders a few times, then let the jaw soften."], ["Hum or sigh", "A low hum or deliberate sigh can soften held throat and chest tension."], ["Shake out the hands", "A short hand release interrupts the gripping pattern that anxiety often creates."]]},
-    "p2-companion": {"protocol": "Anger Alchemy", "lead": "Anger often arrives in the body as heat, clenching and a surge toward action.", "left": [["JAW & FACE", "Tight jaw, gritted teeth, heat in the face."], ["THROAT", "Tightness, a lump, or effort to hold words back."], ["CHEST", "Pressure, heat, tight breathing, urge to push forward."], ["STOMACH", "Knotted or charged feeling low in the body."]], "right": [["HANDS", "Clenched fists, tingling, urge to hit or grip."], ["NECK & SHOULDERS", "Rigid neck, raised shoulders, braced posture."], ["UPPER BACK", "Tension between the shoulder blades from holding intensity."]], "practices": [["Shake out the hands", "Release gripping and let some charge move out of the body."], ["Wall press", "Press into a wall for 10 to 20 seconds, then release."], ["Fast walk", "Use brisk movement to reduce the urge to explode in place."], ["Exhale breathing", "Longer exhales help take the edge off the surge."], ["Unclench the jaw", "Loosen the mouth, jaw and shoulders before speaking."], ["Open the chest", "Roll the shoulders back and let the sternum rise slightly to reduce bracing."], ["Cold water reset", "Cool water on the wrists or face can help interrupt the escalation."]]},
-    "p3-companion": {"protocol": "Overwhelm Threshold", "lead": "Overwhelm can feel like the whole system is bracing against too much input at once.", "left": [["JAW & FACE", "Tight face, squinting, clenched jaw."], ["CHEST", "Shallow breath, pressure, difficulty taking a full breath."], ["STOMACH", "Queasy, knotted or heavy sensation."], ["HANDS", "Restlessness, gripping, difficulty keeping still."]], "right": [["NECK & SHOULDERS", "Rigid neck, raised shoulders, feeling compressed."], ["UPPER BACK", "Tension between the shoulder blades."]], "practices": [["Reduce the input", "Lower noise, step away, or narrow the number of things in front of you."], ["One long exhale", "Let the out-breath be longer than the in-breath several times."], ["Sit with support", "Lean back or against a wall so the body is not doing all the holding."], ["Open and close the hands", "A simple repetition can interrupt scattered tension."], ["One-task reset", "Name only the next small action instead of the full list."], ["Shoulder drop", "Raise the shoulders once, then let them drop fully with an exhale."], ["Visual narrowing", "Look at one fixed object for a few breaths to reduce overload."]]},
-    "p4-companion": {"protocol": "Abandonment Wound", "lead": "Abandonment distress often feels like the body tightening around the fear of being left alone or not chosen.", "left": [["THROAT", "Tight throat, urge to call, text or plead."], ["CHEST", "Ache, pressure, longing, or a sudden drop in steadiness."], ["STOMACH", "Sinking, hollow or nauseous sensation."], ["JAW & FACE", "Tension from trying not to cry or panic."]], "right": [["HANDS", "Compulsive checking, grasping, difficulty being still."], ["NECK & SHOULDERS", "Shoulders drawn up, body on alert."], ["UPPER BACK", "Bracing and holding through uncertainty."]], "practices": [["Contain with pressure", "Hold a pillow or weighted blanket for physical reassurance."], ["Name the fear clearly", "Say the fear out loud so the body is not carrying it alone."], ["Soften the grip", "Put the phone down and relax the hands before responding."], ["Lengthen the exhale", "Give the chest more room by slowing the out-breath."], ["Anchor to contact that is real", "Name one person, fact or support that is actually available."], ["Hand to throat and chest", "Use steady contact to reduce the urge to plead or chase."], ["Slow rocking", "Gentle rhythmic rocking can help the body downshift from alarm."]]},
-    "p5-companion": {"protocol": "Shame Dissolution", "lead": "Shame often pulls the body inward, downward or out of sight.", "left": [["FACE", "Heat in the face, wanting to hide or look away."], ["CHEST", "Constriction, collapsing, urge to fold in."], ["STOMACH", "Sinking, dropping, hollow or sick feeling."], ["THROAT", "Tightness that makes it hard to speak honestly."]], "right": [["SHOULDERS", "Rounded posture, making yourself smaller."], ["UPPER BACK", "Protective tension from bracing against exposure."]], "practices": [["Lift the posture gently", "Open the chest a little and let the spine lengthen."], ["Look at one safe point", "Bring the gaze up rather than dropping it."], ["Hand to sternum", "Use warmth and pressure to counter the collapse response."], ["Name one human truth", "Choose one simple sentence that reduces isolation."], ["Walk without hiding", "A short walk can help interrupt the freeze-collapse loop."], ["Uncurl the shoulders", "Let the collarbones widen so the body is not staying folded in."], ["Speak one clear sentence", "A small honest statement helps the throat and body come out of hiding."]]},
-    "p6-companion": {"protocol": "Grief Integration", "lead": "Grief can register as heaviness, constriction and a body that is carrying sorrow even when words are not there.", "left": [["EYES & FACE", "Tired eyes, facial heaviness, pressure from holding tears."], ["THROAT", "A lump, constriction, trouble swallowing or speaking."], ["CHEST", "Heavy, aching, hollow or tight feeling."], ["STOMACH", "Low appetite, heaviness or unsettled feeling."]], "right": [["SHOULDERS", "Weighted or drooping shoulders."], ["UPPER BACK", "Tension from holding yourself together through pain."]], "practices": [["Let the breath be natural", "Focus on softening, not controlling the breath."], ["Gentle rocking", "Simple rhythmic movement can help grief move rather than stick."], ["Warmth on the chest", "A hand or warm compress can be grounding."], ["Walk somewhere meaningful", "Movement plus memory can help process loss."], ["Loosen the throat", "Yawn, hum or sigh to reduce held tension."], ["Rest against support", "Lean into a chair, wall or cushion so the body is not carrying everything alone."], ["Touch and remember", "Hold an object linked to the person or loss while breathing slowly."]]},
-    "p7-companion": {"protocol": "Shutdown Recovery", "lead": "Shutdown often shows up as heaviness, numbness and a body that has pulled back to conserve energy.", "left": [["CHEST", "Flatness, low energy, shallow or barely noticed breathing."], ["STOMACH", "Heavy, empty or shut-down feeling."], ["FACE", "Blankness, low expression, difficulty activating."], ["HANDS", "Stillness, low impulse to move, numbness."]], "right": [["NECK & SHOULDERS", "Collapsed or weighed-down posture."], ["UPPER BACK", "A rounded, withdrawn feeling through the upper body."]], "practices": [["Very small movement", "Start with something tiny like opening and closing the hands."], ["Name one thing you feel", "Even 'numb' counts as a beginning."], ["Use warmth", "A warm drink or blanket can help the body register safety."], ["Slow walking", "A brief walk can help the body come back online."], ["Text one safe person", "Connection helps interrupt the shut-down loop."], ["Look toward light", "Natural light helps orient the body out of inward shutdown."], ["Lift and place", "Stand up, shift weight, and take one deliberate physical action."]]},
-    "p8-companion": {"protocol": "Jealousy Release", "lead": "Jealousy can show up as agitation, hot scanning and a body that wants to monitor or react.", "left": [["JAW & FACE", "Clenching, squinting, tension from comparison or suspicion."], ["CHEST", "Heat, pressure, sharp activation."], ["STOMACH", "Twist, drop or agitated churn."], ["HANDS", "Urge to check, scroll, grip or confront."]], "right": [["NECK & SHOULDERS", "Body braced for threat or humiliation."], ["UPPER BACK", "Tension from vigilance and self-protection."]], "practices": [["Put the phone down", "Interrupt checking before the body escalates further."], ["Breathe out longer", "Reduce the immediate surge before drawing conclusions."], ["Walk before speaking", "Move first so the first words are not purely reactive."], ["Relax the jaw", "Loosen the face to reduce escalation signals."], ["Name the fear underneath", "Jealousy often softens when the vulnerable fear is named."], ["Uncurl the hands", "Physically releasing the grip helps reduce the monitoring impulse."], ["Look away from the trigger", "Remove visual fuel long enough for the body to settle."]]},
-    "p9-companion": {"protocol": "Insecurity Anchor", "lead": "Insecurity can feel like bracing in the body against being judged, measured or not enough.", "left": [["FACE", "Tight expression, self-consciousness, heat or tension."], ["CHEST", "Pressure or collapse around self-doubt."], ["STOMACH", "Fluttering, sinking or unsteady feeling."], ["THROAT", "Tightness when trying to speak up or be seen."]], "right": [["SHOULDERS", "Pulled in or held rigid to protect yourself."], ["UPPER BACK", "Holding tension from trying to keep it together."]], "practices": [["Lengthen the spine", "A more grounded posture can help shift inner messaging."], ["Breathe into the chest", "Make more room where self-doubt often tightens."], ["Speak one clear sentence", "A small act of visibility helps counter the hiding reflex."], ["Release the shoulders", "Let the body stop performing self-protection."], ["Stand on both feet", "A stable base helps interrupt self-conscious activation."], ["Soften the face", "Reduce the tension that comes from monitoring yourself."], ["Name one real strength", "A grounded fact can help the body stop collapsing into doubt."]]},
-    "p10-companion": {"protocol": "Powerlessness & Despair", "lead": "Powerlessness often registers as collapse, heaviness and a body that has stopped expecting an effective next move.", "left": [["CHEST", "Flatness, heaviness or pressure."], ["STOMACH", "Drop, emptiness, depleted feeling."], ["FACE", "Blankness, low expression, tiredness."], ["HANDS", "Inactivity, low energy, little impulse to act."]], "right": [["SHOULDERS", "Sagging, burdened or defeated posture."], ["UPPER BACK", "A collapsed shape from carrying hopelessness."]], "practices": [["Sit upright with support", "Let the body experience a little more structure."], ["Name one thing that is still possible", "A small possibility can interrupt total shutdown."], ["Use slow pressure", "Press hands together or into a cushion to create contact."], ["Take a short walk", "Movement can help restore a sense of agency."], ["Breathe low and steady", "A slower, lower breath helps reduce collapse."], ["Open the chest slightly", "A small change in posture can shift the feeling of defeat."], ["Complete one tiny task", "A finished action helps the body register that movement is still possible."]]}
-  };
-
-  function makeZone(zone, side){
-    return `<div class="sv-zone ${side}"><b>${zone[0]}</b><span>${zone[1]}</span></div>`;
-  }
-
-  function blockHtml(spec){
-    const left = spec.left.map(z => makeZone(z,'left')).join('');
-    const right = spec.right.map(z => makeZone(z,'right')).join('');
-    const practices = spec.practices.map(p => `<div class="sv-practice"><b>${p[0]}</b><span>${p[1]}</span></div>`).join('');
-    return `
-      <div class="somatic-v18">
-        <span class="sv-kicker">Somatic Release</span>
-        <h2 class="sv-title">helping the body come down from emotional overload</h2>
-        <p class="sv-meta">Body-based practice · everyday movement · 7 practical options</p>
-
-        <div class="sv-intro-grid">
-          <div class="sv-intro-copy">
-            <p><strong>What is somatic release?</strong> It simply means using safe movement, breath, pressure, rhythm or sensory input to help your body settle after it has geared up for stress. You are not trying to force an emotion out of your body. You are giving the body a practical way to shift from “ready for action” toward “I can deal with this.”</p>
-            <p>A useful way to think about the body map: emotions do not literally live in one body part. But people often notice recurring sensations in certain areas when distressed. Use this map as a check-in guide, not a diagnosis.</p>
-          </div>
-          <div class="sv-side-note">
-            <h4>What this page focuses on</h4>
-            <p>This somatic view stays specific to the current protocol. It only labels the physical areas that commonly hold tension for this particular kind of emotional stress, so the body map stays practical rather than overwhelming.</p>
-          </div>
-        </div>
-
-        <div class="sv-map-head">
-          <span class="sv-kicker" style="background:transparent;padding:0;border:0;color:#ECC96A;margin-bottom:8px">Common tension points in this protocol</span>
-          <h3 class="sv-map-title">Where stress may show up in your body</h3>
-          <p class="sv-map-lead">${spec.lead}</p>
-        </div>
-
-        <div class="sv-map-wrap">
-          <div class="sv-side">${left}</div>
-          <div class="sv-image">
-            <img src="${MAP_IMG}" alt="Front and back body map showing physical tension zones associated with emotional stress">
-          </div>
-          <div class="sv-side">${right}</div>
-        </div>
-
-        <div class="sv-note-box">
-          <b>What this map is showing</b>
-          <p class="sv-foot">Only the tension points relevant to this protocol are labelled. Use them as cues to notice where your body is bracing — not as a diagnosis or a rule for where an emotion must be felt.</p>
-        </div>
-        <p class="sv-foot">These are common places people may notice muscle tension, pressure, bracing, heat or heaviness during emotional stress. They are not a diagnosis, and your body may signal distress differently.</p>
-
-        <div class="sv-practices">
-          <h4>Release options for this protocol</h4>
-          <div class="sv-practice-list">${practices}</div>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderSomatic(key){
-    const spec = SOMATIC_DATA[key];
-    if (!spec) return;
-    const page = document.querySelector('.reader-page[data-reader-page="' + key + '"]');
-    if (!page) return;
-    const body = page.querySelector('.reader-page-body');
-    if (!body) return;
-    page.setAttribute('data-somatic-refresh','1');
-    body.innerHTML = blockHtml(spec);
-  }
-
-  function renderAllOpenSomatic(){
-    Object.keys(SOMATIC_DATA).forEach(renderSomatic);
-  }
-
-  if (typeof RESOURCE_CONTENT !== 'undefined') {
-    Object.keys(SOMATIC_DATA).forEach(key => {
-      if (RESOURCE_CONTENT[key]) {
-        RESOURCE_CONTENT[key].kind = 'Somatic Release';
-        RESOURCE_CONTENT[key].title = 'Somatic Release — helping the body come down from emotional overload';
-        RESOURCE_CONTENT[key].meta = 'Body-based practice · everyday movement · 7 practical options';
-      }
-    });
-  }
-
-  const oldOpen = window.openReader;
-  if (typeof oldOpen === 'function') {
-    window.openReader = function(protocolKey, initialKey){
-      const result = oldOpen.apply(this, arguments);
-      setTimeout(renderAllOpenSomatic, 30);
-      return result;
-    };
-  }
-
-  const oldSelect = window.selectReaderTab;
-  if (typeof oldSelect === 'function') {
-    window.selectReaderTab = function(protocolKey, key){
-      const result = oldSelect.apply(this, arguments);
-      setTimeout(function(){ renderSomatic(key); }, 30);
-      return result;
-    };
-  }
-
-  window.addEventListener('load', function(){
-    setTimeout(renderAllOpenSomatic, 80);
-  });
-})();
-</script>
-
-
-<style id="sr-v19-personal-somatic-consolidation">
-/* Personal Transformation Somatic Release — final consistency pass */
-.reader-page[data-somatic-refresh="1"] .somatic-v18 > .sv-kicker:first-child,
-.reader-page[data-somatic-refresh="1"] .somatic-v18 > .sv-title,
-.reader-page[data-somatic-refresh="1"] .somatic-v18 > .sv-meta{
-  display:none!important;
-}
-
-/* The actual reader header carries the requested title/meta once, cleanly. */
-.reader-page[data-somatic-refresh="1"] .reader-page-title{
-  max-width:900px!important;
-}
-.reader-page[data-somatic-refresh="1"] .reader-page-tags{
-  color:#D2B85F!important;
-  letter-spacing:1.2px!important;
-}
-
-/* Universal intro becomes the beginning of every personal somatic page. */
-.reader-page[data-somatic-refresh="1"] .sv-intro-grid{
-  margin-top:2px!important;
-}
-
-/* Remove any light/white remnants inherited from earlier somatic versions. */
-.reader-page[data-somatic-refresh="1"] .sv-zone,
-.reader-page[data-somatic-refresh="1"] .sv-side-note,
-.reader-page[data-somatic-refresh="1"] .sv-note-box,
-.reader-page[data-somatic-refresh="1"] .sv-image,
-.reader-page[data-somatic-refresh="1"] .sv-practice,
-.reader-page[data-somatic-refresh="1"] .somatic-v18 *{
-  box-shadow:none;
-}
-.reader-page[data-somatic-refresh="1"] .sv-zone{
-  background:linear-gradient(180deg,rgba(59,59,85,.72),rgba(47,47,69,.72))!important;
-  color:#EEE7F1!important;
-}
-.reader-page[data-somatic-refresh="1"] .sv-side-note,
-.reader-page[data-somatic-refresh="1"] .sv-note-box{
-  background:rgba(255,255,255,.025)!important;
-}
-.reader-page[data-somatic-refresh="1"] .sv-image{
-  background:radial-gradient(circle at 50% 44%,rgba(98,91,132,.22),rgba(18,20,36,0) 68%)!important;
-}
-
-/* Seven practical options should read as one consistent editorial sequence. */
-.reader-page[data-somatic-refresh="1"] .sv-practice-list{
-  border-top:1px solid rgba(245,237,216,.08);
-}
-.reader-page[data-somatic-refresh="1"] .sv-practice{
-  padding:10px 0!important;
-}
-</style>
-
-<script id="sr-v19-personal-somatic-consolidation-runtime">
-(function(){
-  const PERSONAL_SOMATIC_KEYS = [
-    'p1-companion','p2-companion','p3-companion','p4-companion','p5-companion',
-    'p6-companion','p7-companion','p8-companion','p9-companion','p10-companion'
-  ];
-
-  const PROTOCOL_LABELS = {
-    'p1-companion':'Anxiety Reset',
-    'p2-companion':'Anger Alchemy',
-    'p3-companion':'Overwhelm Threshold',
-    'p4-companion':'Abandonment Wound',
-    'p5-companion':'Shame Dissolution',
-    'p6-companion':'Grief Integration',
-    'p7-companion':'Shutdown Recovery',
-    'p8-companion':'Jealousy Release',
-    'p9-companion':'Insecurity Anchor',
-    'p10-companion':'Powerlessness & Despair'
-  };
-
-  function syncHeaders(){
-    if(typeof RESOURCE_CONTENT==='undefined') return;
-
-    PERSONAL_SOMATIC_KEYS.forEach(function(key){
-      const d = RESOURCE_CONTENT[key];
-      if(!d) return;
-      d.kind = 'Somatic Release';
-      d.title = 'Somatic Release — helping the body come down from emotional overload';
-      d.meta = 'Body-based practice · everyday movement · 7 practical options';
-
-      const page = document.querySelector('.reader-page[data-reader-page="'+key+'"]');
-      if(!page) return;
-
-      page.setAttribute('data-somatic-refresh','1');
-
-      const title = page.querySelector('.reader-page-title');
-      const tags = page.querySelector('.reader-page-tags');
-      if(title) title.textContent = d.title;
-      if(tags) tags.textContent = d.meta;
-
-      const mapHead = page.querySelector('.sv-map-head');
-      if(mapHead){
-        mapHead.setAttribute('data-protocol', PROTOCOL_LABELS[key] || '');
-      }
-
-      const img = page.querySelector('.sv-image img');
-      if(img){
-        img.alt = 'Front and back body map showing physical tension zones commonly associated with ' +
-          (PROTOCOL_LABELS[key] || 'this emotional stress pattern');
-      }
-
-      // Safety check: each Personal Transformation somatic page should expose 7 options.
-      const practices = page.querySelectorAll('.sv-practice');
-      if(practices.length && practices.length !== 7){
-        page.dataset.practiceCountIssue = String(practices.length);
-      } else {
-        delete page.dataset.practiceCountIssue;
-      }
-    });
-  }
-
-  const previousOpen = window.openReader;
-  if(typeof previousOpen === 'function'){
-    window.openReader = function(){
-      const result = previousOpen.apply(this, arguments);
-      setTimeout(syncHeaders, 70);
-      return result;
-    };
-  }
-
-  const previousSelect = window.selectReaderTab;
-  if(typeof previousSelect === 'function'){
-    window.selectReaderTab = function(){
-      const result = previousSelect.apply(this, arguments);
-      setTimeout(syncHeaders, 70);
-      return result;
-    };
-  }
-
-  window.addEventListener('load', function(){
-    setTimeout(syncHeaders, 140);
-  });
-})();
-</script>
-
-
-<style id="sr-v20-somatic-editorial-reset">
+<style id="sr-somatic-release-style">
 /* ============================================================
-   SOMATIC RELEASE — CLEAN EDITORIAL LAYOUT
-   Uses only the existing SafeRise fonts + theme variables.
+   SOMATIC RELEASE — CLEAN EDITORIAL LAYOUT (consolidated)
+   Merges sr-v20-somatic-editorial-reset structural styles with
+   the sr-v21-somatic-open-canvas strip-down. Uses only the
+   existing SafeRise fonts + theme variables.
    ============================================================ */
 
 .reader-page[data-somatic-v20="1"] .reader-page-body{
@@ -11168,7 +10650,6 @@ window.addEventListener('load', function(){
   margin:0 0 34px;
 }
 
-.reader-page[data-somatic-v20="1"] .sr20-intro h3,
 .reader-page[data-somatic-v20="1"] .sr20-section-title{
   margin:0 0 10px;
   font-family:'Cormorant Garamond',Georgia,serif;
@@ -11362,18 +10843,6 @@ window.addEventListener('load', function(){
   color:var(--text3);
 }
 
-/* eliminate legacy somatic card/background styling if it survives */
-.reader-page[data-somatic-v20="1"] .sv-zone,
-.reader-page[data-somatic-v20="1"] .sm-zone,
-.reader-page[data-somatic-v20="1"] .sv-side-note,
-.reader-page[data-somatic-v20="1"] .sv-note-box,
-.reader-page[data-somatic-v20="1"] .sm-note-box,
-.reader-page[data-somatic-v20="1"] .sv-image,
-.reader-page[data-somatic-v20="1"] .sm-image{
-  background:transparent!important;
-  box-shadow:none!important;
-}
-
 @media(max-width:1000px){
   .reader-page[data-somatic-v20="1"] .sr20-map-grid{
     grid-template-columns:160px minmax(320px,1fr) 160px;
@@ -11417,156 +10886,10 @@ window.addEventListener('load', function(){
     grid-template-columns:1fr;
   }
 }
-</style>
 
-<script id="sr-v20-somatic-editorial-reset-runtime">
-(function(){
-  const KEYS=[
-    'p1-companion','p2-companion','p3-companion','p4-companion','p5-companion',
-    'p6-companion','p7-companion','p8-companion','p9-companion','p10-companion'
-  ];
-
-  function text(el){
-    return el ? el.textContent.trim() : '';
-  }
-
-  function extractZones(root, side){
-    return [...root.querySelectorAll('.sv-zone.'+side+', .sm-zone.'+side)].map(function(el){
-      return {
-        name:text(el.querySelector('b')),
-        desc:text(el.querySelector('span'))
-      };
-    }).filter(function(z){ return z.name; });
-  }
-
-  function extractPractices(root){
-    return [...root.querySelectorAll('.sv-practice, .sm-practice')].map(function(el){
-      return {
-        name:text(el.querySelector('b')),
-        desc:text(el.querySelector('span'))
-      };
-    }).filter(function(p){ return p.name; });
-  }
-
-  function zonesHtml(zones, side){
-    return zones.map(function(z){
-      return '<div class="sr20-zone '+side+'"><b>'+z.name+'</b><span>'+z.desc+'</span></div>';
-    }).join('');
-  }
-
-  function practicesHtml(items){
-    return items.map(function(p,i){
-      return '<div class="sr20-practice">'+
-        '<span class="sr20-practice-num">'+String(i+1).padStart(2,'0')+'</span>'+
-        '<div><h4>'+p.name+'</h4><p>'+p.desc+'</p></div>'+
-      '</div>';
-    }).join('');
-  }
-
-  function cleanPage(key){
-    const page=document.querySelector('.reader-page[data-reader-page="'+key+'"]');
-    if(!page) return;
-
-    const body=page.querySelector('.reader-page-body');
-    if(!body) return;
-
-    /* First allow earlier renderers to provide protocol-specific content,
-       then pull only the data we need into the clean editorial structure. */
-    const left=extractZones(body,'left');
-    const right=extractZones(body,'right');
-    const practices=extractPractices(body);
-
-    const lead=text(body.querySelector('.sv-map-lead, .sm-lead')) ||
-      'Emotional stress can create recognisable patterns of tension, pressure, heat, heaviness or bracing in the body.';
-
-    const img=body.querySelector('.sv-image img, .sm-image img');
-    const imgSrc=img ? img.src : '';
-    const imgAlt=img ? img.alt : 'Front and back body map showing physical tension zones associated with emotional stress';
-
-    if(!imgSrc || (!left.length && !right.length) || !practices.length) return;
-
-    page.setAttribute('data-somatic-v20','1');
-    page.setAttribute('data-somatic-refresh','1');
-
-    const title=page.querySelector('.reader-page-title');
-    const tags=page.querySelector('.reader-page-tags');
-
-    if(title) title.textContent='Somatic Release — helping the body come down from emotional overload';
-    if(tags) tags.textContent='Body-based practice · everyday movement · 7 practical options';
-
-    body.innerHTML=
-      '<div class="sr20-wrap">'+
-
-        '<section class="sr20-intro">'+
-          '<h3>What is somatic release?</h3>'+
-          '<p>It simply means using safe movement, breath, pressure, rhythm or sensory input to help your body settle after it has geared up for stress. You are not trying to force an emotion out of your body. You are giving the body a practical way to shift from “ready for action” toward “I can deal with this.”</p>'+
-          '<div class="sr20-guidance">'+
-            '<b>How to use the body map</b>'+
-            '<p>Emotions do not literally live in one body part. But people often notice recurring sensations in certain areas when distressed. Use this map as a check-in guide, not a diagnosis.</p>'+
-          '</div>'+
-        '</section>'+
-
-        '<section class="sr20-section">'+
-          '<div class="sr20-section-head">'+
-            '<span class="sr20-eyebrow">Common tension points in this protocol</span>'+
-            '<h3 class="sr20-section-title">Where stress may show up in your body</h3>'+
-            '<p class="sr20-lead">'+lead+'</p>'+
-          '</div>'+
-          '<div class="sr20-map-grid">'+
-            '<div class="sr20-zone-list left">'+zonesHtml(left,'left')+'</div>'+
-            '<div class="sr20-figure"><img src="'+imgSrc+'" alt="'+imgAlt+'"></div>'+
-            '<div class="sr20-zone-list right">'+zonesHtml(right,'right')+'</div>'+
-          '</div>'+
-          '<div class="sr20-map-note">'+
-            '<b>What this map is showing</b>'+
-            '<p>Only the tension points relevant to this protocol are labelled. Use them as cues to notice where your body is bracing. Your body may signal distress differently, and these sensations are not a diagnosis.</p>'+
-          '</div>'+
-        '</section>'+
-
-        '<section class="sr20-section">'+
-          '<div class="sr20-practice-intro">'+
-            '<span class="sr20-eyebrow">Everyday somatic release</span>'+
-            '<h3 class="sr20-section-title">Activities that can help the body settle</h3>'+
-            '<p class="sr20-lead">These are simple day-to-day ways to give physical activation somewhere safe to go. Choose one or two that fit the moment rather than trying to do everything at once.</p>'+
-          '</div>'+
-          '<div class="sr20-practices">'+practicesHtml(practices)+'</div>'+
-          '<p class="sr20-use-note">Use these as practical regulation tools, not as a substitute for medical or mental-health care when symptoms are severe, persistent or concerning.</p>'+
-        '</section>'+
-
-      '</div>';
-  }
-
-  function refreshAll(){
-    KEYS.forEach(cleanPage);
-  }
-
-  const priorOpen=window.openReader;
-  if(typeof priorOpen==='function'){
-    window.openReader=function(){
-      const result=priorOpen.apply(this,arguments);
-      setTimeout(refreshAll,180);
-      return result;
-    };
-  }
-
-  const priorSelect=window.selectReaderTab;
-  if(typeof priorSelect==='function'){
-    window.selectReaderTab=function(){
-      const result=priorSelect.apply(this,arguments);
-      setTimeout(refreshAll,180);
-      return result;
-    };
-  }
-
-  window.addEventListener('load',function(){
-    setTimeout(refreshAll,240);
-  });
-})();
-</script>
-
-
-<style id="sr-v21-somatic-open-canvas">
-/* Remove internal dark blocks: all somatic text sits directly on the reading-room canvas. */
+/* Open-canvas strip-down (formerly sr-v21-somatic-open-canvas):
+   remove internal dark blocks — all somatic text sits directly
+   on the reading-room canvas. */
 .reader-page[data-somatic-v20="1"] .sr20-wrap,
 .reader-page[data-somatic-v20="1"] .sr20-intro,
 .reader-page[data-somatic-v20="1"] .sr20-guidance,
@@ -11587,11 +10910,7 @@ window.addEventListener('load', function(){
 
 /* Make sure no legacy pseudo-connectors or callout lines survive. */
 .reader-page[data-somatic-v20="1"] .sr20-zone::before,
-.reader-page[data-somatic-v20="1"] .sr20-zone::after,
-.reader-page[data-somatic-v20="1"] .sv-zone::before,
-.reader-page[data-somatic-v20="1"] .sv-zone::after,
-.reader-page[data-somatic-v20="1"] .sm-zone::before,
-.reader-page[data-somatic-v20="1"] .sm-zone::after {
+.reader-page[data-somatic-v20="1"] .sr20-zone::after {
   display:none!important;
   content:none!important;
 }
@@ -11614,82 +10933,125 @@ window.addEventListener('load', function(){
 }
 </style>
 
-<script id="sr-v21-somatic-arrowless-art">
+<script id="sr-somatic-release-runtime">
 (function(){
-  const ARROWLESS_MAP = 'assets/sr-v21-somatic-arrowless-art.webp';
-  function updateArt(){
-    document.querySelectorAll('.reader-page[data-somatic-v20="1"] .sr20-figure img').forEach(function(img){
-      img.src = ARROWLESS_MAP;
-      img.alt = 'Front and back body illustration highlighting physical tension areas relevant to this protocol';
-    });
-  }
-  window.addEventListener('load',function(){setTimeout(updateArt,300)});
-  document.addEventListener('click',function(e){
-    if(e.target.closest('.reader-tab,.res-item,.res-action')) setTimeout(updateArt,260);
-  });
-  const observer = new MutationObserver(function(){requestAnimationFrame(updateArt)});
-  observer.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
-})();
-</script>
+  /* Consolidated Somatic Release data — zones/practices from
+     sr-v18-somatic-refresh, images from sr-v23-somatic-transparent-illustrations. */
+  const SOMATIC_DATA = {"p1-companion": {"protocol": "Anxiety Reset", "lead": "Anxiety often shows up as a body that is preparing for danger before the mind has caught up.", "img": "assets/sr-v23-somatic-transparent-illustrations.webp", "left": [["JAW & FACE", "Tight face, clenched jaw, difficulty softening."], ["THROAT", "Tight throat, urge to swallow, trouble speaking."], ["CHEST", "Shallow breath, pressure, racing or fluttering."], ["STOMACH", "Knotted, unsettled, queasy or heavy feeling."]], "right": [["HANDS", "Restlessness, shaking, gripping, difficulty keeping still."], ["NECK & SHOULDERS", "Raised shoulders, neck tension, feeling braced."], ["UPPER BACK", "Tension between the shoulder blades from holding yourself together."]], "practices": [["Long-exhale breathing", "Breathe in for 4, out for 6 to 8, to help the body downshift."], ["Ground through touch", "Press your feet into the floor or hold something solid."], ["Walk it out slowly", "A slow, steady walk can help the body complete the stress response."], ["Hand to chest", "Add warmth and pressure while you name what feels unsafe right now."], ["Release the shoulders", "Lift and drop the shoulders a few times, then let the jaw soften."], ["Hum or sigh", "A low hum or deliberate sigh can soften held throat and chest tension."], ["Shake out the hands", "A short hand release interrupts the gripping pattern that anxiety often creates."]]}, "p2-companion": {"protocol": "Anger Alchemy", "lead": "Anger often arrives in the body as heat, clenching and a surge toward action.", "img": "assets/media-15.webp", "left": [["JAW & FACE", "Tight jaw, gritted teeth, heat in the face."], ["THROAT", "Tightness, a lump, or effort to hold words back."], ["CHEST", "Pressure, heat, tight breathing, urge to push forward."], ["STOMACH", "Knotted or charged feeling low in the body."]], "right": [["HANDS", "Clenched fists, tingling, urge to hit or grip."], ["NECK & SHOULDERS", "Rigid neck, raised shoulders, braced posture."], ["UPPER BACK", "Tension between the shoulder blades from holding intensity."]], "practices": [["Shake out the hands", "Release gripping and let some charge move out of the body."], ["Wall press", "Press into a wall for 10 to 20 seconds, then release."], ["Fast walk", "Use brisk movement to reduce the urge to explode in place."], ["Exhale breathing", "Longer exhales help take the edge off the surge."], ["Unclench the jaw", "Loosen the mouth, jaw and shoulders before speaking."], ["Open the chest", "Roll the shoulders back and let the sternum rise slightly to reduce bracing."], ["Cold water reset", "Cool water on the wrists or face can help interrupt the escalation."]]}, "p3-companion": {"protocol": "Overwhelm Threshold", "lead": "Overwhelm can feel like the whole system is bracing against too much input at once.", "img": "assets/media-16.webp", "left": [["JAW & FACE", "Tight face, squinting, clenched jaw."], ["CHEST", "Shallow breath, pressure, difficulty taking a full breath."], ["STOMACH", "Queasy, knotted or heavy sensation."], ["HANDS", "Restlessness, gripping, difficulty keeping still."]], "right": [["NECK & SHOULDERS", "Rigid neck, raised shoulders, feeling compressed."], ["UPPER BACK", "Tension between the shoulder blades."]], "practices": [["Reduce the input", "Lower noise, step away, or narrow the number of things in front of you."], ["One long exhale", "Let the out-breath be longer than the in-breath several times."], ["Sit with support", "Lean back or against a wall so the body is not doing all the holding."], ["Open and close the hands", "A simple repetition can interrupt scattered tension."], ["One-task reset", "Name only the next small action instead of the full list."], ["Shoulder drop", "Raise the shoulders once, then let them drop fully with an exhale."], ["Visual narrowing", "Look at one fixed object for a few breaths to reduce overload."]]}, "p4-companion": {"protocol": "Abandonment Wound", "lead": "Abandonment distress often feels like the body tightening around the fear of being left alone or not chosen.", "img": "assets/media-17.webp", "left": [["THROAT", "Tight throat, urge to call, text or plead."], ["CHEST", "Ache, pressure, longing, or a sudden drop in steadiness."], ["STOMACH", "Sinking, hollow or nauseous sensation."], ["JAW & FACE", "Tension from trying not to cry or panic."]], "right": [["HANDS", "Compulsive checking, grasping, difficulty being still."], ["NECK & SHOULDERS", "Shoulders drawn up, body on alert."], ["UPPER BACK", "Bracing and holding through uncertainty."]], "practices": [["Contain with pressure", "Hold a pillow or weighted blanket for physical reassurance."], ["Name the fear clearly", "Say the fear out loud so the body is not carrying it alone."], ["Soften the grip", "Put the phone down and relax the hands before responding."], ["Lengthen the exhale", "Give the chest more room by slowing the out-breath."], ["Anchor to contact that is real", "Name one person, fact or support that is actually available."], ["Hand to throat and chest", "Use steady contact to reduce the urge to plead or chase."], ["Slow rocking", "Gentle rhythmic rocking can help the body downshift from alarm."]]}, "p5-companion": {"protocol": "Shame Dissolution", "lead": "Shame often pulls the body inward, downward or out of sight.", "img": "assets/media-18.webp", "left": [["FACE", "Heat in the face, wanting to hide or look away."], ["CHEST", "Constriction, collapsing, urge to fold in."], ["STOMACH", "Sinking, dropping, hollow or sick feeling."], ["THROAT", "Tightness that makes it hard to speak honestly."]], "right": [["SHOULDERS", "Rounded posture, making yourself smaller."], ["UPPER BACK", "Protective tension from bracing against exposure."]], "practices": [["Lift the posture gently", "Open the chest a little and let the spine lengthen."], ["Look at one safe point", "Bring the gaze up rather than dropping it."], ["Hand to sternum", "Use warmth and pressure to counter the collapse response."], ["Name one human truth", "Choose one simple sentence that reduces isolation."], ["Walk without hiding", "A short walk can help interrupt the freeze-collapse loop."], ["Uncurl the shoulders", "Let the collarbones widen so the body is not staying folded in."], ["Speak one clear sentence", "A small honest statement helps the throat and body come out of hiding."]]}, "p6-companion": {"protocol": "Grief Integration", "lead": "Grief can register as heaviness, constriction and a body that is carrying sorrow even when words are not there.", "img": "assets/media-19.webp", "left": [["EYES & FACE", "Tired eyes, facial heaviness, pressure from holding tears."], ["THROAT", "A lump, constriction, trouble swallowing or speaking."], ["CHEST", "Heavy, aching, hollow or tight feeling."], ["STOMACH", "Low appetite, heaviness or unsettled feeling."]], "right": [["SHOULDERS", "Weighted or drooping shoulders."], ["UPPER BACK", "Tension from holding yourself together through pain."]], "practices": [["Let the breath be natural", "Focus on softening, not controlling the breath."], ["Gentle rocking", "Simple rhythmic movement can help grief move rather than stick."], ["Warmth on the chest", "A hand or warm compress can be grounding."], ["Walk somewhere meaningful", "Movement plus memory can help process loss."], ["Loosen the throat", "Yawn, hum or sigh to reduce held tension."], ["Rest against support", "Lean into a chair, wall or cushion so the body is not carrying everything alone."], ["Touch and remember", "Hold an object linked to the person or loss while breathing slowly."]]}, "p7-companion": {"protocol": "Shutdown Recovery", "lead": "Shutdown often shows up as heaviness, numbness and a body that has pulled back to conserve energy.", "img": "assets/media-20.webp", "left": [["CHEST", "Flatness, low energy, shallow or barely noticed breathing."], ["STOMACH", "Heavy, empty or shut-down feeling."], ["FACE", "Blankness, low expression, difficulty activating."], ["HANDS", "Stillness, low impulse to move, numbness."]], "right": [["NECK & SHOULDERS", "Collapsed or weighed-down posture."], ["UPPER BACK", "A rounded, withdrawn feeling through the upper body."]], "practices": [["Very small movement", "Start with something tiny like opening and closing the hands."], ["Name one thing you feel", "Even 'numb' counts as a beginning."], ["Use warmth", "A warm drink or blanket can help the body register safety."], ["Slow walking", "A brief walk can help the body come back online."], ["Text one safe person", "Connection helps interrupt the shut-down loop."], ["Look toward light", "Natural light helps orient the body out of inward shutdown."], ["Lift and place", "Stand up, shift weight, and take one deliberate physical action."]]}, "p8-companion": {"protocol": "Jealousy Release", "lead": "Jealousy can show up as agitation, hot scanning and a body that wants to monitor or react.", "img": "assets/media-21.webp", "left": [["JAW & FACE", "Clenching, squinting, tension from comparison or suspicion."], ["CHEST", "Heat, pressure, sharp activation."], ["STOMACH", "Twist, drop or agitated churn."], ["HANDS", "Urge to check, scroll, grip or confront."]], "right": [["NECK & SHOULDERS", "Body braced for threat or humiliation."], ["UPPER BACK", "Tension from vigilance and self-protection."]], "practices": [["Put the phone down", "Interrupt checking before the body escalates further."], ["Breathe out longer", "Reduce the immediate surge before drawing conclusions."], ["Walk before speaking", "Move first so the first words are not purely reactive."], ["Relax the jaw", "Loosen the face to reduce escalation signals."], ["Name the fear underneath", "Jealousy often softens when the vulnerable fear is named."], ["Uncurl the hands", "Physically releasing the grip helps reduce the monitoring impulse."], ["Look away from the trigger", "Remove visual fuel long enough for the body to settle."]]}, "p9-companion": {"protocol": "Insecurity Anchor", "lead": "Insecurity can feel like bracing in the body against being judged, measured or not enough.", "img": "assets/media-22.webp", "left": [["FACE", "Tight expression, self-consciousness, heat or tension."], ["CHEST", "Pressure or collapse around self-doubt."], ["STOMACH", "Fluttering, sinking or unsteady feeling."], ["THROAT", "Tightness when trying to speak up or be seen."]], "right": [["SHOULDERS", "Pulled in or held rigid to protect yourself."], ["UPPER BACK", "Holding tension from trying to keep it together."]], "practices": [["Lengthen the spine", "A more grounded posture can help shift inner messaging."], ["Breathe into the chest", "Make more room where self-doubt often tightens."], ["Speak one clear sentence", "A small act of visibility helps counter the hiding reflex."], ["Release the shoulders", "Let the body stop performing self-protection."], ["Stand on both feet", "A stable base helps interrupt self-conscious activation."], ["Soften the face", "Reduce the tension that comes from monitoring yourself."], ["Name one real strength", "A grounded fact can help the body stop collapsing into doubt."]]}, "p10-companion": {"protocol": "Powerlessness & Despair", "lead": "Powerlessness often registers as collapse, heaviness and a body that has stopped expecting an effective next move.", "img": "assets/media-23.webp", "left": [["CHEST", "Flatness, heaviness or pressure."], ["STOMACH", "Drop, emptiness, depleted feeling."], ["FACE", "Blankness, low expression, tiredness."], ["HANDS", "Inactivity, low energy, little impulse to act."]], "right": [["SHOULDERS", "Sagging, burdened or defeated posture."], ["UPPER BACK", "A collapsed shape from carrying hopelessness."]], "practices": [["Sit upright with support", "Let the body experience a little more structure."], ["Name one thing that is still possible", "A small possibility can interrupt total shutdown."], ["Use slow pressure", "Press hands together or into a cushion to create contact."], ["Take a short walk", "Movement can help restore a sense of agency."], ["Breathe low and steady", "A slower, lower breath helps reduce collapse."], ["Open the chest slightly", "A small change in posture can shift the feeling of defeat."], ["Complete one tiny task", "A finished action helps the body register that movement is still possible."]]}};
 
+  const KEYS = Object.keys(SOMATIC_DATA);
 
-<script id="sr-v22-somatic-protocol-illustrations">
-(function(){
-  const SOMATIC_ILLUSTRATIONS = {'p1-companion': 'assets/sr-v22-somatic-protocol-illustrations.webp', 'p2-companion': 'assets/media-05.webp', 'p3-companion': 'assets/media-06.webp', 'p4-companion': 'assets/media-07.webp', 'p5-companion': 'assets/media-08.webp', 'p6-companion': 'assets/media-09.webp', 'p7-companion': 'assets/media-10.webp', 'p8-companion': 'assets/media-11.webp', 'p9-companion': 'assets/media-12.webp', 'p10-companion': 'assets/media-13.webp'};
-
-  function applySomaticIllustrations(){
-    Object.entries(SOMATIC_ILLUSTRATIONS).forEach(function(entry){
-      const key = entry[0];
-      const src = entry[1];
-      const page = document.querySelector('.reader-page[data-reader-page="' + key + '"]');
-      if(!page) return;
-      page.querySelectorAll('.sr20-figure img, .sv-image img, .sm-image img').forEach(function(img){
-        img.src = src;
-        img.alt = 'Protocol-specific front and back physiology illustration for ' + key;
-      });
+  if (typeof RESOURCE_CONTENT !== 'undefined') {
+    KEYS.forEach(function(key){
+      if (RESOURCE_CONTENT[key]) {
+        RESOURCE_CONTENT[key].kind = 'Somatic Release';
+        RESOURCE_CONTENT[key].title = 'Somatic Release — helping the body come down from emotional overload';
+        RESOURCE_CONTENT[key].meta = 'Body-based practice · everyday movement · 7 practical options';
+      }
     });
   }
 
-  window.addEventListener('load', function(){ setTimeout(applySomaticIllustrations, 260); });
-  document.addEventListener('click', function(e){
-    if(e.target.closest('.reader-tab,.res-item,.res-action,.lib-card,.resource-card')) {
-      setTimeout(applySomaticIllustrations, 260);
-    }
-  });
-
-  const observer = new MutationObserver(function(){ requestAnimationFrame(applySomaticIllustrations); });
-  observer.observe(document.documentElement, {subtree:true, childList:true});
-})();
-</script>
-
-
-<script id="sr-v23-somatic-transparent-illustrations">
-(function(){
-  const SOMATIC_TRANSPARENT = {'p1-companion': 'assets/sr-v23-somatic-transparent-illustrations.webp', 'p2-companion': 'assets/media-15.webp', 'p3-companion': 'assets/media-16.webp', 'p4-companion': 'assets/media-17.webp', 'p5-companion': 'assets/media-18.webp', 'p6-companion': 'assets/media-19.webp', 'p7-companion': 'assets/media-20.webp', 'p8-companion': 'assets/media-21.webp', 'p9-companion': 'assets/media-22.webp', 'p10-companion': 'assets/media-23.webp'};
-
-  function applyTransparentSomaticArt(){
-    Object.entries(SOMATIC_TRANSPARENT).forEach(function(entry){
-      const key = entry[0];
-      const src = entry[1];
-      const page = document.querySelector('.reader-page[data-reader-page="' + key + '"]');
-      if (!page) return;
-      page.querySelectorAll('.sr20-figure img, .sv-image img, .sm-image img').forEach(function(img){
-        img.src = src;
-        img.style.background = 'transparent';
-        img.style.mixBlendMode = 'normal';
-      });
-    });
+  function zonesHtml(zones, side){
+    return zones.map(function(z){
+      return '<div class="sr20-zone '+side+'"><b>'+z[0]+'</b><span>'+z[1]+'</span></div>';
+    }).join('');
   }
 
-  window.addEventListener('load', function(){ setTimeout(applyTransparentSomaticArt, 280); });
-  document.addEventListener('click', function(e){
-    if (e.target.closest('.reader-tab,.res-item,.res-action,.lib-card,.resource-card')) {
-      setTimeout(applyTransparentSomaticArt, 260);
-    }
-  });
+  function practicesHtml(items){
+    return items.map(function(p,i){
+      return '<div class="sr20-practice">'+
+        '<span class="sr20-practice-num">'+String(i+1).padStart(2,'0')+'</span>'+
+        '<div><h4>'+p[0]+'</h4><p>'+p[1]+'</p></div>'+
+      '</div>';
+    }).join('');
+  }
 
-  const observer = new MutationObserver(function(){ requestAnimationFrame(applyTransparentSomaticArt); });
-  observer.observe(document.documentElement, {subtree:true, childList:true});
+  function bodyHtml(spec, key){
+    const imgAlt = 'Protocol-specific front and back physiology illustration for ' + key;
+    return '<div class="sr20-wrap">'+
+
+      '<section class="sr20-intro">'+
+        '<h3>What is somatic release?</h3>'+
+        '<p>It simply means using safe movement, breath, pressure, rhythm or sensory input to help your body settle after it has geared up for stress. You are not trying to force an emotion out of your body. You are giving the body a practical way to shift from “ready for action” toward “I can deal with this.”</p>'+
+        '<div class="sr20-guidance">'+
+          '<b>How to use the body map</b>'+
+          '<p>Emotions do not literally live in one body part. But people often notice recurring sensations in certain areas when distressed. Use this map as a check-in guide, not a diagnosis.</p>'+
+        '</div>'+
+      '</section>'+
+
+      '<section class="sr20-section">'+
+        '<div class="sr20-section-head">'+
+          '<span class="sr20-eyebrow">Common tension points in this protocol</span>'+
+          '<h3 class="sr20-section-title">Where stress may show up in your body</h3>'+
+          '<p class="sr20-lead">'+spec.lead+'</p>'+
+        '</div>'+
+        '<div class="sr20-map-grid">'+
+          '<div class="sr20-zone-list left">'+zonesHtml(spec.left,'left')+'</div>'+
+          '<div class="sr20-figure"><img src="'+spec.img+'" alt="'+imgAlt+'"></div>'+
+          '<div class="sr20-zone-list right">'+zonesHtml(spec.right,'right')+'</div>'+
+        '</div>'+
+        '<div class="sr20-map-note">'+
+          '<b>What this map is showing</b>'+
+          '<p>Only the tension points relevant to this protocol are labelled. Use them as cues to notice where your body is bracing. Your body may signal distress differently, and these sensations are not a diagnosis.</p>'+
+        '</div>'+
+      '</section>'+
+
+      '<section class="sr20-section">'+
+        '<div class="sr20-practice-intro">'+
+          '<span class="sr20-eyebrow">Everyday somatic release</span>'+
+          '<h3 class="sr20-section-title">Activities that can help the body settle</h3>'+
+          '<p class="sr20-lead">These are simple day-to-day ways to give physical activation somewhere safe to go. Choose one or two that fit the moment rather than trying to do everything at once.</p>'+
+        '</div>'+
+        '<div class="sr20-practices">'+practicesHtml(spec.practices)+'</div>'+
+        '<p class="sr20-use-note">Use these as practical regulation tools, not as a substitute for medical or mental-health care when symptoms are severe, persistent or concerning.</p>'+
+      '</section>'+
+
+    '</div>';
+  }
+
+  function renderSomatic(key){
+    const spec = SOMATIC_DATA[key];
+    if (!spec) return;
+    const page = document.querySelector('.reader-page[data-reader-page="' + key + '"]');
+    if (!page) return;
+    const body = page.querySelector('.reader-page-body');
+    if (!body) return;
+
+    page.setAttribute('data-somatic-v20','1');
+
+    const title = page.querySelector('.reader-page-title');
+    const tags = page.querySelector('.reader-page-tags');
+    if (title) title.textContent = 'Somatic Release — helping the body come down from emotional overload';
+    if (tags) tags.textContent = 'Body-based practice · everyday movement · 7 practical options';
+
+    body.innerHTML = bodyHtml(spec, key);
+  }
+
+  function renderAllOpenSomatic(){
+    KEYS.forEach(renderSomatic);
+  }
+
+  const oldOpen = window.openReader;
+  if (typeof oldOpen === 'function') {
+    window.openReader = function(protocolKey, initialKey){
+      const result = oldOpen.apply(this, arguments);
+      renderAllOpenSomatic();
+      return result;
+    };
+  }
+
+  const oldSelect = window.selectReaderTab;
+  if (typeof oldSelect === 'function') {
+    window.selectReaderTab = function(protocolKey, key){
+      const result = oldSelect.apply(this, arguments);
+      renderSomatic(key);
+      return result;
+    };
+  }
+
+  window.addEventListener('load', function(){
+    renderAllOpenSomatic();
+  });
 })();
 </script>
 
