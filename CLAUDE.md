@@ -92,3 +92,34 @@ length/tone, but track-specific content (do not reuse one track's wording on ano
 The cards should feel clean, compact, and premium while preserving the existing
 identity of every protocol.
 ```
+
+## Design system
+
+All visual styling lives in `css/saferise-system.css` and `js/saferise-system.js`.
+`docs/INTEGRATION.md` is the markup contract — read it before touching any UI.
+
+- Do NOT add styles to page files. New styling goes in the system CSS.
+- Prefix every new class `sr-`. A collision has already cost real time:
+  `.track` was the video scrubber at `height:3px`, and the carousel
+  silently collapsed to 36px when it reused the name.
+- Never use `<button>` as a card containing an aspect-ratio child.
+  Chromium renders the child and leaves the button at zero height.
+  Use `<article role="button" tabindex="0">`.
+- Never put a literal closing script tag inside a .js file, including
+  in comments. It terminates the tag if the file is ever inlined.
+- Reduced motion is handled centrally in the system CSS. Do not add
+  per-component `prefers-reduced-motion` blocks.
+- The system CSS must load LAST, after every existing stylesheet.
+  It wins by cascade order, not by `!important`.
+
+## Platform landmines
+
+- All Track 02 resources route through the Reader via `READER_PROTOCOLS`,
+  never simple modals. A new resource type must hook into BOTH
+  `openResourceModal` and the Reader's page-building loop.
+- Widget injection goes after `contentEl.appendChild(page)` in `openReader`,
+  branching on `data.kind`.
+- Fixed nav and resource modals have a history of z-index conflicts.
+- Waveform loop init is tied to audio player IDs.
+
+## Definition of done
