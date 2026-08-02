@@ -4399,26 +4399,48 @@ document.addEventListener('DOMContentLoaded', function(){
       </button>
     </div>
 
-    <div id="hero-mount-personal"></div>
+    <div id="ten-protocols-section"></div>
 
-<div id="ten-protocols-section"></div>
-<!-- ═══ 03 TEN PROTOCOLS ═══ -->
-<div id="ten-protocols"></div>
-<section>
-  <div class="container">
-    <div id="protocols-head-mount-personal"></div>
+    <div class="sr-banner">
+      <video class="sr-banner-media" muted playsinline></video>
+      <div class="sr-banner-scrim"></div>
+      <div class="sr-banner-copy">
+        <h1>Personal<em>Transformation</em></h1>
+        <p class="sr-lead">A library of protocols for real change.</p>
+        <p>You already know what you're feeling. Open the protocol that matches it — each one is a complete guided system for a single state, with nothing to fill in first. No intake. No labels. No waiting to be assessed. Start with what matters most right now.</p>
+      </div>
+      <button class="sr-play" aria-label="Play introduction">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    </div>
 
-    <div class="proto-grid reveal pcard-grid" id="protoList">
+    <div data-sr-carousel-group>
+      <div class="sr-car-head">
+        <p class="sr-kick">Browse All Protocols</p>
+        <div class="sr-car-nav">
+          <span class="sr-counter"><b data-sr-counter>1</b> / 10</span>
+          <button class="sr-arrow" data-sr-prev aria-label="Previous protocol">
+            <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="sr-arrow" data-sr-next aria-label="Next protocol">
+            <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+      </div>
+      <div class="sr-carousel" data-sr-carousel>
+        <div class="sr-ptrack" data-sr-track id="protoList" tabindex="0">
 
       <!-- PROTOCOL MACRO: defined inline for each of 10 -->
 
       <!-- 01 ANXIETY -->
-      <div class="proto-item" data-proto="1" onclick="toggleProto(this)">
-        <span class="proto-toggle">+</span>
-        <span class="proto-num">01</span>
-        <p class="proto-name">The Anxiety Reset Protocol</p>
-        <p class="proto-trigger">Uncertainty, spiralling thoughts, future fear, decision paralysis</p>
-        <p class="proto-landing-desc">Calm fear responses, quiet spiralling thoughts, and return to the present.</p>
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c01" data-proto="1" onclick="toggleProto(this)" aria-label="Open The Anxiety Reset Protocol">
+        <span class="sr-tile">
+          <span class="sr-art"></span>
+          <span class="sr-num">01</span>
+          <span class="sr-kicker">Regulate</span>
+          <span class="sr-rule"></span>
+        </span>
+        <h3 class="proto-name">The Anxiety Reset Protocol</h3>
+        <p class="proto-trigger" hidden>Uncertainty, spiralling thoughts, future fear, decision paralysis</p>
+        <p class="proto-landing-desc sr-trig">Calm fear responses, quiet spiralling thoughts, and return to the present.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
@@ -4648,14 +4670,19 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
 
         </div>
-      </div>
+      </article>
 
       <!-- 02 THE ANGER ALCHEMY PROTOCOL -->
-      <div class="proto-item" data-proto="2" onclick="toggleProto(this)">
-        <span class="proto-toggle">+</span>
-        <span class="proto-num">02</span>
-        <p class="proto-name">The Anger Alchemy Protocol</p>
-        <p class="proto-trigger">Injustice, boundary violation, disrespect, loss of control</p><p class="proto-landing-desc">Turn anger into clarity, protect what matters, and choose your response.</p>
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c02" data-proto="2" onclick="toggleProto(this)" aria-label="Open The Anger Alchemy Protocol">
+        <span class="sr-tile">
+          <span class="sr-art"></span>
+          <span class="sr-num">02</span>
+          <span class="sr-kicker">Transmute</span>
+          <span class="sr-rule"></span>
+        </span>
+        <h3 class="proto-name">The Anger Alchemy Protocol</h3>
+        <p class="proto-trigger" hidden>Injustice, boundary violation, disrespect, loss of control</p>
+        <p class="proto-landing-desc sr-trig">Turn anger into clarity, protect what matters, and choose your response.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
@@ -4890,14 +4917,19 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
 
         </div>
-      </div>
+      </article>
 
       <!-- 03 THE OVERWHELM THRESHOLD PROTOCOL -->
-      <div class="proto-item" data-proto="3" onclick="toggleProto(this)">
-        <span class="proto-toggle">+</span>
-        <span class="proto-num">03</span>
-        <p class="proto-name">The Overwhelm Threshold Protocol</p>
-        <p class="proto-trigger">Noise, crowds, competing stimulation, environmental chaos, sensory flood</p><p class="proto-landing-desc">Reduce overload, regain your footing, and create space to think clearly.</p>
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c03" data-proto="3" onclick="toggleProto(this)" aria-label="Open The Overwhelm Threshold Protocol">
+        <span class="sr-tile">
+          <span class="sr-art"></span>
+          <span class="sr-num">03</span>
+          <span class="sr-kicker">Reduce Load</span>
+          <span class="sr-rule"></span>
+        </span>
+        <h3 class="proto-name">The Overwhelm Threshold Protocol</h3>
+        <p class="proto-trigger" hidden>Noise, crowds, competing stimulation, environmental chaos, sensory flood</p>
+        <p class="proto-landing-desc sr-trig">Reduce overload, regain your footing, and create space to think clearly.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
@@ -5130,14 +5162,19 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
 
         </div>
-      </div>
+      </article>
 
       <!-- 04 THE ABANDONMENT WOUND PROTOCOL -->
-      <div class="proto-item" data-proto="4" onclick="toggleProto(this)">
-        <span class="proto-toggle">+</span>
-        <span class="proto-num">04</span>
-        <p class="proto-name">The Abandonment Wound Protocol</p>
-        <p class="proto-trigger">Rejection, being left, not chosen, loss of belonging, attachment threat</p><p class="proto-landing-desc">Steady the fear of rejection and rebuild security when belonging feels threatened.</p>
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c04" data-proto="4" onclick="toggleProto(this)" aria-label="Open The Abandonment Wound Protocol">
+        <span class="sr-tile">
+          <span class="sr-art"></span>
+          <span class="sr-num">04</span>
+          <span class="sr-kicker">Repair</span>
+          <span class="sr-rule"></span>
+        </span>
+        <h3 class="proto-name">The Abandonment Wound Protocol</h3>
+        <p class="proto-trigger" hidden>Rejection, being left, not chosen, loss of belonging, attachment threat</p>
+        <p class="proto-landing-desc sr-trig">Steady the fear of rejection and rebuild security when belonging feels threatened.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
@@ -5372,14 +5409,19 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
 
         </div>
-      </div>
+      </article>
 
       <!-- 05 THE SHAME DISSOLUTION PROTOCOL -->
-      <div class="proto-item" data-proto="5" onclick="toggleProto(this)">
-        <span class="proto-toggle">+</span>
-        <span class="proto-num">05</span>
-        <p class="proto-name">The Shame Dissolution Protocol</p>
-        <p class="proto-trigger">Public mistake, exposure, feeling fundamentally flawed or judged</p><p class="proto-landing-desc">Move beyond self-judgment, recover your dignity, and stop a moment from defining you.</p>
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c05" data-proto="5" onclick="toggleProto(this)" aria-label="Open The Shame Dissolution Protocol">
+        <span class="sr-tile">
+          <span class="sr-art"></span>
+          <span class="sr-num">05</span>
+          <span class="sr-kicker">Dissolve</span>
+          <span class="sr-rule"></span>
+        </span>
+        <h3 class="proto-name">The Shame Dissolution Protocol</h3>
+        <p class="proto-trigger" hidden>Public mistake, exposure, feeling fundamentally flawed or judged</p>
+        <p class="proto-landing-desc sr-trig">Move beyond self-judgment, recover your dignity, and stop a moment from defining you.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
@@ -5609,15 +5651,19 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
 
         </div>
-      </div>
+      </article>
 
       <!-- 06 THE GRIEF INTEGRATION PROTOCOL -->
-      <div class="proto-item" data-proto="6" onclick="toggleProto(this)">
-        <span class="proto-toggle">+</span>
-        <span class="proto-num">06</span>
-        <p class="proto-name">The Grief Integration Protocol</p>
-        <p class="proto-trigger">Loss of a person, relationship, chapter of life, or imagined future</p>
-        <p class="proto-landing-desc">Make space for loss, move through what has changed, and carry forward what matters.</p>
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c06" data-proto="6" onclick="toggleProto(this)" aria-label="Open The Grief Integration Protocol">
+        <span class="sr-tile">
+          <span class="sr-art"></span>
+          <span class="sr-num">06</span>
+          <span class="sr-kicker">Integrate</span>
+          <span class="sr-rule"></span>
+        </span>
+        <h3 class="proto-name">The Grief Integration Protocol</h3>
+        <p class="proto-trigger" hidden>Loss of a person, relationship, chapter of life, or imagined future</p>
+        <p class="proto-landing-desc sr-trig">Make space for loss, move through what has changed, and carry forward what matters.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
@@ -5847,14 +5893,19 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
 
         </div>
-      </div>
+      </article>
 
       <!-- 07 THE SHUTDOWN RECOVERY PROTOCOL -->
-      <div class="proto-item" data-proto="7" onclick="toggleProto(this)">
-        <span class="proto-toggle">+</span>
-        <span class="proto-num">07</span>
-        <p class="proto-name">The Shutdown Recovery Protocol</p>
-        <p class="proto-trigger">Numbness, flatness, disconnection, inability to feel or engage</p><p class="proto-landing-desc">Reconnect with yourself, restore engagement, and gently come back online.</p>
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c07" data-proto="7" onclick="toggleProto(this)" aria-label="Open The Shutdown Recovery Protocol">
+        <span class="sr-tile">
+          <span class="sr-art"></span>
+          <span class="sr-num">07</span>
+          <span class="sr-kicker">Restore</span>
+          <span class="sr-rule"></span>
+        </span>
+        <h3 class="proto-name">The Shutdown Recovery Protocol</h3>
+        <p class="proto-trigger" hidden>Numbness, flatness, disconnection, inability to feel or engage</p>
+        <p class="proto-landing-desc sr-trig">Reconnect with yourself, restore engagement, and gently come back online.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
@@ -6084,14 +6135,19 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
 
         </div>
-      </div>
+      </article>
 
       <!-- 08 THE JEALOUSY RELEASE PROTOCOL -->
-      <div class="proto-item" data-proto="8" onclick="toggleProto(this)">
-        <span class="proto-toggle">+</span>
-        <span class="proto-num">08</span>
-        <p class="proto-name">The Jealousy Release Protocol</p>
-        <p class="proto-trigger">Someone else's success, comparison, the sting of being outpaced</p><p class="proto-landing-desc">Move beyond comparison, understand what the sting is revealing, and return to your own path.</p>
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c08" data-proto="8" onclick="toggleProto(this)" aria-label="Open The Jealousy Release Protocol">
+        <span class="sr-tile">
+          <span class="sr-art"></span>
+          <span class="sr-num">08</span>
+          <span class="sr-kicker">Release</span>
+          <span class="sr-rule"></span>
+        </span>
+        <h3 class="proto-name">The Jealousy Release Protocol</h3>
+        <p class="proto-trigger" hidden>Someone else's success, comparison, the sting of being outpaced</p>
+        <p class="proto-landing-desc sr-trig">Move beyond comparison, understand what the sting is revealing, and return to your own path.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
@@ -6326,14 +6382,19 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
 
         </div>
-      </div>
+      </article>
 
       <!-- 09 THE INSECURITY ANCHOR PROTOCOL -->
-      <div class="proto-item" data-proto="9" onclick="toggleProto(this)">
-        <span class="proto-toggle">+</span>
-        <span class="proto-num">09</span>
-        <p class="proto-name">The Insecurity Anchor Protocol</p>
-        <p class="proto-trigger">Being evaluated, judged, or seen — self-doubt without clear evidence</p><p class="proto-landing-desc">Quiet self-doubt, strengthen inner trust, and stay grounded when you feel judged or exposed.</p>
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c09" data-proto="9" onclick="toggleProto(this)" aria-label="Open The Insecurity Anchor Protocol">
+        <span class="sr-tile">
+          <span class="sr-art"></span>
+          <span class="sr-num">09</span>
+          <span class="sr-kicker">Anchor</span>
+          <span class="sr-rule"></span>
+        </span>
+        <h3 class="proto-name">The Insecurity Anchor Protocol</h3>
+        <p class="proto-trigger" hidden>Being evaluated, judged, or seen — self-doubt without clear evidence</p>
+        <p class="proto-landing-desc sr-trig">Quiet self-doubt, strengthen inner trust, and stay grounded when you feel judged or exposed.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
@@ -6568,14 +6629,19 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
 
         </div>
-      </div>
+      </article>
 
       <!-- 10 THE POWERLESSNESS & DESPAIR PROTOCOL -->
-      <div class="proto-item" data-proto="10" onclick="toggleProto(this)">
-        <span class="proto-toggle">+</span>
-        <span class="proto-num">10</span>
-        <p class="proto-name">The Powerlessness & Despair Protocol</p>
-        <p class="proto-trigger">Circumstances that feel foreclosed, effort that no longer seems to matter</p><p class="proto-landing-desc">Find what is still within your reach, restore agency, and take the next meaningful step.</p>
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c10" data-proto="10" onclick="toggleProto(this)" aria-label="Open The Powerlessness & Despair Protocol">
+        <span class="sr-tile">
+          <span class="sr-art"></span>
+          <span class="sr-num">10</span>
+          <span class="sr-kicker">Reclaim</span>
+          <span class="sr-rule"></span>
+        </span>
+        <h3 class="proto-name">The Powerlessness & Despair Protocol</h3>
+        <p class="proto-trigger" hidden>Circumstances that feel foreclosed, effort that no longer seems to matter</p>
+        <p class="proto-landing-desc sr-trig">Find what is still within your reach, restore agency, and take the next meaningful step.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
@@ -6812,45 +6878,226 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
 
         </div>
-      </div>
+      </article>
 
-    </div><!-- end proto-grid -->
-  </div>
-</section>
-
-
-
-
-    <!-- Join a Monthly Workshop / Book a Premium 1:1 -->
-    <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:8px;">
-      <div style="background:var(--card);border:1px solid var(--border);border-top:2px solid var(--primary);padding:26px 24px;display:flex;flex-direction:column;">
-        <p style="font-size:9px;letter-spacing:3px;color:var(--primary);font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Join A Monthly Workshop</p>
-        <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;color:var(--text2);line-height:1.65;margin-bottom:18px;flex:1;">Work a protocol live, in real time, alongside a small group — Andre facilitating the same Four-Step framework, together.</p>
-        <button onclick="showProg('workshops')" style="width:100%;background:var(--primary);border:1px solid var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;">Discover More ◆</button>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-top:2px solid var(--primary);padding:26px 24px;display:flex;flex-direction:column;">
-        <p style="font-size:9px;letter-spacing:3px;color:var(--primary);font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Book A Premium 1:1</p>
-        <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;color:var(--text2);line-height:1.65;margin-bottom:18px;flex:1;">A private hour with the founder for whatever the self-guided protocols can't fully reach on their own.</p>
-        <button onclick="showProg('premium1on1')" style="width:100%;background:none;border:1px solid var(--primary);color:var(--primary);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;">Discover More ◆</button>
+        </div>
       </div>
     </div>
 
-    <div id="whats-included-mount-personal"></div>
+    <section class="sr-section">
+      <div class="sr-head">
+        <h2>What's Included</h2>
+        <p>The full resource library — everything you need to understand, release, and move beyond specific emotional distress patterns.</p>
+      </div>
+      <div class="sr-features">
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></span>
+        <div>
+          <h3>Guided Experience</h3>
+          <p><span class="sr-tagline">Step-by-step audio.</span><br>The full session, voiced and paced. Headphones, ten minutes, nothing to read.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/></svg></span>
+        <div>
+          <h3>How This Works</h3>
+          <p><span class="sr-tagline">See the mechanisms.</span><br>What is happening in your body during this state, and why the four steps land in that order.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><path d="M4 5.5A2 2 0 016 4h5v15H6a2 2 0 00-2 1.5z"/><path d="M20 5.5A2 2 0 0018 4h-5v15h5a2 2 0 012 1.5z"/></svg></span>
+        <div>
+          <h3>Protocol Guide</h3>
+          <p><span class="sr-tagline">Clear guidance on how to use it.</span><br>The printable step guide, formatted for your phone or the fridge door.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><path d="M9.5 17h5M10 20h4"/><path d="M12 3a5.5 5.5 0 013.3 9.9c-.5.4-.8 1-.8 1.6H9.5c0-.6-.3-1.2-.8-1.6A5.5 5.5 0 0112 3z"/></svg></span>
+        <div>
+          <h3>Source Insights</h3>
+          <p><span class="sr-tagline">Understand the root causes.</span><br>The six frameworks behind this protocol, in plain language — Porges, HeartMath, Dispenza, Maté, Jung, Watts.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 5-14 16-15 0 10-5 15-12 15a8 8 0 01-4 0z"/><path d="M9 15c2-3 5-5 8-6"/></svg></span>
+        <div>
+          <h3>Somatic Release</h3>
+          <p><span class="sr-tagline">Body-based practices.</span><br>Daily companions between sessions — the small physical things that keep the work in place.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9M10 13h4"/></svg></span>
+        <div>
+          <h3>Reference Case</h3>
+          <p><span class="sr-tagline">A real-world example.</span><br>A historical figure who lived this exact pattern, and what actually shifted it.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><path d="M12 4l8.5 15h-17z"/><path d="M12 10v4M12 17h.01"/></svg></span>
+        <div>
+          <h3>Crisis Card</h3>
+          <p><span class="sr-tagline">The four-line version.</span><br>For the moment it is actually happening, when reading anything longer is not realistic.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.2 8.8l-1.9 4.5-4.5 1.9 1.9-4.5z"/></svg></span>
+        <div>
+          <h3>Attention Advisory</h3>
+          <p><span class="sr-tagline">Know your limits.</span><br>Where to direct your energy right now, and how close to stay.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9.2 12l2 2 3.6-4"/></svg></span>
+        <div>
+          <h3>Disclosure &amp; Support</h3>
+          <p><span class="sr-tagline">A script for someone close to you.</span><br>Words for explaining what you are doing and what you need, without over-explaining.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><path d="M3 11l3-3 4 1 2-1 2 1 4-1 3 3"/><path d="M6 8v7a2 2 0 002 2h8a2 2 0 002-2V8"/><path d="M10 14h4"/></svg></span>
+        <div>
+          <h3>Invitation to Repair</h3>
+          <p><span class="sr-tagline">Rebuild what was strained.</span><br>A structured way to open repair with another person when the pattern involves them.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M8 15l3.5-4 3 2.5L20 8"/></svg></span>
+        <div>
+          <h3>Progress Tracking</h3>
+          <p><span class="sr-tagline">Measure the change.</span><br>Log each session and watch the tier move — before and after, in your own data.</p>
+        </div>
+      </div>
+      <div class="sr-feat">
+        <span class="sr-ico"><svg viewBox="0 0 24 24"><path d="M4 20l1-4L16 5a2 2 0 013 3L8 19z"/><path d="M14 7l3 3"/></svg></span>
+        <div>
+          <h3>Progress Journal</h3>
+          <p><span class="sr-tagline">Prompts that land.</span><br>Precision prompts tied to this protocol, not generic journalling questions.</p>
+        </div>
+      </div>
+      </div>
+      <p class="sr-note">Attention Advisory and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern — six and four of the ten protocols, respectively.</p>
+    </section>
 
-    <!-- CTA -->
-    <div id="personal-pricing" style="text-align:center;background:var(--bg3);border:1px solid var(--primary);padding:52px 40px;margin-top:48px;">
-      <h2 style="font-family:'Cinzel',serif;font-size:clamp(22px,3vw,32px);font-weight:400;color:var(--primary);margin-bottom:26px;">Your SafeRise is ready when you are.</h2>
-      <button onclick="showProg('compare');" style="background:var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 32px;border-radius:2px;border:none;cursor:pointer;margin-bottom:16px;">Start — €9/mo ◆</button>
-      <p style="font-size:11px;color:var(--text3);font-family:'DM Sans',sans-serif;margin-bottom:14px;">or preview the Foundation Protocol free</p>
-      <form name="foundation-unlock" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="return unlockFoundation(event);" style="display:flex;gap:8px;justify-content:center;max-width:380px;margin:0 auto 14px;flex-wrap:wrap;">
-        <input type="hidden" name="form-name" value="foundation-unlock">
-        <input type="hidden" name="source" value="homepage-foundation-cta">
-        <p style="display:none;"><label>Leave blank <input name="bot-field"></label></p>
-        <input type="email" name="email" required id="foundation-email-input" placeholder="name@email.com" style="flex:1;min-width:200px;background:var(--card2);border:1px solid var(--border);border-radius:2px;padding:11px 13px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);">
-        <button type="submit" style="border:1px solid var(--primary);color:var(--primary);background:none;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:11px 16px;border-radius:2px;cursor:pointer;white-space:nowrap;">Unlock Foundation</button>
-      </form>
-      <p style="font-size:11px;color:var(--text3);font-family:'DM Sans',sans-serif;">30-day satisfaction guarantee · Cancel anytime</p>
+    <section class="sr-testi">
+      <blockquote>PLACEHOLDER — replace with a real quote before launch. Keep it to two sentences: what the state was before, and what specifically changed. Concrete beats effusive.</blockquote>
+      <p class="sr-who">First Name, Location<span>Personal Transformation · 3 months</span></p>
+    </section>
+
+    <section class="sr-human">
+      <div class="sr-head">
+        <p class="sr-kick">Beyond Self-Guided</p>
+        <h2>When you want someone in the room.</h2>
+        <p>The protocols work alone. These are for the moments they don't go far enough.</p>
+      </div>
+      <div class="sr-svc-pair">
+        <article class="sr-svc sr-svc-group">
+          <span class="sr-svc-ico"><svg viewBox="0 0 24 24">
+            <circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/>
+            <path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><path d="M16 14.6c2.2.2 3.8 1.7 4.3 4.4"/>
+          </svg></span>
+          <p class="sr-svc-kick">Join a Monthly Workshop</p>
+          <h3>Work a protocol live, with others.</h3>
+          <p class="sr-svc-body">Andre facilitating the same Four-Step framework in real time, alongside a small group — so you practise it once with support before you run it alone.</p>
+          <ul class="sr-svc-meta">
+            <li>Small group</li><li>Monthly</li><li>Live, facilitated</li>
+          </ul>
+          <button class="sr-svc-cta" onclick="showProg('workshops')">Discover More ◆</button>
+        </article>
+
+        <article class="sr-svc sr-svc-solo">
+          <span class="sr-svc-tag">Limited availability</span>
+          <span class="sr-svc-ico"><svg viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="3.4"/><path d="M5 20c.8-4 3.6-6 7-6s6.2 2 7 6"/>
+          </svg></span>
+          <p class="sr-svc-kick">Book a Premium 1:1</p>
+          <h3>A private hour with the founder.</h3>
+          <p class="sr-svc-body">For whatever the self-guided protocols can't fully reach on their own — the pattern that needs a second pair of eyes, not another resource.</p>
+          <ul class="sr-svc-meta">
+            <li>Private</li><li>60 minutes</li><li>With the founder</li>
+          </ul>
+          <button class="sr-svc-cta" onclick="showProg('premium1on1')">Discover More ◆</button>
+        </article>
+      </div>
+    </section>
+
+    <div class="sr-ctabar" data-sr-cta>
+      <p class="sr-say">Your SafeRise is ready <b>when you are.</b></p>
+      <div class="sr-acts">
+        <a class="sr-free" href="javascript:void(0)" onclick="showProg('foundation')">Preview the Foundation Protocol</a>
+        <button class="sr-start" onclick="showProg('compare')">Start — €9/mo ◆</button>
+      </div>
     </div>
+
+    <section class="sr-section">
+      <div class="sr-head">
+        <p class="sr-kick">Common Questions</p>
+        <h2>Before you start.</h2>
+        <p>The things worth knowing, answered plainly.</p>
+      </div>
+      <div class="sr-faq-cols">
+        <div>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>Is this therapy?</summary>
+          <p class="sr-a">No. SafeRise is a structured self-guided practice and coaching resource, not psychotherapy, counselling, or medical treatment. Andre is trained in Jungian shadow-work frameworks, somatic coaching, and meditation practice — he is not a licensed therapist or psychiatrist, and nothing here is a diagnosis.</p>
+          <p class="sr-a">Many people use it alongside therapy. It is designed to give you something practical to do in the moment a pattern shows up, between the sessions where you unpack why it exists.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>What if I'm already working with a therapist?</summary>
+          <p class="sr-a">That combination tends to work well, and it's worth telling them you're doing it. Each protocol includes a Disclosure &amp; Support script partly for this — a short way to explain what the practice involves so they can tell you whether it fits what you're working on together.</p>
+          <p class="sr-a">If your therapist advises against it, follow their guidance. They know your situation; a website doesn't.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>Do I need experience with meditation or somatic work?</summary>
+          <p class="sr-a">None. Every protocol is fully guided from start to finish — you're told what to do, when, and for how long. If you've tried meditation and found that being left alone with your thoughts made things worse, this is deliberately not that.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>How long does a session take, and what do I need?</summary>
+          <p class="sr-a">Around ten minutes. Headphones if you have them, somewhere you won't be interrupted, and the ability to sit or lie down. Nothing else — no journal to prepare, no prior reading.</p>
+          <p class="sr-a">There's also a Crisis Card in every protocol: a four-line version for moments when ten minutes isn't realistic.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>Which protocol should I start with?</summary>
+          <p class="sr-a">The one that names what you're feeling right now. That's the whole design — you don't need to work out an underlying cause first, and there's no correct order.</p>
+          <p class="sr-a">If nothing obviously matches, start with the Foundation Protocol. It teaches the four steps in their simplest form, and every other protocol is a variation on it.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>What actually comes with a protocol?</summary>
+          <p class="sr-a">A guided audio session, a printable step guide, the science behind the pattern, a reference case, body-based practices for between sessions, journalling prompts, and a crisis card. Some protocols also include an Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.</p>
+          <p class="sr-a">You are not expected to use all of it. Most people use two or three and ignore the rest.</p>
+        </details>
+        </div>
+        <div>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>Can I use this while I'm actually in the middle of it?</summary>
+          <p class="sr-a">Yes — that's what the Crisis Card is for, and it's designed to be readable when concentration is poor. The full session is better done once things have settled slightly.</p>
+          <p class="sr-a">If you're experiencing severe physical symptoms, or symptoms you haven't had before, treat that as a medical question first and speak to a doctor.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>Is any of this based on real science?</summary>
+          <p class="sr-a">The core of it rests on peer-reviewed work: Stephen Porges's Polyvagal Theory, the HeartMath Institute's research on heart-rhythm coherence, and Gabor Maté's Compassionate Inquiry. Carl Jung's shadow and individuation frameworks and Joe Dispenza's work on the observer state are included as interpretive layers rather than clinical evidence, and we try to be clear about which is which.</p>
+          <p class="sr-a">SafeRise has not been through a clinical trial. It is a structured practice built on established frameworks, not a treatment with proven outcomes.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>Is my journal private?</summary>
+          <p class="sr-a">Your entries and progress data are yours. They aren't shared, sold, or used to target advertising. Full detail is in the Privacy Policy.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>What if it doesn't work for me?</summary>
+          <p class="sr-a">Cancel any time from your account — there's no contract and no cancellation call. If it isn't landing within the first month, we'd rather you stopped than kept paying out of obligation.</p>
+          <p class="sr-a">Regulation practices are not universal. Some nervous systems respond faster to movement, or to another person in the room, than to a guided sequence alone.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>Can I use it with a partner?</summary>
+          <p class="sr-a">Track 01 is intrinsic work — just you and your own system. Relationship Healing is the track built for two people practising together, and it's in development.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>What if I'm in crisis right now?</summary>
+          <p class="sr-a">SafeRise is not crisis support and shouldn't be used as a substitute for it. If you're in immediate danger, contact your local emergency number.</p>
+          <p class="sr-a">If you need to talk to someone now, <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> lists free, confidential helplines by country. Reaching out there is the right move, and it's not an overreaction.</p>
+        </details>
+        </div>
+      </div>
+    </section>
   </div>
 </div>
 
