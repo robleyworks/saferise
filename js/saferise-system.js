@@ -24,6 +24,9 @@
        arrows   → [data-sr-prev] / [data-sr-next]
      Scoped to the nearest [data-sr-carousel-group] so several
      carousels can coexist on one page.
+
+     Also drifts on its own — slow, continuous, right-to-left — until
+     the visitor takes over. See "AUTOPLAY" below.
      ───────────────────────────────────────────────────────── */
   function initCarousel(root) {
     if (root.dataset.srInit === '1') return;
@@ -60,8 +63,8 @@
       paint();
     }
 
-    if (next) next.addEventListener('click', function () { go(pos + 1); });
-    if (prev) prev.addEventListener('click', function () { go(pos - 1); });
+    if (next) next.addEventListener('click', function () { stopAuto(); go(pos + 1); });
+    if (prev) prev.addEventListener('click', function () { stopAuto(); go(pos - 1); });
 
     track.addEventListener('scroll', function () {
       clearTimeout(timer);
@@ -72,11 +75,121 @@
     }, { passive: true });
 
     track.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowRight') { e.preventDefault(); go(pos + 1); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); go(pos - 1); }
+      if (e.key === 'ArrowRight') { stopAuto(); e.preventDefault(); go(pos + 1); }
+      if (e.key === 'ArrowLeft') { stopAuto(); e.preventDefault(); go(pos - 1); }
     });
 
     paint();
+
+    /* ─── AUTOPLAY ───────────────────────────────────────────
+       Continuous drift, not a step-by-step timer: scrollLeft is
+       nudged forward every frame by (trackWidth / LAP_SECONDS),
+       so it reads as motion, not a slideshow.
+
+       Seamless loop: the ten cards are cloned once, inert
+       (aria-hidden, no id, no onclick, .proto-expand stripped —
+       the real cards already double as accordion hosts, and a
+       second live copy of that markup would duplicate ids like
+       the waveform's), and appended after the real set. Once
+       scrollLeft passes the width of the real set, it's the
+       clones filling the viewport — pixel-identical to the real
+       cards — so subtracting that same width back out is
+       invisible. No jump, because nothing actually looks like it
+       jumped.
+
+       scroll-snap-type: x mandatory (set in CSS) fights a slow
+       continuous scrollLeft nudge — the browser tries to settle
+       on the nearest card after every frame, producing a stutter.
+       Rather than weaken snap for every carousel this component
+       ever hosts, it's toggled off only while autoplay is actually
+       driving the track, and restored the moment a person takes
+       over (hover, focus, touch, or a permanent stop) — so manual
+       scrolling and the arrow buttons keep their intended snap. */
+    if (reduce) return;
+
+    var LAP_SECONDS = 32;      // full traversal of the real 10, within the 25-40s ask
+    var RESUME_DELAY = 2000;   // "a couple of seconds" after interaction ends
+
+    var clones = cards.map(function (card) {
+      var c = card.cloneNode(true);
+      c.removeAttribute('id');
+      c.removeAttribute('onclick');
+      c.removeAttribute('role');
+      c.removeAttribute('tabindex');
+      c.setAttribute('aria-hidden', 'true');
+      c.tabIndex = -1;
+      c.style.pointerEvents = 'none';
+      c.classList.remove('open');
+      var expand = c.querySelector('.proto-expand');
+      if (expand) expand.parentNode.removeChild(expand);
+      [].forEach.call(c.querySelectorAll('[id]'), function (el) { el.removeAttribute('id'); });
+      return c;
+    });
+    clones.forEach(function (c) { track.appendChild(c); });
+
+    var realWidth = 0;
+    function measure() { realWidth = clones[0].offsetLeft - cards[0].offsetLeft; }
+    measure();
+    window.addEventListener('resize', measure);
+
+    function disableSnap() { track.style.scrollSnapType = 'none'; }
+    function restoreSnap() { track.style.scrollSnapType = ''; }
+
+    var stopped = false, paused = false, resumeTimer = null, rafId = null, lastT = null;
+
+    function frame(t) {
+      if (lastT == null) lastT = t;
+      var dt = Math.min((t - lastT) / 1000, 0.25); // clamp so a backgrounded tab can't leap
+      lastT = t;
+      /* The carousel boots inside a .prog-overlay that starts display:none —
+         offsetLeft reads 0 for everything until the portal is shown, so a
+         one-time measure() at init can permanently record realWidth 0 and
+         the drift never starts. Keep re-measuring until it isn't. */
+      if (realWidth <= 0) measure();
+      if (!stopped && !paused && realWidth > 0) {
+        track.scrollLeft += (realWidth / LAP_SECONDS) * dt;
+        if (track.scrollLeft >= realWidth) track.scrollLeft -= realWidth;
+        pos = nearest();
+        paint();
+      }
+      rafId = requestAnimationFrame(frame);
+    }
+
+    function pause() {
+      if (stopped || paused) return;
+      paused = true;
+      restoreSnap();
+      clearTimeout(resumeTimer);
+    }
+    function scheduleResume() {
+      if (stopped) return;
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(function () {
+        paused = false;
+        lastT = null; // don't count the paused interval as elapsed drift time
+        disableSnap();
+      }, RESUME_DELAY);
+    }
+    function stopAuto() {
+      if (stopped) return;
+      stopped = true;
+      paused = false;
+      clearTimeout(resumeTimer);
+      restoreSnap();
+      if (rafId) cancelAnimationFrame(rafId);
+    }
+
+    track.addEventListener('mouseenter', pause);
+    track.addEventListener('mouseleave', scheduleResume);
+    track.addEventListener('focusin', pause);
+    track.addEventListener('focusout', scheduleResume);
+    track.addEventListener('touchstart', pause, { passive: true });
+    track.addEventListener('touchend', scheduleResume, { passive: true });
+    track.addEventListener('touchcancel', scheduleResume, { passive: true });
+    cards.forEach(function (c) { c.addEventListener('click', stopAuto); });
+
+    disableSnap();
+    rafId = requestAnimationFrame(frame);
   }
 
   /* ─────────────────────────────────────────────────────────

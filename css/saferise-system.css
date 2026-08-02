@@ -282,6 +282,14 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
 .sr-head p{margin:0;font:italic 400 19px/1.7 'Cormorant Garamond',Georgia,serif;color:var(--text2)}
 .sr-note{margin:44px auto 0;text-align:center;max-width:74ch;
   font:400 13px/1.7 'DM Sans',sans-serif;color:var(--text3)}
+/* index.html reuses the bare class name .sr-note for an unrelated Reader
+   callout box, and both of its style blocks (#sr-v8-cool-reader,
+   #sr-v9-lighter-resource-body) set its background with !important. A
+   normal-weight rule here, however late it loads, cannot win against
+   that — !important only loses to !important. This is the one place
+   the system CSS uses it, specifically to null out those properties. */
+.sr-note{background:none!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;padding:0!important}
 
 /* B5 · feature grid — "what's included" ───────────────────── */
 .sr-section{margin-top:104px;padding-top:72px;border-top:1px solid rgba(212,168,67,.20)}
