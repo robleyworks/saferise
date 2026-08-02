@@ -26,39 +26,52 @@ DO NOT:
 
 The reference image is ONLY a reference for the grid layout, spacing, hierarchy, and overall presentation.
 
-For the protocol cards, REMOVE the descriptive text/subtitle/body copy beneath each protocol title.
+==================================================
+PROTOCOL CARD DESCRIPTIONS
+==================================================
 
-Each card should contain ONLY:
+Each card shows a short, NEW advisory-style description beneath the title — one calm,
+practical sentence describing what the protocol helps the user do (not the original
+trigger/symptom-list copy).
+
+Each card should contain:
 
 [EXISTING ORIGINAL ICON]
 
 [EXISTING ORIGINAL PROTOCOL TITLE]
 
+[NEW short advisory description — one sentence, track-specific, not copied between tracks]
 
 Open Protocol →
 
-For example, if the current data contains:
+For example, if the original data contains:
 
 Icon
 Anger Alchemy
-Transform anger into clarity by understanding what it is protecting...
+Injustice, boundary violation, disrespect, loss of control
 Open Protocol →
 
-The redesigned card should become:
+The card renders as:
 
 Icon
 Anger Alchemy
-
+Turn anger into clarity, protect what matters, and choose your response.
 Open Protocol →
 
 The protocol title "Anger Alchemy" must remain unchanged.
 Its existing icon must remain unchanged.
-Only the descriptive text is removed from the card.
+The ORIGINAL description ("Injustice, boundary violation...") is not deleted — it stays
+present in the markup/data, just not rendered on the card. The visible line is new
+advisory copy, added as an additional field alongside it.
 
 IMPORTANT:
-Do this by changing the card rendering, NOT by deleting descriptions from the underlying protocol data.
+Do this by changing the card rendering, NOT by deleting the original descriptions from
+the underlying protocol data. Add the new advisory copy as a separate field
+(e.g. a `landingDescription`/`proto-landing-desc` value) rather than overwriting the
+original description in place.
 
-The descriptions may be used elsewhere in the application and must remain intact in the data source.
+The original descriptions may be used elsewhere in the application and must remain
+intact in the data source.
 
 Do not modify:
 - protocol data
@@ -70,9 +83,12 @@ Do not modify:
 - icons
 - ordering
 
-Only stop rendering the description inside the SERIES LANDING PAGE protocol cards.
+Only the SERIES LANDING PAGE protocol cards render the new advisory description in place
+of the original description.
 
-Apply this consistently across all four series.
+Apply this consistently across all four series — same structure, same description
+length/tone, but track-specific content (do not reuse one track's wording on another).
 
-The cards should therefore become cleaner and more compact while preserving the existing identity of every protocol.
+The cards should feel clean, compact, and premium while preserving the existing
+identity of every protocol.
 ```
