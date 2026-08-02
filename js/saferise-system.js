@@ -82,32 +82,63 @@
     paint();
 
     /* ─── AUTOPLAY ───────────────────────────────────────────
-       Continuous drift, not a step-by-step timer: scrollLeft is
-       nudged forward every frame by (trackWidth / LAP_SECONDS),
-       so it reads as motion, not a slideshow.
+       Continuous drift, not a step-by-step timer: every tick moves
+       scrollLeft by (real-set-width / LAP_SECONDS) * elapsed-seconds,
+       so it reads as motion, not a slideshow. Driven by a fixed-rate
+       interval rather than requestAnimationFrame — the drift is slow
+       enough (25-40s/lap) that the difference is invisible, and a
+       timer keeps running under conditions where rAF is throttled
+       to a stop (backgrounded/occluded tabs).
 
-       Seamless loop: the ten cards are cloned once, inert
-       (aria-hidden, no id, no onclick, .proto-expand stripped —
-       the real cards already double as accordion hosts, and a
-       second live copy of that markup would duplicate ids like
-       the waveform's), and appended after the real set. Once
-       scrollLeft passes the width of the real set, it's the
-       clones filling the viewport — pixel-identical to the real
-       cards — so subtracting that same width back out is
-       invisible. No jump, because nothing actually looks like it
-       jumped.
+       Seamless loop: the ten cards are cloned once, appended after
+       the real set, so the track holds two identical sets back to
+       back. Once scrollLeft passes the width of the real set, the
+       clones are what's filling the viewport — pixel-identical to
+       the real cards — so subtracting that same width back out in
+       the same tick is invisible; nothing ever looks like it moved.
+       Clones are inert: aria-hidden="true", tabindex="-1" (out of
+       both the accessibility tree and tab order — only the real ten
+       are ever reachable), no id/onclick, .proto-expand stripped
+       (the real cards double as accordion hosts, and a second live
+       copy of that markup would duplicate ids like the waveform's),
+       and pointer-events:none, so a click on a clone does nothing —
+       chosen over "open the same protocol as the original" because
+       it needs no click-to-real-card mapping to get wrong; the area
+       just behaves like empty track.
+
+       The real-set width is measured fresh every tick, not cached:
+       opening a protocol widens that one card via .sr-cover.open in
+       the CSS, which shifts every card and clone after it. A width
+       cached before that would be short, so the wrap subtraction
+       would land inside the real set instead of exactly back at its
+       start — a visible jump. (In practice opening a card also stops
+       autoplay via the click listener below, but the measurement
+       shouldn't depend on that ordering to be correct.) Re-measuring
+       is two offsetLeft reads; irrelevant cost at a 50ms tick.
 
        scroll-snap-type: x mandatory (set in CSS) fights a slow
-       continuous scrollLeft nudge — the browser tries to settle
-       on the nearest card after every frame, producing a stutter.
-       Rather than weaken snap for every carousel this component
-       ever hosts, it's toggled off only while autoplay is actually
-       driving the track, and restored the moment a person takes
-       over (hover, focus, touch, or a permanent stop) — so manual
-       scrolling and the arrow buttons keep their intended snap. */
+       continuous scrollLeft nudge — the browser tries to settle on
+       the nearest card after every tick, producing a stutter. Rather
+       than weaken snap for every carousel this component ever hosts,
+       it's toggled off only while autoplay is actually driving the
+       track, and restored the moment a person takes over (hover,
+       focus, touch, or a permanent stop) — so manual scrolling and
+       the arrow buttons keep their intended snap.
+
+       PAUSED vs STOPPED are two independent booleans, not one flag
+       standing in for both meanings:
+         paused  — temporary: hover, focus-within, or a touch. Clears
+                   itself ~2s after the interaction ends.
+         stopped — permanent: an arrow click or opening a protocol.
+                   Once true, nothing flips it back — including a
+                   resume timer that was already pending when the
+                   permanent stop happened, which re-checks `stopped`
+                   the moment it fires rather than trusting the state
+                   it was scheduled under. */
     if (reduce) return;
 
     var LAP_SECONDS = 32;      // full traversal of the real 10, within the 25-40s ask
+    var TICK_MS = 50;          // interval rate; speed is time-based, not tick-count-based
     var RESUME_DELAY = 2000;   // "a couple of seconds" after interaction ends
 
     var clones = cards.map(function (card) {
@@ -127,32 +158,43 @@
     });
     clones.forEach(function (c) { track.appendChild(c); });
 
-    var realWidth = 0;
-    function measure() { realWidth = clones[0].offsetLeft - cards[0].offsetLeft; }
-    measure();
-    window.addEventListener('resize', measure);
+    function realWidth() { return clones[0].offsetLeft - cards[0].offsetLeft; }
 
-    function disableSnap() { track.style.scrollSnapType = 'none'; }
-    function restoreSnap() { track.style.scrollSnapType = ''; }
+    /* .sr-ptrack sets scroll-behavior:smooth in the base CSS, for the
+       arrow buttons' scrollTo. Per spec that also intercepts a plain
+       scrollLeft assignment, not just scrollTo() — so while autoplay
+       owns the track, scroll-behavior is forced to auto here too,
+       alongside snap, and both are restored together the moment a
+       person takes over. Without this, every tick's increment (and
+       worse, the wrap correction) animates instead of jumping:
+       overlapping animations retargeted every 50ms fight each other
+       and stall, and the "invisible" wrap becomes a visible scroll
+       backward across the whole track. */
+    function disableSnap() { track.style.scrollSnapType = 'none'; track.style.scrollBehavior = 'auto'; }
+    function restoreSnap() { track.style.scrollSnapType = ''; track.style.scrollBehavior = ''; }
 
-    var stopped = false, paused = false, resumeTimer = null, rafId = null, lastT = null;
+    var paused = false;    // temporary: hover / focus-within / touch
+    var stopped = false;   // permanent: arrow click / protocol opened
+    var resumeTimer = null, intervalId = null, lastTick = null;
 
-    function frame(t) {
-      if (lastT == null) lastT = t;
-      var dt = Math.min((t - lastT) / 1000, 0.25); // clamp so a backgrounded tab can't leap
-      lastT = t;
-      /* The carousel boots inside a .prog-overlay that starts display:none —
-         offsetLeft reads 0 for everything until the portal is shown, so a
-         one-time measure() at init can permanently record realWidth 0 and
-         the drift never starts. Keep re-measuring until it isn't. */
-      if (realWidth <= 0) measure();
-      if (!stopped && !paused && realWidth > 0) {
-        track.scrollLeft += (realWidth / LAP_SECONDS) * dt;
-        if (track.scrollLeft >= realWidth) track.scrollLeft -= realWidth;
-        pos = nearest();
-        paint();
-      }
-      rafId = requestAnimationFrame(frame);
+    function tick() {
+      var now = Date.now();
+      if (lastTick == null) lastTick = now;
+      var dt = Math.min((now - lastTick) / 1000, 0.25); // clamp so a stalled tab can't leap
+      lastTick = now;
+
+      if (stopped || paused) return;
+
+      var width = realWidth();
+      if (width <= 0) return; // portal not visible / not laid out yet
+
+      // scroll-behavior is forced to auto for the duration of autoplay
+      // (see disableSnap above), so a direct assignment here is a plain
+      // synchronous jump — both for the increment and the wrap.
+      track.scrollLeft += (width / LAP_SECONDS) * dt;
+      if (track.scrollLeft >= width) track.scrollLeft -= width;
+      pos = nearest();
+      paint();
     }
 
     function pause() {
@@ -165,8 +207,9 @@
       if (stopped) return;
       clearTimeout(resumeTimer);
       resumeTimer = setTimeout(function () {
+        if (stopped) return; // a permanent stop can land while this was pending
         paused = false;
-        lastT = null; // don't count the paused interval as elapsed drift time
+        lastTick = null; // don't count the paused interval as elapsed drift time
         disableSnap();
       }, RESUME_DELAY);
     }
@@ -175,8 +218,9 @@
       stopped = true;
       paused = false;
       clearTimeout(resumeTimer);
+      resumeTimer = null;
       restoreSnap();
-      if (rafId) cancelAnimationFrame(rafId);
+      if (intervalId) clearInterval(intervalId);
     }
 
     track.addEventListener('mouseenter', pause);
@@ -189,7 +233,7 @@
     cards.forEach(function (c) { c.addEventListener('click', stopAuto); });
 
     disableSnap();
-    rafId = requestAnimationFrame(frame);
+    intervalId = setInterval(tick, TICK_MS);
   }
 
   /* ─────────────────────────────────────────────────────────
