@@ -2987,32 +2987,85 @@ footer{border-top:1px solid var(--border);padding:60px;text-align:center;backgro
     <button onclick="showProg('about')" style="background:var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 32px;border-radius:2px;border:none;cursor:pointer;">About SafeRise ◆</button>
   </div>
 </section>
-<footer>
-  <!-- Pangolin logo mark -->
-  <svg width="60" height="60" viewBox="0 0 60 60" style="display:block;margin:0 auto 20px;">
-    <circle cx="30" cy="30" r="27" fill="var(--card)" stroke="var(--primary)" stroke-width="1.2" opacity="0.8"/>
-    <circle cx="30" cy="30" r="22" fill="var(--card2)" stroke="var(--primary)" stroke-width="0.8" opacity="0.9"/>
-    <path d="M30 8 Q34 6 37 10 Q34 14 30 8Z" fill="var(--primary)" opacity="0.45"/>
-    <path d="M37 10 Q41 8 43 13 Q40 17 37 10Z" fill="var(--primary)" opacity="0.42"/>
-    <path d="M43 13 Q47 13 48 18 Q44 22 43 13Z" fill="var(--primary)" opacity="0.40"/>
-    <path d="M48 18 Q51 21 49 26 Q45 29 48 18Z" fill="var(--primary)" opacity="0.37"/>
-    <path d="M48 27 Q50 31 47 36 Q43 38 48 27Z" fill="var(--primary)" opacity="0.35"/>
-    <path d="M44 37 Q45 41 40 44 Q36 44 44 37Z" fill="var(--primary)" opacity="0.35"/>
-    <path d="M38 44 Q38 48 33 49 Q29 48 38 44Z" fill="var(--primary)" opacity="0.37"/>
-    <path d="M26 49 Q25 52 20 51 Q16 49 26 49Z" fill="var(--primary)" opacity="0.37"/>
-    <path d="M18 46 Q15 49 11 46 Q9 43 18 46Z" fill="var(--primary)" opacity="0.35"/>
-    <path d="M11 40 Q7 42 5 37 Q4 34 11 40Z" fill="var(--primary)" opacity="0.33"/>
-    <path d="M6 32 Q3 32 3 26 Q4 22 6 32Z" fill="var(--primary)" opacity="0.32"/>
-    <path d="M5 20 Q2 19 3 13 Q5 9 5 20Z" fill="var(--primary)" opacity="0.34"/>
-    <path d="M10 12 Q8 9 11 4 Q14 1 10 12Z" fill="var(--primary)" opacity="0.38"/>
-    <path d="M18 6 Q16 2 21 0 Q24 -1 18 6Z" fill="var(--primary)" opacity="0.42"/>
-    <circle cx="30" cy="30" r="9" fill="var(--primary)" opacity="0.1"/>
-    <path d="M30 35 Q25 30 25 26 Q25 22 27 22 Q30 21 30 23 Q30 21 33 22 Q35 22 35 26 Q35 30 30 35Z" fill="var(--primary)" opacity="0.82"/>
-    <path d="M23 46 Q26 50 30 51 Q34 50 37 46" stroke="var(--primary)" stroke-width="0.8" fill="var(--card2)" opacity="0.7"/>
-  </svg>
-  <p class="footer-title">The SafeRise Protocol</p>
-  <p class="footer-sub">Executive Summary · Confidential · 2026</p>
+<!-- sr-footer-template: the single reusable footer partial. Cloned into
+     #main-content and every .prog-overlay by the script below — see
+     docs/INTEGRATION.md "Footer + scope notice". Do not duplicate this
+     markup by hand elsewhere; add another clone target instead. -->
+<template id="sr-footer-template">
+<footer class="sr-foot">
+  <div class="sr-foot-in">
+    <div class="sr-scope">
+      <h3><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5.4c0 4.8-3 8.9-7 10-4-1.1-7-5.2-7-10V6l7-3z"/></svg>Scope &amp; Safety</h3>
+      <p>SafeRise is a self-guided nervous-system tool, not a replacement for therapy or crisis care — many members use both together. The SafeRise Protocol is a self-regulation methodology — not therapy, not clinical treatment, and not a replacement for professional mental health support. It is a practical nervous system tool you can use in daily life, alongside any other support you are receiving.</p>
+      <p><b>If you are in immediate danger, contact your local emergency number.</b> <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a></p>
+    </div>
+    <div class="sr-foot-grid">
+      <div class="sr-foot-brand">
+        <div class="sr-mk">
+          <span class="sr-disc">
+            <svg width="20" height="20" viewBox="0 0 60 60">
+              <path d="M30 8 Q34 6 37 10 Q34 14 30 8Z" fill="var(--primary)" opacity="0.45"/>
+              <path d="M37 10 Q41 8 43 13 Q40 17 37 10Z" fill="var(--primary)" opacity="0.42"/>
+              <path d="M43 13 Q47 13 48 18 Q44 22 43 13Z" fill="var(--primary)" opacity="0.40"/>
+              <path d="M48 18 Q51 21 49 26 Q45 29 48 18Z" fill="var(--primary)" opacity="0.37"/>
+              <path d="M48 27 Q50 31 47 36 Q43 38 48 27Z" fill="var(--primary)" opacity="0.35"/>
+              <path d="M44 37 Q45 41 40 44 Q36 44 44 37Z" fill="var(--primary)" opacity="0.35"/>
+              <path d="M38 44 Q38 48 33 49 Q29 48 38 44Z" fill="var(--primary)" opacity="0.37"/>
+              <path d="M26 49 Q25 52 20 51 Q16 49 26 49Z" fill="var(--primary)" opacity="0.37"/>
+              <path d="M18 46 Q15 49 11 46 Q9 43 18 46Z" fill="var(--primary)" opacity="0.35"/>
+              <path d="M11 40 Q7 42 5 37 Q4 34 11 40Z" fill="var(--primary)" opacity="0.33"/>
+              <path d="M6 32 Q3 32 3 26 Q4 22 6 32Z" fill="var(--primary)" opacity="0.32"/>
+              <path d="M5 20 Q2 19 3 13 Q5 9 5 20Z" fill="var(--primary)" opacity="0.34"/>
+              <path d="M10 12 Q8 9 11 4 Q14 1 10 12Z" fill="var(--primary)" opacity="0.40"/>
+              <path d="M18 6 Q16 2 21 0 Q24 -1 18 6Z" fill="var(--primary)" opacity="0.42"/>
+              <path d="M30 35 Q25 30 25 26 Q25 22 27 22 Q30 21 30 23 Q30 21 33 22 Q35 22 35 26 Q35 30 30 35Z" fill="var(--primary)" opacity="0.82"/>
+            </svg>
+          </span>
+          <span><b>SAFERISE</b><i>PROTOCOL</i></span>
+        </div>
+        <p>A platform for nervous system recalibration.</p>
+      </div>
+      <div class="sr-foot-col">
+        <h4>Tracks</h4>
+        <ul>
+          <li><a href="javascript:void(0)" onclick="showProg('personal')">Personal Transformation</a></li>
+          <li><a href="javascript:void(0)" onclick="showProg('couples')">Relationship Healing</a></li>
+          <li><a href="javascript:void(0)" onclick="showProg('corporate')">Professional</a></li>
+          <li><a href="javascript:void(0)" onclick="showProg('elevation')">Elevation Series</a></li>
+        </ul>
+      </div>
+      <div class="sr-foot-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#journey" onclick="showMain()">The Journey</a></li>
+          <li><a href="javascript:void(0)" onclick="showProg('compare')">Compare Plans</a></li>
+          <li><a href="javascript:void(0)" onclick="showProg('services')">Services</a></li>
+        </ul>
+      </div>
+      <div class="sr-foot-col">
+        <h4>About</h4>
+        <ul>
+          <li><a href="javascript:void(0)" onclick="showProg('about')">About SafeRise</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="sr-foot-bottom">
+      <p>© 2026 SafeRise Protocol · Sint Maarten</p>
+      <span class="sr-spacer"></span>
+      <a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a>
+    </div>
+  </div>
 </footer>
+</template>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tpl = document.getElementById('sr-footer-template');
+  if (!tpl) return;
+  document.querySelectorAll('#main-content, .prog-overlay').forEach(function (host) {
+    host.appendChild(tpl.content.cloneNode(true));
+  });
+});
+</script>
 
 
 

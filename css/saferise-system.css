@@ -374,8 +374,11 @@ details.sr-q .sr-a + .sr-a{padding-top:0;margin-top:-8px}
 details.sr-q .sr-a a{color:var(--primary2)}
 
 /* B10 · footer + scope notice ─────────────────────────────── */
+/* text-align:left overrides the platform's legacy bare `footer{text-align:center}`
+   rule (index.html) — that selector targets the element, not a class, so it
+   still cascades onto any real <footer>, including this one. */
 .sr-foot{position:relative;left:50%;transform:translateX(-50%);width:100vw;max-width:100vw;
-  margin-top:110px;padding:0 0 34px;background:#06060D;
+  margin-top:110px;padding:0 0 34px;background:#06060D;text-align:left;
   border-top:1px solid rgba(212,168,67,.20)}
 .sr-foot-in{max-width:1180px;margin:0 auto;padding:0 40px}
 .sr-scope{margin:0;padding:30px 34px;border-radius:var(--sr-r-md);transform:translateY(-34px);
