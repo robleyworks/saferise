@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SafeRise — Personal Transformation Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080810; --bg2:#0E0E1A; --card:#171728; --border:rgba(245,237,216,.10);
+  --primary:#D4A843; --primary2:#ECC96A;
+  --text:#F5EDD8; --text2:#CFC8D4; --text3:#8B8598;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 40px 120px}
+
+/* ── ORIGINAL SAFERISE NAV (two rows) ───────────────────────── */
+.navwrap{position:sticky;top:0;z-index:60;background:rgba(8,8,16,.94);
+  backdrop-filter:blur(20px) saturate(140%);border-bottom:1px solid rgba(212,168,67,.16)}
+.navtop{display:flex;align-items:center;padding:13px 40px}
+.navtop .mark{display:flex;align-items:center;gap:13px;margin-right:auto;text-decoration:none}
+.navtop .disc{width:40px;height:40px;border-radius:50%;border:1px solid var(--primary);
+  background:radial-gradient(circle at 40% 34%,#2A2A44,#0E0E1C);display:grid;place-items:center;
+  font:400 16px/1 'Cinzel',serif;color:var(--primary)}
+.navtop .mark b{display:block;font:400 15px/1.15 'Cinzel',serif;letter-spacing:5px;color:var(--primary)}
+.navtop .mark i{display:block;font:400 8px/1 'DM Sans',sans-serif;letter-spacing:5px;
+  color:var(--text3);font-style:normal}
+.beginfree{background:var(--primary);color:#0B0B14;border:none;cursor:pointer;
+  font:700 11px/1 'DM Sans',sans-serif;letter-spacing:2px;text-transform:uppercase;
+  padding:14px 26px;border-radius:2px;transition:filter .2s}
+.beginfree:hover{filter:brightness(1.08)}
+.navrow{display:flex;justify-content:center;align-items:stretch;gap:2px;padding:0 40px;
+  border-top:1px solid rgba(245,237,216,.07);overflow-x:auto;scrollbar-width:none}
+.navrow::-webkit-scrollbar{display:none}
+.navrow a{position:relative;white-space:nowrap;text-decoration:none;
+  font:400 11px/1 'DM Sans',sans-serif;letter-spacing:2.4px;text-transform:uppercase;
+  color:var(--text3);padding:16px 18px;border-bottom:2px solid transparent;transition:color .22s}
+.navrow a:hover{color:var(--text2)}
+.navrow a.on{color:var(--primary);border-bottom-color:var(--primary)}
+.navrow .sep{width:1px;background:rgba(245,237,216,.12);margin:12px 14px}
+.navrow .soon{position:absolute;top:2px;left:50%;transform:translateX(-50%);
+  background:#2A2A44;color:var(--primary2);font:700 7px/1 'DM Sans',sans-serif;
+  letter-spacing:1.4px;padding:3px 6px;border-radius:2px}
+
+/* ══ 1. FULL-BLEED BANNER ═══════════════════════════════════════
+   Breaks the 1100px container without needing to move the markup
+   outside it. 21:9 on desktop, taller on mobile so the copy fits. */
+.banner{position:relative;left:50%;transform:translateX(-50%);
+  width:100vw;max-width:100vw;aspect-ratio:21/8;min-height:420px;max-height:640px;
+  overflow:hidden;background:#0B0B14;margin-bottom:72px}
+
+/* poster frame — replace .poster with your <video poster> or first frame */
+.poster{position:absolute;inset:0;
+  background:
+    radial-gradient(52% 68% at 70% 46%, rgba(255,196,92,.92), transparent 62%),
+    radial-gradient(90% 70% at 62% 62%, rgba(214,122,48,.55), transparent 70%),
+    linear-gradient(178deg,#3A4A63 0%,#6E6B6A 26%,#B4763C 52%,#5E4128 74%,#1A1410 100%)}
+.poster::after{content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(38% 60% at 12% 88%, rgba(10,8,6,.9), transparent 70%),
+    radial-gradient(40% 60% at 92% 84%, rgba(10,8,6,.85), transparent 70%)}
+/* legibility scrim — the thing that makes overlaid type work */
+.scrim{position:absolute;inset:0;
+  background:linear-gradient(94deg,rgba(6,6,12,.90) 0%,rgba(6,6,12,.66) 34%,rgba(6,6,12,.10) 62%,transparent 78%),
+             linear-gradient(0deg,rgba(6,6,12,.85) 0%,transparent 34%)}
+
+.banner-copy{position:absolute;left:max(40px,calc(50vw - 550px));top:50%;
+  transform:translateY(-58%);max-width:470px;z-index:2}
+.banner-copy h1{margin:0 0 14px;font:400 clamp(34px,4.4vw,62px)/1.02 'Cinzel',serif;
+  letter-spacing:.01em;text-shadow:0 2px 24px rgba(0,0,0,.6)}
+.banner-copy h1 em{display:block;font-style:normal;color:var(--primary2)}
+.banner-copy .lead{margin:0 0 12px;font:italic 400 clamp(18px,1.6vw,23px)/1.45 'Cormorant Garamond',Georgia,serif;color:var(--text)}
+.banner-copy p{margin:0;font:400 15px/1.72 'DM Sans',sans-serif;color:#DCD6E0;max-width:40ch}
+
+.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+  width:88px;height:88px;border-radius:50%;border:1.5px solid rgba(255,255,255,.75);
+  background:rgba(20,18,28,.34);backdrop-filter:blur(6px);cursor:pointer;
+  display:grid;place-items:center;transition:transform .32s var(--ease),box-shadow .4s}
+.play svg{width:26px;height:26px;fill:#fff;margin-left:4px}
+.banner:hover .play{transform:translate(-50%,-50%) scale(1.07);box-shadow:0 0 0 18px rgba(255,255,255,.05)}
+
+.controls{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;align-items:center;gap:16px;
+  padding:16px max(40px,calc(50vw - 550px));
+  background:linear-gradient(0deg,rgba(6,6,12,.92),transparent)}
+.controls svg{fill:#F5EDD8;flex:none;cursor:pointer;opacity:.9}
+.controls .t{font:400 12px/1 'DM Sans',sans-serif;color:#CFC8D4;font-variant-numeric:tabular-nums}
+.track{flex:1;height:3px;border-radius:2px;background:rgba(245,237,216,.22);position:relative;cursor:pointer}
+.track i{position:absolute;inset:0 76% 0 0;border-radius:2px;background:var(--primary)}
+.track b{position:absolute;left:24%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;
+  border-radius:50%;background:var(--primary2)}
+
+/* ══ 2. PROTOCOL CAROUSEL (Canva design-trends pattern) ═════════ */
+.car-head{display:flex;align-items:center;gap:22px;margin-bottom:22px}
+.car-head .kick{margin:0;font:700 11px/1 'DM Sans',sans-serif;letter-spacing:5px;
+  text-transform:uppercase;color:var(--primary)}
+.car-nav{margin-left:auto;display:flex;align-items:center;gap:14px;flex:none}
+.counter{font:400 13px/1 'DM Sans',sans-serif;color:var(--text3);font-variant-numeric:tabular-nums;
+  letter-spacing:1px;min-width:52px;text-align:right}
+.counter b{color:var(--primary);font-weight:500}
+.arrow{width:46px;height:46px;border-radius:50%;cursor:pointer;display:grid;place-items:center;
+  border:1px solid rgba(212,168,67,.42);background:transparent;
+  transition:background .22s,border-color .22s,transform .22s var(--ease)}
+.arrow svg{width:17px;height:17px;fill:none;stroke:var(--primary);stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round}
+.arrow:hover{background:var(--primary);border-color:var(--primary);transform:scale(1.05)}
+.arrow:hover svg{stroke:#0B0B14}
+.arrow:focus-visible{outline:2px solid var(--primary2);outline-offset:3px}
+
+/* full-bleed track — cards peek past the container on both sides */
+.carousel{position:relative;left:50%;transform:translateX(-50%);width:100vw;max-width:100vw}
+.ptrack{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;scrollbar-width:none;
+  padding:6px max(40px,calc(50vw - 550px)) 30px}
+.ptrack::-webkit-scrollbar{display:none}
+
+.cover{display:block;outline-offset:6px;flex:0 0 clamp(212px,19vw,262px);scroll-snap-align:start;cursor:pointer;
+  background:none;border:0;padding:0;text-align:left;
+  transition:transform .38s var(--ease)}
+.cover .tile{display:block;position:relative;aspect-ratio:3/4;border-radius:14px;overflow:hidden;isolation:isolate;
+  border:1px solid rgba(255,255,255,.09);background:var(--c1);
+  transition:box-shadow .38s var(--ease),border-color .3s}
+.cover .art{display:block;position:absolute;inset:0;z-index:-2;
+  background:radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),
+             linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%);
+  transition:transform .6s var(--ease)}
+.cover .num{display:block;position:absolute;right:-12px;bottom:-26px;z-index:-1;
+  font:600 132px/1 'Cinzel',serif;color:rgba(255,255,255,.13);letter-spacing:-.04em}
+.cover .kicker{display:block;position:absolute;top:15px;left:15px;z-index:1;
+  font:700 9px/1 'DM Sans',sans-serif;letter-spacing:2.6px;text-transform:uppercase;
+  color:rgba(255,255,255,.92);text-shadow:0 1px 8px rgba(0,0,0,.55)}
+.cover .rule{display:block;position:absolute;left:15px;right:15px;bottom:15px;z-index:1;height:1px;
+  background:rgba(255,255,255,.28);transform-origin:left;transform:scaleX(.34);
+  transition:transform .45s var(--ease),background .3s}
+
+/* text sits BELOW the tile, as on design-trends */
+.cover h3{margin:18px 0 6px;font:400 21px/1.18 'Cinzel',serif;color:var(--text);
+  transition:color .25s}
+.cover .trig{margin:0;font:400 13px/1.6 'DM Sans',sans-serif;color:var(--text3);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.cover:hover{transform:translateY(-6px)}
+.cover:hover .tile{border-color:rgba(255,255,255,.24);
+  box-shadow:0 28px 52px -24px rgba(0,0,0,.9),0 0 0 1px rgba(212,168,67,.3)}
+.cover:hover .art{transform:scale(1.07)}
+.cover:hover .rule{transform:scaleX(1);background:var(--primary2)}
+.cover:hover h3{color:var(--primary2)}
+.cover:focus-visible{outline:2px solid var(--primary2);outline-offset:6px;border-radius:16px}
+
+/* edge fades so cut-off cards read as intentional */
+.carousel::before,.carousel::after{content:"";position:absolute;top:0;bottom:30px;width:90px;
+  pointer-events:none;z-index:2}
+.carousel::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.carousel::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+
+/* ── the ten identities ─────────────────────────────────────── */
+.c01{--c1:#0B3F49;--c2:#3FD8C4;--c3:#07202B}   /* Anxiety Reset      — cyan  */
+.c02{--c1:#5A140E;--c2:#FF7A3D;--c3:#2A0705}   /* Anger Alchemy      — ember */
+.c03{--c1:#5E3B06;--c2:#FFC24A;--c3:#2A1804}   /* Overwhelm          — amber */
+.c04{--c1:#54103A;--c2:#FF6FA8;--c3:#280719}   /* Abandonment        — rose  */
+.c05{--c1:#3A1258;--c2:#B57BFF;--c3:#1B0729}   /* Shame Dissolution  — violet*/
+.c06{--c1:#132A5E;--c2:#6E9DFF;--c3:#08132C}   /* Grief Integration  — indigo*/
+.c07{--c1:#123F33;--c2:#5BE08D;--c3:#071F19}   /* Shutdown Recovery  — green */
+.c08{--c1:#3C4A0B;--c2:#C6E84A;--c3:#1B2205}   /* Jealousy Release   — lime  */
+.c09{--c1:#4B2A12;--c2:#E39A5C;--c3:#231208}   /* Insecurity Anchor  — copper*/
+.c10{--c1:#2B1148;--c2:#D4A843;--c3:#120620}   /* Powerlessness      — gold  */
+
+
+/* ══ 3. WHAT'S INSIDE — Canva-style feature grid ════════════════ */
+.inside{margin-top:104px;padding-top:72px;border-top:1px solid rgba(212,168,67,.20)}
+.inside-head{max-width:760px;margin:0 auto 58px;text-align:center}
+.inside-head h2{margin:0 0 18px;font:400 clamp(28px,3.4vw,42px)/1.12 'Cinzel',serif;color:var(--text)}
+.inside-head p{margin:0;font:italic 400 19px/1.7 'Cormorant Garamond',Georgia,serif;color:var(--text2)}
+
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:44px 48px}
+.feat{display:grid;grid-template-columns:52px 1fr;gap:18px;align-items:start}
+.feat .ico{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;
+  border:1px solid rgba(212,168,67,.30);background:linear-gradient(155deg,#1B1B2E,#12121F);
+  transition:border-color .3s var(--ease),transform .3s var(--ease)}
+.feat .ico svg{width:22px;height:22px;fill:none;stroke:var(--primary);
+  stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.feat:hover .ico{border-color:var(--primary);transform:translateY(-2px)}
+.feat h3{margin:6px 0 8px;font:400 19px/1.25 'Cinzel',serif;color:var(--text)}
+.feat p{margin:0;font:400 14px/1.68 'DM Sans',sans-serif;color:var(--text3)}
+.feat .tagline{color:var(--primary2);font-style:italic;
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:15px}
+.inside-note{margin:44px auto 0;text-align:center;max-width:74ch;
+  font:400 13px/1.7 'DM Sans',sans-serif;color:var(--text3)}
+
+/* ══ 4. TESTIMONIAL ═════════════════════════════════════════════ */
+.testi{margin-top:100px;padding:64px 56px;position:relative;overflow:hidden;border-radius:16px;
+  border:1px solid rgba(212,168,67,.22);
+  background:linear-gradient(150deg,rgba(212,168,67,.07),rgba(23,23,40,.9) 46%,rgba(14,14,26,.95))}
+.testi::before{content:"\201C";position:absolute;top:-38px;left:26px;
+  font:400 190px/1 'Cinzel',serif;color:rgba(212,168,67,.14)}
+.testi blockquote{position:relative;margin:0 auto;max-width:760px;text-align:center;
+  font:italic 400 clamp(21px,2.3vw,29px)/1.55 'Cormorant Garamond',Georgia,serif;color:var(--text)}
+.testi .who{margin:26px 0 0;text-align:center;font:700 10px/1.8 'DM Sans',sans-serif;
+  letter-spacing:2.6px;text-transform:uppercase;color:var(--primary)}
+.testi .who span{display:block;font-weight:400;letter-spacing:1.6px;color:var(--text3)}
+
+/* ══ 5. CTA BAND — slim, linear ═════════════════════════════════ */
+.ctabar{display:flex;align-items:center;gap:26px;flex-wrap:wrap;
+  margin-top:88px;padding:22px 30px;border-radius:999px;
+  border:1px solid rgba(212,168,67,.30);
+  background:linear-gradient(100deg,rgba(212,168,67,.09),rgba(23,23,40,.9) 46%,rgba(14,14,26,.95))}
+.ctabar[hidden]{display:none}
+.ctabar .say{margin:0;flex:1 1 320px;
+  font:italic 400 19px/1.45 'Cormorant Garamond',Georgia,serif;color:var(--text)}
+.ctabar .say b{font-style:normal;font-weight:400;color:var(--primary2)}
+.ctabar .acts{display:flex;align-items:center;gap:20px;flex:none}
+.ctabar .start{background:var(--e-gold,linear-gradient(140deg,#ECC96A,#D4A843 55%,#B98C2E));
+  color:#0B0B14;border:none;cursor:pointer;white-space:nowrap;
+  font:700 11px/1 'DM Sans',sans-serif;letter-spacing:2.4px;text-transform:uppercase;
+  padding:16px 30px;border-radius:999px;transition:transform .2s var(--ease),box-shadow .25s}
+.ctabar .start:hover{transform:translateY(-1px);box-shadow:0 14px 30px -14px rgba(212,168,67,.7)}
+.ctabar .free{white-space:nowrap;text-decoration:none;border-bottom:1px solid rgba(212,168,67,.4);
+  padding-bottom:2px;font:500 13px/1 'DM Sans',sans-serif;color:var(--text2);transition:color .2s}
+.ctabar .free:hover{color:var(--primary2)}
+.ctabar .start:focus-visible,.ctabar .free:focus-visible{
+  outline:2px solid var(--primary2);outline-offset:3px}
+
+/* ══ 6. WORK WITH A HUMAN ═══════════════════════════════════════ */
+.human{margin-top:104px}
+.human-head{max-width:720px;margin:0 auto 40px;text-align:center}
+.human-head .kick{margin:0 0 12px;font:700 10px/1 'DM Sans',sans-serif;letter-spacing:5px;
+  text-transform:uppercase;color:var(--primary)}
+.human-head h2{margin:0 0 14px;font:400 clamp(26px,3.2vw,38px)/1.14 'Cinzel',serif;color:var(--text)}
+.human-head p{margin:0;font:italic 400 18px/1.7 'Cormorant Garamond',Georgia,serif;color:var(--text2)}
+
+.svc-pair{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.svc{position:relative;display:flex;flex-direction:column;padding:38px 36px 34px;
+  border-radius:16px;border:1px solid rgba(212,168,67,.22);overflow:hidden;
+  background:linear-gradient(158deg,rgba(23,23,40,.96),rgba(14,14,26,.98));
+  transition:transform .34s var(--ease),box-shadow .34s var(--ease),border-color .3s}
+.svc::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.svc::after{content:"";position:absolute;top:-40%;right:-20%;width:70%;height:80%;
+  border-radius:50%;background:var(--accent);opacity:.12;filter:blur(56px);pointer-events:none}
+.svc-group{--accent:#5BC8D8}
+.svc-solo{--accent:#D4A843}
+.svc:hover{transform:translateY(-5px);border-color:rgba(212,168,67,.5);
+  box-shadow:0 30px 60px -28px rgba(0,0,0,.92)}
+
+.svc-tag{position:absolute;top:20px;right:22px;z-index:1;
+  font:700 8.5px/1 'DM Sans',sans-serif;letter-spacing:1.8px;text-transform:uppercase;
+  color:var(--primary2);border:1px solid rgba(212,168,67,.42);border-radius:999px;padding:6px 11px}
+.svc-ico{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;margin-bottom:22px;
+  border:1px solid var(--accent);background:rgba(255,255,255,.03)}
+.svc-ico svg{width:24px;height:24px;fill:none;stroke:var(--accent);stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.svc-kick{margin:0 0 10px;font:700 10px/1 'DM Sans',sans-serif;letter-spacing:3px;
+  text-transform:uppercase;color:var(--accent)}
+.svc h3{margin:0 0 14px;font:400 25px/1.2 'Cinzel',serif;color:var(--text)}
+.svc-body{margin:0 0 24px;font:400 15px/1.72 'DM Sans',sans-serif;color:var(--text3)}
+.svc-meta{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:0}
+.svc-meta li{font:500 11px/1 'DM Sans',sans-serif;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--text2);border:1px solid var(--border);border-radius:999px;padding:8px 13px}
+.svc-cta{margin-top:auto;width:100%;padding:16px;cursor:pointer;border-radius:999px;
+  border:1px solid var(--accent);background:transparent;color:var(--accent);
+  font:700 11px/1 'DM Sans',sans-serif;letter-spacing:2.4px;text-transform:uppercase;
+  transition:background .22s,color .22s}
+.svc-cta:hover{background:var(--accent);color:#0B0B14}
+.svc-cta:focus-visible{outline:2px solid var(--primary2);outline-offset:3px}
+
+@media (max-width:1100px){ .features{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:760px){
+  .features{grid-template-columns:1fr;gap:32px}
+  .svc-pair{grid-template-columns:1fr}
+  .svc{padding:32px 24px 28px}
+  .testi{padding:48px 26px}
+  .ctabar{border-radius:18px;padding:24px 22px;gap:20px}
+  .ctabar .acts{width:100%;justify-content:space-between}
+}
+
+
+/* ══ 7. FAQ ═════════════════════════════════════════════════════ */
+.faq{margin-top:104px;padding-top:72px;border-top:1px solid rgba(212,168,67,.20)}
+.faq-head{max-width:720px;margin:0 auto 44px;text-align:center}
+.faq-head .kick{margin:0 0 12px;font:700 10px/1 'DM Sans',sans-serif;letter-spacing:5px;
+  text-transform:uppercase;color:var(--primary)}
+.faq-head h2{margin:0 0 14px;font:400 clamp(26px,3.2vw,38px)/1.14 'Cinzel',serif;color:var(--text)}
+.faq-head p{margin:0;font:italic 400 18px/1.7 'Cormorant Garamond',Georgia,serif;color:var(--text2)}
+
+.faq-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 44px;align-items:start}
+details.q{border-bottom:1px solid var(--border)}
+details.q summary{list-style:none;cursor:pointer;display:flex;align-items:flex-start;gap:16px;
+  padding:20px 0;font:400 18px/1.4 'Cormorant Garamond',Georgia,serif;color:var(--text);
+  transition:color .22s}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary:hover{color:var(--primary2)}
+details.q summary:focus-visible{outline:2px solid var(--primary2);outline-offset:3px;border-radius:4px}
+details.q summary .sign{flex:none;width:18px;height:18px;margin-top:3px;position:relative}
+details.q summary .sign::before,details.q summary .sign::after{content:"";position:absolute;
+  background:var(--primary);transition:transform .28s var(--ease),opacity .28s}
+details.q summary .sign::before{top:8px;left:0;width:18px;height:1.5px}
+details.q summary .sign::after{left:8px;top:0;width:1.5px;height:18px}
+details.q[open] summary .sign::after{transform:rotate(90deg);opacity:0}
+details.q[open] summary{color:var(--primary2)}
+details.q .a{padding:0 0 22px 34px;margin:0;
+  font:400 15px/1.75 'DM Sans',sans-serif;color:var(--text3);max-width:56ch}
+details.q .a + .a{padding-top:0;margin-top:-8px}
+details.q .a a{color:var(--primary2)}
+
+/* ══ 8. FOOTER ══════════════════════════════════════════════════ */
+.site-foot{position:relative;left:50%;transform:translateX(-50%);width:100vw;max-width:100vw;
+  margin-top:110px;padding:0 0 34px;background:#06060D;
+  border-top:1px solid rgba(212,168,67,.20)}
+.foot-in{max-width:1180px;margin:0 auto;padding:0 40px}
+
+.scope{margin:0;padding:30px 34px;border-radius:14px;transform:translateY(-34px);
+  border:1px solid rgba(212,168,67,.28);
+  background:linear-gradient(140deg,rgba(212,168,67,.08),rgba(20,20,34,.96))}
+.scope h3{margin:0 0 12px;display:flex;align-items:center;gap:10px;
+  font:700 10px/1 'DM Sans',sans-serif;letter-spacing:3px;text-transform:uppercase;color:var(--primary)}
+.scope h3 svg{width:16px;height:16px;fill:none;stroke:var(--primary);stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round}
+.scope p{margin:0 0 12px;font:400 14px/1.75 'DM Sans',sans-serif;color:var(--text2);max-width:92ch}
+.scope p:last-child{margin-bottom:0}
+.scope b{color:var(--text);font-weight:500}
+.scope a{color:var(--primary2)}
+
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;padding:8px 0 40px}
+.foot-brand .mk{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.foot-brand .disc{width:38px;height:38px;border-radius:50%;border:1px solid var(--primary);
+  display:grid;place-items:center;font:400 15px/1 'Cinzel',serif;color:var(--primary);
+  background:radial-gradient(circle at 40% 34%,#22223A,#0B0B16)}
+.foot-brand b{display:block;font:400 14px/1.15 'Cinzel',serif;letter-spacing:5px;color:var(--primary)}
+.foot-brand i{display:block;font:400 8px/1 'DM Sans',sans-serif;letter-spacing:5px;
+  color:var(--text3);font-style:normal}
+.foot-brand p{margin:0;font:italic 400 16px/1.65 'Cormorant Garamond',Georgia,serif;
+  color:var(--text3);max-width:34ch}
+.foot-col h4{margin:0 0 16px;font:700 10px/1 'DM Sans',sans-serif;letter-spacing:2.6px;
+  text-transform:uppercase;color:var(--text2)}
+.foot-col ul{list-style:none;margin:0;padding:0}
+.foot-col li{margin-bottom:11px}
+.foot-col a{text-decoration:none;font:400 14px/1.5 'DM Sans',sans-serif;color:var(--text3);
+  transition:color .2s}
+.foot-col a:hover{color:var(--primary2)}
+
+.foot-bottom{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:center;
+  padding-top:26px;border-top:1px solid rgba(245,237,216,.08)}
+.foot-bottom p{margin:0;font:400 12.5px/1.6 'DM Sans',sans-serif;color:var(--text3)}
+.foot-bottom .spacer{margin-left:auto}
+.foot-bottom a{color:var(--text3);text-decoration:none;font:400 12.5px/1 'DM Sans',sans-serif}
+.foot-bottom a:hover{color:var(--primary2)}
+
+@media (max-width:900px){
+  .faq-cols{grid-template-columns:1fr;gap:0}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .foot-brand{grid-column:1/-1}
+}
+@media (max-width:560px){
+  .foot-grid{grid-template-columns:1fr}
+  .foot-in{padding:0 20px}
+  .scope{padding:24px 20px}
+}
+
+/* ── responsive ─────────────────────────────────────────────── */
+@media (max-width:1180px){ .covers{grid-template-columns:repeat(4,1fr)} }
+@media (max-width:980px){
+  .covers{grid-template-columns:repeat(3,1fr)}
+  .banner{aspect-ratio:auto;height:auto;min-height:0;max-height:none;padding:110px 0 96px}
+  .banner-copy{position:static;transform:none;padding:0 26px;max-width:none}
+  .play{top:auto;bottom:96px}
+}
+@media (max-width:680px){
+  .wrap{padding:0 20px 80px}
+  .covers{grid-template-columns:repeat(2,1fr);gap:12px}
+  .cover h3{font-size:19px}
+  .cover .num{font-size:104px}
+  .bar{gap:18px;overflow-x:auto}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important}
+  .cover:hover{transform:none} .cover:hover .art{transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="navwrap">
+  <div class="navtop">
+    <a class="mark" href="#"><div class="disc">&#9670;</div><div><b>SAFERISE</b><i>PROTOCOL</i></div></a>
+    <button class="beginfree">Begin Free &#9670;</button>
+  </div>
+  <nav class="navrow">
+    <a href="#">The Journey</a>
+    <a href="#">About</a>
+    <span class="sep"></span>
+    <a href="#" class="on">Personal Transformation</a>
+    <a href="#">Relationship Healing</a>
+    <a href="#">Professional</a>
+    <a href="#">Elevation Series<span class="soon">Soon</span></a>
+    <a href="#">Compare Plans</a>
+    <a href="#">Services</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <!-- ══ FULL-BLEED BANNER ══ -->
+  <div class="banner">
+    <div class="poster"></div>
+    <div class="scrim"></div>
+    <div class="banner-copy">
+      <h1>Personal<em>Transformation</em></h1>
+      <p class="lead">A library of protocols for real change.</p>
+      <p>You already know what you're feeling. Open the protocol that matches it &mdash; each one is a complete guided system for a single state, with nothing to fill in first. No intake. No labels. No waiting to be assessed. Start with what matters most right now.</p>
+    </div>
+    <button class="play" aria-label="Play introduction">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <div class="controls">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M8 5v14l11-7z"/></svg>
+      <span class="t">0:00 / 2:15</span>
+      <div class="track"><i></i><b></b></div>
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 00-2.5-4v8a4.5 4.5 0 002.5-4z"/></svg>
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+    </div>
+  </div>
+
+  <!-- ══ MAGAZINE GRID ══ -->
+  <div class="car-head">
+    <p class="kick">Browse All Protocols</p>
+    <div class="car-nav">
+      <span class="counter"><b id="cIdx">1</b> / 10</span>
+      <button class="arrow" id="cPrev" aria-label="Previous protocol">
+        <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="arrow" id="cNext" aria-label="Next protocol">
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+
+  <div class="carousel">
+    <div class="ptrack" id="cTrack" tabindex="0">
+      <article role="button" tabindex="0" class="cover c01" aria-label="Open the Anxiety Reset Protocol">
+        <span class="tile"><span class="art"></span><span class="num">01</span>
+          <span class="kicker">Regulate</span><span class="rule"></span></span>
+        <h3>Anxiety Reset</h3>
+        <p class="trig">Uncertainty, spiralling thoughts, future fear, decision paralysis</p>
+      </article>
+      <article role="button" tabindex="0" class="cover c02" aria-label="Open the Anger Alchemy Protocol">
+        <span class="tile"><span class="art"></span><span class="num">02</span>
+          <span class="kicker">Transmute</span><span class="rule"></span></span>
+        <h3>Anger Alchemy</h3>
+        <p class="trig">Reactive heat, jaw tension, the surge that arrives before the thought</p>
+      </article>
+      <article role="button" tabindex="0" class="cover c03" aria-label="Open the Overwhelm Threshold Protocol">
+        <span class="tile"><span class="art"></span><span class="num">03</span>
+          <span class="kicker">Reduce Load</span><span class="rule"></span></span>
+        <h3>Overwhelm Threshold</h3>
+        <p class="trig">Too much input, narrowing bandwidth, everything at once</p>
+      </article>
+      <article role="button" tabindex="0" class="cover c04" aria-label="Open the Abandonment Wound Protocol">
+        <span class="tile"><span class="art"></span><span class="num">04</span>
+          <span class="kicker">Repair</span><span class="rule"></span></span>
+        <h3>Abandonment Wound</h3>
+        <p class="trig">Fear of being left, protest and withdrawal, old ruptures resurfacing</p>
+      </article>
+      <article role="button" tabindex="0" class="cover c05" aria-label="Open the Shame Dissolution Protocol">
+        <span class="tile"><span class="art"></span><span class="num">05</span>
+          <span class="kicker">Dissolve</span><span class="rule"></span></span>
+        <h3>Shame Dissolution</h3>
+        <p class="trig">The collapse inward, hiding, the belief that the flaw is you</p>
+      </article>
+      <article role="button" tabindex="0" class="cover c06" aria-label="Open the Grief Integration Protocol">
+        <span class="tile"><span class="art"></span><span class="num">06</span>
+          <span class="kicker">Integrate</span><span class="rule"></span></span>
+        <h3>Grief Integration</h3>
+        <p class="trig">Loss that hasn't finished moving, waves without warning</p>
+      </article>
+      <article role="button" tabindex="0" class="cover c07" aria-label="Open the Shutdown Recovery Protocol">
+        <span class="tile"><span class="art"></span><span class="num">07</span>
+          <span class="kicker">Restore</span><span class="rule"></span></span>
+        <h3>Shutdown Recovery</h3>
+        <p class="trig">Numbness, disconnection, the flat quiet after too much</p>
+      </article>
+      <article role="button" tabindex="0" class="cover c08" aria-label="Open the Jealousy Release Protocol">
+        <span class="tile"><span class="art"></span><span class="num">08</span>
+          <span class="kicker">Release</span><span class="rule"></span></span>
+        <h3>Jealousy Release</h3>
+        <p class="trig">Comparison, scarcity, the ache of what someone else has</p>
+      </article>
+      <article role="button" tabindex="0" class="cover c09" aria-label="Open the Insecurity Anchor Protocol">
+        <span class="tile"><span class="art"></span><span class="num">09</span>
+          <span class="kicker">Anchor</span><span class="rule"></span></span>
+        <h3>Insecurity Anchor</h3>
+        <p class="trig">Shaky ground, needing reassurance, worth that keeps moving</p>
+      </article>
+      <article role="button" tabindex="0" class="cover c10" aria-label="Open the Powerlessness &amp; Despair Protocol">
+        <span class="tile"><span class="art"></span><span class="num">10</span>
+          <span class="kicker">Reclaim</span><span class="rule"></span></span>
+        <h3>Powerlessness &amp; Despair</h3>
+        <p class="trig">Nothing changes, no leverage, the weight of not being able to move</p>
+      </article>
+    </div>
+  </div>
+
+  <!-- ══ WHAT'S INSIDE ══ -->
+  <section class="inside">
+    <div class="inside-head">
+      <h2>What's Included</h2>
+      <p>The full resource library &mdash; everything you need to understand, release, and move beyond specific emotional distress patterns.</p>
+    </div>
+
+    <div class="features">
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></span>
+        <div>
+          <h3>Guided Experience</h3>
+          <p><span class="tagline">Step-by-step audio.</span><br>The full session, voiced and paced. Headphones, ten minutes, nothing to read.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/></svg></span>
+        <div>
+          <h3>How This Works</h3>
+          <p><span class="tagline">See the mechanisms.</span><br>What is happening in your body during this state, and why the four steps land in that order.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M4 5.5A2 2 0 016 4h5v15H6a2 2 0 00-2 1.5z"/><path d="M20 5.5A2 2 0 0018 4h-5v15h5a2 2 0 012 1.5z"/></svg></span>
+        <div>
+          <h3>Protocol Guide</h3>
+          <p><span class="tagline">Clear guidance on how to use it.</span><br>The printable step guide, formatted for your phone or the fridge door.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M9.5 17h5M10 20h4"/><path d="M12 3a5.5 5.5 0 013.3 9.9c-.5.4-.8 1-.8 1.6H9.5c0-.6-.3-1.2-.8-1.6A5.5 5.5 0 0112 3z"/></svg></span>
+        <div>
+          <h3>Source Insights</h3>
+          <p><span class="tagline">Understand the root causes.</span><br>The six frameworks behind this protocol, in plain language &mdash; Porges, HeartMath, Dispenza, Mat&eacute;, Jung, Watts.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M4 20c0-8 5-14 16-15 0 10-5 15-12 15a8 8 0 01-4 0z"/><path d="M9 15c2-3 5-5 8-6"/></svg></span>
+        <div>
+          <h3>Somatic Release</h3>
+          <p><span class="tagline">Body-based practices.</span><br>Daily companions between sessions &mdash; the small physical things that keep the work in place.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9M10 13h4"/></svg></span>
+        <div>
+          <h3>Reference Case</h3>
+          <p><span class="tagline">A real-world example.</span><br>A historical figure who lived this exact pattern, and what actually shifted it.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 4l8.5 15h-17z"/><path d="M12 10v4M12 17h.01"/></svg></span>
+        <div>
+          <h3>Crisis Card</h3>
+          <p><span class="tagline">The four-line version.</span><br>For the moment it is actually happening, when reading anything longer is not realistic.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.2 8.8l-1.9 4.5-4.5 1.9 1.9-4.5z"/></svg></span>
+        <div>
+          <h3>Attention Advisory</h3>
+          <p><span class="tagline">Know your limits.</span><br>Where to direct your energy right now, and how close to stay.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9.2 12l2 2 3.6-4"/></svg></span>
+        <div>
+          <h3>Disclosure &amp; Support</h3>
+          <p><span class="tagline">A script for someone close to you.</span><br>Words for explaining what you are doing and what you need, without over-explaining.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M3 11l3-3 4 1 2-1 2 1 4-1 3 3"/><path d="M6 8v7a2 2 0 002 2h8a2 2 0 002-2V8"/><path d="M10 14h4"/></svg></span>
+        <div>
+          <h3>Invitation to Repair</h3>
+          <p><span class="tagline">Rebuild what was strained.</span><br>A structured way to open repair with another person when the pattern involves them.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M8 15l3.5-4 3 2.5L20 8"/></svg></span>
+        <div>
+          <h3>Progress Tracking</h3>
+          <p><span class="tagline">Measure the change.</span><br>Log each session and watch the tier move &mdash; before and after, in your own data.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M4 20l1-4L16 5a2 2 0 013 3L8 19z"/><path d="M14 7l3 3"/></svg></span>
+        <div>
+          <h3>Progress Journal</h3>
+          <p><span class="tagline">Prompts that land.</span><br>Precision prompts tied to this protocol, not generic journalling questions.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="inside-note">Attention Advisory and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern &mdash; six and four of the ten protocols, respectively.</p>
+  </section>
+
+  <!-- ══ TESTIMONIAL ══ -->
+  <section class="testi">
+    <blockquote>PLACEHOLDER &mdash; replace with a real quote before launch. Keep it to two sentences: what the state was before, and what specifically changed. Concrete beats effusive.</blockquote>
+    <p class="who">First Name, Location<span>Personal Transformation &middot; 3 months</span></p>
+  </section>
+
+  <!-- ══ SERVICES ══ -->
+  <section class="human">
+    <div class="human-head">
+      <p class="kick">Beyond Self-Guided</p>
+      <h2>When you want someone in the room.</h2>
+      <p>The protocols work alone. These are for the moments they don't go far enough.</p>
+    </div>
+
+    <div class="svc-pair">
+      <article class="svc svc-group">
+        <span class="svc-ico"><svg viewBox="0 0 24 24">
+          <circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/>
+          <path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><path d="M16 14.6c2.2.2 3.8 1.7 4.3 4.4"/>
+        </svg></span>
+        <p class="svc-kick">Join a Monthly Workshop</p>
+        <h3>Work a protocol live, with others.</h3>
+        <p class="svc-body">Andre facilitating the same Four-Step framework in real time, alongside a small group &mdash; so you practise it once with support before you run it alone.</p>
+        <ul class="svc-meta">
+          <li>Small group</li><li>Monthly</li><li>Live, facilitated</li>
+        </ul>
+        <button class="svc-cta">Discover More &#9670;</button>
+      </article>
+
+      <article class="svc svc-solo">
+        <span class="svc-tag">Limited availability</span>
+        <span class="svc-ico"><svg viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="3.4"/><path d="M5 20c.8-4 3.6-6 7-6s6.2 2 7 6"/>
+        </svg></span>
+        <p class="svc-kick">Book a Premium 1:1</p>
+        <h3>A private hour with the founder.</h3>
+        <p class="svc-body">For whatever the self-guided protocols can't fully reach on their own &mdash; the pattern that needs a second pair of eyes, not another resource.</p>
+        <ul class="svc-meta">
+          <li>Private</li><li>60 minutes</li><li>With the founder</li>
+        </ul>
+        <button class="svc-cta">Discover More &#9670;</button>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══ CTA BAND ══ (add hidden when the visitor already has a plan) -->
+  <div class="ctabar" id="portalCta" data-state="signed-out">
+    <p class="say">Your SafeRise is ready <b>when you are.</b></p>
+    <div class="acts">
+      <a class="free" href="#">Preview the Foundation Protocol</a>
+      <button class="start">Start &mdash; &euro;9/mo &#9670;</button>
+    </div>
+  </div>
+
+  <!-- ══ FAQ ══ -->
+  <section class="faq" id="faq">
+    <div class="faq-head">
+      <p class="kick">Common Questions</p>
+      <h2>Before you start.</h2>
+      <p>The things worth knowing, answered plainly.</p>
+    </div>
+    <div class="faq-cols">
+      <div>
+    <details class="q">
+      <summary><span class="sign"></span>Is this therapy?</summary>
+      <p class="a">No. SafeRise is a structured self-guided practice and coaching resource, not psychotherapy, counselling, or medical treatment. Andre is trained in Jungian shadow-work frameworks, somatic coaching, and meditation practice &mdash; he is not a licensed therapist or psychiatrist, and nothing here is a diagnosis.</p>
+      <p class="a">Many people use it alongside therapy. It is designed to give you something practical to do in the moment a pattern shows up, between the sessions where you unpack why it exists.</p>
+    </details>
+    <details class="q">
+      <summary><span class="sign"></span>What if I'm already working with a therapist?</summary>
+      <p class="a">That combination tends to work well, and it's worth telling them you're doing it. Each protocol includes a Disclosure &amp; Support script partly for this &mdash; a short way to explain what the practice involves so they can tell you whether it fits what you're working on together.</p>
+      <p class="a">If your therapist advises against it, follow their guidance. They know your situation; a website doesn't.</p>
+    </details>
+    <details class="q">
+      <summary><span class="sign"></span>Do I need experience with meditation or somatic work?</summary>
+      <p class="a">None. Every protocol is fully guided from start to finish &mdash; you're told what to do, when, and for how long. If you've tried meditation and found that being left alone with your thoughts made things worse, this is deliberately not that.</p>
+    </details>
+    <details class="q">
+      <summary><span class="sign"></span>How long does a session take, and what do I need?</summary>
+      <p class="a">Around ten minutes. Headphones if you have them, somewhere you won't be interrupted, and the ability to sit or lie down. Nothing else &mdash; no journal to prepare, no prior reading.</p>
+      <p class="a">There's also a Crisis Card in every protocol: a four-line version for moments when ten minutes isn't realistic.</p>
+    </details>
+    <details class="q">
+      <summary><span class="sign"></span>Which protocol should I start with?</summary>
+      <p class="a">The one that names what you're feeling right now. That's the whole design &mdash; you don't need to work out an underlying cause first, and there's no correct order.</p>
+      <p class="a">If nothing obviously matches, start with the Foundation Protocol. It teaches the four steps in their simplest form, and every other protocol is a variation on it.</p>
+    </details>
+    <details class="q">
+      <summary><span class="sign"></span>What actually comes with a protocol?</summary>
+      <p class="a">A guided audio session, a printable step guide, the science behind the pattern, a reference case, body-based practices for between sessions, journalling prompts, and a crisis card. Some protocols also include an Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.</p>
+      <p class="a">You are not expected to use all of it. Most people use two or three and ignore the rest.</p>
+    </details>
+      </div>
+      <div>
+    <details class="q">
+      <summary><span class="sign"></span>Can I use this while I'm actually in the middle of it?</summary>
+      <p class="a">Yes &mdash; that's what the Crisis Card is for, and it's designed to be readable when concentration is poor. The full session is better done once things have settled slightly.</p>
+      <p class="a">If you're experiencing severe physical symptoms, or symptoms you haven't had before, treat that as a medical question first and speak to a doctor.</p>
+    </details>
+    <details class="q">
+      <summary><span class="sign"></span>Is any of this based on real science?</summary>
+      <p class="a">The core of it rests on peer-reviewed work: Stephen Porges's Polyvagal Theory, the HeartMath Institute's research on heart-rhythm coherence, and Gabor Mat&eacute;'s Compassionate Inquiry. Carl Jung's shadow and individuation frameworks and Joe Dispenza's work on the observer state are included as interpretive layers rather than clinical evidence, and we try to be clear about which is which.</p>
+      <p class="a">SafeRise has not been through a clinical trial. It is a structured practice built on established frameworks, not a treatment with proven outcomes.</p>
+    </details>
+    <details class="q">
+      <summary><span class="sign"></span>Is my journal private?</summary>
+      <p class="a">Your entries and progress data are yours. They aren't shared, sold, or used to target advertising. Full detail is in the Privacy Policy.</p>
+    </details>
+    <details class="q">
+      <summary><span class="sign"></span>What if it doesn't work for me?</summary>
+      <p class="a">Cancel any time from your account &mdash; there's no contract and no cancellation call. If it isn't landing within the first month, we'd rather you stopped than kept paying out of obligation.</p>
+      <p class="a">Regulation practices are not universal. Some nervous systems respond faster to movement, or to another person in the room, than to a guided sequence alone.</p>
+    </details>
+    <details class="q">
+      <summary><span class="sign"></span>Can I use it with a partner?</summary>
+      <p class="a">Track 01 is intrinsic work &mdash; just you and your own system. Relationship Healing is the track built for two people practising together, and it's in development.</p>
+    </details>
+    <details class="q">
+      <summary><span class="sign"></span>What if I'm in crisis right now?</summary>
+      <p class="a">SafeRise is not crisis support and shouldn't be used as a substitute for it. If you're in immediate danger, contact your local emergency number.</p>
+      <p class="a">If you need to talk to someone now, <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> lists free, confidential helplines by country. Reaching out there is the right move, and it's not an overreaction.</p>
+    </details>
+      </div>
+    </div>
+  </section>
+
+</div>
+  <!-- ══ FOOTER ══ -->
+  <footer class="site-foot">
+    <div class="foot-in">
+
+      <div class="scope">
+        <h3><svg viewBox="0 0 24 24"><path d="M12 3l7.5 3.2v5.4c0 4.3-3.1 7.5-7.5 9.4-4.4-1.9-7.5-5.1-7.5-9.4V6.2z"/><path d="M12 9v4M12 16h.01"/></svg>Scope &amp; Safety</h3>
+        <p><b>SafeRise is a self-guided practice and coaching resource. It is not therapy, medical
+        treatment, or crisis care,</b> and it does not diagnose any condition. Andre Robley is trained in
+        Jungian shadow-work frameworks, somatic coaching, and meditation practice, and is not a licensed
+        therapist, psychologist, or physician. Nothing on this site replaces advice from a qualified
+        clinician who knows your situation.</p>
+        <p><b>If you are in immediate danger, contact your local emergency number.</b> If you are
+        struggling and want to speak to someone now, <a href="https://findahelpline.com" target="_blank"
+        rel="noopener">findahelpline.com</a> lists free, confidential helplines by country. If you are
+        under the care of a doctor or therapist, please talk to them before starting, and follow their
+        guidance over anything you read here.</p>
+      </div>
+
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <div class="mk">
+            <div class="disc">&#9670;</div>
+            <div><b>SAFERISE</b><i>PROTOCOL</i></div>
+          </div>
+          <p>Precision tools for regulating your emotional state &mdash; grounded in nervous-system
+          science, delivered from lived experience.</p>
+        </div>
+
+        <div class="foot-col">
+          <h4>Protocols</h4>
+          <ul>
+            <li><a href="#">Personal Transformation</a></li>
+            <li><a href="#">Relationship Healing</a></li>
+            <li><a href="#">Professional &amp; Performance</a></li>
+            <li><a href="#">Elevation Series</a></li>
+            <li><a href="#">Foundation Protocol &mdash; free</a></li>
+          </ul>
+        </div>
+
+        <div class="foot-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#faq">Common Questions</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Monthly Workshops</a></li>
+            <li><a href="#">Premium 1:1 Sessions</a></li>
+            <li><a href="#">Corporate &amp; Retreats</a></li>
+          </ul>
+        </div>
+
+        <div class="foot-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Scope &amp; Disclaimer</a></li>
+            <li><a href="#">Accessibility</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="foot-bottom">
+        <p>&copy; 2026 SafeRise Protocol &middot; Sint Maarten</p>
+        <span class="spacer"></span>
+        <a href="#">Terms</a><a href="#">Privacy</a><a href="#">Contact</a>
+      </div>
+    </div>
+  </footer>
+<script>
+(function(){
+  var track=document.getElementById('cTrack'), idx=document.getElementById('cIdx');
+  if(!track) return;
+  var cards=[].slice.call(track.querySelectorAll('.cover'));
+
+  /* Navigation runs off an explicit index. Reading it back from scrollLeft
+     alone breaks at the end of the track, where the final cards all clamp to
+     the same maximum scroll position and the counter sticks. */
+  var pos = 0, lock = 0;
+
+  function nearest(){
+    var best=0, d=Infinity;
+    cards.forEach(function(c,i){
+      var v=Math.abs(c.offsetLeft-track.scrollLeft);
+      if(v<d){ d=v; best=i; }
+    });
+    /* at maximum scroll the last card is showing, whatever the maths says */
+    if(track.scrollLeft >= track.scrollWidth-track.clientWidth-2) best=cards.length-1;
+    return best;
+  }
+  function paint(){ idx.textContent = pos+1; }
+  function go(n){
+    pos = (n+cards.length)%cards.length;          /* wrap, like Canva */
+    lock = Date.now()+700;                        /* ignore scroll echo */
+    track.scrollTo({left:cards[pos].offsetLeft, behavior:'smooth'});
+    paint();
+  }
+  document.getElementById('cNext').onclick=function(){ go(pos+1); };
+  document.getElementById('cPrev').onclick=function(){ go(pos-1); };
+
+  var t;
+  track.addEventListener('scroll',function(){
+    clearTimeout(t);
+    t=setTimeout(function(){
+      if(Date.now()<lock) return;                 /* programmatic, not the user */
+      pos=nearest(); paint();
+    },110);
+  },{passive:true});
+
+  track.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'){ e.preventDefault(); go(current()+1); }
+    if(e.key==='ArrowLeft'){  e.preventDefault(); go(current()-1); }
+  });
+})();
+</script>
+</body>
+</html>
