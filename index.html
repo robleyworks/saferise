@@ -850,6 +850,14 @@ footer{border-top:1px solid var(--border);padding:60px;text-align:center;backgro
 @media(max-width:768px){
   .sr-hero-inner{padding:44px 28px;}
 }
+
+/* ---- Personal portal: protocol full-page view ----
+   .sr-tile's aspect-ratio:3/4 sizes it for the ~230px carousel card it
+   was designed for. Once its .proto-item is relocated into the full-width
+   page mount (view-swap script, later in this file) that ratio scales the
+   same tile to ~1300px tall. Capped to a fixed height here instead, so it
+   reads as a page banner rather than a wall of gradient. */
+#personal-protocol-page .sr-tile{aspect-ratio:auto;height:240px}
 </style>
 
 
@@ -3158,6 +3166,99 @@ function toggleProto(el){
   document.querySelectorAll('.proto-item').forEach(p=>p.classList.remove('open'));
   if(!open) el.classList.add('open');
 }
+
+// ---- Personal portal: protocol full-page view ----
+// toggleProto() above is shared by every track's protocol grid and is left
+// untouched. This only reacts to the .open class it sets, scoped to the
+// personal portal's carousel, by relocating the opened .proto-item out of
+// the carousel and into a dedicated full-page mount — a DOM move via
+// appendChild/insertBefore, which never rewrites, reorders, or otherwise
+// touches what's inside the element (including .proto-expand).
+//
+// A MutationObserver (not a click handler) is the single trigger for both
+// directions, because .open is added/removed from more than one place:
+// the cover's own click, and the "Collapse & Back to All Protocols" link
+// buried inside the preserved .proto-expand content, which also calls
+// toggleProto() directly. Watching the class itself, whatever changed it,
+// keeps every path — cover click, that link, Escape, the new back button,
+// the browser back button — funneling through the same open/close code.
+//
+// Deferred to DOMContentLoaded: this script block runs while the parser
+// is still inside #main-content, long before #prog-personal's markup
+// exists, so an immediate getElementById here would always find nothing.
+document.addEventListener('DOMContentLoaded', function () {
+  const portal = document.getElementById('personal-portal-view');
+  const page = document.getElementById('personal-protocol-page');
+  const backBtn = page ? page.querySelector('[data-proto-page-back]') : null;
+  if (!portal || !page || !backBtn) return;
+  const track = portal.querySelector('.sr-ptrack');
+  if (!track) return;
+
+  let current = null, marker = null, savedScrollY = 0;
+
+  function openProtocolPage(item) {
+    savedScrollY = window.scrollY;
+    marker = document.createComment('proto-return-point');
+    item.parentNode.insertBefore(marker, item);
+    page.appendChild(item);
+    portal.hidden = true;
+    page.hidden = false;
+    current = item;
+    window.scrollTo(0, 0);
+    backBtn.focus();
+    history.pushState({ srProtocolOpen: true }, '');
+  }
+
+  // Single source of truth for closing: every trigger removes .open (or,
+  // for the real browser back button, arrives here directly via popstate)
+  // and the actual DOM/visibility/scroll restore always happens here.
+  function actualClose() {
+    if (!current) return;
+    const item = current;
+    current = null; // set before touching classList so the observer callback below no-ops
+    item.classList.remove('open');
+    marker.parentNode.insertBefore(item, marker);
+    marker.parentNode.removeChild(marker);
+    marker = null;
+    page.hidden = true;
+    portal.hidden = false;
+    window.scrollTo(0, savedScrollY);
+  }
+
+  // In-page close (link inside .proto-expand, Escape, the new back button)
+  // only ever un-pushes the history entry opening pushed — actualClose()
+  // itself runs from the resulting popstate, so a real back-button press
+  // and an in-page "back" both resolve through exactly one code path.
+  function requestClose() {
+    if (!current) return;
+    history.back();
+  }
+
+  window.addEventListener('popstate', function () {
+    if (current) actualClose();
+  });
+
+  backBtn.addEventListener('click', function () {
+    if (current) current.classList.remove('open');
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && current) current.classList.remove('open');
+  });
+
+  const mo = new MutationObserver(function (mutations) {
+    mutations.forEach(function (m) {
+      const item = m.target;
+      const isOpen = item.classList.contains('open');
+      if (isOpen && current !== item) openProtocolPage(item);
+      else if (!isOpen && current === item) requestClose();
+    });
+  });
+  Array.prototype.forEach.call(track.querySelectorAll('.proto-item'), function (item) {
+    mo.observe(item, { attributes: true, attributeFilter: ['class'] });
+  });
+});
+
 function toggleProtoList(id, btn){
   const el = document.getElementById(id);
   const isOpen = el.style.display === 'block';
@@ -4398,6 +4499,11 @@ document.addEventListener('DOMContentLoaded', function(){
         Back to SafeRise
       </button>
     </div>
+
+    <!-- personal-portal-view: everything that makes up the portal's own
+         "home" — hidden as one unit while a protocol is open. See the
+         view-swap script near the end of this file. -->
+    <div id="personal-portal-view">
 
     <div id="ten-protocols-section"></div>
 
@@ -6978,11 +7084,6 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="sr-note">Attention Advisory and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern — six and four of the ten protocols, respectively.</p>
     </section>
 
-    <section class="sr-testi">
-      <blockquote>PLACEHOLDER — replace with a real quote before launch. Keep it to two sentences: what the state was before, and what specifically changed. Concrete beats effusive.</blockquote>
-      <p class="sr-who">First Name, Location<span>Personal Transformation · 3 months</span></p>
-    </section>
-
     <section class="sr-human">
       <div class="sr-head">
         <p class="sr-kick">Beyond Self-Guided</p>
@@ -7018,6 +7119,11 @@ document.addEventListener('DOMContentLoaded', function(){
           <button class="sr-svc-cta" onclick="showProg('premium1on1')">Discover More ◆</button>
         </article>
       </div>
+    </section>
+
+    <section class="sr-testi">
+      <blockquote>PLACEHOLDER — replace with a real quote before launch. Keep it to two sentences: what the state was before, and what specifically changed. Concrete beats effusive.</blockquote>
+      <p class="sr-who">First Name, Location<span>Personal Transformation · 3 months</span></p>
     </section>
 
     <div class="sr-ctabar" data-sr-cta>
@@ -7098,6 +7204,20 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
       </div>
     </section>
+
+    </div><!-- /personal-portal-view -->
+
+    <!-- personal-protocol-page: mount point for the open protocol's full-
+         page view. Empty until a cover is opened; the JS view-swap script
+         relocates the .proto-item here (a DOM move — its markup, including
+         .proto-expand, is never touched) and moves it back on close. -->
+    <div id="personal-protocol-page" hidden>
+      <button type="button" class="proto-page-back" data-proto-page-back
+              style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:0;margin-bottom:32px;">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Protocols
+      </button>
+    </div>
   </div>
 </div>
 
