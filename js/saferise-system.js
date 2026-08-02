@@ -106,15 +106,14 @@
        it needs no click-to-real-card mapping to get wrong; the area
        just behaves like empty track.
 
-       The real-set width is measured fresh every tick, not cached:
-       opening a protocol widens that one card via .sr-cover.open in
-       the CSS, which shifts every card and clone after it. A width
-       cached before that would be short, so the wrap subtraction
-       would land inside the real set instead of exactly back at its
-       start — a visible jump. (In practice opening a card also stops
-       autoplay via the click listener below, but the measurement
-       shouldn't depend on that ordering to be correct.) Re-measuring
-       is two offsetLeft reads; irrelevant cost at a 50ms tick.
+       The real-set width is measured fresh every tick, not cached —
+       cheap insurance (two offsetLeft reads) against anything that
+       reflows the track between ticks, e.g. a window resize, rather
+       than a specific scenario this needs to defend against: opening
+       a protocol permanently stops autoplay via the click listener
+       below before the personal portal's view-swap script relocates
+       that card out of the track, so tick() has already stopped
+       running by the time the track's contents change.
 
        scroll-snap-type: x mandatory (set in CSS) fights a slow
        continuous scrollLeft nudge — the browser tries to settle on
