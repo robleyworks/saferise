@@ -267,16 +267,26 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
   text-transform:uppercase;color:var(--primary)}
 .sr-head h2{margin:0 0 16px;font:400 clamp(28px,3.4vw,42px)/1.12 'Cinzel',serif;color:var(--text)}
 .sr-head p{margin:0;font:italic 400 19px/1.7 'Cormorant Garamond',Georgia,serif;color:var(--text2)}
-.sr-note{margin:44px auto 0;text-align:center;max-width:74ch;
+/* margin-bottom is negative on purpose: .sr-section (its parent) has no
+   bottom padding/border, so this collapses straight through into the
+   next section's own margin-top — the only lever available for closing
+   that gap without touching the next section's CSS. Collapsing sums the
+   largest positive margin with the most negative one, so -32px here
+   trims the gap by exactly 32px (measured 176px → 144px against
+   .sr-human's 104px margin-top), not 32px off some margin of its own. */
+.sr-note{margin:44px auto -32px;text-align:center;max-width:74ch;
   font:400 13px/1.7 'DM Sans',sans-serif;color:var(--text3)}
 /* index.html reuses the bare class name .sr-note for an unrelated Reader
    callout box, and both of its style blocks (#sr-v8-cool-reader,
    #sr-v9-lighter-resource-body) set its background with !important. A
    normal-weight rule here, however late it loads, cannot win against
    that — !important only loses to !important. This is the one place
-   the system CSS uses it, specifically to null out those properties. */
+   the system CSS uses it, specifically to null out those properties —
+   and, now, to pull color back to the intended var(--text3): v8 also
+   sets color:#D8D2DF!important, which at ~13.5:1 against the page
+   background reads far brighter than a footnote should. */
 .sr-note{background:none!important;border:0!important;border-radius:0!important;
-  box-shadow:none!important;padding:0!important}
+  box-shadow:none!important;padding:0!important;color:var(--text3)!important}
 
 /* B5 · feature grid — "what's included" ───────────────────── */
 .sr-section{margin-top:104px;padding-top:72px;border-top:1px solid rgba(212,168,67,.20)}
