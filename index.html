@@ -362,54 +362,64 @@ footer{border-top:1px solid var(--border);padding:60px;text-align:center;backgro
 .j-share-btn svg{width:12px;height:12px;stroke:var(--primary);}
 .j-share-btn span{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text2);font-weight:500;}
 
-/* ---- Log Progress & Journal (Journal & Progress / Request Consultation) ---- */
-.jprog-section{margin-top:30px;padding-top:26px;border-top:1px solid var(--border);}
+/* ---- Log Progress & Journal (Journal & Progress / Request Consultation) ----
+   One shared divider style for a genuine section break — border-top:1px
+   solid var(--border) — used at exactly two points: session log → journal
+   entry, and journal entry → past entries, with identical spacing at both.
+   Everything else in this block (status card, recommendation note, prompt
+   card, Recent Sessions, the "why here" note) is set apart by spacing and
+   its own background only, no border of its own.
+
+   Spacing runs on one 8/16/24/40px scale: 8 = a label to its control,
+   16 = a control to the next block within the same sub-section, 24 = a
+   sub-section's own internal breathing room, 40 = the section-break gap
+   that pairs with the shared rule above.
+
+   .jprog-select/.jprog-log-note/.jprog-journal-text are display:block
+   (textareas and selects default to inline-block) so a following button
+   always wraps onto its own line at the left edge, regardless of the
+   field's own max-width — inline-block was letting Save Entry flow up
+   beside .jprog-journal-text instead of dropping below it. */
+.jprog-section{margin-top:16px;}
 .jprog-eyebrow{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--primary);font-weight:600;font-family:'DM Sans',sans-serif;display:block;margin-bottom:8px;}
-.jprog-title{font-family:'Cinzel',serif;font-size:19px;color:var(--text);margin:0 0 6px;}
-.jprog-sub{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14.5px;color:var(--text3);line-height:1.6;margin-bottom:20px;}
-.jprog-tabs{display:flex;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:5px;margin-bottom:20px;}
+.jprog-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;line-height:1.25;font-weight:500;color:var(--text);margin:0 0 6px;}
+.jprog-sub{font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.65;color:var(--text3);max-width:650px;margin:0 0 24px;}
+.jprog-tabs{display:flex;gap:8px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:24px;max-width:620px;}
 .jprog-tab{flex:1;background:none;border:none;cursor:pointer;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:0.3px;color:var(--text3);border-radius:6px;transition:all 0.2s;}
 .jprog-tab:hover{color:var(--text2);}
 .jprog-tab.active{color:var(--bg);background:var(--primary);box-shadow:0 2px 8px rgba(212,168,67,0.35);}
 .jprog-panel{display:none;}
 .jprog-panel.active{display:block;}
-.jprog-status-box{background:linear-gradient(135deg,rgba(212,168,67,0.08),rgba(212,168,67,0.02));border:1px solid var(--primary);border-radius:3px;padding:16px 18px;margin-bottom:16px;}
-.jprog-status-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
-.jprog-status-head strong{font-family:'Cinzel',serif;font-weight:400;font-size:14px;color:var(--text);}
-.jprog-status-pill{font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--primary);background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.3);padding:3px 10px;border-radius:20px;}
-.jprog-status-box p{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);line-height:1.6;}
-.jprog-next{background:var(--card2);border-left:3px solid var(--primary);border-radius:0 3px 3px 0;padding:14px 18px;margin-bottom:16px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);line-height:1.65;}
-.jprog-next strong{color:var(--primary);}
+.jprog-status-box,.jprog-tier-card{background:linear-gradient(135deg,rgba(212,168,67,0.08),rgba(212,168,67,0.02));padding:16px 18px;margin-bottom:16px;max-width:700px;}
+.jprog-status-head,.jprog-tier-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;font-family:'Cinzel',serif;font-weight:400;font-size:14px;color:var(--text);}
+.jprog-status-pill,.jprog-tier-badge{font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--primary);background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.3);padding:3px 10px;border-radius:20px;font-family:'DM Sans',sans-serif;}
+.jprog-status-box p,.jprog-tier-text{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);line-height:1.6;}
+.jprog-next,.jprog-rec-box{background:var(--card2);padding:14px 18px;margin-bottom:24px;max-width:700px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);line-height:1.65;}
+.jprog-next strong,.jprog-rec-box strong{color:var(--primary);}
 .jprog-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:16px;}
 .jprog-stat{background:var(--card2);border:1px solid var(--border);padding:14px 16px;}
 .jprog-stat-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);font-weight:600;margin-bottom:7px;}
 .jprog-stat-value{font-family:'Cinzel',serif;font-size:14px;color:var(--primary2);letter-spacing:0.2px;}
-.jprog-why{padding-top:14px;border-top:1px dashed var(--border);font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text3);line-height:1.6;}
+.jprog-why{padding-top:24px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text3);line-height:1.6;}
 .jprog-why strong{color:var(--primary);}
-.jprog-tier-card{background:linear-gradient(135deg,rgba(212,168,67,0.08),rgba(212,168,67,0.02));border:1px solid var(--primary);border-radius:3px;padding:16px 18px;margin-bottom:16px;}
-.jprog-tier-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;font-family:'Cinzel',serif;font-weight:400;font-size:14px;color:var(--text);}
-.jprog-tier-badge{font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--primary);background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.3);padding:3px 10px;border-radius:20px;font-family:'DM Sans',sans-serif;}
-.jprog-tier-text{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);line-height:1.6;}
-.jprog-rec-box{background:var(--card2);border-left:3px solid var(--primary);border-radius:0 3px 3px 0;padding:14px 18px;margin-bottom:20px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);line-height:1.65;}
-.jprog-rec-box strong{color:var(--primary);}
-.jprog-label{display:block;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--text3);font-weight:600;font-family:'DM Sans',sans-serif;margin:0 0 7px;}
-.jprog-select,.jprog-log-note,.jprog-journal-text{width:100%;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;border:1px solid var(--border);border-radius:3px;background:var(--card2);color:var(--text);margin-bottom:14px;}
+.jprog-label{display:block;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--text3);font-weight:600;font-family:'DM Sans',sans-serif;margin:0 0 8px;}
+.jprog-select,.jprog-log-note,.jprog-journal-text{display:block;width:100%;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;border:1px solid var(--border);border-radius:3px;background:var(--card2);color:var(--text);margin-bottom:16px;max-width:700px;}
 .jprog-log-note,.jprog-journal-text{resize:vertical;min-height:60px;}
 .jprog-journal-text{min-height:100px;}
 .jprog-select::placeholder,.jprog-log-note::placeholder,.jprog-journal-text::placeholder{color:var(--text3);}
 .jprog-btn{display:inline-block;background:var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;padding:11px 22px;border-radius:3px;cursor:pointer;border:none;}
-.jprog-recent{margin-top:22px;padding-top:18px;border-top:1px solid var(--border);}
+.jprog-recent{margin-top:16px;}
 .jprog-log-list,.jprog-journal-list{font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--text3);font-style:italic;}
 .jprog-entry{border-bottom:1px solid var(--border);padding:10px 0;}
 .jprog-entry:last-child{border-bottom:none;}
 .jprog-entry-meta{font-size:11px;color:var(--text3);font-family:'DM Sans',sans-serif;}
 .jprog-entry-text{font-size:12.5px;color:var(--text2);margin-top:3px;font-family:'DM Sans',sans-serif;font-style:normal;}
-.jprog-journal-block{margin-top:26px;padding-top:22px;border-top:1px solid var(--border);}
-.jprog-prompt-card{background:var(--card2);border:1px solid var(--primary);border-radius:3px;padding:14px 16px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px;}
+.jprog-journal-block{margin-top:40px;padding-top:24px;border-top:1px solid var(--border);}
+.jprog-prompt-card{background:var(--card2);padding:16px 18px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px;max-width:700px;}
 .jprog-prompt-main{flex:1;}
 .jprog-prompt-kicker{font-size:9px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:1.3px;font-family:'DM Sans',sans-serif;margin:0 0 5px;}
-.jprog-prompt-text{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14px;color:var(--text);margin:0;line-height:1.55;}
-.jprog-prompt-cats{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;}
+.jprog-prompt-text{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:19px;color:var(--text);margin:0;line-height:1.55;}
+.jprog-prompt-cats{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;}
 .jprog-prompt-chip{font-size:9.5px;padding:4px 10px;border-radius:14px;cursor:pointer;letter-spacing:0.3px;font-family:'DM Sans',sans-serif;border:1px solid var(--border);color:var(--text3);}
 .jprog-prompt-chip.deeper{border-style:dashed;}
 .jprog-prompt-chip.active{background:var(--primary);color:var(--bg);border-color:var(--primary);border-style:solid;font-weight:600;}
@@ -417,11 +427,11 @@ footer{border-top:1px solid var(--border);padding:60px;text-align:center;backgro
 .jprog-prompt-use,.jprog-prompt-shuffle{font-size:10px;font-weight:700;padding:7px 12px;border-radius:3px;white-space:nowrap;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;letter-spacing:0.5px;}
 .jprog-prompt-use{border:1px solid var(--primary);color:var(--primary);}
 .jprog-prompt-shuffle{border:1px solid var(--border);color:var(--text3);}
-.jprog-past{margin-top:22px;padding-top:18px;border-top:1px solid var(--border);}
+.jprog-past{margin-top:40px;padding-top:24px;border-top:1px solid var(--border);}
 .jprog-consult-prefill{background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.3);border-radius:3px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:16px;}
 .jprog-consult-prefill strong{color:var(--text);}
 .jprog-consult-intro{font-family:'Cormorant Garamond',Georgia,serif;font-size:14.5px;color:var(--text2);line-height:1.7;margin-bottom:16px;}
-.jprog-textarea{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:2px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);min-height:80px;resize:vertical;margin-bottom:14px;}
+.jprog-textarea{display:block;width:100%;background:var(--card2);border:1px solid var(--border);border-radius:2px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);min-height:80px;resize:vertical;margin-bottom:14px;}
 .jprog-textarea::placeholder{color:var(--text3);}
 .jprog-consult-btn{display:inline-block;background:var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px 24px;border-radius:2px;cursor:pointer;border:none;}
 .jprog-consult-note{font-family:'DM Sans',sans-serif;font-size:11.5px;color:var(--text3);margin-top:12px;}
@@ -13087,73 +13097,17 @@ window.addEventListener('load', function(){
   background:transparent!important;
 }
 
-/* ---------- JOURNAL & PROGRESS: writing first ---------- */
-.jprog-section{
-  margin-top:40px!important;
-  padding-top:32px!important;
-}
-.jprog-title{
-  font-family:'Cormorant Garamond',Georgia,serif!important;
-  font-size:24px!important;
-  line-height:1.25!important;
-  font-weight:500!important;
-}
-.jprog-sub{
-  max-width:650px!important;
-  margin-bottom:20px!important;
-  font:400 14px/1.65 'DM Sans',sans-serif!important;
-  color:var(--text3)!important;
-}
-.jprog-tabs{
-  max-width:620px!important;
-  margin-bottom:24px!important;
-  padding:3px!important;
-  background:transparent!important;
-  border-color:rgba(212,168,67,.14)!important;
-}
-.jprog-prompt-card{
-  max-width:700px!important;
-  margin-bottom:16px!important;
-  padding:18px 0!important;
-  border:0!important;
-  border-top:1px solid #D4A843!important;
-  border-bottom:1px solid rgba(212,168,67,.14)!important;
-  background:transparent!important;
-}
-.jprog-prompt-text{
-  font:italic 500 19px/1.55 'Cormorant Garamond',Georgia,serif!important;
-}
-.jprog-journal-text{
-  max-width:700px!important;
-  min-height:150px!important;
-  margin-bottom:12px!important;
-  padding:14px!important;
-  font-size:14px!important;
-  line-height:1.65!important;
-}
-.jprog-prompt-cats{
-  margin-top:12px!important;
-}
-.jprog-status-box,
-.jprog-tier-card,
-.jprog-next,
-.jprog-rec-box,
+/* ---------- JOURNAL & PROGRESS ----------
+   Moved to the properly-scoped, single-source block near the top of the
+   file (search "Log Progress & Journal") — this "resource-reading-system"
+   block is about Reader pages, and having jprog-* rules duplicated here
+   too, fighting the original definitions with !important, was a real
+   source of the divider/spacing inconsistency. .id-evidence-card is
+   unrelated (a Reader "decision" page element) and keeps its own rule. */
 .id-evidence-card{
   max-width:700px!important;
   background:transparent!important;
   box-shadow:none!important;
-}
-.jprog-status-box,
-.jprog-tier-card{
-  border-color:rgba(212,168,67,.22)!important;
-}
-.jprog-next,
-.jprog-rec-box{
-  border-left:0!important;
-  border-top:1px solid rgba(212,168,67,.18)!important;
-  padding:14px 0!important;
-}
-.id-evidence-card{
   padding:18px 0!important;
   border:0!important;
   border-top:1px solid rgba(212,168,67,.18)!important;
