@@ -103,33 +103,26 @@ section::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
              rgba(212,168,67,.28) 78%,transparent)}
 
 /* A5 · surfaces ───────────────────────────────────────────── */
-/* .sr-panel: the same surface treatment, for #main-content's flat info
-   cards (science, pattern stats, testimonial stats, FAQ, pricing tiers)
-   that predate this system and don't already carry a semantic card
-   class of their own. */
-.proto-item,.sci-card,.expert-card,.expert-card2,.step-card,.tier,.res-item,
+.proto-item,.expert-card,.expert-card2,.step-card,.tier,.res-item,
 .jprog-section,.jprog-tier-card,.jprog-prompt-card,.jprog-status-box,
-.pangolin-card,.safety-widget,.j-cta,.jp5-card,.jp5-purpose-card,.pull-quote,
-.sr-panel{
+.safety-widget,.j-cta,.jp5-card,.jp5-purpose-card,.pull-quote{
   border-radius:var(--sr-r-md);position:relative;
   transition:transform .3s var(--sr-ease),box-shadow .3s var(--sr-ease),border-color .3s}
-.proto-item,.sci-card,.expert-card,.step-card,.tier,.pangolin-card,.sr-panel{
+.proto-item,.expert-card,.step-card,.tier{
   background-image:var(--sr-hair);background-origin:border-box;box-shadow:var(--sr-lift)}
-.proto-item:hover,.sci-card:hover,.expert-card:hover,.step-card:hover,
-.tier:hover,.res-item:hover,.sr-panel:hover{
+.proto-item:hover,.expert-card:hover,.step-card:hover,
+.tier:hover,.res-item:hover{
   transform:translateY(-3px);box-shadow:var(--sr-ring);border-color:rgba(212,168,67,.42)}
 .proto-item.open{transform:none;box-shadow:var(--sr-ring)}
 .proto-num,.j-num,.step-num,.sci-card-num{font-variant-numeric:tabular-nums}
 .pull-quote{border-radius:0 var(--sr-r-md) var(--sr-r-md) 0;
   background:linear-gradient(120deg,rgba(212,168,67,.07),rgba(42,42,66,.5))}
 
-/* .sr-bloom: the corner-light + layered-gradient finish from .sr-svc/
-   .sr-testi, for #main-content's one featured pairing (Pangolin &
-   Founder) rather than every flat .sr-panel. */
-.sr-bloom{overflow:hidden;
-  background-image:linear-gradient(158deg,rgba(23,23,40,.5),rgba(14,14,26,.2)),var(--sr-hair)}
-.sr-bloom::after{content:"";position:absolute;top:-40%;right:-20%;width:70%;height:80%;
-  border-radius:50%;background:var(--primary);opacity:.12;filter:blur(56px);pointer-events:none}
+/* #main-content only. One flat surface, no gradient border, no shadow,
+   no hover glow — see CLAUDE.md decorative-cleanup pass. Card "-ness"
+   comes from a single inline background-color tint set per instance;
+   this rule only rounds the corners. */
+.sci-card,.pangolin-card,.sr-panel{border-radius:var(--sr-r-md)}
 
 /* A6 · media frames ───────────────────────────────────────── */
 .media-block,.video-placeholder,.audio-placeholder,.pdf-placeholder{
