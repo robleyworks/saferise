@@ -4503,13 +4503,6 @@ document.addEventListener('DOMContentLoaded', function(){
 <!-- PERSONAL TRANSFORMATION PAGE -->
 <div id="prog-personal" class="prog-overlay" style="--sr-accent:#D4A843;--sr-accent-wash:rgba(212,168,67,.12);--sr-accent-border:rgba(212,168,67,.35);">
   <div style="max-width:1100px;margin:0 auto;padding:60px 60px 100px;">
-    <div style="margin-bottom:40px;">
-      <button onclick="showMain()" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:0;">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Back to SafeRise
-      </button>
-    </div>
-
     <!-- personal-portal-view: everything that makes up the portal's own
          "home" — hidden as one unit while a protocol is open. See the
          view-swap script near the end of this file. -->
@@ -4554,9 +4547,15 @@ document.addEventListener('DOMContentLoaded', function(){
           <span class="sr-kicker">Regulate</span>
           <span class="sr-rule"></span>
         </span>
-        <h3 class="proto-name">The Anxiety Reset Protocol</h3>
+        <span class="sr-proto-banner">
+          <span class="sr-proto-banner-media"></span>
+          <span class="sr-proto-banner-scrim"></span>
+          <span class="sr-proto-banner-copy">
+            <h3 class="proto-name">The Anxiety Reset Protocol</h3>
+            <p class="proto-landing-desc sr-trig">Calm fear responses, quiet spiralling thoughts, and return to the present.</p>
+          </span>
+        </span>
         <p class="proto-trigger" hidden>Uncertainty, spiralling thoughts, future fear, decision paralysis</p>
-        <p class="proto-landing-desc sr-trig">Calm fear responses, quiet spiralling thoughts, and return to the present.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
@@ -4792,9 +4791,15 @@ document.addEventListener('DOMContentLoaded', function(){
           <span class="sr-kicker">Transmute</span>
           <span class="sr-rule"></span>
         </span>
-        <h3 class="proto-name">The Anger Alchemy Protocol</h3>
+        <span class="sr-proto-banner">
+          <span class="sr-proto-banner-media"></span>
+          <span class="sr-proto-banner-scrim"></span>
+          <span class="sr-proto-banner-copy">
+            <h3 class="proto-name">The Anger Alchemy Protocol</h3>
+            <p class="proto-landing-desc sr-trig">Turn anger into clarity, protect what matters, and choose your response.</p>
+          </span>
+        </span>
         <p class="proto-trigger" hidden>Injustice, boundary violation, disrespect, loss of control</p>
-        <p class="proto-landing-desc sr-trig">Turn anger into clarity, protect what matters, and choose your response.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
 
@@ -5035,9 +5040,15 @@ document.addEventListener('DOMContentLoaded', function(){
           <span class="sr-kicker">Reduce Load</span>
           <span class="sr-rule"></span>
         </span>
-        <h3 class="proto-name">The Overwhelm Threshold Protocol</h3>
+        <span class="sr-proto-banner">
+          <span class="sr-proto-banner-media"></span>
+          <span class="sr-proto-banner-scrim"></span>
+          <span class="sr-proto-banner-copy">
+            <h3 class="proto-name">The Overwhelm Threshold Protocol</h3>
+            <p class="proto-landing-desc sr-trig">Reduce overload, regain your footing, and create space to think clearly.</p>
+          </span>
+        </span>
         <p class="proto-trigger" hidden>Noise, crowds, competing stimulation, environmental chaos, sensory flood</p>
-        <p class="proto-landing-desc sr-trig">Reduce overload, regain your footing, and create space to think clearly.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
 
@@ -5276,9 +5287,15 @@ document.addEventListener('DOMContentLoaded', function(){
           <span class="sr-kicker">Repair</span>
           <span class="sr-rule"></span>
         </span>
-        <h3 class="proto-name">The Abandonment Wound Protocol</h3>
+        <span class="sr-proto-banner">
+          <span class="sr-proto-banner-media"></span>
+          <span class="sr-proto-banner-scrim"></span>
+          <span class="sr-proto-banner-copy">
+            <h3 class="proto-name">The Abandonment Wound Protocol</h3>
+            <p class="proto-landing-desc sr-trig">Steady the fear of rejection and rebuild security when belonging feels threatened.</p>
+          </span>
+        </span>
         <p class="proto-trigger" hidden>Rejection, being left, not chosen, loss of belonging, attachment threat</p>
-        <p class="proto-landing-desc sr-trig">Steady the fear of rejection and rebuild security when belonging feels threatened.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
 
@@ -5519,9 +5536,15 @@ document.addEventListener('DOMContentLoaded', function(){
           <span class="sr-kicker">Dissolve</span>
           <span class="sr-rule"></span>
         </span>
-        <h3 class="proto-name">The Shame Dissolution Protocol</h3>
+        <span class="sr-proto-banner">
+          <span class="sr-proto-banner-media"></span>
+          <span class="sr-proto-banner-scrim"></span>
+          <span class="sr-proto-banner-copy">
+            <h3 class="proto-name">The Shame Dissolution Protocol</h3>
+            <p class="proto-landing-desc sr-trig">Move beyond self-judgment, recover your dignity, and stop a moment from defining you.</p>
+          </span>
+        </span>
         <p class="proto-trigger" hidden>Public mistake, exposure, feeling fundamentally flawed or judged</p>
-        <p class="proto-landing-desc sr-trig">Move beyond self-judgment, recover your dignity, and stop a moment from defining you.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
 
@@ -5757,9 +5780,15 @@ document.addEventListener('DOMContentLoaded', function(){
           <span class="sr-kicker">Integrate</span>
           <span class="sr-rule"></span>
         </span>
-        <h3 class="proto-name">The Grief Integration Protocol</h3>
+        <span class="sr-proto-banner">
+          <span class="sr-proto-banner-media"></span>
+          <span class="sr-proto-banner-scrim"></span>
+          <span class="sr-proto-banner-copy">
+            <h3 class="proto-name">The Grief Integration Protocol</h3>
+            <p class="proto-landing-desc sr-trig">Make space for loss, move through what has changed, and carry forward what matters.</p>
+          </span>
+        </span>
         <p class="proto-trigger" hidden>Loss of a person, relationship, chapter of life, or imagined future</p>
-        <p class="proto-landing-desc sr-trig">Make space for loss, move through what has changed, and carry forward what matters.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
 
@@ -5995,9 +6024,15 @@ document.addEventListener('DOMContentLoaded', function(){
           <span class="sr-kicker">Restore</span>
           <span class="sr-rule"></span>
         </span>
-        <h3 class="proto-name">The Shutdown Recovery Protocol</h3>
+        <span class="sr-proto-banner">
+          <span class="sr-proto-banner-media"></span>
+          <span class="sr-proto-banner-scrim"></span>
+          <span class="sr-proto-banner-copy">
+            <h3 class="proto-name">The Shutdown Recovery Protocol</h3>
+            <p class="proto-landing-desc sr-trig">Reconnect with yourself, restore engagement, and gently come back online.</p>
+          </span>
+        </span>
         <p class="proto-trigger" hidden>Numbness, flatness, disconnection, inability to feel or engage</p>
-        <p class="proto-landing-desc sr-trig">Reconnect with yourself, restore engagement, and gently come back online.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
 
@@ -6233,9 +6268,15 @@ document.addEventListener('DOMContentLoaded', function(){
           <span class="sr-kicker">Release</span>
           <span class="sr-rule"></span>
         </span>
-        <h3 class="proto-name">The Jealousy Release Protocol</h3>
+        <span class="sr-proto-banner">
+          <span class="sr-proto-banner-media"></span>
+          <span class="sr-proto-banner-scrim"></span>
+          <span class="sr-proto-banner-copy">
+            <h3 class="proto-name">The Jealousy Release Protocol</h3>
+            <p class="proto-landing-desc sr-trig">Move beyond comparison, understand what the sting is revealing, and return to your own path.</p>
+          </span>
+        </span>
         <p class="proto-trigger" hidden>Someone else's success, comparison, the sting of being outpaced</p>
-        <p class="proto-landing-desc sr-trig">Move beyond comparison, understand what the sting is revealing, and return to your own path.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
 
@@ -6476,9 +6517,15 @@ document.addEventListener('DOMContentLoaded', function(){
           <span class="sr-kicker">Anchor</span>
           <span class="sr-rule"></span>
         </span>
-        <h3 class="proto-name">The Insecurity Anchor Protocol</h3>
+        <span class="sr-proto-banner">
+          <span class="sr-proto-banner-media"></span>
+          <span class="sr-proto-banner-scrim"></span>
+          <span class="sr-proto-banner-copy">
+            <h3 class="proto-name">The Insecurity Anchor Protocol</h3>
+            <p class="proto-landing-desc sr-trig">Quiet self-doubt, strengthen inner trust, and stay grounded when you feel judged or exposed.</p>
+          </span>
+        </span>
         <p class="proto-trigger" hidden>Being evaluated, judged, or seen — self-doubt without clear evidence</p>
-        <p class="proto-landing-desc sr-trig">Quiet self-doubt, strengthen inner trust, and stay grounded when you feel judged or exposed.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
 
@@ -6719,9 +6766,15 @@ document.addEventListener('DOMContentLoaded', function(){
           <span class="sr-kicker">Reclaim</span>
           <span class="sr-rule"></span>
         </span>
-        <h3 class="proto-name">The Powerlessness & Despair Protocol</h3>
+        <span class="sr-proto-banner">
+          <span class="sr-proto-banner-media"></span>
+          <span class="sr-proto-banner-scrim"></span>
+          <span class="sr-proto-banner-copy">
+            <h3 class="proto-name">The Powerlessness & Despair Protocol</h3>
+            <p class="proto-landing-desc sr-trig">Find what is still within your reach, restore agency, and take the next meaningful step.</p>
+          </span>
+        </span>
         <p class="proto-trigger" hidden>Circumstances that feel foreclosed, effort that no longer seems to matter</p>
-        <p class="proto-landing-desc sr-trig">Find what is still within your reach, restore agency, and take the next meaningful step.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
 
           <div class="crisis-note">
