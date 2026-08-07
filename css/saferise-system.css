@@ -585,6 +585,329 @@ details.sr-q .sr-a a{color:var(--primary2)}
   font:600 9.5px/1.4 'DM Sans',sans-serif;letter-spacing:1.5px;
   text-transform:uppercase;color:var(--text3)}
 
+/* B13 · Open protocol page — border/hairline cleanup + gutters ─
+   Audited borders on #personal-protocol-page before this rule:
+     .proto-item          box-shadow var(--sr-ring): 0 0 0 1px gold +
+                           a soft drop shadow — a full outline "rail"
+                           around the whole card, sitting right across
+                           the top of the now-edge-to-edge banner.
+     .proto-item           background-image var(--sr-hair) — a diagonal
+                           gold-to-transparent gradient painted as a
+                           second, subtler hairline across the same box.
+     .proto-expand         border-top 1px var(--border) — a divider
+                           directly under the banner, before step 1.
+     .sr-cover:hover .sr-tile   border-color change + box-shadow
+                           0 0 0 1px gold — a ring on the cover's hover
+                           panel (the carousel card, not this page, but
+                           audited together since item 2 groups them).
+   Four distinct styles, all removed below except the .j-step border,
+   which is the one kept divider — it already only fires between
+   numbered stages (.j-step:first-child has border-top:none). */
+#personal-protocol-page .proto-item{box-shadow:none;background-image:none}
+#personal-protocol-page .proto-item .proto-expand{border-top:0}
+#prog-personal .sr-cover:hover .sr-tile{
+  border-color:rgba(255,255,255,.24);box-shadow:0 28px 52px -24px rgba(0,0,0,.9)}
+#prog-personal .sr-cover--light:hover .sr-tile{border-color:rgba(20,20,36,.24)}
+
+/* Protocol-page text was flush against the card's own edge (0 padding —
+   .sr-cover zeroes .proto-item's original 24px/28px). The banner stays
+   edge-to-edge on purpose; only the content below it gets a gutter,
+   matching the internal padding other prose blocks use on this same
+   site (.sr-testi 56px, .sr-svc 36px) rather than re-adding the old
+   24/28 which predates the banner layout. */
+#personal-protocol-page .proto-item .proto-expand{padding-left:40px;padding-right:40px}
+@media(max-width:760px){
+  #personal-protocol-page .proto-item .proto-expand{padding-left:24px;padding-right:24px}
+}
+
+/* Cover hover panel: title/description sat flush against the card's
+   left/right edge (same 0-padding cause as above). The open-page
+   banner copy already has its own left offset and max-width, so its
+   padding is reset back to 0 to avoid a double inset. */
+#prog-personal .sr-cover h3.proto-name,
+#prog-personal .sr-cover .proto-landing-desc{padding:0 16px}
+#personal-protocol-page .proto-item .sr-proto-banner-copy .proto-name,
+#personal-protocol-page .proto-item .sr-proto-banner-copy .proto-landing-desc{padding:0}
+
+/* B14 · Practice & Journal — neutral tonal ladder ──────────────
+   The platform's --card2/--surface tokens this block used to inherit
+   (#242438, #2A2A42) run noticeably bluer than red/green — a violet
+   cast — and sit too close together in value. Replaced with a flat,
+   self-contained neutral ladder, scoped to .jprog-section only:
+     page #0A0A0D    → .jprog-section itself (the block's own ground)
+     section #131317 → .jprog-journal-block (the Journal sub-group —
+                        nested one level into the page, one tone up)
+     card #1C1C21    → jprog-tier-card/rec-box/stat ("Where You Are",
+                        "What's Next") and jprog-prompt-card
+     input #24242A   → select / textareas
+     hairline #33333B, used only for the tab strip border and the
+     entry-list dividers — nothing else in this block gets a border.
+   Gold is #C9A03C throughout (replacing var(--primary)'s #D4A843
+   here specifically) and only appears on genuinely interactive/accent
+   elements — active tab, badges, buttons, the active prompt chip —
+   not as a background tint (the old rgba(212,168,67,.08) note/prefill
+   washes are gone, replaced by the card tone). */
+#prog-personal .jprog-section{
+  background:#0A0A0D;padding:28px 30px 32px;border-radius:var(--sr-r-md);max-width:none}
+#prog-personal .jprog-eyebrow{color:#77747C}
+#prog-personal .jprog-title{color:#F2EDE3}
+#prog-personal .jprog-sub{color:#95929A}
+#prog-personal .jprog-tabs{border-color:#33333B}
+#prog-personal .jprog-tab{color:#77747C}
+#prog-personal .jprog-tab:hover{color:#95929A}
+#prog-personal .jprog-tab.active{color:#0A0A0D;background:#C9A03C;box-shadow:none}
+#prog-personal .jprog-status-box,#prog-personal .jprog-tier-card{
+  background:#1C1C21;padding:16px 18px;border-radius:6px}
+#prog-personal .jprog-status-head,#prog-personal .jprog-tier-head{color:#F2EDE3}
+#prog-personal .jprog-status-pill,#prog-personal .jprog-tier-badge{
+  color:#C9A03C;background:rgba(201,160,60,.14);border-color:rgba(201,160,60,.32)}
+#prog-personal .jprog-status-box p,#prog-personal .jprog-tier-text{color:#95929A}
+#prog-personal .jprog-next,#prog-personal .jprog-rec-box{background:#1C1C21;color:#95929A;border-radius:6px}
+#prog-personal .jprog-next strong,#prog-personal .jprog-rec-box strong{color:#C9A03C}
+#prog-personal .jprog-stat{background:#1C1C21;border-color:#33333B}
+#prog-personal .jprog-stat-label{color:#77747C}
+#prog-personal .jprog-stat-value{color:#F2EDE3}
+#prog-personal .jprog-why{color:#77747C}
+#prog-personal .jprog-why strong{color:#C9A03C}
+#prog-personal .jprog-label{color:#77747C}
+#prog-personal .jprog-select,#prog-personal .jprog-log-note,#prog-personal .jprog-journal-text{
+  background:#24242A;border-color:#33333B;color:#F2EDE3}
+#prog-personal .jprog-select::placeholder,#prog-personal .jprog-log-note::placeholder,
+#prog-personal .jprog-journal-text::placeholder{color:#77747C}
+#prog-personal .jprog-btn{background:#C9A03C;color:#0A0A0D}
+#prog-personal .jprog-log-list,#prog-personal .jprog-journal-list{color:#77747C}
+#prog-personal .jprog-entry{border-color:#33333B}
+#prog-personal .jprog-entry-meta{color:#77747C}
+#prog-personal .jprog-entry-text{color:#95929A}
+#prog-personal .jprog-journal-block{
+  background:#131317;padding:24px;border-radius:6px;border-top:0}
+#prog-personal .jprog-prompt-card{background:#1C1C21;border-radius:6px}
+#prog-personal .jprog-prompt-kicker{color:#C9A03C}
+#prog-personal .jprog-prompt-text{color:#F2EDE3}
+#prog-personal .jprog-prompt-chip{border-color:#33333B;color:#77747C}
+#prog-personal .jprog-prompt-chip.active{background:#C9A03C;color:#0A0A0D;border-color:#C9A03C}
+#prog-personal .jprog-prompt-use{border-color:#C9A03C;color:#C9A03C}
+#prog-personal .jprog-prompt-shuffle{border-color:#33333B;color:#77747C}
+#prog-personal .jprog-past{border-top:0;margin-top:28px;padding-top:0}
+#prog-personal .jprog-consult-prefill{background:#1C1C21;border-color:#33333B;color:#95929A}
+#prog-personal .jprog-consult-prefill strong{color:#F2EDE3}
+#prog-personal .jprog-consult-intro{color:#95929A}
+#prog-personal .jprog-textarea{background:#24242A;border-color:#33333B;color:#F2EDE3}
+#prog-personal .jprog-textarea::placeholder{color:#77747C}
+#prog-personal .jprog-consult-btn{background:#C9A03C;color:#0A0A0D}
+#prog-personal .jprog-consult-note{color:#77747C}
+#prog-personal .jprog-subhead{color:#F2EDE3}
+
+/* .id-evidence-card ("The Chosen Self" / "Open the Decision") is a
+   fifth panel injected into .jprog-section by a separate script
+   (initIdentityEvidence) — a gold-washed card the .jprog-* audit above
+   doesn't reach. A later !important rule elsewhere in the file already
+   strips its background to transparent for Reader "decision" pages
+   and reinstates gold-tinted top/bottom hairlines; both need
+   !important here to still win inside this block. */
+#prog-personal .id-evidence-card{
+  background:#1C1C21!important;border:0!important;border-radius:6px!important;padding:18px!important}
+#prog-personal .id-evidence-card small{color:#C9A03C}
+#prog-personal .id-evidence-card strong{color:#F2EDE3}
+#prog-personal .id-evidence-card p{color:#95929A}
+#prog-personal .id-evidence-open{border-color:#33333B;color:#C9A03C}
+#prog-personal .id-evidence-open:hover{border-color:#C9A03C}
+
+/* B15 · Reader — dark reading surface + mode toggle ────────────
+   The Reader is one shared modal reused by every portal — there is
+   no per-track DOM to hang an id off — so unlike the rest of this
+   file, every rule here is scoped by #reader-overlay (the modal's
+   own id) rather than a portal id. That also gives each rule enough
+   specificity to beat the platform's v8–v12 Reader patches (all
+   !important, all loaded earlier in the document) regardless of
+   source order, which plain class-for-class !important cannot do.
+
+   Three modes, switched by [data-reader-mode] on .reader-modal:
+   dark (default) / sepia / light, each defining the same variable
+   set so every rule below is only written once. */
+#reader-overlay .reader-modal{
+  --rd-ground:#0D0D11; --rd-sidebar:#141419; --rd-rail:#17171D;
+  --rd-quote:#16161B; --rd-card:#1C1C21; --rd-hair:rgba(232,227,217,.12);
+  --rd-heading:#E8E3D9; --rd-body:#C4BFB7; --rd-meta:#8B8791;
+  --rd-accent:#D4A843; --rd-on-accent:#0D0D11;
+}
+#reader-overlay .reader-modal[data-reader-mode="sepia"]{
+  --rd-ground:#1A1712; --rd-sidebar:#221D16; --rd-rail:#26211A;
+  --rd-quote:#221D17; --rd-card:#2B251D; --rd-hair:rgba(237,228,211,.14);
+  --rd-heading:#EDE4D3; --rd-body:#C9BEA8; --rd-meta:#8F8570;
+  --rd-accent:#D4A843; --rd-on-accent:#1A1712;
+}
+#reader-overlay .reader-modal[data-reader-mode="light"]{
+  --rd-ground:#F2EAD8; --rd-sidebar:#FBF7EE; --rd-rail:#F7F1E3;
+  --rd-quote:#ECE1CB; --rd-card:#E7DCC5; --rd-hair:rgba(43,38,32,.14);
+  --rd-heading:#2B2620; --rd-body:#4A4438; --rd-meta:#857A66;
+  --rd-accent:#A47B22; --rd-on-accent:#FBF7EE;
+}
+
+/* Container width: was max-width:1440px (near full-viewport). The open
+   protocol page's own container is 1100px (the site's canonical
+   .container gutter), so the Reader now matches it — still enough for
+   the 300px sidebar + 64px×2 page padding + a 70ch reading column. */
+#reader-overlay .reader-modal{max-width:1100px!important;background:var(--rd-ground)!important}
+
+/* Chrome — ground must read darker than sidebar/rail in every mode */
+#reader-overlay .reader-sidebar{background:var(--rd-sidebar)!important}
+#reader-overlay .reader-rail{background:var(--rd-rail)!important}
+#reader-overlay .reader-content{background:var(--rd-ground)!important}
+#reader-overlay .reader-content-topbar{background:var(--rd-sidebar)!important;border-bottom-color:var(--rd-hair)!important;color:var(--rd-meta)!important}
+#reader-overlay .reader-bottom-nav{background:var(--rd-sidebar)!important;border-top-color:var(--rd-hair)!important}
+#reader-overlay .reader-sidebar-head{border-bottom-color:var(--rd-hair)!important}
+#reader-overlay .reader-rail-actions{border-top-color:var(--rd-hair)!important}
+#reader-overlay .reader-back-link{color:var(--rd-meta)!important}
+#reader-overlay .reader-back-link:hover{color:var(--rd-accent)!important}
+#reader-overlay .reader-nav-btn{color:var(--rd-meta)!important}
+#reader-overlay .reader-protocol-title,
+#reader-overlay .reader-sidebar-quote{color:var(--rd-heading)!important}
+#reader-overlay .reader-progress-line,
+#reader-overlay .reader-sidebar-label,
+#reader-overlay .reader-rail-label,
+#reader-overlay .reader-rail-count{color:var(--rd-meta)!important}
+#reader-overlay .reader-progress-track{background:var(--rd-card)!important}
+#reader-overlay .reader-progress-fill{background:var(--rd-accent)!important}
+#reader-overlay .reader-tab-title{color:var(--rd-body)!important}
+#reader-overlay .reader-tab.active .reader-tab-title{color:var(--rd-heading)!important}
+#reader-overlay .reader-tab-desc,
+#reader-overlay .reader-tab-meta-row{color:var(--rd-meta)!important}
+#reader-overlay .reader-tab-icon{background:var(--rd-card)!important;border-color:var(--rd-hair)!important}
+#reader-overlay .reader-tab-icon svg{stroke:var(--rd-meta)!important}
+#reader-overlay .reader-tab.active .reader-tab-icon{border-color:var(--rd-accent)!important}
+#reader-overlay .reader-tab.active .reader-tab-icon svg{stroke:var(--rd-accent)!important}
+#reader-overlay .reader-tab.active{background:color-mix(in srgb, var(--rd-accent) 10%, transparent)!important;border-left-color:var(--rd-accent)!important}
+#reader-overlay .reader-tab:hover{background:color-mix(in srgb, var(--rd-heading) 6%, transparent)!important}
+#reader-overlay .reader-sidebar-footer,
+#reader-overlay .reader-rail-footer{background:var(--rd-card)!important;border-color:var(--rd-hair)!important}
+#reader-overlay .reader-sidebar-footer p,
+#reader-overlay .reader-rail-footer p{color:var(--rd-body)!important}
+#reader-overlay .reader-step-node{background:var(--rd-card)!important;border-color:var(--rd-hair)!important;color:var(--rd-meta)!important}
+#reader-overlay .reader-step-node.current{background:var(--rd-accent)!important;border-color:var(--rd-accent)!important;color:var(--rd-on-accent)!important}
+#reader-overlay .reader-step-connector{background:var(--rd-hair)!important}
+#reader-overlay .reader-step-label{color:var(--rd-meta)!important}
+#reader-overlay .reader-step-label.current,
+#reader-overlay .reader-step.current .reader-step-label{color:var(--rd-heading)!important}
+#reader-overlay .reader-rail-action svg{color:var(--rd-meta)!important}
+#reader-overlay .reader-rail-action span{color:var(--rd-body)!important}
+#reader-overlay .reader-rail-card{background:var(--rd-card)!important;border-color:var(--rd-hair)!important}
+#reader-overlay .reader-rail-card p{color:var(--rd-body)!important}
+#reader-overlay .reader-dot{background:var(--rd-hair)!important}
+#reader-overlay .reader-dot.active{background:var(--rd-accent)!important}
+
+/* Reading content — the actual document */
+#reader-overlay .reader-page-title{color:var(--rd-heading)!important}
+#reader-overlay .reader-page-tags,
+#reader-overlay .reader-page-meta{color:var(--rd-meta)!important}
+#reader-overlay .reader-page-meta{border-bottom-color:var(--rd-hair)!important}
+#reader-overlay .reader-page-divider .mark{color:var(--rd-accent)!important}
+#reader-overlay .reader-page-divider .line{background:var(--rd-hair)!important}
+#reader-overlay .reader-page-body,
+#reader-overlay .reader-page-body p{color:var(--rd-body)!important}
+#reader-overlay .reader-page-body h2,
+#reader-overlay .reader-page-body h3,
+#reader-overlay .reader-page-body h4{color:var(--rd-heading)!important}
+#reader-overlay .reader-page-quote{background:var(--rd-quote)!important;border-radius:8px}
+#reader-overlay .reader-page-quote p{color:var(--rd-heading)!important}
+#reader-overlay .reader-page-quote .attr{color:var(--rd-accent)!important}
+#reader-overlay .reader-page-body p.rm-quote,
+#reader-overlay .reader-page-body .rm-pullquote{
+  background:var(--rd-quote)!important;color:var(--rd-heading)!important;border-left-color:var(--rd-accent)!important}
+#reader-overlay .reader-page-locked{background:var(--rd-card)!important;border-color:var(--rd-accent)!important}
+#reader-overlay .reader-page-locked p{color:var(--rd-body)!important}
+#reader-overlay .video-placeholder{
+  background-color:var(--rd-card)!important;
+  background-image:radial-gradient(120% 120% at 50% 0%,rgba(212,168,67,.10),transparent 60%)!important}
+
+/* Reading rhythm — 70ch measure, 18/1.8, in every mode */
+#reader-overlay .reader-page-body{max-width:70ch!important;font-size:18px!important;line-height:1.8!important}
+#reader-overlay .reader-page-body>p{margin:0 0 24px!important}
+
+/* Best-effort neutral pass over the resource-specific components below
+   (id-evidence excluded — that one's covered by B14, reachable directly
+   from the protocol page). These were hand-tuned to the old navy-purple
+   palette across the v8–v12 patches; rather than leave them frozen to
+   one mode's colours, their surfaces/text now track the same variables
+   as everything else in the reader. */
+#reader-overlay .reader-page-body .rm-archetype,
+#reader-overlay .sr-perspective,
+#reader-overlay .sr-everyday-box,
+#reader-overlay .sr-bodymap-wrap,
+#reader-overlay .sr-zones>div,
+#reader-overlay .sr-activity-grid>div,
+#reader-overlay .sr-disclosure-card,
+#reader-overlay .sr-distinction>div,
+#reader-overlay .sr-tier-card,
+#reader-overlay .sr-tier-detail,
+#reader-overlay .sr-easy-list li,
+#reader-overlay .sr-highlight-row>div,
+#reader-overlay .sr-number-step,
+#reader-overlay .sr-section-block,
+#reader-overlay .sr-guide-intro,
+#reader-overlay .sr-first-minute li,
+#reader-overlay .sr-founder-insight{background:var(--rd-card)!important;border-color:var(--rd-hair)!important}
+#reader-overlay .reader-page-body .rm-archetype-name,
+#reader-overlay .sr-perspective strong,
+#reader-overlay .sr-tier-title,
+#reader-overlay .sr-disclosure-card b,
+#reader-overlay .sr-distinction b,
+#reader-overlay .sr-number-step h4,
+#reader-overlay .sr-guide-intro h3,
+#reader-overlay .sr-section-block h3,
+#reader-overlay .sr-ref-hero h3,
+#reader-overlay .sr-founder-head h3{color:var(--rd-heading)!important}
+#reader-overlay .reader-page-body .rm-archetype p,
+#reader-overlay .sr-perspective p,
+#reader-overlay .sr-everyday-box p,
+#reader-overlay .sr-zones em,
+#reader-overlay .sr-activity-grid p,
+#reader-overlay .sr-disclosure-card p,
+#reader-overlay .sr-distinction p,
+#reader-overlay .sr-tier-summary,
+#reader-overlay .sr-tier-detail span,
+#reader-overlay .sr-number-step p,
+#reader-overlay .sr-guide-intro p,
+#reader-overlay .sr-easy-list li,
+#reader-overlay .sr-highlight-row span,
+#reader-overlay .sr-founder-copy p{color:var(--rd-body)!important}
+#reader-overlay .reader-page-body .rm-step-text{color:var(--rd-body)!important}
+#reader-overlay .reader-page-body .rm-step-title,
+#reader-overlay .rm-deeper-label,
+#reader-overlay .sr-section-kicker,
+#reader-overlay .sr-perspective small,
+#reader-overlay .sr-tier-no small,
+#reader-overlay .sr-zones b,
+#reader-overlay .sr-activity-grid b{color:var(--rd-meta)!important}
+#reader-overlay .reader-page-body .rm-step-num{background:var(--rd-card)!important;color:var(--rd-accent)!important;border-color:var(--rd-accent)!important}
+#reader-overlay .sr-lead,
+#reader-overlay .sr-note,
+#reader-overlay .sr-callout,
+#reader-overlay .sr-script-card,
+#reader-overlay .sr-body-notice{
+  background:var(--rd-card)!important;border-color:var(--rd-hair)!important;color:var(--rd-body)!important}
+#reader-overlay .sr-lead strong,
+#reader-overlay .sr-note strong,
+#reader-overlay .sr-callout strong,
+#reader-overlay .sr-founder-takeaway{color:var(--rd-heading)!important}
+
+/* Reading-mode toggle */
+#reader-overlay .reader-mode-toggle{display:inline-flex;gap:2px;padding:2px;border-radius:999px;
+  background:var(--rd-card);border:1px solid var(--rd-hair)}
+#reader-overlay .reader-mode-btn{border:0;cursor:pointer;background:none;color:var(--rd-meta);
+  font-family:'DM Sans',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.8px;
+  text-transform:uppercase;padding:5px 10px;border-radius:999px;transition:background .18s,color .18s}
+#reader-overlay .reader-mode-btn:hover{color:var(--rd-body)}
+#reader-overlay .reader-mode-btn.active{background:var(--rd-accent);color:var(--rd-on-accent)}
+
+/* Resource-type colour coding — reduced to one small dot; the badge and
+   sidebar label it sits beside are both neutral now. */
+#reader-overlay .reader-page-kind{background:var(--rd-card)!important;color:var(--rd-meta)!important;
+  display:inline-flex!important;align-items:center;gap:7px}
+#reader-overlay .reader-tab-kind{color:var(--rd-meta)!important;display:flex;align-items:center;gap:6px}
+#reader-overlay .reader-kind-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+
 
 /* ═════════════════════════════════════════════════════════════
    RESPONSIVE + MOTION

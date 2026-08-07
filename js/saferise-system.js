@@ -96,15 +96,17 @@
        clones are what's filling the viewport — pixel-identical to
        the real cards — so subtracting that same width back out in
        the same tick is invisible; nothing ever looks like it moved.
-       Clones are inert: aria-hidden="true", tabindex="-1" (out of
-       both the accessibility tree and tab order — only the real ten
-       are ever reachable), no id/onclick, .proto-expand stripped
-       (the real cards double as accordion hosts, and a second live
-       copy of that markup would duplicate ids like the waveform's),
-       and pointer-events:none, so a click on a clone does nothing —
-       chosen over "open the same protocol as the original" because
-       it needs no click-to-real-card mapping to get wrong; the area
-       just behaves like empty track.
+       Clones stay out of the accessibility tree and tab order —
+       aria-hidden="true", tabindex="-1", no id/role — since only the
+       real ten should ever be reachable that way, and .proto-expand
+       is stripped from each clone (the real cards double as accordion
+       hosts, and a second live copy of that markup would duplicate
+       ids like the waveform's). But visually a clone is still a
+       pixel-identical stand-in for the card it was cloned from, so it
+       keeps pointer-events and the .sr-cover classes that drive
+       :hover, and its click is forwarded to the matching real card
+       (see the click listener below) — a click past the seam opens
+       the same protocol as clicking the original would have.
 
        The real-set width is measured fresh every tick, not cached —
        cheap insurance (two offsetLeft reads) against anything that
@@ -140,7 +142,7 @@
     var TICK_MS = 50;          // interval rate; speed is time-based, not tick-count-based
     var RESUME_DELAY = 2000;   // "a couple of seconds" after interaction ends
 
-    var clones = cards.map(function (card) {
+    var clones = cards.map(function (card, i) {
       var c = card.cloneNode(true);
       c.removeAttribute('id');
       c.removeAttribute('onclick');
@@ -148,11 +150,18 @@
       c.removeAttribute('tabindex');
       c.setAttribute('aria-hidden', 'true');
       c.tabIndex = -1;
-      c.style.pointerEvents = 'none';
       c.classList.remove('open');
       var expand = c.querySelector('.proto-expand');
       if (expand) expand.parentNode.removeChild(expand);
       [].forEach.call(c.querySelectorAll('[id]'), function (el) { el.removeAttribute('id'); });
+      // A clone is still a pixel-identical, hoverable stand-in for cards[i] —
+      // only its accordion content was stripped (duplicate ids). Forwarding
+      // the click to the real card reuses that card's own inline onclick
+      // (toggleProto) and its stopAuto listener below, so a clone opens the
+      // same protocol exactly as if the visitor had scrolled back to card i
+      // and clicked it directly. aria-hidden/tabindex=-1 above keep it out
+      // of the accessibility tree and tab order regardless.
+      c.addEventListener('click', function () { cards[i].click(); });
       return c;
     });
     clones.forEach(function (c) { track.appendChild(c); });

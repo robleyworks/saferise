@@ -3689,6 +3689,12 @@ document.addEventListener('DOMContentLoaded', function(){
         <div class="reader-content-topbar">
           <div class="reader-back-link" onclick="closeReader()"><svg viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1L2 4l4 3"/></svg>Back to Journey</div>
           <div class="reader-content-topbar-right">
+            <div class="reader-mode-toggle" role="group" aria-label="Reading mode">
+              <button type="button" class="reader-mode-btn" data-reader-mode-btn="dark">Dark</button>
+              <button type="button" class="reader-mode-btn" data-reader-mode-btn="sepia">Sepia</button>
+              <button type="button" class="reader-mode-btn" data-reader-mode-btn="light">Light</button>
+            </div>
+            <span class="topbar-divider">·</span>
             <span id="reader-content-readtime"></span>
             <span class="topbar-divider">·</span>
             <span id="reader-content-savelabel">Save</span>
@@ -4260,6 +4266,35 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 
+// ---- Reader reading mode (Dark default / Sepia / Light) ----
+// Persisted per browser via localStorage, shared across every resource
+// and every protocol — the Reader is one modal reused everywhere, not
+// re-created per open, so the attribute + button state only need to be
+// synced on load and on each open, not per keystroke/tab-switch.
+const READER_MODE_KEY = 'srReaderMode';
+function applyReaderMode(mode){
+  const modal = document.querySelector('.reader-modal');
+  if (modal) modal.dataset.readerMode = mode;
+  document.querySelectorAll('[data-reader-mode-btn]').forEach(function(b){
+    b.classList.toggle('active', b.dataset.readerModeBtn === mode);
+  });
+}
+function setReaderMode(mode){
+  try { localStorage.setItem(READER_MODE_KEY, mode); } catch(e) {}
+  applyReaderMode(mode);
+}
+function currentReaderMode(){
+  let saved = null;
+  try { saved = localStorage.getItem(READER_MODE_KEY); } catch(e) {}
+  return (saved === 'sepia' || saved === 'light' || saved === 'dark') ? saved : 'dark';
+}
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('[data-reader-mode-btn]').forEach(function(b){
+    b.addEventListener('click', function(){ setReaderMode(b.dataset.readerModeBtn); });
+  });
+  applyReaderMode(currentReaderMode());
+});
+
 function protocolGuideVideoHTML(protoTitle){
   const label = protoTitle.replace(/ Protocol$/, '');
   return '<div class="media-block" style="margin-bottom:24px;">' +
@@ -4276,6 +4311,7 @@ function protocolGuideVideoHTML(protoTitle){
 function openReader(protocolKey, initialKey){
   const proto = READER_PROTOCOLS[protocolKey];
   if (!proto) return;
+  applyReaderMode(currentReaderMode());
   readerVisited = new Set();
   document.getElementById('reader-protocol-title').textContent = proto.title;
   const tabsEl = document.getElementById('reader-tabs');
@@ -4299,7 +4335,7 @@ function openReader(protocolKey, initialKey){
     tab.innerHTML =
       '<div class="reader-tab-icon">' + READER_ICONS[meta.icon] + '</div>' +
       '<div class="reader-tab-body">' +
-        '<p class="reader-tab-kind" style="color:' + style.color + '">' + data.kind + '</p>' +
+        '<p class="reader-tab-kind"><span class="reader-kind-dot" style="background:' + style.color + '"></span>' + data.kind + '</p>' +
         '<p class="reader-tab-title">' + data.title + '</p>' +
         (meta.desc ? '<p class="reader-tab-desc">' + meta.desc + '</p>' : '') +
         '<div class="reader-tab-meta-row"><span>' + meta.readtime + ' min read</span>' + (data.locked ? '<span class="reader-tab-lock">\uD83D\uDD12</span>' : '') + '</div>' +
@@ -4344,7 +4380,7 @@ function openReader(protocolKey, initialKey){
       '<span class="attr">\u2014 The SafeRise Protocol</span></div>' +
       '<div class="reader-page-divider"><div class="line"></div><span class="mark">\u2600</span><div class="line"></div></div>'
     ) : '';
-    page.innerHTML = '<p class="reader-page-kind" style="background:' + style.color + '">' + data.kind + '</p>' +
+    page.innerHTML = '<p class="reader-page-kind"><span class="reader-kind-dot" style="background:' + style.color + '"></span>' + data.kind + '</p>' +
       '<p class="reader-page-title">' + data.title + '</p>' +
       tagsHtml + quoteHtml +
       '<div class="reader-page-body">' + bodyHtml + '</div>' + lockedHtml;
@@ -4389,8 +4425,6 @@ function selectReaderTab(protocolKey, key){
   document.querySelectorAll('#reader-tabs .reader-tab').forEach(function(t){
     const active = t.dataset.readerKey === key;
     t.classList.toggle('active', active);
-    const style = rmStyleFor(RESOURCE_CONTENT[t.dataset.readerKey].kind);
-    t.style.borderLeftColor = active ? style.color : 'transparent';
     const checkEl = t.querySelector('.reader-tab-check');
     if (checkEl) checkEl.style.display = (readerVisited.has(t.dataset.readerKey) && !active) ? 'block' : 'none';
   });
