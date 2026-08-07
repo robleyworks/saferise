@@ -4518,7 +4518,7 @@ document.addEventListener('DOMContentLoaded', function(){
     <div id="ten-protocols-section"></div>
 
     <div class="sr-banner">
-      <video class="sr-banner-media" muted playsinline></video>
+      <video class="sr-banner-media" poster="assets/covers/banner.jpg" muted playsinline></video>
       <div class="sr-banner-scrim"></div>
       <div class="sr-banner-copy">
         <h1>Personal<em>Transformation</em></h1>
@@ -4547,7 +4547,7 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- PROTOCOL MACRO: defined inline for each of 10 -->
 
       <!-- 01 ANXIETY -->
-      <article role="button" tabindex="0" class="proto-item sr-cover sr-c01" data-proto="1" onclick="toggleProto(this)" aria-label="Open The Anxiety Reset Protocol">
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c01 sr-cover--light" data-proto="1" onclick="toggleProto(this)" aria-label="Open The Anxiety Reset Protocol">
         <span class="sr-tile">
           <span class="sr-art"></span>
           <span class="sr-num">01</span>
@@ -4558,11 +4558,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class="proto-trigger" hidden>Uncertainty, spiralling thoughts, future fear, decision paralysis</p>
         <p class="proto-landing-desc sr-trig">Calm fear responses, quiet spiralling thoughts, and return to the present.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
-
-          <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
-            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><path d="M7.5 2.5L3 6l4.5 3.5"/></svg>
-            Collapse &amp; Back to All Protocols
-          </div>
 
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
           <div class="j-step" style="padding-top:0;">
@@ -4708,7 +4703,6 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="j-step">
             <div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Log Progress & Journal</span></div>
             <div class="jprog-section" data-jprog-key="p1" data-jprog-title="The Anxiety Reset Protocol" data-jprog-prompts="p1">
-      <span class="jprog-eyebrow">Log Progress & Journal</span>
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
@@ -4718,6 +4712,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
 
+        <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -4736,6 +4731,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div class="jprog-journal-block">
+          <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
             <div class="jprog-prompt-main">
@@ -4789,7 +4785,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </article>
 
       <!-- 02 THE ANGER ALCHEMY PROTOCOL -->
-      <article role="button" tabindex="0" class="proto-item sr-cover sr-c02" data-proto="2" onclick="toggleProto(this)" aria-label="Open The Anger Alchemy Protocol">
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c02 sr-cover--light" data-proto="2" onclick="toggleProto(this)" aria-label="Open The Anger Alchemy Protocol">
         <span class="sr-tile">
           <span class="sr-art"></span>
           <span class="sr-num">02</span>
@@ -4800,11 +4796,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class="proto-trigger" hidden>Injustice, boundary violation, disrespect, loss of control</p>
         <p class="proto-landing-desc sr-trig">Turn anger into clarity, protect what matters, and choose your response.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
-
-          <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
-            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><path d="M7.5 2.5L3 6l4.5 3.5"/></svg>
-            Collapse &amp; Back to All Protocols
-          </div>
 
 
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
@@ -4955,7 +4946,6 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="j-step">
             <div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Log Progress & Journal</span></div>
             <div class="jprog-section" data-jprog-key="p2" data-jprog-title="The Anger Alchemy Protocol" data-jprog-prompts="p2">
-      <span class="jprog-eyebrow">Log Progress & Journal</span>
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
@@ -4965,6 +4955,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
 
+        <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -4983,6 +4974,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div class="jprog-journal-block">
+          <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
             <div class="jprog-prompt-main">
@@ -5036,7 +5028,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </article>
 
       <!-- 03 THE OVERWHELM THRESHOLD PROTOCOL -->
-      <article role="button" tabindex="0" class="proto-item sr-cover sr-c03" data-proto="3" onclick="toggleProto(this)" aria-label="Open The Overwhelm Threshold Protocol">
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c03 sr-cover--light" data-proto="3" onclick="toggleProto(this)" aria-label="Open The Overwhelm Threshold Protocol">
         <span class="sr-tile">
           <span class="sr-art"></span>
           <span class="sr-num">03</span>
@@ -5047,11 +5039,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class="proto-trigger" hidden>Noise, crowds, competing stimulation, environmental chaos, sensory flood</p>
         <p class="proto-landing-desc sr-trig">Reduce overload, regain your footing, and create space to think clearly.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
-
-          <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
-            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><path d="M7.5 2.5L3 6l4.5 3.5"/></svg>
-            Collapse &amp; Back to All Protocols
-          </div>
 
 
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
@@ -5200,7 +5187,6 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="j-step">
             <div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Log Progress & Journal</span></div>
             <div class="jprog-section" data-jprog-key="p3" data-jprog-title="The Overwhelm Threshold Protocol" data-jprog-prompts="p3">
-      <span class="jprog-eyebrow">Log Progress & Journal</span>
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
@@ -5210,6 +5196,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
 
+        <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -5228,6 +5215,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div class="jprog-journal-block">
+          <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
             <div class="jprog-prompt-main">
@@ -5281,7 +5269,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </article>
 
       <!-- 04 THE ABANDONMENT WOUND PROTOCOL -->
-      <article role="button" tabindex="0" class="proto-item sr-cover sr-c04" data-proto="4" onclick="toggleProto(this)" aria-label="Open The Abandonment Wound Protocol">
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c04 sr-cover--light" data-proto="4" onclick="toggleProto(this)" aria-label="Open The Abandonment Wound Protocol">
         <span class="sr-tile">
           <span class="sr-art"></span>
           <span class="sr-num">04</span>
@@ -5292,11 +5280,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class="proto-trigger" hidden>Rejection, being left, not chosen, loss of belonging, attachment threat</p>
         <p class="proto-landing-desc sr-trig">Steady the fear of rejection and rebuild security when belonging feels threatened.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
-
-          <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
-            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><path d="M7.5 2.5L3 6l4.5 3.5"/></svg>
-            Collapse &amp; Back to All Protocols
-          </div>
 
 
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
@@ -5447,7 +5430,6 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="j-step">
             <div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Log Progress & Journal</span></div>
             <div class="jprog-section" data-jprog-key="p4" data-jprog-title="The Abandonment Wound Protocol" data-jprog-prompts="p4">
-      <span class="jprog-eyebrow">Log Progress & Journal</span>
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
@@ -5457,6 +5439,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
 
+        <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -5475,6 +5458,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div class="jprog-journal-block">
+          <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
             <div class="jprog-prompt-main">
@@ -5528,7 +5512,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </article>
 
       <!-- 05 THE SHAME DISSOLUTION PROTOCOL -->
-      <article role="button" tabindex="0" class="proto-item sr-cover sr-c05" data-proto="5" onclick="toggleProto(this)" aria-label="Open The Shame Dissolution Protocol">
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c05 sr-cover--light" data-proto="5" onclick="toggleProto(this)" aria-label="Open The Shame Dissolution Protocol">
         <span class="sr-tile">
           <span class="sr-art"></span>
           <span class="sr-num">05</span>
@@ -5539,11 +5523,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class="proto-trigger" hidden>Public mistake, exposure, feeling fundamentally flawed or judged</p>
         <p class="proto-landing-desc sr-trig">Move beyond self-judgment, recover your dignity, and stop a moment from defining you.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
-
-          <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
-            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><path d="M7.5 2.5L3 6l4.5 3.5"/></svg>
-            Collapse &amp; Back to All Protocols
-          </div>
 
 
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
@@ -5689,7 +5668,6 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="j-step">
             <div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Log Progress & Journal</span></div>
             <div class="jprog-section" data-jprog-key="p5" data-jprog-title="The Shame Dissolution Protocol" data-jprog-prompts="p5">
-      <span class="jprog-eyebrow">Log Progress & Journal</span>
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
@@ -5699,6 +5677,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
 
+        <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -5717,6 +5696,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div class="jprog-journal-block">
+          <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
             <div class="jprog-prompt-main">
@@ -5770,7 +5750,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </article>
 
       <!-- 06 THE GRIEF INTEGRATION PROTOCOL -->
-      <article role="button" tabindex="0" class="proto-item sr-cover sr-c06" data-proto="6" onclick="toggleProto(this)" aria-label="Open The Grief Integration Protocol">
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c06 sr-cover--light" data-proto="6" onclick="toggleProto(this)" aria-label="Open The Grief Integration Protocol">
         <span class="sr-tile">
           <span class="sr-art"></span>
           <span class="sr-num">06</span>
@@ -5781,11 +5761,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class="proto-trigger" hidden>Loss of a person, relationship, chapter of life, or imagined future</p>
         <p class="proto-landing-desc sr-trig">Make space for loss, move through what has changed, and carry forward what matters.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
-
-          <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
-            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><path d="M7.5 2.5L3 6l4.5 3.5"/></svg>
-            Collapse &amp; Back to All Protocols
-          </div>
 
 
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
@@ -5931,7 +5906,6 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="j-step">
             <div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Log Progress & Journal</span></div>
             <div class="jprog-section" data-jprog-key="p6" data-jprog-title="The Grief Integration Protocol" data-jprog-prompts="p6">
-      <span class="jprog-eyebrow">Log Progress & Journal</span>
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
@@ -5941,6 +5915,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
 
+        <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -5959,6 +5934,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div class="jprog-journal-block">
+          <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
             <div class="jprog-prompt-main">
@@ -6012,7 +5988,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </article>
 
       <!-- 07 THE SHUTDOWN RECOVERY PROTOCOL -->
-      <article role="button" tabindex="0" class="proto-item sr-cover sr-c07" data-proto="7" onclick="toggleProto(this)" aria-label="Open The Shutdown Recovery Protocol">
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c07 sr-cover--light" data-proto="7" onclick="toggleProto(this)" aria-label="Open The Shutdown Recovery Protocol">
         <span class="sr-tile">
           <span class="sr-art"></span>
           <span class="sr-num">07</span>
@@ -6023,11 +5999,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class="proto-trigger" hidden>Numbness, flatness, disconnection, inability to feel or engage</p>
         <p class="proto-landing-desc sr-trig">Reconnect with yourself, restore engagement, and gently come back online.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
-
-          <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
-            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><path d="M7.5 2.5L3 6l4.5 3.5"/></svg>
-            Collapse &amp; Back to All Protocols
-          </div>
 
 
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
@@ -6173,7 +6144,6 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="j-step">
             <div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Log Progress & Journal</span></div>
             <div class="jprog-section" data-jprog-key="p7" data-jprog-title="The Shutdown Recovery Protocol" data-jprog-prompts="p7">
-      <span class="jprog-eyebrow">Log Progress & Journal</span>
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
@@ -6183,6 +6153,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
 
+        <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -6201,6 +6172,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div class="jprog-journal-block">
+          <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
             <div class="jprog-prompt-main">
@@ -6254,7 +6226,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </article>
 
       <!-- 08 THE JEALOUSY RELEASE PROTOCOL -->
-      <article role="button" tabindex="0" class="proto-item sr-cover sr-c08" data-proto="8" onclick="toggleProto(this)" aria-label="Open The Jealousy Release Protocol">
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c08 sr-cover--light" data-proto="8" onclick="toggleProto(this)" aria-label="Open The Jealousy Release Protocol">
         <span class="sr-tile">
           <span class="sr-art"></span>
           <span class="sr-num">08</span>
@@ -6265,11 +6237,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class="proto-trigger" hidden>Someone else's success, comparison, the sting of being outpaced</p>
         <p class="proto-landing-desc sr-trig">Move beyond comparison, understand what the sting is revealing, and return to your own path.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
-
-          <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
-            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><path d="M7.5 2.5L3 6l4.5 3.5"/></svg>
-            Collapse &amp; Back to All Protocols
-          </div>
 
 
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
@@ -6420,7 +6387,6 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="j-step">
             <div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Log Progress & Journal</span></div>
             <div class="jprog-section" data-jprog-key="p8" data-jprog-title="The Jealousy Release Protocol" data-jprog-prompts="p8">
-      <span class="jprog-eyebrow">Log Progress & Journal</span>
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
@@ -6430,6 +6396,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
 
+        <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -6448,6 +6415,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div class="jprog-journal-block">
+          <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
             <div class="jprog-prompt-main">
@@ -6501,7 +6469,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </article>
 
       <!-- 09 THE INSECURITY ANCHOR PROTOCOL -->
-      <article role="button" tabindex="0" class="proto-item sr-cover sr-c09" data-proto="9" onclick="toggleProto(this)" aria-label="Open The Insecurity Anchor Protocol">
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c09 sr-cover--light" data-proto="9" onclick="toggleProto(this)" aria-label="Open The Insecurity Anchor Protocol">
         <span class="sr-tile">
           <span class="sr-art"></span>
           <span class="sr-num">09</span>
@@ -6512,11 +6480,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class="proto-trigger" hidden>Being evaluated, judged, or seen — self-doubt without clear evidence</p>
         <p class="proto-landing-desc sr-trig">Quiet self-doubt, strengthen inner trust, and stay grounded when you feel judged or exposed.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
-
-          <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
-            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><path d="M7.5 2.5L3 6l4.5 3.5"/></svg>
-            Collapse &amp; Back to All Protocols
-          </div>
 
 
           <!-- ============ HERO: WALKTHROUGH / WHY I BUILT THIS ============ -->
@@ -6667,7 +6630,6 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="j-step">
             <div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Log Progress & Journal</span></div>
             <div class="jprog-section" data-jprog-key="p9" data-jprog-title="The Insecurity Anchor Protocol" data-jprog-prompts="p9">
-      <span class="jprog-eyebrow">Log Progress & Journal</span>
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
@@ -6677,6 +6639,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
 
+        <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -6695,6 +6658,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div class="jprog-journal-block">
+          <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
             <div class="jprog-prompt-main">
@@ -6748,7 +6712,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </article>
 
       <!-- 10 THE POWERLESSNESS & DESPAIR PROTOCOL -->
-      <article role="button" tabindex="0" class="proto-item sr-cover sr-c10" data-proto="10" onclick="toggleProto(this)" aria-label="Open The Powerlessness & Despair Protocol">
+      <article role="button" tabindex="0" class="proto-item sr-cover sr-c10 sr-cover--light" data-proto="10" onclick="toggleProto(this)" aria-label="Open The Powerlessness & Despair Protocol">
         <span class="sr-tile">
           <span class="sr-art"></span>
           <span class="sr-num">10</span>
@@ -6759,11 +6723,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class="proto-trigger" hidden>Circumstances that feel foreclosed, effort that no longer seems to matter</p>
         <p class="proto-landing-desc sr-trig">Find what is still within your reach, restore agency, and take the next meaningful step.</p>
         <div class="proto-expand journey" onclick="event.stopPropagation()">
-
-          <div class="j-collapse" onclick="toggleProto(this.closest('.proto-item'));document.getElementById('ten-protocols-section').scrollIntoView({behavior:'smooth'});">
-            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><path d="M7.5 2.5L3 6l4.5 3.5"/></svg>
-            Collapse &amp; Back to All Protocols
-          </div>
 
           <div class="crisis-note">
             <svg viewBox="0 0 20 20" fill="none" stroke-width="1.5"><path d="M10 6.5v4.5M10 14h.01" stroke-linecap="round"/><circle cx="10" cy="10" r="7.5"/></svg>
@@ -6916,7 +6875,6 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="j-step">
             <div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Log Progress & Journal</span></div>
             <div class="jprog-section" data-jprog-key="p10" data-jprog-title="The Powerlessness &amp; Despair Protocol" data-jprog-prompts="p10">
-      <span class="jprog-eyebrow">Log Progress & Journal</span>
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
@@ -6926,6 +6884,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
 
+        <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -6944,6 +6903,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div class="jprog-journal-block">
+          <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
             <div class="jprog-prompt-main">

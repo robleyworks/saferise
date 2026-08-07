@@ -267,6 +267,34 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
 .sr-c09{--c1:var(--sr-c09-1);--c2:var(--sr-c09-2);--c3:var(--sr-c09-3)}
 .sr-c10{--c1:var(--sr-c10-1);--c2:var(--sr-c10-2);--c3:var(--sr-c10-3)}
 
+/* B3b · light-art cover modifier ──────────────────────────────
+   The overlay tokens above (.sr-kicker, .sr-num, .sr-rule, tile border)
+   are tuned for dark photography. Personal Transformation's ten covers
+   are light images, so this flips those four tokens to dark-ink
+   equivalents. :hover states on .sr-cover carry an extra pseudo-class
+   in their selector, so they already out-specificity these resting
+   rules and are unaffected. */
+.sr-cover--light .sr-kicker{color:#211C2B;text-shadow:none}
+.sr-cover--light .sr-num{color:rgba(20,20,36,.16)}
+.sr-cover--light .sr-rule{background:rgba(20,20,36,.28)}
+.sr-cover--light .sr-tile{border-color:rgba(20,20,36,.14)}
+
+/* B3c · Personal Transformation cover photography ─────────────
+   Image is the top background layer; the existing gradient identity
+   stays as the next layer down, so a 404'd file still shows the tint
+   instead of a blank tile. Scoped to #prog-personal because sr-c01…10
+   are shared colour-identity classes other tracks may reuse later. */
+#prog-personal .sr-c01 .sr-art{background-image:url('/assets/covers/01.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+#prog-personal .sr-c02 .sr-art{background-image:url('/assets/covers/02.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+#prog-personal .sr-c03 .sr-art{background-image:url('/assets/covers/03.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+#prog-personal .sr-c04 .sr-art{background-image:url('/assets/covers/04.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+#prog-personal .sr-c05 .sr-art{background-image:url('/assets/covers/05.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+#prog-personal .sr-c06 .sr-art{background-image:url('/assets/covers/06.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+#prog-personal .sr-c07 .sr-art{background-image:url('/assets/covers/07.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+#prog-personal .sr-c08 .sr-art{background-image:url('/assets/covers/08.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+#prog-personal .sr-c09 .sr-art{background-image:url('/assets/covers/09.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+#prog-personal .sr-c10 .sr-art{background-image:url('/assets/covers/10.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+
 /* B4 · centred section head ───────────────────────────────── */
 .sr-head{max-width:760px;margin:0 auto 52px;text-align:center}
 .sr-head .sr-kick{margin:0 0 12px;font:700 10px/1 'DM Sans',sans-serif;letter-spacing:5px;
@@ -459,6 +487,51 @@ details.sr-q .sr-a a{color:var(--primary2)}
   padding:8px 14px;border-radius:var(--sr-r-pill);white-space:nowrap;transition:all .22s}
 #sr-rail button:hover{color:var(--text2);background:rgba(212,168,67,.08)}
 #sr-rail button.sr-on{color:#0B0B14;background:var(--sr-gold)}
+
+/* B12 · Personal Transformation — open protocol page ──────────
+   Cover-led header, evaluate-list label column, and Section 4
+   sub-heading hierarchy. Scoped to #personal-protocol-page /
+   #prog-personal so the shared .proto-item / .fit-meter-row /
+   .jprog-* rules used by the other three portals and the
+   home-page preview are untouched. */
+#personal-protocol-page .proto-item{
+  display:grid;grid-template-columns:minmax(0,300px) 1fr;
+  column-gap:40px;row-gap:0;align-items:start}
+#personal-protocol-page .proto-item .sr-tile{
+  grid-column:1;grid-row:1/3;aspect-ratio:3/4;height:auto;width:100%}
+#personal-protocol-page .proto-item .proto-name{
+  grid-column:2;grid-row:1;align-self:end;margin:0 0 14px;
+  font-size:clamp(28px,3.2vw,40px)}
+#personal-protocol-page .proto-item .proto-landing-desc{
+  grid-column:2;grid-row:2;align-self:start;display:block;overflow:visible;
+  -webkit-line-clamp:unset;color:var(--text2);
+  font:italic 400 17px/1.6 'Cormorant Garamond',Georgia,serif}
+#personal-protocol-page .proto-item .proto-expand{grid-column:1/-1}
+@media(max-width:760px){
+  #personal-protocol-page .proto-item{grid-template-columns:1fr}
+  #personal-protocol-page .proto-item .sr-tile{grid-column:1;grid-row:1;
+    max-width:320px;margin:0 auto 20px}
+  #personal-protocol-page .proto-item .proto-name{grid-column:1;grid-row:2}
+  #personal-protocol-page .proto-item .proto-landing-desc{grid-column:1;grid-row:3}
+}
+
+/* Evaluate list — 78px was too narrow for "Relationships"; it overflowed
+   the grid cell and crowded the row text beside it. */
+#prog-personal .fit-meter-row{grid-template-columns:96px 1fr}
+
+/* Section 4 — two prominent sub-headings ("Log a Session", "Journal");
+   the status/meta text around them (Where You Are, What's Next via the
+   shared jprog-tier-head/jprog-status-head rule, Recent Sessions, Past
+   Entries and the Why-here note via the existing .jprog-label/.jprog-why
+   rules) is left at its already-small size, now reading as quieter by
+   comparison rather than by its own change. */
+#prog-personal .jprog-subhead{
+  font:400 18px/1.25 'Cinzel',serif;color:var(--text);margin:24px 0 16px}
+#prog-personal .jprog-subhead:first-child{margin-top:0}
+#prog-personal .jprog-tier-head,
+#prog-personal .jprog-status-head{
+  font:600 9.5px/1.4 'DM Sans',sans-serif;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--text3)}
 
 
 /* ═════════════════════════════════════════════════════════════
