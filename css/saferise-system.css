@@ -97,10 +97,19 @@ body::before{
   background:linear-gradient(90deg,var(--primary2),rgba(212,168,67,0))}
 
 /* A4 · section seams ──────────────────────────────────────── */
+/* section::before used to draw a full-viewport-width (left:0;right:0,
+   no gutter) gradient hairline at the top of every single <section> on
+   every page — 16 of them across the home page, the Personal
+   Transformation portal's marketing sections and the About page, per
+   an audit before removal. It rendered edge-to-edge past the 1100px
+   content column on all of them, doubled up with .all-plans-pricing's
+   own inline border-top, and crossed near the footer's Scope & Safety
+   box on pages where a short trailing section sits close above it.
+   Removed outright rather than re-scoped: every section it touched
+   already carries its own separation — .sr-section/.sr-testi have
+   their own border, the rest rely on their existing 72–104px
+   margin/padding — so no replacement hairline is needed anywhere. */
 section{border-top:0!important;padding-block:clamp(72px,9vw,128px)}
-section::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(212,168,67,.28) 22%,
-             rgba(212,168,67,.28) 78%,transparent)}
 
 /* A5 · surfaces ───────────────────────────────────────────── */
 .proto-item,.expert-card,.expert-card2,.step-card,.tier,.res-item,
@@ -530,7 +539,7 @@ details.sr-q .sr-a a{color:var(--primary2)}
 #personal-protocol-page .proto-item .sr-proto-banner{
   display:block;position:relative;left:50%;transform:translateX(-50%);
   width:100vw;max-width:100vw;aspect-ratio:2880/686;overflow:hidden;
-  background:#0B0B14;margin-bottom:48px}
+  background:#0A0A0D;margin-bottom:48px}
 #personal-protocol-page .proto-item .sr-proto-banner-media{
   position:absolute;inset:0;width:100%;height:100%;
   background-size:cover;background-position:center}
@@ -609,15 +618,27 @@ details.sr-q .sr-a a{color:var(--primary2)}
   border-color:rgba(255,255,255,.24);box-shadow:0 28px 52px -24px rgba(0,0,0,.9)}
 #prog-personal .sr-cover--light:hover .sr-tile{border-color:rgba(20,20,36,.24)}
 
-/* Protocol-page text was flush against the card's own edge (0 padding —
-   .sr-cover zeroes .proto-item's original 24px/28px). The banner stays
-   edge-to-edge on purpose; only the content below it gets a gutter,
-   matching the internal padding other prose blocks use on this same
-   site (.sr-testi 56px, .sr-svc 36px) rather than re-adding the old
-   24/28 which predates the banner layout. */
-#personal-protocol-page .proto-item .proto-expand{padding-left:40px;padding-right:40px}
-@media(max-width:760px){
-  #personal-protocol-page .proto-item .proto-expand{padding-left:24px;padding-right:24px}
+/* Wrapper panel, deleted as a visual surface — .proto-item was still
+   painting rgb(42,42,66) (var(--surface), 980px wide, 14px radius)
+   behind everything below the banner: a second, narrower "card" sitting
+   under the full-bleed banner above it. No background, no radius —
+   content now sits directly on the page ground (#0A0A0D, set below). */
+#personal-protocol-page .proto-item{background:none;border-radius:0}
+
+/* Protocol-page content used to sit flush against .proto-item's own
+   edge, then get a flat 40px/24px gutter with no relationship to
+   anything else on the page. Now it uses the exact formula the
+   banner's own overlaid copy uses — max(40px, 50vw - 550px) — via the
+   same full-bleed breakout .sr-proto-banner already does, so the two
+   line up on the same left edge at every viewport width instead of by
+   coincidence at one. */
+#personal-protocol-page .proto-item .proto-expand{
+  position:relative;left:50%;transform:translateX(-50%);
+  width:100vw;max-width:100vw;box-sizing:border-box;
+  padding-left:max(40px,calc(50vw - 550px));
+  padding-right:max(40px,calc(50vw - 550px))}
+@media(max-width:980px){
+  #personal-protocol-page .proto-item .proto-expand{padding-left:26px;padding-right:26px}
 }
 
 /* Cover hover panel: title/description sat flush against the card's
@@ -712,6 +733,72 @@ details.sr-q .sr-a a{color:var(--primary2)}
 #prog-personal .id-evidence-card p{color:#95929A}
 #prog-personal .id-evidence-open{border-color:#33333B;color:#C9A03C}
 #prog-personal .id-evidence-open:hover{border-color:#C9A03C}
+
+/* B16 · Personal Transformation — page-level neutral ladder ────
+   B14 put the neutral ladder inside Section 4's cards but left the
+   surfaces those cards (and everything else on the page) sit on still
+   painting the platform's own --bg/--bg3/--card/--card2/--surface/
+   --surface2 tokens — every one of which carries a violet cast (blue
+   channel 8–30 above red/green). Extended here to the whole page:
+     page    #0A0A0D  → #prog-personal itself (was var(--bg) #080810)
+     raised  #131317  → tab chrome, side panels (was var(--bg3))
+     card    #1C1C21  → media frames, resource rows (was var(--card))
+     input   #24242A  → nested media controls, icon chips
+                         (was var(--card2)/var(--surface2))
+     hairline #33333B → replaces every var(--border)'s gold tint on
+                         these same elements — a gold border on a
+                         neutral surface still read like a stray accent
+   Scoped to #prog-personal throughout — the underlying --bg3/--card/
+   --surface tokens stay untouched for the other three portals. */
+#prog-personal.prog-overlay{background:#0A0A0D}
+
+#prog-personal .media-block,
+#prog-personal .exp-tab,
+#prog-personal .hero-tab,
+#prog-personal .listen-side,
+#prog-personal .res-item,
+#prog-personal .jp5-card{background:#131317}
+#prog-personal .exp-tab:hover,
+#prog-personal .hero-tab:hover,
+#prog-personal .res-item:hover{background:#1C1C21}
+#prog-personal .exp-tab.active,
+#prog-personal .hero-tab.active{background:#1C1C21}
+
+#prog-personal .video-placeholder,
+#prog-personal .audio-placeholder,
+#prog-personal .pdf-placeholder{background:#1C1C21}
+#prog-personal .pdf-placeholder:hover{background:#24242A}
+
+#prog-personal .video-bar,
+#prog-personal .res-icon,
+#prog-personal .pdf-icon,
+#prog-personal .jp5-modal,
+#prog-personal .jp5-input,
+#prog-personal .jp5-close{background:#24242A;border-color:#33333B}
+
+/* Border audit (item 4): .media-block and .listen-side carried a full
+   1px outline with no hover/active state ever changing it — pure panel
+   chrome, redundant now that the raised/card contrast above already
+   reads as a distinct surface. Dropped outright. .exp-tab/.hero-tab/
+   .res-item DO use their border to signal state (hover, active/selected)
+   so the border itself stays, just transparent at rest instead of a
+   visible neutral-grey outline — the gold on hover/active is the only
+   version of it a visitor ever needs to see. fit-meter-row's own
+   bottom-border row dividers are dropped too: B13 (previous session)
+   already settled on keeping exactly one divider style on this page
+   (.j-step, between numbered stages) and this was a second style that
+   slipped through that pass. */
+#prog-personal .media-block,
+#prog-personal .listen-side{border:0}
+#prog-personal .exp-tab,
+#prog-personal .hero-tab,
+#prog-personal .res-item{border-color:transparent}
+#prog-personal .exp-tab:hover,
+#prog-personal .hero-tab:hover{border-color:transparent}
+#prog-personal .exp-tab.active,
+#prog-personal .hero-tab.active,
+#prog-personal .res-item:hover{border-color:var(--primary)}
+#prog-personal .fit-meter-row{border-bottom:0}
 
 /* B15 · Reader — dark reading surface + mode toggle ────────────
    The Reader is one shared modal reused by every portal — there is
