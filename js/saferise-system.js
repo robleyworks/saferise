@@ -205,11 +205,31 @@
       paint();
     }
 
+    // pause()/resume() fully stop and restart the interval rather than
+    // just gating tick() behind `paused` on one long-lived timer. A
+    // single setInterval that keeps firing (no-op) for the entire
+    // paused stretch, then is expected to resume useful work later,
+    // is exactly the shape browsers throttle hardest and least
+    // predictably once a tab backgrounds even briefly — clearing it on
+    // pause and registering a fresh one on resume means there's no
+    // stale timer for that throttling to have latched onto, and a
+    // resume that visibly does nothing (this shipped once already)
+    // can't happen silently again.
+    function startInterval() {
+      if (intervalId) return;
+      lastTick = null;
+      intervalId = setInterval(tick, TICK_MS);
+    }
+    function stopInterval() {
+      if (intervalId) { clearInterval(intervalId); intervalId = null; }
+    }
+
     function pause() {
       if (stopped || paused) return;
       paused = true;
       restoreSnap();
       clearTimeout(resumeTimer);
+      stopInterval();
     }
     function scheduleResume() {
       if (stopped) return;
@@ -217,8 +237,8 @@
       resumeTimer = setTimeout(function () {
         if (stopped) return; // a permanent stop can land while this was pending
         paused = false;
-        lastTick = null; // don't count the paused interval as elapsed drift time
         disableSnap();
+        startInterval(); // fresh timer registration, not a resumed stale one
       }, RESUME_DELAY);
     }
     function stopAuto() {
@@ -228,7 +248,7 @@
       clearTimeout(resumeTimer);
       resumeTimer = null;
       restoreSnap();
-      if (intervalId) clearInterval(intervalId);
+      stopInterval();
     }
 
     track.addEventListener('mouseenter', pause);
@@ -241,7 +261,7 @@
     cards.forEach(function (c) { c.addEventListener('click', stopAuto); });
 
     disableSnap();
-    intervalId = setInterval(tick, TICK_MS);
+    startInterval();
   }
 
   /* ─────────────────────────────────────────────────────────

@@ -206,7 +206,7 @@ section:nth-child(even){background:var(--bg2);}
 .pangolin-desc{font-family:'Cormorant Garamond',Georgia,serif;font-size:14px;color:var(--text3);font-style:italic;line-height:1.5;}
 
 /* FOOTER */
-footer{border-top:1px solid var(--border);padding:60px;text-align:center;background:var(--bg2);}
+footer{padding:60px;text-align:center;background:var(--bg2);}
 .footer-title{font-family:'Cinzel',serif;font-size:20px;color:var(--primary);margin-bottom:10px;letter-spacing:2px;}
 .footer-sub{font-size:11px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;}
 
@@ -3217,6 +3217,28 @@ document.addEventListener('DOMContentLoaded', function () {
     window.scrollTo(0, 0);
     backBtn.focus();
     history.pushState({ srProtocolOpen: true }, '');
+
+    // The banner that's actually opening is above the fold the instant
+    // this runs, so it gets bumped from its default loading="lazy" to
+    // eager + high priority, plus a <link rel=preload> — the other nine
+    // banners stay lazy since they're not what's on screen. One <link>
+    // element is reused (href swapped) rather than appending a fresh one
+    // per open, so repeat visits to the carousel don't pile up stale
+    // preload hints in <head>.
+    var bannerImg = item.querySelector('.sr-proto-banner-media');
+    if (bannerImg) {
+      bannerImg.loading = 'eager';
+      bannerImg.fetchPriority = 'high';
+      var preload = document.getElementById('sr-banner-preload');
+      if (!preload) {
+        preload = document.createElement('link');
+        preload.id = 'sr-banner-preload';
+        preload.rel = 'preload';
+        preload.as = 'image';
+        document.head.appendChild(preload);
+      }
+      preload.href = bannerImg.currentSrc || bannerImg.src;
+    }
   }
 
   // Single source of truth for closing: every trigger removes .open (or,
@@ -4576,13 +4598,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 01 ANXIETY -->
       <article role="button" tabindex="0" class="proto-item sr-cover sr-c01 sr-cover--light" data-proto="1" onclick="toggleProto(this)" aria-label="Open The Anxiety Reset Protocol">
         <span class="sr-tile">
-          <span class="sr-art"></span>
+          <img class="sr-art" src="/assets/covers/01.jpg" alt="" width="900" height="1200" loading="eager" decoding="async" fetchpriority="high">
           <span class="sr-num">01</span>
           <span class="sr-kicker">Regulate</span>
           <span class="sr-rule"></span>
         </span>
         <span class="sr-proto-banner">
-          <span class="sr-proto-banner-media"></span>
+          <img class="sr-proto-banner-media" src="/assets/banners/01_anxiety_reset_banner_2880x686.jpg" alt="" width="2880" height="686" loading="lazy" decoding="async" data-banner-key="01">
           <span class="sr-proto-banner-scrim"></span>
           <span class="sr-proto-banner-copy">
             <h3 class="proto-name">The Anxiety Reset Protocol</h3>
@@ -4739,13 +4761,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
-        <div class="jprog-tier-card">
+        <div class="jprog-status-group">
+          <div class="jprog-tier-card">
           <p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>
           <p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p>
         </div>
-        <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+          <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+        </div>
 
-        <p class="jprog-subhead">Log a Session</p>
+        <div class="jprog-enclosure jprog-enclosure-log">
+          <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -4757,13 +4782,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <label class="jprog-label">Anything worth noting? (optional)</label>
         <textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>
         <div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>
+        </div>
 
         <div class="jprog-recent">
           <label class="jprog-label">Recent Sessions</label>
           <div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div>
         </div>
 
-        <div class="jprog-journal-block">
+        <div class="jprog-enclosure jprog-enclosure-journal">
           <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
@@ -4779,13 +4805,14 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what's coming up with this protocol..."></textarea>
           <div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>
-          <div class="jprog-past">
+          
+        </div>
+
+        <div class="jprog-past">
             <label class="jprog-label">Past Entries</label>
             <div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div>
           </div>
-        </div>
-      </div>
-      <p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
+      </div><p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
     </div>
           </div>
 
@@ -4820,13 +4847,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 02 THE ANGER ALCHEMY PROTOCOL -->
       <article role="button" tabindex="0" class="proto-item sr-cover sr-c02 sr-cover--light" data-proto="2" onclick="toggleProto(this)" aria-label="Open The Anger Alchemy Protocol">
         <span class="sr-tile">
-          <span class="sr-art"></span>
+          <img class="sr-art" src="/assets/covers/02.jpg" alt="" width="900" height="1200" loading="eager" decoding="async" fetchpriority="high">
           <span class="sr-num">02</span>
           <span class="sr-kicker">Transmute</span>
           <span class="sr-rule"></span>
         </span>
         <span class="sr-proto-banner">
-          <span class="sr-proto-banner-media"></span>
+          <img class="sr-proto-banner-media" src="/assets/banners/02_anger_alchemy_banner_2880x686.jpg" alt="" width="2880" height="686" loading="lazy" decoding="async" data-banner-key="02">
           <span class="sr-proto-banner-scrim"></span>
           <span class="sr-proto-banner-copy">
             <h3 class="proto-name">The Anger Alchemy Protocol</h3>
@@ -4988,13 +5015,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
-        <div class="jprog-tier-card">
+        <div class="jprog-status-group">
+          <div class="jprog-tier-card">
           <p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>
           <p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p>
         </div>
-        <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+          <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+        </div>
 
-        <p class="jprog-subhead">Log a Session</p>
+        <div class="jprog-enclosure jprog-enclosure-log">
+          <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -5006,13 +5036,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <label class="jprog-label">Anything worth noting? (optional)</label>
         <textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>
         <div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>
+        </div>
 
         <div class="jprog-recent">
           <label class="jprog-label">Recent Sessions</label>
           <div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div>
         </div>
 
-        <div class="jprog-journal-block">
+        <div class="jprog-enclosure jprog-enclosure-journal">
           <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
@@ -5028,13 +5059,14 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what's coming up with this protocol..."></textarea>
           <div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>
-          <div class="jprog-past">
+          
+        </div>
+
+        <div class="jprog-past">
             <label class="jprog-label">Past Entries</label>
             <div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div>
           </div>
-        </div>
-      </div>
-      <p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
+      </div><p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
     </div>
           </div>
 
@@ -5069,13 +5101,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 03 THE OVERWHELM THRESHOLD PROTOCOL -->
       <article role="button" tabindex="0" class="proto-item sr-cover sr-c03 sr-cover--light" data-proto="3" onclick="toggleProto(this)" aria-label="Open The Overwhelm Threshold Protocol">
         <span class="sr-tile">
-          <span class="sr-art"></span>
+          <img class="sr-art" src="/assets/covers/03.jpg" alt="" width="900" height="1200" loading="eager" decoding="async" fetchpriority="high">
           <span class="sr-num">03</span>
           <span class="sr-kicker">Reduce Load</span>
           <span class="sr-rule"></span>
         </span>
         <span class="sr-proto-banner">
-          <span class="sr-proto-banner-media"></span>
+          <img class="sr-proto-banner-media" src="/assets/banners/03_overwhelm_threshold_banner_2880x686.jpg" alt="" width="2880" height="686" loading="lazy" decoding="async" data-banner-key="03">
           <span class="sr-proto-banner-scrim"></span>
           <span class="sr-proto-banner-copy">
             <h3 class="proto-name">The Overwhelm Threshold Protocol</h3>
@@ -5235,13 +5267,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
-        <div class="jprog-tier-card">
+        <div class="jprog-status-group">
+          <div class="jprog-tier-card">
           <p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>
           <p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p>
         </div>
-        <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+          <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+        </div>
 
-        <p class="jprog-subhead">Log a Session</p>
+        <div class="jprog-enclosure jprog-enclosure-log">
+          <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -5253,13 +5288,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <label class="jprog-label">Anything worth noting? (optional)</label>
         <textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>
         <div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>
+        </div>
 
         <div class="jprog-recent">
           <label class="jprog-label">Recent Sessions</label>
           <div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div>
         </div>
 
-        <div class="jprog-journal-block">
+        <div class="jprog-enclosure jprog-enclosure-journal">
           <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
@@ -5275,13 +5311,14 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what's coming up with this protocol..."></textarea>
           <div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>
-          <div class="jprog-past">
+          
+        </div>
+
+        <div class="jprog-past">
             <label class="jprog-label">Past Entries</label>
             <div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div>
           </div>
-        </div>
-      </div>
-      <p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
+      </div><p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
     </div>
           </div>
 
@@ -5316,13 +5353,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 04 THE ABANDONMENT WOUND PROTOCOL -->
       <article role="button" tabindex="0" class="proto-item sr-cover sr-c04 sr-cover--light" data-proto="4" onclick="toggleProto(this)" aria-label="Open The Abandonment Wound Protocol">
         <span class="sr-tile">
-          <span class="sr-art"></span>
+          <img class="sr-art" src="/assets/covers/04.jpg" alt="" width="900" height="1200" loading="eager" decoding="async" fetchpriority="high">
           <span class="sr-num">04</span>
           <span class="sr-kicker">Repair</span>
           <span class="sr-rule"></span>
         </span>
         <span class="sr-proto-banner">
-          <span class="sr-proto-banner-media"></span>
+          <img class="sr-proto-banner-media" src="/assets/banners/04_abandonment_wound_banner_2880x686.jpg" alt="" width="2880" height="686" loading="lazy" decoding="async" data-banner-key="04">
           <span class="sr-proto-banner-scrim"></span>
           <span class="sr-proto-banner-copy">
             <h3 class="proto-name">The Abandonment Wound Protocol</h3>
@@ -5484,13 +5521,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
-        <div class="jprog-tier-card">
+        <div class="jprog-status-group">
+          <div class="jprog-tier-card">
           <p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>
           <p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p>
         </div>
-        <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+          <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+        </div>
 
-        <p class="jprog-subhead">Log a Session</p>
+        <div class="jprog-enclosure jprog-enclosure-log">
+          <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -5502,13 +5542,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <label class="jprog-label">Anything worth noting? (optional)</label>
         <textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>
         <div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>
+        </div>
 
         <div class="jprog-recent">
           <label class="jprog-label">Recent Sessions</label>
           <div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div>
         </div>
 
-        <div class="jprog-journal-block">
+        <div class="jprog-enclosure jprog-enclosure-journal">
           <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
@@ -5524,13 +5565,14 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what's coming up with this protocol..."></textarea>
           <div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>
-          <div class="jprog-past">
+          
+        </div>
+
+        <div class="jprog-past">
             <label class="jprog-label">Past Entries</label>
             <div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div>
           </div>
-        </div>
-      </div>
-      <p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
+      </div><p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
     </div>
           </div>
 
@@ -5565,13 +5607,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 05 THE SHAME DISSOLUTION PROTOCOL -->
       <article role="button" tabindex="0" class="proto-item sr-cover sr-c05 sr-cover--light" data-proto="5" onclick="toggleProto(this)" aria-label="Open The Shame Dissolution Protocol">
         <span class="sr-tile">
-          <span class="sr-art"></span>
+          <img class="sr-art" src="/assets/covers/05.jpg" alt="" width="900" height="1200" loading="lazy" decoding="async">
           <span class="sr-num">05</span>
           <span class="sr-kicker">Dissolve</span>
           <span class="sr-rule"></span>
         </span>
         <span class="sr-proto-banner">
-          <span class="sr-proto-banner-media"></span>
+          <img class="sr-proto-banner-media" src="/assets/banners/05_shame_dissolution_banner_2880x686.jpg" alt="" width="2880" height="686" loading="lazy" decoding="async" data-banner-key="05">
           <span class="sr-proto-banner-scrim"></span>
           <span class="sr-proto-banner-copy">
             <h3 class="proto-name">The Shame Dissolution Protocol</h3>
@@ -5728,13 +5770,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
-        <div class="jprog-tier-card">
+        <div class="jprog-status-group">
+          <div class="jprog-tier-card">
           <p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>
           <p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p>
         </div>
-        <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+          <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+        </div>
 
-        <p class="jprog-subhead">Log a Session</p>
+        <div class="jprog-enclosure jprog-enclosure-log">
+          <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -5746,13 +5791,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <label class="jprog-label">Anything worth noting? (optional)</label>
         <textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>
         <div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>
+        </div>
 
         <div class="jprog-recent">
           <label class="jprog-label">Recent Sessions</label>
           <div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div>
         </div>
 
-        <div class="jprog-journal-block">
+        <div class="jprog-enclosure jprog-enclosure-journal">
           <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
@@ -5768,13 +5814,14 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what's coming up with this protocol..."></textarea>
           <div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>
-          <div class="jprog-past">
+          
+        </div>
+
+        <div class="jprog-past">
             <label class="jprog-label">Past Entries</label>
             <div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div>
           </div>
-        </div>
-      </div>
-      <p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
+      </div><p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
     </div>
           </div>
 
@@ -5809,13 +5856,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 06 THE GRIEF INTEGRATION PROTOCOL -->
       <article role="button" tabindex="0" class="proto-item sr-cover sr-c06 sr-cover--light" data-proto="6" onclick="toggleProto(this)" aria-label="Open The Grief Integration Protocol">
         <span class="sr-tile">
-          <span class="sr-art"></span>
+          <img class="sr-art" src="/assets/covers/06.jpg" alt="" width="900" height="1200" loading="lazy" decoding="async">
           <span class="sr-num">06</span>
           <span class="sr-kicker">Integrate</span>
           <span class="sr-rule"></span>
         </span>
         <span class="sr-proto-banner">
-          <span class="sr-proto-banner-media"></span>
+          <img class="sr-proto-banner-media" src="/assets/banners/06_grief_integration_banner_2880x686.jpg" alt="" width="2880" height="686" loading="lazy" decoding="async" data-banner-key="06">
           <span class="sr-proto-banner-scrim"></span>
           <span class="sr-proto-banner-copy">
             <h3 class="proto-name">The Grief Integration Protocol</h3>
@@ -5972,13 +6019,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
-        <div class="jprog-tier-card">
+        <div class="jprog-status-group">
+          <div class="jprog-tier-card">
           <p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>
           <p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p>
         </div>
-        <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+          <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+        </div>
 
-        <p class="jprog-subhead">Log a Session</p>
+        <div class="jprog-enclosure jprog-enclosure-log">
+          <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -5990,13 +6040,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <label class="jprog-label">Anything worth noting? (optional)</label>
         <textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>
         <div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>
+        </div>
 
         <div class="jprog-recent">
           <label class="jprog-label">Recent Sessions</label>
           <div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div>
         </div>
 
-        <div class="jprog-journal-block">
+        <div class="jprog-enclosure jprog-enclosure-journal">
           <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
@@ -6012,13 +6063,14 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what's coming up with this protocol..."></textarea>
           <div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>
-          <div class="jprog-past">
+          
+        </div>
+
+        <div class="jprog-past">
             <label class="jprog-label">Past Entries</label>
             <div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div>
           </div>
-        </div>
-      </div>
-      <p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
+      </div><p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
     </div>
           </div>
 
@@ -6053,13 +6105,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 07 THE SHUTDOWN RECOVERY PROTOCOL -->
       <article role="button" tabindex="0" class="proto-item sr-cover sr-c07 sr-cover--light" data-proto="7" onclick="toggleProto(this)" aria-label="Open The Shutdown Recovery Protocol">
         <span class="sr-tile">
-          <span class="sr-art"></span>
+          <img class="sr-art" src="/assets/covers/07.jpg" alt="" width="900" height="1200" loading="lazy" decoding="async">
           <span class="sr-num">07</span>
           <span class="sr-kicker">Restore</span>
           <span class="sr-rule"></span>
         </span>
         <span class="sr-proto-banner">
-          <span class="sr-proto-banner-media"></span>
+          <img class="sr-proto-banner-media" src="/assets/banners/07_shutdown_recovery_banner_2880x686.jpg" alt="" width="2880" height="686" loading="lazy" decoding="async" data-banner-key="07">
           <span class="sr-proto-banner-scrim"></span>
           <span class="sr-proto-banner-copy">
             <h3 class="proto-name">The Shutdown Recovery Protocol</h3>
@@ -6216,13 +6268,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
-        <div class="jprog-tier-card">
+        <div class="jprog-status-group">
+          <div class="jprog-tier-card">
           <p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>
           <p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p>
         </div>
-        <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+          <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+        </div>
 
-        <p class="jprog-subhead">Log a Session</p>
+        <div class="jprog-enclosure jprog-enclosure-log">
+          <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -6234,13 +6289,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <label class="jprog-label">Anything worth noting? (optional)</label>
         <textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>
         <div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>
+        </div>
 
         <div class="jprog-recent">
           <label class="jprog-label">Recent Sessions</label>
           <div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div>
         </div>
 
-        <div class="jprog-journal-block">
+        <div class="jprog-enclosure jprog-enclosure-journal">
           <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
@@ -6256,13 +6312,14 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what's coming up with this protocol..."></textarea>
           <div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>
-          <div class="jprog-past">
+          
+        </div>
+
+        <div class="jprog-past">
             <label class="jprog-label">Past Entries</label>
             <div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div>
           </div>
-        </div>
-      </div>
-      <p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
+      </div><p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
     </div>
           </div>
 
@@ -6297,13 +6354,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 08 THE JEALOUSY RELEASE PROTOCOL -->
       <article role="button" tabindex="0" class="proto-item sr-cover sr-c08 sr-cover--light" data-proto="8" onclick="toggleProto(this)" aria-label="Open The Jealousy Release Protocol">
         <span class="sr-tile">
-          <span class="sr-art"></span>
+          <img class="sr-art" src="/assets/covers/08.jpg" alt="" width="900" height="1200" loading="lazy" decoding="async">
           <span class="sr-num">08</span>
           <span class="sr-kicker">Release</span>
           <span class="sr-rule"></span>
         </span>
         <span class="sr-proto-banner">
-          <span class="sr-proto-banner-media"></span>
+          <img class="sr-proto-banner-media" src="/assets/banners/08_jealousy_release_banner_2880x686.jpg" alt="" width="2880" height="686" loading="lazy" decoding="async" data-banner-key="08">
           <span class="sr-proto-banner-scrim"></span>
           <span class="sr-proto-banner-copy">
             <h3 class="proto-name">The Jealousy Release Protocol</h3>
@@ -6465,13 +6522,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
-        <div class="jprog-tier-card">
+        <div class="jprog-status-group">
+          <div class="jprog-tier-card">
           <p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>
           <p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p>
         </div>
-        <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+          <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+        </div>
 
-        <p class="jprog-subhead">Log a Session</p>
+        <div class="jprog-enclosure jprog-enclosure-log">
+          <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -6483,13 +6543,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <label class="jprog-label">Anything worth noting? (optional)</label>
         <textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>
         <div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>
+        </div>
 
         <div class="jprog-recent">
           <label class="jprog-label">Recent Sessions</label>
           <div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div>
         </div>
 
-        <div class="jprog-journal-block">
+        <div class="jprog-enclosure jprog-enclosure-journal">
           <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
@@ -6505,13 +6566,14 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what's coming up with this protocol..."></textarea>
           <div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>
-          <div class="jprog-past">
+          
+        </div>
+
+        <div class="jprog-past">
             <label class="jprog-label">Past Entries</label>
             <div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div>
           </div>
-        </div>
-      </div>
-      <p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
+      </div><p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
     </div>
           </div>
 
@@ -6546,13 +6608,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 09 THE INSECURITY ANCHOR PROTOCOL -->
       <article role="button" tabindex="0" class="proto-item sr-cover sr-c09 sr-cover--light" data-proto="9" onclick="toggleProto(this)" aria-label="Open The Insecurity Anchor Protocol">
         <span class="sr-tile">
-          <span class="sr-art"></span>
+          <img class="sr-art" src="/assets/covers/09.jpg" alt="" width="900" height="1200" loading="lazy" decoding="async">
           <span class="sr-num">09</span>
           <span class="sr-kicker">Anchor</span>
           <span class="sr-rule"></span>
         </span>
         <span class="sr-proto-banner">
-          <span class="sr-proto-banner-media"></span>
+          <img class="sr-proto-banner-media" src="/assets/banners/09_insecurity_anchor_banner_2880x686.jpg" alt="" width="2880" height="686" loading="lazy" decoding="async" data-banner-key="09">
           <span class="sr-proto-banner-scrim"></span>
           <span class="sr-proto-banner-copy">
             <h3 class="proto-name">The Insecurity Anchor Protocol</h3>
@@ -6714,13 +6776,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
-        <div class="jprog-tier-card">
+        <div class="jprog-status-group">
+          <div class="jprog-tier-card">
           <p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>
           <p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p>
         </div>
-        <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+          <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+        </div>
 
-        <p class="jprog-subhead">Log a Session</p>
+        <div class="jprog-enclosure jprog-enclosure-log">
+          <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -6732,13 +6797,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <label class="jprog-label">Anything worth noting? (optional)</label>
         <textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>
         <div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>
+        </div>
 
         <div class="jprog-recent">
           <label class="jprog-label">Recent Sessions</label>
           <div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div>
         </div>
 
-        <div class="jprog-journal-block">
+        <div class="jprog-enclosure jprog-enclosure-journal">
           <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
@@ -6754,13 +6820,14 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what's coming up with this protocol..."></textarea>
           <div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>
-          <div class="jprog-past">
+          
+        </div>
+
+        <div class="jprog-past">
             <label class="jprog-label">Past Entries</label>
             <div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div>
           </div>
-        </div>
-      </div>
-      <p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
+      </div><p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
     </div>
           </div>
 
@@ -6795,13 +6862,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <!-- 10 THE POWERLESSNESS & DESPAIR PROTOCOL -->
       <article role="button" tabindex="0" class="proto-item sr-cover sr-c10 sr-cover--light" data-proto="10" onclick="toggleProto(this)" aria-label="Open The Powerlessness & Despair Protocol">
         <span class="sr-tile">
-          <span class="sr-art"></span>
+          <img class="sr-art" src="/assets/covers/10.jpg" alt="" width="900" height="1200" loading="lazy" decoding="async">
           <span class="sr-num">10</span>
           <span class="sr-kicker">Reclaim</span>
           <span class="sr-rule"></span>
         </span>
         <span class="sr-proto-banner">
-          <span class="sr-proto-banner-media"></span>
+          <img class="sr-proto-banner-media" src="/assets/banners/10_powerlessness_despair_banner_2880x686.jpg" alt="" width="2880" height="686" loading="lazy" decoding="async" data-banner-key="10">
           <span class="sr-proto-banner-scrim"></span>
           <span class="sr-proto-banner-copy">
             <h3 class="proto-name">The Powerlessness & Despair Protocol</h3>
@@ -6965,13 +7032,16 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="jprog-title">Practice &amp; Journal</p>
       <p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>
       <div class="jprog-panel active" data-jprog-panel="track">
-        <div class="jprog-tier-card">
+        <div class="jprog-status-group">
+          <div class="jprog-tier-card">
           <p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>
           <p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p>
         </div>
-        <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+          <div class="jprog-rec-box"><strong>What's Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there's enough usage to read a pattern.</span></div>
+        </div>
 
-        <p class="jprog-subhead">Log a Session</p>
+        <div class="jprog-enclosure jprog-enclosure-log">
+          <p class="jprog-subhead">Log a Session</p>
         <label class="jprog-label">What step did you reach or focus on?</label>
         <select class="jprog-select" data-jprog-el="stepselect">
           <option>Step 1 — Identify &amp; Name</option>
@@ -6983,13 +7053,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <label class="jprog-label">Anything worth noting? (optional)</label>
         <textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>
         <div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>
+        </div>
 
         <div class="jprog-recent">
           <label class="jprog-label">Recent Sessions</label>
           <div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div>
         </div>
 
-        <div class="jprog-journal-block">
+        <div class="jprog-enclosure jprog-enclosure-journal">
           <p class="jprog-subhead">Journal</p>
           <label class="jprog-label">Journal entry</label>
           <div class="jprog-prompt-card">
@@ -7005,13 +7076,14 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what's coming up with this protocol..."></textarea>
           <div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>
-          <div class="jprog-past">
+          
+        </div>
+
+        <div class="jprog-past">
             <label class="jprog-label">Past Entries</label>
             <div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div>
           </div>
-        </div>
-      </div>
-      <p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
+      </div><p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library above and has started practicing.</p>
     </div>
           </div>
 

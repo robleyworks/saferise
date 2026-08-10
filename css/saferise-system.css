@@ -247,10 +247,10 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
 .sr-cover .sr-tile{display:block;position:relative;aspect-ratio:3/4;border-radius:var(--sr-r-md);
   overflow:hidden;isolation:isolate;border:1px solid rgba(255,255,255,.09);background:var(--c1);
   transition:box-shadow .38s var(--sr-ease),border-color .3s}
-.sr-cover .sr-art{display:block;position:absolute;inset:0;z-index:-2;
+.sr-cover .sr-art{display:block;position:absolute;inset:0;z-index:-2;width:100%;height:100%;
+  object-fit:cover;object-position:center;
   background:radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),
              linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%);
-  background-size:cover;background-position:center;
   transition:transform .6s var(--sr-ease)}
 .sr-cover .sr-num{display:block;position:absolute;right:-12px;bottom:-26px;z-index:-1;
   font:600 132px/1 'Cinzel',serif;color:rgba(255,255,255,.13);letter-spacing:-.04em}
@@ -296,35 +296,21 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
 .sr-cover--light .sr-rule{background:rgba(20,20,36,.28)}
 .sr-cover--light .sr-tile{border-color:rgba(20,20,36,.14)}
 
-/* B3c · Personal Transformation cover photography ─────────────
-   Image is the top background layer; the existing gradient identity
-   stays as the next layer down, so a 404'd file still shows the tint
-   instead of a blank tile. Scoped to #prog-personal because sr-c01…10
-   are shared colour-identity classes other tracks may reuse later. */
-#prog-personal .sr-c01 .sr-art{background-image:url('/assets/covers/01.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c02 .sr-art{background-image:url('/assets/covers/02.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c03 .sr-art{background-image:url('/assets/covers/03.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c04 .sr-art{background-image:url('/assets/covers/04.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c05 .sr-art{background-image:url('/assets/covers/05.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c06 .sr-art{background-image:url('/assets/covers/06.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c07 .sr-art{background-image:url('/assets/covers/07.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c08 .sr-art{background-image:url('/assets/covers/08.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c09 .sr-art{background-image:url('/assets/covers/09.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c10 .sr-art{background-image:url('/assets/covers/10.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+/* B3c · Personal Transformation cover art — now real <img src>
+   elements (item 1: only <img> supports loading/decoding/width/height,
+   which is the whole point of this pass — a CSS background-image on
+   .sr-art matching #prog-personal unconditionally used to fetch all 10
+   cover photos AND all 10 banner photos the instant the carousel
+   existed in the DOM, whether or not any of it was ever scrolled into
+   view. The gradient identity now lives directly on .sr-art/
+   .sr-proto-banner-media as a real `background` (B3 / B12 above) —
+   painted behind the <img>'s own content, so a 404'd file still shows
+   the tint instead of a blank tile, with no per-protocol rule needed
+   here to wire a URL. */
 
-/* B3d · Personal Transformation protocol-page banners ──────────
-   Same fallback-layering idea as B3c: photo on top, the identity
-   gradient stays underneath in case a file 404s. */
-#prog-personal .sr-c01 .sr-proto-banner-media{background-image:url('/assets/banners/01_anxiety_reset_banner_2880x686.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c02 .sr-proto-banner-media{background-image:url('/assets/banners/02_anger_alchemy_banner_2880x686.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c03 .sr-proto-banner-media{background-image:url('/assets/banners/03_overwhelm_threshold_banner_2880x686.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c04 .sr-proto-banner-media{background-image:url('/assets/banners/04_abandonment_wound_banner_2880x686.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c05 .sr-proto-banner-media{background-image:url('/assets/banners/05_shame_dissolution_banner_2880x686.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c06 .sr-proto-banner-media{background-image:url('/assets/banners/06_grief_integration_banner_2880x686.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c07 .sr-proto-banner-media{background-image:url('/assets/banners/07_shutdown_recovery_banner_2880x686.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c08 .sr-proto-banner-media{background-image:url('/assets/banners/08_jealousy_release_banner_2880x686.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c09 .sr-proto-banner-media{background-image:url('/assets/banners/09_insecurity_anchor_banner_2880x686.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-#prog-personal .sr-c10 .sr-proto-banner-media{background-image:url('/assets/banners/10_powerlessness_despair_banner_2880x686.jpg'),radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+/* B3d · Personal Transformation protocol-page banners — also real
+   <img src> now (see B3c above); .sr-proto-banner-media's gradient
+   fallback is defined alongside its other properties in B12. */
 
 /* B4 · centred section head ───────────────────────────────── */
 .sr-head{max-width:760px;margin:0 auto 52px;text-align:center}
@@ -461,8 +447,7 @@ details.sr-q .sr-a a{color:var(--primary2)}
    rule (index.html) — that selector targets the element, not a class, so it
    still cascades onto any real <footer>, including this one. */
 .sr-foot{position:relative;left:50%;transform:translateX(-50%);width:100vw;max-width:100vw;
-  margin-top:110px;padding:0 0 34px;background:#06060D;text-align:left;
-  border-top:1px solid rgba(212,168,67,.20)}
+  margin-top:110px;padding:0 0 34px;background:#06060D;text-align:left}
 .sr-foot-in{max-width:1180px;margin:0 auto;padding:0 40px}
 .sr-scope{margin:0;padding:30px 34px;border-radius:var(--sr-r-md);transform:translateY(-34px);
   border:1px solid rgba(212,168,67,.28);
@@ -534,6 +519,12 @@ details.sr-q .sr-a a{color:var(--primary2)}
    .sr-banner already uses at that width — the ratio requirement is a
    full-bleed-photography concern, not a mandate to clip text. */
 .sr-proto-banner,.sr-proto-banner-copy{display:contents}
+/* .sr-proto-banner-media is a real <img> now (item 1), which — unlike
+   the empty <span> it replaced — has visible content and box-generates
+   even under a `display:contents` parent. Hidden by default so it
+   doesn't show up inside the carousel card; switched back on only
+   inside the open-page banner below. */
+.sr-proto-banner-media{display:none}
 #personal-protocol-page .proto-item{display:block}
 #personal-protocol-page .proto-item .sr-tile{display:none}
 #personal-protocol-page .proto-item .sr-proto-banner{
@@ -541,8 +532,10 @@ details.sr-q .sr-a a{color:var(--primary2)}
   width:100vw;max-width:100vw;aspect-ratio:2880/686;overflow:hidden;
   background:#0A0A0D;margin-bottom:48px}
 #personal-protocol-page .proto-item .sr-proto-banner-media{
-  position:absolute;inset:0;width:100%;height:100%;
-  background-size:cover;background-position:center}
+  display:block;position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  background:radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),
+             linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
 #personal-protocol-page .proto-item .sr-proto-banner-scrim{
   position:absolute;inset:0;
   background:linear-gradient(94deg,rgba(6,6,12,.90) 0%,rgba(6,6,12,.66) 34%,
@@ -700,9 +693,19 @@ details.sr-q .sr-a a{color:var(--primary2)}
 #prog-personal .jprog-entry{border-color:#33333B}
 #prog-personal .jprog-entry-meta{color:#77747C}
 #prog-personal .jprog-entry-text{color:#95929A}
-#prog-personal .jprog-journal-block{
-  background:#131317;padding:24px;border-radius:6px;border-top:0}
-#prog-personal .jprog-prompt-card{background:#1C1C21;border-radius:6px}
+/* Item 4 (later session) — Log a Session and Journal each get their own
+   #1C1C21 card enclosure with real vertical gap between them; the
+   status/meta content around them (status-group, jprog-recent,
+   jprog-past) stays outside both, unstyled as a "surface" at all, so
+   the two things a member actually DOES stay the visually loudest
+   things in the block. */
+#prog-personal .jprog-enclosure{
+  background:#1C1C21;border-radius:10px;padding:24px 26px;margin:22px 0}
+#prog-personal .jprog-enclosure .jprog-subhead{margin-top:0}
+#prog-personal .jprog-status-group{margin-bottom:4px}
+#prog-personal .jprog-recent,
+#prog-personal .jprog-past{margin:22px 0}
+#prog-personal .jprog-prompt-card{background:#24242A;border-radius:6px}
 #prog-personal .jprog-prompt-kicker{color:#C9A03C}
 #prog-personal .jprog-prompt-text{color:#F2EDE3}
 #prog-personal .jprog-prompt-chip{border-color:#33333B;color:#77747C}
@@ -799,6 +802,21 @@ details.sr-q .sr-a a{color:var(--primary2)}
 #prog-personal .hero-tab.active,
 #prog-personal .res-item:hover{border-color:var(--primary)}
 #prog-personal .fit-meter-row{border-bottom:0}
+
+/* B17 · Services section (Monthly Workshop / Premium 1:1) ──────
+   .sr-human sat directly on the page background with no surface of
+   its own; its two .sr-svc cards painted rgba(23,23,40,*)→(14,14,26,*)
+   — a violet-tinted gradient. Raised tone on the section (padded and
+   rounded so it reads as one lifted block, not just a colour change
+   flush with the page edges), card tone on the cards themselves —
+   the same two-step relationship B14/B16 already use elsewhere. */
+#prog-personal .sr-human{
+  background:#131317;border-radius:20px;padding:56px 56px 60px}
+#prog-personal .sr-svc{background:#1C1C21}
+#prog-personal .sr-svc:hover{box-shadow:0 30px 60px -28px rgba(0,0,0,.92)}
+@media(max-width:760px){
+  #prog-personal .sr-human{padding:40px 24px 44px;border-radius:16px}
+}
 
 /* B15 · Reader — dark reading surface + mode toggle ────────────
    The Reader is one shared modal reused by every portal — there is
