@@ -818,6 +818,487 @@ details.sr-q .sr-a a{color:var(--primary2)}
   #prog-personal .sr-human{padding:40px 24px 44px;border-radius:16px}
 }
 
+/* ═════════════════════════════════════════════════════════════
+   B18 · Relationship Healing & Professional — same component
+   system as Personal Transformation (B1–B17 above), replicated
+   onto #prog-couples/#prog-corporate. Every rule below is scoped
+   to one or both of those two ids (plus their own #couples-/
+   #corporate- mount ids), so nothing here touches #prog-personal,
+   the home page, or the Reader. Gold is replaced throughout by
+   var(--sr-accent)/-wash/-border, already declared per-track
+   inline on the .prog-overlay root (rose #E87090 for couples,
+   teal #38C8BE for corporate) — one shared rule renders in each
+   track's own colour automatically. Couples/Corporate protocol
+   content uses .simple-expand (not .proto-expand.journey) as its
+   reveal wrapper, so the gutter/border-cleanup rules below target
+   that class name instead — same formula, same result.
+   ═════════════════════════════════════════════════════════════ */
+#prog-couples .sr-banner,
+#prog-corporate .sr-banner{margin-top:-64px}
+
+/* Fallback identity tint behind each cover/banner <img> (shows only
+   if a photo 404s, or for the instant before it decodes) — one flat
+   tint per track instead of Personal's 10 per-protocol hues, since
+   these two tracks share a single photographic identity, not ten. */
+.sr-cover-rose{--c1:#3A0F1E;--c2:#E87090;--c3:#1A0509}
+.sr-cover-teal{--c1:#06282A;--c2:#38C8BE;--c3:#031415}
+
+/* B12 · Personal Transformation — open protocol page banner ───
+   Full-bleed banner replaces the old cover-led header. The cover
+   (.sr-tile) stays for the carousel card; the two new wrapper spans
+   (.sr-proto-banner, .sr-proto-banner-copy) are `display:contents`
+   by default so wrapping them around the existing title/description
+   doesn't change the carousel card's flow at all — the banner
+   treatment below only switches on inside #personal-protocol-page.
+   No min/max-height clamp above 980px: the source images are a fixed
+   2880×686 (4.2:1) and aspect-ratio alone holds that exactly at every
+   desktop/tablet width. Below 980px the ratio would crush the banner
+   to under 100px tall and clip the overlaid title/description, so it
+   switches to the same auto-height/padding fallback the portal's own
+   .sr-banner already uses at that width — the ratio requirement is a
+   full-bleed-photography concern, not a mandate to clip text. */
+.sr-proto-banner,
+.sr-proto-banner-copy{display:contents}
+/* .sr-proto-banner-media is a real <img> now (item 1), which — unlike
+   the empty <span> it replaced — has visible content and box-generates
+   even under a `display:contents` parent. Hidden by default so it
+   doesn't show up inside the carousel card; switched back on only
+   inside the open-page banner below. */
+.sr-proto-banner-media{display:none}
+#couples-protocol-page .proto-item,
+#corporate-protocol-page .proto-item{display:block}
+#couples-protocol-page .proto-item .sr-tile,
+#corporate-protocol-page .proto-item .sr-tile{display:none}
+#couples-protocol-page .proto-item .sr-proto-banner,
+#corporate-protocol-page .proto-item .sr-proto-banner{
+  display:block;position:relative;left:50%;transform:translateX(-50%);
+  width:100vw;max-width:100vw;aspect-ratio:2880/686;overflow:hidden;
+  background:#0A0A0D;margin-bottom:48px}
+#couples-protocol-page .proto-item .sr-proto-banner-media,
+#corporate-protocol-page .proto-item .sr-proto-banner-media{
+  display:block;position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  background:radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),
+             linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+#couples-protocol-page .proto-item .sr-proto-banner-scrim,
+#corporate-protocol-page .proto-item .sr-proto-banner-scrim{
+  position:absolute;inset:0;
+  background:linear-gradient(94deg,rgba(6,6,12,.90) 0%,rgba(6,6,12,.66) 34%,
+             rgba(6,6,12,.10) 62%,transparent 78%),
+             linear-gradient(0deg,rgba(6,6,12,.85) 0%,transparent 34%)}
+#couples-protocol-page .proto-item .sr-proto-banner-copy,
+#corporate-protocol-page .proto-item .sr-proto-banner-copy{
+  display:block;position:absolute;left:max(40px,calc(50vw - 550px));top:50%;
+  transform:translateY(-50%);max-width:560px;z-index:2}
+#couples-protocol-page .proto-item .sr-proto-banner-copy .proto-name,
+#corporate-protocol-page .proto-item .sr-proto-banner-copy .proto-name{
+  margin:0 0 12px;font:400 clamp(24px,3vw,40px)/1.1 'Cinzel',serif;
+  color:var(--text);text-shadow:0 2px 20px rgba(0,0,0,.6)}
+#couples-protocol-page .proto-item .sr-proto-banner-copy .proto-landing-desc,
+#corporate-protocol-page .proto-item .sr-proto-banner-copy .proto-landing-desc{
+  margin:0;display:block;overflow:visible;-webkit-line-clamp:unset;
+  font:italic 400 16px/1.6 'Cormorant Garamond',Georgia,serif;
+  color:#DCD6E0;max-width:48ch;text-shadow:0 1px 14px rgba(0,0,0,.55)}
+@media(max-width:980px){
+  #couples-protocol-page .proto-item .sr-proto-banner,
+#corporate-protocol-page .proto-item .sr-proto-banner{
+    aspect-ratio:auto;padding:72px 26px 56px}
+  /* position:relative (not static) so z-index:2 still lifts the copy
+     above the absolutely-positioned media/scrim — a static element
+     paints below positioned siblings regardless of z-index. */
+  #couples-protocol-page .proto-item .sr-proto-banner-copy,
+#corporate-protocol-page .proto-item .sr-proto-banner-copy{
+    position:relative;transform:none;left:auto;max-width:none;padding-right:26px}
+}
+
+/* Cover artwork (assets/covers/*.jpg) has the kicker word, protocol
+   number and rule baked into the photo — the .sr-kicker/.sr-num/.sr-rule
+   spans drawn below are a leftover from before the artwork existed and
+   would double them. .sr-cover only appears in Personal Transformation. */
+#prog-couples .sr-cover .sr-kicker,
+#prog-corporate .sr-cover .sr-kicker,
+#prog-couples .sr-cover .sr-num,
+#prog-corporate .sr-cover .sr-num,
+#prog-couples .sr-cover .sr-rule,
+#prog-corporate .sr-cover .sr-rule{display:none}
+
+/* Evaluate list — 78px was too narrow for "Relationships"; it overflowed
+   the grid cell and crowded the row text beside it. */
+#prog-couples .fit-meter-row,
+#prog-corporate .fit-meter-row{grid-template-columns:96px 1fr}
+
+/* Section 4 — two prominent sub-headings ("Log a Session", "Journal");
+   the status/meta text around them (Where You Are, What's Next via the
+   shared jprog-tier-head/jprog-status-head rule, Recent Sessions, Past
+   Entries and the Why-here note via the existing .jprog-label/.jprog-why
+   rules) is left at its already-small size, now reading as quieter by
+   comparison rather than by its own change. */
+#prog-couples .jprog-subhead,
+#prog-corporate .jprog-subhead{
+  font:400 18px/1.25 'Cinzel',serif;color:var(--text);margin:24px 0 16px}
+#prog-couples .jprog-subhead:first-child,
+#prog-corporate .jprog-subhead:first-child{margin-top:0}
+#prog-couples .jprog-tier-head,
+#prog-corporate .jprog-tier-head,
+#prog-couples .jprog-status-head,
+#prog-corporate .jprog-status-head{
+  font:600 9.5px/1.4 'DM Sans',sans-serif;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--text3)}
+
+/* B13 · Open protocol page — border/hairline cleanup + gutters ─
+   Audited borders on #personal-protocol-page before this rule:
+     .proto-item          box-shadow var(--sr-ring): 0 0 0 1px gold +
+                           a soft drop shadow — a full outline "rail"
+                           around the whole card, sitting right across
+                           the top of the now-edge-to-edge banner.
+     .proto-item           background-image var(--sr-hair) — a diagonal
+                           gold-to-transparent gradient painted as a
+                           second, subtler hairline across the same box.
+     .proto-expand         border-top 1px var(--border) — a divider
+                           directly under the banner, before step 1.
+     .sr-cover:hover .sr-tile   border-color change + box-shadow
+                           0 0 0 1px gold — a ring on the cover's hover
+                           panel (the carousel card, not this page, but
+                           audited together since item 2 groups them).
+   Four distinct styles, all removed below except the .j-step border,
+   which is the one kept divider — it already only fires between
+   numbered stages (.j-step:first-child has border-top:none). */
+#couples-protocol-page .proto-item,
+#corporate-protocol-page .proto-item{box-shadow:none;background-image:none}
+#couples-protocol-page .proto-item .simple-expand,
+#corporate-protocol-page .proto-item .simple-expand{border-top:0}
+#prog-couples .sr-cover:hover .sr-tile,
+#prog-corporate .sr-cover:hover .sr-tile{
+  border-color:rgba(255,255,255,.24);box-shadow:0 28px 52px -24px rgba(0,0,0,.9)}
+#prog-couples .sr-cover--light:hover .sr-tile,
+#prog-corporate .sr-cover--light:hover .sr-tile{border-color:rgba(20,20,36,.24)}
+
+/* Wrapper panel, deleted as a visual surface — .proto-item was still
+   painting rgb(42,42,66) (var(--surface), 980px wide, 14px radius)
+   behind everything below the banner: a second, narrower "card" sitting
+   under the full-bleed banner above it. No background, no radius —
+   content now sits directly on the page ground (#0A0A0D, set below). */
+#couples-protocol-page .proto-item,
+#corporate-protocol-page .proto-item{background:none;border-radius:0}
+
+/* Protocol-page content used to sit flush against .proto-item's own
+   edge, then get a flat 40px/24px gutter with no relationship to
+   anything else on the page. Now it uses the exact formula the
+   banner's own overlaid copy uses — max(40px, 50vw - 550px) — via the
+   same full-bleed breakout .sr-proto-banner already does, so the two
+   line up on the same left edge at every viewport width instead of by
+   coincidence at one. */
+#couples-protocol-page .proto-item .simple-expand,
+#corporate-protocol-page .proto-item .simple-expand{
+  position:relative;left:50%;transform:translateX(-50%);
+  width:100vw;max-width:100vw;box-sizing:border-box;
+  padding-left:max(40px,calc(50vw - 550px));
+  padding-right:max(40px,calc(50vw - 550px))}
+@media(max-width:980px){
+  #couples-protocol-page .proto-item .simple-expand,
+#corporate-protocol-page .proto-item .simple-expand{padding-left:26px;padding-right:26px}
+}
+
+/* Cover hover panel: title/description sat flush against the card's
+   left/right edge (same 0-padding cause as above). The open-page
+   banner copy already has its own left offset and max-width, so its
+   padding is reset back to 0 to avoid a double inset. */
+#prog-couples .sr-cover h3.proto-name,
+#prog-corporate .sr-cover h3.proto-name,
+#prog-couples .sr-cover .proto-landing-desc,
+#prog-corporate .sr-cover .proto-landing-desc{padding:0 16px}
+#couples-protocol-page .proto-item .sr-proto-banner-copy .proto-name,
+#corporate-protocol-page .proto-item .sr-proto-banner-copy .proto-name,
+#couples-protocol-page .proto-item .sr-proto-banner-copy .proto-landing-desc,
+#corporate-protocol-page .proto-item .sr-proto-banner-copy .proto-landing-desc{padding:0}
+
+/* B14 · Practice & Journal — neutral tonal ladder ──────────────
+   The platform's --card2/--surface tokens this block used to inherit
+   (#242438, #2A2A42) run noticeably bluer than red/green — a violet
+   cast — and sit too close together in value. Replaced with a flat,
+   self-contained neutral ladder, scoped to .jprog-section only:
+     page #0A0A0D    → .jprog-section itself (the block's own ground)
+     section #131317 → .jprog-journal-block (the Journal sub-group —
+                        nested one level into the page, one tone up)
+     card #1C1C21    → jprog-tier-card/rec-box/stat ("Where You Are",
+                        "What's Next") and jprog-prompt-card
+     input #24242A   → select / textareas
+     hairline #33333B, used only for the tab strip border and the
+     entry-list dividers — nothing else in this block gets a border.
+   Gold is var(--sr-accent) throughout (replacing var(--primary)'s #D4A843
+   here specifically) and only appears on genuinely interactive/accent
+   elements — active tab, badges, buttons, the active prompt chip —
+   not as a background tint (the old rgba(212,168,67,.08) note/prefill
+   washes are gone, replaced by the card tone). */
+#prog-couples .jprog-section,
+#prog-corporate .jprog-section{
+  background:#0A0A0D;padding:28px 30px 32px;border-radius:var(--sr-r-md);max-width:none}
+#prog-couples .jprog-eyebrow,
+#prog-corporate .jprog-eyebrow{color:#77747C}
+#prog-couples .jprog-title,
+#prog-corporate .jprog-title{color:#F2EDE3}
+#prog-couples .jprog-sub,
+#prog-corporate .jprog-sub{color:#95929A}
+#prog-couples .jprog-tabs,
+#prog-corporate .jprog-tabs{border-color:#33333B}
+#prog-couples .jprog-tab,
+#prog-corporate .jprog-tab{color:#77747C}
+#prog-couples .jprog-tab:hover,
+#prog-corporate .jprog-tab:hover{color:#95929A}
+#prog-couples .jprog-tab.active,
+#prog-corporate .jprog-tab.active{color:#0A0A0D;background:var(--sr-accent);box-shadow:none}
+#prog-couples .jprog-status-box,
+#prog-corporate .jprog-status-box,
+#prog-couples .jprog-tier-card,
+#prog-corporate .jprog-tier-card{
+  background:#1C1C21;padding:16px 18px;border-radius:6px}
+#prog-couples .jprog-status-head,
+#prog-corporate .jprog-status-head,
+#prog-couples .jprog-tier-head,
+#prog-corporate .jprog-tier-head{color:#F2EDE3}
+#prog-couples .jprog-status-pill,
+#prog-corporate .jprog-status-pill,
+#prog-couples .jprog-tier-badge,
+#prog-corporate .jprog-tier-badge{
+  color:var(--sr-accent);background:var(--sr-accent-wash);border-color:var(--sr-accent-border)}
+#prog-couples .jprog-status-box p,
+#prog-corporate .jprog-status-box p,
+#prog-couples .jprog-tier-text,
+#prog-corporate .jprog-tier-text{color:#95929A}
+#prog-couples .jprog-next,
+#prog-corporate .jprog-next,
+#prog-couples .jprog-rec-box,
+#prog-corporate .jprog-rec-box{background:#1C1C21;color:#95929A;border-radius:6px}
+#prog-couples .jprog-next strong,
+#prog-corporate .jprog-next strong,
+#prog-couples .jprog-rec-box strong,
+#prog-corporate .jprog-rec-box strong{color:var(--sr-accent)}
+#prog-couples .jprog-stat,
+#prog-corporate .jprog-stat{background:#1C1C21;border-color:#33333B}
+#prog-couples .jprog-stat-label,
+#prog-corporate .jprog-stat-label{color:#77747C}
+#prog-couples .jprog-stat-value,
+#prog-corporate .jprog-stat-value{color:#F2EDE3}
+#prog-couples .jprog-why,
+#prog-corporate .jprog-why{color:#77747C}
+#prog-couples .jprog-why strong,
+#prog-corporate .jprog-why strong{color:var(--sr-accent)}
+#prog-couples .jprog-label,
+#prog-corporate .jprog-label{color:#77747C}
+#prog-couples .jprog-select,
+#prog-corporate .jprog-select,
+#prog-couples .jprog-log-note,
+#prog-corporate .jprog-log-note,
+#prog-couples .jprog-journal-text,
+#prog-corporate .jprog-journal-text{
+  background:#24242A;border-color:#33333B;color:#F2EDE3}
+#prog-couples .jprog-select::placeholder,
+#prog-corporate .jprog-select::placeholder,
+#prog-couples .jprog-log-note::placeholder,
+#prog-corporate .jprog-log-note::placeholder,
+#prog-couples .jprog-journal-text::placeholder,
+#prog-corporate .jprog-journal-text::placeholder{color:#77747C}
+#prog-couples .jprog-btn,
+#prog-corporate .jprog-btn{background:var(--sr-accent);color:#0A0A0D}
+#prog-couples .jprog-log-list,
+#prog-corporate .jprog-log-list,
+#prog-couples .jprog-journal-list,
+#prog-corporate .jprog-journal-list{color:#77747C}
+#prog-couples .jprog-entry,
+#prog-corporate .jprog-entry{border-color:#33333B}
+#prog-couples .jprog-entry-meta,
+#prog-corporate .jprog-entry-meta{color:#77747C}
+#prog-couples .jprog-entry-text,
+#prog-corporate .jprog-entry-text{color:#95929A}
+/* Item 4 (later session) — Log a Session and Journal each get their own
+   #1C1C21 card enclosure with real vertical gap between them; the
+   status/meta content around them (status-group, jprog-recent,
+   jprog-past) stays outside both, unstyled as a "surface" at all, so
+   the two things a member actually DOES stay the visually loudest
+   things in the block. */
+#prog-couples .jprog-enclosure,
+#prog-corporate .jprog-enclosure{
+  background:#1C1C21;border-radius:10px;padding:24px 26px;margin:22px 0}
+#prog-couples .jprog-enclosure .jprog-subhead,
+#prog-corporate .jprog-enclosure .jprog-subhead{margin-top:0}
+#prog-couples .jprog-status-group,
+#prog-corporate .jprog-status-group{margin-bottom:4px}
+#prog-couples .jprog-recent,
+#prog-corporate .jprog-recent,
+#prog-couples .jprog-past,
+#prog-corporate .jprog-past{margin:22px 0}
+#prog-couples .jprog-prompt-card,
+#prog-corporate .jprog-prompt-card{background:#24242A;border-radius:6px}
+#prog-couples .jprog-prompt-kicker,
+#prog-corporate .jprog-prompt-kicker{color:var(--sr-accent)}
+#prog-couples .jprog-prompt-text,
+#prog-corporate .jprog-prompt-text{color:#F2EDE3}
+#prog-couples .jprog-prompt-chip,
+#prog-corporate .jprog-prompt-chip{border-color:#33333B;color:#77747C}
+#prog-couples .jprog-prompt-chip.active,
+#prog-corporate .jprog-prompt-chip.active{background:var(--sr-accent);color:#0A0A0D;border-color:var(--sr-accent)}
+#prog-couples .jprog-prompt-use,
+#prog-corporate .jprog-prompt-use{border-color:var(--sr-accent);color:var(--sr-accent)}
+#prog-couples .jprog-prompt-shuffle,
+#prog-corporate .jprog-prompt-shuffle{border-color:#33333B;color:#77747C}
+#prog-couples .jprog-past,
+#prog-corporate .jprog-past{border-top:0;margin-top:28px;padding-top:0}
+#prog-couples .jprog-consult-prefill,
+#prog-corporate .jprog-consult-prefill{background:#1C1C21;border-color:#33333B;color:#95929A}
+#prog-couples .jprog-consult-prefill strong,
+#prog-corporate .jprog-consult-prefill strong{color:#F2EDE3}
+#prog-couples .jprog-consult-intro,
+#prog-corporate .jprog-consult-intro{color:#95929A}
+#prog-couples .jprog-textarea,
+#prog-corporate .jprog-textarea{background:#24242A;border-color:#33333B;color:#F2EDE3}
+#prog-couples .jprog-textarea::placeholder,
+#prog-corporate .jprog-textarea::placeholder{color:#77747C}
+#prog-couples .jprog-consult-btn,
+#prog-corporate .jprog-consult-btn{background:var(--sr-accent);color:#0A0A0D}
+#prog-couples .jprog-consult-note,
+#prog-corporate .jprog-consult-note{color:#77747C}
+#prog-couples .jprog-subhead,
+#prog-corporate .jprog-subhead{color:#F2EDE3}
+
+/* .id-evidence-card ("The Chosen Self" / "Open the Decision") is a
+   fifth panel injected into .jprog-section by a separate script
+   (initIdentityEvidence) — a gold-washed card the .jprog-* audit above
+   doesn't reach. A later !important rule elsewhere in the file already
+   strips its background to transparent for Reader "decision" pages
+   and reinstates gold-tinted top/bottom hairlines; both need
+   !important here to still win inside this block. */
+#prog-couples .id-evidence-card,
+#prog-corporate .id-evidence-card{
+  background:#1C1C21!important;border:0!important;border-radius:6px!important;padding:18px!important}
+#prog-couples .id-evidence-card small,
+#prog-corporate .id-evidence-card small{color:var(--sr-accent)}
+#prog-couples .id-evidence-card strong,
+#prog-corporate .id-evidence-card strong{color:#F2EDE3}
+#prog-couples .id-evidence-card p,
+#prog-corporate .id-evidence-card p{color:#95929A}
+#prog-couples .id-evidence-open,
+#prog-corporate .id-evidence-open{border-color:#33333B;color:var(--sr-accent)}
+#prog-couples .id-evidence-open:hover,
+#prog-corporate .id-evidence-open:hover{border-color:var(--sr-accent)}
+
+/* B16 · Personal Transformation — page-level neutral ladder ────
+   B14 put the neutral ladder inside Section 4's cards but left the
+   surfaces those cards (and everything else on the page) sit on still
+   painting the platform's own --bg/--bg3/--card/--card2/--surface/
+   --surface2 tokens — every one of which carries a violet cast (blue
+   channel 8–30 above red/green). Extended here to the whole page:
+     page    #0A0A0D  → #prog-personal itself (was var(--bg) #080810)
+     raised  #131317  → tab chrome, side panels (was var(--bg3))
+     card    #1C1C21  → media frames, resource rows (was var(--card))
+     input   #24242A  → nested media controls, icon chips
+                         (was var(--card2)/var(--surface2))
+     hairline #33333B → replaces every var(--border)'s gold tint on
+                         these same elements — a gold border on a
+                         neutral surface still read like a stray accent
+   Scoped to #prog-personal throughout — the underlying --bg3/--card/
+   --surface tokens stay untouched for the other three portals. */
+#prog-couples.prog-overlay,
+#prog-corporate.prog-overlay{background:#0A0A0D}
+
+#prog-couples .media-block,
+#prog-corporate .media-block,
+#prog-couples .exp-tab,
+#prog-corporate .exp-tab,
+#prog-couples .hero-tab,
+#prog-corporate .hero-tab,
+#prog-couples .listen-side,
+#prog-corporate .listen-side,
+#prog-couples .res-item,
+#prog-corporate .res-item,
+#prog-couples .jp5-card,
+#prog-corporate .jp5-card{background:#131317}
+#prog-couples .exp-tab:hover,
+#prog-corporate .exp-tab:hover,
+#prog-couples .hero-tab:hover,
+#prog-corporate .hero-tab:hover,
+#prog-couples .res-item:hover,
+#prog-corporate .res-item:hover{background:#1C1C21}
+#prog-couples .exp-tab.active,
+#prog-corporate .exp-tab.active,
+#prog-couples .hero-tab.active,
+#prog-corporate .hero-tab.active{background:#1C1C21}
+
+#prog-couples .video-placeholder,
+#prog-corporate .video-placeholder,
+#prog-couples .audio-placeholder,
+#prog-corporate .audio-placeholder,
+#prog-couples .pdf-placeholder,
+#prog-corporate .pdf-placeholder{background:#1C1C21}
+#prog-couples .pdf-placeholder:hover,
+#prog-corporate .pdf-placeholder:hover{background:#24242A}
+
+#prog-couples .video-bar,
+#prog-corporate .video-bar,
+#prog-couples .res-icon,
+#prog-corporate .res-icon,
+#prog-couples .pdf-icon,
+#prog-corporate .pdf-icon,
+#prog-couples .jp5-modal,
+#prog-corporate .jp5-modal,
+#prog-couples .jp5-input,
+#prog-corporate .jp5-input,
+#prog-couples .jp5-close,
+#prog-corporate .jp5-close{background:#24242A;border-color:#33333B}
+
+/* Border audit (item 4): .media-block and .listen-side carried a full
+   1px outline with no hover/active state ever changing it — pure panel
+   chrome, redundant now that the raised/card contrast above already
+   reads as a distinct surface. Dropped outright. .exp-tab/.hero-tab/
+   .res-item DO use their border to signal state (hover, active/selected)
+   so the border itself stays, just transparent at rest instead of a
+   visible neutral-grey outline — the gold on hover/active is the only
+   version of it a visitor ever needs to see. fit-meter-row's own
+   bottom-border row dividers are dropped too: B13 (previous session)
+   already settled on keeping exactly one divider style on this page
+   (.j-step, between numbered stages) and this was a second style that
+   slipped through that pass. */
+#prog-couples .media-block,
+#prog-corporate .media-block,
+#prog-couples .listen-side,
+#prog-corporate .listen-side{border:0}
+#prog-couples .exp-tab,
+#prog-corporate .exp-tab,
+#prog-couples .hero-tab,
+#prog-corporate .hero-tab,
+#prog-couples .res-item,
+#prog-corporate .res-item{border-color:transparent}
+#prog-couples .exp-tab:hover,
+#prog-corporate .exp-tab:hover,
+#prog-couples .hero-tab:hover,
+#prog-corporate .hero-tab:hover{border-color:transparent}
+#prog-couples .exp-tab.active,
+#prog-corporate .exp-tab.active,
+#prog-couples .hero-tab.active,
+#prog-corporate .hero-tab.active,
+#prog-couples .res-item:hover,
+#prog-corporate .res-item:hover{border-color:var(--primary)}
+#prog-couples .fit-meter-row,
+#prog-corporate .fit-meter-row{border-bottom:0}
+
+/* B17 · Services section (Monthly Workshop / Premium 1:1) ──────
+   .sr-human sat directly on the page background with no surface of
+   its own; its two .sr-svc cards painted rgba(23,23,40,*)→(14,14,26,*)
+   — a violet-tinted gradient. Raised tone on the section (padded and
+   rounded so it reads as one lifted block, not just a colour change
+   flush with the page edges), card tone on the cards themselves —
+   the same two-step relationship B14/B16 already use elsewhere. */
+#prog-couples .sr-human,
+#prog-corporate .sr-human{
+  background:#131317;border-radius:20px;padding:56px 56px 60px}
+#prog-couples .sr-svc,
+#prog-corporate .sr-svc{background:#1C1C21}
+#prog-couples .sr-svc:hover,
+#prog-corporate .sr-svc:hover{box-shadow:0 30px 60px -28px rgba(0,0,0,.92)}
+@media(max-width:760px){
+  #prog-couples .sr-human,
+#prog-corporate .sr-human{padding:40px 24px 44px;border-radius:16px}
+}
+
 /* B15 · Reader — dark reading surface + mode toggle ────────────
    The Reader is one shared modal reused by every portal — there is
    no per-track DOM to hang an id off — so unlike the rest of this
