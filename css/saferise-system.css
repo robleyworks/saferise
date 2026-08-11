@@ -233,6 +233,28 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
   width:90px;pointer-events:none;z-index:2}
 .sr-carousel::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
 .sr-carousel::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+/* item 3 (later session): the autoplay drift is continuous, not a
+   snap-to-snap jump, so a partially-scrolled edge card is the normal
+   resting look, not a rare in-between frame — and the fade above only
+   ever covered the tile photo (bottom:30px stops well short of the
+   title, which sits ~367-417px down) at a width (90px) far narrower
+   than one card+gap unit (~282px at desktop), leaving a fully legible,
+   hard-edged, mid-word title sitting right at the viewport boundary.
+   Widened and deepened here, Personal only: full card height (bottom:0)
+   so the fade actually reaches the title, and a two-stop gradient that
+   goes solid for its first third rather than fading from the pixel-0
+   edge, so a peeking card's title is substantively hidden long before
+   the sliver becomes wide enough to read, not just dimmed. */
+#prog-personal .sr-carousel::before,
+#prog-personal .sr-carousel::after{bottom:0;width:180px}
+#prog-personal .sr-carousel::before{
+  background:linear-gradient(90deg,var(--bg) 0%,var(--bg) 35%,transparent 100%)}
+#prog-personal .sr-carousel::after{
+  background:linear-gradient(270deg,var(--bg) 0%,var(--bg) 35%,transparent 100%)}
+@media(max-width:680px){
+  #prog-personal .sr-carousel::before,
+  #prog-personal .sr-carousel::after{width:120px}
+}
 .sr-ptrack{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;
   scroll-behavior:smooth;scrollbar-width:none;
   padding:6px max(40px,calc(50vw - 550px)) 30px}
@@ -519,6 +541,12 @@ details.sr-q .sr-a a{color:var(--primary2)}
    .sr-banner already uses at that width — the ratio requirement is a
    full-bleed-photography concern, not a mandate to clip text. */
 .sr-proto-banner,.sr-proto-banner-copy{display:contents}
+/* item 4 (later session): the cover <img> and the open-page banner
+   <img> are each now wrapped in <picture> for the WebP/srcset source,
+   which — unlike the plain <img> this replaces — is an unstyled tag
+   with no sr- class to hang the display:contents trick on directly.
+   Kept transparent to layout the same way its parent already is. */
+.sr-tile picture,.sr-proto-banner picture{display:contents}
 /* .sr-proto-banner-media is a real <img> now (item 1), which — unlike
    the empty <span> it replaced — has visible content and box-generates
    even under a `display:contents` parent. Hidden by default so it
@@ -838,10 +866,16 @@ details.sr-q .sr-a a{color:var(--primary2)}
 
 /* Fallback identity tint behind each cover/banner <img> (shows only
    if a photo 404s, or for the instant before it decodes) — one flat
-   tint per track instead of Personal's 10 per-protocol hues, since
-   these two tracks share a single photographic identity, not ten. */
+   tint per track instead of ten per-protocol hues, since each track
+   shares a single photographic identity, not ten. Personal used to
+   carry its own sr-c01..sr-c10 (see TOKENS above, each a different
+   hue) — replaced here by sr-cover-gold, a single gold family
+   matching how Relationship/Professional already do rose/teal. The
+   old sr-c01..sr-c10 rules and --sr-c0N-1/-2/-3 vars are left in
+   place, just unreferenced now — nothing else used them. */
 .sr-cover-rose{--c1:#3A0F1E;--c2:#E87090;--c3:#1A0509}
 .sr-cover-teal{--c1:#06282A;--c2:#38C8BE;--c3:#031415}
+.sr-cover-gold{--c1:#2E2308;--c2:#D4A843;--c3:#140E03}
 
 /* B12 · Personal Transformation — open protocol page banner ───
    Full-bleed banner replaces the old cover-led header. The cover
