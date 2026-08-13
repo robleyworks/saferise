@@ -4742,7 +4742,7 @@ document.addEventListener('DOMContentLoaded', function(){
 #prog-personal .pt-cival{font-size:13px;color:var(--text2);line-height:1.75}
 
 /* ── nervous system range — photo + framed midsection + 3 captions ── */
-#prog-personal .pt-rangeimg{position:relative;border-radius:14px;overflow:hidden;line-height:0;margin-top:6px}
+#prog-personal .pt-rangeimg{position:relative;border-radius:14px;overflow:hidden;line-height:0;margin-top:6px;aspect-ratio:1600/639}
 #prog-personal .pt-rangeimg img{width:100%;height:auto;display:block}
 #prog-personal .pt-rangeframe{position:absolute;left:31%;right:31%;top:4%;bottom:4%;border:1px solid rgba(212,168,67,.75);border-radius:2px;box-shadow:0 0 60px rgba(212,168,67,.14) inset;pointer-events:none}
 #prog-personal .pt-rangecaps{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:0 26px 20px;line-height:1.5;background:linear-gradient(180deg,transparent,rgba(8,8,12,.72) 55%,rgba(8,8,12,.92))}
@@ -4763,7 +4763,7 @@ document.addEventListener('DOMContentLoaded', function(){
 #prog-personal .pt-mini-kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
 
 /* ── protocol foundation — 4-panel photo + 4-col text + 2 SVGs ── */
-#prog-personal .pt-pfimg{position:relative;border-radius:14px;overflow:hidden;line-height:0;margin-top:6px}
+#prog-personal .pt-pfimg{position:relative;border-radius:14px;overflow:hidden;line-height:0;margin-top:6px;aspect-ratio:1600/533}
 #prog-personal .pt-pfimg img{width:100%;height:auto;display:block}
 #prog-personal .pt-pfsteps{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0 24px 18px;background:linear-gradient(180deg,transparent,rgba(8,8,12,.7) 60%,rgba(8,8,12,.9))}
 #prog-personal .pt-pfsteps span{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
@@ -4819,8 +4819,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
 /* ── sticky CTA bar — scoped override, the shared .sr-ctabar rule
      (css/saferise-system.css) is untouched; couples/corporate keep
-     their own static bar ── */
-#prog-personal .sr-ctabar{position:sticky;bottom:16px;z-index:30;box-shadow:0 20px 50px -20px rgba(0,0,0,.6)}
+     their own static bar. Uses position:fixed rather than sticky:
+     body{overflow-x:hidden} (index.html, shared, site-wide) makes
+     browsers auto-compute overflow-y:auto, which breaks position:sticky
+     for every descendant on every page — fixed sidesteps that entirely. */
+#prog-personal .sr-ctabar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(1100px,calc(100vw - 48px));margin:0;z-index:30;box-shadow:0 20px 50px -20px rgba(0,0,0,.6)}
+@media(max-width:760px){#prog-personal .sr-ctabar{width:calc(100vw - 32px)}}
 
 @media(max-width:760px){
   #prog-personal .pt-jcols{grid-template-columns:minmax(0,1fr);gap:30px;padding-top:28px}
