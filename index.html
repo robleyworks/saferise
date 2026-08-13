@@ -1216,7 +1216,7 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
     </div>
     <!-- CTA -->
     <div style="display:flex;align-items:center;gap:16px;">
-      <a href="javascript:void(0)" onclick="showProg('personal')" style="background:var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px 20px;border-radius:2px;text-decoration:none;white-space:nowrap;">Begin Free ◆</a>
+      <a id="nav-begin-free" href="javascript:void(0)" onclick="showProg('personal')" style="background:var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px 20px;border-radius:2px;text-decoration:none;white-space:nowrap;">Begin Free ◆</a>
     </div>
   </div>
 
@@ -3094,10 +3094,21 @@ function setActive(link){
   link.classList.add('active');
 }
 // Show/hide main content vs program overlays
+// The nav's "Begin Free" CTA is a single shared element (see #main-nav)
+// rendered outside every prog-overlay, so it can't be removed from the
+// markup without stripping the Foundation Protocol's free entry point
+// site-wide. It's hidden only while the Personal Transformation portal
+// is the active view — see PT_Integration_Brief.md §4.1.
+function syncNavBeginFree(activeId) {
+  const cta = document.getElementById('nav-begin-free');
+  if (cta) cta.style.display = (activeId === 'personal') ? 'none' : '';
+}
+
 function showMain() {
   document.querySelectorAll('.prog-overlay').forEach(p => p.classList.remove('prog-active'));
   const mc = document.getElementById('main-content');
   if (mc) mc.style.display = 'block';
+  syncNavBeginFree(null);
   window.scrollTo(0,0);
 }
 
@@ -3107,6 +3118,7 @@ function showProg(id) {
   if (mc) mc.style.display = 'none';
   const target = document.getElementById('prog-' + id);
   if (target) { target.classList.add('prog-active'); window.scrollTo(0,0); }
+  syncNavBeginFree(id);
 }
 
 // Foundation Protocol unlock: a real backend would email a magic link or
@@ -4797,6 +4809,14 @@ document.addEventListener('DOMContentLoaded', function(){
 #prog-personal .pt-inlinecta{text-align:center;border:1px solid rgba(212,168,67,.28);border-radius:14px;padding:36px 28px;margin:56px 0 0;background:linear-gradient(180deg,rgba(212,168,67,.045),transparent)}
 #prog-personal .pt-inlineline{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:19px;color:var(--text);line-height:1.5;margin-bottom:22px}
 
+/* ── hero rewrite — highlighted rule line under the h1 ── */
+#prog-personal .pt-herorule{border-left:2px solid var(--primary);padding-left:18px;margin:0 0 14px;max-width:40ch;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:18px;color:var(--text);line-height:1.5}
+
+/* ── protocols heading — intentionally one line above 760px; the
+     media query below releases it, don't remove either half ── */
+#prog-personal .pt-h2-nowrap{white-space:nowrap;font-size:clamp(20px,2.9vw,36px)}
+@media(max-width:760px){#prog-personal .pt-h2-nowrap{white-space:normal;font-size:clamp(22px,5.6vw,30px)}}
+
 /* ── sticky CTA bar — scoped override, the shared .sr-ctabar rule
      (css/saferise-system.css) is untouched; couples/corporate keep
      their own static bar ── */
@@ -4844,12 +4864,19 @@ document.addEventListener('DOMContentLoaded', function(){
       <div class="sr-banner-scrim"></div>
       <div class="sr-banner-copy">
         <h1>Personal<em>Transformation</em></h1>
-        <p class="sr-lead">A library of protocols for real change.</p>
-        <p>You already know what you're feeling. Open the protocol that matches it — each one is a complete guided system for a single state, with nothing to fill in first. No intake. No labels. No waiting to be assessed. Start with what matters most right now.</p>
+        <p class="pt-herorule">The distance between your best self and your worst reaction is measured in seconds.</p>
+        <p>You know the pattern. Knowing it doesn't close the gap.</p>
+        <p>These protocols work on the state that opens it — regulation you run yourself, in the moment it matters. No intake, no labels, nothing to fill in first.</p>
       </div>
       <button class="sr-play" aria-label="Play introduction">
         <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
       </button>
+    </div>
+
+    <div class="sr-head" id="protocols">
+      <p class="sr-kick">Where to begin</p>
+      <h2 class="pt-h2-nowrap">Start with the state that traps you most.</h2>
+      <p>Each protocol is a complete guided system — tools for before, during and after, with the research shown at every step.</p>
     </div>
 
     <div data-sr-carousel-group>
@@ -7706,7 +7733,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
       </div>
       </div>
-      <p class="sr-note">Attention Advisory and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern — six and four of the ten protocols, respectively.</p>
+      <p class="sr-note">Attention Advisory and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern, rather than on every protocol. The library grows — anything added to the track while you're a member is yours.</p>
     </section>
 
 <div class="pt-inlinecta">
@@ -7805,6 +7832,12 @@ document.addEventListener('DOMContentLoaded', function(){
           <p class="sr-a">A guided audio session, a printable step guide, the science behind the pattern, a reference case, body-based practices for between sessions, journalling prompts, and a crisis card. Some protocols also include an Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.</p>
           <p class="sr-a">You are not expected to use all of it. Most people use two or three and ignore the rest.</p>
         </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>What can change, and how long does it take?</summary>
+          <p class="sr-a">SafeRise does not promise that a feeling will disappear permanently, or that your history will be erased. The aim is a more familiar route back to choice when the state returns. If a method promises a feeling will never return, that is a claim about you it has no way of making.</p>
+          <p class="sr-a">There is no fixed timeline. Some shifts may be noticeable within a session; lasting familiarity depends on repetition and what else is happening in your life. Your tracker shows what is changing in your own experience.</p>
+          <p class="sr-a">Over time the aim is that you carry the sequence rather than run every step — a method that needs you permanently is designed around its own retention, not your regulation.</p>
+        </details>
         </div>
         <div>
         <details class="sr-q">
@@ -7829,6 +7862,11 @@ document.addEventListener('DOMContentLoaded', function(){
         <details class="sr-q">
           <summary><span class="sr-sign"></span>Can I use it with a partner?</summary>
           <p class="sr-a">Track 01 is intrinsic work — just you and your own system. Relationship Healing is the track built for two people practising together, and it's in development.</p>
+        </details>
+        <details class="sr-q">
+          <summary><span class="sr-sign"></span>I've tried things like this before and they didn't stick.</summary>
+          <p class="sr-a">Understanding a pattern does not always interrupt it while it is happening. SafeRise gives you a fixed sequence to run during the state, then a way to record what changed afterwards.</p>
+          <p class="sr-a">That is a different practice from collecting more explanations. Repetition and your own tracking will tell you whether it is useful for you.</p>
         </details>
         <details class="sr-q">
           <summary><span class="sr-sign"></span>What if I'm in crisis right now?</summary>
