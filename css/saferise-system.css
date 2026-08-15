@@ -1783,7 +1783,13 @@ details.sr-q .sr-a a{color:var(--primary2)}
 /* SR-029 — honest "video not yet available" state for the Watch pane.
    No video file exists yet, so this replaces the old fake play button
    (which toggled a simulated progress bar with nothing behind it) with
-   a plain, truthful unavailable state instead of an implied player. */
+   a plain, truthful unavailable state instead of an implied player.
+   Group 3 (mockup diff): .video-placeholder's base padding-top:56.25%
+   (a 16:9-ratio hack) made this ~620-900px tall depending on viewport
+   width — far taller than the real player it stands in for (the Listen
+   pane measures ~138px). Fixed height replaces the aspect-ratio hack so
+   the page reads the same whether Watch or Listen is selected. */
+.sr-video-unavailable{padding-top:0;height:200px}
 .sr-video-unavailable .video-inner{gap:10px}
 .sr-video-unavailable-icon{color:var(--text3)}
 .sr-video-unavailable-title{font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text2);text-transform:uppercase;text-align:center;padding:0 20px;}
