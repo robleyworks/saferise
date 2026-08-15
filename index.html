@@ -4487,10 +4487,29 @@ function renderProtocolPage(pk){
     '<div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Beyond Self-Guided</span></div>' +
     '<p class="j-title">When you want someone in the room</p>' +
     '<p class="j-sub">The protocols work alone. These are for the moments they don\'t go far enough.</p>' +
-    '<div class="jp5-card">' +
-      '<p class="jp5-card-text">Not every consultation is the same conversation. Let us know what you need before we match you with the right focus.</p>' +
-      '<div class="jp5-discover-link" onclick="jp5CurrentKey=\'' + pk + '\';showProg(\'premium1on1\')">Discover the Premium 1:1 Experience<svg viewBox="0 0 8 8" width="8" height="8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>' +
-      '<div class="jp5-open-btn" onclick="jp5Open(\'' + pk + '\',\'purpose\')">Request 1:1 Consultation</div>' +
+    // Group 4 (mockup diff): the mockup's two-card "Beyond Self-Guided"
+    // grid (monthly workshop + premium 1:1) was never brought across —
+    // this section was a single .jp5-card with one link and one button.
+    // Both cards route to existing program pages (showProg('workshops'),
+    // showProg('premium1on1')); no new destinations, no new data.
+    '<div class="sr-beyond">' +
+      '<div class="sr-bcard sr-bcard-teal">' +
+        '<div class="sr-bicon">&#9677;</div>' +
+        '<p class="sr-bl">Join a monthly workshop</p>' +
+        '<h3>Work a protocol live, with others.</h3>' +
+        '<p>Andre facilitating the same Four-Step framework in real time, alongside a small group — so you practise it once with support before you run it alone.</p>' +
+        '<div class="sr-btags"><span class="sr-btag">Small group</span><span class="sr-btag">Monthly</span><span class="sr-btag">Live, facilitated</span></div>' +
+        '<div class="sr-bbtn" onclick="showProg(\'workshops\')">Discover more &#9670;</div>' +
+      '</div>' +
+      '<div class="sr-bcard sr-bcard-gold">' +
+        '<span class="sr-blimited">Limited availability</span>' +
+        '<div class="sr-bicon">&#9673;</div>' +
+        '<p class="sr-bl">Book a premium 1:1</p>' +
+        '<h3>A private hour with the founder.</h3>' +
+        '<p>For whatever the self-guided protocols can\'t fully reach on their own — the pattern that needs a second pair of eyes, not another resource.</p>' +
+        '<div class="sr-btags"><span class="sr-btag">Private</span><span class="sr-btag">60 minutes</span><span class="sr-btag">With the founder</span></div>' +
+        '<div class="sr-bbtn" onclick="jp5CurrentKey=\'' + pk + '\';showProg(\'premium1on1\')">Discover more &#9670;</div>' +
+      '</div>' +
     '</div>' +
     '<div class="j-share">' +
       '<p class="j-share-title">Share This Protocol</p>' +
