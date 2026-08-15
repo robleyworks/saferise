@@ -4299,9 +4299,57 @@ function renderProtocolPage(pk){
   const advisoryHtml = d.advisoryLede ?
     '<aside class="advisory-note sr-advisory-note" aria-label="Attention advisory"><svg viewBox="0 0 20 20" fill="none" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M10 6.5v4.5M10 14h.01" stroke-linecap="round"/></svg><p><strong>Attention advisory.</strong> ' + d.advisoryLede + '</p></aside>' : '';
 
+  // SR-027: "The journey begins" collapsible wrapper around the journey
+  // visual, matching the approved mockup — open by default, duration read
+  // from the protocol's own audioMin rather than a hardcoded number.
+  const journeyMinutes = parseInt(d.audioMin, 10);
   const journeyHtml = d.journeyImage ?
-    '<figure class="pt-journey-visual"><img src="' + d.journeyImage + '" alt="" loading="lazy" decoding="async">' +
-    '<figcaption>' + d.journeyCaption + '</figcaption></figure>' : '';
+    '<details class="sr-journey-details" open>' +
+      '<summary class="sr-journey-summary"><span class="sr-journey-label">The journey begins</span>' +
+        '<span class="sr-journey-meta">One continuous experience &middot; ' + journeyMinutes + ' minutes<span class="sr-journey-toggle"></span></span></summary>' +
+      '<figure class="pt-journey-visual"><img src="' + d.journeyImage + '" alt="" loading="lazy" decoding="async">' +
+      '<figcaption>' + d.journeyCaption + '</figcaption></figure>' +
+    '</details>' : '';
+
+  // SR-027: "quiet short alternative" — offers the 4-line Crisis Card as a
+  // brief on-ramp. Gated on the key actually being reachable in this
+  // protocol's own READER_PROTOCOLS.keys (not just present in
+  // RESOURCE_CONTENT) — p2's crisiscard entry exists as data but was never
+  // added to p2's Reader key list, so opening it there shows an empty
+  // Reader panel; that's a pre-existing gap on the .ls-open link elsewhere
+  // on this page (reported separately, left as-is), but this new block
+  // doesn't need to repeat it.
+  const crisisCardReachable = READER_PROTOCOLS[pk] && READER_PROTOCOLS[pk].keys.indexOf(pk + '-crisiscard') !== -1;
+  const quietAltHtml = crisisCardReachable ?
+    '<div class="sr-quiet-alt">' +
+      '<div class="sr-quiet-alt-copy">' +
+        '<p class="sr-quiet-alt-label">A shorter way in</p>' +
+        '<h3 class="sr-quiet-alt-title">Use the four-line reset</h3>' +
+        '<p class="sr-quiet-alt-body">For any moment when you would rather begin with something brief and easy to hold.</p>' +
+      '</div>' +
+      '<div class="sr-quiet-alt-btn" data-resource="' + pk + '-crisiscard">View short reset</div>' +
+    '</div>' : '';
+
+  // SR-027: Decision editorial block, in the mockup's Go Deeper position.
+  // "The Decision" already exists as a Reader destination (openReader with
+  // key pk+'-decision', wired up by the identity-data script further down
+  // the file); this just gives it the mockup's richer entry point instead
+  // of only the small resource-row card that script also adds. The quote
+  // starts as the mockup's generic line and is swapped for this protocol's
+  // real IDENTITY_DATA[pk].decision statement by syncDecisionEditorialQuotes()
+  // once that data exists — see the DOMContentLoaded hook near addResourceRows().
+  const decisionEditorialHtml =
+    '<div class="sr-decision-editorial">' +
+      '<div class="sr-decision-intro">' +
+        '<p class="sr-decision-eyebrow">Integration &middot; when you feel ready</p>' +
+        '<h2 class="sr-decision-heading">Carry the shift<br>into a choice.</h2>' +
+      '</div>' +
+      '<div class="sr-decision-copy">' +
+        '<p class="sr-decision-quote" data-id-quote="' + pk + '">“Who am I choosing to become?”</p>' +
+        '<p class="sr-decision-body">The Decision turns the space created by practice into a conscious direction. Meet the version of you who can feel what is present without handing it the final word.</p>' +
+        '<div class="sr-decision-link" onclick="openReader(\'' + pk + '\',\'' + pk + '-decision\')">Enter the reflection &nbsp;&rarr;</div>' +
+      '</div>' +
+    '</div>';
 
   // SR-030: card title/meta always read from RESOURCE_CONTENT — the same
   // object the Reader builds its pages from — instead of a hardcoded generic
@@ -4354,6 +4402,7 @@ function renderProtocolPage(pk){
         '<p class="sr-video-unavailable-sub">Use Listen for the full guided practice in the meantime.</p>' +
       '</div></div></div>' +
     '</div>' +
+    quietAltHtml +
     journeyHtml +
 
     // "What This Protocol Can Shift" — folded into Experience per decision #3, not a separate numbered step
@@ -4367,7 +4416,9 @@ function renderProtocolPage(pk){
 
   // ---- 2 Log & Journal ----
   '<div class="j-step">' +
-    '<div class="j-kicker"><span class="j-num">2</span><span class="j-eyebrow">Log Progress &amp; Journal</span></div>' +
+    '<div class="j-kicker"><span class="j-num">2</span><span class="j-eyebrow">Log &amp; Journal</span></div>' +
+    '<p class="j-title">Turn change into evidence</p>' +
+    '<p class="j-sub">One protocol, practised repeatedly, tracked honestly.</p>' +
     '<div class="jprog-section" data-jprog-key="' + pk + '" data-jprog-title="' + d.title + '" data-jprog-prompts="' + pk + '">' +
       '<p class="jprog-title">Practice &amp; Journal</p>' +
       '<p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>' +
@@ -4410,16 +4461,17 @@ function renderProtocolPage(pk){
   // ---- 3 Go Deeper ----
   '<div class="j-step">' +
     '<div class="j-kicker"><span class="j-num">3</span><span class="j-eyebrow">Go Deeper</span></div>' +
-    '<p class="j-title">Your Full Transformation Library</p>' +
-    '<p class="j-sub">Discover the protocol resources that work, gathered in one place, aimed at exactly what you\'re carrying.</p>' +
+    '<p class="j-title">Understand. Integrate. Choose.</p>' +
+    '<p class="j-sub">For when you\'re not in the middle of it. None of this is required to practise.</p>' +
+    decisionEditorialHtml +
     '<div class="res-row" style="margin-top:24px;">' + resItems.join('') + '</div>' +
   '</div>' +
 
   // ---- 4 Beyond Self-Guided ----
   '<div class="j-step">' +
     '<div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Beyond Self-Guided</span></div>' +
-    '<p class="j-title">Still Feeling Stuck?</p>' +
-    '<p class="j-sub">A short, focused session — kept separate from your practice tracking so you can tell us exactly what kind of support you\'re actually looking for.</p>' +
+    '<p class="j-title">When you want someone in the room</p>' +
+    '<p class="j-sub">The protocols work alone. These are for the moments they don\'t go far enough.</p>' +
     '<div class="jp5-card">' +
       '<p class="jp5-card-text">Not every consultation is the same conversation. Let us know what you need before we match you with the right focus.</p>' +
       '<div class="jp5-discover-link" onclick="jp5CurrentKey=\'' + pk + '\';showProg(\'premium1on1\')">Discover the Premium 1:1 Experience<svg viewBox="0 0 8 8" width="8" height="8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>' +
@@ -10778,6 +10830,18 @@ window.addEventListener('load', function(){
     refreshEvidenceCards();
   }
 
+  // SR-027: the Go Deeper Decision-editorial block (renderProtocolPage) is
+  // written with the mockup's generic quote so it renders something before
+  // IDENTITY_DATA exists; this swaps in the protocol's real decision
+  // statement once it does, same ordering fix as syncProtocolResourceCardTitles.
+  function syncDecisionEditorialQuotes(){
+    document.querySelectorAll('[data-id-quote]').forEach(function(el){
+      const pk=el.dataset.idQuote, d=IDENTITY_DATA[pk];
+      if(!d) return;
+      el.textContent='“'+d.decision+'”';
+    });
+  }
+
   function refreshEvidenceCards(){
     const store=loadStore();
     document.querySelectorAll('[data-id-evidence]').forEach(function(box){
@@ -10845,6 +10909,7 @@ window.addEventListener('load', function(){
     addResourceRows();
     addEvidenceCards();
     hydrateDecisionPages();
+    syncDecisionEditorialQuotes();
   });
 })();
 </script>
