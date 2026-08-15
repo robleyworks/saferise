@@ -1238,10 +1238,6 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
         <div style="font-size:8px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;font-family:'DM Sans',sans-serif;">Protocol</div>
       </div>
     </div>
-    <!-- CTA -->
-    <div style="display:flex;align-items:center;gap:16px;">
-      <a id="nav-begin-free" href="javascript:void(0)" onclick="showProg('personal')" style="background:var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px 20px;border-radius:2px;text-decoration:none;white-space:nowrap;">Begin Free ◆</a>
-    </div>
   </div>
 
   <!-- Menu bar: section links -->
@@ -3118,21 +3114,10 @@ function setActive(link){
   link.classList.add('active');
 }
 // Show/hide main content vs program overlays
-// The nav's "Begin Free" CTA is a single shared element (see #main-nav)
-// rendered outside every prog-overlay, so it can't be removed from the
-// markup without stripping the Foundation Protocol's free entry point
-// site-wide. It's hidden only while the Personal Transformation portal
-// is the active view — see PT_Integration_Brief.md §4.1.
-function syncNavBeginFree(activeId) {
-  const cta = document.getElementById('nav-begin-free');
-  if (cta) cta.style.display = (activeId === 'personal') ? 'none' : '';
-}
-
 function showMain() {
   document.querySelectorAll('.prog-overlay').forEach(p => p.classList.remove('prog-active'));
   const mc = document.getElementById('main-content');
   if (mc) mc.style.display = 'block';
-  syncNavBeginFree(null);
   window.scrollTo(0,0);
 }
 
@@ -3142,7 +3127,6 @@ function showProg(id) {
   if (mc) mc.style.display = 'none';
   const target = document.getElementById('prog-' + id);
   if (target) { target.classList.add('prog-active'); window.scrollTo(0,0); }
-  syncNavBeginFree(id);
 }
 
 // Foundation Protocol unlock: a real backend would email a magic link or
