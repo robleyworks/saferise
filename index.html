@@ -4040,19 +4040,26 @@ const RESOURCE_CONTENT = {"p1-guide": {"kind": "Protocol Guide", "title": "Anxie
    resource instead (matches the mockup structure), routed through the
    Reader like every other resource. openReader() special-cases
    kind:'Founder Video' the same way it already does 'Protocol Guide',
-   see founderVideoHTML(). */
+   see founderVideoHTML().
+
+   SR-031: each title below is already per-protocol data, not a runtime
+   "Why I Built The " + title concatenation — but two of them were written
+   by hand-copying that pattern onto a protocol name that can't grammatically
+   follow it. "Wound" and "Powerlessness & Despair" aren't things you build,
+   so p4 and p10 add "Protocol" to give "Why I Built The ___" a noun it can
+   actually take. The other eight already read naturally as-is. */
 (function(){
   const FOUNDER_VIDEOS = {
     'p1': ['Why I Built The Anxiety Reset', '2:50'],
     'p2': ['Why I Built The Anger Alchemy', '3:10'],
     'p3': ['Why I Built The Overwhelm Threshold', '2:35'],
-    'p4': ['Why I Built The Abandonment Wound', '3:40'],
+    'p4': ['Why I Built The Abandonment Wound Protocol', '3:40'],
     'p5': ['Why I Built The Shame Dissolution', '3:05'],
     'p6': ['Why I Built The Grief Integration', '4:15'],
     'p7': ['Why I Built The Shutdown Recovery', '3:20'],
     'p8': ['Why I Built The Jealousy Release', '2:50'],
     'p9': ['Why I Built The Insecurity Anchor', '3:00'],
-    'p10': ['Why I Built The Powerlessness & Despair', '4:30']
+    'p10': ['Why I Built The Powerlessness & Despair Protocol', '4:30']
   };
   Object.keys(FOUNDER_VIDEOS).forEach(function(pk){
     const title = FOUNDER_VIDEOS[pk][0], time = FOUNDER_VIDEOS[pk][1];
