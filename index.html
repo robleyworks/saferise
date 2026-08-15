@@ -4418,6 +4418,47 @@ function renderProtocolPage(pk){
   '</div>';
 }
 
+// Two homepage marketing sections ("Mac monitor" scroll preview and the
+// "tablet" device mockup in "One library. Every device.") each carry their
+// own hand-authored copy of Anxiety Reset content, outside #protoList, so
+// they can't be reached by renderProtocolPage() and silently drift from it
+// — one of them is even mislabelled as protocol 6 (Grief) around genuinely
+// p1 content. Rather than hand-fix the drifted strings, bind whatever's in
+// each preview to the same PT_PROTOCOLS/RESOURCE_CONTENT objects (and to the
+// live #protoList card's own trigger copy) that the real page uses, keyed
+// off each preview's .jprog-section[data-jprog-key] — the one attribute in
+// these blocks that was never wrong.
+function syncLegacyProtocolPreviews(){
+  document.querySelectorAll('.proto-item[data-proto]').forEach(function(item){
+    if (item.closest('#protoList')) return;
+    const jprogSection = item.querySelector('.jprog-section[data-jprog-key]');
+    const pk = jprogSection && jprogSection.dataset.jprogKey;
+    const d = pk && PT_PROTOCOLS[pk];
+    if (!d) return;
+
+    const liveExpand = document.querySelector('#protoList [data-proto-key="' + pk + '"]');
+    const liveCard = liveExpand && liveExpand.closest('.proto-item');
+    if (liveCard) {
+      item.setAttribute('data-proto', liveCard.getAttribute('data-proto'));
+      const liveNum = liveCard.querySelector('.sr-num'), numEl = item.querySelector('.proto-num');
+      if (numEl && liveNum) numEl.textContent = liveNum.textContent;
+      const liveTrigger = liveCard.querySelector('.proto-trigger'), triggerEl = item.querySelector('.proto-trigger');
+      if (triggerEl && liveTrigger) triggerEl.textContent = liveTrigger.textContent;
+    }
+    const nameEl = item.querySelector('.proto-name');
+    if (nameEl) nameEl.textContent = d.title;
+
+    item.querySelectorAll('[data-resource]').forEach(function(resEl){
+      const data = RESOURCE_CONTENT[resEl.dataset.resource];
+      if (!data) return;
+      const titleEl = resEl.querySelector('.res-title'), metaEl = resEl.querySelector('.res-meta');
+      if (titleEl) titleEl.textContent = data.title;
+      if (metaEl) metaEl.textContent = data.meta;
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', syncLegacyProtocolPreviews);
+
 /* sr-v11-content-corrections */
 (function(){
   /* Attention Advisory — same three-tier logic, now editorial and quick to scan. */
