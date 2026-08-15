@@ -1842,3 +1842,48 @@ details.sr-q .sr-a a{color:var(--primary2)}
   .sr-quiet-alt{flex-direction:column;align-items:flex-start;}
   .sr-quiet-alt-btn{width:100%;text-align:center;}
 }
+
+/* Group 1 (mockup diff) — .shift-drop had markup with zero CSS anywhere
+   in the codebase: native disclosure triangle, title running into the
+   preview text. Ported from the mockup's shift-drop rules onto live
+   tokens (var(--primary)/var(--border) in place of --gold/--hair). */
+.shift-drop{margin-top:28px;border:1px solid var(--border);border-radius:8px;background:linear-gradient(115deg,rgba(212,168,67,.04),rgba(78,154,166,.02));overflow:hidden}
+.shift-drop summary{list-style:none;cursor:pointer;padding:17px 20px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px}
+.shift-drop summary::-webkit-details-marker{display:none}
+.shift-title{font-family:'Cinzel',serif;font-size:15px;color:var(--text);white-space:nowrap}
+.shift-preview{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shift-toggle{font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:var(--primary);font-weight:700}
+.shift-toggle::before{content:"Open"}
+.shift-toggle::after{content:"  \25BE"}
+.shift-drop[open] .shift-toggle::before{content:"Close"}
+.shift-drop[open] .shift-toggle::after{content:"  \25B4"}
+.shift-drop .heals{margin:0;border-top:1px solid var(--border);padding:20px}
+.heals-lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14.5px;color:var(--text2);line-height:1.7;margin-bottom:16px}
+@media(max-width:600px){
+  .shift-drop summary{grid-template-columns:1fr auto}
+  .shift-preview{grid-column:1/-1;grid-row:2}
+  .shift-title{white-space:normal}
+}
+
+/* Group 1 (mockup diff) — .sr-logdrop / .sr-journal: <details> shells
+   newly built around the existing Log a Session / Journal internals
+   (which previously had no collapse mechanism at all — always visible,
+   no summary row). Same shell pattern as .sr-journey-details already
+   on this page. #prog-personal's own .jprog-enclosure card treatment is
+   neutralized when nested in one of these so the section reads as one
+   card, not two stacked ones — the same relationship the mockup's own
+   .logdrop/.logcard pair uses (outer card, inner card stripped to a
+   plain divider). */
+.sr-logdrop,.sr-journal{border:1px solid var(--border);border-radius:12px;background:var(--card);margin-top:14px;overflow:hidden}
+.sr-logdrop summary,.sr-journal summary{list-style:none;cursor:pointer;padding:20px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:64px}
+.sr-logdrop summary::-webkit-details-marker,.sr-journal summary::-webkit-details-marker{display:none}
+.sr-logdrop-jt,.sr-journal-jt{font-family:'Cinzel',serif;font-size:18px;color:var(--text)}
+.sr-logdrop-jq,.sr-journal-jq{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:15px;color:var(--text3);flex:1;min-width:200px}
+.sr-logdrop-jx,.sr-journal-jx{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--primary);font-weight:700}
+.sr-logdrop-jx::before,.sr-journal-jx::before{content:"Open"}
+.sr-logdrop-jx::after,.sr-journal-jx::after{content:" \25BE"}
+.sr-logdrop[open] .sr-logdrop-jx::before,.sr-journal[open] .sr-journal-jx::before{content:"Close"}
+.sr-logdrop[open] .sr-logdrop-jx::after,.sr-journal[open] .sr-journal-jx::after{content:" \25B4"}
+.sr-logdrop .jprog-recent,.sr-journal .jprog-past{padding:0 26px 26px;margin:0}
+#prog-personal .sr-logdrop .jprog-enclosure,
+#prog-personal .sr-journal .jprog-enclosure{background:transparent;border-radius:0;border-top:1px solid var(--border);padding:26px;margin:0}

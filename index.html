@@ -3580,6 +3580,8 @@ function jprogRenderPrompt(section){
   const set = JPROG_PROMPTS[promptsKey];
   const list = set[state.promptCat];
   jprogEl(section, 'prompttext').textContent = '"' + list[state.promptIdx % list.length] + '"';
+  const summaryPromptEl = jprogEl(section, 'summaryprompt');
+  if (summaryPromptEl) summaryPromptEl.textContent = '"' + list[state.promptIdx % list.length] + '"';
   const catsEl = jprogEl(section, 'promptcats');
   catsEl.innerHTML = '';
   const DEEPER_CATS = ['Hold Both', 'Reconciling a Tension'];
@@ -4406,7 +4408,7 @@ function renderProtocolPage(pk){
     journeyHtml +
 
     // "What This Protocol Can Shift" — folded into Experience per decision #3, not a separate numbered step
-    '<details class="shift-drop" style="margin-top:28px;">' +
+    '<details class="shift-drop">' +
       '<summary><span class="shift-title">What This Protocol Can Shift</span>' +
         '<span class="shift-preview">' + d.fitRows.map(function(r){return r[0];}).join(', ') + '</span>' +
         '<span class="shift-toggle"></span></summary>' +
@@ -4428,31 +4430,37 @@ function renderProtocolPage(pk){
           '<p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p></div>' +
           '<div class="jprog-rec-box"><strong>What\'s Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there\'s enough usage to read a pattern.</span></div>' +
         '</div>' +
-        '<div class="jprog-enclosure jprog-enclosure-log">' +
-          '<p class="jprog-subhead">Log a Session</p>' +
-          '<label class="jprog-label">How activated were you before, and after?</label>' +
-          '<div class="jprog-charge-row">' +
-            '<div class="jprog-charge-box"><span class="jprog-charge-tag">Before</span><div class="jprog-charge-control"><input type="range" min="0" max="10" value="7" data-jprog-el="presel" aria-label="Activation before"><span class="jprog-charge-val" data-jprog-el="preval">7</span></div><div class="jprog-charge-ends"><span>Settled</span><span>Peak alarm</span></div></div>' +
-            '<div class="jprog-charge-box after"><span class="jprog-charge-tag">After</span><div class="jprog-charge-control"><input type="range" min="0" max="10" value="3" data-jprog-el="postsel" aria-label="Activation after"><span class="jprog-charge-val" data-jprog-el="postval">3</span></div><div class="jprog-charge-ends"><span>Settled</span><span>Peak alarm</span></div></div>' +
+        '<details class="sr-logdrop">' +
+          '<summary><span class="sr-logdrop-jt">Log this session</span><span class="sr-logdrop-jq">A quick record of what changed.</span><span class="sr-logdrop-jx"></span></summary>' +
+          '<div class="jprog-enclosure jprog-enclosure-log">' +
+            '<p class="jprog-subhead">Log a Session</p>' +
+            '<label class="jprog-label">How activated were you before, and after?</label>' +
+            '<div class="jprog-charge-row">' +
+              '<div class="jprog-charge-box"><span class="jprog-charge-tag">Before</span><div class="jprog-charge-control"><input type="range" min="0" max="10" value="7" data-jprog-el="presel" aria-label="Activation before"><span class="jprog-charge-val" data-jprog-el="preval">7</span></div><div class="jprog-charge-ends"><span>Settled</span><span>Peak alarm</span></div></div>' +
+              '<div class="jprog-charge-box after"><span class="jprog-charge-tag">After</span><div class="jprog-charge-control"><input type="range" min="0" max="10" value="3" data-jprog-el="postsel" aria-label="Activation after"><span class="jprog-charge-val" data-jprog-el="postval">3</span></div><div class="jprog-charge-ends"><span>Settled</span><span>Peak alarm</span></div></div>' +
+            '</div>' +
+            '<div class="jprog-delta"><span class="jprog-delta-val" data-jprog-el="deltaval">−4</span><span class="jprog-delta-text" data-jprog-el="deltatext"></span></div>' +
+            '<label class="jprog-label">What step did you reach or focus on?</label>' +
+            '<select class="jprog-select" data-jprog-el="stepselect">' +
+              '<option>Step 1 — Identify &amp; Name</option><option>Step 2 — Redirect to Heart</option><option>Step 3 — Accept &amp; Release</option><option>Step 4 — Gratitude &amp; Expansion</option><option>Full sequence</option>' +
+            '</select>' +
+            '<label class="jprog-label">Anything worth noting? (optional)</label>' +
+            '<textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>' +
+            '<div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>' +
           '</div>' +
-          '<div class="jprog-delta"><span class="jprog-delta-val" data-jprog-el="deltaval">−4</span><span class="jprog-delta-text" data-jprog-el="deltatext"></span></div>' +
-          '<label class="jprog-label">What step did you reach or focus on?</label>' +
-          '<select class="jprog-select" data-jprog-el="stepselect">' +
-            '<option>Step 1 — Identify &amp; Name</option><option>Step 2 — Redirect to Heart</option><option>Step 3 — Accept &amp; Release</option><option>Step 4 — Gratitude &amp; Expansion</option><option>Full sequence</option>' +
-          '</select>' +
-          '<label class="jprog-label">Anything worth noting? (optional)</label>' +
-          '<textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>' +
-          '<div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>' +
-        '</div>' +
-        '<div class="jprog-recent"><label class="jprog-label">Recent Sessions</label><div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div></div>' +
-        '<div class="jprog-enclosure jprog-enclosure-journal">' +
-          '<p class="jprog-subhead">Journal</p><label class="jprog-label">Journal entry</label>' +
-          '<div class="jprog-prompt-card"><div class="jprog-prompt-main"><p class="jprog-prompt-kicker">Need a prompt?</p><p class="jprog-prompt-text" data-jprog-el="prompttext"></p><div class="jprog-prompt-cats" data-jprog-el="promptcats"></div></div>' +
-          '<div class="jprog-prompt-actions"><div class="jprog-prompt-use" data-jprog-el="promptuse">Use This</div><div class="jprog-prompt-shuffle" data-jprog-el="promptshuffle">Shuffle &#8635;</div></div></div>' +
-          '<textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what\'s coming up with this protocol..."></textarea>' +
-          '<div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>' +
-        '</div>' +
-        '<div class="jprog-past"><label class="jprog-label">Past Entries</label><div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div></div>' +
+          '<div class="jprog-recent"><label class="jprog-label">Recent Sessions</label><div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div></div>' +
+        '</details>' +
+        '<details class="sr-journal">' +
+          '<summary><span class="sr-journal-jt">Journal</span><span class="sr-journal-jq" data-jprog-el="summaryprompt"></span><span class="sr-journal-jx"></span></summary>' +
+          '<div class="jprog-enclosure jprog-enclosure-journal">' +
+            '<p class="jprog-subhead">Journal</p><label class="jprog-label">Journal entry</label>' +
+            '<div class="jprog-prompt-card"><div class="jprog-prompt-main"><p class="jprog-prompt-kicker">Need a prompt?</p><p class="jprog-prompt-text" data-jprog-el="prompttext"></p><div class="jprog-prompt-cats" data-jprog-el="promptcats"></div></div>' +
+            '<div class="jprog-prompt-actions"><div class="jprog-prompt-use" data-jprog-el="promptuse">Use This</div><div class="jprog-prompt-shuffle" data-jprog-el="promptshuffle">Shuffle &#8635;</div></div></div>' +
+            '<textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what\'s coming up with this protocol..."></textarea>' +
+            '<div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>' +
+          '</div>' +
+          '<div class="jprog-past"><label class="jprog-label">Past Entries</label><div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div></div>' +
+        '</details>' +
       '</div>' +
       '<p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library below and has started practicing.</p>' +
     '</div>' +
