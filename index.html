@@ -4040,19 +4040,26 @@ const RESOURCE_CONTENT = {"p1-guide": {"kind": "Protocol Guide", "title": "Anxie
    resource instead (matches the mockup structure), routed through the
    Reader like every other resource. openReader() special-cases
    kind:'Founder Video' the same way it already does 'Protocol Guide',
-   see founderVideoHTML(). */
+   see founderVideoHTML().
+
+   SR-031: each title below is already per-protocol data, not a runtime
+   "Why I Built The " + title concatenation — but two of them were written
+   by hand-copying that pattern onto a protocol name that can't grammatically
+   follow it. "Wound" and "Powerlessness & Despair" aren't things you build,
+   so p4 and p10 add "Protocol" to give "Why I Built The ___" a noun it can
+   actually take. The other eight already read naturally as-is. */
 (function(){
   const FOUNDER_VIDEOS = {
     'p1': ['Why I Built The Anxiety Reset', '2:50'],
     'p2': ['Why I Built The Anger Alchemy', '3:10'],
     'p3': ['Why I Built The Overwhelm Threshold', '2:35'],
-    'p4': ['Why I Built The Abandonment Wound', '3:40'],
+    'p4': ['Why I Built The Abandonment Wound Protocol', '3:40'],
     'p5': ['Why I Built The Shame Dissolution', '3:05'],
     'p6': ['Why I Built The Grief Integration', '4:15'],
     'p7': ['Why I Built The Shutdown Recovery', '3:20'],
     'p8': ['Why I Built The Jealousy Release', '2:50'],
     'p9': ['Why I Built The Insecurity Anchor', '3:00'],
-    'p10': ['Why I Built The Powerlessness & Despair', '4:30']
+    'p10': ['Why I Built The Powerlessness & Despair Protocol', '4:30']
   };
   Object.keys(FOUNDER_VIDEOS).forEach(function(pk){
     const title = FOUNDER_VIDEOS[pk][0], time = FOUNDER_VIDEOS[pk][1];
@@ -4292,20 +4299,78 @@ function renderProtocolPage(pk){
   const advisoryHtml = d.advisoryLede ?
     '<aside class="advisory-note sr-advisory-note" aria-label="Attention advisory"><svg viewBox="0 0 20 20" fill="none" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M10 6.5v4.5M10 14h.01" stroke-linecap="round"/></svg><p><strong>Attention advisory.</strong> ' + d.advisoryLede + '</p></aside>' : '';
 
+  // SR-027: "The journey begins" collapsible wrapper around the journey
+  // visual, matching the approved mockup — open by default, duration read
+  // from the protocol's own audioMin rather than a hardcoded number.
+  const journeyMinutes = parseInt(d.audioMin, 10);
   const journeyHtml = d.journeyImage ?
-    '<figure class="pt-journey-visual"><img src="' + d.journeyImage + '" alt="" loading="lazy" decoding="async">' +
-    '<figcaption>' + d.journeyCaption + '</figcaption></figure>' : '';
+    '<details class="sr-journey-details" open>' +
+      '<summary class="sr-journey-summary"><span class="sr-journey-label">The journey begins</span>' +
+        '<span class="sr-journey-meta">One continuous experience &middot; ' + journeyMinutes + ' minutes<span class="sr-journey-toggle"></span></span></summary>' +
+      '<figure class="pt-journey-visual"><img src="' + d.journeyImage + '" alt="" loading="lazy" decoding="async">' +
+      '<figcaption>' + d.journeyCaption + '</figcaption></figure>' +
+    '</details>' : '';
 
+  // SR-027: "quiet short alternative" — offers the 4-line Crisis Card as a
+  // brief on-ramp. Gated on the key actually being reachable in this
+  // protocol's own READER_PROTOCOLS.keys (not just present in
+  // RESOURCE_CONTENT) — p2's crisiscard entry exists as data but was never
+  // added to p2's Reader key list, so opening it there shows an empty
+  // Reader panel; that's a pre-existing gap on the .ls-open link elsewhere
+  // on this page (reported separately, left as-is), but this new block
+  // doesn't need to repeat it.
+  const crisisCardReachable = READER_PROTOCOLS[pk] && READER_PROTOCOLS[pk].keys.indexOf(pk + '-crisiscard') !== -1;
+  const quietAltHtml = crisisCardReachable ?
+    '<div class="sr-quiet-alt">' +
+      '<div class="sr-quiet-alt-copy">' +
+        '<p class="sr-quiet-alt-label">A shorter way in</p>' +
+        '<h3 class="sr-quiet-alt-title">Use the four-line reset</h3>' +
+        '<p class="sr-quiet-alt-body">For any moment when you would rather begin with something brief and easy to hold.</p>' +
+      '</div>' +
+      '<div class="sr-quiet-alt-btn" data-resource="' + pk + '-crisiscard">View short reset</div>' +
+    '</div>' : '';
+
+  // SR-027: Decision editorial block, in the mockup's Go Deeper position.
+  // "The Decision" already exists as a Reader destination (openReader with
+  // key pk+'-decision', wired up by the identity-data script further down
+  // the file); this just gives it the mockup's richer entry point instead
+  // of only the small resource-row card that script also adds. The quote
+  // starts as the mockup's generic line and is swapped for this protocol's
+  // real IDENTITY_DATA[pk].decision statement by syncDecisionEditorialQuotes()
+  // once that data exists — see the DOMContentLoaded hook near addResourceRows().
+  const decisionEditorialHtml =
+    '<div class="sr-decision-editorial">' +
+      '<div class="sr-decision-intro">' +
+        '<p class="sr-decision-eyebrow">Integration &middot; when you feel ready</p>' +
+        '<h2 class="sr-decision-heading">Carry the shift<br>into a choice.</h2>' +
+      '</div>' +
+      '<div class="sr-decision-copy">' +
+        '<p class="sr-decision-quote" data-id-quote="' + pk + '">“Who am I choosing to become?”</p>' +
+        '<p class="sr-decision-body">The Decision turns the space created by practice into a conscious direction. Meet the version of you who can feel what is present without handing it the final word.</p>' +
+        '<div class="sr-decision-link" onclick="openReader(\'' + pk + '\',\'' + pk + '-decision\')">Enter the reflection &nbsp;&rarr;</div>' +
+      '</div>' +
+    '</div>';
+
+  // SR-030: card title/meta always read from RESOURCE_CONTENT — the same
+  // object the Reader builds its pages from — instead of a hardcoded generic
+  // string, so the two can never say different things about one resource.
+  // (RESOURCE_CONTENT['*-refcase'] in particular is overwritten in place by
+  // the STORIES prepare() pass later in the file, which is why this can't
+  // be a value baked in at author time — it has to be a real lookup that
+  // resolves whenever the card is synced, see syncProtocolResourceCardTitles.)
+  function ptResFromContent(type, kindLabel){
+    var data = RESOURCE_CONTENT[pk + '-' + type];
+    return ptResItem(pk, type, kindLabel, data.title, data.meta);
+  }
   const resItems = [];
-  if (d.hasAdvisory) resItems.push(ptResItem(pk, 'advisory', 'Attention Advisory', 'Attention Advisory', 'Advisory Guide · Three tiers'));
-  const founderData = RESOURCE_CONTENT[pk + '-founder'];
-  resItems.push(ptResItem(pk, 'founder', 'Why This Protocol Exists', founderData.title, founderData.meta));
-  resItems.push(ptResItem(pk, 'guide', 'Protocol Guide', short + ' — Step Guide', 'PDF · Printable'));
-  resItems.push(ptResItem(pk, 'insights', 'Source Insights', 'Perspectives that can help you work with this pattern', 'PDF · Porges · HeartMath · Dispenza · Maté · Jung · Watts'));
-  resItems.push(ptResItem(pk, 'refcase', 'Reference Case', 'A historical figure who lived this same pattern', 'Reference Cases & True Stories Guide'));
-  resItems.push(ptResItem(pk, 'companion', d.companionKind, 'Daily companions between sessions', d.companionKind + ' Guide · ' + short + ' section'));
-  resItems.push(ptResItem(pk, 'disclosure', 'Disclosure & Support', 'A script for telling someone what this actually is', 'Disclosure & Support Guide'));
-  if (d.hasRepair) resItems.push(ptResItem(pk, 'repair', 'Invitation to Repair', 'The Invitation to Repair', 'Engagement Invitation'));
+  if (d.hasAdvisory) resItems.push(ptResFromContent('advisory', 'Attention Advisory'));
+  resItems.push(ptResFromContent('founder', 'Why This Protocol Exists'));
+  resItems.push(ptResFromContent('guide', 'Protocol Guide'));
+  resItems.push(ptResFromContent('insights', 'Source Insights'));
+  resItems.push(ptResFromContent('refcase', 'Reference Case'));
+  resItems.push(ptResFromContent('companion', d.companionKind));
+  resItems.push(ptResFromContent('disclosure', 'Disclosure & Support'));
+  if (d.hasRepair) resItems.push(ptResFromContent('repair', 'Invitation to Repair'));
 
   return crisisNoteHtml +
 
@@ -4331,10 +4396,13 @@ function renderProtocolPage(pk){
       '</div></div>' +
     '</div>' +
     '<div class="exp-pane" data-exp-pane="' + pk + '-watch">' +
-      '<div class="media-block"><div class="video-placeholder"><div class="video-inner"><div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div><p class="video-title">Follow-Along Practice Session</p></div></div>' +
-        '<div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">' + d.audioMin + '</span></div>' +
-      '</div>' +
+      '<div class="media-block"><div class="video-placeholder sr-video-unavailable"><div class="video-inner">' +
+        '<svg class="sr-video-unavailable-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 4l18 16" stroke-linecap="round"/><path d="M15 5H5.5A2.5 2.5 0 003 7.5v9c0 .74.32 1.4.85 1.86M21 8v8a2.5 2.5 0 01-2.5 2.5H9" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '<p class="sr-video-unavailable-title">Video guide not yet available</p>' +
+        '<p class="sr-video-unavailable-sub">Use Listen for the full guided practice in the meantime.</p>' +
+      '</div></div></div>' +
     '</div>' +
+    quietAltHtml +
     journeyHtml +
 
     // "What This Protocol Can Shift" — folded into Experience per decision #3, not a separate numbered step
@@ -4348,7 +4416,9 @@ function renderProtocolPage(pk){
 
   // ---- 2 Log & Journal ----
   '<div class="j-step">' +
-    '<div class="j-kicker"><span class="j-num">2</span><span class="j-eyebrow">Log Progress &amp; Journal</span></div>' +
+    '<div class="j-kicker"><span class="j-num">2</span><span class="j-eyebrow">Log &amp; Journal</span></div>' +
+    '<p class="j-title">Turn change into evidence</p>' +
+    '<p class="j-sub">One protocol, practised repeatedly, tracked honestly.</p>' +
     '<div class="jprog-section" data-jprog-key="' + pk + '" data-jprog-title="' + d.title + '" data-jprog-prompts="' + pk + '">' +
       '<p class="jprog-title">Practice &amp; Journal</p>' +
       '<p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>' +
@@ -4391,16 +4461,17 @@ function renderProtocolPage(pk){
   // ---- 3 Go Deeper ----
   '<div class="j-step">' +
     '<div class="j-kicker"><span class="j-num">3</span><span class="j-eyebrow">Go Deeper</span></div>' +
-    '<p class="j-title">Your Full Transformation Library</p>' +
-    '<p class="j-sub">Discover the protocol resources that work, gathered in one place, aimed at exactly what you\'re carrying.</p>' +
+    '<p class="j-title">Understand. Integrate. Choose.</p>' +
+    '<p class="j-sub">For when you\'re not in the middle of it. None of this is required to practise.</p>' +
+    decisionEditorialHtml +
     '<div class="res-row" style="margin-top:24px;">' + resItems.join('') + '</div>' +
   '</div>' +
 
   // ---- 4 Beyond Self-Guided ----
   '<div class="j-step">' +
     '<div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Beyond Self-Guided</span></div>' +
-    '<p class="j-title">Still Feeling Stuck?</p>' +
-    '<p class="j-sub">A short, focused session — kept separate from your practice tracking so you can tell us exactly what kind of support you\'re actually looking for.</p>' +
+    '<p class="j-title">When you want someone in the room</p>' +
+    '<p class="j-sub">The protocols work alone. These are for the moments they don\'t go far enough.</p>' +
     '<div class="jp5-card">' +
       '<p class="jp5-card-text">Not every consultation is the same conversation. Let us know what you need before we match you with the right focus.</p>' +
       '<div class="jp5-discover-link" onclick="jp5CurrentKey=\'' + pk + '\';showProg(\'premium1on1\')">Discover the Premium 1:1 Experience<svg viewBox="0 0 8 8" width="8" height="8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>' +
@@ -4458,6 +4529,25 @@ function syncLegacyProtocolPreviews(){
   });
 }
 document.addEventListener('DOMContentLoaded', syncLegacyProtocolPreviews);
+
+// SR-030: renderProtocolPage() reads RESOURCE_CONTENT at the point it runs,
+// but a handful of entries (Reference Case, via STORIES prepare() further
+// down the file) get overwritten in place *after* that — so the #protoList
+// cards it already generated can end up one step behind what the Reader
+// shows for the same key. Re-applying RESOURCE_CONTENT on DOMContentLoaded
+// (which fires only after every synchronous script, STORIES included, has
+// run) is what actually closes that gap, rather than depending on script
+// order lining up correctly by accident.
+function syncProtocolResourceCardTitles(){
+  document.querySelectorAll('#protoList .res-item[data-resource]').forEach(function(resEl){
+    const data = RESOURCE_CONTENT[resEl.dataset.resource];
+    if (!data) return;
+    const titleEl = resEl.querySelector('.res-title'), metaEl = resEl.querySelector('.res-meta');
+    if (titleEl) titleEl.textContent = data.title;
+    if (metaEl) metaEl.textContent = data.meta;
+  });
+}
+document.addEventListener('DOMContentLoaded', syncProtocolResourceCardTitles);
 
 /* sr-v11-content-corrections */
 (function(){
@@ -10740,6 +10830,18 @@ window.addEventListener('load', function(){
     refreshEvidenceCards();
   }
 
+  // SR-027: the Go Deeper Decision-editorial block (renderProtocolPage) is
+  // written with the mockup's generic quote so it renders something before
+  // IDENTITY_DATA exists; this swaps in the protocol's real decision
+  // statement once it does, same ordering fix as syncProtocolResourceCardTitles.
+  function syncDecisionEditorialQuotes(){
+    document.querySelectorAll('[data-id-quote]').forEach(function(el){
+      const pk=el.dataset.idQuote, d=IDENTITY_DATA[pk];
+      if(!d) return;
+      el.textContent='“'+d.decision+'”';
+    });
+  }
+
   function refreshEvidenceCards(){
     const store=loadStore();
     document.querySelectorAll('[data-id-evidence]').forEach(function(box){
@@ -10807,6 +10909,7 @@ window.addEventListener('load', function(){
     addResourceRows();
     addEvidenceCards();
     hydrateDecisionPages();
+    syncDecisionEditorialQuotes();
   });
 })();
 </script>
