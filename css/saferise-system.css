@@ -1790,3 +1790,12 @@ details.sr-q .sr-a a{color:var(--primary2)}
   .sr-cover:hover,.sr-svc:hover{transform:none}
   .sr-cover:hover .sr-art{transform:none}
 }
+
+/* SR-029 — honest "video not yet available" state for the Watch pane.
+   No video file exists yet, so this replaces the old fake play button
+   (which toggled a simulated progress bar with nothing behind it) with
+   a plain, truthful unavailable state instead of an implied player. */
+.sr-video-unavailable .video-inner{gap:10px}
+.sr-video-unavailable-icon{color:var(--text3)}
+.sr-video-unavailable-title{font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text2);text-transform:uppercase;text-align:center;padding:0 20px;}
+.sr-video-unavailable-sub{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14px;color:var(--text3);text-align:center;padding:0 24px;max-width:360px;}

@@ -4331,9 +4331,11 @@ function renderProtocolPage(pk){
       '</div></div>' +
     '</div>' +
     '<div class="exp-pane" data-exp-pane="' + pk + '-watch">' +
-      '<div class="media-block"><div class="video-placeholder"><div class="video-inner"><div class="play-btn"><svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></div><p class="video-title">Follow-Along Practice Session</p></div></div>' +
-        '<div class="video-bar"><span class="v-time">0:00</span><div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div><span class="v-time">' + d.audioMin + '</span></div>' +
-      '</div>' +
+      '<div class="media-block"><div class="video-placeholder sr-video-unavailable"><div class="video-inner">' +
+        '<svg class="sr-video-unavailable-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 4l18 16" stroke-linecap="round"/><path d="M15 5H5.5A2.5 2.5 0 003 7.5v9c0 .74.32 1.4.85 1.86M21 8v8a2.5 2.5 0 01-2.5 2.5H9" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '<p class="sr-video-unavailable-title">Video guide not yet available</p>' +
+        '<p class="sr-video-unavailable-sub">Use Listen for the full guided practice in the meantime.</p>' +
+      '</div></div></div>' +
     '</div>' +
     journeyHtml +
 
