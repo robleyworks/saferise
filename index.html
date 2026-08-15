@@ -1238,10 +1238,6 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
         <div style="font-size:8px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;font-family:'DM Sans',sans-serif;">Protocol</div>
       </div>
     </div>
-    <!-- CTA -->
-    <div style="display:flex;align-items:center;gap:16px;">
-      <a id="nav-begin-free" href="javascript:void(0)" onclick="showProg('personal')" style="background:var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px 20px;border-radius:2px;text-decoration:none;white-space:nowrap;">Begin Free ◆</a>
-    </div>
   </div>
 
   <!-- Menu bar: section links -->
@@ -3118,21 +3114,10 @@ function setActive(link){
   link.classList.add('active');
 }
 // Show/hide main content vs program overlays
-// The nav's "Begin Free" CTA is a single shared element (see #main-nav)
-// rendered outside every prog-overlay, so it can't be removed from the
-// markup without stripping the Foundation Protocol's free entry point
-// site-wide. It's hidden only while the Personal Transformation portal
-// is the active view — see PT_Integration_Brief.md §4.1.
-function syncNavBeginFree(activeId) {
-  const cta = document.getElementById('nav-begin-free');
-  if (cta) cta.style.display = (activeId === 'personal') ? 'none' : '';
-}
-
 function showMain() {
   document.querySelectorAll('.prog-overlay').forEach(p => p.classList.remove('prog-active'));
   const mc = document.getElementById('main-content');
   if (mc) mc.style.display = 'block';
-  syncNavBeginFree(null);
   window.scrollTo(0,0);
 }
 
@@ -3142,7 +3127,6 @@ function showProg(id) {
   if (mc) mc.style.display = 'none';
   const target = document.getElementById('prog-' + id);
   if (target) { target.classList.add('prog-active'); window.scrollTo(0,0); }
-  syncNavBeginFree(id);
 }
 
 // Foundation Protocol unlock: a real backend would email a magic link or
@@ -4101,7 +4085,7 @@ const PT_RES_ICONS = {
 
 const PT_PROTOCOLS = {
   p1: {
-    kicker: 'Regulate', title: 'The Anxiety Reset Protocol',
+    kicker: 'Regulate', title: 'The Anxiety Reset Protocol', stateNoun: 'anxiety',
     lede: 'Calm fear responses, quiet spiralling thoughts, and return to the present.',
     healsLede: "Patterns of distress shift to a sense of rising safety as each protocol closes that gap and energetic capacity returns.",
     fitRows: [
@@ -4114,12 +4098,13 @@ const PT_PROTOCOLS = {
     ],
     audioLabel: 'Breathwork & Grounding — 8 min', audioMin: '8:00', waveId: 'aw-p1',
     companionKind: 'Somatic Release',
-    hasAdvisory: false, hasRepair: false, hasCrisisNote: false,
+    hasAdvisory: true, hasRepair: false, hasCrisisNote: false,
+    advisoryLede: 'Use this practice only when you can safely turn your attention inward. Do not use it while driving. Keep your eyes open, orient to the room, pause, or choose the shorter reset whenever inward focus feels uncomfortable.',
     journeyImage: '/assets/pt/protocols/anxiety-journey.webp',
     journeyCaption: 'Settle in exactly as you are. Guided breathing, mindful awareness, heart coherence, and grounding into greater capacity come together in one continuous experience — simply follow and notice what shifts.'
   },
   p2: {
-    kicker: 'Transmute', title: 'The Anger Alchemy Protocol',
+    kicker: 'Transmute', title: 'The Anger Alchemy Protocol', stateNoun: 'anger',
     lede: 'Turn anger into clarity, protect what matters, and choose your response.',
     healsLede: "Patterns of distress shift to a sense of rising safety as each protocol closes that gap and energetic capacity returns.",
     fitRows: [
@@ -4135,7 +4120,7 @@ const PT_PROTOCOLS = {
     hasAdvisory: true, hasRepair: true, hasCrisisNote: false
   },
   p3: {
-    kicker: 'Reduce Load', title: 'The Overwhelm Threshold Protocol',
+    kicker: 'Reduce Load', title: 'The Overwhelm Threshold Protocol', stateNoun: 'overwhelm',
     lede: 'Reduce overload, regain your footing, and create space to think clearly.',
     healsLede: "Patterns of distress shift to a sense of rising safety as each protocol closes that gap and energetic capacity returns.",
     fitRows: [
@@ -4151,7 +4136,7 @@ const PT_PROTOCOLS = {
     hasAdvisory: true, hasRepair: false, hasCrisisNote: false
   },
   p4: {
-    kicker: 'Repair', title: 'The Abandonment Wound Protocol',
+    kicker: 'Repair', title: 'The Abandonment Wound Protocol', stateNoun: 'abandonment',
     lede: 'Steady the fear of rejection and rebuild security when belonging feels threatened.',
     healsLede: "Patterns of distress shift to a sense of rising safety as each protocol closes that gap and energetic capacity returns.",
     fitRows: [
@@ -4167,7 +4152,7 @@ const PT_PROTOCOLS = {
     hasAdvisory: true, hasRepair: true, hasCrisisNote: false
   },
   p5: {
-    kicker: 'Dissolve', title: 'The Shame Dissolution Protocol',
+    kicker: 'Dissolve', title: 'The Shame Dissolution Protocol', stateNoun: 'shame',
     lede: 'Move beyond self-judgment, recover your dignity, and stop a moment from defining you.',
     healsLede: "Patterns of distress shift to a sense of rising safety as each protocol closes that gap and energetic capacity returns.",
     fitRows: [
@@ -4183,7 +4168,7 @@ const PT_PROTOCOLS = {
     hasAdvisory: false, hasRepair: false, hasCrisisNote: false
   },
   p6: {
-    kicker: 'Integrate', title: 'The Grief Integration Protocol',
+    kicker: 'Integrate', title: 'The Grief Integration Protocol', stateNoun: 'grief',
     lede: 'Make space for loss, move through what has changed, and carry forward what matters.',
     healsLede: "Patterns of distress shift to a sense of rising safety as each protocol closes that gap and energetic capacity returns.",
     fitRows: [
@@ -4199,7 +4184,7 @@ const PT_PROTOCOLS = {
     hasAdvisory: false, hasRepair: false, hasCrisisNote: false
   },
   p7: {
-    kicker: 'Restore', title: 'The Shutdown Recovery Protocol',
+    kicker: 'Restore', title: 'The Shutdown Recovery Protocol', stateNoun: 'shutdown',
     lede: 'Reconnect with yourself, restore engagement, and gently come back online.',
     healsLede: "Patterns of distress shift to a sense of rising safety as each protocol closes that gap and energetic capacity returns.",
     fitRows: [
@@ -4215,7 +4200,7 @@ const PT_PROTOCOLS = {
     hasAdvisory: false, hasRepair: false, hasCrisisNote: false
   },
   p8: {
-    kicker: 'Release', title: 'The Jealousy Release Protocol',
+    kicker: 'Release', title: 'The Jealousy Release Protocol', stateNoun: 'jealousy',
     lede: 'Move beyond comparison, understand what the sting is revealing, and return to your own path.',
     healsLede: "Patterns of distress shift to a sense of rising safety as each protocol closes that gap and energetic capacity returns.",
     fitRows: [
@@ -4231,7 +4216,7 @@ const PT_PROTOCOLS = {
     hasAdvisory: true, hasRepair: true, hasCrisisNote: false
   },
   p9: {
-    kicker: 'Anchor', title: 'The Insecurity Anchor Protocol',
+    kicker: 'Anchor', title: 'The Insecurity Anchor Protocol', stateNoun: 'insecurity',
     lede: 'Quiet self-doubt, strengthen inner trust, and stay grounded when you feel judged or exposed.',
     healsLede: "Patterns of distress shift to a sense of rising safety as each protocol closes that gap and energetic capacity returns.",
     fitRows: [
@@ -4247,7 +4232,7 @@ const PT_PROTOCOLS = {
     hasAdvisory: true, hasRepair: true, hasCrisisNote: false
   },
   p10: {
-    kicker: 'Reclaim', title: 'The Powerlessness & Despair Protocol',
+    kicker: 'Reclaim', title: 'The Powerlessness & Despair Protocol', stateNoun: 'powerlessness',
     lede: 'Find what is still within your reach, restore agency, and take the next meaningful step.',
     healsLede: "Patterns of distress shift to a sense of rising safety as each protocol closes that gap and energetic capacity returns.",
     fitRows: [
@@ -4263,6 +4248,17 @@ const PT_PROTOCOLS = {
     hasAdvisory: true, hasRepair: false, hasCrisisNote: true
   }
 };
+
+/* SR-002: each protocol's Source Insights title used to be a single literal
+   string copy-pasted onto every one of the ten pages ("...work with anger" on
+   nine protocols that aren't about anger). Bind it to per-protocol data
+   instead, so it can never say the wrong word for what the page is about. */
+(function(){
+  Object.keys(PT_PROTOCOLS).forEach(function(pk){
+    var entry = RESOURCE_CONTENT[pk + '-insights'];
+    if (entry) entry.title = 'Six perspectives that can help you work with ' + PT_PROTOCOLS[pk].stateNoun;
+  });
+})();
 
 function ptResIcon(type){
   return '<svg viewBox="0 0 20 20" fill="none" stroke-width="1.4">' + PT_RES_ICONS[type] + '</svg>';
@@ -4288,6 +4284,14 @@ function renderProtocolPage(pk){
     return '<div class="fit-meter-row"><span class="fit-meter-domain">' + r[0] + '</span><div class="fit-meter-line"><span class="fit-meter-pain">' + r[1] + '</span><div class="fit-meter-track"><div class="fit-meter-dot"></div></div><span class="fit-meter-gain">' + r[2] + '</span></div></div>';
   }).join('');
 
+  // Attention Advisory: shown inline above the player (when the protocol has
+  // one, via advisoryLede) AND as its own Go Deeper card below (via
+  // hasAdvisory/resItems) — deliberately not deduplicated, since a member
+  // mid-session and a member browsing resources are reading it at different
+  // moments.
+  const advisoryHtml = d.advisoryLede ?
+    '<aside class="advisory-note sr-advisory-note" aria-label="Attention advisory"><svg viewBox="0 0 20 20" fill="none" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M10 6.5v4.5M10 14h.01" stroke-linecap="round"/></svg><p><strong>Attention advisory.</strong> ' + d.advisoryLede + '</p></aside>' : '';
+
   const journeyHtml = d.journeyImage ?
     '<figure class="pt-journey-visual"><img src="' + d.journeyImage + '" alt="" loading="lazy" decoding="async">' +
     '<figcaption>' + d.journeyCaption + '</figcaption></figure>' : '';
@@ -4310,6 +4314,7 @@ function renderProtocolPage(pk){
     '<div class="j-kicker"><span class="j-num">1</span><span class="j-eyebrow">Experience</span></div>' +
     '<p class="j-title">Practice It Right Now</p>' +
     '<p class="j-sub">If the trigger is happening as you read this, start here — audio or video, whichever you\'d reach for. Both work with nothing else open.</p>' +
+    advisoryHtml +
     '<div class="exp-tabs">' +
       '<div class="exp-tab active" data-exp="' + pk + '-listen"><span class="exp-tab-label">Listen</span><span class="exp-tab-name">Guided Audio</span></div>' +
       '<div class="exp-tab" data-exp="' + pk + '-watch"><span class="exp-tab-label">Watch</span><span class="exp-tab-name">Follow-Along Video</span></div>' +
@@ -4413,6 +4418,47 @@ function renderProtocolPage(pk){
   '</div>';
 }
 
+// Two homepage marketing sections ("Mac monitor" scroll preview and the
+// "tablet" device mockup in "One library. Every device.") each carry their
+// own hand-authored copy of Anxiety Reset content, outside #protoList, so
+// they can't be reached by renderProtocolPage() and silently drift from it
+// — one of them is even mislabelled as protocol 6 (Grief) around genuinely
+// p1 content. Rather than hand-fix the drifted strings, bind whatever's in
+// each preview to the same PT_PROTOCOLS/RESOURCE_CONTENT objects (and to the
+// live #protoList card's own trigger copy) that the real page uses, keyed
+// off each preview's .jprog-section[data-jprog-key] — the one attribute in
+// these blocks that was never wrong.
+function syncLegacyProtocolPreviews(){
+  document.querySelectorAll('.proto-item[data-proto]').forEach(function(item){
+    if (item.closest('#protoList')) return;
+    const jprogSection = item.querySelector('.jprog-section[data-jprog-key]');
+    const pk = jprogSection && jprogSection.dataset.jprogKey;
+    const d = pk && PT_PROTOCOLS[pk];
+    if (!d) return;
+
+    const liveExpand = document.querySelector('#protoList [data-proto-key="' + pk + '"]');
+    const liveCard = liveExpand && liveExpand.closest('.proto-item');
+    if (liveCard) {
+      item.setAttribute('data-proto', liveCard.getAttribute('data-proto'));
+      const liveNum = liveCard.querySelector('.sr-num'), numEl = item.querySelector('.proto-num');
+      if (numEl && liveNum) numEl.textContent = liveNum.textContent;
+      const liveTrigger = liveCard.querySelector('.proto-trigger'), triggerEl = item.querySelector('.proto-trigger');
+      if (triggerEl && liveTrigger) triggerEl.textContent = liveTrigger.textContent;
+    }
+    const nameEl = item.querySelector('.proto-name');
+    if (nameEl) nameEl.textContent = d.title;
+
+    item.querySelectorAll('[data-resource]').forEach(function(resEl){
+      const data = RESOURCE_CONTENT[resEl.dataset.resource];
+      if (!data) return;
+      const titleEl = resEl.querySelector('.res-title'), metaEl = resEl.querySelector('.res-meta');
+      if (titleEl) titleEl.textContent = data.title;
+      if (metaEl) metaEl.textContent = data.meta;
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', syncLegacyProtocolPreviews);
+
 /* sr-v11-content-corrections */
 (function(){
   /* Attention Advisory — same three-tier logic, now editorial and quick to scan. */
@@ -4447,6 +4493,22 @@ function renderProtocolPage(pk){
       "<div class='sr-section-block'><span class='sr-section-kicker'>SHORTER VERSION</span><div class='sr-big-quote'><span>“</span><blockquote>I’m working on how I handle anger. If I ask for a little space, I’m not shutting you out — I’m trying to come back to the conversation with the part of me that can actually think and speak clearly.</blockquote></div></div>",
       "<div class='sr-section-block'><span class='sr-section-kicker'>SUPPORT CAN BE SIMPLE</span><ul class='sr-easy-list'><li><strong>“Do you need space or company?”</strong> gives you a choice without guessing.</li><li><strong>“Do you want me to listen or help problem-solve?”</strong> keeps support practical.</li><li><strong>“When should we check back in?”</strong> makes space feel temporary rather than like abandonment.</li><li><strong>Respecting the pause.</strong> Sometimes the most supportive thing is not continuing the argument while the protocol is being used.</li></ul></div>",
       "<div class='sr-callout'><strong>What this disclosure does not do</strong><p>It does not excuse hurtful behaviour, ask someone to tolerate being treated badly, or settle a specific conflict. If there is a rupture between you, use the Invitation to Repair after you have regulated enough to address what actually happened.</p></div>"
+    ]
+  };
+})();
+
+/* SR-002: Anxiety Reset's Attention Advisory — the practice asks members to
+   turn attention inward, which is itself the thing that can feel activating
+   or unsafe when anxiety is already high. This is a different concern from
+   the Anger Alchemy advisory above (relational distance), so it gets its own
+   content rather than reusing that copy. */
+(function(){
+  RESOURCE_CONTENT['p1-advisory'] = {
+    kind: 'Attention Advisory', title: 'Anxiety Reset — Where to Direct Your Attention', meta: 'Attention guide · Practising safely', locked: false,
+    body: [
+      "<div class='sr-guide-intro'><span class='sr-section-kicker'>THE QUESTION THIS HELPS YOU ANSWER</span><h3>How do I turn my attention inward safely, when focusing inward is itself what feels activating?</h3><p>This practice asks you to notice your body and your breath — exactly the kind of inward attention that can feel uncomfortable, or even unsafe, when anxiety is already high. Use this guide before your first session, or any time turning inward feels like more than you can hold right now.</p></div>",
+      "<div class='sr-section-block'><span class='sr-section-kicker'>HOW TO STAY SAFE WHILE YOU PRACTISE</span><ul class='sr-easy-list'><li><strong>Never while driving or operating machinery.</strong> This practice asks for your full attention — give it somewhere you can safely close your eyes or soften your focus.</li><li><strong>Keep your eyes open if that feels safer.</strong> The sequence works with eyes open, oriented to the room, just as well as with eyes closed.</li><li><strong>Pause any time.</strong> There is no part of this you have to push through. Stopping and returning later is not failure.</li><li><strong>Choose the shorter reset.</strong> If the full session feels like too much today, the four-line Crisis Card is built for exactly that moment.</li></ul></div>",
+      "<div class='sr-callout'><strong>If you are in crisis right now</strong><p>This protocol is a self-regulation practice, not crisis care. If you are in immediate danger, contact your local emergency number, or reach <a href='https://findahelpline.com' target='_blank' rel='noopener'>findahelpline.com</a> for a free, confidential helpline in your country.</p></div>"
     ]
   };
 })();
@@ -4667,7 +4729,7 @@ document.addEventListener('keydown', function(e){
 
 // ---- Reader: left tab-list document viewer (pilot: Anger Alchemy / p2) ----
 const READER_PROTOCOLS = {
-  'p1': { title: 'The Anxiety Reset Protocol', keys: ['p1-founder','p1-guide','p1-insights','p1-refcase','p1-companion','p1-disclosure','p1-crisiscard'] },
+  'p1': { title: 'The Anxiety Reset Protocol', keys: ['p1-advisory','p1-founder','p1-guide','p1-insights','p1-refcase','p1-companion','p1-disclosure','p1-crisiscard'] },
   'p2': { title: 'The Anger Alchemy Protocol', keys: ['p2-advisory','p2-founder','p2-guide','p2-insights','p2-refcase','p2-companion','p2-disclosure','p2-repair'] },
   'p3': { title: 'The Overwhelm Threshold Protocol', keys: ['p3-advisory','p3-founder','p3-guide','p3-insights','p3-refcase','p3-companion','p3-disclosure','p3-crisiscard'] },
   'p4': { title: 'The Abandonment Wound Protocol', keys: ['p4-advisory','p4-founder','p4-guide','p4-insights','p4-refcase','p4-companion','p4-disclosure','p4-repair','p4-crisiscard'] },
