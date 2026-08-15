@@ -4296,16 +4296,26 @@ function renderProtocolPage(pk){
     '<figure class="pt-journey-visual"><img src="' + d.journeyImage + '" alt="" loading="lazy" decoding="async">' +
     '<figcaption>' + d.journeyCaption + '</figcaption></figure>' : '';
 
+  // SR-030: card title/meta always read from RESOURCE_CONTENT — the same
+  // object the Reader builds its pages from — instead of a hardcoded generic
+  // string, so the two can never say different things about one resource.
+  // (RESOURCE_CONTENT['*-refcase'] in particular is overwritten in place by
+  // the STORIES prepare() pass later in the file, which is why this can't
+  // be a value baked in at author time — it has to be a real lookup that
+  // resolves whenever the card is synced, see syncProtocolResourceCardTitles.)
+  function ptResFromContent(type, kindLabel){
+    var data = RESOURCE_CONTENT[pk + '-' + type];
+    return ptResItem(pk, type, kindLabel, data.title, data.meta);
+  }
   const resItems = [];
-  if (d.hasAdvisory) resItems.push(ptResItem(pk, 'advisory', 'Attention Advisory', 'Attention Advisory', 'Advisory Guide · Three tiers'));
-  const founderData = RESOURCE_CONTENT[pk + '-founder'];
-  resItems.push(ptResItem(pk, 'founder', 'Why This Protocol Exists', founderData.title, founderData.meta));
-  resItems.push(ptResItem(pk, 'guide', 'Protocol Guide', short + ' — Step Guide', 'PDF · Printable'));
-  resItems.push(ptResItem(pk, 'insights', 'Source Insights', 'Perspectives that can help you work with this pattern', 'PDF · Porges · HeartMath · Dispenza · Maté · Jung · Watts'));
-  resItems.push(ptResItem(pk, 'refcase', 'Reference Case', 'A historical figure who lived this same pattern', 'Reference Cases & True Stories Guide'));
-  resItems.push(ptResItem(pk, 'companion', d.companionKind, 'Daily companions between sessions', d.companionKind + ' Guide · ' + short + ' section'));
-  resItems.push(ptResItem(pk, 'disclosure', 'Disclosure & Support', 'A script for telling someone what this actually is', 'Disclosure & Support Guide'));
-  if (d.hasRepair) resItems.push(ptResItem(pk, 'repair', 'Invitation to Repair', 'The Invitation to Repair', 'Engagement Invitation'));
+  if (d.hasAdvisory) resItems.push(ptResFromContent('advisory', 'Attention Advisory'));
+  resItems.push(ptResFromContent('founder', 'Why This Protocol Exists'));
+  resItems.push(ptResFromContent('guide', 'Protocol Guide'));
+  resItems.push(ptResFromContent('insights', 'Source Insights'));
+  resItems.push(ptResFromContent('refcase', 'Reference Case'));
+  resItems.push(ptResFromContent('companion', d.companionKind));
+  resItems.push(ptResFromContent('disclosure', 'Disclosure & Support'));
+  if (d.hasRepair) resItems.push(ptResFromContent('repair', 'Invitation to Repair'));
 
   return crisisNoteHtml +
 
@@ -4460,6 +4470,25 @@ function syncLegacyProtocolPreviews(){
   });
 }
 document.addEventListener('DOMContentLoaded', syncLegacyProtocolPreviews);
+
+// SR-030: renderProtocolPage() reads RESOURCE_CONTENT at the point it runs,
+// but a handful of entries (Reference Case, via STORIES prepare() further
+// down the file) get overwritten in place *after* that — so the #protoList
+// cards it already generated can end up one step behind what the Reader
+// shows for the same key. Re-applying RESOURCE_CONTENT on DOMContentLoaded
+// (which fires only after every synchronous script, STORIES included, has
+// run) is what actually closes that gap, rather than depending on script
+// order lining up correctly by accident.
+function syncProtocolResourceCardTitles(){
+  document.querySelectorAll('#protoList .res-item[data-resource]').forEach(function(resEl){
+    const data = RESOURCE_CONTENT[resEl.dataset.resource];
+    if (!data) return;
+    const titleEl = resEl.querySelector('.res-title'), metaEl = resEl.querySelector('.res-meta');
+    if (titleEl) titleEl.textContent = data.title;
+    if (metaEl) metaEl.textContent = data.meta;
+  });
+}
+document.addEventListener('DOMContentLoaded', syncProtocolResourceCardTitles);
 
 /* sr-v11-content-corrections */
 (function(){
