@@ -4378,9 +4378,16 @@ function renderProtocolPage(pk){
 
   // ---- 1 Experience ----
   '<div class="j-step" style="padding-top:0;">' +
-    '<div class="j-kicker"><span class="j-num">1</span><span class="j-eyebrow">Experience</span></div>' +
-    '<p class="j-title">Practice It Right Now</p>' +
-    '<p class="j-sub">If the trigger is happening as you read this, start here — audio or video, whichever you\'d reach for. Both work with nothing else open.</p>' +
+    // Group 2 (mockup diff): the protocol title used to render twice — once
+    // overlaid on the (now-compact) banner photo, once as generic j-title
+    // copy here. This card is the single place it lives now; see
+    // .sr-exp-hero in css/saferise-system.css and the banner CSS note above it.
+    '<div class="sr-exp-hero">' +
+      '<div class="j-kicker"><span class="j-num">1</span><span class="j-eyebrow">Guided Meditation Experience</span></div>' +
+      '<h1 class="sr-exp-hero-title">' + d.title + '</h1>' +
+      '<p class="sr-exp-hero-lede">' + d.lede + '</p>' +
+      '<p class="sr-exp-hero-subline">Begin the journey with your guided meditation via audio or video.</p>' +
+    '</div>' +
     advisoryHtml +
     '<div class="exp-tabs">' +
       '<div class="exp-tab active" data-exp="' + pk + '-listen"><span class="exp-tab-label">Listen</span><span class="exp-tab-name">Guided Audio</span></div>' +

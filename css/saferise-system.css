@@ -555,39 +555,28 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .sr-proto-banner-media{display:none}
 #personal-protocol-page .proto-item{display:block}
 #personal-protocol-page .proto-item .sr-tile{display:none}
+/* Group 2 (mockup diff) — the open-page banner was a full-bleed hero
+   (aspect-ratio 2880/686), rendering ~550px+ tall on wide viewports with
+   the protocol title overlaid on the photo. Mockup wants a compact band
+   capped at clamp(200px,25vh,250px), and the title moved out entirely —
+   it now lives once, in the new #experience .sr-exp-hero card below,
+   not duplicated here. */
 #personal-protocol-page .proto-item .sr-proto-banner{
   display:block;position:relative;left:50%;transform:translateX(-50%);
-  width:100vw;max-width:100vw;aspect-ratio:2880/686;overflow:hidden;
+  width:100vw;max-width:100vw;min-height:clamp(200px,25vh,250px);overflow:hidden;
   background:#0A0A0D;margin-bottom:48px}
 #personal-protocol-page .proto-item .sr-proto-banner-media{
   display:block;position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:center;
   background:radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),
              linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+/* Horizontal scrim per mockup .bannerscrim (dark at left, clearing by ~66%) */
 #personal-protocol-page .proto-item .sr-proto-banner-scrim{
   position:absolute;inset:0;
-  background:linear-gradient(94deg,rgba(6,6,12,.90) 0%,rgba(6,6,12,.66) 34%,
-             rgba(6,6,12,.10) 62%,transparent 78%),
-             linear-gradient(0deg,rgba(6,6,12,.85) 0%,transparent 34%)}
-#personal-protocol-page .proto-item .sr-proto-banner-copy{
-  display:block;position:absolute;left:max(40px,calc(50vw - 550px));top:50%;
-  transform:translateY(-50%);max-width:560px;z-index:2}
-#personal-protocol-page .proto-item .sr-proto-banner-copy .proto-name{
-  margin:0 0 12px;font:400 clamp(24px,3vw,40px)/1.1 'Cinzel',serif;
-  color:var(--text);text-shadow:0 2px 20px rgba(0,0,0,.6)}
-#personal-protocol-page .proto-item .sr-proto-banner-copy .proto-landing-desc{
-  margin:0;display:block;overflow:visible;-webkit-line-clamp:unset;
-  font:italic 400 16px/1.6 'Cormorant Garamond',Georgia,serif;
-  color:#DCD6E0;max-width:48ch;text-shadow:0 1px 14px rgba(0,0,0,.55)}
-@media(max-width:980px){
-  #personal-protocol-page .proto-item .sr-proto-banner{
-    aspect-ratio:auto;padding:72px 26px 56px}
-  /* position:relative (not static) so z-index:2 still lifts the copy
-     above the absolutely-positioned media/scrim — a static element
-     paints below positioned siblings regardless of z-index. */
-  #personal-protocol-page .proto-item .sr-proto-banner-copy{
-    position:relative;transform:none;left:auto;max-width:none;padding-right:26px}
-}
+  background:linear-gradient(90deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.7) 38%,
+             rgba(8,8,12,.14) 66%,rgba(8,8,12,.4) 100%)}
+/* Title/description no longer render here — see note above. */
+#personal-protocol-page .proto-item .sr-proto-banner-copy{display:none}
 
 /* Cover artwork (assets/covers/*.jpg) has the kicker word, protocol
    number and rule baked into the photo — the .sr-kicker/.sr-num/.sr-rule
@@ -1887,3 +1876,26 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .sr-logdrop .jprog-recent,.sr-journal .jprog-past{padding:0 26px 26px;margin:0}
 #prog-personal .sr-logdrop .jprog-enclosure,
 #prog-personal .sr-journal .jprog-enclosure{background:transparent;border-radius:0;border-top:1px solid var(--border);padding:26px;margin:0}
+
+/* Group 2 (mockup diff) — Experience hero card: the protocol title used to
+   render twice (once overlaid on the banner photo, once as generic j-title
+   copy "Practice It Right Now" below it). This is the mockup's
+   #experience .sechead--lead, the single place the title now lives.
+   Kicker row reuses the existing .j-kicker/.j-num/.j-eyebrow — same
+   circular numbered badge already used by every other section head on
+   this page, not a new component. */
+.sr-exp-hero{position:relative;padding:30px 32px;margin-bottom:22px;
+  border:1px solid var(--border);border-radius:10px;overflow:hidden;
+  background:linear-gradient(102deg,#0A0A11 0%,#15131A 43%,#3C3027 76%,#A8906C 145%)}
+.sr-exp-hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent 0 54%,rgba(238,207,158,.06) 100%)}
+.sr-exp-hero>*{position:relative;z-index:1}
+.sr-exp-hero .j-kicker{margin-bottom:12px}
+.sr-exp-hero-title{font-family:'Cinzel',serif;font-weight:400;
+  font-size:clamp(28px,3.8vw,42px);line-height:1.15;margin-bottom:14px;color:var(--text)}
+.sr-exp-hero-lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:19px;color:#CFC7B6;max-width:600px;margin-bottom:16px;line-height:1.5}
+.sr-exp-hero-subline{font-size:14px;color:var(--text3);letter-spacing:.01em}
+@media(max-width:600px){
+  .sr-exp-hero{padding:24px 22px}
+}
