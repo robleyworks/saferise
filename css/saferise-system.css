@@ -1733,6 +1733,20 @@ details.sr-q .sr-a a{color:var(--primary2)}
 #prog-couples details.sr-q .sr-a a,
 #prog-corporate details.sr-q .sr-a a{color:var(--sr-accent)}
 
+/* ─────────────────────────────────────────────────────────────
+   ATTENTION ADVISORY — inline safety note above a protocol's
+   player (SR-002). Same slot pattern as .crisis-note but gold,
+   not red: this is a caution about how to practise, not a crisis
+   escalation. Kept namespaced sr- since it's new; .crisis-note
+   itself predates this system and stays where it is.
+   ───────────────────────────────────────────────────────────── */
+.sr-advisory-note{display:flex;gap:12px;align-items:flex-start;
+  background:rgba(212,168,67,.08);border:1px solid rgba(212,168,67,.35);
+  border-radius:4px;padding:14px 16px;margin:0 0 22px}
+.sr-advisory-note svg{stroke:var(--primary);flex-shrink:0;margin-top:2px;width:18px;height:18px}
+.sr-advisory-note p{font-size:12.5px;line-height:1.55;color:var(--text2);margin:0}
+.sr-advisory-note strong{color:var(--text)}
+
 /* ═════════════════════════════════════════════════════════════
    RESPONSIVE + MOTION
    ═════════════════════════════════════════════════════════════ */
