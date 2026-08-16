@@ -555,39 +555,26 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .sr-proto-banner-media{display:none}
 #personal-protocol-page .proto-item{display:block}
 #personal-protocol-page .proto-item .sr-tile{display:none}
+/* Resources-Final diff, Group 1 — supersedes the previous "compact banner
+   strip" pass entirely: the mockup has no separate banner strip at any
+   width. The cover photo lives behind #experience .sechead--lead
+   (.sr-exp-hero here) instead, moved there by syncExperienceHeroMedia().
+   Once moved, .sr-proto-banner fills its new parent, .sr-exp-hero-media —
+   see that class below. */
 #personal-protocol-page .proto-item .sr-proto-banner{
-  display:block;position:relative;left:50%;transform:translateX(-50%);
-  width:100vw;max-width:100vw;aspect-ratio:2880/686;overflow:hidden;
-  background:#0A0A0D;margin-bottom:48px}
+  display:block;position:absolute;inset:0}
 #personal-protocol-page .proto-item .sr-proto-banner-media{
   display:block;position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:center;
   background:radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),
              linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
+/* Scrim per mockup's v7 background-image recipe for #experience .sechead--lead */
 #personal-protocol-page .proto-item .sr-proto-banner-scrim{
   position:absolute;inset:0;
-  background:linear-gradient(94deg,rgba(6,6,12,.90) 0%,rgba(6,6,12,.66) 34%,
-             rgba(6,6,12,.10) 62%,transparent 78%),
-             linear-gradient(0deg,rgba(6,6,12,.85) 0%,transparent 34%)}
-#personal-protocol-page .proto-item .sr-proto-banner-copy{
-  display:block;position:absolute;left:max(40px,calc(50vw - 550px));top:50%;
-  transform:translateY(-50%);max-width:560px;z-index:2}
-#personal-protocol-page .proto-item .sr-proto-banner-copy .proto-name{
-  margin:0 0 12px;font:400 clamp(24px,3vw,40px)/1.1 'Cinzel',serif;
-  color:var(--text);text-shadow:0 2px 20px rgba(0,0,0,.6)}
-#personal-protocol-page .proto-item .sr-proto-banner-copy .proto-landing-desc{
-  margin:0;display:block;overflow:visible;-webkit-line-clamp:unset;
-  font:italic 400 16px/1.6 'Cormorant Garamond',Georgia,serif;
-  color:#DCD6E0;max-width:48ch;text-shadow:0 1px 14px rgba(0,0,0,.55)}
-@media(max-width:980px){
-  #personal-protocol-page .proto-item .sr-proto-banner{
-    aspect-ratio:auto;padding:72px 26px 56px}
-  /* position:relative (not static) so z-index:2 still lifts the copy
-     above the absolutely-positioned media/scrim — a static element
-     paints below positioned siblings regardless of z-index. */
-  #personal-protocol-page .proto-item .sr-proto-banner-copy{
-    position:relative;transform:none;left:auto;max-width:none;padding-right:26px}
-}
+  background:linear-gradient(90deg,rgba(8,8,12,.98) 0%,rgba(8,8,12,.88) 43%,
+             rgba(8,8,12,.36) 72%,rgba(208,220,216,.12) 100%)}
+/* Title/description no longer render here — the hero card's own kicker/h1/lede/subline carry them. */
+#personal-protocol-page .proto-item .sr-proto-banner-copy{display:none}
 
 /* Cover artwork (assets/covers/*.jpg) has the kicker word, protocol
    number and rule baked into the photo — the .sr-kicker/.sr-num/.sr-rule
@@ -1794,7 +1781,13 @@ details.sr-q .sr-a a{color:var(--primary2)}
 /* SR-029 — honest "video not yet available" state for the Watch pane.
    No video file exists yet, so this replaces the old fake play button
    (which toggled a simulated progress bar with nothing behind it) with
-   a plain, truthful unavailable state instead of an implied player. */
+   a plain, truthful unavailable state instead of an implied player.
+   Group 3 (mockup diff): .video-placeholder's base padding-top:56.25%
+   (a 16:9-ratio hack) made this ~620-900px tall depending on viewport
+   width — far taller than the real player it stands in for (the Listen
+   pane measures ~138px). Fixed height replaces the aspect-ratio hack so
+   the page reads the same whether Watch or Listen is selected. */
+.sr-video-unavailable{padding-top:0;height:200px}
 .sr-video-unavailable .video-inner{gap:10px}
 .sr-video-unavailable-icon{color:var(--text3)}
 .sr-video-unavailable-title{font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text2);text-transform:uppercase;text-align:center;padding:0 20px;}
@@ -1814,16 +1807,21 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .sr-journey-details[open] .sr-journey-toggle::before{content:" \2014  Close";}
 
 /* SR-027 — "quiet short alternative": offers the 4-line Crisis Card as a
-   brief on-ramp. Uses --pt-mob, the same warm accent the rest of the
-   Personal Transformation page already reserves for this kind of gentler,
-   non-primary call to action. */
+   brief on-ramp.
+   Correction 4: label/button color was --pt-mob (salmon) — the mockup's
+   base .crisis .cl/.cb rule is salmon too, but a later override
+   (.crisis .cl{color:var(--teal)}, .crisis .cb{border-color:rgba(78,154,
+   166,.38);color:#89B8C0}) wins by source order in the mockup's own
+   cascade, so the label/button are teal in the resolved mockup, not
+   salmon. Fixed to match. Card's own border/background left as-is —
+   out of scope for this correction, which is about the two labels. */
 .sr-quiet-alt{position:relative;display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:20px;padding:18px 22px;border:1px solid rgba(201,122,90,.3);border-radius:9px;background:rgba(201,122,90,.06);}
 .sr-quiet-alt-copy{flex:1;min-width:220px;}
-.sr-quiet-alt-label{font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--pt-mob,#C97A5A);font-weight:700;margin-bottom:6px;}
+.sr-quiet-alt-label{font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--pt-teal,#4E9AA6);font-weight:700;margin-bottom:6px;}
 .sr-quiet-alt-title{font-family:'Cinzel',serif;font-weight:400;font-size:16px;color:var(--text);margin-bottom:5px;}
 .sr-quiet-alt-body{font-size:12.5px;color:var(--text3);line-height:1.6;}
-.sr-quiet-alt-btn{flex-shrink:0;border:1px solid rgba(201,122,90,.5);color:var(--pt-mob,#C97A5A);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px 20px;border-radius:3px;cursor:pointer;white-space:nowrap;}
-.sr-quiet-alt-btn:hover{background:rgba(201,122,90,.12);}
+.sr-quiet-alt-btn{flex-shrink:0;border:1px solid rgba(78,154,166,.38);color:#89B8C0;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:12px 20px;border-radius:3px;cursor:pointer;white-space:nowrap;}
+.sr-quiet-alt-btn:hover{background:rgba(78,154,166,.12);}
 
 /* SR-027 — Decision editorial block, Go Deeper section. Two-column layout
    per the approved mockup; collapses to one column under 760px like every
@@ -1842,3 +1840,441 @@ details.sr-q .sr-a a{color:var(--primary2)}
   .sr-quiet-alt{flex-direction:column;align-items:flex-start;}
   .sr-quiet-alt-btn{width:100%;text-align:center;}
 }
+
+/* Group 1 (mockup diff) — .shift-drop had markup with zero CSS anywhere
+   in the codebase: native disclosure triangle, title running into the
+   preview text. Ported from the mockup's shift-drop rules onto live
+   tokens (var(--primary)/var(--border) in place of --gold/--hair).
+   Correction 1: margin changed from margin-top:28px (a standalone-card
+   value, from when this sat outside .experience-box) to the mockup's
+   actual .shift-drop rule — 18px 28px 28px, 16px 18px 18px narrow — now
+   that it's the last direct child inside the box. */
+.shift-drop{margin:18px 28px 28px;border:1px solid var(--border);border-radius:8px;background:linear-gradient(115deg,rgba(212,168,67,.04),rgba(78,154,166,.02));overflow:hidden}
+.shift-drop summary{list-style:none;cursor:pointer;padding:17px 20px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px}
+.shift-drop summary::-webkit-details-marker{display:none}
+.shift-title{font-family:'Cinzel',serif;font-size:15px;color:var(--text);white-space:nowrap}
+.shift-preview{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shift-toggle{font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:var(--primary);font-weight:700}
+.shift-toggle::before{content:"Open"}
+.shift-toggle::after{content:"  \25BE"}
+.shift-drop[open] .shift-toggle::before{content:"Close"}
+.shift-drop[open] .shift-toggle::after{content:"  \25B4"}
+.shift-drop .heals{margin:0;border-top:1px solid var(--border);padding:20px}
+.heals-lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14.5px;color:var(--text2);line-height:1.7;margin-bottom:16px}
+@media(max-width:900px){
+  .shift-drop{margin:16px 18px 18px}
+}
+@media(max-width:600px){
+  .shift-drop summary{grid-template-columns:1fr auto}
+  .shift-preview{grid-column:1/-1;grid-row:2}
+  .shift-title{white-space:normal}
+}
+
+/* Group 1 (mockup diff) — .sr-logdrop / .sr-journal: <details> shells
+   newly built around the existing Log a Session / Journal internals
+   (which previously had no collapse mechanism at all — always visible,
+   no summary row). Same shell pattern as .sr-journey-details already
+   on this page. #prog-personal's own .jprog-enclosure card treatment is
+   neutralized when nested in one of these so the section reads as one
+   card, not two stacked ones — the same relationship the mockup's own
+   .logdrop/.logcard pair uses (outer card, inner card stripped to a
+   plain divider). */
+/* Correction 7: gold-tinted baseline (was neutral var(--border)/var(--card))
+   so sections 2 and 3 read as one family with the resource library. */
+.sr-logdrop,.sr-journal{border:1px solid rgba(212,168,67,.2);border-radius:12px;
+  background:linear-gradient(145deg,rgba(212,168,67,.026),rgba(255,255,255,.006) 42%,transparent);
+  margin-top:14px;overflow:hidden}
+.sr-logdrop:hover,.sr-journal:hover{border-color:rgba(212,168,67,.32)}
+.sr-logdrop summary,.sr-journal summary{list-style:none;cursor:pointer;padding:20px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:64px}
+.sr-logdrop summary::-webkit-details-marker,.sr-journal summary::-webkit-details-marker{display:none}
+.sr-logdrop-jt,.sr-journal-jt{font-family:'Cinzel',serif;font-size:18px;color:var(--text)}
+.sr-logdrop-jq,.sr-journal-jq{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:15px;color:var(--text3);flex:1;min-width:200px}
+.sr-logdrop-jx,.sr-journal-jx{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--primary);font-weight:700}
+.sr-logdrop-jx::before,.sr-journal-jx::before{content:"Open"}
+.sr-logdrop-jx::after,.sr-journal-jx::after{content:" \25BE"}
+.sr-logdrop[open] .sr-logdrop-jx::before,.sr-journal[open] .sr-journal-jx::before{content:"Close"}
+.sr-logdrop[open] .sr-logdrop-jx::after,.sr-journal[open] .sr-journal-jx::after{content:" \25B4"}
+.sr-logdrop .jprog-recent,.sr-journal .jprog-past{padding:0 26px 26px;margin:0}
+.sr-journal>.jprog-why{padding:0 26px 26px;margin:0}
+#prog-personal .sr-journal .jprog-enclosure{background:transparent;border-radius:0;border-top:1px solid var(--border);padding:26px;margin:0}
+/* Correction 2: "Practice & Journal"/sub, "Where You Are" and "What's
+   Next" (plus the Chosen Self card, injected right after .jprog-rec-box
+   by addEvidenceCards()) moved from always-visible above both drops to
+   inside .sr-logdrop's own reveal, ahead of the log form — so they're
+   now direct children of the <details> instead of a padded wrapper, and
+   need the same 26px horizontal inset the rest of the reveal uses. The
+   divider that used to sit between the summary and .jprog-enclosure (the
+   first thing revealed) moves to sit above .jprog-title instead, since
+   that's the first thing revealed now. */
+#prog-personal .sr-logdrop>.jprog-title{padding:22px 26px 0;margin:0 0 6px;border-top:1px solid var(--border)}
+#prog-personal .sr-logdrop>.jprog-sub,
+#prog-personal .sr-logdrop>.jprog-status-group{padding-left:26px;padding-right:26px}
+#prog-personal .sr-logdrop .jprog-enclosure{background:transparent;border-radius:0;border-top:0;padding:26px;margin:0}
+
+/* Resources-Final diff, Group 1 — Section 1 is ONE bordered object
+   (.sr-experience-box), not a stack of separate cards with gaps between
+   them. Header, advisory and player are regions of it: header bleeds to
+   the box's top edge and keeps only a bottom border; the player's own
+   border/background are stripped since the box already provides them. */
+/* Correction 3: had no margin-bottom of its own, while .sr-sec-box (the
+   other three boxes) forces margin-top:0 and does its spacing entirely
+   via its own margin-bottom (68px, to beat .j-step + .j-step's
+   margin-top:34px — see that rule's own comment). Net effect was a 0px
+   gap between this box and the next, against 68px between every other
+   pair. Matched here so every gap between enclosures is identical. */
+.sr-experience-box{border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.012),transparent 42%);margin-bottom:68px}
+@media(max-width:900px){
+  .sr-experience-box{margin-bottom:44px}
+}
+
+/* Experience hero card / #experience .sechead--lead: the protocol title
+   used to render twice (once overlaid on the banner photo, once as
+   generic j-title copy "Practice It Right Now" below it) — this is the
+   single place it lives now. Kicker row reuses the existing
+   .j-kicker/.j-num/.j-eyebrow — same numbered-badge component every
+   other section head already uses, not a new one. Bleeds to the box's
+   top edge (no top border/radius of its own); the cover photo (moved in
+   by syncExperienceHeroMedia()) sits behind it in .sr-exp-hero-media. */
+.sr-exp-hero{position:relative;padding:34px 36px 32px;margin:0;
+  border:0;border-bottom:1px solid var(--border);border-radius:0;overflow:hidden;
+  background:#0A0A0D}
+.sr-exp-hero-media{position:absolute;inset:0;z-index:0;overflow:hidden}
+.sr-exp-hero-media .sr-proto-banner-copy{display:none}
+.sr-exp-hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent 0 54%,rgba(238,207,158,.06) 100%)}
+.sr-exp-hero>*:not(.sr-exp-hero-media){position:relative;z-index:1}
+.sr-exp-hero .j-kicker{margin-bottom:12px}
+.sr-exp-hero-title{font-family:'Cinzel',serif;font-weight:400;
+  font-size:clamp(28px,3.8vw,42px);line-height:1.15;margin-bottom:14px;color:var(--text)}
+.sr-exp-hero-lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:19px;color:#D8D0C0;max-width:600px;margin-bottom:16px;line-height:1.5}
+.sr-exp-hero-subline{font-size:14px;color:#A7A5AA;letter-spacing:.01em}
+@media(max-width:900px){
+  .sr-exp-hero{padding:24px 22px}
+}
+
+/* Player: border/radius/background stripped since .sr-experience-box
+   already provides them (mockup's .experience-box .player rule). */
+.sr-player{border:0;border-radius:0;background:transparent}
+/* Resources-Final diff, Group 4 — tabs: mockup's .ptabs/.ptab is a seamless
+   divided row (one border-right between the two, border-bottom under the
+   whole row), not individually-bordered, gap-separated pill buttons. The
+   bare .exp-tabs/.exp-tab classes are shared with Tracks 02/03 and the
+   homepage previews, so this is scoped to .sr-player (Track 01's player
+   only) rather than changed globally. */
+.sr-player .exp-tabs{display:flex;gap:0;margin-bottom:0;border-bottom:1px solid var(--border);
+  background:rgba(10,10,16,.74);border-radius:0}
+.sr-player .exp-tab{border:0;border-right:1px solid var(--border);border-radius:0;
+  padding:15px 18px;background:transparent}
+.sr-player .exp-tab:last-child{border-right:0}
+.sr-player .exp-tab:hover{background:rgba(255,255,255,.03)}
+.sr-player .exp-tab.active{background:rgba(212,168,67,.09)}
+.sr-player .exp-tab-label{font-size:9.5px;letter-spacing:.2em;margin-bottom:4px}
+.sr-player .exp-tab.active .exp-tab-name{color:var(--text)}
+.sr-pbody{padding:24px 28px 0}
+@media(max-width:900px){
+  .sr-pbody{padding:20px 18px 0}
+}
+/* Quiet short alternative + journey visual sit inside .sr-pbody now —
+   margins match the mockup's .experience-box .crisis rule (was a
+   standalone margin-top:20px card before this box existed). */
+.sr-pbody .sr-quiet-alt{margin:14px 0 0}
+.sr-pbody .sr-journey-details{margin-top:20px;margin-bottom:0}
+@media(max-width:900px){
+  .sr-pbody .sr-quiet-alt{margin-top:12px}
+}
+
+/* Resources-Final diff, Group 3 — Attention Advisory: a divided row with
+   a gold left label column, not an icon-in-a-box card. Sits between the
+   hero header and the player, divided from both by its own border. */
+.sr-attention-advisory{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
+  padding:16px 28px;border-bottom:1px solid var(--border);
+  background:linear-gradient(90deg,rgba(212,168,67,.055),rgba(212,168,67,.012) 62%,transparent)}
+.sr-attention-label{padding-top:2px;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--primary);font-weight:700;white-space:nowrap}
+.sr-attention-advisory p{font-size:12px;line-height:1.65;color:var(--text3);max-width:790px}
+.sr-attention-advisory strong{color:var(--text2);font-weight:500}
+@media(max-width:900px){
+  .sr-attention-advisory{grid-template-columns:1fr;gap:6px;padding:14px 20px}
+  .sr-attention-label{white-space:normal}
+}
+
+/* Group 4 (mockup diff) — Beyond Self-Guided: the mockup's two-card grid
+   (monthly workshop + premium 1:1) never made it across; this section
+   was one plain .jp5-card. Values merged from the mockup's base .beyond/
+   .bcard rules plus its own later "support-section"/"v17" refinement
+   passes (both apply to this exact component in the mockup, no conflict
+   between them the way the banner/hero passes had — see Group 2's commit
+   note for that one). var(--pt-teal)/var(--pt-mob) already exist as
+   #prog-personal accent tokens; --pt-teal doubles for the mockup's
+   --teal here since Personal Transformation has no separate teal token
+   of its own outside this component. */
+.sr-beyond{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:2px}
+.sr-bcard{border:1px solid var(--border);border-radius:12px;padding:26px;
+  min-height:304px;display:flex;flex-direction:column;overflow:hidden;
+  text-align:left;position:relative;background:var(--card)}
+.sr-bcard-teal{border-color:rgba(78,154,166,.35);
+  background:linear-gradient(135deg,rgba(78,154,166,.09),rgba(20,20,27,.96) 58%)}
+.sr-bcard-gold{border-color:rgba(212,168,67,.35);
+  background:linear-gradient(135deg,rgba(212,168,67,.09),rgba(20,20,27,.96) 58%)}
+.sr-bicon{width:38px;height:38px;border-radius:50%;border:1px solid currentColor;
+  display:grid;place-items:center;margin:0 0 18px;font-size:13px}
+.sr-bcard-teal .sr-bicon{color:var(--pt-teal,#4E9AA6)}
+.sr-bcard-gold .sr-bicon{color:var(--primary)}
+.sr-bl{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin:0 0 8px}
+.sr-bcard-teal .sr-bl{color:var(--pt-teal,#4E9AA6)}
+.sr-bcard-gold .sr-bl{color:var(--primary)}
+.sr-bcard h3{font-size:20px;line-height:1.3;max-width:390px;margin:0 0 11px;color:var(--text)}
+.sr-bcard>p:not(.sr-bl){font-size:13px;color:var(--text2);line-height:1.65;max-width:440px;margin:0 0 17px}
+.sr-btags{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;margin-bottom:18px}
+.sr-btag{font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);
+  border:1px solid var(--border);padding:6px 10px;border-radius:16px;line-height:1.2}
+.sr-bbtn{min-height:42px;padding:0 16px;display:flex;align-items:center;justify-content:center;
+  border-radius:4px;border:0;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.sr-bcard-teal .sr-bbtn{color:#071014;background:var(--pt-teal,#4E9AA6)}
+.sr-bcard-teal .sr-bbtn:hover{background:#65B4C0}
+.sr-bcard-gold .sr-bbtn{color:#110D05;background:var(--primary)}
+.sr-bcard-gold .sr-bbtn:hover{background:var(--primary2)}
+.sr-blimited{position:absolute;top:26px;right:26px;font-size:7.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--primary);border:1px solid rgba(212,168,67,.4);
+  padding:5px 9px;border-radius:12px}
+@media(max-width:900px){
+  .sr-bcard{padding:23px;min-height:0}
+  .sr-blimited{top:23px;right:23px}
+}
+@media(max-width:700px){
+  .sr-beyond{grid-template-columns:1fr}
+}
+
+/* Resources-Final diff, Group 2 — Sections 2, 3 and 4 (Log & Journal, Go
+   Deeper, Beyond Self-Guided) were bare .j-step divs divided only by a
+   border-top rule, with a small (18px) .j-title. Mockup makes every
+   non-experience section its own bordered enclosure with an
+   edge-bleeding header carrying a gold left bar — this is the part
+   earlier passes missed entirely. .j-step's own border-top/margin-top
+   divider rule is neutralized on these three (border-top:0!important)
+   since the box now supplies its own full border. */
+/* !important on padding/margin-top and border-top: .j-step + .j-step
+   (index.html, base stylesheet) sets these with higher specificity
+   (two classes) for the plain-divider look between ordinary steps —
+   needs to be beaten explicitly now that steps 2-4 are their own boxes. */
+.sr-sec-box{padding:0 32px 40px!important;margin:0 0 68px!important;
+  border:1px solid var(--border)!important;border-top:0!important;
+  border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.012),rgba(255,255,255,.003) 44%,transparent)}
+/* Correction 3: mockup gives the last enclosure MORE space before the
+   footer (72px / 52px narrow), not less — this was wrongly zeroed out. */
+.sr-sec-box:last-child{margin-bottom:72px!important}
+.sr-sechead{position:relative;max-width:none;margin:0 -32px 38px;padding:27px 30px 29px;
+  border-bottom:1px solid var(--border);overflow:hidden;
+  background:linear-gradient(100deg,rgba(212,168,67,.085) 0%,rgba(212,168,67,.035) 34%,
+             rgba(78,154,166,.018) 66%,transparent 100%)}
+.sr-sechead:after{content:"";position:absolute;top:0;bottom:0;left:0;width:2px;
+  background:linear-gradient(180deg,var(--primary),rgba(212,168,67,.08))}
+.sr-sechead .j-kicker{margin-bottom:14px}
+.sr-sechead h2{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(27px,3.25vw,36px);
+  line-height:1.18;letter-spacing:-.018em;margin-bottom:12px;color:var(--text)}
+.sr-sechead-lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:18px;line-height:1.55;max-width:680px;color:var(--text2)}
+.sr-sechead .j-num{width:23px;height:23px;font-size:10px;line-height:23px}
+.sr-sechead .j-eyebrow{font-size:10px;letter-spacing:.27em}
+@media(max-width:900px){
+  /* !important: the base rule's margin shorthand is !important (needed to
+     beat .j-step + .j-step), so this override needs it too or it's
+     silently ignored regardless of media-query/cascade order — caught
+     during Correction 3 verification (this rule wasn't taking effect at
+     414px). */
+  .sr-sec-box{padding:0 18px 28px;margin-bottom:44px!important;border-radius:11px}
+  .sr-sec-box:last-child{margin-bottom:52px!important}
+  .sr-sechead{margin:0 -18px 30px;padding:22px 21px 24px}
+  .sr-sechead h2{font-size:clamp(25px,8vw,32px)}
+  .sr-sechead-lede{font-size:17px}
+}
+
+/* Resources-Final diff, Group 5 — Go Deeper's resource list: was a flat
+   .res-row of undifferentiated cards. Mockup groups them under labelled
+   headers inside one bordered library. Live's item markup keeps its own
+   class names (.res-item/.res-icon/.res-kind/.res-title/.res-meta/
+   .res-action — unchanged since ptResItem() already used them before this
+   pass) rather than adopting the mockup's shorter .res/.ic/.rl/.rt/.rm/.go
+   names, so all of this is scoped under .resource-group instead of renaming
+   a helper used in more than one place. */
+.resource-library{margin-top:2px;border:1px solid rgba(212,168,67,.2);border-radius:14px;overflow:hidden;
+  background:linear-gradient(145deg,rgba(212,168,67,.026),rgba(255,255,255,.006) 42%,transparent)}
+.resource-group+.resource-group{border-top:1px solid rgba(212,168,67,.2)}
+.resource-group-label{display:flex;align-items:center;gap:15px;padding:19px 26px 17px;
+  border-bottom:1px solid rgba(255,255,255,.035);
+  background:linear-gradient(90deg,rgba(212,168,67,.075),rgba(78,154,166,.018) 62%,transparent)}
+.resource-group-label:before{content:"";width:22px;height:1px;background:var(--primary);opacity:.75}
+.resource-group-label span{font-size:9px;line-height:1.2;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--primary);font-weight:700}
+/* Correction 5: horizontal inset was margin (0 26px) while vertical was
+   padding (23px 0) — margin falls outside the element's own box, so the
+   #prog-personal-scoped hover highlight (#prog-personal .res-item:hover,
+   background #1C1C21 — higher specificity than anything set here, an ID
+   always wins) landed flush on the icon and Read button left/right while
+   having full breathing room top/bottom. Moved the horizontal inset into
+   padding so the highlight box itself is evenly inset. The divider that
+   inset used to provide for free (a shrunk border-box) is rebuilt as a
+   ::after inset independently by the same amount, since the row now
+   spans the full card width. */
+.resource-group .res-item{display:grid;grid-template-columns:42px minmax(0,1fr) 120px;gap:21px;
+  align-items:center;min-height:102px;margin:0;padding:23px 26px;background:transparent;
+  border:0;position:relative}
+.resource-group .res-item:not(:last-child):after{content:"";position:absolute;left:26px;right:26px;
+  bottom:0;height:1px;background:rgba(255,255,255,.035)}
+.resource-group .res-item+.res-item{margin-top:0}
+.resource-group .res-icon{width:42px;height:42px;border-radius:50%;border-color:rgba(212,168,67,.18);
+  background:rgba(8,8,12,.26)}
+.resource-group .res-kind{margin-bottom:6px;font-size:9px;letter-spacing:.21em}
+.resource-group .res-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-weight:400;
+  line-height:1.35;letter-spacing:.005em;color:var(--text)}
+.resource-group .res-meta{font-size:11.5px;line-height:1.5}
+.resource-group .res-action{width:120px;min-height:44px;border-color:rgba(212,168,67,.42);
+  background:rgba(212,168,67,.025);justify-content:center}
+.resource-group .res-action:hover{border-color:var(--primary);background:rgba(212,168,67,.09)}
+.resource-note{margin:20px 3px 0;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:16px;line-height:1.55;color:var(--text3)}
+@media(max-width:900px){
+  .resource-group .res-item{grid-template-columns:40px minmax(0,1fr) 112px;margin:0;padding:23px 20px;gap:17px}
+  .resource-group .res-item:not(:last-child):after{left:20px;right:20px}
+}
+@media(max-width:560px){
+  .resource-group .res-item{grid-template-columns:1fr;margin:0;padding:23px 17px;gap:10px}
+  .resource-group .res-item:not(:last-child):after{left:17px;right:17px}
+  .resource-group .res-icon{display:none}
+  .resource-group .res-action{grid-column:1;width:100%;justify-self:stretch}
+  .resource-group-label{padding-left:18px;padding-right:18px}
+}
+
+/* Resources-Final diff, Group 5 — Go Deeper's own mini-banner header
+   (mockup's #resources>.sechead): unlike Log & Journal / Beyond
+   Self-Guided, this section's header carries its own cover-photo layer
+   (a clone of the same photo already in .sr-exp-hero-media, placed by
+   syncResourcesHeroMedia()) and a "Back to the practice" link, instead
+   of the plain gold-gradient background the other two sechead uses. */
+.sr-resources-sechead{min-height:238px;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:34px 36px 35px;background:#0A0A0D}
+/* #personal-protocol-page .proto-item .sr-proto-banner-scrim (1 id + 2
+   classes) outranks a plain 2-class override — matched here with an id
+   of its own so the resources header actually gets its own scrim recipe
+   instead of silently inheriting the experience hero's. */
+#personal-protocol-page .proto-item .sr-resources-hero-media .sr-proto-banner-scrim{
+  background:linear-gradient(90deg,rgba(8,8,12,.96) 0%,rgba(8,8,12,.78) 45%,
+             rgba(8,8,12,.28) 74%,rgba(8,8,12,.48) 100%)}
+.sr-resource-back{position:absolute;z-index:2;top:26px;left:30px;color:#D7C19A;font-size:9px;font-weight:700;
+  letter-spacing:.19em;text-transform:uppercase;cursor:pointer}
+.sr-resource-back:hover{color:var(--primary)}
+.sr-resources-sechead h2{font-size:clamp(30px,3.6vw,40px)}
+.sr-resources-sechead .sr-sechead-lede{color:#CEC4B2;max-width:610px}
+@media(max-width:900px){
+  .sr-resources-sechead{min-height:218px;padding:31px 24px 29px}
+  .sr-resource-back{left:23px;top:22px}
+}
+
+/* Correction 6 — next-step marker (.is-next). Values given verbatim by
+   the person who approved them after several rounds of toning down; do
+   not brighten, thicken, speed up or otherwise "improve" them.
+   Two mechanical fixes were needed to make the given rules actually take
+   effect against this file's existing selectors, values themselves
+   untouched:
+   - "knum" doesn't exist anywhere in this codebase; the section-kicker
+     number badge is .j-num, so the marker rule targets that instead.
+   - .j-num has no border at all today (background only), so a
+     border-color with no border-width/style is invisible — added a
+     matching thin solid border so the given colour renders.
+   .sr-sec-box's own border is !important (beats a same-specificity base
+   rule elsewhere), so its is-next override needs !important too or it's
+   silently ignored — same pattern as Correction 3's narrow-width fix. */
+.sr-sec-box,.sr-logdrop,.sr-journal,.sr-player{transition:border-color 1.2s ease,background 1.2s ease}
+.sr-sec-box.is-next{border-color:rgba(212,168,67,.26)!important}
+.sr-sec-box.is-next>.sr-sechead:after{
+  width:3px;
+  background:linear-gradient(180deg,var(--gold,var(--primary)),rgba(212,168,67,.3))}
+.sr-sec-box.is-next .j-num{
+  background:rgba(212,168,67,.2);border:1.5px solid rgba(212,168,67,.6)}
+
+.sr-logdrop.is-next,.sr-journal.is-next{
+  position:relative;overflow:hidden;
+  border-color:rgba(212,168,67,.5);
+  background:linear-gradient(145deg,rgba(212,168,67,.05),rgba(255,255,255,.008) 46%,transparent)}
+.sr-logdrop.is-next:before,.sr-journal.is-next:before{
+  content:"";position:absolute;top:0;bottom:0;left:0;width:2px;
+  background:linear-gradient(180deg,var(--gold,var(--primary)),rgba(212,168,67,.25))}
+
+.sr-player.is-next{border-color:rgba(212,168,67,.5)}
+/* .play-btn no longer exists in this player (SR-029 replaced the fake
+   Watch play button with an honest "not yet available" state) — .audio-play
+   is the one real control left, so it's targeted alongside .play-btn
+   rather than in place of it, in case Watch gets a real player later. */
+.sr-player.is-next .play-btn,.sr-player.is-next .audio-play{border-color:var(--gold,var(--primary))}
+
+/* The word "Next" on the marked row — carries the actual meaning of the
+   cue (screen readers, quick scanning), not just a decorative glow. */
+.sr-cuetag{display:none;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold,var(--primary));font-weight:700;opacity:.85;white-space:nowrap}
+/* A plain ".is-next .sr-cuetag" descendant rule lights up BOTH rows once
+   section 2 itself carries is-next (Stages 2/3 mark the section AND one
+   row), since both .sr-logdrop and .sr-journal sit inside that same
+   is-next section — narrowed to each row's own is-next so only the
+   actually-marked row shows the tag. */
+.sr-logdrop.is-next .sr-cuetag,.sr-journal.is-next .sr-cuetag{display:inline}
+
+/* Breath — soft, slow, contained; opt-in via body.sr-breath so it can be
+   switched off in one place. Default cycle 14s via --sr-pulse. */
+body.sr-breath .sr-sec-box.is-next{animation:srSecQuiet var(--sr-pulse,14s) ease-in-out infinite}
+@keyframes srSecQuiet{
+  0%,100%{border-color:rgba(212,168,67,.2);
+          box-shadow:0 0 26px -16px rgba(212,168,67,.14)}
+  50%    {border-color:rgba(212,168,67,.38);
+          box-shadow:0 0 60px -14px rgba(212,168,67,.3)}
+}
+
+body.sr-breath .sr-sec-box.is-next>.sr-sechead:after{
+  animation:srBarQuiet var(--sr-pulse,14s) ease-in-out infinite}
+@keyframes srBarQuiet{
+  0%,100%{box-shadow:0 0 10px -2px rgba(212,168,67,.25)}
+  50%    {box-shadow:0 0 22px 0 rgba(212,168,67,.55)}
+}
+
+body.sr-breath .sr-logdrop.is-next,
+body.sr-breath .sr-journal.is-next{animation:srRowQuiet var(--sr-pulse,14s) ease-in-out infinite}
+@keyframes srRowQuiet{
+  0%,100%{border-color:rgba(212,168,67,.44);
+          background:linear-gradient(145deg,rgba(212,168,67,.045),rgba(255,255,255,.006) 46%,transparent);
+          box-shadow:0 0 24px -14px rgba(212,168,67,.2),
+                     inset 0 0 30px -22px rgba(212,168,67,.16)}
+  50%    {border-color:rgba(212,168,67,.66);
+          background:linear-gradient(145deg,rgba(212,168,67,.09),rgba(255,255,255,.012) 46%,transparent);
+          box-shadow:0 0 56px -12px rgba(212,168,67,.4),
+                     inset 0 0 60px -18px rgba(212,168,67,.34)}
+}
+body.sr-breath .sr-logdrop.is-next:before,
+body.sr-breath .sr-journal.is-next:before{
+  animation:srBarQuiet var(--sr-pulse,14s) ease-in-out infinite}
+
+body.sr-breath .sr-player.is-next{animation:srPlQuiet var(--sr-pulse,14s) ease-in-out infinite}
+@keyframes srPlQuiet{
+  0%,100%{border-color:rgba(212,168,67,.44);
+          box-shadow:0 0 26px -14px rgba(212,168,67,.2),
+                     inset 0 0 40px -26px rgba(212,168,67,.18)}
+  50%    {border-color:rgba(212,168,67,.66);
+          box-shadow:0 0 64px -12px rgba(212,168,67,.42),
+                     inset 0 0 90px -22px rgba(212,168,67,.34)}
+}
+body.sr-breath .sr-player.is-next .play-btn,
+body.sr-breath .sr-player.is-next .audio-play{
+  animation:srBtnQuiet var(--sr-pulse,14s) ease-in-out infinite}
+@keyframes srBtnQuiet{
+  0%,100%{box-shadow:0 0 14px -6px rgba(212,168,67,.24);background:rgba(212,168,67,.05)}
+  50%    {box-shadow:0 0 34px -6px rgba(212,168,67,.5);background:rgba(212,168,67,.11)}
+}
+
+/* No per-component prefers-reduced-motion block here — CLAUDE.md is
+   explicit that reduced motion is handled centrally (see the sitewide
+   rule near the top of this file forcing transition/animation-duration
+   to .01ms!important on *, ::before, ::after under this same media
+   query). That rule already neutralizes every animation above, static
+   marker intact, without a second per-component override. */

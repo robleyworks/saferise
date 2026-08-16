@@ -3264,6 +3264,9 @@ document.addEventListener('DOMContentLoaded', function () {
     window.scrollTo(0, 0);
     backBtn.focus();
     history.pushState({ srProtocolOpen: true }, '', '#p' + item.dataset.proto);
+    // Correction 6: on open, the marker defaults to Stage 1 (player) unless
+    // this protocol already advanced further earlier in the same session.
+    if (typeof srApplyStage === 'function') srApplyStage('p' + item.dataset.proto);
 
     // The banner that's actually opening is above the fold the instant
     // this runs, so it gets bumped from its default loading="lazy" to
@@ -3489,6 +3492,48 @@ function jprogGetState(section){
   return jprogState.get(section);
 }
 
+// Correction 6 — next-step marker. In-memory only, keyed by protocol key
+// (pk); no localStorage, so a reload resets every protocol back to Stage
+// 1 (the player). This tracks ACTIONS TAKEN, not a fixed order: a member
+// who logs a session without ever "completing" one just jumps straight
+// from Stage 1 to Stage 3, since srAdvanceStage only ever moves forward
+// through SR_NEXT_ORDER, never back past whatever's already been done.
+const SR_NEXT_ORDER = ['player', 'log', 'journal', 'section3'];
+const srNextStage = {};
+
+function srApplyStage(pk){
+  const page = document.getElementById('personal-protocol-page');
+  if (!page || page.hidden) return;
+  const root = page.querySelector('.jprog-section[data-jprog-key="' + pk + '"]');
+  if (!root) return; // not the currently-open protocol (or not Track 01) — nothing to mark
+  const stage = srNextStage[pk] || 'player';
+  const player = page.querySelector('.sr-player');
+  const sec2 = page.querySelector('.sr-sec-box:has(.jprog-section)');
+  const sec3 = page.querySelector('.sr-sec-box:has(.resource-library)');
+  const logdrop = root.querySelector('.sr-logdrop');
+  const journal = root.querySelector('.sr-journal');
+  [player, sec2, sec3, logdrop, journal].forEach(function(el){ if (el) el.classList.remove('is-next'); });
+  if (stage === 'player') {
+    if (player) player.classList.add('is-next');
+  } else if (stage === 'log') {
+    if (sec2) sec2.classList.add('is-next');
+    if (logdrop) logdrop.classList.add('is-next');
+  } else if (stage === 'journal') {
+    if (sec2) sec2.classList.add('is-next');
+    if (journal) journal.classList.add('is-next');
+  } else if (stage === 'section3') {
+    if (sec3) sec3.classList.add('is-next');
+  }
+}
+
+function srAdvanceStage(pk, stage){
+  const cur = srNextStage[pk] || 'player';
+  if (SR_NEXT_ORDER.indexOf(stage) > SR_NEXT_ORDER.indexOf(cur)) {
+    srNextStage[pk] = stage;
+    srApplyStage(pk);
+  }
+}
+
 function jprogEscape(s){
   const d = document.createElement('div');
   d.textContent = s;
@@ -3580,6 +3625,8 @@ function jprogRenderPrompt(section){
   const set = JPROG_PROMPTS[promptsKey];
   const list = set[state.promptCat];
   jprogEl(section, 'prompttext').textContent = '"' + list[state.promptIdx % list.length] + '"';
+  const summaryPromptEl = jprogEl(section, 'summaryprompt');
+  if (summaryPromptEl) summaryPromptEl.textContent = '"' + list[state.promptIdx % list.length] + '"';
   const catsEl = jprogEl(section, 'promptcats');
   catsEl.innerHTML = '';
   const DEEPER_CATS = ['Hold Both', 'Reconciling a Tension'];
@@ -3669,6 +3716,8 @@ function jprogInit(section){
     noteEl.value = '';
     jprogRenderLogs(section);
     jprogRenderTier(section);
+    // Correction 6, Stage 3: session logged — marker moves to Journal.
+    if (typeof srAdvanceStage === 'function') srAdvanceStage(section.dataset.jprogKey, 'journal');
   });
 
   jprogEl(section, 'journalbtn').addEventListener('click', function(e){
@@ -3681,6 +3730,8 @@ function jprogInit(section){
     ta.value = '';
     jprogRenderJournal(section);
     jprogRenderTier(section);
+    // Correction 6, Stage 4: journal saved — marker moves to Go Deeper.
+    if (typeof srAdvanceStage === 'function') srAdvanceStage(section.dataset.jprogKey, 'section3');
   });
 
   const consultBtn = jprogEl(section, 'consultbtn');
@@ -4090,6 +4141,22 @@ const PT_RES_ICONS = {
   founder: '<path d="M7 4l9 6-9 6V4z"/>'
 };
 
+/* Resources-Final diff, Group 5: Go Deeper renders resources inside labelled
+   groups instead of one flat list. Which group a resource belongs to is a
+   property of its TYPE ("a Protocol Guide orients you", "a Companion is
+   something you apply between sessions"), not of which protocol it's
+   attached to — same reasoning as PT_RES_ICONS above, so it lives here
+   alongside it rather than being repeated as a field on all 10 PT_PROTOCOLS
+   entries. Two groups, matching the mockup's Anxiety Reset split exactly;
+   a protocol whose flags leave a group with zero members simply never
+   renders that group's header — see renderProtocolPage's resource-group
+   construction. */
+const PT_RES_GROUPS = {
+  advisory: 'orient', founder: 'orient', guide: 'orient', insights: 'orient', refcase: 'orient',
+  companion: 'apply', disclosure: 'apply', repair: 'apply'
+};
+const PT_RES_GROUP_LABELS = { orient: 'Orient & understand', apply: 'Apply between sessions' };
+
 const PT_PROTOCOLS = {
   p1: {
     kicker: 'Regulate', title: 'The Anxiety Reset Protocol', stateNoun: 'anxiety',
@@ -4296,8 +4363,16 @@ function renderProtocolPage(pk){
   // hasAdvisory/resItems) — deliberately not deduplicated, since a member
   // mid-session and a member browsing resources are reading it at different
   // moments.
+  // Resources-Final diff, Group 3: mockup renders this as a divided row
+  // (gold left label column + body text), not an icon-in-a-box card. The
+  // mockup bolds only the advisory's own first sentence, not a generic
+  // "Attention advisory." prefix — same split applied here to the existing
+  // per-protocol advisoryLede data, nothing new hardcoded.
+  const advisorySplitAt = d.advisoryLede ? d.advisoryLede.indexOf('. ') : -1;
+  const advisoryBold = advisorySplitAt > -1 ? d.advisoryLede.slice(0, advisorySplitAt + 1) : d.advisoryLede;
+  const advisoryRest = advisorySplitAt > -1 ? d.advisoryLede.slice(advisorySplitAt + 1) : '';
   const advisoryHtml = d.advisoryLede ?
-    '<aside class="advisory-note sr-advisory-note" aria-label="Attention advisory"><svg viewBox="0 0 20 20" fill="none" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M10 6.5v4.5M10 14h.01" stroke-linecap="round"/></svg><p><strong>Attention advisory.</strong> ' + d.advisoryLede + '</p></aside>' : '';
+    '<aside class="sr-attention-advisory" aria-label="Attention advisory"><span class="sr-attention-label">Attention advisory</span><p><strong>' + advisoryBold + '</strong>' + advisoryRest + '</p></aside>' : '';
 
   // SR-027: "The journey begins" collapsible wrapper around the journey
   // visual, matching the approved mockup — open by default, duration read
@@ -4360,7 +4435,7 @@ function renderProtocolPage(pk){
   // resolves whenever the card is synced, see syncProtocolResourceCardTitles.)
   function ptResFromContent(type, kindLabel){
     var data = RESOURCE_CONTENT[pk + '-' + type];
-    return ptResItem(pk, type, kindLabel, data.title, data.meta);
+    return { type: type, html: ptResItem(pk, type, kindLabel, data.title, data.meta) };
   }
   const resItems = [];
   if (d.hasAdvisory) resItems.push(ptResFromContent('advisory', 'Attention Advisory'));
@@ -4372,110 +4447,202 @@ function renderProtocolPage(pk){
   resItems.push(ptResFromContent('disclosure', 'Disclosure & Support'));
   if (d.hasRepair) resItems.push(ptResFromContent('repair', 'Invitation to Repair'));
 
+  // Resources-Final diff, Group 5: bucket resItems by PT_RES_GROUPS[type] —
+  // a group whose bucket ends up empty for this protocol (e.g. "apply"
+  // when hasRepair is false and this protocol also has no disclosure/
+  // companion... in practice every protocol has companion+disclosure, so
+  // only hasRepair/hasAdvisory ever change bucket membership) simply never
+  // gets a .resource-group-label rendered — no empty headers.
+  const resGroupOrder = ['orient', 'apply'];
+  const resGroupsHtml = resGroupOrder.map(function(groupId){
+    const members = resItems.filter(function(item){ return PT_RES_GROUPS[item.type] === groupId; });
+    if (!members.length) return '';
+    return '<div class="resource-group">' +
+      '<div class="resource-group-label"><span>' + PT_RES_GROUP_LABELS[groupId] + '</span></div>' +
+      members.map(function(item){ return item.html; }).join('') +
+    '</div>';
+  }).join('');
+
   return crisisNoteHtml +
 
   // ---- 1 Experience ----
+  // Resources-Final diff, Group 1: the mockup nests the whole of section 1
+  // inside .experience-box as ONE bordered object — header, advisory, tabs
+  // and player are regions of it, not separate free-floating cards. The
+  // old standalone .sr-proto-banner strip is gone; the cover photo (same
+  // <picture>/<img>/data-banner-key markup and asset pipeline the carousel
+  // cover already uses) is DOM-moved into .sr-exp-hero-media by
+  // syncExperienceHeroMedia() so it sits behind the header text instead of
+  // above it in its own strip — see that function and the CSS note beside
+  // .sr-exp-hero-media in css/saferise-system.css.
   '<div class="j-step" style="padding-top:0;">' +
-    '<div class="j-kicker"><span class="j-num">1</span><span class="j-eyebrow">Experience</span></div>' +
-    '<p class="j-title">Practice It Right Now</p>' +
-    '<p class="j-sub">If the trigger is happening as you read this, start here — audio or video, whichever you\'d reach for. Both work with nothing else open.</p>' +
-    advisoryHtml +
-    '<div class="exp-tabs">' +
-      '<div class="exp-tab active" data-exp="' + pk + '-listen"><span class="exp-tab-label">Listen</span><span class="exp-tab-name">Guided Audio</span></div>' +
-      '<div class="exp-tab" data-exp="' + pk + '-watch"><span class="exp-tab-label">Watch</span><span class="exp-tab-name">Follow-Along Video</span></div>' +
-    '</div>' +
-    '<div class="exp-pane active" data-exp-pane="' + pk + '-listen">' +
-      '<div class="listen-grid"><div class="media-block"><div class="audio-placeholder">' +
-        '<p style="font-size:12px;color:var(--text3);letter-spacing:1px;margin-bottom:6px;">' + d.audioLabel + '</p>' +
-        '<div class="audio-waveform" id="' + d.waveId + '"></div>' +
-        '<div class="audio-controls"><div class="audio-play"><svg width="10" height="12" viewBox="0 0 10 12"><path d="M1 0l9 6-9 6V0z"/></svg></div><div class="audio-track"><div class="audio-fill"></div></div><span class="audio-time">' + d.audioMin + '</span></div>' +
-      '</div></div>' +
-      '<div class="listen-side"><span class="ls-label">Crisis Card</span><p class="ls-title">4-Line Version</p>' +
-        '<p class="ls-foot">For when reading a full page isn\'t possible. Printable, or save it to your phone\'s lock screen.</p>' +
-        '<div class="ls-open" data-resource="' + pk + '-crisiscard">Open Card <svg viewBox="0 0 8 8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>' +
-      '</div></div>' +
-    '</div>' +
-    '<div class="exp-pane" data-exp-pane="' + pk + '-watch">' +
-      '<div class="media-block"><div class="video-placeholder sr-video-unavailable"><div class="video-inner">' +
-        '<svg class="sr-video-unavailable-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 4l18 16" stroke-linecap="round"/><path d="M15 5H5.5A2.5 2.5 0 003 7.5v9c0 .74.32 1.4.85 1.86M21 8v8a2.5 2.5 0 01-2.5 2.5H9" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-        '<p class="sr-video-unavailable-title">Video guide not yet available</p>' +
-        '<p class="sr-video-unavailable-sub">Use Listen for the full guided practice in the meantime.</p>' +
-      '</div></div></div>' +
-    '</div>' +
-    quietAltHtml +
-    journeyHtml +
+    '<div class="sr-experience-box">' +
+      '<div class="sr-exp-hero">' +
+        '<div class="sr-exp-hero-media"></div>' +
+        '<div class="j-kicker"><span class="j-num">1</span><span class="j-eyebrow">Guided Meditation Experience</span></div>' +
+        '<h1 class="sr-exp-hero-title">' + d.title + '</h1>' +
+        '<p class="sr-exp-hero-lede">' + d.lede + '</p>' +
+        '<p class="sr-exp-hero-subline">Begin the journey with your guided meditation via audio or video.</p>' +
+      '</div>' +
+      advisoryHtml +
+      '<div class="sr-player">' +
+        '<div class="exp-tabs">' +
+          '<div class="exp-tab active" data-exp="' + pk + '-watch"><span class="exp-tab-label">Watch</span><span class="exp-tab-name">Guided Video</span></div>' +
+          '<div class="exp-tab" data-exp="' + pk + '-listen"><span class="exp-tab-label">Listen</span><span class="exp-tab-name">Audio Only</span></div>' +
+        '</div>' +
+        '<div class="sr-pbody">' +
+          '<div class="exp-pane active" data-exp-pane="' + pk + '-watch">' +
+            '<div class="media-block"><div class="video-placeholder sr-video-unavailable"><div class="video-inner">' +
+              '<svg class="sr-video-unavailable-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 4l18 16" stroke-linecap="round"/><path d="M15 5H5.5A2.5 2.5 0 003 7.5v9c0 .74.32 1.4.85 1.86M21 8v8a2.5 2.5 0 01-2.5 2.5H9" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '<p class="sr-video-unavailable-title">Video guide not yet available</p>' +
+              '<p class="sr-video-unavailable-sub">Use Listen for the full guided practice in the meantime.</p>' +
+            '</div></div></div>' +
+          '</div>' +
+          '<div class="exp-pane" data-exp-pane="' + pk + '-listen">' +
+            '<div class="listen-grid"><div class="media-block"><div class="audio-placeholder">' +
+              '<p style="font-size:12px;color:var(--text3);letter-spacing:1px;margin-bottom:6px;">' + d.audioLabel + '</p>' +
+              '<div class="audio-waveform" id="' + d.waveId + '"></div>' +
+              '<div class="audio-controls"><div class="audio-play"><svg width="10" height="12" viewBox="0 0 10 12"><path d="M1 0l9 6-9 6V0z"/></svg></div><div class="audio-track"><div class="audio-fill"></div></div><span class="audio-time">' + d.audioMin + '</span></div>' +
+            '</div></div>' +
+            '<div class="listen-side"><span class="ls-label">Crisis Card</span><p class="ls-title">4-Line Version</p>' +
+              '<p class="ls-foot">For when reading a full page isn\'t possible. Printable, or save it to your phone\'s lock screen.</p>' +
+              '<div class="ls-open" data-resource="' + pk + '-crisiscard">Open Card <svg viewBox="0 0 8 8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>' +
+            '</div></div>' +
+          '</div>' +
+          quietAltHtml +
+          journeyHtml +
+        '</div>' +
+      '</div>' +
 
-    // "What This Protocol Can Shift" — folded into Experience per decision #3, not a separate numbered step
-    '<details class="shift-drop" style="margin-top:28px;">' +
-      '<summary><span class="shift-title">What This Protocol Can Shift</span>' +
-        '<span class="shift-preview">' + d.fitRows.map(function(r){return r[0];}).join(', ') + '</span>' +
-        '<span class="shift-toggle"></span></summary>' +
-      '<div class="heals"><p class="heals-lede">' + d.healsLede + '</p><div class="fit-meter-list">' + fitRowsHtml + '</div></div>' +
-    '</details>' +
+      // Correction 1: "What This Protocol Can Shift" is a region of the
+      // section 1 box in the mockup — direct child of .experience-box,
+      // last thing in it, after the player (which itself holds the
+      // journey collapsible) — not a sibling floating outside the box.
+      // Its own border/radius stay (mockup's .shift-drop rule keeps
+      // them; only .heals inside it loses its own decoration, per
+      // .shift-drop .heals below).
+      '<details class="shift-drop">' +
+        '<summary><span class="shift-title">What This Protocol Can Shift</span>' +
+          '<span class="shift-preview">' + d.fitRows.map(function(r){return r[0];}).join(', ') + '</span>' +
+          '<span class="shift-toggle"></span></summary>' +
+        '<div class="heals"><p class="heals-lede">' + d.healsLede + '</p><div class="fit-meter-list">' + fitRowsHtml + '</div></div>' +
+      '</details>' +
+    '</div>' +
   '</div>' +
 
   // ---- 2 Log & Journal ----
-  '<div class="j-step">' +
-    '<div class="j-kicker"><span class="j-num">2</span><span class="j-eyebrow">Log &amp; Journal</span></div>' +
-    '<p class="j-title">Turn change into evidence</p>' +
-    '<p class="j-sub">One protocol, practised repeatedly, tracked honestly.</p>' +
+  // Resources-Final diff, Group 2: every non-experience section is its own
+  // bordered enclosure (.sr-sec-box) with a header that bleeds to the box's
+  // edges and carries a gold left bar (.sr-sechead) — was a bare .j-kicker
+  // + p.j-title + p.j-sub with no enclosure of its own.
+  '<div class="j-step sr-sec-box">' +
+    '<div class="sr-sechead">' +
+      '<div class="j-kicker"><span class="j-num">2</span><span class="j-eyebrow">Log &amp; Journal</span></div>' +
+      '<h2>Turn change into evidence</h2>' +
+      '<p class="sr-sechead-lede">One protocol, practised repeatedly, tracked honestly.</p>' +
+    '</div>' +
+    // Correction 2: section 2 collapsed shows only the header and the two
+    // rows — "Practice & Journal"/sub, "Where You Are", "What's Next" (and
+    // the Chosen Self card, injected right after .jprog-rec-box by
+    // addEvidenceCards() — follows it into its new position automatically)
+    // now live INSIDE .sr-logdrop's reveal, ahead of the log form itself,
+    // instead of always-visible above both collapsibles.
     '<div class="jprog-section" data-jprog-key="' + pk + '" data-jprog-title="' + d.title + '" data-jprog-prompts="' + pk + '">' +
-      '<p class="jprog-title">Practice &amp; Journal</p>' +
-      '<p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>' +
       '<div class="jprog-panel active" data-jprog-panel="track">' +
-        '<div class="jprog-status-group">' +
-          '<div class="jprog-tier-card"><p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>' +
-          '<p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p></div>' +
-          '<div class="jprog-rec-box"><strong>What\'s Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there\'s enough usage to read a pattern.</span></div>' +
-        '</div>' +
-        '<div class="jprog-enclosure jprog-enclosure-log">' +
-          '<p class="jprog-subhead">Log a Session</p>' +
-          '<label class="jprog-label">How activated were you before, and after?</label>' +
-          '<div class="jprog-charge-row">' +
-            '<div class="jprog-charge-box"><span class="jprog-charge-tag">Before</span><div class="jprog-charge-control"><input type="range" min="0" max="10" value="7" data-jprog-el="presel" aria-label="Activation before"><span class="jprog-charge-val" data-jprog-el="preval">7</span></div><div class="jprog-charge-ends"><span>Settled</span><span>Peak alarm</span></div></div>' +
-            '<div class="jprog-charge-box after"><span class="jprog-charge-tag">After</span><div class="jprog-charge-control"><input type="range" min="0" max="10" value="3" data-jprog-el="postsel" aria-label="Activation after"><span class="jprog-charge-val" data-jprog-el="postval">3</span></div><div class="jprog-charge-ends"><span>Settled</span><span>Peak alarm</span></div></div>' +
+        '<details class="sr-logdrop">' +
+          '<summary><span class="sr-logdrop-jt">Log this session</span><span class="sr-cuetag">Next</span><span class="sr-logdrop-jq">A quick record of what changed.</span><span class="sr-logdrop-jx"></span></summary>' +
+          '<p class="jprog-title">Practice &amp; Journal</p>' +
+          '<p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>' +
+          '<div class="jprog-status-group">' +
+            '<div class="jprog-tier-card"><p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>' +
+            '<p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p></div>' +
+            '<div class="jprog-rec-box"><strong>What\'s Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there\'s enough usage to read a pattern.</span></div>' +
           '</div>' +
-          '<div class="jprog-delta"><span class="jprog-delta-val" data-jprog-el="deltaval">−4</span><span class="jprog-delta-text" data-jprog-el="deltatext"></span></div>' +
-          '<label class="jprog-label">What step did you reach or focus on?</label>' +
-          '<select class="jprog-select" data-jprog-el="stepselect">' +
-            '<option>Step 1 — Identify &amp; Name</option><option>Step 2 — Redirect to Heart</option><option>Step 3 — Accept &amp; Release</option><option>Step 4 — Gratitude &amp; Expansion</option><option>Full sequence</option>' +
-          '</select>' +
-          '<label class="jprog-label">Anything worth noting? (optional)</label>' +
-          '<textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>' +
-          '<div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>' +
-        '</div>' +
-        '<div class="jprog-recent"><label class="jprog-label">Recent Sessions</label><div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div></div>' +
-        '<div class="jprog-enclosure jprog-enclosure-journal">' +
-          '<p class="jprog-subhead">Journal</p><label class="jprog-label">Journal entry</label>' +
-          '<div class="jprog-prompt-card"><div class="jprog-prompt-main"><p class="jprog-prompt-kicker">Need a prompt?</p><p class="jprog-prompt-text" data-jprog-el="prompttext"></p><div class="jprog-prompt-cats" data-jprog-el="promptcats"></div></div>' +
-          '<div class="jprog-prompt-actions"><div class="jprog-prompt-use" data-jprog-el="promptuse">Use This</div><div class="jprog-prompt-shuffle" data-jprog-el="promptshuffle">Shuffle &#8635;</div></div></div>' +
-          '<textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what\'s coming up with this protocol..."></textarea>' +
-          '<div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>' +
-        '</div>' +
-        '<div class="jprog-past"><label class="jprog-label">Past Entries</label><div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div></div>' +
+          '<div class="jprog-enclosure jprog-enclosure-log">' +
+            '<p class="jprog-subhead">Log a Session</p>' +
+            '<label class="jprog-label">How activated were you before, and after?</label>' +
+            '<div class="jprog-charge-row">' +
+              '<div class="jprog-charge-box"><span class="jprog-charge-tag">Before</span><div class="jprog-charge-control"><input type="range" min="0" max="10" value="7" data-jprog-el="presel" aria-label="Activation before"><span class="jprog-charge-val" data-jprog-el="preval">7</span></div><div class="jprog-charge-ends"><span>Settled</span><span>Peak alarm</span></div></div>' +
+              '<div class="jprog-charge-box after"><span class="jprog-charge-tag">After</span><div class="jprog-charge-control"><input type="range" min="0" max="10" value="3" data-jprog-el="postsel" aria-label="Activation after"><span class="jprog-charge-val" data-jprog-el="postval">3</span></div><div class="jprog-charge-ends"><span>Settled</span><span>Peak alarm</span></div></div>' +
+            '</div>' +
+            '<div class="jprog-delta"><span class="jprog-delta-val" data-jprog-el="deltaval">−4</span><span class="jprog-delta-text" data-jprog-el="deltatext"></span></div>' +
+            '<label class="jprog-label">What step did you reach or focus on?</label>' +
+            '<select class="jprog-select" data-jprog-el="stepselect">' +
+              '<option>Step 1 — Identify &amp; Name</option><option>Step 2 — Redirect to Heart</option><option>Step 3 — Accept &amp; Release</option><option>Step 4 — Gratitude &amp; Expansion</option><option>Full sequence</option>' +
+            '</select>' +
+            '<label class="jprog-label">Anything worth noting? (optional)</label>' +
+            '<textarea class="jprog-log-note" data-jprog-el="lognote" placeholder="e.g. Got through the full sequence but the release step felt rushed."></textarea>' +
+            '<div class="jprog-btn" data-jprog-el="logbtn">Log This Session</div>' +
+          '</div>' +
+          '<div class="jprog-recent"><label class="jprog-label">Recent Sessions</label><div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div></div>' +
+        '</details>' +
+        '<details class="sr-journal">' +
+          '<summary><span class="sr-journal-jt">Journal</span><span class="sr-cuetag">Next</span><span class="sr-journal-jq" data-jprog-el="summaryprompt"></span><span class="sr-journal-jx"></span></summary>' +
+          '<div class="jprog-enclosure jprog-enclosure-journal">' +
+            '<p class="jprog-subhead">Journal</p><label class="jprog-label">Journal entry</label>' +
+            '<div class="jprog-prompt-card"><div class="jprog-prompt-main"><p class="jprog-prompt-kicker">Need a prompt?</p><p class="jprog-prompt-text" data-jprog-el="prompttext"></p><div class="jprog-prompt-cats" data-jprog-el="promptcats"></div></div>' +
+            '<div class="jprog-prompt-actions"><div class="jprog-prompt-use" data-jprog-el="promptuse">Use This</div><div class="jprog-prompt-shuffle" data-jprog-el="promptshuffle">Shuffle &#8635;</div></div></div>' +
+            '<textarea class="jprog-journal-text" data-jprog-el="journaltext" placeholder="Write freely about what\'s coming up with this protocol..."></textarea>' +
+            '<div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>' +
+          '</div>' +
+          '<div class="jprog-past"><label class="jprog-label">Past Entries</label><div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div></div>' +
+          '<p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library below and has started practicing.</p>' +
+        '</details>' +
       '</div>' +
-      '<p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library below and has started practicing.</p>' +
     '</div>' +
   '</div>' +
 
   // ---- 3 Go Deeper ----
-  '<div class="j-step">' +
-    '<div class="j-kicker"><span class="j-num">3</span><span class="j-eyebrow">Go Deeper</span></div>' +
-    '<p class="j-title">Understand. Integrate. Choose.</p>' +
-    '<p class="j-sub">For when you\'re not in the middle of it. None of this is required to practise.</p>' +
+  // Resources-Final diff, Group 5: this section's header gets the mockup's
+  // #resources>.sechead mini-banner treatment (its own cover-photo layer +
+  // a "Back to the practice" link) instead of the plain gold-gradient
+  // sechead the other two sections use — see .sr-resources-sechead in
+  // css/saferise-system.css. The photo comes from a clone of the same
+  // <picture> element already moved into .sr-exp-hero-media (not a second
+  // network fetch), made by syncResourcesHeroMedia().
+  '<div class="j-step sr-sec-box">' +
+    '<div class="sr-sechead sr-resources-sechead">' +
+      '<div class="sr-exp-hero-media sr-resources-hero-media"></div>' +
+      '<div class="sr-resource-back" onclick="this.closest(\'.proto-expand\').querySelector(\'.sr-experience-box\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">&lsaquo;&nbsp; Back to the practice</div>' +
+      '<div class="j-kicker"><span class="j-num">3</span><span class="j-eyebrow">Go Deeper</span></div>' +
+      '<h2>Understand. Integrate. Choose.</h2>' +
+      '<p class="sr-sechead-lede">For when you\'re not in the middle of it. None of this is required to practise.</p>' +
+    '</div>' +
     decisionEditorialHtml +
-    '<div class="res-row" style="margin-top:24px;">' + resItems.join('') + '</div>' +
+    '<div class="resource-library" aria-label="Optional protocol resources">' + resGroupsHtml + '</div>' +
+    '<p class="resource-note">Explore only when it supports the practice. You do not need to complete the library to return to the meditation.</p>' +
   '</div>' +
 
   // ---- 4 Beyond Self-Guided ----
-  '<div class="j-step">' +
-    '<div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Beyond Self-Guided</span></div>' +
-    '<p class="j-title">When you want someone in the room</p>' +
-    '<p class="j-sub">The protocols work alone. These are for the moments they don\'t go far enough.</p>' +
-    '<div class="jp5-card">' +
-      '<p class="jp5-card-text">Not every consultation is the same conversation. Let us know what you need before we match you with the right focus.</p>' +
-      '<div class="jp5-discover-link" onclick="jp5CurrentKey=\'' + pk + '\';showProg(\'premium1on1\')">Discover the Premium 1:1 Experience<svg viewBox="0 0 8 8" width="8" height="8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>' +
-      '<div class="jp5-open-btn" onclick="jp5Open(\'' + pk + '\',\'purpose\')">Request 1:1 Consultation</div>' +
+  '<div class="j-step sr-sec-box">' +
+    '<div class="sr-sechead">' +
+      '<div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Beyond Self-Guided</span></div>' +
+      '<h2>When you want someone in the room</h2>' +
+      '<p class="sr-sechead-lede">The protocols work alone. These are for the moments they don\'t go far enough.</p>' +
+    '</div>' +
+    // Group 4 (mockup diff): the mockup's two-card "Beyond Self-Guided"
+    // grid (monthly workshop + premium 1:1) was never brought across —
+    // this section was a single .jp5-card with one link and one button.
+    // Both cards route to existing program pages (showProg('workshops'),
+    // showProg('premium1on1')); no new destinations, no new data.
+    '<div class="sr-beyond">' +
+      '<div class="sr-bcard sr-bcard-teal">' +
+        '<div class="sr-bicon">&#9677;</div>' +
+        '<p class="sr-bl">Join a monthly workshop</p>' +
+        '<h3>Work a protocol live, with others.</h3>' +
+        '<p>Andre facilitating the same Four-Step framework in real time, alongside a small group — so you practise it once with support before you run it alone.</p>' +
+        '<div class="sr-btags"><span class="sr-btag">Small group</span><span class="sr-btag">Monthly</span><span class="sr-btag">Live, facilitated</span></div>' +
+        '<div class="sr-bbtn" onclick="showProg(\'workshops\')">Discover more &#9670;</div>' +
+      '</div>' +
+      '<div class="sr-bcard sr-bcard-gold">' +
+        '<span class="sr-blimited">Limited availability</span>' +
+        '<div class="sr-bicon">&#9673;</div>' +
+        '<p class="sr-bl">Book a premium 1:1</p>' +
+        '<h3>A private hour with the founder.</h3>' +
+        '<p>For whatever the self-guided protocols can\'t fully reach on their own — the pattern that needs a second pair of eyes, not another resource.</p>' +
+        '<div class="sr-btags"><span class="sr-btag">Private</span><span class="sr-btag">60 minutes</span><span class="sr-btag">With the founder</span></div>' +
+        '<div class="sr-bbtn" onclick="jp5CurrentKey=\'' + pk + '\';showProg(\'premium1on1\')">Discover more &#9670;</div>' +
+      '</div>' +
     '</div>' +
     '<div class="j-share">' +
       '<p class="j-share-title">Share This Protocol</p>' +
@@ -4548,6 +4715,47 @@ function syncProtocolResourceCardTitles(){
   });
 }
 document.addEventListener('DOMContentLoaded', syncProtocolResourceCardTitles);
+
+// Resources-Final diff, Group 1: the mockup has no separate banner strip —
+// the cover photo lives behind #experience .sechead--lead instead. Rather
+// than re-fetch or duplicate the image, this DOM-moves each protocol's own
+// .sr-proto-banner (the same <picture>/<img>/data-banner-key markup and
+// asset pipeline the carousel cover already uses) from its old top-level
+// position into the new .sr-exp-hero-media slot renderProtocolPage() left
+// for it — a plain move, same pattern as the carousel-to-full-page mount
+// swap already used elsewhere on this page, never rewriting the markup
+// itself. Runs once for all 10 protocols regardless of which is open,
+// since every protocol's markup already coexists in the DOM.
+function syncExperienceHeroMedia(){
+  document.querySelectorAll('#protoList > .proto-item[data-proto]').forEach(function(item){
+    const banner = item.querySelector(':scope > .sr-proto-banner');
+    const slot = item.querySelector('.sr-exp-hero-media');
+    if (banner && slot) slot.appendChild(banner);
+  });
+}
+
+// Resources-Final diff, Group 5: the mockup gives #resources>.sechead its
+// own copy of the cover photo, read via a small script that pulls the
+// *computed* background-image off #experience .sechead--lead and
+// reapplies it with a second scrim. Live's cover is a real <img> (data-
+// driven asset, not a CSS background-image), so the adaptation is a
+// clone of the same <picture> element syncExperienceHeroMedia() already
+// placed — same photo, no second network fetch — rather than a
+// background-image read. Must run after syncExperienceHeroMedia so
+// there's something in .sr-exp-hero-media to clone from.
+function syncResourcesHeroMedia(){
+  document.querySelectorAll('#protoList > .proto-item[data-proto]').forEach(function(item){
+    const source = item.querySelector('.sr-exp-hero-media .sr-proto-banner');
+    const slot = item.querySelector('.sr-resources-hero-media');
+    if (source && slot && !slot.querySelector('.sr-proto-banner')) {
+      slot.appendChild(source.cloneNode(true));
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', function(){
+  syncExperienceHeroMedia();
+  syncResourcesHeroMedia();
+});
 
 /* sr-v11-content-corrections */
 (function(){
@@ -5300,6 +5508,16 @@ document.addEventListener('DOMContentLoaded', function(){
       btn.classList.toggle('is-playing');
       const fill = btn.closest('.audio-controls').querySelector('.audio-fill');
       if(fill) fill.style.width = btn.classList.contains('is-playing') ? '45%' : '0%';
+      // Correction 6, Stage 2: there's no real media to detect completion
+      // from (this control is decorative, as the comment above notes, and
+      // Watch has no control at all since SR-029), so pressing the one
+      // real control that exists is the chosen honest-enough proxy for
+      // "session completed" — scoped to Track 01's open protocol page only.
+      const ptPage = document.getElementById('personal-protocol-page');
+      if (ptPage && !ptPage.hidden && ptPage.contains(btn) && typeof srAdvanceStage === 'function') {
+        const sec = ptPage.querySelector('.jprog-section[data-jprog-key]');
+        if (sec) srAdvanceStage(sec.dataset.jprogKey, 'log');
+      }
     });
   });
 });
@@ -10798,19 +11016,37 @@ window.addEventListener('load', function(){
   }
 
   function addResourceRows(){
+    function buildCard(pk){
+      const d=IDENTITY_DATA[pk], card=document.createElement('div');
+      card.className='res-item identity-resource';
+      card.dataset.resource=pk+'-decision';
+      card.innerHTML='<div class="res-icon">'+(READER_ICONS.identity||'')+'</div>'+
+        '<div class="res-body"><p class="res-kind">The Decision</p><p class="res-title">Identity &amp; Embodiment — '+esc(d.chosen)+'</p>'+
+        '<p class="res-meta">Choose the identity · make the decision · practise the evidence</p></div>'+
+        '<div class="res-action">Read <svg viewBox="0 0 8 8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>';
+      card.addEventListener('click',function(e){e.stopPropagation();openReader(pk,pk+'-decision');});
+      return card;
+    }
     Object.keys(IDENTITY_DATA).forEach(function(pk){
+      // Tracks 02/03 and the homepage legacy previews still use the flat
+      // .res-row this always targeted — untouched.
       document.querySelectorAll('.res-row').forEach(function(row){
         if(!row.querySelector('[data-resource^="'+pk+'-"]')) return;
         if(row.querySelector('[data-resource="'+pk+'-decision"]')) return;
-        const d=IDENTITY_DATA[pk], card=document.createElement('div');
-        card.className='res-item identity-resource';
-        card.dataset.resource=pk+'-decision';
-        card.innerHTML='<div class="res-icon">'+(READER_ICONS.identity||'')+'</div>'+
-          '<div class="res-body"><p class="res-kind">The Decision</p><p class="res-title">Identity &amp; Embodiment — '+esc(d.chosen)+'</p>'+
-          '<p class="res-meta">Choose the identity · make the decision · practise the evidence</p></div>'+
-          '<div class="res-action">Read <svg viewBox="0 0 8 8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>';
-        card.addEventListener('click',function(e){e.stopPropagation();openReader(pk,pk+'-decision');});
-        row.appendChild(card);
+        row.appendChild(buildCard(pk));
+      });
+      // Resources-Final diff, Group 5: Track 01's Go Deeper resources now
+      // live in .resource-library > .resource-group instead of one flat
+      // .res-row — append to the LAST group in this protocol's library
+      // (mirrors where it landed in the old flat list: after disclosure/
+      // repair) rather than every matching group, which would otherwise
+      // duplicate the card once per group.
+      document.querySelectorAll('.resource-library').forEach(function(library){
+        if(!library.querySelector('[data-resource^="'+pk+'-"]')) return;
+        if(library.querySelector('[data-resource="'+pk+'-decision"]')) return;
+        const groups=library.querySelectorAll('.resource-group');
+        const target=groups.length?groups[groups.length-1]:library;
+        target.appendChild(buildCard(pk));
       });
     });
   }
