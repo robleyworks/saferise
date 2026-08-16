@@ -3323,6 +3323,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   window.addEventListener('popstate', function () {
+    // SR-034: the resource reader pushes its own entry on top of this one.
+    // While it is open, this popstate belongs to it — it closes itself and
+    // the protocol page must stay put, or back would jump the member all
+    // the way out to the carousel instead of returning to the practice.
+    if (window.__srReaderOpen) return;
     if (current) actualClose();
   });
 
@@ -5601,6 +5606,274 @@ function closeReader(){
 }
 
 // Wire up every resource item, crisis-card opener, and inline crisis-resource link.
+/* ================================================================
+   RESOURCE READER — standalone page controller (brief §2b). SR-034.
+
+   Replaces #reader-overlay for Track 01 only. Tracks 02 and 03 keep
+   routing into openReader() until their own pages exist.
+
+   Content is NOT rebuilt here. openReader() is called to construct and
+   hydrate the page, the overlay is un-shown in the same synchronous
+   turn so it never paints, and the built .reader-page node is relocated
+   into this page's centre column. That indirection is deliberate: seven
+   separate later script blocks monkey-patch openReader() and
+   selectReaderTab() to hydrate their own content into .reader-page —
+   the Decision body (which ships as body:['']), the founder video, the
+   protocol-guide video, evidence cards, resource rows, the reference
+   case person card. Building the body independently would leave every
+   one of those unrun and several resources blank. Relocating a node is
+   a DOM move: listeners and hydrated state come with it.
+   ================================================================ */
+var SR_READER = { pk:null, key:null, lit:null, io:null, fb:{} };
+
+var SR_RD_HEART = '<svg viewBox="0 0 24 24"><path d="M12 20.5S3 14.9 3 8.9A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 9 2.9c0 6-9 11.6-9 11.6z"/></svg>';
+var SR_RD_PANGOLIN = '<svg viewBox="0 0 24 24">' +
+  '<path d="M11.6 3.3a8.7 8.7 0 1 1-8.3 10.9"/>' +
+  '<path d="M12.4 7.6a4.4 4.4 0 1 1-3.9 6.3"/>' +
+  '<path d="M11.6 3.3c-.5 1.4-1.2 2.5-2.2 3.4M15.4 4.1c-.3 1.5-1 2.7-2 3.7' +
+  'M18.6 6.3c-.6 1.4-1.6 2.5-2.8 3.2M20.6 9.6c-1 1.1-2.2 1.9-3.6 2.3"/></svg>';
+var SR_RD_FEEDBACK = [
+  { key:'resonate',  icon:SR_RD_HEART,    label:'It resonates' },
+  { key:'integrate', icon:SR_RD_PANGOLIN, label:'I will integrate' }
+];
+
+/* ---- theme: midnight (default) / sunrise, persisted ---- */
+function srReaderTheme(mode, silent){
+  var soft = mode === 'soft';
+  document.body.classList.toggle('rd-soft', soft);
+  try { localStorage.setItem('sr-reader-theme', soft ? 'soft' : 'dark'); } catch (e) {}
+  document.querySelectorAll('#personal-resource-page [data-sr-theme]').forEach(function(b){
+    b.classList.toggle('on', b.dataset.srTheme === (soft ? 'soft' : 'dark'));
+  });
+}
+function srReaderStoredTheme(){
+  try { return localStorage.getItem('sr-reader-theme') === 'soft' ? 'soft' : 'dark'; }
+  catch (e) { return 'dark'; }
+}
+
+/* ---- guidance light: one recommended next action at a time (§5) ---- */
+function srReaderLight(el){
+  if (SR_READER.lit === el) return;
+  if (SR_READER.lit) SR_READER.lit.classList.remove('on');
+  SR_READER.lit = el || null;
+  if (el) el.classList.add('on');
+}
+
+/* ---- rail ---- */
+function srReaderRail(){
+  var pk = SR_READER.pk, proto = READER_PROTOCOLS[pk];
+  var list = document.getElementById('sr-rd-raillist'), html = '';
+  proto.keys.forEach(function(key, i){
+    var m = readerMeta(key);
+    if (!m) return;
+    var data = RESOURCE_CONTENT[key];
+    var isAdvisory = /-advisory$/.test(key);
+    html += '<button type="button" class="sr-item' + (key === SR_READER.key ? ' on' : '') +
+              (isAdvisory ? ' advisory' : '') + '" data-sr-goto="' + key + '">' +
+      '<span class="sr-ic" data-type="' + m.type + '">' + readerGlyph(key) + '</span>' +
+      '<span><span class="sr-n">' + ('0' + (i + 1)).slice(-2) + '</span>' +
+      '<span class="sr-t">' + m.railTitle + '</span>' +
+      '<span class="sr-m">' + m.railMeta + '</span></span></button>';
+  });
+  list.innerHTML = html;
+
+  var idx = proto.keys.indexOf(SR_READER.key), cur = readerMeta(SR_READER.key);
+  document.getElementById('sr-rd-railsum').textContent =
+    ('0' + (idx + 1)).slice(-2) + ' of ' + ('0' + proto.keys.length).slice(-2) +
+    (cur ? ' · ' + cur.railTitle : '');
+}
+
+/* ---- utility column ---- */
+function srReaderUtility(){
+  var pk = SR_READER.pk, proto = READER_PROTOCOLS[pk], key = SR_READER.key;
+  var m = readerMeta(key);
+
+  // progress counts readable content; the advisory is a safety note, not a step
+  var content = proto.keys.filter(function(k){ return !/-advisory$/.test(k); });
+  var pos = content.indexOf(key) + 1, tot = content.length, tr = '';
+  for (var i = 0; i < tot; i++) tr += (i ? '<s></s>' : '') + '<i class="' + (i < pos ? '' : 'off') + '"></i>';
+  document.querySelector('#sr-rd-progress .sr-track').innerHTML = tr;
+  document.querySelector('#sr-rd-progress .pv').innerHTML =
+    (pos > 0 ? '<b>' + pos + '</b> of ' + tot : '<b>—</b> of ' + tot);
+
+  // guidance — on every resource (§3); duration only when one exists
+  var guide = document.getElementById('sr-rd-guide');
+  guide.hidden = !(m && m.hasAudio);
+  document.getElementById('sr-rd-guidetitle').textContent = m ? 'Using ' + m.railTitle : '';
+  var dur = document.getElementById('sr-rd-dur');
+  dur.textContent = (m && m.dur) ? m.dur : '';
+  dur.hidden = !(m && m.dur);
+
+  // download — its own quiet region, hidden entirely while no file exists
+  document.getElementById('sr-rd-download').hidden = !(m && m.hasPdf);
+
+  // feedback, multi-select, state kept per resource
+  var fb = document.getElementById('sr-rd-fb'), fh = '';
+  var picked = SR_READER.fb[key] || {};
+  SR_RD_FEEDBACK.forEach(function(o){
+    fh += '<button type="button" class="sr-chip' + (picked[o.key] ? ' on' : '') +
+          '" data-fb="' + o.key + '">' + o.icon + '<span>' + o.label + '</span></button>';
+  });
+  fb.innerHTML = fh;
+
+  // up next
+  var nx = proto.keys[proto.keys.indexOf(key) + 1], box = document.getElementById('sr-rd-upnext');
+  if (nx && readerMeta(nx)) {
+    var nm = readerMeta(nx);
+    box.hidden = false;
+    box.innerHTML = '<p class="ul">Up next</p>' +
+      '<a href="#" class="sr-next" data-sr-goto="' + nx + '">' +
+      '<span class="sr-ic" data-type="' + nm.type + '">' + readerGlyph(nx) + '</span>' +
+      '<span class="nt">' + nm.railTitle + '<span class="nm">' + nm.railMeta + '</span></span>' +
+      '<span class="na">&rarr;</span></a>';
+  } else {
+    box.hidden = true;
+    box.innerHTML = '';
+  }
+}
+
+/* ---- centre column ---- */
+function srReaderMain(){
+  var pk = SR_READER.pk, key = SR_READER.key;
+  var data = RESOURCE_CONTENT[key], m = readerMeta(key);
+  var km = kindMetaFor(data.kind);
+
+  // eyebrow falls back to the kind label while written copy is pending
+  document.getElementById('sr-rd-eyebrow').textContent = (m && m.eyebrow) || data.kind;
+  document.getElementById('sr-rd-title').textContent = data.title;
+  document.getElementById('sr-rd-kind').textContent = data.kind;
+  document.getElementById('sr-rd-read').textContent = m ? m.railMeta : km.readtime + ' min read';
+
+  // Build + hydrate through the existing pipeline, then relocate. The
+  // overlay is un-shown before this turn yields, so it never paints.
+  var overlay = document.getElementById('reader-overlay');
+  openReader(pk, key);
+  overlay.classList.remove('active');
+
+  var built = document.querySelector('#reader-content .reader-page[data-reader-page="' + key + '"]');
+  var host = document.getElementById('sr-rd-body');
+  host.innerHTML = '';
+  if (built) {
+    built.classList.add('active');
+    host.appendChild(built);
+  }
+}
+
+function srReaderSelect(key){
+  if (!READER_PROTOCOLS[SR_READER.pk] || !RESOURCE_CONTENT[key]) return;
+  SR_READER.key = key;
+  srReaderMain();
+  srReaderRail();
+  srReaderUtility();
+  srReaderLight(null);
+  var rail = document.getElementById('sr-rd-rail');
+  if (window.innerWidth <= 1000 && rail.classList.contains('open')) srReaderToggleRail();
+  document.getElementById('personal-resource-page').scrollIntoView({ block:'start' });
+}
+
+function srReaderToggleRail(){
+  var r = document.getElementById('sr-rd-rail'), on = r.classList.toggle('open');
+  document.getElementById('sr-rd-railtoggle').setAttribute('aria-expanded', on ? 'true' : 'false');
+}
+
+function openResourceReader(pk, key){
+  var proto = READER_PROTOCOLS[pk];
+  if (!proto) return;
+  var page = document.getElementById('personal-resource-page');
+  var protoPage = document.getElementById('personal-protocol-page');
+  SR_READER.pk = pk;
+  SR_READER.savedScrollY = window.scrollY;
+
+  var d = (typeof PT_PROTOCOLS !== 'undefined' && PT_PROTOCOLS[pk]) ? PT_PROTOCOLS[pk] : null;
+  document.getElementById('sr-rd-protocol').textContent = proto.title;
+  document.getElementById('sr-rd-protolede').textContent = (d && d.lede) ? d.lede : '';
+
+  if (protoPage) protoPage.hidden = true;
+  page.hidden = false;
+  window.__srReaderOpen = true;
+  srReaderTheme(srReaderStoredTheme());
+  srReaderSelect(key);
+  window.scrollTo(0, 0);
+  if (typeof buildWaveforms === 'function') buildWaveforms();
+
+  // guidance light: journal block lights when the reading is finished,
+  // then moves to Up Next once that action is taken or scrolled past (§5)
+  var close = document.getElementById('sr-rd-close'), next = document.getElementById('sr-rd-upnext');
+  if (SR_READER.io) SR_READER.io.disconnect();
+  if ('IntersectionObserver' in window) {
+    SR_READER.io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting && e.target === close) srReaderLight(close); });
+    }, { threshold:.55 });
+    SR_READER.io.observe(close);
+  }
+  history.pushState({ srReaderOpen:true }, '', '#' + pk + '/' + key);
+}
+
+function closeResourceReader(){
+  var page = document.getElementById('personal-resource-page');
+  var protoPage = document.getElementById('personal-protocol-page');
+  if (page.hidden) return;
+  page.hidden = true;
+  if (protoPage) protoPage.hidden = false;
+  window.__srReaderOpen = false;
+  // the theme is the reader's own surface; the rest of the site stays midnight
+  document.body.classList.remove('rd-soft');
+  if (SR_READER.io) { SR_READER.io.disconnect(); SR_READER.io = null; }
+  srReaderLight(null);
+  SR_READER.pk = SR_READER.key = null;
+  window.scrollTo(0, SR_READER.savedScrollY || 0);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  var page = document.getElementById('personal-resource-page');
+  if (!page) return;
+
+  page.addEventListener('click', function(e){
+    var goto = e.target.closest('[data-sr-goto]');
+    if (goto) { e.preventDefault(); srReaderSelect(goto.dataset.srGoto); return; }
+
+    var theme = e.target.closest('[data-sr-theme]');
+    if (theme) { srReaderTheme(theme.dataset.srTheme); return; }
+
+    var toggle = e.target.closest('#sr-rd-railtoggle');
+    if (toggle) { srReaderToggleRail(); return; }
+
+    var chip = e.target.closest('.sr-fb .sr-chip');
+    if (chip) {
+      var key = SR_READER.key, sel = SR_READER.fb[key] || (SR_READER.fb[key] = {});
+      sel[chip.dataset.fb] = !sel[chip.dataset.fb];
+      chip.classList.toggle('on', !!sel[chip.dataset.fb]);
+      return;
+    }
+
+    var back = e.target.closest('[data-resource-page-back]');
+    if (back) { history.back(); return; }
+
+    // pressing the journal moves the light on to Up Next (§5)
+    if (e.target.closest('#sr-rd-close')) {
+      srReaderLight(document.getElementById('sr-rd-upnext'));
+    }
+  });
+
+  page.addEventListener('keydown', function(e){
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.id === 'sr-rd-play') {
+      e.preventDefault(); e.target.classList.toggle('playing');
+    }
+  });
+
+  window.addEventListener('scroll', function(){
+    if (page.hidden) return;
+    var close = document.getElementById('sr-rd-close');
+    if (close && close.getBoundingClientRect().bottom < 0) {
+      srReaderLight(document.getElementById('sr-rd-upnext'));
+    }
+  }, { passive:true });
+
+  window.addEventListener('popstate', function(){
+    if (!page.hidden) closeResourceReader();
+  });
+});
+
 // Attached directly (not delegated) for the same reason as the hero/exp tabs:
 // the journey wrapper calls event.stopPropagation() on click, which would
 // otherwise block a listener delegated to an ancestor.
@@ -5616,7 +5889,14 @@ document.addEventListener('DOMContentLoaded', function(){
       // resources) falls back to the small single-resource popup.
       const protoMatch = key.match(/^(t2-p\d+|t3-p\d+|p\d+)-/);
       const protoKey = protoMatch ? protoMatch[1] : null;
-      if (protoKey && READER_PROTOCOLS[protoKey]) {
+      // Brief §2b: Track 01 opens the standalone reader page. Tracks 02 and
+      // 03 keep the overlay until their own pages exist — openReader() is
+      // left intact for them (and the page itself still calls it internally
+      // to build and hydrate content; see the SR-034 note above).
+      if (protoKey && /^p\d+$/.test(protoKey) && READER_PROTOCOLS[protoKey] &&
+          document.getElementById('personal-resource-page')) {
+        openResourceReader(protoKey, key);
+      } else if (protoKey && READER_PROTOCOLS[protoKey]) {
         openReader(protoKey, key);
       } else {
         openResourceModal(key);
@@ -6617,6 +6897,111 @@ document.querySelectorAll('#protoList [data-proto-key]').forEach(function(expand
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Back to Protocols
       </button>
+    </div>
+
+    <!-- personal-resource-page: the standalone Resource Reader (brief §2b).
+         Replaces #reader-overlay for Track 01 only; the overlay stays in
+         place for Tracks 02 and 03 until their pages exist. Chrome is static
+         markup, contents are built by openResourceReader(). -->
+    <div id="personal-resource-page" class="sr-rdpage" hidden>
+      <div class="sr-rdshell">
+        <div class="sr-backbar">
+          <button type="button" class="proto-page-back" data-resource-page-back>
+            &lsaquo;&nbsp; Back to the practice
+          </button>
+        </div>
+        <section class="sr-reader" aria-label="Resource reader">
+          <div class="sr-grid">
+
+            <div class="sr-rail" id="sr-rd-rail">
+              <button class="sr-railtoggle" id="sr-rd-railtoggle" aria-expanded="false"
+                      aria-controls="sr-rd-raillist" type="button">
+                Resource <b id="sr-rd-railsum"></b><span class="sx">Index</span>
+              </button>
+              <div class="resource-group-label sr-raillabel"><span>Resources to go deeper</span></div>
+              <div class="sr-rail-list" id="sr-rd-raillist"></div>
+            </div>
+
+            <div class="sr-rdcover" id="sr-rd-cover">
+              <div class="sr-cover-sun" aria-hidden="true"></div>
+              <h1 class="sr-sectitle" id="sr-rd-protocol"></h1>
+              <p class="sr-lede sr-lede-lead" id="sr-rd-protolede"></p>
+            </div>
+
+            <div class="sr-main">
+              <div class="sr-rdhead">
+                <div class="sr-headrow">
+                  <p class="eyebrow" id="sr-rd-eyebrow"></p>
+                  <div class="sr-theme" role="group" aria-label="Reading theme">
+                    <button type="button" data-sr-theme="dark" class="on">Midnight</button>
+                    <button type="button" data-sr-theme="soft">Sunrise</button>
+                  </div>
+                </div>
+                <h2 id="sr-rd-title"></h2>
+                <p class="sr-subline"><span id="sr-rd-kind"></span> &nbsp;&middot;&nbsp; <span id="sr-rd-read"></span></p>
+              </div>
+
+              <!-- The built .reader-page node is relocated in here. Its inner
+                   contract (.reader-page[data-reader-page] > .reader-page-body)
+                   is preserved exactly so every existing hydrator keeps working. -->
+              <div class="sr-body" id="sr-rd-body"></div>
+
+              <div class="sr-close sr-lit" id="sr-rd-close">
+                <p class="eyebrow sr-quiet">When you're ready</p>
+                <p class="q">Return to your journal?</p>
+                <p class="cp">What has landed that you would like to reflect on, or carry forward into practice?</p>
+                <button type="button" class="sr-ghost" id="sr-rd-journal">Open the journal</button>
+              </div>
+            </div>
+
+            <div class="sr-utility">
+
+              <div class="sr-u sr-progress" id="sr-rd-progress">
+                <div class="prow"><span class="ul">Protocol progress</span><span class="pv"></span></div>
+                <div class="sr-track"></div>
+                <p class="pn">Needs an account to persist.</p>
+              </div>
+
+              <div class="sr-u sr-guide" id="sr-rd-guide">
+                <p class="ul">Resource guidance</p>
+                <div class="audio-placeholder">
+                  <div class="audio-waveform" id="sr-rd-wave"></div>
+                  <div class="audio-controls">
+                    <div class="audio-play" id="sr-rd-play" role="button" tabindex="0" aria-label="Play the resource guidance">
+                      <svg width="10" height="12" viewBox="0 0 10 12"><path d="M1 0l9 6-9 6V0z"/></svg>
+                    </div>
+                    <div class="audio-track"><div class="audio-fill"></div></div>
+                    <div class="audio-time" id="sr-rd-dur"></div>
+                  </div>
+                </div>
+                <p class="lt" id="sr-rd-guidetitle"></p>
+                <p class="ld">Tips on how to get the most out of this resource.</p>
+              </div>
+
+              <div class="sr-u sr-feedback">
+                <p class="ul">Resource feedback</p>
+                <p class="sr-fbq">How does this resource land?</p>
+                <div class="sr-fb" id="sr-rd-fb"></div>
+              </div>
+
+              <div class="sr-u sr-download" id="sr-rd-download" hidden>
+                <a href="#" class="sr-dl">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 1v9M4.5 7L8 10.5 11.5 7M2 13.5h12"/></svg>
+                  Download or print this resource
+                </a>
+              </div>
+
+              <div class="sr-u sr-upnext sr-lit" id="sr-rd-upnext"></div>
+
+              <div class="sr-u sr-oneone">
+                <p>Working a pattern that keeps returning? <a href="#" data-sr-oneone>Request a 1:1 session</a></p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="sr-sky" aria-hidden="true"></div>
     </div>
   </div>
 </div>

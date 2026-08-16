@@ -2509,15 +2509,24 @@ body.rd-soft{background-color:#354268}
 html:has(body.rd-soft){background:#647496}
 
 /* The nav warms with the page. The mockup themes its own .sr-topnav; the
-   live equivalent is the fixed .theme-bar, so that is what is themed here.
+   live equivalent is #main-nav — the fixed bar at top:0/z-index:1000.
+   NOT .theme-bar: that class is styled in index.html and queried by
+   saferise-system.js, but no element in the document carries it, so a rule
+   hung there would have themed nothing.
    Safe despite being shared chrome because rd-soft is only ever on <body>
    while the reader view is open, and openResourceReader/closeResourceReader
-   are the only things that add and remove it. */
-body.rd-soft .theme-bar{background:rgba(78,92,128,.72);
-  border-bottom-color:rgba(255,222,190,.2)}
+   are the only things that add and remove it.
+
+   #main-nav sets its background as an INLINE style attribute, and an
+   inline declaration outranks every stylesheet selector regardless of
+   specificity — !important is the only thing that reaches it. Same
+   exception as B18b, and for the same reason: not a cascade-order
+   problem, a cascade-origin one. */
+body.rd-soft #main-nav{background:rgba(78,92,128,.72)!important;
+  border-bottom-color:rgba(255,222,190,.2)!important}
 
 /* everything else warms at the same pace */
-.theme-bar,
+#main-nav,
 .sr-reader,.sr-rail,.sr-utility,.sr-main,.sr-u,.sr-item,.sr-ic,
 .sr-close,.sr-chapter,.sr-body p,.sr-rdhead,.sr-chip,.sr-theme,.sr-theme button,
 .sr-item .sr-t,.sr-item .sr-n,.sr-item .sr-m,.sr-next .nt,.sr-next .nm,.sr-guide .lt,
@@ -2618,4 +2627,30 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
   .sr-rdshell{padding:0 14px}
   .sr-reader{border-radius:11px}
   .sr-fb .sr-chip{width:100%;justify-content:flex-start}
+}
+
+/* B18b · the relocated .reader-page inside the reader shell ─────
+   SR-034. openResourceReader() moves the node openReader() built into
+   .sr-body, so every existing hydrator keeps working on the DOM contract
+   it already queries. What comes with the node is the overlay's own
+   chrome, which has to be neutralised here.
+
+   This is the one place in this file that needs !important. CLAUDE.md is
+   right that the system wins by cascade order — but the rules being
+   overridden are themselves !important (the v8–v12 reader patches, all
+   loaded earlier), and cascade order cannot beat !important. Specificity
+   plus !important can, which is why each rule is scoped by .sr-body. */
+.sr-body .reader-page{display:block!important;padding:0!important;animation:none!important;
+  color:var(--ink)!important;background:transparent!important}
+/* the head already carries kind and title — the node's own copies would
+   render them a second time, directly beneath */
+.sr-body .reader-page-kind,
+.sr-body .reader-page-title,
+.sr-body .reader-page-tags{display:none!important}
+.sr-body .reader-page-body{font-size:15px!important;line-height:1.78!important;
+  color:var(--ink)!important;max-width:none!important;background:transparent!important}
+.sr-body .reader-page-body p{font-size:15px!important;line-height:1.78!important;
+  color:var(--ink)!important;max-width:62ch!important;margin-bottom:17px}
+@media(max-width:780px){
+  .sr-body .reader-page{padding:0!important}
 }
