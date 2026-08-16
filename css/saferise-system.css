@@ -1879,7 +1879,12 @@ details.sr-q .sr-a a{color:var(--primary2)}
    card, not two stacked ones — the same relationship the mockup's own
    .logdrop/.logcard pair uses (outer card, inner card stripped to a
    plain divider). */
-.sr-logdrop,.sr-journal{border:1px solid var(--border);border-radius:12px;background:var(--card);margin-top:14px;overflow:hidden}
+/* Correction 7: gold-tinted baseline (was neutral var(--border)/var(--card))
+   so sections 2 and 3 read as one family with the resource library. */
+.sr-logdrop,.sr-journal{border:1px solid rgba(212,168,67,.2);border-radius:12px;
+  background:linear-gradient(145deg,rgba(212,168,67,.026),rgba(255,255,255,.006) 42%,transparent);
+  margin-top:14px;overflow:hidden}
+.sr-logdrop:hover,.sr-journal:hover{border-color:rgba(212,168,67,.32)}
 .sr-logdrop summary,.sr-journal summary{list-style:none;cursor:pointer;padding:20px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:64px}
 .sr-logdrop summary::-webkit-details-marker,.sr-journal summary::-webkit-details-marker{display:none}
 .sr-logdrop-jt,.sr-journal-jt{font-family:'Cinzel',serif;font-size:18px;color:var(--text)}
