@@ -1906,8 +1906,17 @@ details.sr-q .sr-a a{color:var(--primary2)}
    them. Header, advisory and player are regions of it: header bleeds to
    the box's top edge and keeps only a bottom border; the player's own
    border/background are stripped since the box already provides them. */
+/* Correction 3: had no margin-bottom of its own, while .sr-sec-box (the
+   other three boxes) forces margin-top:0 and does its spacing entirely
+   via its own margin-bottom (68px, to beat .j-step + .j-step's
+   margin-top:34px — see that rule's own comment). Net effect was a 0px
+   gap between this box and the next, against 68px between every other
+   pair. Matched here so every gap between enclosures is identical. */
 .sr-experience-box{border:1px solid var(--border);border-radius:14px;overflow:hidden;
-  background:linear-gradient(180deg,rgba(255,255,255,.012),transparent 42%)}
+  background:linear-gradient(180deg,rgba(255,255,255,.012),transparent 42%);margin-bottom:68px}
+@media(max-width:900px){
+  .sr-experience-box{margin-bottom:44px}
+}
 
 /* Experience hero card / #experience .sechead--lead: the protocol title
    used to render twice (once overlaid on the banner photo, once as
@@ -2045,7 +2054,9 @@ details.sr-q .sr-a a{color:var(--primary2)}
   border:1px solid var(--border)!important;border-top:0!important;
   border-radius:14px;overflow:hidden;
   background:linear-gradient(180deg,rgba(255,255,255,.012),rgba(255,255,255,.003) 44%,transparent)}
-.sr-sec-box:last-child{margin-bottom:0!important}
+/* Correction 3: mockup gives the last enclosure MORE space before the
+   footer (72px / 52px narrow), not less — this was wrongly zeroed out. */
+.sr-sec-box:last-child{margin-bottom:72px!important}
 .sr-sechead{position:relative;max-width:none;margin:0 -32px 38px;padding:27px 30px 29px;
   border-bottom:1px solid var(--border);overflow:hidden;
   background:linear-gradient(100deg,rgba(212,168,67,.085) 0%,rgba(212,168,67,.035) 34%,
@@ -2060,8 +2071,13 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .sr-sechead .j-num{width:23px;height:23px;font-size:10px;line-height:23px}
 .sr-sechead .j-eyebrow{font-size:10px;letter-spacing:.27em}
 @media(max-width:900px){
-  .sr-sec-box{padding:0 18px 28px;margin-bottom:44px;border-radius:11px}
-  .sr-sec-box:last-child{margin-bottom:0!important}
+  /* !important: the base rule's margin shorthand is !important (needed to
+     beat .j-step + .j-step), so this override needs it too or it's
+     silently ignored regardless of media-query/cascade order — caught
+     during Correction 3 verification (this rule wasn't taking effect at
+     414px). */
+  .sr-sec-box{padding:0 18px 28px;margin-bottom:44px!important;border-radius:11px}
+  .sr-sec-box:last-child{margin-bottom:52px!important}
   .sr-sechead{margin:0 -18px 30px;padding:22px 21px 24px}
   .sr-sechead h2{font-size:clamp(25px,8vw,32px)}
   .sr-sechead-lede{font-size:17px}
