@@ -2046,3 +2046,72 @@ details.sr-q .sr-a a{color:var(--primary2)}
   .sr-sechead h2{font-size:clamp(25px,8vw,32px)}
   .sr-sechead-lede{font-size:17px}
 }
+
+/* Resources-Final diff, Group 5 — Go Deeper's resource list: was a flat
+   .res-row of undifferentiated cards. Mockup groups them under labelled
+   headers inside one bordered library. Live's item markup keeps its own
+   class names (.res-item/.res-icon/.res-kind/.res-title/.res-meta/
+   .res-action — unchanged since ptResItem() already used them before this
+   pass) rather than adopting the mockup's shorter .res/.ic/.rl/.rt/.rm/.go
+   names, so all of this is scoped under .resource-group instead of renaming
+   a helper used in more than one place. */
+.resource-library{margin-top:2px;border:1px solid rgba(212,168,67,.2);border-radius:14px;overflow:hidden;
+  background:linear-gradient(145deg,rgba(212,168,67,.026),rgba(255,255,255,.006) 42%,transparent)}
+.resource-group+.resource-group{border-top:1px solid rgba(212,168,67,.2)}
+.resource-group-label{display:flex;align-items:center;gap:15px;padding:19px 26px 17px;
+  border-bottom:1px solid rgba(255,255,255,.035);
+  background:linear-gradient(90deg,rgba(212,168,67,.075),rgba(78,154,166,.018) 62%,transparent)}
+.resource-group-label:before{content:"";width:22px;height:1px;background:var(--primary);opacity:.75}
+.resource-group-label span{font-size:9px;line-height:1.2;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--primary);font-weight:700}
+.resource-group .res-item{display:grid;grid-template-columns:42px minmax(0,1fr) 120px;gap:21px;
+  align-items:center;min-height:102px;margin:0 26px;padding:23px 0;background:transparent;
+  border:0;border-bottom:1px solid rgba(255,255,255,.035)}
+.resource-group .res-item:last-child{border-bottom:0}
+.resource-group .res-item+.res-item{margin-top:0}
+.resource-group .res-item:hover{background:transparent;border-bottom-color:rgba(255,255,255,.035)}
+.resource-group .res-icon{width:42px;height:42px;border-radius:50%;border-color:rgba(212,168,67,.18);
+  background:rgba(8,8,12,.26)}
+.resource-group .res-kind{margin-bottom:6px;font-size:9px;letter-spacing:.21em}
+.resource-group .res-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-weight:400;
+  line-height:1.35;letter-spacing:.005em;color:var(--text)}
+.resource-group .res-meta{font-size:11.5px;line-height:1.5}
+.resource-group .res-action{width:120px;min-height:44px;border-color:rgba(212,168,67,.42);
+  background:rgba(212,168,67,.025);justify-content:center}
+.resource-group .res-action:hover{border-color:var(--primary);background:rgba(212,168,67,.09)}
+.resource-note{margin:20px 3px 0;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:16px;line-height:1.55;color:var(--text3)}
+@media(max-width:900px){
+  .resource-group .res-item{grid-template-columns:40px minmax(0,1fr) 112px;margin:0 20px;gap:17px}
+}
+@media(max-width:560px){
+  .resource-group .res-item{grid-template-columns:1fr;margin:0 17px;gap:10px}
+  .resource-group .res-icon{display:none}
+  .resource-group .res-action{grid-column:1;width:100%;justify-self:stretch}
+  .resource-group-label{padding-left:18px;padding-right:18px}
+}
+
+/* Resources-Final diff, Group 5 — Go Deeper's own mini-banner header
+   (mockup's #resources>.sechead): unlike Log & Journal / Beyond
+   Self-Guided, this section's header carries its own cover-photo layer
+   (a clone of the same photo already in .sr-exp-hero-media, placed by
+   syncResourcesHeroMedia()) and a "Back to the practice" link, instead
+   of the plain gold-gradient background the other two sechead uses. */
+.sr-resources-sechead{min-height:238px;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:34px 36px 35px;background:#0A0A0D}
+/* #personal-protocol-page .proto-item .sr-proto-banner-scrim (1 id + 2
+   classes) outranks a plain 2-class override — matched here with an id
+   of its own so the resources header actually gets its own scrim recipe
+   instead of silently inheriting the experience hero's. */
+#personal-protocol-page .proto-item .sr-resources-hero-media .sr-proto-banner-scrim{
+  background:linear-gradient(90deg,rgba(8,8,12,.96) 0%,rgba(8,8,12,.78) 45%,
+             rgba(8,8,12,.28) 74%,rgba(8,8,12,.48) 100%)}
+.sr-resource-back{position:absolute;z-index:2;top:26px;left:30px;color:#D7C19A;font-size:9px;font-weight:700;
+  letter-spacing:.19em;text-transform:uppercase;cursor:pointer}
+.sr-resource-back:hover{color:var(--primary)}
+.sr-resources-sechead h2{font-size:clamp(30px,3.6vw,40px)}
+.sr-resources-sechead .sr-sechead-lede{color:#CEC4B2;max-width:610px}
+@media(max-width:900px){
+  .sr-resources-sechead{min-height:218px;padding:31px 24px 29px}
+  .sr-resource-back{left:23px;top:22px}
+}

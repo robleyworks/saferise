@@ -4092,6 +4092,22 @@ const PT_RES_ICONS = {
   founder: '<path d="M7 4l9 6-9 6V4z"/>'
 };
 
+/* Resources-Final diff, Group 5: Go Deeper renders resources inside labelled
+   groups instead of one flat list. Which group a resource belongs to is a
+   property of its TYPE ("a Protocol Guide orients you", "a Companion is
+   something you apply between sessions"), not of which protocol it's
+   attached to — same reasoning as PT_RES_ICONS above, so it lives here
+   alongside it rather than being repeated as a field on all 10 PT_PROTOCOLS
+   entries. Two groups, matching the mockup's Anxiety Reset split exactly;
+   a protocol whose flags leave a group with zero members simply never
+   renders that group's header — see renderProtocolPage's resource-group
+   construction. */
+const PT_RES_GROUPS = {
+  advisory: 'orient', founder: 'orient', guide: 'orient', insights: 'orient', refcase: 'orient',
+  companion: 'apply', disclosure: 'apply', repair: 'apply'
+};
+const PT_RES_GROUP_LABELS = { orient: 'Orient & understand', apply: 'Apply between sessions' };
+
 const PT_PROTOCOLS = {
   p1: {
     kicker: 'Regulate', title: 'The Anxiety Reset Protocol', stateNoun: 'anxiety',
@@ -4370,7 +4386,7 @@ function renderProtocolPage(pk){
   // resolves whenever the card is synced, see syncProtocolResourceCardTitles.)
   function ptResFromContent(type, kindLabel){
     var data = RESOURCE_CONTENT[pk + '-' + type];
-    return ptResItem(pk, type, kindLabel, data.title, data.meta);
+    return { type: type, html: ptResItem(pk, type, kindLabel, data.title, data.meta) };
   }
   const resItems = [];
   if (d.hasAdvisory) resItems.push(ptResFromContent('advisory', 'Attention Advisory'));
@@ -4381,6 +4397,22 @@ function renderProtocolPage(pk){
   resItems.push(ptResFromContent('companion', d.companionKind));
   resItems.push(ptResFromContent('disclosure', 'Disclosure & Support'));
   if (d.hasRepair) resItems.push(ptResFromContent('repair', 'Invitation to Repair'));
+
+  // Resources-Final diff, Group 5: bucket resItems by PT_RES_GROUPS[type] —
+  // a group whose bucket ends up empty for this protocol (e.g. "apply"
+  // when hasRepair is false and this protocol also has no disclosure/
+  // companion... in practice every protocol has companion+disclosure, so
+  // only hasRepair/hasAdvisory ever change bucket membership) simply never
+  // gets a .resource-group-label rendered — no empty headers.
+  const resGroupOrder = ['orient', 'apply'];
+  const resGroupsHtml = resGroupOrder.map(function(groupId){
+    const members = resItems.filter(function(item){ return PT_RES_GROUPS[item.type] === groupId; });
+    if (!members.length) return '';
+    return '<div class="resource-group">' +
+      '<div class="resource-group-label"><span>' + PT_RES_GROUP_LABELS[groupId] + '</span></div>' +
+      members.map(function(item){ return item.html; }).join('') +
+    '</div>';
+  }).join('');
 
   return crisisNoteHtml +
 
@@ -4502,14 +4534,24 @@ function renderProtocolPage(pk){
   '</div>' +
 
   // ---- 3 Go Deeper ----
+  // Resources-Final diff, Group 5: this section's header gets the mockup's
+  // #resources>.sechead mini-banner treatment (its own cover-photo layer +
+  // a "Back to the practice" link) instead of the plain gold-gradient
+  // sechead the other two sections use — see .sr-resources-sechead in
+  // css/saferise-system.css. The photo comes from a clone of the same
+  // <picture> element already moved into .sr-exp-hero-media (not a second
+  // network fetch), made by syncResourcesHeroMedia().
   '<div class="j-step sr-sec-box">' +
-    '<div class="sr-sechead">' +
+    '<div class="sr-sechead sr-resources-sechead">' +
+      '<div class="sr-exp-hero-media sr-resources-hero-media"></div>' +
+      '<div class="sr-resource-back" onclick="this.closest(\'.proto-expand\').querySelector(\'.sr-experience-box\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">&lsaquo;&nbsp; Back to the practice</div>' +
       '<div class="j-kicker"><span class="j-num">3</span><span class="j-eyebrow">Go Deeper</span></div>' +
       '<h2>Understand. Integrate. Choose.</h2>' +
       '<p class="sr-sechead-lede">For when you\'re not in the middle of it. None of this is required to practise.</p>' +
     '</div>' +
     decisionEditorialHtml +
-    '<div class="res-row" style="margin-top:24px;">' + resItems.join('') + '</div>' +
+    '<div class="resource-library" aria-label="Optional protocol resources">' + resGroupsHtml + '</div>' +
+    '<p class="resource-note">Explore only when it supports the practice. You do not need to complete the library to return to the meditation.</p>' +
   '</div>' +
 
   // ---- 4 Beyond Self-Guided ----
@@ -4632,7 +4674,29 @@ function syncExperienceHeroMedia(){
     if (banner && slot) slot.appendChild(banner);
   });
 }
-document.addEventListener('DOMContentLoaded', syncExperienceHeroMedia);
+
+// Resources-Final diff, Group 5: the mockup gives #resources>.sechead its
+// own copy of the cover photo, read via a small script that pulls the
+// *computed* background-image off #experience .sechead--lead and
+// reapplies it with a second scrim. Live's cover is a real <img> (data-
+// driven asset, not a CSS background-image), so the adaptation is a
+// clone of the same <picture> element syncExperienceHeroMedia() already
+// placed — same photo, no second network fetch — rather than a
+// background-image read. Must run after syncExperienceHeroMedia so
+// there's something in .sr-exp-hero-media to clone from.
+function syncResourcesHeroMedia(){
+  document.querySelectorAll('#protoList > .proto-item[data-proto]').forEach(function(item){
+    const source = item.querySelector('.sr-exp-hero-media .sr-proto-banner');
+    const slot = item.querySelector('.sr-resources-hero-media');
+    if (source && slot && !slot.querySelector('.sr-proto-banner')) {
+      slot.appendChild(source.cloneNode(true));
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', function(){
+  syncExperienceHeroMedia();
+  syncResourcesHeroMedia();
+});
 
 /* sr-v11-content-corrections */
 (function(){
@@ -10883,19 +10947,37 @@ window.addEventListener('load', function(){
   }
 
   function addResourceRows(){
+    function buildCard(pk){
+      const d=IDENTITY_DATA[pk], card=document.createElement('div');
+      card.className='res-item identity-resource';
+      card.dataset.resource=pk+'-decision';
+      card.innerHTML='<div class="res-icon">'+(READER_ICONS.identity||'')+'</div>'+
+        '<div class="res-body"><p class="res-kind">The Decision</p><p class="res-title">Identity &amp; Embodiment — '+esc(d.chosen)+'</p>'+
+        '<p class="res-meta">Choose the identity · make the decision · practise the evidence</p></div>'+
+        '<div class="res-action">Read <svg viewBox="0 0 8 8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>';
+      card.addEventListener('click',function(e){e.stopPropagation();openReader(pk,pk+'-decision');});
+      return card;
+    }
     Object.keys(IDENTITY_DATA).forEach(function(pk){
+      // Tracks 02/03 and the homepage legacy previews still use the flat
+      // .res-row this always targeted — untouched.
       document.querySelectorAll('.res-row').forEach(function(row){
         if(!row.querySelector('[data-resource^="'+pk+'-"]')) return;
         if(row.querySelector('[data-resource="'+pk+'-decision"]')) return;
-        const d=IDENTITY_DATA[pk], card=document.createElement('div');
-        card.className='res-item identity-resource';
-        card.dataset.resource=pk+'-decision';
-        card.innerHTML='<div class="res-icon">'+(READER_ICONS.identity||'')+'</div>'+
-          '<div class="res-body"><p class="res-kind">The Decision</p><p class="res-title">Identity &amp; Embodiment — '+esc(d.chosen)+'</p>'+
-          '<p class="res-meta">Choose the identity · make the decision · practise the evidence</p></div>'+
-          '<div class="res-action">Read <svg viewBox="0 0 8 8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>';
-        card.addEventListener('click',function(e){e.stopPropagation();openReader(pk,pk+'-decision');});
-        row.appendChild(card);
+        row.appendChild(buildCard(pk));
+      });
+      // Resources-Final diff, Group 5: Track 01's Go Deeper resources now
+      // live in .resource-library > .resource-group instead of one flat
+      // .res-row — append to the LAST group in this protocol's library
+      // (mirrors where it landed in the old flat list: after disclosure/
+      // repair) rather than every matching group, which would otherwise
+      // duplicate the card once per group.
+      document.querySelectorAll('.resource-library').forEach(function(library){
+        if(!library.querySelector('[data-resource^="'+pk+'-"]')) return;
+        if(library.querySelector('[data-resource="'+pk+'-decision"]')) return;
+        const groups=library.querySelectorAll('.resource-group');
+        const target=groups.length?groups[groups.length-1]:library;
+        target.appendChild(buildCard(pk));
       });
     });
   }
