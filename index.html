@@ -4464,17 +4464,21 @@ function renderProtocolPage(pk){
           journeyHtml +
         '</div>' +
       '</div>' +
-    '</div>' +
 
-    // "What This Protocol Can Shift" — folded into Experience per decision #3, not a separate numbered
-    // step; own bordered card, sibling to (not nested inside) .experience-box, per the mockup's own
-    // .shift-drop rule (full border, not stripped) — only the side margins line up with the box above it.
-    '<details class="shift-drop">' +
-      '<summary><span class="shift-title">What This Protocol Can Shift</span>' +
-        '<span class="shift-preview">' + d.fitRows.map(function(r){return r[0];}).join(', ') + '</span>' +
-        '<span class="shift-toggle"></span></summary>' +
-      '<div class="heals"><p class="heals-lede">' + d.healsLede + '</p><div class="fit-meter-list">' + fitRowsHtml + '</div></div>' +
-    '</details>' +
+      // Correction 1: "What This Protocol Can Shift" is a region of the
+      // section 1 box in the mockup — direct child of .experience-box,
+      // last thing in it, after the player (which itself holds the
+      // journey collapsible) — not a sibling floating outside the box.
+      // Its own border/radius stay (mockup's .shift-drop rule keeps
+      // them; only .heals inside it loses its own decoration, per
+      // .shift-drop .heals below).
+      '<details class="shift-drop">' +
+        '<summary><span class="shift-title">What This Protocol Can Shift</span>' +
+          '<span class="shift-preview">' + d.fitRows.map(function(r){return r[0];}).join(', ') + '</span>' +
+          '<span class="shift-toggle"></span></summary>' +
+        '<div class="heals"><p class="heals-lede">' + d.healsLede + '</p><div class="fit-meter-list">' + fitRowsHtml + '</div></div>' +
+      '</details>' +
+    '</div>' +
   '</div>' +
 
   // ---- 2 Log & Journal ----

@@ -1839,8 +1839,12 @@ details.sr-q .sr-a a{color:var(--primary2)}
 /* Group 1 (mockup diff) — .shift-drop had markup with zero CSS anywhere
    in the codebase: native disclosure triangle, title running into the
    preview text. Ported from the mockup's shift-drop rules onto live
-   tokens (var(--primary)/var(--border) in place of --gold/--hair). */
-.shift-drop{margin-top:28px;border:1px solid var(--border);border-radius:8px;background:linear-gradient(115deg,rgba(212,168,67,.04),rgba(78,154,166,.02));overflow:hidden}
+   tokens (var(--primary)/var(--border) in place of --gold/--hair).
+   Correction 1: margin changed from margin-top:28px (a standalone-card
+   value, from when this sat outside .experience-box) to the mockup's
+   actual .shift-drop rule — 18px 28px 28px, 16px 18px 18px narrow — now
+   that it's the last direct child inside the box. */
+.shift-drop{margin:18px 28px 28px;border:1px solid var(--border);border-radius:8px;background:linear-gradient(115deg,rgba(212,168,67,.04),rgba(78,154,166,.02));overflow:hidden}
 .shift-drop summary{list-style:none;cursor:pointer;padding:17px 20px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px}
 .shift-drop summary::-webkit-details-marker{display:none}
 .shift-title{font-family:'Cinzel',serif;font-size:15px;color:var(--text);white-space:nowrap}
@@ -1852,6 +1856,9 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .shift-drop[open] .shift-toggle::after{content:"  \25B4"}
 .shift-drop .heals{margin:0;border-top:1px solid var(--border);padding:20px}
 .heals-lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14.5px;color:var(--text2);line-height:1.7;margin-bottom:16px}
+@media(max-width:900px){
+  .shift-drop{margin:16px 18px 18px}
+}
 @media(max-width:600px){
   .shift-drop summary{grid-template-columns:1fr auto}
   .shift-preview{grid-column:1/-1;grid-row:2}
