@@ -5026,17 +5026,37 @@ document.addEventListener('keydown', function(e){
 });
 
 // ---- Reader: left tab-list document viewer (pilot: Anger Alchemy / p2) ----
+/* SR-033: Track 01 key order rebuilt so the reader renders the resources
+   in the order the brief locks (§3). Two things changed, neither of them
+   content:
+
+   1. The Attention Advisory sat FIRST in every protocol that has one.
+      The brief is explicit that where present it renders as the Proximity
+      Guide "before Disclosure & Support — not first", and that proximity →
+      repair → disclosure is one chain, so advisory and repair now sit
+      immediately before disclosure rather than at the ends of the array.
+
+   2. 'p2-crisiscard' was missing from p2 entirely. Its content has existed
+      all along, but ordering comes from this array, so the resource was
+      unreachable — and ptResFromContent()'s crisisCardReachable check
+      (~line 4397) reads this same array, so the card was suppressed on the
+      Anger Alchemy protocol page too. Added in the same position it holds
+      everywhere else.
+
+   Track 02 and 03 arrays below are untouched. The protocol page's own Go
+   Deeper list builds its order independently in renderProtocolPage(), so
+   nothing there moves. */
 const READER_PROTOCOLS = {
-  'p1': { title: 'The Anxiety Reset Protocol', keys: ['p1-advisory','p1-founder','p1-guide','p1-insights','p1-refcase','p1-companion','p1-disclosure','p1-crisiscard'] },
-  'p2': { title: 'The Anger Alchemy Protocol', keys: ['p2-advisory','p2-founder','p2-guide','p2-insights','p2-refcase','p2-companion','p2-disclosure','p2-repair'] },
-  'p3': { title: 'The Overwhelm Threshold Protocol', keys: ['p3-advisory','p3-founder','p3-guide','p3-insights','p3-refcase','p3-companion','p3-disclosure','p3-crisiscard'] },
-  'p4': { title: 'The Abandonment Wound Protocol', keys: ['p4-advisory','p4-founder','p4-guide','p4-insights','p4-refcase','p4-companion','p4-disclosure','p4-repair','p4-crisiscard'] },
+  'p1': { title: 'The Anxiety Reset Protocol', keys: ['p1-founder','p1-guide','p1-insights','p1-refcase','p1-companion','p1-advisory','p1-disclosure','p1-crisiscard'] },
+  'p2': { title: 'The Anger Alchemy Protocol', keys: ['p2-founder','p2-guide','p2-insights','p2-refcase','p2-companion','p2-advisory','p2-repair','p2-disclosure','p2-crisiscard'] },
+  'p3': { title: 'The Overwhelm Threshold Protocol', keys: ['p3-founder','p3-guide','p3-insights','p3-refcase','p3-companion','p3-advisory','p3-disclosure','p3-crisiscard'] },
+  'p4': { title: 'The Abandonment Wound Protocol', keys: ['p4-founder','p4-guide','p4-insights','p4-refcase','p4-companion','p4-advisory','p4-repair','p4-disclosure','p4-crisiscard'] },
   'p5': { title: 'The Shame Dissolution Protocol', keys: ['p5-founder','p5-guide','p5-insights','p5-refcase','p5-companion','p5-disclosure','p5-crisiscard'] },
   'p6': { title: 'The Grief Integration Protocol', keys: ['p6-founder','p6-guide','p6-insights','p6-refcase','p6-companion','p6-disclosure','p6-crisiscard'] },
   'p7': { title: 'The Shutdown Recovery Protocol', keys: ['p7-founder','p7-guide','p7-insights','p7-refcase','p7-companion','p7-disclosure','p7-crisiscard'] },
-  'p8': { title: 'The Jealousy Release Protocol', keys: ['p8-advisory','p8-founder','p8-guide','p8-insights','p8-refcase','p8-companion','p8-disclosure','p8-repair','p8-crisiscard'] },
-  'p9': { title: 'The Insecurity Anchor Protocol', keys: ['p9-advisory','p9-founder','p9-guide','p9-insights','p9-refcase','p9-companion','p9-disclosure','p9-repair','p9-crisiscard'] },
-  'p10': { title: 'The Powerlessness & Despair Protocol', keys: ['p10-advisory','p10-founder','p10-guide','p10-insights','p10-refcase','p10-companion','p10-disclosure','p10-crisiscard','crisis-p10'] },
+  'p8': { title: 'The Jealousy Release Protocol', keys: ['p8-founder','p8-guide','p8-insights','p8-refcase','p8-companion','p8-advisory','p8-repair','p8-disclosure','p8-crisiscard'] },
+  'p9': { title: 'The Insecurity Anchor Protocol', keys: ['p9-founder','p9-guide','p9-insights','p9-refcase','p9-companion','p9-advisory','p9-repair','p9-disclosure','p9-crisiscard'] },
+  'p10': { title: 'The Powerlessness & Despair Protocol', keys: ['p10-founder','p10-guide','p10-insights','p10-refcase','p10-companion','p10-advisory','p10-disclosure','p10-crisiscard','crisis-p10'] },
   't2-p1': { title: 'The Safe Conversation Protocol', keys: ['t2-p1-guide','t2-p1-insights','t2-p1-refcase','t2-p1-safety'] },
   't2-p2': { title: 'The Rupture & Repair Protocol', keys: ['t2-p2-guide','t2-p2-insights','t2-p2-refcase','t2-p2-safety'] },
   't2-p3': { title: 'The Trust & Betrayal Protocol', keys: ['t2-p3-guide','t2-p3-insights','t2-p3-refcase','t2-p3-safety'] },
@@ -5102,6 +5122,117 @@ const READER_QUOTES = {
   'p9-insights':'Insecurity is not a lack of confidence. It is a search for proof in all the wrong places.',
   'p10-insights':'Powerlessness is not the end of the story. It is often where the real one begins.',
 };
+/* ---- READER_META: the standalone reader's per-resource fields (brief §2) ----
+   SR-033. These are the fields the reader needs that the data did not carry.
+   They are DERIVED at call time from RESOURCE_CONTENT rather than written out
+   as a literal table, for one specific reason: a resource's kind and title are
+   rewritten in place by later patches in this file — 'Somatic Release' renames
+   several companions, and p2-refcase is replaced outright more than once. A
+   hardcoded table would have gone stale against exactly those rewrites. Only
+   the values that cannot be derived are stored, in READER_META_COPY below.
+
+   eyebrow is deliberately null everywhere except p1. It is register-sensitive
+   prose and is written by hand, not generated; readerMeta() falls back to the
+   resource's kind label so the head renders correctly while copy is pending.
+   TODO: supply eyebrow copy for p2–p10 (9 protocols, 74 resources).
+   TODO: dur stays null until the guidance audio is produced (§8 logs this as
+   a new production line item, ~9 scripts per protocol). The guidance block
+   renders without a duration rather than showing a placeholder time.
+   TODO: chapters is [] — no chapter divisions exist in the source bodies yet;
+   §8 flags this as needing its own decision for the long resources. */
+const READER_META_COPY = {
+  /* p1 · Anxiety Reset — approved eyebrow chain. Reads down the rail as one
+     argument: origin, practise, understand, recognise, release, choose, tell,
+     become, carry. Nine slots, nine labels — 'p1-decision' is spliced into
+     the keys array at runtime (see the identity layer, ~line 11014), so it
+     sits at 08 between disclosure and the crisis card. BECOME is the only
+     slot about identity rather than action; CARRY stays literal, on the card
+     you actually carry. Order matches READER_PROTOCOLS.p1.keys after that
+     splice. */
+  'p1-founder':    { eyebrow: 'Origin' },
+  'p1-guide':      { eyebrow: 'Practise' },
+  'p1-insights':   { eyebrow: 'Understand' },
+  'p1-refcase':    { eyebrow: 'Recognise' },
+  'p1-companion':  { eyebrow: 'Release' },
+  'p1-advisory':   { eyebrow: 'Choose' },
+  'p1-disclosure': { eyebrow: 'Tell' },
+  'p1-decision':   { eyebrow: 'Become' },
+  'p1-crisiscard': { eyebrow: 'Carry' }
+};
+
+/* category → icon tint. The five buckets are the brief's; the mapping is
+   mechanical, straight off KIND_META.category. 'Founder Video' has no
+   KIND_META entry, so kindMetaFor() returns the RESOURCE fallback and a
+   founder resource tints as 'identity'. */
+const READER_TYPE_BY_CATEGORY = {
+  'START HERE': 'core',
+  'UNDERSTAND': 'evidence',
+  'PRACTISE':   'relational',
+  'RESOURCE':   'identity',
+  'EMERGENCY':  'meta'
+};
+
+/* Short form for the narrow rail, derived from the resource's own title:
+   strip the "<Protocol> — " prefix, and where the title is a prose sentence
+   or a comma list rather than a name, use the kind label instead. Never
+   truncates mid-word or appends an ellipsis. */
+function readerRailTitle(title, kind, pk) {
+  var t = String(title || '');
+  var proto = READER_PROTOCOLS[pk];
+  if (proto) {
+    var short = proto.title.replace(/^The /, '').replace(/ Protocol$/, '');
+    ['—', '–', '-'].forEach(function(dash){
+      var pre = short + ' ' + dash + ' ';
+      if (t.indexOf(pre) === 0) t = t.slice(pre.length);
+    });
+  }
+  // a comma list ("Rhythmic walking, a weighted blanket, worry stones")
+  // indexes badly — the kind reads better in a rail
+  if ((t.match(/,/g) || []).length >= 2) return kind;
+  if (t.length > 34) {
+    var cut = t.split(/,\s|\s—\s|\s–\s/)[0];
+    t = cut.length <= 34 ? cut : kind;
+  }
+  return t;
+}
+
+function readerMeta(key) {
+  var data = RESOURCE_CONTENT[key];
+  if (!data) return null;
+  var pk = /^crisis-(p\d+)$/.test(key) ? key.replace(/^crisis-/, '')
+                                       : key.replace(/-[a-z]+$/, '');
+  var km = kindMetaFor(data.kind);
+  var over = READER_META_COPY[key] || {};
+  var suffix = key.replace(/^(t\d+-)?p\d+-/, '');
+  return {
+    // null until written; the reader falls back to the kind label
+    eyebrow:   over.eyebrow || null,
+    type:      READER_TYPE_BY_CATEGORY[km.category] || 'identity',
+    // glyph key resolved against the live library set at render time
+    glyph:     suffix,
+    railTitle: over.railTitle || readerRailTitle(data.title, data.kind, pk),
+    railMeta:  km.readtime + ' min read',
+    dur:       null,
+    hasAudio:  true,
+    hasPdf:    false,   // no PDF asset exists in the repo for any resource yet
+    chapters:  []
+  };
+}
+
+/* The library's own glyph set (PT_RES_ICONS) covers eight of the nine Track 01
+   resource types; 'crisiscard' has no entry there, so it falls back to the
+   reader's own icon set via KIND_META.icon. */
+function readerGlyph(key) {
+  var data = RESOURCE_CONTENT[key];
+  var suffix = key.replace(/^(t\d+-)?p\d+-/, '');
+  if (typeof PT_RES_ICONS !== 'undefined' && PT_RES_ICONS[suffix]) {
+    return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">' +
+           PT_RES_ICONS[suffix] + '</svg>';
+  }
+  var icon = data ? kindMetaFor(data.kind).icon : 'book';
+  return READER_ICONS[icon] || READER_ICONS.book;
+}
+
 let readerVisited = new Set();
 
 /* ---- Shared series landing hero + browse-header renderer ----
