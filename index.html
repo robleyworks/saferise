@@ -5788,6 +5788,11 @@ function openResourceReader(pk, key){
   document.getElementById('sr-rd-protocol').textContent = proto.title;
   document.getElementById('sr-rd-protolede').textContent = (d && d.lede) ? d.lede : '';
 
+  // The reader is only reachable from the protocol page, which has already
+  // hidden the portal — but hide it here too so a direct call (or a future
+  // deep link) cannot leave the portal stacked above the reader.
+  var portal = document.getElementById('personal-portal-view');
+  if (portal) portal.hidden = true;
   if (protoPage) protoPage.hidden = true;
   page.hidden = false;
   window.__srReaderOpen = true;
@@ -6919,7 +6924,14 @@ document.querySelectorAll('#protoList [data-proto-key]').forEach(function(expand
             &lsaquo;&nbsp; Back to the practice
           </button>
         </div>
-        <section class="sr-reader" aria-label="Resource reader">
+        <!-- A div, not a <section>: this design system styles the bare
+             `section` element as a page-section primitive — border-top:0
+             !important plus padding-block:clamp(72px,9vw,128px) — which
+             stripped the enclosure's top border and injected 72px of dead
+             space above the cover and below the utility. role="region"
+             with the label keeps the same semantics without inheriting a
+             page-level primitive's styling. -->
+        <div class="sr-reader" role="region" aria-label="Resource reader">
           <div class="sr-grid">
 
             <div class="sr-rail" id="sr-rd-rail">
@@ -7008,7 +7020,7 @@ document.querySelectorAll('#protoList [data-proto-key]').forEach(function(expand
 
             </div>
           </div>
-        </section>
+        </div>
       </div>
       <div class="sr-sky" aria-hidden="true"></div>
     </div>
