@@ -4446,10 +4446,16 @@ function renderProtocolPage(pk){
   '</div>' +
 
   // ---- 2 Log & Journal ----
-  '<div class="j-step">' +
-    '<div class="j-kicker"><span class="j-num">2</span><span class="j-eyebrow">Log &amp; Journal</span></div>' +
-    '<p class="j-title">Turn change into evidence</p>' +
-    '<p class="j-sub">One protocol, practised repeatedly, tracked honestly.</p>' +
+  // Resources-Final diff, Group 2: every non-experience section is its own
+  // bordered enclosure (.sr-sec-box) with a header that bleeds to the box's
+  // edges and carries a gold left bar (.sr-sechead) — was a bare .j-kicker
+  // + p.j-title + p.j-sub with no enclosure of its own.
+  '<div class="j-step sr-sec-box">' +
+    '<div class="sr-sechead">' +
+      '<div class="j-kicker"><span class="j-num">2</span><span class="j-eyebrow">Log &amp; Journal</span></div>' +
+      '<h2>Turn change into evidence</h2>' +
+      '<p class="sr-sechead-lede">One protocol, practised repeatedly, tracked honestly.</p>' +
+    '</div>' +
     '<div class="jprog-section" data-jprog-key="' + pk + '" data-jprog-title="' + d.title + '" data-jprog-prompts="' + pk + '">' +
       '<p class="jprog-title">Practice &amp; Journal</p>' +
       '<p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>' +
@@ -4496,19 +4502,23 @@ function renderProtocolPage(pk){
   '</div>' +
 
   // ---- 3 Go Deeper ----
-  '<div class="j-step">' +
-    '<div class="j-kicker"><span class="j-num">3</span><span class="j-eyebrow">Go Deeper</span></div>' +
-    '<p class="j-title">Understand. Integrate. Choose.</p>' +
-    '<p class="j-sub">For when you\'re not in the middle of it. None of this is required to practise.</p>' +
+  '<div class="j-step sr-sec-box">' +
+    '<div class="sr-sechead">' +
+      '<div class="j-kicker"><span class="j-num">3</span><span class="j-eyebrow">Go Deeper</span></div>' +
+      '<h2>Understand. Integrate. Choose.</h2>' +
+      '<p class="sr-sechead-lede">For when you\'re not in the middle of it. None of this is required to practise.</p>' +
+    '</div>' +
     decisionEditorialHtml +
     '<div class="res-row" style="margin-top:24px;">' + resItems.join('') + '</div>' +
   '</div>' +
 
   // ---- 4 Beyond Self-Guided ----
-  '<div class="j-step">' +
-    '<div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Beyond Self-Guided</span></div>' +
-    '<p class="j-title">When you want someone in the room</p>' +
-    '<p class="j-sub">The protocols work alone. These are for the moments they don\'t go far enough.</p>' +
+  '<div class="j-step sr-sec-box">' +
+    '<div class="sr-sechead">' +
+      '<div class="j-kicker"><span class="j-num">4</span><span class="j-eyebrow">Beyond Self-Guided</span></div>' +
+      '<h2>When you want someone in the room</h2>' +
+      '<p class="sr-sechead-lede">The protocols work alone. These are for the moments they don\'t go far enough.</p>' +
+    '</div>' +
     // Group 4 (mockup diff): the mockup's two-card "Beyond Self-Guided"
     // grid (monthly workshop + premium 1:1) was never brought across —
     // this section was a single .jp5-card with one link and one button.

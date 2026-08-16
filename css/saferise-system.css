@@ -2008,3 +2008,41 @@ details.sr-q .sr-a a{color:var(--primary2)}
 @media(max-width:700px){
   .sr-beyond{grid-template-columns:1fr}
 }
+
+/* Resources-Final diff, Group 2 — Sections 2, 3 and 4 (Log & Journal, Go
+   Deeper, Beyond Self-Guided) were bare .j-step divs divided only by a
+   border-top rule, with a small (18px) .j-title. Mockup makes every
+   non-experience section its own bordered enclosure with an
+   edge-bleeding header carrying a gold left bar — this is the part
+   earlier passes missed entirely. .j-step's own border-top/margin-top
+   divider rule is neutralized on these three (border-top:0!important)
+   since the box now supplies its own full border. */
+/* !important on padding/margin-top and border-top: .j-step + .j-step
+   (index.html, base stylesheet) sets these with higher specificity
+   (two classes) for the plain-divider look between ordinary steps —
+   needs to be beaten explicitly now that steps 2-4 are their own boxes. */
+.sr-sec-box{padding:0 32px 40px!important;margin:0 0 68px!important;
+  border:1px solid var(--border)!important;border-top:0!important;
+  border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.012),rgba(255,255,255,.003) 44%,transparent)}
+.sr-sec-box:last-child{margin-bottom:0!important}
+.sr-sechead{position:relative;max-width:none;margin:0 -32px 38px;padding:27px 30px 29px;
+  border-bottom:1px solid var(--border);overflow:hidden;
+  background:linear-gradient(100deg,rgba(212,168,67,.085) 0%,rgba(212,168,67,.035) 34%,
+             rgba(78,154,166,.018) 66%,transparent 100%)}
+.sr-sechead:after{content:"";position:absolute;top:0;bottom:0;left:0;width:2px;
+  background:linear-gradient(180deg,var(--primary),rgba(212,168,67,.08))}
+.sr-sechead .j-kicker{margin-bottom:14px}
+.sr-sechead h2{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(27px,3.25vw,36px);
+  line-height:1.18;letter-spacing:-.018em;margin-bottom:12px;color:var(--text)}
+.sr-sechead-lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:18px;line-height:1.55;max-width:680px;color:var(--text2)}
+.sr-sechead .j-num{width:23px;height:23px;font-size:10px;line-height:23px}
+.sr-sechead .j-eyebrow{font-size:10px;letter-spacing:.27em}
+@media(max-width:900px){
+  .sr-sec-box{padding:0 18px 28px;margin-bottom:44px;border-radius:11px}
+  .sr-sec-box:last-child{margin-bottom:0!important}
+  .sr-sechead{margin:0 -18px 30px;padding:22px 21px 24px}
+  .sr-sechead h2{font-size:clamp(25px,8vw,32px)}
+  .sr-sechead-lede{font-size:17px}
+}
