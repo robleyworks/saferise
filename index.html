@@ -4298,8 +4298,16 @@ function renderProtocolPage(pk){
   // hasAdvisory/resItems) — deliberately not deduplicated, since a member
   // mid-session and a member browsing resources are reading it at different
   // moments.
+  // Resources-Final diff, Group 3: mockup renders this as a divided row
+  // (gold left label column + body text), not an icon-in-a-box card. The
+  // mockup bolds only the advisory's own first sentence, not a generic
+  // "Attention advisory." prefix — same split applied here to the existing
+  // per-protocol advisoryLede data, nothing new hardcoded.
+  const advisorySplitAt = d.advisoryLede ? d.advisoryLede.indexOf('. ') : -1;
+  const advisoryBold = advisorySplitAt > -1 ? d.advisoryLede.slice(0, advisorySplitAt + 1) : d.advisoryLede;
+  const advisoryRest = advisorySplitAt > -1 ? d.advisoryLede.slice(advisorySplitAt + 1) : '';
   const advisoryHtml = d.advisoryLede ?
-    '<aside class="advisory-note sr-advisory-note" aria-label="Attention advisory"><svg viewBox="0 0 20 20" fill="none" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M10 6.5v4.5M10 14h.01" stroke-linecap="round"/></svg><p><strong>Attention advisory.</strong> ' + d.advisoryLede + '</p></aside>' : '';
+    '<aside class="sr-attention-advisory" aria-label="Attention advisory"><span class="sr-attention-label">Attention advisory</span><p><strong>' + advisoryBold + '</strong>' + advisoryRest + '</p></aside>' : '';
 
   // SR-027: "The journey begins" collapsible wrapper around the journey
   // visual, matching the approved mockup — open by default, duration read
@@ -4377,44 +4385,58 @@ function renderProtocolPage(pk){
   return crisisNoteHtml +
 
   // ---- 1 Experience ----
+  // Resources-Final diff, Group 1: the mockup nests the whole of section 1
+  // inside .experience-box as ONE bordered object — header, advisory, tabs
+  // and player are regions of it, not separate free-floating cards. The
+  // old standalone .sr-proto-banner strip is gone; the cover photo (same
+  // <picture>/<img>/data-banner-key markup and asset pipeline the carousel
+  // cover already uses) is DOM-moved into .sr-exp-hero-media by
+  // syncExperienceHeroMedia() so it sits behind the header text instead of
+  // above it in its own strip — see that function and the CSS note beside
+  // .sr-exp-hero-media in css/saferise-system.css.
   '<div class="j-step" style="padding-top:0;">' +
-    // Group 2 (mockup diff): the protocol title used to render twice — once
-    // overlaid on the (now-compact) banner photo, once as generic j-title
-    // copy here. This card is the single place it lives now; see
-    // .sr-exp-hero in css/saferise-system.css and the banner CSS note above it.
-    '<div class="sr-exp-hero">' +
-      '<div class="j-kicker"><span class="j-num">1</span><span class="j-eyebrow">Guided Meditation Experience</span></div>' +
-      '<h1 class="sr-exp-hero-title">' + d.title + '</h1>' +
-      '<p class="sr-exp-hero-lede">' + d.lede + '</p>' +
-      '<p class="sr-exp-hero-subline">Begin the journey with your guided meditation via audio or video.</p>' +
+    '<div class="sr-experience-box">' +
+      '<div class="sr-exp-hero">' +
+        '<div class="sr-exp-hero-media"></div>' +
+        '<div class="j-kicker"><span class="j-num">1</span><span class="j-eyebrow">Guided Meditation Experience</span></div>' +
+        '<h1 class="sr-exp-hero-title">' + d.title + '</h1>' +
+        '<p class="sr-exp-hero-lede">' + d.lede + '</p>' +
+        '<p class="sr-exp-hero-subline">Begin the journey with your guided meditation via audio or video.</p>' +
+      '</div>' +
+      advisoryHtml +
+      '<div class="sr-player">' +
+        '<div class="exp-tabs">' +
+          '<div class="exp-tab active" data-exp="' + pk + '-watch"><span class="exp-tab-label">Watch</span><span class="exp-tab-name">Guided Video</span></div>' +
+          '<div class="exp-tab" data-exp="' + pk + '-listen"><span class="exp-tab-label">Listen</span><span class="exp-tab-name">Audio Only</span></div>' +
+        '</div>' +
+        '<div class="sr-pbody">' +
+          '<div class="exp-pane active" data-exp-pane="' + pk + '-watch">' +
+            '<div class="media-block"><div class="video-placeholder sr-video-unavailable"><div class="video-inner">' +
+              '<svg class="sr-video-unavailable-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 4l18 16" stroke-linecap="round"/><path d="M15 5H5.5A2.5 2.5 0 003 7.5v9c0 .74.32 1.4.85 1.86M21 8v8a2.5 2.5 0 01-2.5 2.5H9" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '<p class="sr-video-unavailable-title">Video guide not yet available</p>' +
+              '<p class="sr-video-unavailable-sub">Use Listen for the full guided practice in the meantime.</p>' +
+            '</div></div></div>' +
+          '</div>' +
+          '<div class="exp-pane" data-exp-pane="' + pk + '-listen">' +
+            '<div class="listen-grid"><div class="media-block"><div class="audio-placeholder">' +
+              '<p style="font-size:12px;color:var(--text3);letter-spacing:1px;margin-bottom:6px;">' + d.audioLabel + '</p>' +
+              '<div class="audio-waveform" id="' + d.waveId + '"></div>' +
+              '<div class="audio-controls"><div class="audio-play"><svg width="10" height="12" viewBox="0 0 10 12"><path d="M1 0l9 6-9 6V0z"/></svg></div><div class="audio-track"><div class="audio-fill"></div></div><span class="audio-time">' + d.audioMin + '</span></div>' +
+            '</div></div>' +
+            '<div class="listen-side"><span class="ls-label">Crisis Card</span><p class="ls-title">4-Line Version</p>' +
+              '<p class="ls-foot">For when reading a full page isn\'t possible. Printable, or save it to your phone\'s lock screen.</p>' +
+              '<div class="ls-open" data-resource="' + pk + '-crisiscard">Open Card <svg viewBox="0 0 8 8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>' +
+            '</div></div>' +
+          '</div>' +
+          quietAltHtml +
+          journeyHtml +
+        '</div>' +
+      '</div>' +
     '</div>' +
-    advisoryHtml +
-    '<div class="exp-tabs">' +
-      '<div class="exp-tab active" data-exp="' + pk + '-listen"><span class="exp-tab-label">Listen</span><span class="exp-tab-name">Guided Audio</span></div>' +
-      '<div class="exp-tab" data-exp="' + pk + '-watch"><span class="exp-tab-label">Watch</span><span class="exp-tab-name">Follow-Along Video</span></div>' +
-    '</div>' +
-    '<div class="exp-pane active" data-exp-pane="' + pk + '-listen">' +
-      '<div class="listen-grid"><div class="media-block"><div class="audio-placeholder">' +
-        '<p style="font-size:12px;color:var(--text3);letter-spacing:1px;margin-bottom:6px;">' + d.audioLabel + '</p>' +
-        '<div class="audio-waveform" id="' + d.waveId + '"></div>' +
-        '<div class="audio-controls"><div class="audio-play"><svg width="10" height="12" viewBox="0 0 10 12"><path d="M1 0l9 6-9 6V0z"/></svg></div><div class="audio-track"><div class="audio-fill"></div></div><span class="audio-time">' + d.audioMin + '</span></div>' +
-      '</div></div>' +
-      '<div class="listen-side"><span class="ls-label">Crisis Card</span><p class="ls-title">4-Line Version</p>' +
-        '<p class="ls-foot">For when reading a full page isn\'t possible. Printable, or save it to your phone\'s lock screen.</p>' +
-        '<div class="ls-open" data-resource="' + pk + '-crisiscard">Open Card <svg viewBox="0 0 8 8"><path d="M1 0l6 4-6 4V0z" fill="currentColor" stroke="none"/></svg></div>' +
-      '</div></div>' +
-    '</div>' +
-    '<div class="exp-pane" data-exp-pane="' + pk + '-watch">' +
-      '<div class="media-block"><div class="video-placeholder sr-video-unavailable"><div class="video-inner">' +
-        '<svg class="sr-video-unavailable-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 4l18 16" stroke-linecap="round"/><path d="M15 5H5.5A2.5 2.5 0 003 7.5v9c0 .74.32 1.4.85 1.86M21 8v8a2.5 2.5 0 01-2.5 2.5H9" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-        '<p class="sr-video-unavailable-title">Video guide not yet available</p>' +
-        '<p class="sr-video-unavailable-sub">Use Listen for the full guided practice in the meantime.</p>' +
-      '</div></div></div>' +
-    '</div>' +
-    quietAltHtml +
-    journeyHtml +
 
-    // "What This Protocol Can Shift" — folded into Experience per decision #3, not a separate numbered step
+    // "What This Protocol Can Shift" — folded into Experience per decision #3, not a separate numbered
+    // step; own bordered card, sibling to (not nested inside) .experience-box, per the mockup's own
+    // .shift-drop rule (full border, not stripped) — only the side margins line up with the box above it.
     '<details class="shift-drop">' +
       '<summary><span class="shift-title">What This Protocol Can Shift</span>' +
         '<span class="shift-preview">' + d.fitRows.map(function(r){return r[0];}).join(', ') + '</span>' +
@@ -4582,6 +4604,25 @@ function syncProtocolResourceCardTitles(){
   });
 }
 document.addEventListener('DOMContentLoaded', syncProtocolResourceCardTitles);
+
+// Resources-Final diff, Group 1: the mockup has no separate banner strip —
+// the cover photo lives behind #experience .sechead--lead instead. Rather
+// than re-fetch or duplicate the image, this DOM-moves each protocol's own
+// .sr-proto-banner (the same <picture>/<img>/data-banner-key markup and
+// asset pipeline the carousel cover already uses) from its old top-level
+// position into the new .sr-exp-hero-media slot renderProtocolPage() left
+// for it — a plain move, same pattern as the carousel-to-full-page mount
+// swap already used elsewhere on this page, never rewriting the markup
+// itself. Runs once for all 10 protocols regardless of which is open,
+// since every protocol's markup already coexists in the DOM.
+function syncExperienceHeroMedia(){
+  document.querySelectorAll('#protoList > .proto-item[data-proto]').forEach(function(item){
+    const banner = item.querySelector(':scope > .sr-proto-banner');
+    const slot = item.querySelector('.sr-exp-hero-media');
+    if (banner && slot) slot.appendChild(banner);
+  });
+}
+document.addEventListener('DOMContentLoaded', syncExperienceHeroMedia);
 
 /* sr-v11-content-corrections */
 (function(){

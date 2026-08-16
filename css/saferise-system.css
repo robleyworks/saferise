@@ -555,27 +555,25 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .sr-proto-banner-media{display:none}
 #personal-protocol-page .proto-item{display:block}
 #personal-protocol-page .proto-item .sr-tile{display:none}
-/* Group 2 (mockup diff) — the open-page banner was a full-bleed hero
-   (aspect-ratio 2880/686), rendering ~550px+ tall on wide viewports with
-   the protocol title overlaid on the photo. Mockup wants a compact band
-   capped at clamp(200px,25vh,250px), and the title moved out entirely —
-   it now lives once, in the new #experience .sr-exp-hero card below,
-   not duplicated here. */
+/* Resources-Final diff, Group 1 — supersedes the previous "compact banner
+   strip" pass entirely: the mockup has no separate banner strip at any
+   width. The cover photo lives behind #experience .sechead--lead
+   (.sr-exp-hero here) instead, moved there by syncExperienceHeroMedia().
+   Once moved, .sr-proto-banner fills its new parent, .sr-exp-hero-media —
+   see that class below. */
 #personal-protocol-page .proto-item .sr-proto-banner{
-  display:block;position:relative;left:50%;transform:translateX(-50%);
-  width:100vw;max-width:100vw;min-height:clamp(200px,25vh,250px);overflow:hidden;
-  background:#0A0A0D;margin-bottom:48px}
+  display:block;position:absolute;inset:0}
 #personal-protocol-page .proto-item .sr-proto-banner-media{
   display:block;position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:center;
   background:radial-gradient(78% 58% at 26% 16%, var(--c2), transparent 66%),
              linear-gradient(158deg, var(--c1) 0%, var(--c3) 100%)}
-/* Horizontal scrim per mockup .bannerscrim (dark at left, clearing by ~66%) */
+/* Scrim per mockup's v7 background-image recipe for #experience .sechead--lead */
 #personal-protocol-page .proto-item .sr-proto-banner-scrim{
   position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.7) 38%,
-             rgba(8,8,12,.14) 66%,rgba(8,8,12,.4) 100%)}
-/* Title/description no longer render here — see note above. */
+  background:linear-gradient(90deg,rgba(8,8,12,.98) 0%,rgba(8,8,12,.88) 43%,
+             rgba(8,8,12,.36) 72%,rgba(208,220,216,.12) 100%)}
+/* Title/description no longer render here — the hero card's own kicker/h1/lede/subline carry them. */
 #personal-protocol-page .proto-item .sr-proto-banner-copy{display:none}
 
 /* Cover artwork (assets/covers/*.jpg) has the kicker word, protocol
@@ -1883,27 +1881,84 @@ details.sr-q .sr-a a{color:var(--primary2)}
 #prog-personal .sr-logdrop .jprog-enclosure,
 #prog-personal .sr-journal .jprog-enclosure{background:transparent;border-radius:0;border-top:1px solid var(--border);padding:26px;margin:0}
 
-/* Group 2 (mockup diff) — Experience hero card: the protocol title used to
-   render twice (once overlaid on the banner photo, once as generic j-title
-   copy "Practice It Right Now" below it). This is the mockup's
-   #experience .sechead--lead, the single place the title now lives.
-   Kicker row reuses the existing .j-kicker/.j-num/.j-eyebrow — same
-   circular numbered badge already used by every other section head on
-   this page, not a new component. */
-.sr-exp-hero{position:relative;padding:30px 32px;margin-bottom:22px;
-  border:1px solid var(--border);border-radius:10px;overflow:hidden;
-  background:linear-gradient(102deg,#0A0A11 0%,#15131A 43%,#3C3027 76%,#A8906C 145%)}
+/* Resources-Final diff, Group 1 — Section 1 is ONE bordered object
+   (.sr-experience-box), not a stack of separate cards with gaps between
+   them. Header, advisory and player are regions of it: header bleeds to
+   the box's top edge and keeps only a bottom border; the player's own
+   border/background are stripped since the box already provides them. */
+.sr-experience-box{border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.012),transparent 42%)}
+
+/* Experience hero card / #experience .sechead--lead: the protocol title
+   used to render twice (once overlaid on the banner photo, once as
+   generic j-title copy "Practice It Right Now" below it) — this is the
+   single place it lives now. Kicker row reuses the existing
+   .j-kicker/.j-num/.j-eyebrow — same numbered-badge component every
+   other section head already uses, not a new one. Bleeds to the box's
+   top edge (no top border/radius of its own); the cover photo (moved in
+   by syncExperienceHeroMedia()) sits behind it in .sr-exp-hero-media. */
+.sr-exp-hero{position:relative;padding:34px 36px 32px;margin:0;
+  border:0;border-bottom:1px solid var(--border);border-radius:0;overflow:hidden;
+  background:#0A0A0D}
+.sr-exp-hero-media{position:absolute;inset:0;z-index:0;overflow:hidden}
+.sr-exp-hero-media .sr-proto-banner-copy{display:none}
 .sr-exp-hero::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(90deg,transparent 0 54%,rgba(238,207,158,.06) 100%)}
-.sr-exp-hero>*{position:relative;z-index:1}
+.sr-exp-hero>*:not(.sr-exp-hero-media){position:relative;z-index:1}
 .sr-exp-hero .j-kicker{margin-bottom:12px}
 .sr-exp-hero-title{font-family:'Cinzel',serif;font-weight:400;
   font-size:clamp(28px,3.8vw,42px);line-height:1.15;margin-bottom:14px;color:var(--text)}
 .sr-exp-hero-lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
-  font-size:19px;color:#CFC7B6;max-width:600px;margin-bottom:16px;line-height:1.5}
-.sr-exp-hero-subline{font-size:14px;color:var(--text3);letter-spacing:.01em}
-@media(max-width:600px){
+  font-size:19px;color:#D8D0C0;max-width:600px;margin-bottom:16px;line-height:1.5}
+.sr-exp-hero-subline{font-size:14px;color:#A7A5AA;letter-spacing:.01em}
+@media(max-width:900px){
   .sr-exp-hero{padding:24px 22px}
+}
+
+/* Player: border/radius/background stripped since .sr-experience-box
+   already provides them (mockup's .experience-box .player rule). */
+.sr-player{border:0;border-radius:0;background:transparent}
+/* Resources-Final diff, Group 4 — tabs: mockup's .ptabs/.ptab is a seamless
+   divided row (one border-right between the two, border-bottom under the
+   whole row), not individually-bordered, gap-separated pill buttons. The
+   bare .exp-tabs/.exp-tab classes are shared with Tracks 02/03 and the
+   homepage previews, so this is scoped to .sr-player (Track 01's player
+   only) rather than changed globally. */
+.sr-player .exp-tabs{display:flex;gap:0;margin-bottom:0;border-bottom:1px solid var(--border);
+  background:rgba(10,10,16,.74);border-radius:0}
+.sr-player .exp-tab{border:0;border-right:1px solid var(--border);border-radius:0;
+  padding:15px 18px;background:transparent}
+.sr-player .exp-tab:last-child{border-right:0}
+.sr-player .exp-tab:hover{background:rgba(255,255,255,.03)}
+.sr-player .exp-tab.active{background:rgba(212,168,67,.09)}
+.sr-player .exp-tab-label{font-size:9.5px;letter-spacing:.2em;margin-bottom:4px}
+.sr-player .exp-tab.active .exp-tab-name{color:var(--text)}
+.sr-pbody{padding:24px 28px 0}
+@media(max-width:900px){
+  .sr-pbody{padding:20px 18px 0}
+}
+/* Quiet short alternative + journey visual sit inside .sr-pbody now —
+   margins match the mockup's .experience-box .crisis rule (was a
+   standalone margin-top:20px card before this box existed). */
+.sr-pbody .sr-quiet-alt{margin:14px 0 0}
+.sr-pbody .sr-journey-details{margin-top:20px;margin-bottom:0}
+@media(max-width:900px){
+  .sr-pbody .sr-quiet-alt{margin-top:12px}
+}
+
+/* Resources-Final diff, Group 3 — Attention Advisory: a divided row with
+   a gold left label column, not an icon-in-a-box card. Sits between the
+   hero header and the player, divided from both by its own border. */
+.sr-attention-advisory{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
+  padding:16px 28px;border-bottom:1px solid var(--border);
+  background:linear-gradient(90deg,rgba(212,168,67,.055),rgba(212,168,67,.012) 62%,transparent)}
+.sr-attention-label{padding-top:2px;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--primary);font-weight:700;white-space:nowrap}
+.sr-attention-advisory p{font-size:12px;line-height:1.65;color:var(--text3);max-width:790px}
+.sr-attention-advisory strong{color:var(--text2);font-weight:500}
+@media(max-width:900px){
+  .sr-attention-advisory{grid-template-columns:1fr;gap:6px;padding:14px 20px}
+  .sr-attention-label{white-space:normal}
 }
 
 /* Group 4 (mockup diff) — Beyond Self-Guided: the mockup's two-card grid
