@@ -3264,6 +3264,9 @@ document.addEventListener('DOMContentLoaded', function () {
     window.scrollTo(0, 0);
     backBtn.focus();
     history.pushState({ srProtocolOpen: true }, '', '#p' + item.dataset.proto);
+    // Correction 6: on open, the marker defaults to Stage 1 (player) unless
+    // this protocol already advanced further earlier in the same session.
+    if (typeof srApplyStage === 'function') srApplyStage('p' + item.dataset.proto);
 
     // The banner that's actually opening is above the fold the instant
     // this runs, so it gets bumped from its default loading="lazy" to
@@ -3489,6 +3492,48 @@ function jprogGetState(section){
   return jprogState.get(section);
 }
 
+// Correction 6 — next-step marker. In-memory only, keyed by protocol key
+// (pk); no localStorage, so a reload resets every protocol back to Stage
+// 1 (the player). This tracks ACTIONS TAKEN, not a fixed order: a member
+// who logs a session without ever "completing" one just jumps straight
+// from Stage 1 to Stage 3, since srAdvanceStage only ever moves forward
+// through SR_NEXT_ORDER, never back past whatever's already been done.
+const SR_NEXT_ORDER = ['player', 'log', 'journal', 'section3'];
+const srNextStage = {};
+
+function srApplyStage(pk){
+  const page = document.getElementById('personal-protocol-page');
+  if (!page || page.hidden) return;
+  const root = page.querySelector('.jprog-section[data-jprog-key="' + pk + '"]');
+  if (!root) return; // not the currently-open protocol (or not Track 01) — nothing to mark
+  const stage = srNextStage[pk] || 'player';
+  const player = page.querySelector('.sr-player');
+  const sec2 = page.querySelector('.sr-sec-box:has(.jprog-section)');
+  const sec3 = page.querySelector('.sr-sec-box:has(.resource-library)');
+  const logdrop = root.querySelector('.sr-logdrop');
+  const journal = root.querySelector('.sr-journal');
+  [player, sec2, sec3, logdrop, journal].forEach(function(el){ if (el) el.classList.remove('is-next'); });
+  if (stage === 'player') {
+    if (player) player.classList.add('is-next');
+  } else if (stage === 'log') {
+    if (sec2) sec2.classList.add('is-next');
+    if (logdrop) logdrop.classList.add('is-next');
+  } else if (stage === 'journal') {
+    if (sec2) sec2.classList.add('is-next');
+    if (journal) journal.classList.add('is-next');
+  } else if (stage === 'section3') {
+    if (sec3) sec3.classList.add('is-next');
+  }
+}
+
+function srAdvanceStage(pk, stage){
+  const cur = srNextStage[pk] || 'player';
+  if (SR_NEXT_ORDER.indexOf(stage) > SR_NEXT_ORDER.indexOf(cur)) {
+    srNextStage[pk] = stage;
+    srApplyStage(pk);
+  }
+}
+
 function jprogEscape(s){
   const d = document.createElement('div');
   d.textContent = s;
@@ -3671,6 +3716,8 @@ function jprogInit(section){
     noteEl.value = '';
     jprogRenderLogs(section);
     jprogRenderTier(section);
+    // Correction 6, Stage 3: session logged — marker moves to Journal.
+    if (typeof srAdvanceStage === 'function') srAdvanceStage(section.dataset.jprogKey, 'journal');
   });
 
   jprogEl(section, 'journalbtn').addEventListener('click', function(e){
@@ -3683,6 +3730,8 @@ function jprogInit(section){
     ta.value = '';
     jprogRenderJournal(section);
     jprogRenderTier(section);
+    // Correction 6, Stage 4: journal saved — marker moves to Go Deeper.
+    if (typeof srAdvanceStage === 'function') srAdvanceStage(section.dataset.jprogKey, 'section3');
   });
 
   const consultBtn = jprogEl(section, 'consultbtn');
@@ -4501,7 +4550,7 @@ function renderProtocolPage(pk){
     '<div class="jprog-section" data-jprog-key="' + pk + '" data-jprog-title="' + d.title + '" data-jprog-prompts="' + pk + '">' +
       '<div class="jprog-panel active" data-jprog-panel="track">' +
         '<details class="sr-logdrop">' +
-          '<summary><span class="sr-logdrop-jt">Log this session</span><span class="sr-logdrop-jq">A quick record of what changed.</span><span class="sr-logdrop-jx"></span></summary>' +
+          '<summary><span class="sr-logdrop-jt">Log this session</span><span class="sr-cuetag">Next</span><span class="sr-logdrop-jq">A quick record of what changed.</span><span class="sr-logdrop-jx"></span></summary>' +
           '<p class="jprog-title">Practice &amp; Journal</p>' +
           '<p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>' +
           '<div class="jprog-status-group">' +
@@ -4528,7 +4577,7 @@ function renderProtocolPage(pk){
           '<div class="jprog-recent"><label class="jprog-label">Recent Sessions</label><div class="jprog-log-list" data-jprog-el="loglist">No sessions logged yet for this protocol.</div></div>' +
         '</details>' +
         '<details class="sr-journal">' +
-          '<summary><span class="sr-journal-jt">Journal</span><span class="sr-journal-jq" data-jprog-el="summaryprompt"></span><span class="sr-journal-jx"></span></summary>' +
+          '<summary><span class="sr-journal-jt">Journal</span><span class="sr-cuetag">Next</span><span class="sr-journal-jq" data-jprog-el="summaryprompt"></span><span class="sr-journal-jx"></span></summary>' +
           '<div class="jprog-enclosure jprog-enclosure-journal">' +
             '<p class="jprog-subhead">Journal</p><label class="jprog-label">Journal entry</label>' +
             '<div class="jprog-prompt-card"><div class="jprog-prompt-main"><p class="jprog-prompt-kicker">Need a prompt?</p><p class="jprog-prompt-text" data-jprog-el="prompttext"></p><div class="jprog-prompt-cats" data-jprog-el="promptcats"></div></div>' +
@@ -5459,6 +5508,16 @@ document.addEventListener('DOMContentLoaded', function(){
       btn.classList.toggle('is-playing');
       const fill = btn.closest('.audio-controls').querySelector('.audio-fill');
       if(fill) fill.style.width = btn.classList.contains('is-playing') ? '45%' : '0%';
+      // Correction 6, Stage 2: there's no real media to detect completion
+      // from (this control is decorative, as the comment above notes, and
+      // Watch has no control at all since SR-029), so pressing the one
+      // real control that exists is the chosen honest-enough proxy for
+      // "session completed" — scoped to Track 01's open protocol page only.
+      const ptPage = document.getElementById('personal-protocol-page');
+      if (ptPage && !ptPage.hidden && ptPage.contains(btn) && typeof srAdvanceStage === 'function') {
+        const sec = ptPage.querySelector('.jprog-section[data-jprog-key]');
+        if (sec) srAdvanceStage(sec.dataset.jprogKey, 'log');
+      }
     });
   });
 });

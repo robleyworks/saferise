@@ -2168,3 +2168,108 @@ details.sr-q .sr-a a{color:var(--primary2)}
   .sr-resources-sechead{min-height:218px;padding:31px 24px 29px}
   .sr-resource-back{left:23px;top:22px}
 }
+
+/* Correction 6 — next-step marker (.is-next). Values given verbatim by
+   the person who approved them after several rounds of toning down; do
+   not brighten, thicken, speed up or otherwise "improve" them.
+   Two mechanical fixes were needed to make the given rules actually take
+   effect against this file's existing selectors, values themselves
+   untouched:
+   - "knum" doesn't exist anywhere in this codebase; the section-kicker
+     number badge is .j-num, so the marker rule targets that instead.
+   - .j-num has no border at all today (background only), so a
+     border-color with no border-width/style is invisible — added a
+     matching thin solid border so the given colour renders.
+   .sr-sec-box's own border is !important (beats a same-specificity base
+   rule elsewhere), so its is-next override needs !important too or it's
+   silently ignored — same pattern as Correction 3's narrow-width fix. */
+.sr-sec-box,.sr-logdrop,.sr-journal,.sr-player{transition:border-color 1.2s ease,background 1.2s ease}
+.sr-sec-box.is-next{border-color:rgba(212,168,67,.26)!important}
+.sr-sec-box.is-next>.sr-sechead:after{
+  width:3px;
+  background:linear-gradient(180deg,var(--gold,var(--primary)),rgba(212,168,67,.3))}
+.sr-sec-box.is-next .j-num{
+  background:rgba(212,168,67,.2);border:1.5px solid rgba(212,168,67,.6)}
+
+.sr-logdrop.is-next,.sr-journal.is-next{
+  position:relative;overflow:hidden;
+  border-color:rgba(212,168,67,.5);
+  background:linear-gradient(145deg,rgba(212,168,67,.05),rgba(255,255,255,.008) 46%,transparent)}
+.sr-logdrop.is-next:before,.sr-journal.is-next:before{
+  content:"";position:absolute;top:0;bottom:0;left:0;width:2px;
+  background:linear-gradient(180deg,var(--gold,var(--primary)),rgba(212,168,67,.25))}
+
+.sr-player.is-next{border-color:rgba(212,168,67,.5)}
+/* .play-btn no longer exists in this player (SR-029 replaced the fake
+   Watch play button with an honest "not yet available" state) — .audio-play
+   is the one real control left, so it's targeted alongside .play-btn
+   rather than in place of it, in case Watch gets a real player later. */
+.sr-player.is-next .play-btn,.sr-player.is-next .audio-play{border-color:var(--gold,var(--primary))}
+
+/* The word "Next" on the marked row — carries the actual meaning of the
+   cue (screen readers, quick scanning), not just a decorative glow. */
+.sr-cuetag{display:none;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold,var(--primary));font-weight:700;opacity:.85;white-space:nowrap}
+/* A plain ".is-next .sr-cuetag" descendant rule lights up BOTH rows once
+   section 2 itself carries is-next (Stages 2/3 mark the section AND one
+   row), since both .sr-logdrop and .sr-journal sit inside that same
+   is-next section — narrowed to each row's own is-next so only the
+   actually-marked row shows the tag. */
+.sr-logdrop.is-next .sr-cuetag,.sr-journal.is-next .sr-cuetag{display:inline}
+
+/* Breath — soft, slow, contained; opt-in via body.sr-breath so it can be
+   switched off in one place. Default cycle 14s via --sr-pulse. */
+body.sr-breath .sr-sec-box.is-next{animation:srSecQuiet var(--sr-pulse,14s) ease-in-out infinite}
+@keyframes srSecQuiet{
+  0%,100%{border-color:rgba(212,168,67,.2);
+          box-shadow:0 0 26px -16px rgba(212,168,67,.14)}
+  50%    {border-color:rgba(212,168,67,.38);
+          box-shadow:0 0 60px -14px rgba(212,168,67,.3)}
+}
+
+body.sr-breath .sr-sec-box.is-next>.sr-sechead:after{
+  animation:srBarQuiet var(--sr-pulse,14s) ease-in-out infinite}
+@keyframes srBarQuiet{
+  0%,100%{box-shadow:0 0 10px -2px rgba(212,168,67,.25)}
+  50%    {box-shadow:0 0 22px 0 rgba(212,168,67,.55)}
+}
+
+body.sr-breath .sr-logdrop.is-next,
+body.sr-breath .sr-journal.is-next{animation:srRowQuiet var(--sr-pulse,14s) ease-in-out infinite}
+@keyframes srRowQuiet{
+  0%,100%{border-color:rgba(212,168,67,.44);
+          background:linear-gradient(145deg,rgba(212,168,67,.045),rgba(255,255,255,.006) 46%,transparent);
+          box-shadow:0 0 24px -14px rgba(212,168,67,.2),
+                     inset 0 0 30px -22px rgba(212,168,67,.16)}
+  50%    {border-color:rgba(212,168,67,.66);
+          background:linear-gradient(145deg,rgba(212,168,67,.09),rgba(255,255,255,.012) 46%,transparent);
+          box-shadow:0 0 56px -12px rgba(212,168,67,.4),
+                     inset 0 0 60px -18px rgba(212,168,67,.34)}
+}
+body.sr-breath .sr-logdrop.is-next:before,
+body.sr-breath .sr-journal.is-next:before{
+  animation:srBarQuiet var(--sr-pulse,14s) ease-in-out infinite}
+
+body.sr-breath .sr-player.is-next{animation:srPlQuiet var(--sr-pulse,14s) ease-in-out infinite}
+@keyframes srPlQuiet{
+  0%,100%{border-color:rgba(212,168,67,.44);
+          box-shadow:0 0 26px -14px rgba(212,168,67,.2),
+                     inset 0 0 40px -26px rgba(212,168,67,.18)}
+  50%    {border-color:rgba(212,168,67,.66);
+          box-shadow:0 0 64px -12px rgba(212,168,67,.42),
+                     inset 0 0 90px -22px rgba(212,168,67,.34)}
+}
+body.sr-breath .sr-player.is-next .play-btn,
+body.sr-breath .sr-player.is-next .audio-play{
+  animation:srBtnQuiet var(--sr-pulse,14s) ease-in-out infinite}
+@keyframes srBtnQuiet{
+  0%,100%{box-shadow:0 0 14px -6px rgba(212,168,67,.24);background:rgba(212,168,67,.05)}
+  50%    {box-shadow:0 0 34px -6px rgba(212,168,67,.5);background:rgba(212,168,67,.11)}
+}
+
+/* No per-component prefers-reduced-motion block here — CLAUDE.md is
+   explicit that reduced motion is handled centrally (see the sitewide
+   rule near the top of this file forcing transition/animation-duration
+   to .01ms!important on *, ::before, ::after under this same media
+   query). That rule already neutralizes every animation above, static
+   marker intact, without a second per-component override. */
