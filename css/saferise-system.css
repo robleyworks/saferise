@@ -2508,7 +2508,16 @@ body.rd-soft .sr-sky{opacity:1;transform:translateY(0) scale(1)}
 body.rd-soft{background-color:#354268}
 html:has(body.rd-soft){background:#647496}
 
+/* The nav warms with the page. The mockup themes its own .sr-topnav; the
+   live equivalent is the fixed .theme-bar, so that is what is themed here.
+   Safe despite being shared chrome because rd-soft is only ever on <body>
+   while the reader view is open, and openResourceReader/closeResourceReader
+   are the only things that add and remove it. */
+body.rd-soft .theme-bar{background:rgba(78,92,128,.72);
+  border-bottom-color:rgba(255,222,190,.2)}
+
 /* everything else warms at the same pace */
+.theme-bar,
 .sr-reader,.sr-rail,.sr-utility,.sr-main,.sr-u,.sr-item,.sr-ic,
 .sr-close,.sr-chapter,.sr-body p,.sr-rdhead,.sr-chip,.sr-theme,.sr-theme button,
 .sr-item .sr-t,.sr-item .sr-n,.sr-item .sr-m,.sr-next .nt,.sr-next .nm,.sr-guide .lt,
