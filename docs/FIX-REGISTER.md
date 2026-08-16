@@ -90,6 +90,49 @@ readings before they were understood:
 - Scrolled screenshots can composite stale while the pane is hidden. An
   unscrolled capture is trustworthy; a scrolled one may not be.
 
+### SR-042 · Safari is untested; there is no cross-browser coverage
+**Found:** `feat/resource-reader` · **Affects:** every visual and behavioural claim made so far
+
+A gap, not an oversight. Playwright's absence ([[SR-041]]) means everything
+verified for SR-032 through SR-036 was verified in **one** Chromium-based
+browser pane. This product is Safari-primary and mobile-first, so the browser
+that matters most is the one with no automated coverage at all.
+
+Specific things in this branch that are worth a careful manual Safari pass:
+
+- `:has()` — used for the page-padding reduction and for
+  `html:has(body.rd-soft)`. Supported in current Safari; the overscroll
+  colour rule in particular has no fallback.
+- `display:contents` on `.sr-main` / `.sr-utility` below 780, which is what
+  produces the entire mobile stacking order.
+- `background-attachment` / fixed-layer behaviour on `.sr-sky` during scroll,
+  historically a Safari weak point.
+- The 6.5s/8s Sunrise transition in motion — never observed running in **any**
+  browser (see [[SR-041]]).
+
+Manual Safari testing before merge was planned by the author of this branch's
+review; this entry exists so the gap is recorded rather than assumed closed.
+
+### SR-043 · The approved mockup carries both defects fixed in SR-036
+**Found:** `feat/resource-reader` · **Affects:** anyone integrating from the mockup again
+
+`SafeRise-Resource-Reader-v2-FINAL.html` still contains both defects that
+SR-036 fixed in the repo. Working from that file again will reintroduce them:
+
+1. The enclosure is a `<section>`. Harmless in the standalone mockup, which
+   has no bare-`section` styling; in this repo `section` is a page-section
+   primitive carrying `border-top:0!important` and
+   `padding-block:clamp(72px,9vw,128px)`, which strips the enclosure's top
+   border and injects 72px of dead space above the cover.
+2. The `@media(max-width:780px)` block assigns an order to every region
+   except `.sr-close`, leaving the journal block at the flex default of `0`
+   so it renders above the cover — first thing on the page. §3 puts it at the
+   foot of the centre column.
+
+Neither is visible in the mockup itself, which is why both survived sign-off.
+The repo is correct; the mockup is not. Fix the mockup, or treat these two
+points as known corrections on every future pass.
+
 ---
 
 ## Fixed
