@@ -2105,12 +2105,22 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .resource-group-label:before{content:"";width:22px;height:1px;background:var(--primary);opacity:.75}
 .resource-group-label span{font-size:9px;line-height:1.2;letter-spacing:.24em;text-transform:uppercase;
   color:var(--primary);font-weight:700}
+/* Correction 5: horizontal inset was margin (0 26px) while vertical was
+   padding (23px 0) — margin falls outside the element's own box, so the
+   #prog-personal-scoped hover highlight (#prog-personal .res-item:hover,
+   background #1C1C21 — higher specificity than anything set here, an ID
+   always wins) landed flush on the icon and Read button left/right while
+   having full breathing room top/bottom. Moved the horizontal inset into
+   padding so the highlight box itself is evenly inset. The divider that
+   inset used to provide for free (a shrunk border-box) is rebuilt as a
+   ::after inset independently by the same amount, since the row now
+   spans the full card width. */
 .resource-group .res-item{display:grid;grid-template-columns:42px minmax(0,1fr) 120px;gap:21px;
-  align-items:center;min-height:102px;margin:0 26px;padding:23px 0;background:transparent;
-  border:0;border-bottom:1px solid rgba(255,255,255,.035)}
-.resource-group .res-item:last-child{border-bottom:0}
+  align-items:center;min-height:102px;margin:0;padding:23px 26px;background:transparent;
+  border:0;position:relative}
+.resource-group .res-item:not(:last-child):after{content:"";position:absolute;left:26px;right:26px;
+  bottom:0;height:1px;background:rgba(255,255,255,.035)}
 .resource-group .res-item+.res-item{margin-top:0}
-.resource-group .res-item:hover{background:transparent;border-bottom-color:rgba(255,255,255,.035)}
 .resource-group .res-icon{width:42px;height:42px;border-radius:50%;border-color:rgba(212,168,67,.18);
   background:rgba(8,8,12,.26)}
 .resource-group .res-kind{margin-bottom:6px;font-size:9px;letter-spacing:.21em}
@@ -2123,10 +2133,12 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .resource-note{margin:20px 3px 0;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
   font-size:16px;line-height:1.55;color:var(--text3)}
 @media(max-width:900px){
-  .resource-group .res-item{grid-template-columns:40px minmax(0,1fr) 112px;margin:0 20px;gap:17px}
+  .resource-group .res-item{grid-template-columns:40px minmax(0,1fr) 112px;margin:0;padding:23px 20px;gap:17px}
+  .resource-group .res-item:not(:last-child):after{left:20px;right:20px}
 }
 @media(max-width:560px){
-  .resource-group .res-item{grid-template-columns:1fr;margin:0 17px;gap:10px}
+  .resource-group .res-item{grid-template-columns:1fr;margin:0;padding:23px 17px;gap:10px}
+  .resource-group .res-item:not(:last-child):after{left:17px;right:17px}
   .resource-group .res-icon{display:none}
   .resource-group .res-action{grid-column:1;width:100%;justify-self:stretch}
   .resource-group-label{padding-left:18px;padding-right:18px}
