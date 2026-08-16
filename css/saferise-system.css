@@ -2711,3 +2711,26 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
 /* …and the banner's own top padding, so the protocol title starts higher.
    34px -> 22px; the brief asks for the reduction without naming a value. */
 #personal-protocol-page .sr-exp-hero{padding-top:22px}
+
+/* B18c · Sunrise: the panels sit ON the light, not IN it ───────
+   SR-044. Sunrise washed the whole enclosure pale blue-grey and dropped
+   body contrast: rail, centre and utility all lifted toward the sky
+   instead of staying dark and recessed against it.
+
+   Cause was layering, not colour. --recess and --lift are exactly the
+   mockup's values; what differed was the backdrop underneath them.
+   #prog-personal is position:relative with z-index:1, so it forms a
+   stacking context. .sr-sky lived inside it at z-index:-1, which paints
+   above that overlay's own background but below its content — putting
+   the sky's light gradient (#647496 at the top, plus the warm sun
+   radial) directly behind the enclosure. Panels at rgba(24,30,60,.2)
+   over that read pale.
+
+   In the approved mockup the sky is a child of <body> and is fully
+   occluded by body's opaque #354268 — verified by toggling it off in the
+   mockup, which changes nothing on screen. The approved sunrise is a flat
+   #354268 surround with the recessed panels sitting on top of it. The sky
+   element is moved back to <body> in JS to restore that, and the overlay
+   is themed to the same #354268 so the surround matches rather than
+   showing the portal's near-black. */
+body.rd-soft #prog-personal{background:#354268}

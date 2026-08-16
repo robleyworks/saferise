@@ -5224,18 +5224,32 @@ function readerMeta(key) {
   };
 }
 
-/* The library's own glyph set (PT_RES_ICONS) covers eight of the nine Track 01
-   resource types; 'crisiscard' has no entry there, so it falls back to the
-   reader's own icon set via KIND_META.icon. */
+/* Rail glyphs. These are the library's own glyph set, keyed by resource type.
+   The rail previously drew PT_RES_ICONS' line-art SVGs, which put a padlock
+   on Disclosure & Support — that reads as locked content, which is both wrong
+   and discouraging on a resource about asking for help.
+
+   'repair' and 'support' are NOT in the specified set: it covers p1's nine
+   types, and repair appears in p2/p4/p8/p9 while support ('crisis-p10')
+   appears only in p10. The two below are placeholders chosen to stay in
+   family — repair as joining, support as the same portable diamond the crisis
+   card uses — and are pending a written decision. */
+const READER_GLYPHS = {
+  founder:    '▶', // play — Why I Built This
+  guide:      '◫', // divided block — step guide
+  insights:   '◑', // half-filled — source insights
+  refcase:    '♡', // heart — reference case
+  companion:  '⊘', // circled slash — somatic release
+  advisory:   '!',      // same mark the inline safety note uses
+  disclosure: '⚿', // key — disclosure & support
+  decision:   '↺', // return arrow — the decision
+  crisiscard: '◇', // diamond — portable
+  repair:     '⊕', // PLACEHOLDER, pending decision
+  support:    '◇'  // PLACEHOLDER, pending decision
+};
 function readerGlyph(key) {
-  var data = RESOURCE_CONTENT[key];
-  var suffix = key.replace(/^(t\d+-)?p\d+-/, '');
-  if (typeof PT_RES_ICONS !== 'undefined' && PT_RES_ICONS[suffix]) {
-    return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">' +
-           PT_RES_ICONS[suffix] + '</svg>';
-  }
-  var icon = data ? kindMetaFor(data.kind).icon : 'book';
-  return READER_ICONS[icon] || READER_ICONS.book;
+  var suffix = /^crisis-p\d+$/.test(key) ? 'support' : key.replace(/^(t\d+-)?p\d+-/, '');
+  return READER_GLYPHS[suffix] || '◇';
 }
 
 let readerVisited = new Set();
@@ -5688,8 +5702,12 @@ function srReaderUtility(){
   var pk = SR_READER.pk, proto = READER_PROTOCOLS[pk], key = SR_READER.key;
   var m = readerMeta(key);
 
-  // progress counts readable content; the advisory is a safety note, not a step
-  var content = proto.keys.filter(function(k){ return !/-advisory$/.test(k); });
+  // Progress counts ALL resources, advisory included. It previously excluded
+  // the advisory as a "preamble", which disagreed with the rail — the rail
+  // numbered the advisory 06 of 09 while progress read "3 of 8", and landing
+  // on the advisory itself rendered "— of 8" because it was not in the set
+  // being counted. In this reader the advisory is a numbered resource.
+  var content = proto.keys;
   var pos = content.indexOf(key) + 1, tot = content.length, tr = '';
   for (var i = 0; i < tot; i++) tr += (i ? '<s></s>' : '') + '<i class="' + (i < pos ? '' : 'off') + '"></i>';
   document.querySelector('#sr-rd-progress .sr-track').innerHTML = tr;
@@ -5788,6 +5806,17 @@ function openResourceReader(pk, key){
   document.getElementById('sr-rd-protocol').textContent = proto.title;
   document.getElementById('sr-rd-protolede').textContent = (d && d.lede) ? d.lede : '';
 
+  // The cover bleeds the protocol's own photograph behind the title under a
+  // left-weighted scrim, same treatment as the protocol page banner. The
+  // mockup applied this as an inline background-image and the binding was not
+  // carried over in the first pass, so the banner rendered flat. Same asset
+  // the banner uses: /assets/covers/<NN>.jpg.
+  var num = pk.replace(/^p/, '');
+  if (num.length < 2) num = '0' + num;
+  document.getElementById('sr-rd-cover').style.backgroundImage =
+    'linear-gradient(90deg,rgba(8,8,12,.97) 0%,rgba(8,8,12,.82) 42%,' +
+    'rgba(8,8,12,.3) 72%,rgba(8,8,12,.5) 100%),url("/assets/covers/' + num + '.jpg")';
+
   // The reader is only reachable from the protocol page, which has already
   // hidden the portal — but hide it here too so a direct call (or a future
   // deep link) cannot leave the portal stacked above the reader.
@@ -5832,6 +5861,16 @@ function closeResourceReader(){
 document.addEventListener('DOMContentLoaded', function(){
   var page = document.getElementById('personal-resource-page');
   if (!page) return;
+
+  /* The sky belongs to <body>, as it does in the mockup — not inside the
+     reader page. #prog-personal is position:relative with z-index:1, so it
+     forms a stacking context; a z-index:-1 layer inside it paints ABOVE that
+     overlay's own opaque background but below its content, which put the
+     light sky gradient directly behind the enclosure and washed every
+     translucent panel pale. Moved to <body>, it sits behind body's own
+     background exactly as the approved mockup has it. */
+  var sky = page.querySelector('.sr-sky');
+  if (sky) document.body.appendChild(sky);
 
   page.addEventListener('click', function(e){
     var goto = e.target.closest('[data-sr-goto]');
