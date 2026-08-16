@@ -133,6 +133,40 @@ Neither is visible in the mockup itself, which is why both survived sign-off.
 The repo is correct; the mockup is not. Fix the mockup, or treat these two
 points as known corrections on every future pass.
 
+### SR-045 · Sunrise sky layer never paints; approved look is the flat surround
+**Found:** `feat/resource-reader` · **Affects:** §4, and any future Sunrise work
+
+**Revisit deliberately. This is a design decision, not an integration fix.**
+
+`.sr-sky` has never painted — not in this repo, and not in the approved mockup
+either. It is a child of `<body>` at `z-index:-1`, and `body.rd-soft` carries an
+opaque `background-color:#354268`. A stacking context paints negative-z children
+*before* in-flow backgrounds, so body's own background covers the sky
+completely. Verified by toggling `.sr-sky` off in
+`SafeRise-Resource-Reader-v2-FINAL.html`: the rendering is pixel-identical.
+
+Origin, per the brief's author: `body.rd-soft{background-color}` was added to
+fix a white band on long scrolls, and the sky was never re-verified afterward.
+So §4 describes a layer — warm sun radial at top centre, vignette holding night
+at the periphery, blue vertical run `#647496 → #354268`, 6.5s opacity / 8s
+transform — that has never been on screen. **What was approved visually is the
+flat `#354268` surround.**
+
+SR-044 matches that approved rendering deliberately: the sky element was moved
+back to `<body>` (it had drifted inside `#prog-personal`, where it *was*
+painting and washing every translucent panel pale), and the overlay is themed
+to the same `#354268`.
+
+Making the sky genuinely visible is not a small change. The panels are
+translucent — `--recess: rgba(24,30,60,.2)` — and read as recessed only because
+they sit on a flat dark ground. Over a live gradient they lift and wash out,
+which is exactly the defect SR-044 fixed. Doing it properly means opaque panels
+and a fresh pass over every Sunrise surface.
+
+Two of the three transitions §4 describes do work: the surface transitions on
+panels, hairlines and text, and `.sr-cover-sun`'s wash over the cover. Only the
+sky itself is inert.
+
 ---
 
 ## Fixed

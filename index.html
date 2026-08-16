@@ -5224,28 +5224,27 @@ function readerMeta(key) {
   };
 }
 
-/* Rail glyphs. These are the library's own glyph set, keyed by resource type.
+/* Rail glyphs — the library's own glyph set, keyed by resource type.
    The rail previously drew PT_RES_ICONS' line-art SVGs, which put a padlock
-   on Disclosure & Support — that reads as locked content, which is both wrong
-   and discouraging on a resource about asking for help.
+   on Disclosure & Support: that reads as locked content, on a resource whose
+   whole subject is asking for help.
 
-   'repair' and 'support' are NOT in the specified set: it covers p1's nine
-   types, and repair appears in p2/p4/p8/p9 while support ('crisis-p10')
-   appears only in p10. The two below are placeholders chosen to stay in
-   family — repair as joining, support as the same portable diamond the crisis
-   card uses — and are pending a written decision. */
+   Every type has its own glyph — no two share one, which matters in a rail
+   read as a vertical index. 'repair' and 'support' were not in the original
+   specified set (it covers p1's nine types; repair appears in p2/p4/p8/p9 and
+   support only in p10) and are now specified too. */
 const READER_GLYPHS = {
   founder:    '▶', // play — Why I Built This
   guide:      '◫', // divided block — step guide
   insights:   '◑', // half-filled — source insights
   refcase:    '♡', // heart — reference case
   companion:  '⊘', // circled slash — somatic release
-  advisory:   '!',      // same mark the inline safety note uses
+  advisory:   '!', // same mark the inline safety note uses
   disclosure: '⚿', // key — disclosure & support
-  decision:   '↺', // return arrow — the decision
+  decision:   '◉', // filled centre — the decision
   crisiscard: '◇', // diamond — portable
-  repair:     '⊕', // PLACEHOLDER, pending decision
-  support:    '◇'  // PLACEHOLDER, pending decision
+  repair:     '↺', // returning — invitation to repair
+  support:    '✦'  // star — support resources
 };
 function readerGlyph(key) {
   var suffix = /^crisis-p\d+$/.test(key) ? 'support' : key.replace(/^(t\d+-)?p\d+-/, '');
