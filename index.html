@@ -4492,17 +4492,23 @@ function renderProtocolPage(pk){
       '<h2>Turn change into evidence</h2>' +
       '<p class="sr-sechead-lede">One protocol, practised repeatedly, tracked honestly.</p>' +
     '</div>' +
+    // Correction 2: section 2 collapsed shows only the header and the two
+    // rows — "Practice & Journal"/sub, "Where You Are", "What's Next" (and
+    // the Chosen Self card, injected right after .jprog-rec-box by
+    // addEvidenceCards() — follows it into its new position automatically)
+    // now live INSIDE .sr-logdrop's reveal, ahead of the log form itself,
+    // instead of always-visible above both collapsibles.
     '<div class="jprog-section" data-jprog-key="' + pk + '" data-jprog-title="' + d.title + '" data-jprog-prompts="' + pk + '">' +
-      '<p class="jprog-title">Practice &amp; Journal</p>' +
-      '<p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>' +
       '<div class="jprog-panel active" data-jprog-panel="track">' +
-        '<div class="jprog-status-group">' +
-          '<div class="jprog-tier-card"><p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>' +
-          '<p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p></div>' +
-          '<div class="jprog-rec-box"><strong>What\'s Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there\'s enough usage to read a pattern.</span></div>' +
-        '</div>' +
         '<details class="sr-logdrop">' +
           '<summary><span class="sr-logdrop-jt">Log this session</span><span class="sr-logdrop-jq">A quick record of what changed.</span><span class="sr-logdrop-jx"></span></summary>' +
+          '<p class="jprog-title">Practice &amp; Journal</p>' +
+          '<p class="jprog-sub">For members actively using this protocol — log sessions, journal, and see progress recognized over time.</p>' +
+          '<div class="jprog-status-group">' +
+            '<div class="jprog-tier-card"><p class="jprog-tier-head">Where You Are <span class="jprog-tier-badge" data-jprog-el="tierbadge">Early Signs</span></p>' +
+            '<p class="jprog-tier-text" data-jprog-el="tiertext">Log a session or add a journal entry below to see your progress markers here.</p></div>' +
+            '<div class="jprog-rec-box"><strong>What\'s Next:</strong> <span data-jprog-el="rectext">Recommendations appear once there\'s enough usage to read a pattern.</span></div>' +
+          '</div>' +
           '<div class="jprog-enclosure jprog-enclosure-log">' +
             '<p class="jprog-subhead">Log a Session</p>' +
             '<label class="jprog-label">How activated were you before, and after?</label>' +
@@ -4531,9 +4537,9 @@ function renderProtocolPage(pk){
             '<div class="jprog-btn" data-jprog-el="journalbtn">Save Entry</div>' +
           '</div>' +
           '<div class="jprog-past"><label class="jprog-label">Past Entries</label><div class="jprog-journal-list" data-jprog-el="journallist">No journal entries yet for this protocol.</div></div>' +
+          '<p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library below and has started practicing.</p>' +
         '</details>' +
       '</div>' +
-      '<p class="jprog-why"><strong>Why here:</strong> Journaling and progress tracking only make sense once a member has the resource library below and has started practicing.</p>' +
     '</div>' +
   '</div>' +
 

@@ -1885,8 +1885,21 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .sr-logdrop[open] .sr-logdrop-jx::before,.sr-journal[open] .sr-journal-jx::before{content:"Close"}
 .sr-logdrop[open] .sr-logdrop-jx::after,.sr-journal[open] .sr-journal-jx::after{content:" \25B4"}
 .sr-logdrop .jprog-recent,.sr-journal .jprog-past{padding:0 26px 26px;margin:0}
-#prog-personal .sr-logdrop .jprog-enclosure,
+.sr-journal>.jprog-why{padding:0 26px 26px;margin:0}
 #prog-personal .sr-journal .jprog-enclosure{background:transparent;border-radius:0;border-top:1px solid var(--border);padding:26px;margin:0}
+/* Correction 2: "Practice & Journal"/sub, "Where You Are" and "What's
+   Next" (plus the Chosen Self card, injected right after .jprog-rec-box
+   by addEvidenceCards()) moved from always-visible above both drops to
+   inside .sr-logdrop's own reveal, ahead of the log form — so they're
+   now direct children of the <details> instead of a padded wrapper, and
+   need the same 26px horizontal inset the rest of the reveal uses. The
+   divider that used to sit between the summary and .jprog-enclosure (the
+   first thing revealed) moves to sit above .jprog-title instead, since
+   that's the first thing revealed now. */
+#prog-personal .sr-logdrop>.jprog-title{padding:22px 26px 0;margin:0 0 6px;border-top:1px solid var(--border)}
+#prog-personal .sr-logdrop>.jprog-sub,
+#prog-personal .sr-logdrop>.jprog-status-group{padding-left:26px;padding-right:26px}
+#prog-personal .sr-logdrop .jprog-enclosure{background:transparent;border-radius:0;border-top:0;padding:26px;margin:0}
 
 /* Resources-Final diff, Group 1 — Section 1 is ONE bordered object
    (.sr-experience-box), not a stack of separate cards with gaps between
