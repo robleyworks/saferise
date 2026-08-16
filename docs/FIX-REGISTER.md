@@ -12,7 +12,7 @@ to assume.
 
 ## Open
 
-### SR-035 · Track 01 is 92 resources, not 89
+### SR-037 · Track 01 is 92 resources, not 89
 **Found:** `feat/resource-reader` · **Affects:** anything counting or iterating Track 01 resources
 
 `READER_PROTOCOLS` lists 82 Track 01 keys statically. A tenth resource,
@@ -26,7 +26,7 @@ card.
 The real total is **92**. Any count derived by reading the source array is
 wrong by ten. Count at runtime, after the identity layer has run.
 
-### SR-036 · Widget hydrators are coupled to the Reader's DOM contract
+### SR-038 · Widget hydrators are coupled to the Reader's DOM contract
 **Found:** `feat/resource-reader` · **Affects:** any future work on any reader surface
 
 Resource bodies are not self-contained. Several ship empty or partial in
@@ -51,7 +51,7 @@ the overlay in the same synchronous turn, and relocates the built node. Do not
 "simplify" that indirection away; it is the only reason the reader renders
 anything but empty pages.
 
-### SR-037 · 91 eyebrow labels outstanding
+### SR-039 · 91 eyebrow labels outstanding
 **Found:** `feat/resource-reader` · **Owner:** copy, not engineering
 
 `READER_META_COPY` carries the written eyebrow chain for **p1 only** (nine
@@ -63,7 +63,7 @@ not chain down the rail as an argument the way p1 does.
 Eyebrow copy is register-sensitive and is written by hand. It is deliberately
 **not** generated. Do not derive it.
 
-### SR-038 · No PDF assets exist
+### SR-040 · No PDF assets exist
 **Found:** `feat/resource-reader` · **Affects:** the reader's download region
 
 The repo contains **zero** `.pdf` files, though resource metadata advertises
@@ -72,7 +72,7 @@ them ("PDF · 4 pages · Printable") and a `.pdf-placeholder` component exists.
 the download region does not render at all — no disabled state, no
 placeholder. It begins rendering on its own once `hasPdf` can return true.
 
-### SR-039 · node and Playwright are not installed
+### SR-041 · node and Playwright are not installed
 **Found:** `feat/resource-reader` · **Affects:** what verification can claim
 
 Neither `node` nor Homebrew is present on the development machine, so the
@@ -104,3 +104,5 @@ readings before they were understood:
 | SR-032 | Resource reader CSS (B18) + nav theming. `.sr-cover`/`.sr-head` renamed to `.sr-rdcover`/`.sr-rdhead` to clear live collisions. |
 | SR-033 | Reader data: advisory/repair moved before disclosure; `p2-crisiscard` made reachable; `READER_META` scaffold added. |
 | SR-034 | Standalone resource reader page for Track 01, theme layer, guidance light. |
+| SR-035 | §6 back link: both pages share one position, size and type; reader break-out to the banner's 1100px column. |
+| SR-036 | §7 verification: enclosure was a bare `<section>` (lost its top border, gained 72px dead padding); journal block rendered first below 780. |
