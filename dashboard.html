@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — MEMBER DASHBOARD (v2 mockup)
+
+  Built on the v29 / Resource Reader design system. Token block, type stack and
+  primitives are lifted verbatim. Every new class is sr-dash- prefixed.
+
+  REAL ASSETS IN USE (embedded here for review; in the repo these become file paths):
+    · Welcome header .......... the corridor photograph from the Six Areas section
+    · Four Steps band ......... the Protocol Foundation photograph, v29
+    · The Science tile ........ the nervous-system range photograph, v29
+    · The Stories / Workshops . the journey triptych, v29
+    · Protocol cover 01 ....... assets/covers/01.jpg (the real Anxiety Reset cover)
+    · Covers 02–10 ............ referenced at assets/covers/NN.jpg — they exist in the
+                               repo but are not embedded here, so they fall back to
+                               the tonal gradient in this standalone file
+
+  IMPORTANT — covers carry their kicker word and number INSIDE the image.
+  This page draws no CSS overlay text on a cover. Adding one doubles the text.
+
+  STILL A PLACEHOLDER (no asset exists yet):
+    · Pangolin Clearing Meditation feature art
+    · 1:1 sessions card art
+    · Track 02 / 03 / 04 covers
+  Each is marked NEEDS ART below.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-dashboard.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ══════════ ICON RAIL — navigation costs no vertical space ══════════ -->
+<nav class="sr-dash-navrail" aria-label="Sections">
+  <span class="sr-dash-navrailmark">◈</span>
+  <button class="sr-dash-navrailbtn on" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
+  <button class="sr-dash-navrailbtn" data-route="library"><svg viewBox="0 0 24 24"><path d="M5 4h6v16H5zM13 4h6v16h-6z"/></svg><span>Protocol library</span></button>
+  <button class="sr-dash-navrailbtn" data-route="journal"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/></svg><span>Journal</span></button>
+  <button class="sr-dash-navrailbtn" data-route="record"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-8M22 20H2"/></svg><span>Your record</span></button>
+  <button class="sr-dash-navrailbtn" data-route="laboratory"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.4L5.6 17A2 2 0 0 0 7.4 20h9.2a2 2 0 0 0 1.8-3L14 8.4V3"/><path d="M7.6 14h8.8"/></svg><span>The Life Laboratory</span></button>
+  <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
+  <button class="sr-dash-navrailbtn sr-dash-navrailbtn--crisis" data-modal="crisis" aria-label="Cue Card">
+    <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 11h6M6.5 14h4"/></svg>
+    <span>Cue Card · always one tap away</span>
+  </button>
+  <div class="sr-dash-navrailfoot">
+    <button class="sr-dash-navrailbtn" data-route="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.2H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/></svg><span>Account &amp; plan</span></button>
+  </div>
+</nav>
+
+
+
+<nav class="sr-dash-nav">
+  <div class="shell sr-dash-navin">
+    <a class="brand" href="#">
+      <span class="brandmark">◈</span>
+      <span><span class="brandname">SAFERISE</span><span class="brandsub">PROTOCOL</span></span>
+    </a>
+    <div class="sr-dash-navlinks">
+      <a href="#" class="on">Dashboard</a>
+      <a href="#">Protocol Library</a>
+      <a href="#">Resources</a>
+      <a href="#">Coaching</a>
+      <a href="#" class="soon">My Journey</a>
+      <a href="#" class="soon">Journal</a>
+    </div>
+    <button class="sr-dash-acct" aria-label="Your account">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg>
+    </button>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ═══ WELCOME + ORIENTATION — one block. The hero is shorter and the
+     orientation rail sits at its base, so the height is earned and the page
+     steps down into the cream card rather than hitting it cold. ═══ -->
+<!-- ══════════ UPPER REGION ══════════
+     Order for a new member: welcome, orientation, then the Clearing with
+     "what's next" beside it. The orientation strip retires itself once the
+     three steps are done, at which point the Clearing leads the page. -->
+<header class="sr-dash-top sr-dash-hideme">
+  <div class="shell">
+
+    <!-- ══ HERO SLIDER ══
+         The hero itself rotates. Slide 01 is the welcome; the rest are whatever
+         is current — a note, a launch, an episode. Edit HERO_SLIDES in the script. -->
+    <section class="sr-hero" id="srHero" aria-label="Featured">
+      <div class="sr-themewrap">
+        <div class="sr-theme" role="group" aria-label="Reading mode">
+          <button id="srThemeMid" class="on">Midnight</button>
+          <button id="srThemeSun">Sunrise</button>
+        </div>
+      </div>
+
+      <div class="sr-hero-track" id="srHeroTrack">
+        <!-- 01 · welcome, always first -->
+        <article class="sr-hero-slide on">
+          <img class="sr-hero-art" src="assets/dashboard/hero-corridor.jpg" alt="">
+          <div class="sr-hero-scrim"></div>
+          <div class="sr-hero-body">
+            <h1>Welcome back, Andre.</h1>
+            <p class="sr-hero-sub">This is your space to understand your patterns, regulate your system, and become the person you choose to be.</p>
+          </div>
+          <div class="sr-dash-quote">
+            <p>Meditation quiets the noise.<br>Mindfulness shows you what was underneath it.<br>
+               What you do with that attention is who you become.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="sr-hero-nav">
+        <div class="sr-hero-dots" id="srHeroDots"></div>
+        <button class="sr-hero-arrow" id="srHeroPrev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
+        <button class="sr-hero-arrow" id="srHeroNext" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
+      </div>
+    </section>
+
+    <!-- ══ BEGIN HERE ══
+         Three cards on one internal grid: label · title · body · control · action.
+         Every row of every card sits on the same baseline as its neighbours. -->
+    <section class="sr-begin">
+      <div class="sr-begin-head">
+        <p class="eyebrow">Begin here</p>
+        <p class="sr-begin-note">Three ways in. Any one of them is a whole session.</p>
+      </div>
+
+      <div class="sr-begin-row">
+
+        <!-- 01 · the Clearing — the whole card is the media cover -->
+        <article class="sr-begin-card sr-begin-card--media">
+          <button class="sr-cover" data-modal="media" aria-label="Play the Clearing">
+            <span class="sr-cover-art"></span>
+            <span class="sr-cover-scrim"></span>
+            <span class="sr-cover-play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></span>
+            <span class="sr-cover-copy">
+              <span class="sr-cover-kick">Settle in</span>
+              <span class="sr-cover-title">The Clearing</span>
+              <span class="sr-cover-sub">Quiet the noise and arrive in a state where the work can land.</span>
+            </span>
+            <span class="sr-cover-rail"><i style="width:34%"></i></span>
+          </button>
+        </article>
+
+        <!-- 02 · carry on, with the protocol as a banner -->
+        <article class="sr-begin-card sr-begin-card--panel">
+          <p class="sr-begin-no"><b>02</b>Carry on</p>
+          <h3>Where you left off</h3>
+
+          <div class="sr-begin-slot">
+            <button class="sr-resume" id="srResume"
+                    data-protocol="The Anxiety Reset Protocol" data-no="01" data-track="1" data-resource="07">
+              <span class="sr-resume-art">
+                <img src="https://deploy-preview-14--the-saferise-protocol.netlify.app/assets/covers/01.jpg" alt="" onerror="this.style.display='none'">
+              </span>
+              <span class="sr-resume-scrim"></span>
+              <span class="sr-resume-copy">
+                <span class="sr-resume-name">The Anxiety Reset Protocol</span>
+                <span class="sr-resume-meta">Resource 07 of 08 · The Decision</span>
+              </span>
+              <span class="sr-resume-rail"><i style="width:87%"></i></span>
+            </button>
+          </div>
+
+          <p class="sr-begin-act">
+            <span class="sr-link">Pick up where you left off <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></span>
+          </p>
+        </article>
+
+        <!-- 03 · start new -->
+        <article class="sr-begin-card sr-begin-card--panel">
+          <p class="sr-begin-no"><b>03</b>Start new</p>
+          <h3>Where would you like to begin?</h3>
+          <p class="sr-begin-body">Answer both and one protocol is chosen for you.</p>
+
+          <div class="sr-begin-slot">
+            <div class="sr-dash-field">
+              <input class="sr-dash-input" id="srArrive" type="text" autocomplete="off" placeholder="How are you arriving? Wired, flat, can't settle…">
+              <div class="sr-dash-suggest" id="srSuggest"></div>
+            </div>
+            <div class="sr-dash-field">
+              <select class="sr-dash-select" id="srPrep">
+                <option value="">Preparing for…</option>
+                <option value="self">Just myself</option>
+                <option value="person">A conversation</option>
+                <option value="work">A room at work</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="sr-begin-act">
+            <span class="sr-begin-meta" id="srBeginHint">Nothing is logged until you begin.</span>
+          </p>
+
+          <div class="sr-dash-result" id="srResult">
+            <img class="sr-dash-resultthumb" id="srResultThumb" src="" alt="" onerror="this.hidden=true" onload="this.hidden=false">
+            <div class="sr-dash-resulttext">
+              <p class="sr-dash-resultkick" id="srResultKick">Opens next</p>
+              <p class="sr-dash-resultname" id="srResultName"></p>
+              <p class="sr-dash-resultwhy" id="srResultWhy"></p>
+            </div>
+            <div class="sr-dash-resultact" id="srResultAct"></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </div>
+</header>
+
+<div class="shell">
+
+  <!-- ═══ LIBRARY ═══ -->
+  <section class="sr-dash-sec sr-keep" id="srLibrary">
+    <div class="sr-dash-sechead">
+      <p class="eyebrow">Your protocols</p>
+      <h2>Every state has a way through it.</h2>
+    </div>
+    <div class="sr-dash-panel">
+      <div class="sr-dash-carhead">
+        <p class="sr-dash-carkick">Browse all protocols</p>
+        <div class="sr-dash-carnav">
+          <p class="note" id="srTrackNote">Personal Transformation · included with your plan</p>
+          <span class="sr-dash-carcount" id="srCarCount">1 / 10</span>
+          <button class="sr-dash-carbtn sr-dash-carprev" aria-label="Previous protocols"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
+          <button class="sr-dash-carbtn sr-dash-carnext" aria-label="More protocols"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
+        </div>
+      </div>
+      <div class="sr-dash-lib">
+        <div class="sr-dash-rail" role="tablist" aria-label="Tracks">
+          <button class="sr-dash-railbtn on" role="tab" aria-selected="true" data-track="1">
+            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="12" cy="7.2" r="3.1"/><path d="M5.6 20a6.4 6.4 0 0 1 12.8 0"/></svg>
+            <span><span class="sr-dash-railname">Personal Transformation</span><span class="sr-dash-railmeta">10 protocols</span></span>
+          </button>
+          <button class="sr-dash-railbtn" role="tab" aria-selected="false" data-track="2">
+            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="8.4" cy="7.6" r="2.7"/><circle cx="15.6" cy="7.6" r="2.7"/><path d="M3 20a5.4 5.4 0 0 1 8.4-4.5"/><path d="M12.6 15.5A5.4 5.4 0 0 1 21 20"/></svg>
+            <span><span class="sr-dash-railname">Relationship Healing</span><span class="sr-dash-railmeta">10 protocols</span></span>
+          </button>
+          <button class="sr-dash-railbtn" role="tab" aria-selected="false" data-track="3">
+            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="8.6" cy="7.4" r="2.9"/><path d="M3 20a5.6 5.6 0 0 1 11.2 0"/><path d="M16.6 17.2V20M19.2 13.8V20M21.8 10.4V20"/></svg>
+            <span><span class="sr-dash-railname">Professional Performance</span><span class="sr-dash-railmeta">10 protocols</span></span>
+          </button>
+          <button class="sr-dash-railbtn" role="tab" aria-selected="false" data-track="4">
+            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="12" cy="11" r="2.9"/><path d="M6 20.4a6 6 0 0 1 12 0"/><path d="M7.8 5.6L12 1.8l4.2 3.8"/></svg>
+            <span><span class="sr-dash-railname">Elevation Series</span><span class="sr-dash-railmeta">Coming soon</span></span>
+          </button>
+        </div>
+        <div class="sr-dash-carwrap">
+          <div class="sr-dash-carviewport" id="srCarViewport"><div class="sr-dash-carrow t-1" id="srCarRow"></div></div>
+        </div>
+      </div>
+
+      <!-- shown only while a track you do not own is selected -->
+      <div class="sr-dash-lockcta" id="srLockCta">
+        <p id="srLockText"></p>
+        <button class="sr-dash-addbtn sr-dash-addbtn--solid" id="srLockBtn"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ THE JOURNEY WITHIN EACH PROTOCOL ═══
+       Structure lifted from the Personal Transformation page (.journey / .jcols / .jopt).
+       Content, band and the Optional Support row all follow the track selected above.
+       NEEDS ART — all four band photographs are placeholders at a fixed
+       1400 x 380 so every track sits at the same height. Drop real files into
+       the BAND map in the script to replace them one track at a time. ═══ -->
+  <section class="sr-dash-sec" id="srJourney">
+    <!-- header sits outside the panel, matching Your Library and Understanding SafeRise -->
+    <div class="sr-dash-sechead">
+      <p class="eyebrow">Inside every protocol</p>
+      <h2>Experience it. Record what shifts. Go deeper when you are ready.</h2>
+      <p class="note" id="srJNote"></p>
+    </div>
+    <div class="sr-dash-panel sr-dash-jpanel">
+      <div class="sr-dash-jband" id="srJBand"></div>
+      <div class="sr-dash-jrule"></div>
+      <div class="sr-dash-jcols" id="srJCols"></div>
+    </div>
+  </section>
+
+  <!-- ═══ WHAT EVERY PROTOCOL OPENS — a fold, like the frameworks. The reader
+       merges what a resource is, what it does for you, and the source the claim
+       rests on, so value and evidence arrive together. ═══ -->
+  <section class="sr-dash-sec">
+    <div class="sr-dash-fold" id="srFoldRes">
+      <button class="sr-dash-foldbtn" id="srResBtn" aria-expanded="false" aria-controls="srResBody">
+        <span class="sr-dash-foldsign"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+        <span>
+          <span class="eyebrow" style="display:block;margin-bottom:6px">What every protocol opens</span>
+          <span class="sr-dash-foldtitle">Twelve resources, one for each kind of moment.</span>
+        </span>
+        <span class="sr-dash-foldnote">Guided audio · breathwork · somatic<br>journal · sources · cue card</span>
+      </button>
+      <div class="sr-dash-foldbody" id="srResBody" hidden>
+        <div class="sr-dash-strip" id="srStrip" role="tablist" aria-label="Protocol resources"></div>
+        <div class="sr-dash-reader">
+          <div>
+            <p class="sr-dash-readname" id="srReadName"></p>
+            <p class="sr-dash-readline" id="srReadLine"></p>
+            <p class="sr-dash-readbody" id="srReadBody"></p>
+          </div>
+          <div class="sr-dash-readwhy">
+            <p class="sr-dash-readwhykick" id="srReadWhyKick"></p>
+            <p id="srReadWhy"></p>
+            <p class="sr-dash-readsrc" id="srReadSrc"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SESSIONS & WORKSHOPS ═══
+       Replaces the Optional Support strip inside the journey panel. Offers on the
+       left with what is actually included; live dates on the right.
+       INTEGRATION: the date list is static here. In production this renders from
+       the scheduling provider and each Reserve opens its checkout — see handover. -->
+  <section class="sr-dash-sec">
+    <div class="sr-dash-sechead">
+      <p class="eyebrow">When self-guided is not enough</p>
+      <h2>Some patterns need another person present.</h2>
+      <p class="note">Outside the core protocol · never required</p>
+    </div>
+    <div class="sr-dash-panel">
+      <div class="sr-dash-bookband">
+        <div class="sr-dash-bookpanel b2"><div class="sr-dash-booklabel"><span>Premium 1:1</span><em>Banner photograph pending</em></div></div>
+        <div class="sr-dash-bookpanel b1"><div class="sr-dash-booklabel"><span>Workshops</span><em>Banner photograph pending</em></div></div>
+        <div class="sr-dash-bookpanel b3"><div class="sr-dash-booklabel"><span>Next available</span><em>Banner photograph pending</em></div></div>
+      </div>
+      <div class="sr-dash-book">
+
+        <div class="sr-dash-offer">
+          <div class="sr-dash-offerhead">
+            <p class="sr-dash-offername">Premium 1:1</p>
+            <p class="sr-dash-offerprice">€275 / session</p>
+          </div>
+          <p class="sr-dash-offerbody">Private work with a SafeRise guide, shaped around the protocols you already run.</p>
+          <ul class="sr-dash-offerlist">
+            <li>Ninety minutes, online</li>
+            <li>Bring your archive — it is read beforehand</li>
+            <li>Written follow-up within two days</li>
+          </ul>
+          <div class="sr-dash-offeract">
+            <button class="sr-dash-addbtn sr-dash-addbtn--solid" data-modal="oneone">Book a session <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
+            <button class="sr-link" data-modal="oneone">How a session runs</button>
+          </div>
+        </div>
+
+        <div class="sr-dash-offer">
+          <div class="sr-dash-offerhead">
+            <p class="sr-dash-offername">Workshops</p>
+            <p class="sr-dash-offerprice">from €59</p>
+          </div>
+          <p class="sr-dash-offerbody">Run the protocol in a room with other people, facilitated live.</p>
+          <ul class="sr-dash-offerlist">
+            <li>Two hours, online or in person</li>
+            <li>Personal €59 · Relationship €139 per couple</li>
+            <li>Recording shared with attendees</li>
+          </ul>
+          <div class="sr-dash-offeract">
+            <button class="sr-dash-addbtn" data-modal="workshop">Reserve a place <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
+            <button class="sr-link" data-modal="workshop">What happens in one</button>
+          </div>
+        </div>
+
+        <div class="sr-dash-dates">
+          <div class="sr-dash-dateshead">
+            <p class="sr-dash-dateskick">Next available</p>
+            <p class="sr-dash-datestz">Times shown in your timezone · AST</p>
+          </div>
+
+          <div class="sr-dash-slot">
+            <p class="sr-dash-slotdate"><b>22</b><span>Aug</span></p>
+            <div class="sr-dash-slotmain">
+              <p class="sr-dash-slotname">Anxiety Reset · group workshop</p>
+              <p class="sr-dash-slotmeta">18:00–20:00 · Online · <em>6 places left</em></p>
+            </div>
+            <button class="sr-dash-slotbtn" data-modal="workshop">Reserve</button>
+          </div>
+
+          <div class="sr-dash-slot">
+            <p class="sr-dash-slotdate"><b>29</b><span>Aug</span></p>
+            <div class="sr-dash-slotmain">
+              <p class="sr-dash-slotname">Rupture &amp; Repair · couples workshop</p>
+              <p class="sr-dash-slotmeta">18:00–20:00 · Online · <em class="low">2 places left</em></p>
+            </div>
+            <button class="sr-dash-slotbtn" data-modal="workshop">Reserve</button>
+          </div>
+
+          <div class="sr-dash-slot">
+            <p class="sr-dash-slotdate"><b>03</b><span>Sep</span></p>
+            <div class="sr-dash-slotmain">
+              <p class="sr-dash-slotname">Premium 1:1 with Andre</p>
+              <p class="sr-dash-slotmeta">Three times available · 90 min</p>
+            </div>
+            <button class="sr-dash-slotbtn" data-modal="oneone">Book</button>
+          </div>
+
+          <div class="sr-dash-slot">
+            <p class="sr-dash-slotdate"><b>12</b><span>Sep</span></p>
+            <div class="sr-dash-slotmain">
+              <p class="sr-dash-slotname">Shutdown Recovery · group workshop</p>
+              <p class="sr-dash-slotmeta">18:00–20:00 · Online · <em>full</em></p>
+            </div>
+            <button class="sr-dash-slotbtn" disabled>Waitlist</button>
+          </div>
+
+          <div class="sr-dash-datesfoot">
+            <button class="sr-dash-go" data-modal="calendar" style="background:none;border:0;cursor:pointer;font-family:inherit;padding:0">See the full calendar <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
+            <p class="sr-dash-datestz">Cancel free up to 48 hours before</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Understanding SafeRise dissolved: the four portals now sit as one line above
+       the FAQ, and The Chosen Self / Your Decisions moved into Your record. -->
+
+  <!-- ═══ WHERE THE METHOD COMES FROM — closed by default. Reference material,
+       not something a member needs in view on every visit. ═══ -->
+  <section class="sr-dash-sec">
+    <div class="sr-dash-fold" id="srFoldMethod">
+      <button class="sr-dash-foldbtn" id="srFoldBtn" aria-expanded="false" aria-controls="srFoldBody">
+        <span class="sr-dash-foldsign"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+        <span>
+          <span class="eyebrow" style="display:block;margin-bottom:6px">Where the method comes from</span>
+          <span class="sr-dash-foldtitle">Six frameworks, three registers.</span>
+        </span>
+        <span class="sr-dash-foldnote">Porges · HeartMath · Maté<br>Jung · Dispenza · Watts</span>
+      </button>
+      <div class="sr-dash-foldbody" id="srFoldBody" hidden>
+<div class="sr-dash-sixgrid">
+
+        <div class="sr-dash-six" style="--sc:var(--gold)">
+          <span class="sr-dash-sixi"><!-- SWAP: <img src="assets/frameworks/porges.jpg"> -->
+            <svg viewBox="0 0 24 24"><path d="M12 3v9M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg></span>
+          <div>
+            <p class="sr-dash-sixrank">Peer-reviewed · load-bearing</p>
+            <p class="sr-dash-sixname">Polyvagal Theory</p>
+            <p class="sr-dash-sixfrom">from Dr Stephen Porges</p>
+            <p class="sr-dash-sixbody">Threat and safety are detected below conscious thought. Explains why insight alone does not settle a state, and why Step 01 names what is present rather than arguing with it.</p>
+          </div>
+        </div>
+
+        <div class="sr-dash-six" style="--sc:var(--gold)">
+          <span class="sr-dash-sixi"><!-- SWAP: coherence waveform graphic -->
+            <svg viewBox="0 0 24 24"><path d="M2 14c2.5 0 2.5-6 5-6s2.5 12 5 12 2.5-12 5-12 2.5 6 5 6"/></svg></span>
+          <div>
+            <p class="sr-dash-sixrank">Peer-reviewed · load-bearing</p>
+            <p class="sr-dash-sixname">Cardiac coherence</p>
+            <p class="sr-dash-sixfrom">from the HeartMath Institute</p>
+            <p class="sr-dash-sixbody">Around six breaths a minute — 0.1 Hz — is where heart-rate variability peaks for most people. The measurable basis for Step 02, and the most specific claim SafeRise makes.</p>
+          </div>
+        </div>
+
+        <div class="sr-dash-six" style="--sc:var(--gold)">
+          <span class="sr-dash-sixi"><!-- SWAP: <img src="assets/frameworks/mate.jpg"> -->
+            <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9z"/><path d="M9.5 11.5h5"/></svg></span>
+          <div>
+            <p class="sr-dash-sixrank">Clinical practice · supporting</p>
+            <p class="sr-dash-sixname">Compassionate Inquiry</p>
+            <p class="sr-dash-sixfrom">from Dr Gabor Maté</p>
+            <p class="sr-dash-sixbody">Meeting what is present without fighting it, including your own part in it. The basis for Step 03, where acceptance is treated as a decision rather than a feeling.</p>
+          </div>
+        </div>
+
+        <div class="sr-dash-six" style="--sc:var(--teal)">
+          <span class="sr-dash-sixi">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 3.6a8.4 8.4 0 0 0 0 16.8"/><circle cx="12" cy="12" r="2.4"/></svg></span>
+          <div>
+            <p class="sr-dash-sixrank">Interpretive layer</p>
+            <p class="sr-dash-sixname">Shadow &amp; individuation</p>
+            <p class="sr-dash-sixfrom">from Carl Jung</p>
+            <p class="sr-dash-sixbody">The frame for what Go Deeper does with a pattern once it is regulated — and for The Decision, where insight becomes an identity you choose.</p>
+          </div>
+        </div>
+
+        <div class="sr-dash-six" style="--sc:var(--teal)">
+          <span class="sr-dash-sixi">
+            <svg viewBox="0 0 24 24"><path d="M9 20v-2a5 5 0 0 1-2-4V9a5 5 0 0 1 10 0v5a5 5 0 0 1-2 4v2z"/><path d="M12 4.4v9.6"/></svg></span>
+          <div>
+            <p class="sr-dash-sixrank">Interpretive layer</p>
+            <p class="sr-dash-sixname">Observer stance</p>
+            <p class="sr-dash-sixfrom">from Dr Joe Dispenza</p>
+            <p class="sr-dash-sixbody">Mental rehearsal in Step 04 — practising the version of yourself on the other side. Included as an integrative extension, not as clinical evidence.</p>
+          </div>
+        </div>
+
+        <div class="sr-dash-six" style="--sc:var(--teal)">
+          <span class="sr-dash-sixi">
+            <svg viewBox="0 0 24 24"><path d="M3 15c3.5 0 3.5-3 7-3s3.5 3 7 3 4-1.6 4-1.6"/><path d="M3 10c3.5 0 3.5-3 7-3s3.5 3 7 3 4-1.6 4-1.6"/></svg></span>
+          <div>
+            <p class="sr-dash-sixrank">Interpretive layer</p>
+            <p class="sr-dash-sixname">Non-resistance</p>
+            <p class="sr-dash-sixfrom">from Alan Watts</p>
+            <p class="sr-dash-sixbody">The disposition the whole method runs on: that resisting a state sustains it, and that release follows acceptance rather than effort.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="sr-dash-sixclose">The frameworks carry peer-reviewed research. The specific combination here does not.
+        <b>SafeRise has not been through a clinical trial. It is a structured practice built on established frameworks, not a treatment with proven outcomes of its own. Dr Keny F. Bastien MD is engaged as clinical collaborator on scope and safety.</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ YOUR RECORD ═══
+       Four things a member cannot get anywhere else: what their state has done,
+       what they have practised, what they have read, and what they wrote. The
+       summariser reads all four and says one thing back. -->
+  <section class="sr-dash-sec">
+    <div class="sr-dash-sechead">
+      <p class="eyebrow">Your record</p>
+      <h2>Follow your transformation journey.</h2>
+      <p class="note">Private to you · 20 sessions logged</p>
+    </div>
+
+    <!-- 1 · what SafeRise notices — the summariser -->
+    <div class="sr-sum">
+      <div class="sr-sum-main">
+        <p class="sr-sum-kick">What your record shows</p>
+        <p class="sr-sum-body" id="srSumBody">Across twenty sessions your average state after practice has risen from <b>2.4 to 3.6</b>, and the gap between before and after has narrowed. The pattern still arrives — you have opened Anxiety Reset eleven times since June — but the route back is now around <b>four minutes</b> rather than the twenty it took in your first fortnight. Your entries have changed tense: June reads as description, August reads as recognition.</p>
+        <div class="sr-sum-acts">
+          <button class="sr-dash-addbtn sr-dash-addbtn--solid" id="srSumGen">Generate August summary <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
+          <a class="sr-dash-go" href="#">Build a protocol report <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
+        </div>
+        <p class="sr-sum-note">Summaries are generated from your own logs and entries. They are never shared and never used to score you.</p>
+      </div>
+      <div class="sr-sum-side">
+        <p class="sr-sum-kick">What SafeRise suggests next</p>
+        <div id="srSuggest2"></div>
+      </div>
+    </div>
+
+    <!-- 2 · state -->
+    <div class="sr-dash-arch">
+      <div class="sr-dash-archmain">
+        <div class="sr-dash-archbanner">
+          <div class="sr-dash-archbannerin"><p>“The tightness went before the thought did.”</p></div>
+        </div>
+        <div class="sr-dash-archin">
+          <div class="sr-dash-arc" style="margin-bottom:24px">
+            <svg class="sr-dash-arcsvg" viewBox="0 0 150 92">
+              <path d="M12 82a63 63 0 0 1 126 0" fill="none" stroke="#22222E" stroke-width="13" stroke-linecap="round"/>
+              <path d="M12 82a63 63 0 0 1 30-53" fill="none" stroke="#C97A5A" stroke-width="13" stroke-linecap="round"/>
+              <path d="M48 26a63 63 0 0 1 54 0" fill="none" stroke="#7FA88C" stroke-width="13" stroke-linecap="round"/>
+              <path d="M108 29a63 63 0 0 1 30 53" fill="none" stroke="#5A6B84" stroke-width="13" stroke-linecap="round"/>
+              <circle cx="86" cy="24" r="6" fill="#F5EDD8"/><circle cx="86" cy="24" r="10" fill="none" stroke="#F5EDD8" stroke-opacity=".3"/>
+            </svg>
+            <div class="sr-dash-arclegend">
+              <span><i style="background:#C97A5A"></i>Mobilised</span>
+              <span><i style="background:#7FA88C"></i>Safe — your regulated range</span>
+              <span><i style="background:#5A6B84"></i>Shut down</span>
+            </div>
+            <p class="sr-dash-arcnote">Where your last session finished. A position in your range, not a score — there is no target and nothing to beat.</p>
+          </div>
+          <p class="sr-dash-archkick">State before and after · last twelve sessions</p>
+          <div class="sr-dash-tiers">
+            <div class="sr-dash-bar" style="height:42%"></div><div class="sr-dash-bar" style="height:54%"></div>
+            <div class="sr-dash-bar" style="height:38%"></div><div class="sr-dash-bar" style="height:61%"></div>
+            <div class="sr-dash-bar" style="height:49%"></div><div class="sr-dash-bar" style="height:70%"></div>
+            <div class="sr-dash-bar" style="height:58%"></div><div class="sr-dash-bar" style="height:76%"></div>
+            <div class="sr-dash-bar" style="height:66%"></div><div class="sr-dash-bar" style="height:82%"></div>
+            <div class="sr-dash-bar" style="height:74%"></div><div class="sr-dash-bar" style="height:88%"></div>
+          </div>
+          <div class="sr-dash-axis"><span>June</span><span>August</span></div>
+          <div style="margin-top:20px"><a class="sr-dash-go" href="#">Open the full archive <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a></div>
+        </div>
+      </div>
+
+      <div class="sr-dash-archside">
+        <div class="sr-dash-tpanel sr-dash-tpanel--banner">
+          <div class="sr-dash-archbanner sr-dash-archbanner--journal">
+            <div class="sr-dash-archbannerin"><p>“Named it properly for once — not anxious, afraid the call would go badly.”</p></div>
+          </div>
+          <div class="sr-dash-entryhead">
+            <p class="eyebrow" style="margin-bottom:8px">In your own words</p>
+            <h3>Recent journal entries</h3>
+            <p>Fourteen entries · about 2,100 words since June.</p>
+          </div>
+          <div class="sr-dash-entry">
+            <p class="sr-dash-entrydate">12 Aug · Anxiety Reset</p>
+            <p class="sr-dash-entrytext">The tightness went before the thought did. That has not happened before.</p>
+          </div>
+          <div class="sr-dash-entry" style="margin-top:16px">
+            <p class="sr-dash-entrydate">08 Aug · Shutdown Recovery</p>
+            <p class="sr-dash-entrytext">Flat all day. Sat for four minutes instead of ten. Still counted.</p>
+          </div>
+          <div class="sr-dash-entrythemes">
+            <p class="sr-dash-usekick">Recurring in your entries</p>
+            <span class="sr-tag">anticipation <b>6</b></span>
+            <span class="sr-tag">being misread <b>4</b></span>
+            <span class="sr-tag">work calls <b>4</b></span>
+            <span class="sr-tag">naming it <b>3</b></span>
+          </div>
+          <div style="margin-top:18px;display:flex;gap:18px;flex-wrap:wrap">
+            <a class="sr-dash-go" href="#">Write an entry <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
+            <a class="sr-dash-go" href="#">All entries <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 · cadence and coverage — the two numbers that predict return.
+         The ranked protocol and resource charts moved to the full archive. -->
+    <div class="sr-cadence">
+      <p class="sr-cadence-line">Last practice <b>2 days ago</b> · <b>seven</b> of ten protocols still unopened · <b>14</b> entries written since June.</p>
+      <a class="sr-dash-go" href="#">See it all in the archive <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
+    </div>
+
+    <!-- 4 · identity and the laboratory -->
+    <div class="sr-dash-identity sr-dash-identity--three">
+      <a class="sr-dash-idcard" href="#">
+        <span class="sr-dash-idicon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span>
+        <span>
+          <span class="sr-dash-idname">The Chosen Self</span>
+          <span class="sr-dash-idbody">The identity you are practising into. Written by you, revisited whenever the old one gets loud.</span>
+          <span class="sr-dash-idmeta">Last revised 2 August</span>
+        </span>
+      </a>
+      <a class="sr-dash-idcard" href="#">
+        <span class="sr-dash-idicon"><svg viewBox="0 0 24 24"><path d="M12 4v7M12 11l6 4M12 11l-6 4"/><circle cx="12" cy="4" r="1.6"/><circle cx="18" cy="16" r="1.6"/><circle cx="6" cy="16" r="1.6"/></svg></span>
+        <span>
+          <span class="sr-dash-idname">Your Decisions</span>
+          <span class="sr-dash-idbody">The choices you made once the pattern was no longer making them for you.</span>
+          <span class="sr-dash-idmeta">4 recorded</span>
+        </span>
+      </a>
+      <a class="sr-dash-idcard sr-dash-idcard--lab" href="#" id="srLabCard">
+        <span class="sr-dash-idicon"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.4L5.6 17A2 2 0 0 0 7.4 20h9.2a2 2 0 0 0 1.8-3L14 8.4V3"/><path d="M7.6 14h8.8"/></svg></span>
+        <span>
+          <span class="sr-dash-idname">The Life Laboratory</span>
+          <span class="sr-dash-idbody">What your experience is teaching you, and what it might be worth to someone else.</span>
+          <span class="sr-dash-idmeta">9 observations · 2 ready to examine</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══ FAQ ═══ -->
+  <div class="sr-dash-faq">
+    <div class="sr-dash-faqtext">
+      <h3>Questions about how any of this works?</h3>
+      <p>What the evidence does and does not show, whether your journal is private, what to do mid-episode, and what happens if you stop.</p>
+    </div>
+    <a class="sr-dash-addbtn" href="#">Read the FAQ <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
+  </div>
+
+  <!-- ═══ SCOPE &amp; SAFETY ═══ -->
+  <footer class="sr-dash-foot">
+    <p><strong style="color:var(--text2);font-weight:500">Scope &amp; safety.</strong> SafeRise Protocol is self-guided education and training in nervous-system regulation. It is not therapy, medical treatment, or a substitute for professional care, and it has not been through a clinical trial. If you are in crisis, contact your local emergency service.</p>
+    <div class="sr-dash-footlinks">
+      <a href="#">FAQ</a><a href="#">Account</a><a href="#">Billing</a><a href="#">Support</a><a href="#">Terms</a><a href="#">Privacy</a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ══════════ PROTOCOL / RESOURCE PANE ══════════
+     The real designs, embedded. saferise-protocol-page.html and
+     saferise-resource-reader.html are loaded with ?embed=1, which strips their
+     own nav and footer and reports height back so the frame never scrolls
+     independently. Keep all three files in the same folder. -->
+<section class="sr-proto" id="srProto" aria-label="Protocol">
+  <div class="shell">
+    <div class="sr-proto-backbar">
+      <button class="sr-proto-back" id="srProtoBack">
+        <svg width="15" height="10" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 6H2M7 1L2 6l5 5"/></svg>
+        Back to the dashboard
+      </button>
+      <nav class="sr-proto-crumb" id="srProtoCrumb"></nav>
+      <div class="sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+        <button data-theme="midnight" class="on">Midnight</button>
+        <button data-theme="sunrise">Sunrise</button>
+      </div>
+      <button class="sr-proto-allres" id="srProtoAll" hidden>
+        <svg width="14" height="10" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 6H2M7 1L2 6l5 5"/></svg>
+        Back to the protocol
+      </button>
+    </div>
+    <iframe class="sr-proto-frame" id="srProtoFrame" title="Protocol" src="about:blank" scrolling="no"></iframe>
+  </div>
+</section>
+
+
+<!-- ══════════ BOOKING LAYERS ══════════
+     Mock destinations for links that have no page yet. Each is a self-contained
+     dialog; in production these become real pages or the scheduler's embed. -->
+<div class="sr-modal" id="mWorkshop" role="dialog" aria-modal="true" aria-label="Workshop booking">
+  <div class="sr-modalbox">
+    <div class="sr-modalart m2">
+      <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+    <div class="sr-modalin">
+      <p class="sr-modalkick">Group workshop</p>
+      <h3>Anxiety Reset · Friday 22 August</h3>
+      <p>Two hours, facilitated live. We run the protocol together, then work through what came up in the room. You are never asked to share anything you do not want to.</p>
+      <div class="sr-modalgrid">
+        <div>
+          <p class="sr-modallabel">What happens</p>
+          <ul class="sr-modallist">
+            <li>Arrival and Clearing — 15 minutes</li>
+            <li>The four steps, run together — 40 minutes</li>
+            <li>Facilitated discussion — 45 minutes</li>
+            <li>Close and integration — 20 minutes</li>
+          </ul>
+        </div>
+        <div>
+          <p class="sr-modallabel">Choose a date</p>
+          <div class="sr-slotpick" data-pick>
+            <button class="sr-slotopt on"><b>22 Aug</b><span>18:00–20:00 · Online<em>6 places left</em></span></button>
+            <button class="sr-slotopt"><b>29 Aug</b><span>18:00–20:00 · Online<em>2 places left</em></span></button>
+            <button class="sr-slotopt" disabled><b>12 Sep</b><span>18:00–20:00 · Online<em>Full — join the waitlist</em></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="sr-modalfoot">
+        <p>€59 per person. Cancel free up to 48 hours before. A recording is shared with everyone who attends.</p>
+        <button class="sr-dash-addbtn sr-dash-addbtn--solid">Reserve my place · €59 <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sr-modal" id="mOneone" role="dialog" aria-modal="true" aria-label="Premium 1:1 booking">
+  <div class="sr-modalbox">
+    <div class="sr-modalart m1">
+      <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+    <div class="sr-modalin">
+      <p class="sr-modalkick">Premium 1:1</p>
+      <h3>Ninety minutes, private, with Andre</h3>
+      <p>Your archive is read beforehand, so the session starts where your practice actually is rather than at the beginning. A written follow-up arrives within two days.</p>
+      <div class="sr-modalgrid">
+        <div>
+          <p class="sr-modallabel">How a session runs</p>
+          <ul class="sr-modallist">
+            <li>Your record reviewed in advance</li>
+            <li>Where the pattern is still winning</li>
+            <li>The protocol adjusted to your case</li>
+            <li>Written follow-up within two days</li>
+          </ul>
+        </div>
+        <div>
+          <p class="sr-modallabel">Next availability</p>
+          <div class="sr-slotpick" data-pick>
+            <button class="sr-slotopt on"><b>03 Sep</b><span>10:00 · 90 min<em>AST — your timezone</em></span></button>
+            <button class="sr-slotopt"><b>03 Sep</b><span>15:00 · 90 min<em>AST — your timezone</em></span></button>
+            <button class="sr-slotopt"><b>09 Sep</b><span>11:00 · 90 min<em>AST — your timezone</em></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="sr-modalfoot">
+        <p>€275 per session. Reschedule free up to 72 hours before. Sessions are not therapy — see Scope &amp; safety.</p>
+        <button class="sr-dash-addbtn sr-dash-addbtn--solid">Book this time · €275 <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sr-modal" id="mCalendar" role="dialog" aria-modal="true" aria-label="Full calendar">
+  <div class="sr-modalbox">
+    <div class="sr-modalart m3">
+      <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+    <div class="sr-modalin">
+      <p class="sr-modalkick">Everything scheduled</p>
+      <h3>August and September</h3>
+      <p>Workshops run monthly per track. Private sessions open in two-week blocks. Times are shown in your timezone.</p>
+      <div class="sr-slotpick" data-pick style="gap:8px">
+        <button class="sr-slotopt on"><b>22 Aug</b><span>Anxiety Reset · group workshop<em>18:00–20:00 · Online · 6 places left · €59</em></span></button>
+        <button class="sr-slotopt"><b>29 Aug</b><span>Rupture &amp; Repair · couples workshop<em>18:00–20:00 · Online · 2 places left · €139 per couple</em></span></button>
+        <button class="sr-slotopt"><b>03 Sep</b><span>Premium 1:1 with Andre<em>Three times available · 90 min · €275</em></span></button>
+        <button class="sr-slotopt" disabled><b>12 Sep</b><span>Shutdown Recovery · group workshop<em>Full — join the waitlist</em></span></button>
+        <button class="sr-slotopt"><b>26 Sep</b><span>Anger Alchemy · group workshop<em>18:00–20:00 · Online · 10 places · €59</em></span></button>
+      </div>
+      <div class="sr-modalfoot">
+        <p>Cancel free up to 48 hours before a workshop, 72 hours before a 1:1.</p>
+        <button class="sr-dash-addbtn sr-dash-addbtn--solid">Continue to booking <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ ROUTE LAYER ══════════
+     Nothing on this dashboard is a dead link. Anything whose page does not exist
+     yet opens this panel, which names the route and what will live there. Replace
+     the ROUTES entry with a real href as each page ships. -->
+<div class="sr-modal" id="mRoute" role="dialog" aria-modal="true" aria-label="Destination">
+  <div class="sr-modalbox" style="max-width:560px">
+    <div class="sr-modalart m3">
+      <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+    <div class="sr-modalin">
+      <p class="sr-modalkick" id="srRouteKick">Not built yet</p>
+      <h3 id="srRouteTitle"></h3>
+      <p id="srRouteBody"></p>
+      <div class="sr-modalfoot">
+        <p id="srRoutePath" style="font-family:'DM Sans',sans-serif;letter-spacing:.06em"></p>
+        <button class="sr-dash-addbtn" data-close>Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ MEDIA LAYER ══════════ -->
+<div class="sr-modal" id="mMedia" role="dialog" aria-modal="true" aria-label="The Clearing">
+  <div class="sr-modalbox" style="max-width:900px">
+    <div class="sr-player">
+      <div class="sr-player-stage">
+        <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+        <button class="sr-player-play" id="srPlayerPlay" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></button>
+      </div>
+      <div class="sr-player-bar">
+        <span class="sr-player-time" id="srPlayerNow">3:24</span>
+        <span class="sr-player-rail"><i id="srPlayerFill" style="width:34%"></i></span>
+        <span class="sr-player-time">10:00</span>
+      </div>
+    </div>
+    <div class="sr-modalin">
+      <p class="sr-modalkick">Settle in</p>
+      <h3>The Clearing</h3>
+      <p>Ten guided minutes to quiet the noise and bring you into a state where the work can land. Nothing is required of you but to listen.</p>
+      <div class="sr-modalfoot">
+        <p>Logged to your record when it finishes. You can stop at any point and it still counts.</p>
+        <button class="sr-dash-addbtn" data-close>Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ CRISIS CARD ══════════
+     Reachable from the rail on every screen, and from the resources strip. Never
+     requires a protocol or the resources page. Four lines, nothing to scroll. -->
+<div class="sr-modal" id="mCrisis" role="dialog" aria-modal="true" aria-label="Cue Card">
+  <div class="sr-modalbox sr-crisis">
+    <div class="sr-crisis-art">
+      <img src="https://deploy-preview-14--the-saferise-protocol.netlify.app/assets/covers/01.jpg" alt="" onerror="this.style.display='none'">
+      <span class="sr-crisis-scrim"></span>
+      <span class="sr-crisis-label">Cue Card<em>Four lines. Always here.</em></span>
+    </div>
+    <div class="sr-crisis-body">
+      <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+      <p class="sr-crisis-kick">In the moment</p>
+      <h3>You do not have to remember anything. Read the four lines and follow them.</h3>
+
+      <ol class="sr-crisis-steps">
+        <li><b>01</b><span><em>Name it.</em> Out loud if you can. Not “I’m anxious” — finish the sentence. <i>I am afraid that ______.</i></span></li>
+        <li><b>02</b><span><em>Hand to heart.</em> In for four. Out for six. Six times. The out-breath is the part that works.</span></li>
+        <li><b>03</b><span><em>Stop fighting it.</em> Let it be in the room with you. You are not agreeing with it. You are stopping the second fight.</span></li>
+        <li><b>04</b><span><em>One breath as the person on the other side.</em> Not a plan. One breath.</span></li>
+      </ol>
+
+      <div class="sr-crisis-foot">
+        <p>Then stop. Nothing else is required of you today. Log it later if you want to — it still counts.</p>
+        <div class="sr-crisis-acts">
+          <button class="sr-dash-addbtn sr-dash-addbtn--solid" data-close>I have got it</button>
+          <a class="sr-link" href="#">Print it · keep it on you</a>
+        </div>
+      </div>
+
+      <p class="sr-crisis-safety"><b>If you are in immediate danger</b>, contact your local emergency service. SafeRise is self-guided practice, not crisis care.</p>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+(function(){
+  // COVER_01 is embedded for this mockup; 02–10 resolve from assets/covers/NN.jpg
+  var COVER_01 = "assets/covers/01.jpg";
+
+  var TRACKS = {
+    1:{accent:'var(--t1)', cls:'t-1', note:'Personal Transformation · included with your plan', unlocked:true,
+       items:[
+      ['Regulate','The Anxiety Reset Protocol'],['Transmute','The Anger Alchemy Protocol'],
+      ['Reduce Load','The Overwhelm Threshold Protocol'],['Repair','The Abandonment Wound Protocol'],
+      ['Dissolve','The Shame Dissolution Protocol'],['Integrate','The Grief Integration Protocol'],
+      ['Restore','The Shutdown Recovery Protocol'],['Release','The Jealousy Release Protocol'],
+      ['Anchor','The Insecurity Anchor Protocol'],['Reclaim','The Powerlessness & Despair Protocol']]},
+    2:{accent:'var(--t2)', cls:'t-2', note:'Relationship Healing · not on your plan yet', unlocked:false,
+       items:[
+      ['Speak','The Safe Conversation Protocol'],['Repair','The Rupture & Repair Protocol'],
+      ['Rebuild','The Trust & Betrayal Protocol'],['Release','The Resentment Release Protocol'],
+      ['Open','The Intimacy Barrier Protocol'],['Level','The Double Standard Protocol'],
+      ['Clarify','The Projection Clarity Protocol'],['Appreciate','The Appreciation & Support Protocol'],
+      ['Meet','The Pursue & Withdraw Protocol'],['Close','The Conscious Separation Protocol']]},
+    3:{accent:'var(--t3)', cls:'t-3', note:'Professional Performance · not on your plan yet', unlocked:false,
+       items:[
+      ['Steady','The High-Stakes Presence Protocol'],['Navigate','The Conflict Navigation Protocol'],
+      ['Dissolve','The Imposter Dissolution Protocol'],['Loosen','The Perfectionism Release Protocol'],
+      ['Perform','The Performance Anxiety Protocol'],['Recover','The Ambition Recovery Protocol'],
+      ['Cross','The Career Transition Protocol'],['Decide','The Decision Fatigue Protocol'],
+      ['Refill','The Burnout & Overload Protocol'],['Unlock','The Creative Flow Protocol']]},
+    4:{accent:'var(--t4)', cls:'t-4', note:'Elevation Series · opening soon', unlocked:false, items:[]}
+  };
+
+  // The three parts are the same shape in every track — Experience, Log, Go Deeper.
+  // What changes is who is in the room, what the Experience actually is, and what
+  // sits in the Go Deeper library for that track.
+  // SWAP when the band photographs exist — all four at 1400 x 380:
+  //   assets/journey/t1-band.jpg · t2-band.jpg · t3-band.jpg · t4-band.jpg
+  var BAND = { };
+
+  var JOURNEY = {
+    1:{note:'Personal Transformation · run alone', title:'Experience it. Record what shifts.<br>Go deeper when you\u2019re ready.',
+       sub:'Three parts, held inside one continuous practice.',
+       band:'p1',
+       cols:[
+        {tag:'01 · Start here', tagcol:'var(--gold)', name:'Experience', value:'Change your state, now.', valcol:'var(--gold-lt)',
+         body:['The Protocol Foundation Meditation, voiced start to finish. Breathwork and Somatic Release sit alongside it for the days you will not sit for ten minutes, and the Cue Card carries the four-line version for when it is actually happening.'],
+         meta:'Guided · ~10 min · Immediate'},
+        {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn change into a record.',
+         body:['Rate your state before and after, note the practice you used, and write what surfaced. Progress Tracking holds the numbers, the Progress Journal holds your words, and together they build the record that shows the route back getting shorter.'],
+         meta:'Private to you · After every session'},
+        {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Integrate. Choose.', valcol:'var(--teal)',
+         body:['How This Works explains the mechanism. Source Insights names the frameworks. The Reference Case shows a documented life that ran the same pattern, and the Attention Advisory says plainly where self-guided practice stops.'],
+         note:'Individuation sits here: insight and shadow integration move into The Decision.',
+         meta:'Read anytime · No fixed order'}],},
+
+    2:{note:'Relationship Healing · run facing each other', title:'Practise it together. Record it separately.<br>Go deeper when you\u2019re both ready.',
+       sub:'Three parts, held inside one practice run facing each other.',
+       band:'p2',
+       cols:[
+        {tag:'01 · Start here', tagcol:'var(--t2)', name:'Experience', value:'Change the state in the room.', valcol:'var(--t2)',
+         body:['The Session Guide runs the four steps with both of you present, one reading aloud. Run the Safety Score first — on yourself and on them — and use the Invitation to Repair as the script for opening it when they are not in the room yet.'],
+         meta:'Together · ~10 min · Same room'},
+        {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn repair into a record.',
+         body:['Each of you logs separately and neither reads the other. Note what ruptured, what got said, and how long contact took to return — repair arriving faster is the measure, not whether rupture happened at all.'],
+         meta:'Private to each of you · After every session'},
+        {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Repair. Choose.', valcol:'var(--teal)',
+         body:['The same twelve, with the full session script, the Disclosure & Support guide for explaining this to people outside the relationship, and third-party invitation scripts for when someone else has to be brought in.'],
+         note:'Reference cases sit here: couples who ran the same pattern, and what changed it.',
+         meta:'Read anytime · Either of you'}],},
+
+    3:{note:'Professional Performance · ten minutes, before or after', title:'Run it before the room. Record what held.<br>Go deeper between them.',
+       sub:'Three parts, sized to fit inside a working day.',
+       band:'p3',
+       cols:[
+        {tag:'01 · Start here', tagcol:'var(--t3)', name:'Experience', value:'Change your state before it costs you.', valcol:'var(--t3)',
+         body:['A ten-minute guided session for before the room or after it, with short forms sized to the gap between meetings and a four-line Cue Card you can read at a desk without anyone noticing.'],
+         meta:'Guided · ~10 min · Before or after'},
+        {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn performance into a record.',
+         body:['Log the situation, what was actually at stake, and whether presence or rehearsal won. Across a quarter the record shows which kind of room still gets you fastest, and whether the activation before it is easing.'],
+         meta:'Private to you · After every session'},
+        {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Recover. Choose.', valcol:'var(--teal)',
+         body:['The same twelve, sized for a working day — mechanism, sources, meditation scripts, somatic practices between meetings, and the Disclosure guide for explaining a practice to people at work.'],
+         note:'Recovery sits here: ambition, burnout, and decisions you are too depleted to make well.',
+         meta:'Read anytime · No fixed order'}],},
+
+    4:{note:'Elevation Series · opening soon', title:'The same three parts, taken further.',
+       sub:'Structure confirmed. Detail opens with the Series.',
+       band:'p4',
+       cols:[
+        {tag:'01 · Start here', tagcol:'var(--t4)', name:'Experience', value:'Extended practice.', valcol:'var(--t4)',
+         body:['Longer guided sessions, built on the same four steps.'], meta:''},
+        {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'The same record, carried forward.',
+         body:['Your existing log continues into the Series — nothing restarts.'], meta:''},
+        {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Integrate. Choose.', valcol:'var(--teal)',
+         body:['Resource library to be confirmed.'], meta:''}],}
+  };
+
+  var jNote  = document.getElementById('srJNote');
+  var jBand  = document.getElementById('srJBand');
+  var jCols  = document.getElementById('srJCols');
+
+  function renderJourney(n){
+    var j = JOURNEY[n];
+    jNote.textContent = j.note;
+    jBand.innerHTML = BAND[n]
+      ? '<img src="'+BAND[n]+'" alt="Three moments in one practice: the guided session, logging what shifted, and reading deeper">'
+      : '<div class="sr-dash-jplaceholder '+j.band+'"><span>Experience<b>band photograph pending</b></span><span>Log &amp; Journal<b>band photograph pending</b></span><span>Go Deeper<b>band photograph pending</b></span></div>';
+    jCols.innerHTML = j.cols.map(function(c){
+      return '<div class="sr-dash-jcol">'+
+        '<p class="sr-dash-jtag" style="color:'+c.tagcol+'">'+c.tag+'</p>'+
+        '<p class="sr-dash-jname">'+c.name+'</p>'+
+        '<p class="sr-dash-jvalue"'+(c.valcol?' style="color:'+c.valcol+'"':'')+'>'+c.value+'</p>'+
+        c.body.map(function(t){return '<p class="sr-dash-jbody">'+t+'</p>';}).join('')+
+        (c.note ? '<p class="sr-dash-jnote">'+c.note+'</p>' : '')+
+        (c.meta ? '<p class="sr-dash-jmeta">'+c.meta+'</p>' : '')+'</div>';
+    }).join('');
+  }
+
+  var row  = document.getElementById('srCarRow');
+  var vp   = document.getElementById('srCarViewport');
+  var note = document.getElementById('srTrackNote');
+  var rail = document.querySelectorAll('.sr-dash-railbtn');
+  var prev = document.querySelector('.sr-dash-carprev');
+  var next = document.querySelector('.sr-dash-carnext');
+  var CURRENT = 'The Anxiety Reset Protocol';
+  var ARROW = '<svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg>';
+  var LOCK  = '<svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>';
+
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+  var CURRENT_TRACK = 1;
+  function render(n){
+    var t = TRACKS[n];
+    CURRENT_TRACK = +n;
+    row.className = 'sr-dash-carrow ' + t.cls;
+    row.style.setProperty('--accent', t.accent);
+    note.textContent = t.note;
+
+    if(!t.items.length){
+      row.innerHTML = '<div class="sr-dash-empty">'+
+        '<h3>Elevation Series</h3>'+
+        '<p>Seven protocols for people who have finished the foundational work and want to go further. Opening after the recording sprint.</p>'+
+        '<a class="sr-dash-go" href="#">Tell me when it opens '+ARROW+'</a></div>';
+      // A track with nothing in it has nothing to sell. This returns before the
+      // lock block below, so the previous track's CTA has to be cleared here or
+      // it stays on screen offering the wrong track at the wrong price.
+      var emptyLock = document.getElementById('srLockCta');
+      if(emptyLock) emptyLock.classList.remove('show');
+      offset = 0; apply(); sync(); return;
+    }
+
+    var CARDS = t.items.map(function(it,i){
+      var no  = String(i+1).padStart(2,'0');
+      var src = COVERDIR[n] + no + '.jpg';
+      var cur = t.unlocked && it[1] === CURRENT;
+      // fallback tile carries the kicker and number; the real cover already has them
+      var fallback = '<div class="sr-dash-fallback"><span class="sr-dash-verb">'+esc(it[0])+
+                     '</span><span class="sr-dash-no">'+no+'</span></div>';
+      var img = '<img src="'+src+'" alt="" loading="lazy" '+
+                'onload="this.parentNode.querySelector(\'.sr-dash-fallback\').remove()" '+
+                'onerror="this.remove()">';
+      var ribbon = cur ? '<span class="sr-dash-ribbon">Step 03 of 07</span>' : '';
+      var action = t.unlocked
+        ? '<a class="sr-dash-go" href="#">'+(cur?'Continue':'Begin')+' '+ARROW+'</a>'
+        : '<span class="sr-dash-lock">'+LOCK+'Locked</span>';
+      return '<article class="sr-dash-card'+(t.unlocked?'':' sr-dash-locked')+(cur?' is-current':'')+
+        '" data-open="'+(t.unlocked?esc(it[1]):'')+'" data-no="'+no+'" data-src="'+src+'">'+
+        '<div class="sr-dash-cardart">'+fallback+img+ribbon+'</div>'+
+        '<h3 class="sr-dash-cardname">'+esc(it[1])+'</h3>'+action+'</article>';
+    }).join('');
+    // Two identical sets. The flow runs forward only; when it has travelled the
+    // width of one set we subtract that width with no animation, so the loop is
+    // seamless — no reversal, no jump back, nothing that reads as a dip.
+    row.innerHTML = t.items.length > 3 ? CARDS + CARDS : CARDS;
+    row.setAttribute('data-doubled', t.items.length > 3 ? '1' : '0');
+
+    var lock = document.getElementById('srLockCta');
+    if(lock){
+      if(t.unlocked || !t.items.length){ lock.classList.remove('show'); }
+      else {
+        var PRICE = {2:'\u20AC29 / month', 3:'\u20AC49 / month'};
+        document.getElementById('srLockText').innerHTML =
+          '<b>' + TRACKNAME[n] + ' is not on your plan yet.</b> ' +
+          'Adding it opens all ten protocols and every resource inside them. Your existing access stays exactly as it is.';
+        document.getElementById('srLockBtn').innerHTML = 'Add for ' + (PRICE[n] || '') + ' ' + ARROW;
+        lock.classList.add('show');
+      }
+    }
+    offset = 0; apply();
+    sync();
+    if(typeof updateCount === 'function') updateCount();
+  }
+
+  function sync(){
+    var max = vp.scrollWidth - vp.clientWidth - 2;
+    prev.disabled = false;
+    next.disabled = false;   // the loop is endless in both directions
+  }
+
+  prev.addEventListener('click', function(){ step(-1); });
+  next.addEventListener('click', function(){ step(1); });
+  vp.addEventListener('scroll', sync, {passive:true});
+  window.addEventListener('resize', sync);
+
+  rail.forEach(function(b){
+    b.addEventListener('click', function(){
+      rail.forEach(function(x){ x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
+      b.classList.add('on'); b.setAttribute('aria-selected','true');
+      var n = b.getAttribute('data-track');
+      b.style.setProperty('--accent', TRACKS[n].accent);
+      document.getElementById('srJourney').style.setProperty('--accent', TRACKS[n].accent);
+      render(n);
+      renderJourney(n);
+    });
+  });
+
+
+  // ── arrival check-in: typed, with predictive matching ──
+  // Free text is matched against phrasings people actually use, not a taxonomy.
+  var STATES = [
+    {k:'wired',  label:'Wired',  note:'Racing, on edge, cannot settle',
+     terms:['wired','anxious','anxiety','racing','on edge','edgy','panic','restless','cannot settle','can\u2019t settle','cant settle','tense','keyed up','spinning','overthinking','buzzing','jittery','stressed']},
+    {k:'heavy',  label:'Heavy',  note:'Weighed down, carrying something',
+     terms:['heavy','sad','grief','grieving','low','weighed down','sinking','loss','mourning','tearful','carrying','burdened','down']},
+    {k:'flat',   label:'Flat',   note:'Nothing much, disconnected, numb',
+     terms:['flat','numb','nothing','empty','disconnected','shut down','shutdown','blank','detached','foggy','fog','can\u2019t be bothered','unmotivated','exhausted','drained','burnt out','burned out']},
+    {k:'raw',    label:'Raw',    note:'Exposed, ashamed, easily stung',
+     terms:['raw','ashamed','shame','exposed','embarrassed','humiliated','stung','rejected','hurt','small','worthless','not enough','insecure','vulnerable']},
+    {k:'steady', label:'Steady', note:'Settled enough to go further',
+     terms:['steady','fine','ok','okay','good','calm','settled','clear','grounded','well','alright','present']}
+  ];
+
+  var RECS = {
+    'wired|self':   [1,'01','The Anxiety Reset Protocol','Wired is mobilisation. This one settles the fast route first, so thinking becomes available again.'],
+    'heavy|self':   [1,'06','The Grief Integration Protocol','Heavy usually means something is being carried rather than felt. This makes room for it.'],
+    'flat|self':    [1,'07','The Shutdown Recovery Protocol','Flat is a shutdown response, not laziness. This one brings you back online gently.'],
+    'raw|self':     [1,'05','The Shame Dissolution Protocol','Raw and exposed is shame territory. This stops a moment from defining you.'],
+    'steady|self':  [1,'09','The Insecurity Anchor Protocol','Steady is a good day to strengthen the ground rather than repair it.'],
+    'wired|person': [2,'01','The Safe Conversation Protocol','Run this together before the conversation, not during it.'],
+    'heavy|person': [2,'02','The Rupture & Repair Protocol','Something ruptured. This opens repair without either of you having to win it.'],
+    'flat|person':  [2,'09','The Pursue & Withdraw Protocol','Flat between two people is usually withdrawal. This names the loop without blame.'],
+    'raw|person':   [2,'03','The Trust & Betrayal Protocol','Raw around another person is where trust work belongs.'],
+    'steady|person':[2,'08','The Appreciation & Support Protocol','A steady day is the right day to do the repair that is not urgent.'],
+    'wired|work':   [3,'01','The High-Stakes Presence Protocol','Ten minutes before the room. Presence rather than rehearsal.'],
+    'heavy|work':   [3,'09','The Burnout & Overload Protocol','Heavy at work over weeks is load, not mood.'],
+    'flat|work':    [3,'06','The Ambition Recovery Protocol','Flat about work you used to want has its own protocol.'],
+    'raw|work':     [3,'03','The Imposter Dissolution Protocol','Raw and exposed at work is imposter territory.'],
+    'steady|work':  [3,'10','The Creative Flow Protocol','Steady is the state creative work actually needs.']
+  };
+  var OWNED = {1:true, 2:false, 3:false, 4:false};
+  var TRACKNAME = {1:'Personal Transformation', 2:'Relationship Healing', 3:'Professional Performance'};
+  var TRACKPRICE = {2:'\u20AC29/mo', 3:'\u20AC49/mo'};
+  // ── COVERS ──────────────────────────────────────────────────────────────
+  // Only 01 is embedded in this mockup. Covers 02–10 are requested from these
+  // paths and appear the moment the file exists; until then each card falls back
+  // to its tonal tile with the kicker and number drawn in CSS.
+  // Real covers, served from the repo.
+  var BASE = 'assets/covers/';
+  var COVERDIR = {1:BASE, 2:BASE + 't2-', 3:BASE + 't3-'};
+
+  function recommend(){
+    if(!PICK.state || !PICK.prep) return;
+    var r = RECS[PICK.state + '|' + PICK.prep];
+    if(!r) return;
+    var track = r[0], no = r[1], name = r[2], why = r[3];
+    document.getElementById('srResultName').textContent = name;
+    document.getElementById('srResultWhy').textContent = why;
+    var thumb = document.getElementById('srResultThumb');
+    thumb.src = COVERDIR[track] + no + '.jpg';
+    var act = document.getElementById('srResultAct');
+    if(OWNED[track]){
+      document.getElementById('srResultKick').textContent = 'Opens next \u00B7 in your plan';
+      act.innerHTML = '<button class="sr-dash-pill" id="srBeginBtn">Open protocol ' + ARROW + '</button>';
+      document.getElementById('srBeginBtn').addEventListener('click', function(){
+        openProtocol(name, thumb.getAttribute('src') || '', no, track);
+      });
+      markInCarousel(name);
+    } else {
+      document.getElementById('srResultKick').textContent = 'Opens next \u00B7 ' + TRACKNAME[track];
+      act.innerHTML = '<button class="sr-dash-pill sr-dash-pill--ghost">Add ' + TRACKNAME[track] + ' \u00B7 ' + TRACKPRICE[track] + ' ' + ARROW + '</button>' +
+        '<span class="sr-dash-locknote">Adds to your plan. Your Personal Transformation access stays as it is.</span>';
+    }
+    document.getElementById('srResult').classList.add('show');
+    var hint = document.getElementById('srBeginHint');
+    if(hint && hint.parentNode) hint.parentNode.style.display = 'none';
+  }
+
+  var PICK = {state:null, prep:null};
+  var input   = document.getElementById('srArrive');
+  var sugg    = document.getElementById('srSuggest');
+  var prepSel = document.getElementById('srPrep');
+  var cursor  = -1;
+
+  function matches(q){
+    q = q.trim().toLowerCase();
+    if(!q) return STATES.slice();
+    var scored = [];
+    STATES.forEach(function(st){
+      var best = null;
+      st.terms.forEach(function(t){
+        var i = t.indexOf(q);
+        if(i === 0) best = (best === null || best > 0) ? 0 : best;
+        else if(i > 0 && best === null) best = 1;
+      });
+      if(best !== null) scored.push({st:st, rank:best});
+    });
+    scored.sort(function(a,b){ return a.rank - b.rank; });
+    return scored.map(function(x){ return x.st; });
+  }
+
+  function paint(q){
+    var list = matches(q);
+    cursor = -1;
+    if(!list.length){ sugg.classList.remove('show'); return; }
+    sugg.innerHTML = list.map(function(st){
+      return '<button type="button" class="sr-dash-sitem" data-k="' + st.k + '">' +
+             '<em>' + st.label + '</em><span>' + st.note + '</span></button>';
+    }).join('');
+    sugg.querySelectorAll('.sr-dash-sitem').forEach(function(btn){
+      btn.addEventListener('mousedown', function(e){
+        e.preventDefault();
+        choose(btn.getAttribute('data-k'));
+      });
+    });
+    sugg.classList.add('show');
+  }
+
+  function choose(k){
+    var st = STATES.filter(function(x){ return x.k === k; })[0];
+    input.value = st.label;
+    PICK.state = k;
+    sugg.classList.remove('show');
+    recommend();
+  }
+
+  input.addEventListener('focus', function(){ paint(input.value); });
+  input.addEventListener('input', function(){
+    PICK.state = null;
+    paint(input.value);
+  });
+  input.addEventListener('blur', function(){
+    setTimeout(function(){ sugg.classList.remove('show'); }, 120);
+    // accept a clean typed answer even if the person never clicked a suggestion
+    if(!PICK.state){
+      var list = matches(input.value);
+      if(input.value.trim() && list.length){ choose(list[0].k); }
+    }
+  });
+  input.addEventListener('keydown', function(e){
+    var items = sugg.querySelectorAll('.sr-dash-sitem');
+    if(!sugg.classList.contains('show') || !items.length) return;
+    if(e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault();
+      cursor += (e.key === 'ArrowDown') ? 1 : -1;
+      if(cursor < 0) cursor = items.length - 1;
+      if(cursor >= items.length) cursor = 0;
+      items.forEach(function(x){ x.classList.remove('cursor'); });
+      items[cursor].classList.add('cursor');
+    } else if(e.key === 'Enter'){
+      e.preventDefault();
+      choose(items[cursor > -1 ? cursor : 0].getAttribute('data-k'));
+    } else if(e.key === 'Escape'){
+      sugg.classList.remove('show');
+    }
+  });
+
+  prepSel.addEventListener('change', function(){
+    PICK.prep = prepSel.value || null;
+    recommend();
+  });
+
+
+
+
+  // ── route layer: every link resolves to something ──
+  var ROUTES = {
+    dashboard:  ['This page', 'You are here.', '/dashboard'],
+    library:    ['Protocol library', 'All thirty protocols across the four tracks, filterable by the state you are in rather than the protocol name.', '/library'],
+    journal:    ['Journal', 'Every entry you have written, searchable and filterable by protocol, date or theme.', '/journal'],
+    record:     ['Your record', 'The full archive: state history, per-protocol history, resource history, and the report builder.', '/record'],
+    laboratory: ['The Life Laboratory', 'Your observations, the seven stages from Live to Serve, and the workspace for examining and documenting what your experience has taught you.', '/laboratory'],
+    coaching:   ['Sessions & workshops', 'The full calendar, booking, and everything you have attended.', '/sessions'],
+    account:    ['Account & plan', 'Your plan and billing, preferences, privacy and data export, and closing your account.', '/account'],
+    clearing:   ['The Clearing', 'Ten guided minutes, with the player and the log that records it.', '/clearing'],
+    checkout:   ['Add a track', 'Checkout. Adds to your plan without touching your existing access.', '/checkout'],
+    plans:      ['Plans', 'What each track includes and what it costs. Access is cumulative.', '/plans'],
+    article:    ['Article', 'A short written piece from Andre.', '/writing'],
+    podcast:    ['The SafeRise podcast', 'Episode player and the back catalogue.', '/podcast'],
+    reading:    ['Understanding SafeRise', 'The science, the frameworks, the method and the reference cases.', '/about'],
+    faq:        ['FAQ', 'What the evidence shows, whether your journal is private, what to do mid-episode, and what happens if you stop.', '/faq'],
+    report:     ['Protocol report', 'A printable summary of one protocol across your whole history.', '/record/report'],
+    chosen:     ['The Chosen Self', 'The identity you are practising into, in your own words.', '/record/chosen-self'],
+    decisions:  ['Your Decisions', 'The choices you made once the pattern was no longer making them.', '/record/decisions'],
+    entry:      ['Write an entry', 'A new journal entry, attached to a protocol if you want it to be.', '/journal/new'],
+    legal:      ['Terms and privacy', 'Including how your record is stored, what is never used for training, and how to export or delete it.', '/legal']
+  };
+  function openRoute(key){
+    var r = ROUTES[key] || ROUTES.dashboard;
+    document.getElementById('srRouteTitle').textContent = r[0];
+    document.getElementById('srRouteBody').textContent  = r[1];
+    document.getElementById('srRoutePath').textContent  = r[2];
+    document.getElementById('srRouteKick').textContent  = key === 'dashboard' ? 'You are here' : 'Not built yet';
+    document.getElementById('mRoute').classList.add('on');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // rail
+  document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      openRoute(b.getAttribute('data-route') || 'dashboard');
+    });
+  });
+
+  // map the remaining in-page links by their text, so nothing is left at "#"
+  var TEXTMAP = [
+    [/play the clearing/i,'clearing'], [/^read it$/i,'article'], [/what is included/i,'plans'],
+    [/play episode/i,'podcast'], [/^add /i,'checkout'], [/full archive|in the archive/i,'record'],
+    [/protocol report/i,'report'], [/write an entry/i,'entry'], [/all entries/i,'journal'],
+    [/chosen self/i,'chosen'], [/your decisions/i,'decisions'], [/life laboratory/i,'laboratory'],
+    [/the science|the frameworks|the method|the stories/i,'reading'], [/read the faq|^faq$/i,'faq'],
+    [/^account$/i,'account'], [/^billing$/i,'account'], [/^support$/i,'faq'],
+    [/^terms$/i,'legal'], [/^privacy$/i,'legal'], [/try source insights/i,'record'],
+    [/tell me when it opens/i,'plans'], [/browse your library/i,'library']
+  ];
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('a[href="#"], a[href^="#"]:not([href="#main"]), button');
+    if(!el) return;
+    if(el.closest('[data-modal]') || el.hasAttribute('data-modal') || el.hasAttribute('data-close')) return;
+    if(el.closest('.sr-modal') || el.closest('.sr-dash-navrail')) return;
+    if(el.closest('.sr-dash-card') || el.id === 'srResume' || el.id === 'srBeginBtn') return;   // real destinations
+    if(el.closest('#srHeroDots') || el.closest('.sr-bb-nav') || el.closest('.sr-hero-nav')) return;
+    if(el.classList.contains('sr-dash-chipres') || el.classList.contains('sr-dash-railbtn')) return;
+    if(el.classList.contains('sr-dash-foldbtn') || el.closest('.sr-dash-foldbtn')) return;
+    if(el.classList.contains('sr-dash-carbtn') || el.id === 'srSumGen' || el.id === 'srProtoBack') return;
+    if(el.classList.contains('sr-slotopt') || el.classList.contains('sr-hero-play')) return;
+    if(el.id === 'srThemeMid' || el.id === 'srThemeSun') return;
+    var t = (el.textContent || '').trim();
+    for(var i = 0; i < TEXTMAP.length; i++){
+      if(TEXTMAP[i][0].test(t)){ e.preventDefault(); openRoute(TEXTMAP[i][1]); return; }
+    }
+  }, true);
+
+  // ── booking layers ──
+  var MODALS = {workshop:'mWorkshop', oneone:'mOneone', calendar:'mCalendar', route:'mRoute', media:'mMedia', crisis:'mCrisis'};
+  function openModal(key){
+    var m = document.getElementById(MODALS[key]);
+    if(!m) return;
+    m.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    var c = m.querySelector('[data-close]'); if(c) c.focus();
+  }
+  function closeModals(){
+    Object.keys(MODALS).forEach(function(k){
+      var m = document.getElementById(MODALS[k]); if(m) m.classList.remove('on');
+    });
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', function(e){
+    var open = e.target.closest('[data-modal]');
+    if(open){ e.preventDefault(); openModal(open.getAttribute('data-modal')); return; }
+    if(e.target.closest('[data-close]')){ closeModals(); return; }
+    if(e.target.classList && e.target.classList.contains('sr-modal')) closeModals();
+    var pick = e.target.closest('.sr-slotopt');
+    if(pick && !pick.disabled){
+      pick.parentNode.querySelectorAll('.sr-slotopt').forEach(function(b){ b.classList.remove('on'); });
+      pick.classList.add('on');
+    }
+  });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModals(); });
+
+
+  // ── what SafeRise suggests next ──
+  // Reads the record: state trend, protocol coverage, resource gaps, entry themes.
+  // Rules for now; the same shape takes a model later.
+  var SUGGESTIONS = [
+    {icon:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+     title:'Run Anxiety Reset before Thursday',
+     why:'Four of your entries mention work calls. Your last two were logged after, not before.'},
+    {icon:'<path d="M4 5h7v15H4zM13 5h7v15h-7z"/>',
+     title:'Open Source Insights on Anxiety Reset',
+     why:'You practise more than you read. This is the one resource you have never opened.'},
+    {icon:'<path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9z"/>',
+     title:'Being misread keeps returning',
+     why:'Four entries in six weeks. That pattern lives in Relationship Healing, not Personal Transformation.'}
+  ];
+  var sug2 = document.getElementById('srSuggest2');
+  if(sug2){
+    sug2.innerHTML = SUGGESTIONS.map(function(x){
+      return '<div class="sr-sug"><span class="sr-sug-i"><svg viewBox="0 0 24 24">' + x.icon + '</svg></span>' +
+        '<button><span class="sr-sug-t">' + x.title + '</span><span class="sr-sug-w">' + x.why + '</span></button></div>';
+    }).join('');
+  }
+  var sumGen = document.getElementById('srSumGen');
+  if(sumGen){
+    sumGen.addEventListener('click', function(){
+      sumGen.textContent = 'Preparing your summary…';
+      setTimeout(function(){ sumGen.innerHTML = 'August summary ready ' + ARROW; }, 900);
+    });
+  }
+
+  // ── folds: resources and frameworks ──
+  [['srResBtn','srResBody','srFoldRes'], ['srFoldBtn','srFoldBody','srFoldMethod']].forEach(function(t){
+    var btn = document.getElementById(t[0]), box = document.getElementById(t[1]), fold = document.getElementById(t[2]);
+    if(!btn || !box || !fold) return;
+    btn.addEventListener('click', function(){
+      var open = box.hidden;
+      box.hidden = !open;
+      fold.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+
+  // ── hero slider ──
+  // Slide 01 is the welcome and is written into the markup. Everything below is
+  // appended after it — edit this array to change what runs.
+  var HERO_SLIDES = [
+    {tag:'', kick:'This week', art:'a1',
+     title:'The pattern is not the person.',
+     sub:'A short note on why the route back matters more than whether the state arrives at all.',
+     meta:'2 min read', cta:'Read it'},
+    {tag:'New', kick:'Opening 1 September', art:'a2',
+     title:'Relationship Healing.',
+     sub:'Ten protocols run facing another person — session guides, safety scoring and repair scripts.',
+     meta:'Relationship Healing · \u20AC29 / month', cta:'See what is included'},
+    {tag:'Episode 04', kick:'The SafeRise podcast', art:'a3', media:true,
+     title:'Discipline is not the opposite of rest.',
+     sub:'Andre and Dwight Williams on why the men who burn out hardest are usually the most disciplined.',
+     meta:'48 min \u00B7 Released Thursday', cta:'Play episode'}
+  ];
+  var HERO_ART = {
+    // NEEDS ART — each slide takes a 1600x520 photograph or poster frame
+    a1:'radial-gradient(70% 120% at 68% 46%,rgba(236,201,106,.34),transparent 66%),linear-gradient(110deg,#0B0B12,#241B10 62%,#3A2A12)',
+    a2:'radial-gradient(70% 120% at 68% 46%,rgba(78,154,166,.3),transparent 66%),linear-gradient(110deg,#0B0B12,#14232A 62%,#1D3A42)',
+    a3:'radial-gradient(70% 120% at 68% 46%,rgba(155,127,212,.3),transparent 66%),linear-gradient(110deg,#0B0B12,#1B1630 62%,#2C2350)'
+  };
+
+  var heroTrack = document.getElementById('srHeroTrack');
+  var heroDots  = document.getElementById('srHeroDots');
+  var heroIndex = 0, heroTimer = null;
+
+  if(heroTrack){
+    heroTrack.insertAdjacentHTML('beforeend', HERO_SLIDES.map(function(b){
+      return '<article class="sr-hero-slide">' +
+        '<div class="sr-hero-art" style="background:' + HERO_ART[b.art] + '"></div>' +
+        '<div class="sr-hero-scrim"></div>' +
+        (b.tag ? '<span class="sr-hero-tag">' + b.tag + '</span>' : '') +
+        (b.media ? '<button class="sr-hero-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></button>' : '') +
+        '<div class="sr-hero-body">' +
+          '<p class="sr-hero-kick">' + b.kick + '</p>' +
+          '<p class="sr-hero-title">' + b.title + '</p>' +
+          '<p class="sr-hero-sub">' + b.sub + '</p>' +
+          '<p class="sr-hero-meta">' + b.meta + '</p>' +
+          '<div class="sr-hero-cta"><button class="sr-dash-addbtn">' + b.cta + ' ' + ARROW + '</button></div>' +
+        '</div></article>';
+    }).join(''));
+
+    var hSlides = heroTrack.querySelectorAll('.sr-hero-slide');
+    heroDots.innerHTML = Array.prototype.map.call(hSlides, function(_,i){
+      return '<button class="sr-hero-dot' + (i ? '' : ' on') + '" data-i="' + i + '" aria-label="Slide ' + (i+1) + '"></button>';
+    }).join('');
+    var hDots = heroDots.querySelectorAll('.sr-hero-dot');
+
+    function heroGo(i){
+      heroIndex = (i + hSlides.length) % hSlides.length;
+      hSlides.forEach(function(s,n){ s.classList.toggle('on', n === heroIndex); });
+      hDots.forEach(function(d,n){ d.classList.toggle('on', n === heroIndex); });
+    }
+    function heroStart(){
+      if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      heroStop(); heroTimer = setInterval(function(){ heroGo(heroIndex + 1); }, 7500);
+    }
+    function heroStop(){ if(heroTimer){ clearInterval(heroTimer); heroTimer = null; } }
+    hDots.forEach(function(d){ d.addEventListener('click', function(){ heroGo(+d.getAttribute('data-i')); heroStart(); }); });
+    document.getElementById('srHeroPrev').addEventListener('click', function(){ heroGo(heroIndex - 1); heroStart(); });
+    document.getElementById('srHeroNext').addEventListener('click', function(){ heroGo(heroIndex + 1); heroStart(); });
+    document.getElementById('srHero').addEventListener('mouseenter', heroStop);
+    document.getElementById('srHero').addEventListener('mouseleave', heroStart);
+    heroStart();
+  }
+
+  // ── reading mode, shared with the reader (body.rd-soft) ──
+  var THEME_KEY = 'sr-theme';
+  function setTheme(mode){
+    document.body.classList.toggle('rd-soft', mode === 'sunrise');
+    document.getElementById('srThemeMid').classList.toggle('on', mode !== 'sunrise');
+    document.getElementById('srThemeSun').classList.toggle('on', mode === 'sunrise');
+    document.querySelectorAll('.sr-theme--bar [data-theme]').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-theme') === mode);
+    });
+    try{ sessionStorage.setItem(THEME_KEY, mode); }catch(e){}
+    var f = document.getElementById('srProtoFrame');
+    if(f && f.src && f.src.indexOf('about:blank') === -1 && f.contentWindow){
+      try{ f.contentWindow.postMessage({sr:true, type:'theme', mode:mode}, '*'); }catch(e){}
+    }
+  }
+  document.getElementById('srThemeMid').addEventListener('click', function(){ setTheme('midnight'); });
+  document.getElementById('srThemeSun').addEventListener('click', function(){ setTheme('sunrise'); });
+  document.querySelectorAll('.sr-theme--bar [data-theme]').forEach(function(b){
+    b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme')); });
+  });
+  try{ if(sessionStorage.getItem(THEME_KEY) === 'sunrise') setTheme('sunrise'); }catch(e){}
+
+
+  // ── twelve resources: strip is the index, the reader carries the detail ──
+  var ICO = {
+    play:'<circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/>',
+    breath:'<path d="M4 14c3 0 3-4 6-4s3 4 6 4 4-2 4-2"/><path d="M4 18c3 0 3-3 6-3s3 3 6 3 4-1.5 4-1.5"/><circle cx="12" cy="6" r="2.6"/>',
+    body:'<circle cx="12" cy="4.6" r="2.2"/><path d="M12 7v7M12 14l-3.4 6M12 14l3.4 6M7 9.5l5 1.4 5-1.4"/>',
+    pen:'<path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/>',
+    chart:'<path d="M4 20V9M10 20V4M16 20v-8M22 20H2"/>',
+    gear:'<circle cx="12" cy="12" r="3.4"/><path d="M12 3v2.6M12 18.4V21M3 12h2.6M18.4 12H21M5.6 5.6l1.9 1.9M16.5 16.5l1.9 1.9M18.4 5.6l-1.9 1.9M7.5 16.5l-1.9 1.9"/>',
+    book:'<path d="M4 5h7v15H4zM13 5h7v15h-7z"/>',
+    guide:'<path d="M6 3h9l3 3v15H6z"/><path d="M9 9h7M9 13h7M9 17h4"/>',
+    person:'<circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/>',
+    card:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 11h6M6.5 14h4"/>',
+    alert:'<path d="M12 3.5L21 19H3z"/><path d="M12 10v4M12 16.6v.1"/>',
+    speak:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>'
+  };
+  var SOURCES = {"Guided Experience": "Porges · Polyvagal Theory — peer-reviewed", "Breathwork": "HeartMath · cardiac coherence near 0.1 Hz — peer-reviewed", "Somatic Release": "Porges · Polyvagal Theory — peer-reviewed", "Progress Journal": "Maté · Compassionate Inquiry — clinical practice", "Progress Tracking": "SafeRise measurement · not an external claim", "How This Works": "Porges and HeartMath — peer-reviewed", "Source Insights": "All six frameworks, each with its register named", "Protocol Guide": "SafeRise practice material · no external claim", "Reference Case": "Documented biography · historical, not clinical", "Cue Card": "Working-memory narrowing under threat — established", "Attention Advisory": "Scope boundary · reviewed with Dr Keny F. Bastien MD", "Disclosure &amp; Invitation": "SafeRise practice material · no external claim"};
+  var RES = [
+    ['play','Guided<br>Experience','Guided Experience','Step-by-step audio.',
+     'The full session, voiced and paced. Headphones, ten minutes, nothing to read.',
+     'Why audio','A state cannot be reasoned into changing while you are reading instructions. Voice removes the reading, so attention stays in the body where the change actually happens.'],
+    ['breath','Breathwork','Breathwork','The pacing, on its own.',
+     'In for four, out for six \u2014 roughly six breaths a minute, held for as long as you have.',
+     'Why breath','A longer exhale than inhale is the most direct lever you have on the vagal brake. Around six breaths a minute is where heart-rate variability peaks for most people \u2014 the rhythm HeartMath calls cardiac coherence. It is the one step that works before you have understood anything.'],
+    ['body','Somatic<br>Release','Somatic Release','Body-based practices.',
+     'Daily companions between sessions \u2014 the small physical things that keep the work in place.',
+     'Why the body','Porges\u2019s account puts threat detection below conscious thought. Insight does not reach it; posture, contact, weight and movement do. These are what you use on the days you will not sit for ten minutes.'],
+    ['pen','Progress<br>Journal','Progress Journal','Your own words.',
+     'Write what surfaced, in whatever form it arrives. Private to you, always.',
+     'Why writing','Naming a state specifically is Step 01 of the method \u2014 precision is itself regulating. Writing is where the naming gets precise enough to be useful, and where you can read back what you could not see at the time.'],
+    ['chart','Progress<br>Tracking','Progress Tracking','Measure the change.',
+     'Log each session and watch the tier move \u2014 before and after, in your own data.',
+     'Why measure','The change is gradual enough that memory misses it. A before-and-after tier per session is the only way most people notice that the route back has got shorter.'],
+    ['gear','How This<br>Works','How This Works','See the mechanisms.',
+     'What is happening in your body during this state, and why the four steps land in that order.',
+     'Why explain','People who understand what their body is doing stop reading it as a personal failing. That reframe is doing work before any practice starts.'],
+    ['book','Source<br>Insights','Source Insights','Understand the root causes.',
+     'The six frameworks behind this protocol, in plain language \u2014 Porges, HeartMath, Dispenza, Mat\u00E9, Jung, Watts.',
+     'Why show the sources','So you can check them. Each protocol names where its claims come from, and which are peer-reviewed versus interpretive.'],
+    ['guide','Protocol<br>Guide','Protocol Guide','Clear guidance on how to use it.',
+     'The printable step guide, formatted for your phone or the fridge door.',
+     'Why printable','The moment you need it is rarely the moment you can open an app.'],
+    ['person','Reference<br>Case','Reference Case','A real-world example.',
+     'A historical figure who lived this exact pattern, and what actually shifted it.',
+     'Why a real life','Documented lives, not testimonials. The pattern is easier to recognise in someone else first.'],
+    ['card','Cue<br>Card','Cue Card','The four-line version.',
+     'For the moment it is actually happening, when reading anything longer is not realistic.',
+     'Why four lines','Working memory narrows under threat. Anything longer will not be used, so this is the whole thing.'],
+    ['alert','Attention<br>Advisory','Attention Advisory','Know your limits.',
+     'Where to direct your energy right now, and how close to stay.',
+     'Why a limit','This is self-guided practice, not therapy. The advisory says plainly where that line sits and when to involve someone qualified.'],
+    ['speak','Disclosure &<br>Invitation','Disclosure &amp; Invitation','Words for the people around you.',
+     'A script for explaining what you are doing, and a structured way to open repair when the pattern involves someone else.',
+     'Why scripts','The hardest part is rarely the practice. It is the first sentence to another person.']
+  ];
+
+  var strip = document.getElementById('srStrip');
+  if(strip){
+    strip.innerHTML = RES.map(function(r,i){
+      return '<button class="sr-dash-chipres' + (i ? '' : ' on') + '" role="tab" data-i="' + i + '">' +
+             '<span class="sr-dash-chipico"><svg viewBox="0 0 24 24">' + ICO[r[0]] + '</svg></span>' +
+             '<span class="sr-dash-chiplabel">' + r[1] + '</span></button>';
+    }).join('');
+
+    function readRes(i){
+      var r = RES[i];
+      document.getElementById('srReadName').innerHTML = r[2];
+      document.getElementById('srReadLine').textContent = r[3];
+      document.getElementById('srReadBody').textContent = r[4];
+      document.getElementById('srReadWhyKick').textContent = r[5];
+      document.getElementById('srReadWhy').textContent = r[6];
+      var srcEl = document.getElementById('srReadSrc');
+      if(srcEl) srcEl.textContent = 'Rests on: ' + (SOURCES[r[2]] || 'SafeRise practice material');
+      strip.querySelectorAll('.sr-dash-chipres').forEach(function(b){
+        b.classList.toggle('on', b.getAttribute('data-i') === String(i));
+      });
+    }
+    strip.querySelectorAll('.sr-dash-chipres').forEach(function(b){
+      var i = +b.getAttribute('data-i');
+      if(RES[i] && RES[i][2] === 'Cue Card'){
+        b.addEventListener('click', function(e){ e.preventDefault(); openModal('crisis'); });
+      }
+      var go = function(){ readRes(+b.getAttribute('data-i')); };
+      b.addEventListener('click', go);
+      b.addEventListener('mouseenter', go);
+    });
+    readRes(0);
+  }
+
+
+  // ══════════ CAROUSEL MOTION ══════════
+  // Continuous constant-velocity drift, not stepped advances. The row is moved
+  // with transform (never scrollLeft) so nothing competes with it and there is
+  // no scroll quantisation. The card set is rendered twice; when the drift has
+  // covered one set's width the offset wraps by exactly that width — the cards
+  // at that point are identical, so the wrap cannot be seen. Speed is slow
+  // enough to read, and it never starts or stops abruptly: hovering eases it to
+  // a halt, leaving eases it back up.
+  var count   = document.getElementById('srCarCount');
+  var SPEED   = 22;          // px per second at full drift
+  var offset  = 0;           // current translateX, always <= 0
+  var vel     = 0;           // eased current speed
+  var target  = 0;           // speed we are easing toward
+  var raf     = null, last = null, nudge = null;
+
+  function cardStep(){
+    var c = row.querySelector('.sr-dash-card');
+    return c ? c.offsetWidth + 14 : 190;
+  }
+  function halfWidth(){
+    return row.getAttribute('data-doubled') === '1' ? row.scrollWidth / 2 : 0;
+  }
+  function apply(){ row.style.transform = 'translate3d(' + offset + 'px,0,0)'; }
+  function updateCount(){
+    if(!count) return;
+    var all   = row.querySelectorAll('.sr-dash-card').length;
+    var total = row.getAttribute('data-doubled') === '1' ? all / 2 : all;
+    if(!total){ count.textContent = ''; return; }
+    var i = (Math.round(-offset / cardStep()) % total + total) % total + 1;
+    count.textContent = i + ' / ' + total;
+  }
+  function wrap(){
+    var h = halfWidth();
+    if(!h) return;
+    while(offset <= -h) offset += h;
+    while(offset > 0)    offset -= h;
+  }
+
+  function tick(ts){
+    if(last === null) last = ts;
+    var dt = Math.min(0.05, (ts - last) / 1000);   // clamp after a tab switch
+    last = ts;
+    vel += (target - vel) * Math.min(1, dt * 3.2); // ease toward target speed
+    if(Math.abs(vel) > 0.01){
+      offset -= vel * dt;
+      wrap(); apply();
+    }
+    if(nudge){                                     // arrow press, eased
+      var k = Math.min(1, (ts - nudge.t0) / nudge.ms);
+      var e = 1 - Math.pow(1 - k, 3);               // easeOutCubic
+      offset = nudge.from + nudge.delta * e;
+      wrap(); apply();
+      if(k >= 1) nudge = null;
+    }
+    updateCount();
+    raf = requestAnimationFrame(tick);
+  }
+  // The drift is an arrival gesture, not a permanent state. It runs for one
+  // settle period so the carousel reads as alive, then eases to rest and stays
+  // there — a card that never stops moving is a target you cannot hit, which
+  // costs more than the motion gains. Arrows and track changes re-arm it briefly.
+  var SETTLE = 13000;
+  function startFlow(){
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ target = 0; return; }
+    if(halfWidth()) target = SPEED;
+    if(!raf){ last = null; raf = requestAnimationFrame(tick); }
+    clearTimeout(startFlow._t);
+    startFlow._t = setTimeout(function(){ target = 0; }, SETTLE);
+  }
+  function stopFlow(){ target = 0; }
+
+  function step(dir){
+    target = 0;                                    // hand over to the nudge
+    nudge  = {t0: performance.now(), ms: 620, from: offset, delta: -dir * cardStep() * 2};
+    if(!raf){ last = null; raf = requestAnimationFrame(tick); }
+    clearTimeout(step._t);
+    step._t = setTimeout(function(){ if(!paused) startFlow(); }, 2600);
+  }
+
+  var paused = false;
+  // Pointer over the carousel stops it dead — a drifting card is a moving
+  // target and unclickable. Leaving eases it back up so the stop/start is felt
+  // as intent rather than as a stutter.
+  ['mouseenter','focusin','touchstart'].forEach(function(e){
+    vp.addEventListener(e, function(){ paused = true; target = 0; vel = 0; }, {passive:true});
+  });
+  ['mouseleave','focusout'].forEach(function(e){
+    vp.addEventListener(e, function(){ paused = false; });
+  });
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) target = 0;
+    else { last = null; }
+  });
+
+
+  // ── the begin panel and the carousel are the same decision ──
+  // Answering the two questions scrolls the carousel to that protocol and marks
+  // it, so the recommendation and the library never disagree.
+  function markInCarousel(name){
+    var cards = row.querySelectorAll('.sr-dash-card');
+    var hit = null;
+    cards.forEach(function(c){
+      var is = c.getAttribute('data-open') === name;
+      c.classList.toggle('is-next', is);
+      if(is) hit = c;
+    });
+    if(hit){
+      target = 0;
+      nudge  = {t0: performance.now(), ms: 780, from: offset, delta: -(hit.offsetLeft - 4) - offset};
+      if(!raf){ last = null; raf = requestAnimationFrame(tick); }
+      clearTimeout(markInCarousel._t);
+      markInCarousel._t = setTimeout(function(){ if(!paused) startFlow(); }, 6000);
+    }
+  }
+
+  // ── protocol / resource pane ──
+  // The two design pages are loaded in a frame beneath the carousel. The
+  // carousel stays live: choosing another protocol just reloads the frame.
+  var PROTOCOL_PAGE = 'protocol.html';
+  var RESOURCE_PAGE = 'resource.html';
+
+  var proto  = document.getElementById('srProto');
+  var frame  = document.getElementById('srProtoFrame');
+  var pCrumb = document.getElementById('srProtoCrumb');
+  var allBtn = document.getElementById('srProtoAll');
+  var pOpen  = {name:'', no:'01', track:1};
+
+  function crumb(resName){
+    pCrumb.innerHTML = '<span>/</span><b>' + pOpen.name + '</b>' +
+      (resName ? '<span>/</span><em>' + resName + '</em>' : '');
+    allBtn.hidden = !resName;
+  }
+
+  var frameToken = 0;
+  function resetFrame(h){ frameToken++; frame.style.minHeight = h; }
+
+  function themeParam(){ return '&theme=' + (document.body.classList.contains('rd-soft') ? 'sunrise' : 'midnight'); }
+
+  function loadProtocol(){
+    resetFrame('900px');
+    frame.src = PROTOCOL_PAGE + '?embed=1&track=' + pOpen.track + '&protocol=' + pOpen.no + themeParam();
+    crumb('');
+  }
+  function loadResource(name){
+    resetFrame('700px');
+    frame.src = RESOURCE_PAGE + '?embed=1&track=' + pOpen.track +
+                '&protocol=' + pOpen.no + '&resource=' + encodeURIComponent(name || '') + themeParam();
+    crumb(name || 'Resource');
+  }
+
+  // the frame tells us how tall it is, so there is never a scrollbar inside it
+  window.addEventListener('message', function(e){
+    var d = e.data;
+    if(!d || !d.sr) return;
+    if(d.type === 'height' && d.height > 200 && e.source === frame.contentWindow){
+      frame.style.minHeight = (d.height + 8) + 'px';
+    }
+    if(d.type === 'open-resource')    loadResource(d.name);
+    if(d.type === 'resource-opened')  crumb(d.name);
+    if(d.type === 'back-to-protocol') loadProtocol();
+    if(d.type === 'open-cue')          openModal('crisis');
+    if(d.type === 'height' && e.source === frame.contentWindow){
+      // keep a freshly loaded page in step with the shell
+      try{
+        frame.contentWindow.postMessage({sr:true, type:'theme',
+          mode: document.body.classList.contains('rd-soft') ? 'sunrise' : 'midnight'}, '*');
+      }catch(err){}
+    }
+  });
+  allBtn.addEventListener('click', loadProtocol);
+
+  // Opening a protocol is a deliberate, visible move: the page scrolls up, the
+  // dashboard sections fade out, the carousel slides to the top, and the protocol
+  // arrives beneath it. Slow enough to be read as a shift rather than a jump.
+  function openProtocol(name, src, no, track, resource){
+    pOpen = {name:name, no:no || '01', track:track || 1};
+    var lib = document.getElementById('srLibrary');
+
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      document.body.classList.add('reading');
+      resource ? loadResource(resource) : loadProtocol();
+      window.scrollTo({top:0});
+      return;
+    }
+
+    var start = lib ? lib.getBoundingClientRect().top : 0;
+    document.body.classList.add('shifting');            // fades the other sections
+    window.scrollTo({top: Math.max(0, window.scrollY + start - 22), behavior:'smooth'});
+
+    setTimeout(function(){
+      document.body.classList.add('reading');           // sections leave the flow
+      if(lib){                                          // carousel glides into place
+        var delta = start - lib.getBoundingClientRect().top;
+        if(Math.abs(delta) > 1){
+          lib.style.transition = 'none';
+          lib.style.transform  = 'translateY(' + delta + 'px)';
+          requestAnimationFrame(function(){
+            lib.style.transition = 'transform .78s cubic-bezier(.22,.61,.36,1)';
+            lib.style.transform  = 'translateY(0)';
+          });
+          setTimeout(function(){ lib.style.transition = ''; lib.style.transform = ''; }, 900);
+        }
+      }
+      resource ? loadResource(resource) : loadProtocol();
+      window.scrollTo({top:0});
+      document.body.classList.remove('shifting');
+    }, 460);
+  }
+
+  // ── return to your path ──
+  var resumeEl = document.getElementById('srResume');
+  if(resumeEl){
+    resumeEl.addEventListener('click', function(e){
+      e.preventDefault();
+      openProtocol(resumeEl.getAttribute('data-protocol'), '',
+                   resumeEl.getAttribute('data-no'),
+                   +resumeEl.getAttribute('data-track'),
+                   resumeEl.getAttribute('data-resource'));
+    });
+  }
+  function closeProtocol(){
+    document.body.classList.remove('reading','shifting');
+    frame.src = 'about:blank';
+    window.scrollTo({top:0});
+    updateCount();          // track and carousel position are untouched
+  }
+  document.getElementById('srProtoBack').addEventListener('click', closeProtocol);
+
+  row.addEventListener('click', function(e){
+    var card = e.target.closest('.sr-dash-card');
+    if(!card) return;
+    var name = card.getAttribute('data-open');
+    if(!name) return;       // locked cards do nothing
+    e.preventDefault();
+    openProtocol(name, card.getAttribute('data-src'), card.getAttribute('data-no'), CURRENT_TRACK);
+  });
+
+  render(1);
+  renderJourney(1);
+  updateCount();
+  startFlow();
+})();
+</script>
+</body>
+</html>
