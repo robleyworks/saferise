@@ -32,6 +32,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- The system stylesheet supplies --sr-track01..04, the single source of truth
+     for the four track accents (SR-045). The dashboard sheet follows it and
+     wins by cascade order, not by !important. -->
+<link rel="stylesheet" href="css/saferise-system.css">
 <link rel="stylesheet" href="css/saferise-dashboard.css">
 </head>
 <body>
@@ -93,7 +97,7 @@
     <!-- ══ HERO SLIDER ══
          The hero itself rotates. Slide 01 is the welcome; the rest are whatever
          is current — a note, a launch, an episode. Edit HERO_SLIDES in the script. -->
-    <section class="sr-hero" id="srHero" aria-label="Featured">
+    <section class="sr-dash-hero" id="srHero" aria-label="Featured">
       <div class="sr-themewrap">
         <div class="sr-theme" role="group" aria-label="Reading mode">
           <button id="srThemeMid" class="on">Midnight</button>
@@ -101,14 +105,14 @@
         </div>
       </div>
 
-      <div class="sr-hero-track" id="srHeroTrack">
+      <div class="sr-dash-hero-track" id="srHeroTrack">
         <!-- 01 · welcome, always first -->
-        <article class="sr-hero-slide on">
-          <img class="sr-hero-art" src="assets/dashboard/hero-corridor.jpg" alt="">
-          <div class="sr-hero-scrim"></div>
-          <div class="sr-hero-body">
+        <article class="sr-dash-hero-slide on">
+          <img class="sr-dash-hero-art" src="assets/dashboard/hero-corridor.jpg" alt="">
+          <div class="sr-dash-hero-scrim"></div>
+          <div class="sr-dash-hero-body">
             <h1>Welcome back, Andre.</h1>
-            <p class="sr-hero-sub">This is your space to understand your patterns, regulate your system, and become the person you choose to be.</p>
+            <p class="sr-dash-hero-sub">This is your space to understand your patterns, regulate your system, and become the person you choose to be.</p>
           </div>
           <div class="sr-dash-quote">
             <p>Meditation quiets the noise.<br>Mindfulness shows you what was underneath it.<br>
@@ -117,10 +121,10 @@
         </article>
       </div>
 
-      <div class="sr-hero-nav">
-        <div class="sr-hero-dots" id="srHeroDots"></div>
-        <button class="sr-hero-arrow" id="srHeroPrev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
-        <button class="sr-hero-arrow" id="srHeroNext" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
+      <div class="sr-dash-hero-nav">
+        <div class="sr-dash-hero-dots" id="srHeroDots"></div>
+        <button class="sr-dash-hero-arrow" id="srHeroPrev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
+        <button class="sr-dash-hero-arrow" id="srHeroNext" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
       </div>
     </section>
 
@@ -819,15 +823,15 @@
 <!-- ══════════ MEDIA LAYER ══════════ -->
 <div class="sr-modal" id="mMedia" role="dialog" aria-modal="true" aria-label="The Clearing">
   <div class="sr-modalbox" style="max-width:900px">
-    <div class="sr-player">
-      <div class="sr-player-stage">
+    <div class="sr-dash-player">
+      <div class="sr-dash-player-stage">
         <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
-        <button class="sr-player-play" id="srPlayerPlay" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></button>
+        <button class="sr-dash-player-play" id="srPlayerPlay" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></button>
       </div>
-      <div class="sr-player-bar">
-        <span class="sr-player-time" id="srPlayerNow">3:24</span>
-        <span class="sr-player-rail"><i id="srPlayerFill" style="width:34%"></i></span>
-        <span class="sr-player-time">10:00</span>
+      <div class="sr-dash-player-bar">
+        <span class="sr-dash-player-time" id="srPlayerNow">3:24</span>
+        <span class="sr-dash-player-rail"><i id="srPlayerFill" style="width:34%"></i></span>
+        <span class="sr-dash-player-time">10:00</span>
       </div>
     </div>
     <div class="sr-modalin">
@@ -886,28 +890,28 @@
   var COVER_01 = "assets/covers/01.jpg";
 
   var TRACKS = {
-    1:{accent:'var(--t1)', cls:'t-1', note:'Personal Transformation · included with your plan', unlocked:true,
+    1:{accent:'var(--sr-track01)', cls:'t-1', note:'Personal Transformation · included with your plan', unlocked:true,
        items:[
       ['Regulate','The Anxiety Reset Protocol'],['Transmute','The Anger Alchemy Protocol'],
       ['Reduce Load','The Overwhelm Threshold Protocol'],['Repair','The Abandonment Wound Protocol'],
       ['Dissolve','The Shame Dissolution Protocol'],['Integrate','The Grief Integration Protocol'],
       ['Restore','The Shutdown Recovery Protocol'],['Release','The Jealousy Release Protocol'],
       ['Anchor','The Insecurity Anchor Protocol'],['Reclaim','The Powerlessness & Despair Protocol']]},
-    2:{accent:'var(--t2)', cls:'t-2', note:'Relationship Healing · not on your plan yet', unlocked:false,
+    2:{accent:'var(--sr-track02)', cls:'t-2', note:'Relationship Healing · not on your plan yet', unlocked:false,
        items:[
       ['Speak','The Safe Conversation Protocol'],['Repair','The Rupture & Repair Protocol'],
       ['Rebuild','The Trust & Betrayal Protocol'],['Release','The Resentment Release Protocol'],
       ['Open','The Intimacy Barrier Protocol'],['Level','The Double Standard Protocol'],
       ['Clarify','The Projection Clarity Protocol'],['Appreciate','The Appreciation & Support Protocol'],
       ['Meet','The Pursue & Withdraw Protocol'],['Close','The Conscious Separation Protocol']]},
-    3:{accent:'var(--t3)', cls:'t-3', note:'Professional Performance · not on your plan yet', unlocked:false,
+    3:{accent:'var(--sr-track03)', cls:'t-3', note:'Professional Performance · not on your plan yet', unlocked:false,
        items:[
       ['Steady','The High-Stakes Presence Protocol'],['Navigate','The Conflict Navigation Protocol'],
       ['Dissolve','The Imposter Dissolution Protocol'],['Loosen','The Perfectionism Release Protocol'],
       ['Perform','The Performance Anxiety Protocol'],['Recover','The Ambition Recovery Protocol'],
       ['Cross','The Career Transition Protocol'],['Decide','The Decision Fatigue Protocol'],
       ['Refill','The Burnout & Overload Protocol'],['Unlock','The Creative Flow Protocol']]},
-    4:{accent:'var(--t4)', cls:'t-4', note:'Elevation Series · opening soon', unlocked:false, items:[]}
+    4:{accent:'var(--sr-track04)', cls:'t-4', note:'Elevation Series · opening soon', unlocked:false, items:[]}
   };
 
   // The three parts are the same shape in every track — Experience, Log, Go Deeper.
@@ -937,7 +941,7 @@
        sub:'Three parts, held inside one practice run facing each other.',
        band:'p2',
        cols:[
-        {tag:'01 · Start here', tagcol:'var(--t2)', name:'Experience', value:'Change the state in the room.', valcol:'var(--t2)',
+        {tag:'01 · Start here', tagcol:'var(--sr-track02)', name:'Experience', value:'Change the state in the room.', valcol:'var(--sr-track02)',
          body:['The Session Guide runs the four steps with both of you present, one reading aloud. Run the Safety Score first — on yourself and on them — and use the Invitation to Repair as the script for opening it when they are not in the room yet.'],
          meta:'Together · ~10 min · Same room'},
         {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn repair into a record.',
@@ -952,7 +956,7 @@
        sub:'Three parts, sized to fit inside a working day.',
        band:'p3',
        cols:[
-        {tag:'01 · Start here', tagcol:'var(--t3)', name:'Experience', value:'Change your state before it costs you.', valcol:'var(--t3)',
+        {tag:'01 · Start here', tagcol:'var(--sr-track03)', name:'Experience', value:'Change your state before it costs you.', valcol:'var(--sr-track03)',
          body:['A ten-minute guided session for before the room or after it, with short forms sized to the gap between meetings and a four-line Cue Card you can read at a desk without anyone noticing.'],
          meta:'Guided · ~10 min · Before or after'},
         {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn performance into a record.',
@@ -967,7 +971,7 @@
        sub:'Structure confirmed. Detail opens with the Series.',
        band:'p4',
        cols:[
-        {tag:'01 · Start here', tagcol:'var(--t4)', name:'Experience', value:'Extended practice.', valcol:'var(--t4)',
+        {tag:'01 · Start here', tagcol:'var(--sr-track04)', name:'Experience', value:'Extended practice.', valcol:'var(--sr-track04)',
          body:['Longer guided sessions, built on the same four steps.'], meta:''},
         {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'The same record, carried forward.',
          body:['Your existing log continues into the Series — nothing restarts.'], meta:''},
@@ -1310,11 +1314,11 @@
     if(el.closest('[data-modal]') || el.hasAttribute('data-modal') || el.hasAttribute('data-close')) return;
     if(el.closest('.sr-modal') || el.closest('.sr-dash-navrail')) return;
     if(el.closest('.sr-dash-card') || el.id === 'srResume' || el.id === 'srBeginBtn') return;   // real destinations
-    if(el.closest('#srHeroDots') || el.closest('.sr-bb-nav') || el.closest('.sr-hero-nav')) return;
+    if(el.closest('#srHeroDots') || el.closest('.sr-bb-nav') || el.closest('.sr-dash-hero-nav')) return;
     if(el.classList.contains('sr-dash-chipres') || el.classList.contains('sr-dash-railbtn')) return;
     if(el.classList.contains('sr-dash-foldbtn') || el.closest('.sr-dash-foldbtn')) return;
     if(el.classList.contains('sr-dash-carbtn') || el.id === 'srSumGen' || el.id === 'srProtoBack') return;
-    if(el.classList.contains('sr-slotopt') || el.classList.contains('sr-hero-play')) return;
+    if(el.classList.contains('sr-slotopt') || el.classList.contains('sr-dash-hero-play')) return;
     if(el.id === 'srThemeMid' || el.id === 'srThemeSun') return;
     var t = (el.textContent || '').trim();
     for(var i = 0; i < TEXTMAP.length; i++){
@@ -1422,25 +1426,25 @@
 
   if(heroTrack){
     heroTrack.insertAdjacentHTML('beforeend', HERO_SLIDES.map(function(b){
-      return '<article class="sr-hero-slide">' +
-        '<div class="sr-hero-art" style="background:' + HERO_ART[b.art] + '"></div>' +
-        '<div class="sr-hero-scrim"></div>' +
-        (b.tag ? '<span class="sr-hero-tag">' + b.tag + '</span>' : '') +
-        (b.media ? '<button class="sr-hero-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></button>' : '') +
-        '<div class="sr-hero-body">' +
-          '<p class="sr-hero-kick">' + b.kick + '</p>' +
-          '<p class="sr-hero-title">' + b.title + '</p>' +
-          '<p class="sr-hero-sub">' + b.sub + '</p>' +
-          '<p class="sr-hero-meta">' + b.meta + '</p>' +
-          '<div class="sr-hero-cta"><button class="sr-dash-addbtn">' + b.cta + ' ' + ARROW + '</button></div>' +
+      return '<article class="sr-dash-hero-slide">' +
+        '<div class="sr-dash-hero-art" style="background:' + HERO_ART[b.art] + '"></div>' +
+        '<div class="sr-dash-hero-scrim"></div>' +
+        (b.tag ? '<span class="sr-dash-hero-tag">' + b.tag + '</span>' : '') +
+        (b.media ? '<button class="sr-dash-hero-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></button>' : '') +
+        '<div class="sr-dash-hero-body">' +
+          '<p class="sr-dash-hero-kick">' + b.kick + '</p>' +
+          '<p class="sr-dash-hero-title">' + b.title + '</p>' +
+          '<p class="sr-dash-hero-sub">' + b.sub + '</p>' +
+          '<p class="sr-dash-hero-meta">' + b.meta + '</p>' +
+          '<div class="sr-dash-hero-cta"><button class="sr-dash-addbtn">' + b.cta + ' ' + ARROW + '</button></div>' +
         '</div></article>';
     }).join(''));
 
-    var hSlides = heroTrack.querySelectorAll('.sr-hero-slide');
+    var hSlides = heroTrack.querySelectorAll('.sr-dash-hero-slide');
     heroDots.innerHTML = Array.prototype.map.call(hSlides, function(_,i){
-      return '<button class="sr-hero-dot' + (i ? '' : ' on') + '" data-i="' + i + '" aria-label="Slide ' + (i+1) + '"></button>';
+      return '<button class="sr-dash-hero-dot' + (i ? '' : ' on') + '" data-i="' + i + '" aria-label="Slide ' + (i+1) + '"></button>';
     }).join('');
-    var hDots = heroDots.querySelectorAll('.sr-hero-dot');
+    var hDots = heroDots.querySelectorAll('.sr-dash-hero-dot');
 
     function heroGo(i){
       heroIndex = (i + hSlides.length) % hSlides.length;

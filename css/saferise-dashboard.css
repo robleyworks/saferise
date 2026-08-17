@@ -1,24 +1,34 @@
 /* ==========================================================================
    SafeRise — member dashboard
    Extracted verbatim from the inline <style> block of the v39 mockup.
-   Load order: this file only. It carries its own token block (see note).
+   Loads AFTER css/saferise-system.css, which supplies the track accents.
    The final ALIGNMENT block must stay last — several rules above it would
    otherwise win, and it resolves the two-line margin system.
    ========================================================================== */
-/* ============ shared tokens — v29 / reader, verbatim ============ */
+/* ============ shared tokens — v29 / reader, verbatim ============
+   The four track accents are NOT defined here. They live in
+   saferise-system.css as --sr-track01..04 and are the single source of
+   truth, so the same track reads the same hue on the marketing site and
+   in the dashboard (SR-045). If one reads wrong on this darker ground,
+   change it there — never fork it back into this file. */
 :root{
   --bg:#08080C; --band:#0E0E1A; --band2:#101020; --card:#15151F; --hair:#22222E;
   --gold:#D4A843; --gold-lt:#ECC96A; --teal:#4E9AA6;
   --text:#F5EDD8; --text2:#9C9AA4; --text3:#6A6874;
   --mob:#C97A5A; --safe:#7FA88C; --shut:#5A6B84;
-  --t1:#D4A843; --t2:#E87090; --t3:#4E9AA6; --t4:#9B7FD4;
-  --accent:var(--t1);
+  --accent:var(--sr-track01);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
 img,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
+/* saferise-system.css sets section{padding-block:clamp(72px,9vw,128px)} for the
+   marketing page's full-bleed bands. This page spaces its sections with
+   margin-top:56px instead, so that padding is purely additive — it added 2048px
+   of dead space across nine sections before this reset (SR-048). Cascade order
+   carries it; no !important needed. */
+section{padding-block:0}
 :focus-visible{outline:2px solid var(--gold-lt);outline-offset:3px;border-radius:3px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 
@@ -354,9 +364,10 @@ h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
 .sr-dash-ucard .sr-dash-go{margin-top:auto;padding-top:4px}
 .sr-dash-uart{aspect-ratio:1;border-radius:8px;border:1px solid var(--hair);overflow:hidden;position:relative}
 .sr-dash-uart img{width:100%;height:100%;object-fit:cover}
-.sr-dash-uart.u1 img{object-position:50% 40%}
-.sr-dash-uart.u3 img{object-position:26% 50%}
-.sr-dash-uart.u4 img{object-position:20% 40%}
+/* .sr-dash-uart.u1 / .u3 / .u4 removed — the three photographic tiles they
+   positioned went with the "Understanding SafeRise" section several versions
+   ago, and are why the integration handoff listed three images that do not
+   exist in this build. */
 /* NEEDS ART — no framework illustration exists; typographic tile stands in */
 .sr-dash-uart.u2{display:grid;place-items:center;background:linear-gradient(150deg,#141420,#1E1E2C 60%,#101018)}
 .sr-dash-uart.u2 span{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.14em;color:var(--gold);text-align:center;line-height:2;opacity:.92}
@@ -934,47 +945,47 @@ body.resource .sr-proto-resource{display:block}
 
 
 /* ══════════ HERO SLIDER — the upper section itself rotates ══════════ */
-.sr-hero{position:relative;border-radius:18px;overflow:hidden;isolation:isolate;background:#0C0C14}
-.sr-hero-track{position:relative}
-.sr-hero-slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .8s ease;
+.sr-dash-hero{position:relative;border-radius:18px;overflow:hidden;isolation:isolate;background:#0C0C14}
+.sr-dash-hero-track{position:relative}
+.sr-dash-hero-slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .8s ease;
   display:grid;grid-template-columns:minmax(0,560px) 1fr;align-items:center;min-height:320px}
-.sr-hero-slide.on{position:relative;opacity:1;pointer-events:auto}
-.sr-hero-art{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:64% 42%}
-.sr-hero-scrim{position:absolute;inset:0;z-index:-1;
+.sr-dash-hero-slide.on{position:relative;opacity:1;pointer-events:auto}
+.sr-dash-hero-art{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:64% 42%}
+.sr-dash-hero-scrim{position:absolute;inset:0;z-index:-1;
   background:linear-gradient(92deg,rgba(8,8,12,.93) 0%,rgba(8,8,12,.86) 38%,rgba(8,8,12,.22) 62%,rgba(8,8,12,.36) 100%)}
-.sr-hero-body{padding:38px var(--pad);display:flex;flex-direction:column;align-items:flex-start;gap:11px;z-index:2}
-.sr-hero-body h1{font-size:clamp(26px,3.2vw,38px);line-height:1.16;text-shadow:0 2px 24px rgba(0,0,0,.55)}
-.sr-hero-kick{font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--gold)}
-.sr-hero-title{font-family:'Cinzel',serif;font-size:clamp(22px,2.6vw,32px);line-height:1.22;color:var(--text);
+.sr-dash-hero-body{padding:38px var(--pad);display:flex;flex-direction:column;align-items:flex-start;gap:11px;z-index:2}
+.sr-dash-hero-body h1{font-size:clamp(26px,3.2vw,38px);line-height:1.16;text-shadow:0 2px 24px rgba(0,0,0,.55)}
+.sr-dash-hero-kick{font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--gold)}
+.sr-dash-hero-title{font-family:'Cinzel',serif;font-size:clamp(22px,2.6vw,32px);line-height:1.22;color:var(--text);
   text-shadow:0 2px 24px rgba(0,0,0,.55)}
-.sr-hero-sub{font-size:14.5px;color:#D8D2C4;line-height:1.75;max-width:400px}
-.sr-hero-meta{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:rgba(245,237,216,.5)}
-.sr-hero-cta{margin-top:6px}
-.sr-hero-tag{position:absolute;top:18px;right:calc(var(--pad) + 190px);z-index:3;font-size:9.5px;letter-spacing:.2em;
+.sr-dash-hero-sub{font-size:14.5px;color:#D8D2C4;line-height:1.75;max-width:400px}
+.sr-dash-hero-meta{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:rgba(245,237,216,.5)}
+.sr-dash-hero-cta{margin-top:6px}
+.sr-dash-hero-tag{position:absolute;top:18px;right:calc(var(--pad) + 190px);z-index:3;font-size:9.5px;letter-spacing:.2em;
   text-transform:uppercase;font-weight:700;color:#08080C;background:var(--gold);padding:6px 11px;border-radius:20px}
-.sr-hero-play{position:absolute;left:72%;top:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;
+.sr-dash-hero-play{position:absolute;left:72%;top:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;
   border:1px solid rgba(245,237,216,.55);background:rgba(8,8,12,.34);display:grid;place-items:center;z-index:3;
   backdrop-filter:blur(6px);cursor:pointer;transition:.18s}
-.sr-hero-play:hover{border-color:var(--gold);background:rgba(212,168,67,.2)}
-.sr-hero-play svg{width:17px;height:17px;fill:var(--text);margin-left:3px}
-.sr-hero-nav{position:absolute;right:var(--pad);bottom:18px;z-index:5;display:flex;align-items:center;gap:14px}
-.sr-hero-dots{display:flex;gap:7px}
-.sr-hero-dot{width:7px;height:7px;border-radius:50%;border:1px solid rgba(245,237,216,.45);background:transparent;
+.sr-dash-hero-play:hover{border-color:var(--gold);background:rgba(212,168,67,.2)}
+.sr-dash-hero-play svg{width:17px;height:17px;fill:var(--text);margin-left:3px}
+.sr-dash-hero-nav{position:absolute;right:var(--pad);bottom:18px;z-index:5;display:flex;align-items:center;gap:14px}
+.sr-dash-hero-dots{display:flex;gap:7px}
+.sr-dash-hero-dot{width:7px;height:7px;border-radius:50%;border:1px solid rgba(245,237,216,.45);background:transparent;
   cursor:pointer;padding:0;transition:.2s}
-.sr-hero-dot.on{background:var(--gold);border-color:var(--gold);width:20px;border-radius:4px}
-.sr-hero-arrow{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(8,8,12,.45);
+.sr-dash-hero-dot.on{background:var(--gold);border-color:var(--gold);width:20px;border-radius:4px}
+.sr-dash-hero-arrow{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(8,8,12,.45);
   color:var(--text2);cursor:pointer;display:grid;place-items:center}
-.sr-hero-arrow:hover{border-color:var(--gold);color:var(--gold)}
-.sr-hero-arrow svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.7}
+.sr-dash-hero-arrow:hover{border-color:var(--gold);color:var(--gold)}
+.sr-dash-hero-arrow svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.7}
 .sr-dash-quote{align-self:end;justify-self:end;padding:26px var(--pad) 62px;max-width:430px;text-align:right;z-index:2}
 .sr-dash-quote p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:clamp(14px,1.4vw,17px);
   color:#D8D2C4;line-height:1.7;text-shadow:0 2px 18px rgba(0,0,0,.75)}
 
 @media(max-width:900px){
-  .sr-hero-slide{grid-template-columns:1fr;min-height:280px}
-  .sr-hero-play{left:auto;right:var(--pad);top:auto;bottom:74px;transform:none;width:52px;height:52px}
+  .sr-dash-hero-slide{grid-template-columns:1fr;min-height:280px}
+  .sr-dash-hero-play{left:auto;right:var(--pad);top:auto;bottom:74px;transform:none;width:52px;height:52px}
   .sr-dash-quote{display:none}
-  .sr-hero-nav{bottom:14px}
+  .sr-dash-hero-nav{bottom:14px}
 }
 
 /* ── theme toggle, shared shape with the reader ── */
@@ -983,6 +994,15 @@ body.resource .sr-proto-resource{display:block}
   letter-spacing:.17em;text-transform:uppercase;color:rgba(245,237,216,.6);padding:10px 15px;transition:.18s}
 .sr-theme button.on{background:rgba(212,168,67,.16);color:var(--gold)}
 .sr-themewrap{position:absolute;top:16px;right:var(--pad);z-index:6}
+/* Below 560px the toggle leaves the hero's stacking box and becomes a plain
+   right-aligned row, with the slider starting beneath it (SR-047). Deliberately
+   not solved by giving the slide kickers right-hand clearance: the hero is a
+   rotating slider fed by HERO_SLIDES, so clearance tuned to the current four
+   slides expires the moment a fifth is added. Above 560px nothing changes. */
+@media(max-width:560px){
+  .sr-themewrap{position:static;display:flex;justify-content:flex-end;
+    padding:12px var(--pad) 0}
+}
 
 /* ── sunrise: same tokens the reader uses ── */
 body.rd-soft{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card:#54648C;--hair:#8492B4;
@@ -1243,20 +1263,20 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-bb,.sr-dash-tpanel,.sr-dash-fold,.sr-da
 }
 
 /* media layer */
-.sr-player{background:#08080C}
-.sr-player-stage{position:relative;aspect-ratio:16/9;
+.sr-dash-player{background:#08080C}
+.sr-dash-player-stage{position:relative;aspect-ratio:16/9;
   /* NEEDS ART — SWAP: <video poster="…"> */
   background:radial-gradient(44% 60% at 32% 70%,rgba(236,201,106,.36),transparent 70%),
              linear-gradient(140deg,#0B0B12 0%,#1B1206 46%,#33240F 100%)}
-.sr-player-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;
+.sr-dash-player-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;
   border-radius:50%;background:rgba(8,8,12,.4);border:1px solid rgba(245,237,216,.55);display:grid;place-items:center;
   cursor:pointer;backdrop-filter:blur(8px);transition:.2s}
-.sr-player-play:hover{background:rgba(212,168,67,.24);border-color:var(--gold)}
-.sr-player-play svg{width:22px;height:22px;fill:var(--text);margin-left:3px}
-.sr-player-bar{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid var(--hair)}
-.sr-player-time{font-size:11.5px;color:var(--text3);flex:0 0 auto;letter-spacing:.04em}
-.sr-player-rail{flex:1 1 auto;height:4px;border-radius:2px;background:rgba(245,237,216,.14);overflow:hidden}
-.sr-player-rail i{display:block;height:100%;background:var(--gold)}
+.sr-dash-player-play:hover{background:rgba(212,168,67,.24);border-color:var(--gold)}
+.sr-dash-player-play svg{width:22px;height:22px;fill:var(--text);margin-left:3px}
+.sr-dash-player-bar{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid var(--hair)}
+.sr-dash-player-time{font-size:11.5px;color:var(--text3);flex:0 0 auto;letter-spacing:.04em}
+.sr-dash-player-rail{flex:1 1 auto;height:4px;border-radius:2px;background:rgba(245,237,216,.14);overflow:hidden}
+.sr-dash-player-rail i{display:block;height:100%;background:var(--gold)}
 
 
 /* ── 01 · the Clearing: the card IS the cover ── */
