@@ -7,6 +7,8 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - Never renumber an existing ID.
 - New items go at the bottom of their severity block with the next free number.
 - The number is global — it does not restart per block.
+- Items are marked complete when the branch carrying the fix merges to main, not
+  when the commit is made.
 - Highest ID currently issued: **SR-049**.
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
@@ -39,7 +41,7 @@ in `saferise-system.css` so both surfaces move together — never fork it back.
 default) and the `TRACKS` / `JOURNEY` objects in `dashboard.html`. Loading the
 system sheet exposed [[SR-048]].
 
-*Status:* complete · *Raised:* 17 Aug 2026
+*Status:* complete · *Raised:* 17 Aug 2026 · *Merged:* 17 Aug 2026
 
 ### SR-046 · Class collisions between dashboard, index.html and the design system
 - `.sr-hero`, `.sr-hero-title`, `.sr-hero-sub`, `.sr-hero-cta` are defined in both
@@ -65,7 +67,7 @@ dots, both arrows, dot↔slide index in sync, arrow wrap at both ends, and the
 Clearing cover still opens `#mMedia` with `.sr-dash-player` styled by the
 dashboard sheet.
 
-*Status:* complete · *Raised:* 17 Aug 2026
+*Status:* complete · *Raised:* 17 Aug 2026 · *Merged:* 17 Aug 2026
 
 ---
 
@@ -86,7 +88,7 @@ static and right-aligned; the slider track then begins beneath it. Measured at
 zero overlapping elements. At 561px the toggle is `position:absolute`, top 16px,
 right 20px inside the hero — unchanged.
 
-*Status:* complete · *Raised:* 17 Aug 2026
+*Status:* complete · *Raised:* 17 Aug 2026 · *Merged:* 17 Aug 2026
 
 ### SR-048 · System stylesheet's section padding is additive on the dashboard
 Loading `saferise-system.css` (see [[SR-045]]) exposes
@@ -108,7 +110,7 @@ dashboard draws a top border, so it lands on nothing.
 than in the ALIGNMENT block, which stays single-purpose. The shared sheet is not
 edited, so `index.html` is unaffected.
 
-*Status:* complete · *Raised:* 17 Aug 2026
+*Status:* complete · *Raised:* 17 Aug 2026 · *Merged:* 17 Aug 2026
 
 ---
 
@@ -134,7 +136,7 @@ never reached the viewport. It computes to `auto` as the initial value. The
 carousel's behaviour is correct and unchanged — only the stated mechanism was
 wrong. The element is `overflow:hidden` and never scrolls in any case.
 
-*Status:* complete · *Raised:* 17 Aug 2026
+*Status:* complete · *Raised:* 17 Aug 2026 · *Merged:* 17 Aug 2026
 
 ### SR-049 · 335 orphaned CSS rules removed from the dashboard stylesheet
 `css/saferise-dashboard.css` carried whole components whose markup was cut from the
@@ -169,4 +171,4 @@ page height, both alignment lines, `--pad`, and hero / Begin row / carousel / ca
 footer heights are **byte-identical at 1440, 1100 and 390**, with zero horizontal
 overflow and zero slide/toggle overlap at 390.
 
-*Status:* complete · *Raised:* 17 Aug 2026
+*Status:* complete · *Raised:* 17 Aug 2026 · *Merged:* 17 Aug 2026
