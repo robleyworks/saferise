@@ -2278,3 +2278,463 @@ body.sr-breath .sr-player.is-next .audio-play{
    to .01ms!important on *, ::before, ::after under this same media
    query). That rule already neutralizes every animation above, static
    marker intact, without a second per-component override. */
+
+/* B18 · Resource Reader — standalone page (Track 01) ────────────
+   SR-032. Source: SafeRise-Resource-Reader-v2-FINAL.html, the block
+   after the "/* RESOURCE READER — appended block *(/" marker only.
+   Everything above that marker in the mockup is a standalone copy of
+   a protocol page and is deliberately NOT reproduced here.
+
+   Four deviations from the mockup, each forced and each recorded:
+
+   1. .sr-cover -> .sr-rdcover, .sr-head -> .sr-rdhead.
+      Both names are already live and mean something else: .sr-cover
+      is the protocol carousel card (75 usages, B12) and .sr-head is
+      the centred section header (24 usages, B4). This file loads last,
+      so the mockup's names would have won on cascade order and given
+      every carousel card a min-height and padding below 780px, and
+      every section header a bottom hairline. Same class of failure as
+      the .track / carousel collision noted in CLAUDE.md.
+
+   2. The mockup's appended block styles base classes that live only in
+      the part of the mockup we do not copy (.shell, .sectitle, .lede,
+      .hl, .chip, .ghost, .play/.wave/.scrub). Where this repo already
+      has the component we reuse it -- .eyebrow, .resource-group-label
+      and the .audio-placeholder player. Where it does not, the rule is
+      ported here under an sr- name. .shell is deliberately not revived:
+      index.html's PT reset lists it among the 17 generic names this
+      project avoids.
+
+   3. Tokens are scoped to .sr-rdpage, not :root. --gold and --gold-lt
+      match this repo's --primary/--primary2 exactly, but --text2,
+      --text3, --card and --hair do not: the mockup's greys are cooler.
+      Scoping keeps the signed-off reader visuals without shifting the
+      rest of the site.
+
+   4. No per-component prefers-reduced-motion blocks. The mockup has
+      two; CLAUDE.md and the sitewide rule at the top of this file are
+      explicit that reduced motion is handled centrally, and that rule
+      (transition/animation-duration .01ms!important on *, ::before,
+      ::after) already collapses the sky, the cover wash and the
+      guidance light, which is what brief section 4 asks for. */
+
+/* ---- reader page root + scoped tokens ---- */
+.sr-rdpage{
+  --rose:#C58598; --violet:#9B8AC4; --heart:#E04A5F;
+  --ink:#E4DCC9; --recess:rgba(0,0,0,.26); --lift:rgba(255,255,255,.022);
+  --rail:244px; --util:268px;
+  --gold:#D4A843; --gold-lt:#ECC96A; --teal:#4E9AA6;
+  --bg:#08080C; --band:#0E0E1A; --card:#15151F; --hair:#22222E;
+  --text:#F5EDD8; --text2:#9C9AA4; --text3:#6A6874;
+  --control-height:42px;
+  padding:14px 0 72px;
+}
+.sr-rdshell{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ---- base classes ported from the mockup, sr- namespaced ---- */
+.sr-sectitle{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(28px,3.8vw,42px);
+  line-height:1.15;margin-bottom:14px}
+.sr-lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:17px;
+  color:var(--text2);line-height:1.68;max-width:620px}
+.sr-lede-lead{font-size:19px;color:#CFC7B6;max-width:600px;margin-bottom:16px}
+.sr-subline{font-size:14px;color:var(--text3);letter-spacing:.01em}
+.sr-hl{height:1px;background:linear-gradient(90deg,rgba(212,168,67,.16),rgba(212,168,67,.75));
+  position:relative}
+.sr-hl:after{content:"";position:absolute;right:0;top:-2.5px;width:6px;height:6px;
+  border-radius:50%;background:var(--gold)}
+.sr-chip{font:400 11px/1 'DM Sans',sans-serif;color:var(--text3);border:1px solid var(--hair);
+  padding:8px 13px;border-radius:16px;cursor:pointer;background:transparent}
+.sr-ghost{background:transparent;color:var(--gold);border:1px solid rgba(212,168,67,.5);
+  font:700 11px/1.2 'DM Sans',sans-serif;letter-spacing:.17em;text-transform:uppercase;
+  padding:14px 24px;border-radius:3px;min-height:44px;display:inline-flex;align-items:center;
+  justify-content:center;text-decoration:none;cursor:pointer}
+.sr-rdpage [hidden]{display:none!important}
+
+/* ---- the enclosure: one bordered object, hairline regions ---- */
+.sr-reader{border:1px solid var(--hair);border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.012),rgba(255,255,255,.003) 44%,transparent)}
+.sr-backbar{padding:2px 2px 9px}
+.sr-backbar .proto-page-back{position:static;display:inline-flex;align-items:center;gap:8px;
+  font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:.19em;color:#D7C19A;
+  text-transform:uppercase;font-weight:700;text-decoration:none;background:none;border:0;
+  cursor:pointer;padding:5px 2px;min-height:26px}
+.sr-backbar .proto-page-back:hover{color:var(--gold)}
+
+.sr-grid{display:grid;grid-template-columns:var(--rail) minmax(0,1fr) var(--util);
+  grid-template-rows:auto minmax(0,1fr)}
+.sr-rail{grid-column:1;grid-row:2;border-right:1px solid var(--hair);
+  display:flex;flex-direction:column;background:var(--recess)}
+.sr-rdcover{position:relative;grid-column:1 / -1;grid-row:1;border-bottom:1px solid var(--hair);
+  padding:28px 34px 30px;min-height:196px;display:flex;flex-direction:column;justify-content:flex-end;
+  background-size:cover;background-position:center 42%;background-repeat:no-repeat}
+.sr-main{grid-column:2;grid-row:2;padding:32px 38px 46px;min-width:0;
+  background:linear-gradient(180deg,var(--lift),transparent 46%)}
+.sr-utility{grid-column:3;grid-row:2;border-left:1px solid var(--hair);background:var(--recess)}
+
+/* ---- cover ---- */
+.sr-rdcover:after{content:"";position:absolute;top:0;bottom:0;left:0;width:2px;
+  background:linear-gradient(180deg,var(--gold),rgba(212,168,67,.08))}
+.sr-rdcover>*{position:relative;z-index:1}
+.sr-rdcover .sr-sectitle{margin-bottom:12px}
+.sr-rdcover .sr-lede-lead{max-width:470px;margin-bottom:0}
+
+/* ---- rail ---- */
+.sr-raillabel{gap:0;padding:19px 20px 17px}
+.sr-raillabel:before{display:none}
+.sr-raillabel span{white-space:nowrap}
+.sr-railtoggle{display:none;width:100%;align-items:center;gap:13px;padding:16px 22px;min-height:54px;
+  background:transparent;border:0;font:400 12.5px/1.4 'DM Sans',sans-serif;color:var(--text2);
+  text-align:left;cursor:pointer}
+.sr-railtoggle b{font-weight:500;font-size:13px;color:var(--text)}
+.sr-railtoggle .sx{margin-left:auto;font:700 9.5px/1 'DM Sans',sans-serif;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--gold)}
+.sr-railtoggle .sx:after{content:" \25BE"}
+.sr-rail.open .sr-railtoggle .sx:after{content:" \25B4"}
+.sr-rail-list{padding:6px 0 4px}
+.sr-item{display:grid;grid-template-columns:30px minmax(0,1fr);gap:14px;align-items:start;
+  padding:13px 20px 13px 18px;border-left:2px solid transparent;text-decoration:none;cursor:pointer;
+  background:transparent;border-top:0;border-right:0;border-bottom:0;width:100%;text-align:left;font-family:inherit}
+.sr-item+.sr-item{border-top:1px solid rgba(255,255,255,.028)}
+/* same object as the protocol page's .res-icon, at rail scale */
+.sr-ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;margin-top:1px;
+  border:1px solid rgba(212,168,67,.28);background:var(--recess);color:var(--gold)}
+/* SR-046: the icon is inline SVG, stroked with currentColor so the
+   [data-type] tints above drive it. Geometry inside the box is normalised
+   per icon by srReaderFitIcons(); this only fixes the box. */
+.sr-ic svg{display:block;width:16px;height:16px;overflow:visible}
+.sr-ic[data-type=evidence]{border-color:rgba(78,154,166,.34);color:var(--teal)}
+.sr-ic[data-type=relational]{border-color:rgba(197,133,152,.34);color:var(--rose)}
+.sr-ic[data-type=identity]{border-color:rgba(155,138,196,.34);color:var(--violet)}
+.sr-ic[data-type=meta]{border-color:rgba(255,255,255,.1);color:var(--text3)}
+.sr-item .sr-n{font:700 10.5px/1 'DM Sans',sans-serif;letter-spacing:.14em;color:var(--text3);margin-right:8px}
+.sr-item .sr-t{font-size:13px;line-height:1.4;color:var(--text2)}
+.sr-item .sr-m{display:block;margin-top:4px;font-size:11px;color:var(--text3)}
+.sr-item:hover{background:rgba(255,255,255,.022)}
+.sr-item.on{border-left-color:var(--gold);background:linear-gradient(90deg,rgba(212,168,67,.075),transparent 74%)}
+.sr-item.on .sr-t{color:var(--gold)}
+.sr-item.on .sr-n{color:var(--gold)}
+.sr-item.advisory{background:linear-gradient(90deg,rgba(212,168,67,.05),transparent 72%)}
+.sr-item.advisory .sr-t{font-style:italic}
+
+/* ---- centre ---- */
+.sr-rdhead{border-bottom:1px solid var(--hair);padding-bottom:20px;margin-bottom:26px}
+.sr-rdhead .eyebrow{display:block;margin:0}
+.sr-rdhead h2{margin-bottom:9px}
+.sr-rdhead .sr-lede{margin:0 0 12px}
+.sr-body p{font-size:15px;line-height:1.78;color:var(--ink);max-width:62ch;margin-bottom:17px}
+.sr-body p.sr-tight{margin-bottom:6px}
+.sr-close{margin-top:38px;padding:26px 28px;border:1px solid rgba(255,255,255,.045);border-radius:9px;
+  background:var(--recess)}
+.sr-close .eyebrow{display:block;margin-bottom:11px;font-size:9.5px}
+.sr-close .sr-quiet{color:#565563;font-weight:700}
+.sr-close .sr-ghost{color:var(--gold);border-color:rgba(212,168,67,.22);background:rgba(212,168,67,.07)}
+.sr-close .sr-ghost:hover{border-color:rgba(212,168,67,.45);background:rgba(212,168,67,.12)}
+.sr-close .q{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:19px;color:var(--text2);margin-bottom:9px}
+.sr-close .cp{font-size:13.5px;line-height:1.7;color:var(--text3);max-width:520px;margin-bottom:19px}
+.sr-chapter{margin-top:34px;padding-top:26px;border-top:1px solid var(--hair)}
+.sr-chapter .eyebrow{display:block;margin-bottom:11px;font-size:9.5px}
+.sr-chapter h3{font-size:23px;margin-bottom:13px}
+
+/* three-stage progression — reuses the .sr-hl connector language */
+.sr-prog{display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr;align-items:start;gap:0 14px;
+  margin:26px 0 30px;padding:24px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.sr-prog .st .sn{font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;line-height:1.25;color:var(--text);display:block;margin-bottom:7px;min-height:2.5em}
+.sr-prog .st .sd{font-size:12.5px;line-height:1.55;color:var(--text3)}
+.sr-prog .sr-hl{height:1px;margin-top:11px}
+
+/* ---- utility column ---- */
+.sr-u{padding:22px 22px 24px;border-bottom:1px solid var(--hair)}
+.sr-u:last-child{border-bottom:0}
+.sr-u .ul{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:15px}
+/* guidance audio reuses the live .audio-placeholder unit; only the
+   chrome it carries on the protocol page is neutralised here */
+.sr-guide .audio-placeholder{padding:0;background:transparent}
+.sr-guide .audio-waveform{height:26px;margin:0}
+.sr-guide .audio-controls{margin-top:12px}
+.sr-guide .audio-play{width:46px;height:46px;flex:0 0 46px;margin:0}
+.sr-guide .lt{margin-top:14px;font-size:13px;font-weight:500;color:var(--text)}
+.sr-guide .ld{font-size:12px;color:var(--text3);margin-top:3px;line-height:1.55}
+.sr-download{padding-top:15px;padding-bottom:15px}
+.sr-dl{display:inline-flex;align-items:center;gap:10px;min-height:var(--control-height);
+  background:transparent;border:0;color:var(--text3);text-decoration:none;cursor:pointer;
+  font:400 12px/1.4 'DM Sans',sans-serif;letter-spacing:.01em}
+.sr-dl svg{opacity:.6}
+.sr-dl:hover{color:var(--text2)}
+.sr-dl:hover svg{opacity:1}
+.sr-fbq{font-size:12.5px;color:var(--text2);margin-bottom:13px}
+.sr-fb{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.sr-fb .sr-chip{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  min-height:88px;padding:14px 10px;border-radius:9px;text-align:center;line-height:1.3}
+.sr-fb .sr-chip svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.3;
+  stroke-linecap:round;stroke-linejoin:round;transition:.2s ease}
+.sr-fb .sr-chip[data-fb=resonate].on{color:var(--heart);border-color:rgba(224,74,95,.55);background:rgba(224,74,95,.1)}
+.sr-fb .sr-chip[data-fb=resonate].on svg{fill:var(--heart);stroke:var(--heart)}
+.sr-fb .sr-chip[data-fb=integrate].on{color:var(--teal);border-color:rgba(78,154,166,.55);background:rgba(78,154,166,.1)}
+.sr-fb .sr-chip[data-fb=integrate].on svg{fill:rgba(78,154,166,.5);stroke:var(--teal);stroke-width:1.3}
+.sr-fbnote{margin-top:13px;font-size:11.5px;line-height:1.6;color:var(--text3)}
+.sr-next{display:flex;align-items:center;gap:13px;text-decoration:none}
+.sr-next .sr-ic{margin-top:0}
+.sr-next .nt{flex:1;font-size:13px;font-weight:500;line-height:1.4;color:var(--text)}
+.sr-next .nm{display:block;font-weight:400;font-size:11px;color:var(--text3);margin-top:3px}
+.sr-oneone{padding-top:15px;padding-bottom:16px}
+.sr-oneone p{font-size:11.5px;line-height:1.65;color:var(--text3)}
+.sr-oneone a{color:var(--text2);text-decoration:none;border-bottom:1px solid rgba(212,168,67,.4);padding-bottom:1px}
+.sr-oneone a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+.sr-next .na{width:34px;height:34px;border-radius:50%;border:1px solid rgba(212,168,67,.5);display:grid;place-items:center;color:var(--gold);flex:0 0 34px}
+.sr-next:hover .na{background:rgba(212,168,67,.1)}
+
+/* progress — ships visible; cannot persist without auth */
+.sr-progress{padding-top:16px;padding-bottom:16px}
+.sr-progress .ul{margin-bottom:0}
+.sr-progress .prow{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:11px}
+.sr-progress .pv{font-size:12px;color:var(--text2);white-space:nowrap;letter-spacing:.02em}
+.sr-progress .pv b{color:var(--gold);font-weight:400}
+.sr-track{display:flex;align-items:center;gap:0}
+.sr-track i{width:6px;height:6px;border-radius:50%;background:var(--gold);flex:0 0 6px;opacity:.75}
+.sr-track i.off{background:transparent;border:1px solid rgba(212,168,67,.5)}
+.sr-track s{flex:1;height:1px;background:rgba(212,168,67,.4);display:block}
+.sr-progress .pn{margin-top:10px;font-size:10.5px;color:var(--text3);line-height:1.5}
+
+/* ---- reading modes: midnight (default) · sunrise ---- */
+body.rd-soft .sr-rdpage{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card:#54648C;
+  --hair:#8492B4;--text:#FFFDF8;--text2:#DDE3F0;--text3:#AEB7CE;--ink:#FBFAF5;
+  --recess:rgba(24,30,60,.2);--lift:rgba(255,226,186,.1)}
+/* the sky is a layer, so the light can arrive rather than switch on */
+.sr-sky{position:fixed;inset:-10% 0 0;z-index:-1;pointer-events:none;opacity:0;
+  transform:translateY(7%) scale(1.04);transform-origin:50% 0;
+  background:
+    radial-gradient(88% 52% at 50% -8%, rgba(255,198,132,.6) 0%, rgba(246,166,132,.34) 26%, rgba(214,166,170,.14) 52%, transparent 76%),
+    radial-gradient(130% 104% at 50% 16%, transparent 40%, rgba(22,28,58,.28) 74%, rgba(18,23,50,.52) 100%),
+    linear-gradient(180deg,#647496 0%,#5A6B93 16%,#4F608C 36%,#455584 58%,#3C4B78 80%,#354268 100%);
+  background-color:#354268;background-size:cover;
+  transition:opacity 6.5s cubic-bezier(.32,.06,.2,1), transform 8s cubic-bezier(.28,.04,.2,1)}
+body.rd-soft .sr-sky{opacity:1;transform:translateY(0) scale(1)}
+body.rd-soft{background-color:#354268}
+html:has(body.rd-soft){background:#647496}
+
+/* The nav warms with the page. The mockup themes its own .sr-topnav; the
+   live equivalent is #main-nav — the fixed bar at top:0/z-index:1000.
+   NOT .theme-bar: that class is styled in index.html and queried by
+   saferise-system.js, but no element in the document carries it, so a rule
+   hung there would have themed nothing.
+   Safe despite being shared chrome because rd-soft is only ever on <body>
+   while the reader view is open, and openResourceReader/closeResourceReader
+   are the only things that add and remove it.
+
+   #main-nav sets its background as an INLINE style attribute, and an
+   inline declaration outranks every stylesheet selector regardless of
+   specificity — !important is the only thing that reaches it. Same
+   exception as B18b, and for the same reason: not a cascade-order
+   problem, a cascade-origin one. */
+body.rd-soft #main-nav{background:rgba(78,92,128,.72)!important;
+  border-bottom-color:rgba(255,222,190,.2)!important}
+
+/* everything else warms at the same pace */
+#main-nav,
+.sr-reader,.sr-rail,.sr-utility,.sr-main,.sr-u,.sr-item,.sr-ic,
+.sr-close,.sr-chapter,.sr-body p,.sr-rdhead,.sr-chip,.sr-theme,.sr-theme button,
+.sr-item .sr-t,.sr-item .sr-n,.sr-item .sr-m,.sr-next .nt,.sr-next .nm,.sr-guide .lt,
+.sr-guide .ld,.sr-progress .pv,.sr-fbq,.sr-oneone p,.sr-oneone a,
+.sr-rdpage .resource-group-label,
+.sr-rdhead .sr-lede,.sr-rdhead .sr-subline,.sr-close .q,.sr-close .cp,.sr-dl,.sr-track s,.sr-railtoggle{
+  transition:background-color 6.5s ease,border-color 6.5s ease,color 6.5s ease,background-image 6.5s ease}
+
+/* the cover catches the light too */
+.sr-cover-sun{position:absolute;inset:0;z-index:0;opacity:0;pointer-events:none;
+  transition:opacity 6.5s cubic-bezier(.32,.06,.2,1);
+  background:linear-gradient(90deg,rgba(38,48,84,.66) 0%,rgba(92,102,134,.42) 42%,rgba(240,190,148,.16) 72%,rgba(58,72,112,.34) 100%)}
+body.rd-soft .sr-cover-sun{opacity:1}
+body.rd-soft .sr-rdcover{background-blend-mode:normal}
+body.rd-soft .sr-reader{background:linear-gradient(180deg,rgba(255,214,175,.13),rgba(255,236,214,.05) 34%,rgba(255,236,214,.018) 62%,transparent);
+  border-color:rgba(255,255,255,.16)}
+body.rd-soft .sr-ic{background:rgba(255,255,255,.09);border-color:rgba(255,226,196,.34)}
+body.rd-soft .sr-item.on{background:linear-gradient(90deg,rgba(255,222,150,.2),transparent 74%)}
+body.rd-soft .sr-item+.sr-item{border-top-color:rgba(255,255,255,.12)}
+body.rd-soft .sr-chapter,body.rd-soft .sr-close{border-color:rgba(255,255,255,.2)}
+body.rd-soft .sr-track s{background:rgba(212,168,67,.35)}
+body.rd-soft .sr-close{background:rgba(24,30,60,.18)}
+
+/* ---- guidance light: the sunrise language, pointing at one next action ---- */
+.sr-lit{position:relative}
+.sr-lit:before{content:"";position:absolute;inset:-18px;border-radius:16px;z-index:-1;opacity:0;
+  background:radial-gradient(60% 70% at 50% 50%, rgba(255,206,150,.2) 0%, rgba(249,164,158,.1) 42%, transparent 74%);
+  transition:opacity 2.6s cubic-bezier(.32,.06,.2,1)}
+.sr-lit.on:before{opacity:1}
+.sr-lit.on{border-color:rgba(255,206,150,.34)}
+.sr-close.sr-lit.on .sr-ghost{border-color:rgba(255,214,150,.5);background:rgba(255,206,150,.13)}
+.sr-upnext.sr-lit.on .na{border-color:rgba(255,214,150,.7);background:rgba(255,206,150,.14)}
+body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(255,222,170,.26) 0%, rgba(255,180,160,.13) 42%, transparent 74%)}
+
+/* the switch */
+.sr-headrow{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:13px}
+.sr-theme{display:flex;gap:1px;border:1px solid var(--hair);border-radius:20px;overflow:hidden;flex:0 0 auto}
+.sr-theme button{background:transparent;border:0;cursor:pointer;font:700 8.5px/1 'DM Sans',sans-serif;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--text3);padding:9px 12px;min-height:32px}
+.sr-theme button.on{color:var(--gold);background:rgba(212,168,67,.1)}
+.sr-theme button:hover{color:var(--text2)}
+
+/* ---- responsive ---- */
+@media(max-width:1140px) and (min-width:1001px){
+  .sr-rdpage{--rail:216px;--util:246px}
+  .sr-main{padding:26px 24px 38px}.sr-rdcover{padding:26px 24px}
+}
+/* keep the utility column on the right as long as it fits; only the rail folds */
+@media(max-width:1000px) and (min-width:781px){
+  .sr-rdpage{--util:240px}
+  .sr-prog{grid-template-columns:1fr}
+  .sr-prog .sr-hl{display:none}
+  .sr-prog .st{padding:15px 0;border-top:1px solid rgba(255,255,255,.05)}
+  .sr-prog .st:first-child{border-top:0;padding-top:0}
+  .sr-prog .st .sn{min-height:0;margin-bottom:5px}
+  .sr-grid{grid-template-columns:minmax(0,1fr) var(--util)}
+  .sr-rail{grid-column:1 / -1;grid-row:1;border-right:0;border-bottom:1px solid var(--hair)}
+  .sr-rdcover{grid-column:1 / -1;grid-row:2}
+  .sr-main{grid-column:1;grid-row:3}
+  .sr-utility{grid-column:2;grid-row:3}
+  .sr-railtoggle{display:flex}
+  .sr-rail:not(.open) .resource-group-label,.sr-rail:not(.open) .sr-rail-list{display:none}
+  .sr-rail.open .sr-railtoggle{border-bottom:1px solid var(--hair)}
+  .sr-rail-list{display:grid;grid-template-columns:1fr 1fr}
+  .sr-item+.sr-item{border-top:0}
+  .sr-item{border-top:1px solid rgba(255,255,255,.028)}
+}
+@media(max-width:780px){
+  .sr-grid{display:flex;flex-direction:column}
+  .sr-main,.sr-utility{display:contents}
+  .sr-rdcover{order:1;min-height:180px;padding:22px 20px}
+  .sr-rail{order:2;border-right:0;border-bottom:1px solid var(--hair)}
+  .sr-rdhead{order:3}
+  .sr-progress{order:4}
+  .sr-guide{order:5}
+  .sr-body{order:6}
+  /* The mockup assigns an order to every region below 780 except .sr-close,
+     which leaves it at the flex default of 0 — so the journal block rendered
+     ABOVE the cover, first thing on the page. §3 puts it at the foot of the
+     centre column. Same order as .sr-body so DOM order settles it: body,
+     then close, both still inside .sr-main's display:contents. */
+  .sr-close{order:6}
+  .sr-feedback{order:7}
+  .sr-download{order:8}
+  .sr-upnext{order:9}
+  .sr-oneone{order:10}
+  .sr-rdhead,.sr-body{padding:0 20px}
+  .sr-rdhead{padding-top:24px;margin-bottom:22px}
+  .sr-body{padding-bottom:30px;border-bottom:1px solid var(--hair)}
+  .sr-u{border-left:0}
+  .sr-railtoggle{display:flex;padding:17px 20px;min-height:56px}
+  .sr-rail:not(.open) .resource-group-label,.sr-rail:not(.open) .sr-rail-list{display:none}
+  .sr-rail.open .sr-railtoggle{border-bottom:1px solid var(--hair)}
+  .sr-rdcover .sr-sectitle{font-size:clamp(24px,6.6vw,31px)}
+  .sr-rdcover .sr-lede-lead{font-size:17px}
+  .sr-prog{grid-template-columns:1fr;gap:0}
+  .sr-prog .sr-hl{display:none}
+  .sr-prog .st{padding:15px 0;border-top:1px solid rgba(255,255,255,.05)}
+  .sr-prog .st:first-child{border-top:0;padding-top:0}
+  .sr-prog .st .sn{min-height:0;margin-bottom:5px}
+}
+@media(max-width:560px){
+  .sr-rdpage{padding:14px 0 46px}
+  .sr-rdshell{padding:0 14px}
+  .sr-reader{border-radius:11px}
+  .sr-fb .sr-chip{width:100%;justify-content:flex-start}
+}
+
+/* B18b · the relocated .reader-page inside the reader shell ─────
+   SR-034. openResourceReader() moves the node openReader() built into
+   .sr-body, so every existing hydrator keeps working on the DOM contract
+   it already queries. What comes with the node is the overlay's own
+   chrome, which has to be neutralised here.
+
+   This is the one place in this file that needs !important. CLAUDE.md is
+   right that the system wins by cascade order — but the rules being
+   overridden are themselves !important (the v8–v12 reader patches, all
+   loaded earlier), and cascade order cannot beat !important. Specificity
+   plus !important can, which is why each rule is scoped by .sr-body. */
+.sr-body .reader-page{display:block!important;padding:0!important;animation:none!important;
+  color:var(--ink)!important;background:transparent!important}
+/* the head already carries kind and title — the node's own copies would
+   render them a second time, directly beneath */
+.sr-body .reader-page-kind,
+.sr-body .reader-page-title,
+.sr-body .reader-page-tags{display:none!important}
+.sr-body .reader-page-body{font-size:15px!important;line-height:1.78!important;
+  color:var(--ink)!important;max-width:none!important;background:transparent!important}
+.sr-body .reader-page-body p{font-size:15px!important;line-height:1.78!important;
+  color:var(--ink)!important;max-width:62ch!important;margin-bottom:17px}
+@media(max-width:780px){
+  .sr-body .reader-page{padding:0!important}
+}
+
+/* B19 · §6 — one back link, same place on both pages ───────────
+   SR-035. The protocol page put BACK TO PROTOCOLS in a deep empty
+   region under the nav, at the shell's left edge (x=150 at 1280) while
+   the banner enclosure below it started at x=91. The reader put its own
+   link flush to its enclosure. Same control, two positions, two type
+   scales.
+
+   Both pages now use .sr-backbar, and both break out to the SAME
+   viewport-centred 1100px column the banner already uses —
+   max(40px, 50vw - 550px), copied from
+   #personal-protocol-page .proto-item .proto-expand above rather than
+   re-derived, so the two stay locked together at every width.
+
+   The reader was previously clamped by .pt-page-wrap (1100 max-width,
+   60px padding) to a 980px shell — against the mockup's 1180 — which
+   squeezed the centre column to ~420px where the design wants ~620.
+   Breaking out recovers it to ~590. The mockup's 1180 is deliberately
+   NOT used: it would leave the two back links 17px apart, which is the
+   exact defect this section exists to remove.
+
+   Both pages wrap the link in the same .sr-rdshell > .sr-backbar pair, so
+   the shell supplies the 1100px column and .sr-backbar supplies its own
+   2px optical inset on top of it. Giving .sr-backbar both jobs on one page
+   and not the other left the two links 2px apart. */
+#personal-protocol-page .sr-rdshell,
+#personal-resource-page .sr-rdshell{
+  position:relative;left:50%;transform:translateX(-50%);
+  width:100vw;max-width:100vw;box-sizing:border-box;
+  padding-left:max(40px,calc(50vw - 550px));
+  padding-right:max(40px,calc(50vw - 550px))}
+@media(max-width:980px){
+  #personal-protocol-page .sr-rdshell,
+  #personal-resource-page .sr-rdshell{padding-left:26px;padding-right:26px}
+}
+
+/* The reader's own top padding is dropped to 0 inside the wrap: the wrap
+   supplies the 14px below, and doubling them would push the reader's back
+   link 14px lower than the protocol page's. */
+#personal-resource-page.sr-rdpage{padding-top:0}
+
+/* Reclaim the empty region. .pt-page-wrap carries an inline padding-top:60px
+   and is shared with the portal home, so the reduction is scoped to the two
+   full-page views by :has() — and needs !important only because the value it
+   overrides is inline. */
+.pt-page-wrap:has(> #personal-protocol-page:not([hidden])),
+.pt-page-wrap:has(> #personal-resource-page:not([hidden])){padding-top:14px!important}
+
+/* …and the banner's own top padding, so the protocol title starts higher.
+   34px -> 22px; the brief asks for the reduction without naming a value. */
+#personal-protocol-page .sr-exp-hero{padding-top:22px}
+
+/* B18c · Sunrise: the panels sit ON the light, not IN it ───────
+   SR-044. Sunrise washed the whole enclosure pale blue-grey and dropped
+   body contrast: rail, centre and utility all lifted toward the sky
+   instead of staying dark and recessed against it.
+
+   Cause was layering, not colour. --recess and --lift are exactly the
+   mockup's values; what differed was the backdrop underneath them.
+   #prog-personal is position:relative with z-index:1, so it forms a
+   stacking context. .sr-sky lived inside it at z-index:-1, which paints
+   above that overlay's own background but below its content — putting
+   the sky's light gradient (#647496 at the top, plus the warm sun
+   radial) directly behind the enclosure. Panels at rgba(24,30,60,.2)
+   over that read pale.
+
+   In the approved mockup the sky is a child of <body> and is fully
+   occluded by body's opaque #354268 — verified by toggling it off in the
+   mockup, which changes nothing on screen. The approved sunrise is a flat
+   #354268 surround with the recessed panels sitting on top of it. The sky
+   element is moved back to <body> in JS to restore that, and the overlay
+   is themed to the same #354268 so the surround matches rather than
+   showing the portal's near-black. */
+body.rd-soft #prog-personal{background:#354268}
