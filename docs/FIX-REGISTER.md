@@ -113,49 +113,27 @@ Specific things in this branch that are worth a careful manual Safari pass:
 Manual Safari testing before merge was planned by the author of this branch's
 review; this entry exists so the gap is recorded rather than assumed closed.
 
-#### The rail glyph set is font-fallback dependent — check this specifically
+#### Text glyphs depended on font fallback — resolved by SR-046, lesson retained
 
-The rail glyphs (SR-045) are text characters rendered at 12.5px in the
-`'DM Sans', sans-serif` stack. **Ten of the eleven are not in DM Sans** and
-resolve through system font fallback, so macOS Chromium, macOS Safari and iOS
-Safari can each pick a **different** face. Ink in one engine says nothing about
-the others.
+The rail briefly used Unicode characters at 12.5px in the `'DM Sans',
+sans-serif` stack. **Ten of the eleven are not in DM Sans** and resolved
+through system fallback, so each engine could pick a different face. That set
+is gone — SR-046 replaced it with inline SVG — so there is nothing left here
+to test in Safari. The measurement is kept because the method is reusable and
+the trap is not obvious:
 
-Check in Safari desktop **and** iOS, and not only for tofu — for **size and
-baseline consistency inside the 30px circle**. Two failure modes are already
-visible on this machine:
+**`document.fonts.check('12.5px "DM Sans"', glyph)` returned `true` for all
+eleven characters, including the ten DM Sans does not contain.** It reports
+whether a matching font is *available*, not whether it covers the requested
+glyph. It cannot be used to verify glyph coverage. To actually test coverage,
+measure the glyph's advance in the real stack against its advance in a
+deliberately missing family (`"__NoSuchFace__", sans-serif`) — identical
+metrics mean it fell through to the same system fallback.
 
-- **advance widths span 7.53px → 12.5px**, a 66% spread across a set meant to
-  read as one family in a vertical index
-- **the baseline splits**: `◉ ◑ ♡` sit 1.5px lower than the other eight, which
-  is the signature of a different fallback face being selected for them
-
-`document.fonts.check('12.5px "DM Sans"', glyph)` returns **true for all
-eleven** and is therefore useless here — it reports font availability, not
-per-glyph coverage. Do not use it to verify this.
-
-**Baseline for comparison — macOS, Chromium, 12.5px, `'DM Sans', sans-serif`.**
-The mockup and the repo measure **identically** on this machine, so any
-divergence in your pass is engine or platform, not integration:
-
-| type | glyph | advance | ink top | in DM Sans? |
-|---|---|---|---|---|
-| advisory | `!` | 3.13 | 0 | **yes** |
-| guide | `◫` | 7.53 | 0 | no |
-| repair | `↺` | 7.53 | 0 | no |
-| crisiscard | `◇` | 7.69 | 0 | no |
-| companion | `⊘` | 9.03 | 0 | no |
-| support | `✦` | 9.91 | 0 | no |
-| disclosure | `⚿` | 10.22 | 0 | no |
-| founder | `▶` | 11.00 | 0 | no |
-| decision | `◉` | 12.50 | **1.5** | no |
-| insights | `◑` | 12.50 | **1.5** | no |
-| refcase | `♡` | 12.50 | **1.5** | no |
-
-If the set proves unstable across engines, the durable fix is to stop relying
-on fallback — either ship the glyphs as inline SVG (as `PT_RES_ICONS` already
-does for the resource library) or subset a webfont that actually contains
-them.
+The failure was measurable without leaving Chromium: advance widths spanned
+7.53px → 12.5px, and `◉ ◑ ♡` sat 1.5px below the baseline of the other eight —
+the signature of a second fallback face. A set that inconsistent in one engine
+cannot be rescued by testing another.
 
 ### SR-043 · The approved mockup carries both defects fixed in SR-036
 **Found:** `feat/resource-reader` · **Affects:** anyone integrating from the mockup again
@@ -210,6 +188,32 @@ and a fresh pass over every Sunrise surface.
 Two of the three transitions §4 describes do work: the surface transitions on
 panels, hairlines and text, and `.sr-cover-sun`'s wash over the cover. Only the
 sky itself is inert.
+
+### SR-046 · Disclosure & Support shows a different icon in the rail than in the library
+**Found:** `feat/resource-reader` · **Affects:** icon parity between the two surfaces
+
+The rail now draws `PT_RES_ICONS`' own paths so the rail and the resource
+library show the same shape for the same resource type — **with one exception**.
+
+`PT_RES_ICONS.disclosure` is a **padlock**: `<rect x="4" y="9" width="12"
+height="8" rx="1"/>` plus a shackle arc. On Disclosure & Support — a script for
+telling someone what you need — a padlock reads as *locked content*. It is
+misleading, and discouraging on the one resource whose subject is asking for
+help. The rail therefore draws a speech bubble instead.
+
+**The library still shows the padlock.** Two surfaces, two shapes, one type —
+the exact divergence the SVG swap was meant to remove.
+
+Resolving it means changing `PT_RES_ICONS.disclosure` itself, which changes the
+protocol page's Go Deeper list — an approved surface, and outside what this
+branch was scoped to touch. Left as a deliberate, recorded inconsistency rather
+than an unannounced edit to an approved page.
+
+Also noted while swapping: `PT_RES_ICONS.guide` and `PT_RES_ICONS.insights` are
+near-identical shapes (a portrait page, one with a folded corner). They were
+easy to tell apart as separate cards in the library; in the rail they sit
+adjacent in every single protocol, where they read as the same icon twice.
+Pre-existing, not introduced here, and worth a look whenever the padlock is.
 
 ---
 

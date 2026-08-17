@@ -2398,6 +2398,10 @@ body.sr-breath .sr-player.is-next .audio-play{
 /* same object as the protocol page's .res-icon, at rail scale */
 .sr-ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;margin-top:1px;
   border:1px solid rgba(212,168,67,.28);background:var(--recess);color:var(--gold)}
+/* SR-046: the icon is inline SVG, stroked with currentColor so the
+   [data-type] tints above drive it. Geometry inside the box is normalised
+   per icon by srReaderFitIcons(); this only fixes the box. */
+.sr-ic svg{display:block;width:16px;height:16px;overflow:visible}
 .sr-ic[data-type=evidence]{border-color:rgba(78,154,166,.34);color:var(--teal)}
 .sr-ic[data-type=relational]{border-color:rgba(197,133,152,.34);color:var(--rose)}
 .sr-ic[data-type=identity]{border-color:rgba(155,138,196,.34);color:var(--violet)}
