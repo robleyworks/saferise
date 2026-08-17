@@ -7,7 +7,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - Never renumber an existing ID.
 - New items go at the bottom of their severity block with the next free number.
 - The number is global — it does not restart per block.
-- Highest ID currently issued: **SR-048**.
+- Highest ID currently issued: **SR-049**.
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
 has since shipped. Numbering continues from SR-044 so no ID is ever reused.*
@@ -124,5 +124,49 @@ Two defects found and fixed during integration:
 - Selecting Elevation Series retained the previous track's paywall CTA
   ("Professional Performance is not on your plan yet… ADD FOR €49 / MONTH"), because
   the empty-track branch returned before the CTA-clearing block.
+
+**Correction to the integration handoff.** The handoff states that
+`scroll-behavior:auto` is "pinned on the viewport because the page sets
+`html{scroll-behavior:smooth}` globally, which was competing for the same
+property." No such declaration exists on `.sr-dash-carviewport`, and none is
+needed: `scroll-behavior` is not an inherited property, so the rule on `html`
+never reached the viewport. It computes to `auto` as the initial value. The
+carousel's behaviour is correct and unchanged — only the stated mechanism was
+wrong. The element is `overflow:hidden` and never scrolls in any case.
+
+*Status:* complete · *Raised:* 17 Aug 2026
+
+### SR-049 · 335 orphaned CSS rules removed from the dashboard stylesheet
+`css/saferise-dashboard.css` carried whole components whose markup was cut from the
+design before integration: the Clearing panel, the Protocol Foundation band, the
+Reflection lab, "Understanding SafeRise", older Begin/Resume/Hero variants, and the
+`sr-proto-*` internals that styled the protocol page back when it was inlined rather
+than iframed. Also the four `sr-dash-heroart` / `herocard` / `herogrid` / `heroscrim`
+leftovers orphaned by [[SR-046]].
+
+A rule was removed only when **every** comma-separated part of its selector names at
+least one class absent from `dashboard.html`. A part naming no class at all
+(`section`, `h1`, `body.reading`) counts as live.
+
+**An earlier count of 343 was wrong.** It tested the union of classes across the whole
+selector, which marks `.live, .dead` dead on account of `.dead` alone. Eight rules were
+rescued by switching to per-part testing, among them the ALIGNMENT block's
+`.sr-dash-jcols > .sr-dash-jcol:first-child, …` and the `body.shifting …` reading-mode
+transition — both live, both would have been deleted. The audit is sound only because
+no class name in this file is built by concatenation; the single dynamic case,
+`className = 'sr-dash-carrow ' + t.cls`, takes `t.cls` from string literals present in
+the file.
+
+Three `NEEDS ART` markers sat inside the declaration blocks of removed rules and were
+carried over to a labelled block near the top of the file rather than deleted with
+their rules — the pangolin illustration in particular is still live outstanding work.
+The total of 15 across both files is unchanged.
+
+335 rules, 33.0 KB, and 8 emptied `@media` blocks plus 1 emptied `@supports` block
+removed; stylesheet 99.5 KB → 67.2 KB. Verified with the stylesheet swapped in place
+on a single page load, hero slide pinned to remove slider rotation as a variable:
+page height, both alignment lines, `--pad`, and hero / Begin row / carousel / card /
+footer heights are **byte-identical at 1440, 1100 and 390**, with zero horizontal
+overflow and zero slide/toggle overlap at 390.
 
 *Status:* complete · *Raised:* 17 Aug 2026
