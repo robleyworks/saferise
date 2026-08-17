@@ -113,6 +113,50 @@ Specific things in this branch that are worth a careful manual Safari pass:
 Manual Safari testing before merge was planned by the author of this branch's
 review; this entry exists so the gap is recorded rather than assumed closed.
 
+#### The rail glyph set is font-fallback dependent — check this specifically
+
+The rail glyphs (SR-045) are text characters rendered at 12.5px in the
+`'DM Sans', sans-serif` stack. **Ten of the eleven are not in DM Sans** and
+resolve through system font fallback, so macOS Chromium, macOS Safari and iOS
+Safari can each pick a **different** face. Ink in one engine says nothing about
+the others.
+
+Check in Safari desktop **and** iOS, and not only for tofu — for **size and
+baseline consistency inside the 30px circle**. Two failure modes are already
+visible on this machine:
+
+- **advance widths span 7.53px → 12.5px**, a 66% spread across a set meant to
+  read as one family in a vertical index
+- **the baseline splits**: `◉ ◑ ♡` sit 1.5px lower than the other eight, which
+  is the signature of a different fallback face being selected for them
+
+`document.fonts.check('12.5px "DM Sans"', glyph)` returns **true for all
+eleven** and is therefore useless here — it reports font availability, not
+per-glyph coverage. Do not use it to verify this.
+
+**Baseline for comparison — macOS, Chromium, 12.5px, `'DM Sans', sans-serif`.**
+The mockup and the repo measure **identically** on this machine, so any
+divergence in your pass is engine or platform, not integration:
+
+| type | glyph | advance | ink top | in DM Sans? |
+|---|---|---|---|---|
+| advisory | `!` | 3.13 | 0 | **yes** |
+| guide | `◫` | 7.53 | 0 | no |
+| repair | `↺` | 7.53 | 0 | no |
+| crisiscard | `◇` | 7.69 | 0 | no |
+| companion | `⊘` | 9.03 | 0 | no |
+| support | `✦` | 9.91 | 0 | no |
+| disclosure | `⚿` | 10.22 | 0 | no |
+| founder | `▶` | 11.00 | 0 | no |
+| decision | `◉` | 12.50 | **1.5** | no |
+| insights | `◑` | 12.50 | **1.5** | no |
+| refcase | `♡` | 12.50 | **1.5** | no |
+
+If the set proves unstable across engines, the durable fix is to stop relying
+on fallback — either ship the glyphs as inline SVG (as `PT_RES_ICONS` already
+does for the resource library) or subset a webfont that actually contains
+them.
+
 ### SR-043 · The approved mockup carries both defects fixed in SR-036
 **Found:** `feat/resource-reader` · **Affects:** anyone integrating from the mockup again
 
