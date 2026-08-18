@@ -1,6 +1,6 @@
 /* ==========================================================================
    SafeRise — member dashboard
-   Extracted verbatim from the inline <style> block of the v39 mockup.
+   Extracted verbatim from the inline <style> block of the v41 mockup.
    Loads AFTER css/saferise-system.css, which supplies the track accents.
    The final ALIGNMENT block must stay last — several rules above it would
    otherwise win, and it resolves the two-line margin system.
@@ -241,10 +241,6 @@ h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
 .sr-dash-jmeta{margin-top:auto;padding-top:24px;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--text3);line-height:1.9}
 
 /* ============ understanding ============ */
-/* .sr-dash-uart.u1 / .u3 / .u4 removed — the three photographic tiles they
-   positioned went with the "Understanding SafeRise" section several versions
-   ago, and are why the integration handoff listed three images that do not
-   exist in this build. */
 /* NEEDS ART — no framework illustration exists; typographic tile stands in */
 
 /* ============ growth ============ */
@@ -340,20 +336,7 @@ body{padding-left:74px}
 .sr-dash-carnav{display:flex;align-items:center;gap:12px}
 .sr-dash-carcount{font-size:12.5px;color:var(--text3);min-width:52px;text-align:right}
 
-/* ============ frameworks — reconciled to the .sixgrid construction ============ */
-.sr-dash-sixgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 40px}
-.sr-dash-six{display:grid;grid-template-columns:58px 1fr;gap:18px;align-items:start}
-.sr-dash-sixi{width:58px;height:58px;border-radius:50%;border:1px solid var(--sc,rgba(212,168,67,.4));
-  display:grid;place-items:center;overflow:hidden;background:rgba(255,255,255,.015)}
-.sr-dash-sixi svg{width:24px;height:24px;stroke:var(--sc,var(--gold));fill:none;stroke-width:1.2}
-.sr-dash-sixi img{width:100%;height:100%;object-fit:cover}   /* SWAP: portrait or graphic */
-.sr-dash-sixrank{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--sc,var(--gold));margin-bottom:7px}
-.sr-dash-sixname{font-family:'Cinzel',serif;font-size:17px;letter-spacing:.05em;text-transform:uppercase;color:var(--text);margin-bottom:4px;line-height:1.24}
-.sr-dash-sixfrom{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:15px;color:var(--text3);margin-bottom:10px}
-.sr-dash-sixbody{font-size:13px;color:#D8D4CB;line-height:1.72}
-.sr-dash-sixclose{margin:34px 0 0;padding-top:24px;border-top:1px solid var(--hair);
-  font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:clamp(17px,2vw,20px);color:var(--text);line-height:1.5;max-width:760px}
-.sr-dash-sixclose b{font-style:normal;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:500;color:var(--text2);display:block;margin-top:12px;line-height:1.72}
+/* ============ frameworks — reconciled to the .sixgrid construction ============ */   /* SWAP: portrait or graphic */
 
 /* ============ protocol view — the dashboard gives way to the reader ============ */
 .sr-proto{display:none}
@@ -369,11 +352,6 @@ body.reading #srLibrary{margin-top:22px}
 .sr-proto-back{display:inline-flex;align-items:center;gap:9px;font-size:11.5px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--text2);background:transparent;border:0;cursor:pointer;font-family:inherit;padding:10px 0}
 .sr-proto-back:hover{color:var(--gold)}
-
-@media(max-width:1000px){
-  .sr-dash-sixgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:640px){ .sr-dash-sixgrid{grid-template-columns:1fr} }
 
 /* ============ sessions & workshops — offer + dates, one module ============ */
 .sr-dash-book{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:0;align-items:stretch}
@@ -601,7 +579,8 @@ body.reading #srLibrary{margin-top:22px}
 .sr-proto-allres:hover{color:var(--gold)}
 
 /* ── embedded design pane ── */
-.sr-proto-frame{width:100%;border:0;display:block;min-height:900px;background:transparent}
+.sr-proto-frame{width:100%;border:0;display:block;min-height:900px;background:var(--bg);
+  color-scheme:dark}
 .sr-proto-backbar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:20px var(--pad) 16px}
 .sr-theme--bar{margin-left:auto}
 .sr-proto-allres{margin-left:18px}
@@ -679,7 +658,11 @@ body.reading #srLibrary{margin-top:22px}
 body.rd-soft{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card:#54648C;--hair:#8492B4;
   --text:#FFFDF8;--text2:#DDE3F0;--text3:#AEB7CE}
 body.rd-soft .sr-dash-navrail{background:#3C4B78}
-body,.sr-dash-panel,.sr-dash-navrail,.sr-bb,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,.sr-dash-archmain{
+/* every surface eases together, and at the same rate as the embedded pages */
+body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
+.sr-dash-archmain,.sr-begin-row,.sr-begin-card--panel,.sr-dash-idcard,.sr-sum,
+.sr-sum-side,.sr-use-panel,.sr-cadence,.sr-dash-resume,.sr-dash-hero,.sr-modalbox,
+.sr-dash-input,.sr-dash-select,.sr-proto-rail,.sr-proto-frame{
   transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
 
 @media(max-width:900px){
@@ -1013,7 +996,6 @@ body.shifting .sr-dash-top{opacity:0;transition:opacity .42s ease}
 /* panels nested inside a padded panel keep the same text line */
 .sr-dash-foldbtn { padding:22px var(--pad) }
 .sr-dash-foldbody { padding:4px var(--pad) 30px }
-.sr-dash-foldbody .sr-dash-sixgrid, .sr-dash-foldbody .sr-dash-sixclose { padding-left:0;padding-right:0;margin-left:0;margin-right:0 }
 .sr-dash-faq { padding:24px var(--pad) }
 .sr-dash-faq{ margin-top:22px }
 .sr-dash-faqtext { padding:0 }
