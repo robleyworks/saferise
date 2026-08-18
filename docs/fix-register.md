@@ -9,7 +9,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
-- Highest ID currently issued: **SR-049**.
+- Highest ID currently issued: **SR-055**.
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
 has since shipped. Numbering continues from SR-044 so no ID is ever reused.*
@@ -112,9 +112,96 @@ edited, so `index.html` is unaffected.
 
 *Status:* complete · *Raised:* 17 Aug 2026 · *Merged:* 17 Aug 2026
 
+### SR-050 · Iframe painted white before the embedded document resolved
+An iframe paints white until its own document's background resolves, so opening a
+protocol flashed white across the full frame width before the dark ground arrived.
+
+**Resolution.** `protocol.html` and `resource.html` carry
+`<meta name="color-scheme" content="dark">` and `<style>html,body{background:#08080C}</style>`
+as the first two entries in `<head>`, before the stylesheet; `.sr-proto-frame` carries
+`background:var(--bg)` and `color-scheme:dark`. Verified at 1440, 1100 and 390: the
+frame's own background computes to `rgb(8,8,12)` before load and the embedded document's
+`html` and `body` both resolve to the same value on arrival, so there is no frame at
+which either surface is unpainted.
+
+*Status:* complete · *Raised:* 18 Aug 2026
+
+### SR-051 · Theme change eased in the reader but snapped in shell and protocol page
+Only the reader carried a transition, so Midnight/Sunrise moved the three tiers at
+different rates and read as a glitch rather than a change of light.
+
+**Resolution.** All three tiers share
+`transition: background-color 1.4s ease, border-color 1.4s ease, color 1.4s ease`.
+Verified with a protocol open: the shell hero, the Begin row and `.sr-proto-frame` all
+compute that transition, and the embedded body eases on the same 1.4s. Both toggles stay
+in sync. Note when measuring this: sampling sooner than ~1.4s after the click catches the
+ease in flight and reads the outgoing palette, which looks like a failure and is not.
+
+*Status:* complete · *Raised:* 18 Aug 2026
+
+### SR-052 · Embedded pages constrained to 1020px inside a 1292px frame
+The protocol page's `.inner` and the reader's `.shell` kept their standalone max-width in
+embed mode, so the embedded text sat well inside the dashboard's text line and the
+two-line alignment system broke at the iframe boundary.
+
+**Resolution.** Embed-mode CSS widens both to the frame with a 30px gutter. Measured at
+1440: frame at x111 by 1292 wide, `.inner` 1232 wide at x30, embedded content landing on
+x141 — the dashboard's text line exactly. At 1100: frame x98, content x128, dashboard
+x128. Incomplete below 640px; see [[SR-054]].
+
+*Status:* complete · *Raised:* 18 Aug 2026
+
+### SR-054 · Embed gutter did not follow --pad below 640px
+The embed-mode gutter added by [[SR-052]] is a fixed 30px, but the shell's `--pad` drops
+to 20px at 640px and the embedded pages define no `--pad` of their own. At 390px the
+embedded text sat at x46 against the dashboard's x36 — a 10px break in the same alignment
+system SR-052 exists to hold, visible only at mobile widths.
+
+**Resolution.** A `@media(max-width:640px)` rule in the embed CSS of both pages takes the
+gutter to 20px. Embed mode only; standalone rendering is untouched. Measured at 390:
+embedded content x36, dashboard x36. 1440 and 1100 unchanged at 30px.
+
+*Status:* complete · *Raised:* 18 Aug 2026
+
+### SR-055 · Preview server cannot read the repo under macOS file protection
+`.claude/launch.json` ran `python3 -m http.server`, which dies before parsing arguments:
+that module evaluates `os.getcwd()` as an argparse default at import, and the preview
+runner's process is denied it. Replacing the module with `tools/serve.py`, which derives
+its root from `__file__`, clears that — but the process then cannot open any file under
+the repo either.
+
+Probed directly from the preview process: `~/Documents` and `~/Desktop` both return
+`Operation not permitted`, while `~/.claude`, `/etc` and `/private/tmp` all read
+normally. That is macOS TCC file protection, not a repo or config fault — the Bash tool
+has been granted Documents access and reads the repo fine; the preview runner has not.
+
+**Resolution.** `tools/serve.py` added and `launch.json` repointed at it, which is the
+correct configuration and fixes the half that is fixable. The remaining half needs a
+grant that only Andre can give: System Settings → Privacy & Security → Files and Folders
+(or Full Disk Access) for the app running Claude Code. Until then, local preview runs
+against a sha256-verified mirror under the session scratchpad, which is what this
+session's measurements were taken from.
+
+*Status:* partial — repo-side fixed, needs a macOS permission grant · *Raised:* 18 Aug 2026
+
 ---
 
 ## BACKLOG
+
+### SR-053 · Frameworks fold promoted to a /method rail destination
+"Where the method comes from" is removed from the dashboard and becomes a rail
+destination at `/method`, with the six frameworks to follow as their own pages. The fold
+markup, its initialiser entry and the section are gone; a rail button sits between The
+Life Laboratory and Sessions & workshops; `ROUTES` carries the entry; and each resource's
+`Rests on:` line in the twelve-resource reader now ends with a `Read the framework →`
+link, handled by a `[data-route-link]` branch in the click handler. Until `/method`
+exists both open the route layer, as every unbuilt destination does.
+
+Verified: 9 rail buttons with `method` sixth, between `laboratory` and `coaching`; no
+`#srFoldMethod` or `.sr-dash-sixgrid` anywhere in the page; the rail button and the
+in-reader link both open `mRoute` without navigating away.
+
+*Status:* complete · *Raised:* 18 Aug 2026
 
 ### SR-044 · Member dashboard integrated into the repo
 Adds `dashboard.html`, `protocol.html` and `resource.html`. Styles extracted to
@@ -126,6 +213,13 @@ Two defects found and fixed during integration:
 - Selecting Elevation Series retained the previous track's paywall CTA
   ("Professional Performance is not on your plan yet… ADD FOR €49 / MONTH"), because
   the empty-track branch returned before the CTA-clearing block.
+
+**Both recurred in v41 and were re-applied.** The design source is regenerated from a
+base that predates this register, so neither fix survives a new drop. The surplus
+`</div>` and the Elevation Series paywall both came back and were fixed again during
+the v40/v41 integration. Any future dashboard drop should be checked for both before
+anything else — the div balance check catches the first, and cycling all four track
+tabs catches the second.
 
 **Correction to the integration handoff.** The handoff states that
 `scroll-behavior:auto` is "pinned on the viewport because the page sets

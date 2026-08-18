@@ -50,6 +50,7 @@
   <button class="sr-dash-navrailbtn" data-route="journal"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/></svg><span>Journal</span></button>
   <button class="sr-dash-navrailbtn" data-route="record"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-8M22 20H2"/></svg><span>Your record</span></button>
   <button class="sr-dash-navrailbtn" data-route="laboratory"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.4L5.6 17A2 2 0 0 0 7.4 20h9.2a2 2 0 0 0 1.8-3L14 8.4V3"/><path d="M7.6 14h8.8"/></svg><span>The Life Laboratory</span></button>
+  <button class="sr-dash-navrailbtn" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
   <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
   <button class="sr-dash-navrailbtn sr-dash-navrailbtn--crisis" data-modal="crisis" aria-label="Cue Card">
     <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 11h6M6.5 14h4"/></svg>
@@ -429,95 +430,6 @@
 
   <!-- Understanding SafeRise dissolved: the four portals now sit as one line above
        the FAQ, and The Chosen Self / Your Decisions moved into Your record. -->
-
-  <!-- ═══ WHERE THE METHOD COMES FROM — closed by default. Reference material,
-       not something a member needs in view on every visit. ═══ -->
-  <section class="sr-dash-sec">
-    <div class="sr-dash-fold" id="srFoldMethod">
-      <button class="sr-dash-foldbtn" id="srFoldBtn" aria-expanded="false" aria-controls="srFoldBody">
-        <span class="sr-dash-foldsign"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
-        <span>
-          <span class="eyebrow" style="display:block;margin-bottom:6px">Where the method comes from</span>
-          <span class="sr-dash-foldtitle">Six frameworks, three registers.</span>
-        </span>
-        <span class="sr-dash-foldnote">Porges · HeartMath · Maté<br>Jung · Dispenza · Watts</span>
-      </button>
-      <div class="sr-dash-foldbody" id="srFoldBody" hidden>
-<div class="sr-dash-sixgrid">
-
-        <div class="sr-dash-six" style="--sc:var(--gold)">
-          <span class="sr-dash-sixi"><!-- SWAP: <img src="assets/frameworks/porges.jpg"> -->
-            <svg viewBox="0 0 24 24"><path d="M12 3v9M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg></span>
-          <div>
-            <p class="sr-dash-sixrank">Peer-reviewed · load-bearing</p>
-            <p class="sr-dash-sixname">Polyvagal Theory</p>
-            <p class="sr-dash-sixfrom">from Dr Stephen Porges</p>
-            <p class="sr-dash-sixbody">Threat and safety are detected below conscious thought. Explains why insight alone does not settle a state, and why Step 01 names what is present rather than arguing with it.</p>
-          </div>
-        </div>
-
-        <div class="sr-dash-six" style="--sc:var(--gold)">
-          <span class="sr-dash-sixi"><!-- SWAP: coherence waveform graphic -->
-            <svg viewBox="0 0 24 24"><path d="M2 14c2.5 0 2.5-6 5-6s2.5 12 5 12 2.5-12 5-12 2.5 6 5 6"/></svg></span>
-          <div>
-            <p class="sr-dash-sixrank">Peer-reviewed · load-bearing</p>
-            <p class="sr-dash-sixname">Cardiac coherence</p>
-            <p class="sr-dash-sixfrom">from the HeartMath Institute</p>
-            <p class="sr-dash-sixbody">Around six breaths a minute — 0.1 Hz — is where heart-rate variability peaks for most people. The measurable basis for Step 02, and the most specific claim SafeRise makes.</p>
-          </div>
-        </div>
-
-        <div class="sr-dash-six" style="--sc:var(--gold)">
-          <span class="sr-dash-sixi"><!-- SWAP: <img src="assets/frameworks/mate.jpg"> -->
-            <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9z"/><path d="M9.5 11.5h5"/></svg></span>
-          <div>
-            <p class="sr-dash-sixrank">Clinical practice · supporting</p>
-            <p class="sr-dash-sixname">Compassionate Inquiry</p>
-            <p class="sr-dash-sixfrom">from Dr Gabor Maté</p>
-            <p class="sr-dash-sixbody">Meeting what is present without fighting it, including your own part in it. The basis for Step 03, where acceptance is treated as a decision rather than a feeling.</p>
-          </div>
-        </div>
-
-        <div class="sr-dash-six" style="--sc:var(--teal)">
-          <span class="sr-dash-sixi">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 3.6a8.4 8.4 0 0 0 0 16.8"/><circle cx="12" cy="12" r="2.4"/></svg></span>
-          <div>
-            <p class="sr-dash-sixrank">Interpretive layer</p>
-            <p class="sr-dash-sixname">Shadow &amp; individuation</p>
-            <p class="sr-dash-sixfrom">from Carl Jung</p>
-            <p class="sr-dash-sixbody">The frame for what Go Deeper does with a pattern once it is regulated — and for The Decision, where insight becomes an identity you choose.</p>
-          </div>
-        </div>
-
-        <div class="sr-dash-six" style="--sc:var(--teal)">
-          <span class="sr-dash-sixi">
-            <svg viewBox="0 0 24 24"><path d="M9 20v-2a5 5 0 0 1-2-4V9a5 5 0 0 1 10 0v5a5 5 0 0 1-2 4v2z"/><path d="M12 4.4v9.6"/></svg></span>
-          <div>
-            <p class="sr-dash-sixrank">Interpretive layer</p>
-            <p class="sr-dash-sixname">Observer stance</p>
-            <p class="sr-dash-sixfrom">from Dr Joe Dispenza</p>
-            <p class="sr-dash-sixbody">Mental rehearsal in Step 04 — practising the version of yourself on the other side. Included as an integrative extension, not as clinical evidence.</p>
-          </div>
-        </div>
-
-        <div class="sr-dash-six" style="--sc:var(--teal)">
-          <span class="sr-dash-sixi">
-            <svg viewBox="0 0 24 24"><path d="M3 15c3.5 0 3.5-3 7-3s3.5 3 7 3 4-1.6 4-1.6"/><path d="M3 10c3.5 0 3.5-3 7-3s3.5 3 7 3 4-1.6 4-1.6"/></svg></span>
-          <div>
-            <p class="sr-dash-sixrank">Interpretive layer</p>
-            <p class="sr-dash-sixname">Non-resistance</p>
-            <p class="sr-dash-sixfrom">from Alan Watts</p>
-            <p class="sr-dash-sixbody">The disposition the whole method runs on: that resisting a state sustains it, and that release follows acceptance rather than effort.</p>
-          </div>
-        </div>
-
-      </div>
-
-      <p class="sr-dash-sixclose">The frameworks carry peer-reviewed research. The specific combination here does not.
-        <b>SafeRise has not been through a clinical trial. It is a structured practice built on established frameworks, not a treatment with proven outcomes of its own. Dr Keny F. Bastien MD is engaged as clinical collaborator on scope and safety.</b></p>
-      </div>
-    </div>
-  </section>
 
   <!-- ═══ YOUR RECORD ═══
        Four things a member cannot get anywhere else: what their state has done,
@@ -1027,7 +939,7 @@
         '<a class="sr-dash-go" href="#">Tell me when it opens '+ARROW+'</a></div>';
       // A track with nothing in it has nothing to sell. This returns before the
       // lock block below, so the previous track's CTA has to be cleared here or
-      // it stays on screen offering the wrong track at the wrong price.
+      // it stays on screen offering the wrong track at the wrong price (SR-044).
       var emptyLock = document.getElementById('srLockCta');
       if(emptyLock) emptyLock.classList.remove('show');
       offset = 0; apply(); sync(); return;
@@ -1263,6 +1175,7 @@
     journal:    ['Journal', 'Every entry you have written, searchable and filterable by protocol, date or theme.', '/journal'],
     record:     ['Your record', 'The full archive: state history, per-protocol history, resource history, and the report builder.', '/record'],
     laboratory: ['The Life Laboratory', 'Your observations, the seven stages from Live to Serve, and the workspace for examining and documenting what your experience has taught you.', '/laboratory'],
+    method:     ['Where the method comes from', 'The six frameworks in full — what each one says, what SafeRise takes from it, which protocols rest on it, and where the evidence stops.', '/method'],
     coaching:   ['Sessions & workshops', 'The full calendar, booking, and everything you have attended.', '/sessions'],
     account:    ['Account & plan', 'Your plan and billing, preferences, privacy and data export, and closing your account.', '/account'],
     clearing:   ['The Clearing', 'Ten guided minutes, with the player and the log that records it.', '/clearing'],
@@ -1342,6 +1255,8 @@
     document.body.style.overflow = '';
   }
   document.addEventListener('click', function(e){
+    var rl = e.target.closest('[data-route-link]');
+    if(rl){ e.preventDefault(); openRoute(rl.getAttribute('data-route-link')); return; }
     var open = e.target.closest('[data-modal]');
     if(open){ e.preventDefault(); openModal(open.getAttribute('data-modal')); return; }
     if(e.target.closest('[data-close]')){ closeModals(); return; }
@@ -1385,7 +1300,7 @@
   }
 
   // ── folds: resources and frameworks ──
-  [['srResBtn','srResBody','srFoldRes'], ['srFoldBtn','srFoldBody','srFoldMethod']].forEach(function(t){
+  [['srResBtn','srResBody','srFoldRes']].forEach(function(t){
     var btn = document.getElementById(t[0]), box = document.getElementById(t[1]), fold = document.getElementById(t[2]);
     if(!btn || !box || !fold) return;
     btn.addEventListener('click', function(){
@@ -1558,7 +1473,10 @@
       document.getElementById('srReadWhyKick').textContent = r[5];
       document.getElementById('srReadWhy').textContent = r[6];
       var srcEl = document.getElementById('srReadSrc');
-      if(srcEl) srcEl.textContent = 'Rests on: ' + (SOURCES[r[2]] || 'SafeRise practice material');
+      if(srcEl){
+        srcEl.innerHTML = 'Rests on: ' + (SOURCES[r[2]] || 'SafeRise practice material') +
+          ' &nbsp;<a href="#" data-route-link="method" style="color:var(--gold)">Read the framework &rarr;</a>';
+      }
       strip.querySelectorAll('.sr-dash-chipres').forEach(function(b){
         b.classList.toggle('on', b.getAttribute('data-i') === String(i));
       });

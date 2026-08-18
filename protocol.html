@@ -18,6 +18,8 @@
 -->
 <html lang="en">
 <head>
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SafeRise — Anxiety Reset Protocol</title>
@@ -1133,7 +1135,21 @@ setState('new');calcDelta();
     '.sr-embedded .backlink,' +
     '.sr-embedded .resource-back,' +
     '.sr-embedded footer,' +
-    '.sr-embedded .footer-shell{display:none!important}';
+    '.sr-embedded .footer-shell{display:none!important}' +
+    /* Container: the real constraint is .inner (protocol) / .shell (reader), not
+       .sec. Widening them to the frame with a 30px gutter puts this page's text
+       on the same line as the dashboard's, so the carousel above and the page
+       below share one measure. */
+    '.sr-embedded .shell{max-width:none;padding-left:30px;padding-right:30px}' +
+    '.sr-embedded .inner{max-width:none;width:100%}' +
+    /* The shell's --pad drops to 20px at 640px. The gutter has to follow it or
+       the embedded text sits 10px inside the dashboard's line on mobile, which
+       is the same misalignment this block exists to remove (SR-054). */
+    '@media(max-width:640px){.sr-embedded .shell{padding-left:20px;padding-right:20px}}' +
+    /* theme changes ease at the same rate as the shell */
+    '.sr-embedded body,.sr-embedded .sec,.sr-embedded .sr-reader,' +
+    '.sr-embedded .sr-book,.sr-embedded .sr-book-offer,.sr-embedded .sr-book-dates{' +
+    'transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}';
   document.head.appendChild(css);
 
   function post(type, data){
