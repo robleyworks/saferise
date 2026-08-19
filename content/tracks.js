@@ -497,9 +497,9 @@ TRACKS[3] = T3;
 var FRAMEWORKS = {
   porges:    { name: 'Polyvagal Theory',      person: 'Stephen Porges', short: 'Porges',  register: 'peer-reviewed',    step: 1, colour: 'var(--gold)' },
   heartmath: { name: 'Cardiac coherence',     person: 'HeartMath', short: 'HeartMath',       register: 'peer-reviewed',    step: 2, colour: 'var(--gold)' },
+  distance:  { name: 'Distance & rehearsal',  person: 'Kross & Ayduk \u00B7 Best Possible Self literature', short: 'Kross & Ayduk', register: 'peer-reviewed', step: 4, colour: 'var(--gold)' },
   mate:      { name: 'Compassionate Inquiry', person: 'Gabor Mat\u00E9', short: 'Mat\u00E9', register: 'clinical practice',step: 3, colour: 'var(--gold)' },
   jung:      { name: 'Shadow & individuation', person: 'Carl Jung', short: 'Jung',  register: 'interpretive',     step: 0, colour: 'var(--teal)' },
-  dispenza:  { name: 'Observer stance',       person: 'mechanism only', short: 'Dispenza',  register: 'interpretive',     step: 4, colour: 'var(--teal)' },
   watts:     { name: 'Non-resistance',        person: 'Alan Watts', short: 'Watts',      register: 'interpretive',     step: 0, colour: 'var(--teal)' }
 };
 
@@ -549,8 +549,8 @@ var META = {
   't1-06': { extras: [], state: 'unsteady',    frameworks: ['mate','watts'] },
   't1-07': { extras: [], state: 'numb', frameworks: ['porges','heartmath'] },
   't1-08': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['jung','mate'] },
-  't1-09': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['jung','dispenza'] },
-  't1-10': { extras: ['advisory'], state: 'numb', frameworks: ['porges','watts','dispenza'] },
+  't1-09': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['jung','distance'] },
+  't1-10': { extras: ['advisory'], state: 'numb', frameworks: ['porges','watts','distance'] },
 
   /* Track 02 · Relationship Healing */
   't2-01': { extras: null, state: 'agitated',    frameworks: ['porges','heartmath'] },
@@ -560,21 +560,21 @@ var META = {
   't2-05': { extras: null, state: 'unsteady',    frameworks: ['porges','jung'] },
   't2-06': { extras: null, state: 'unsteady',    frameworks: ['jung','mate'] },
   't2-07': { extras: null, state: 'agitated',    frameworks: ['jung','mate'] },
-  't2-08': { extras: null, state: 'numb', frameworks: ['heartmath','dispenza'] },
+  't2-08': { extras: null, state: 'numb', frameworks: ['heartmath','distance'] },
   't2-09': { extras: null, state: 'unsteady',    frameworks: ['porges','mate'] },
   't2-10': { extras: null, state: 'numb', frameworks: ['mate','watts'] },
 
   /* Track 03 · Professional Performance */
   't3-01': { extras: null, state: 'agitated',    frameworks: ['porges','heartmath'] },
   't3-02': { extras: null, state: 'agitated',    frameworks: ['porges','mate'] },
-  't3-03': { extras: null, state: 'unsteady',    frameworks: ['jung','dispenza'] },
+  't3-03': { extras: null, state: 'unsteady',    frameworks: ['jung','distance'] },
   't3-04': { extras: null, state: 'agitated',    frameworks: ['jung','mate'] },
   't3-05': { extras: null, state: 'agitated',    frameworks: ['heartmath','porges'] },
   't3-06': { extras: null, state: 'numb', frameworks: ['jung','watts'] },
   't3-07': { extras: null, state: 'unsteady',    frameworks: ['jung','watts'] },
-  't3-08': { extras: null, state: 'numb', frameworks: ['porges','dispenza'] },
+  't3-08': { extras: null, state: 'numb', frameworks: ['porges','distance'] },
   't3-09': { extras: null, state: 'numb', frameworks: ['porges','watts'] },
-  't3-10': { extras: null, state: 'unsteady',    frameworks: ['dispenza','watts'] }
+  't3-10': { extras: null, state: 'unsteady',    frameworks: ['distance','watts'] }
 };
 
 /* Derived — never hand-counted. Used by the About page and the framework pages. */
