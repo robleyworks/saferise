@@ -29,14 +29,12 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<!-- ═══ ICON RAIL — verbatim from the dashboard. /method is the active route. ═══ -->
+<!-- ═══ ICON RAIL — verbatim from the dashboard. /method is the active route.
+     SR-075 · library, journal, record and laboratory were removed from the
+     dashboard by SR-068 and SR-069; this copy kept linking to all four. ═══ -->
 <nav class="sr-dash-navrail" aria-label="Sections">
   <span class="sr-dash-navrailmark">◈</span>
   <button class="sr-dash-navrailbtn" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
-  <button class="sr-dash-navrailbtn" data-route="library"><svg viewBox="0 0 24 24"><path d="M5 4h6v16H5zM13 4h6v16h-6z"/></svg><span>Protocol library</span></button>
-  <button class="sr-dash-navrailbtn" data-route="journal"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/></svg><span>Journal</span></button>
-  <button class="sr-dash-navrailbtn" data-route="record"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-8M22 20H2"/></svg><span>Your record</span></button>
-  <button class="sr-dash-navrailbtn" data-route="laboratory"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.4L5.6 17A2 2 0 0 0 7.4 20h9.2a2 2 0 0 0 1.8-3L14 8.4V3"/><path d="M7.6 14h8.8"/></svg><span>The Life Laboratory</span></button>
   <button class="sr-dash-navrailbtn on" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
   <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
   <button class="sr-dash-navrailbtn sr-dash-navrailbtn--crisis" data-modal="crisis" aria-label="Cue Card">
@@ -586,6 +584,9 @@
     b.addEventListener('click', function(){
       var key = b.getAttribute('data-route');
       if(key === 'method') return;                 // already here
+      // The Cue Card button carries data-modal, not data-route, and the modal
+      // itself lives only in dashboard.html — so it goes there deliberately
+      // rather than by falling through the default below.
       window.location.href = PAGES[key] || 'dashboard.html';
     });
   });
