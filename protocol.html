@@ -641,9 +641,11 @@ body,.sr-book,.sr-book-offer,.sr-book-dates{transition:background-color 1.4s eas
       <div id="pane-watch">
         <div class="stage"><div>
           <button type="button" class="play" onclick="startPractice(this)" aria-label="Begin guided video"><svg width="15" height="17" viewBox="0 0 16 18"><path d="M2 1l13 8-13 8V1z"/></svg></button>
-          <p>Breathwork &amp; Grounding — 8 min</p>
+          <p>Breathwork &amp; Grounding</p>
         </div></div>
-        <div class="scrub"><span>0:00</span><div class="scrubline"></div><span>8:00</span></div>
+        <!-- SR-080 · both readouts fill from the media once the real files
+             exist. The elements stay; no placeholder number goes in them. -->
+        <div class="scrub"><span class="scrub-now"></span><div class="scrubline"></div><span class="scrub-total"></span></div>
       </div>
 
       <div id="pane-listen" class="hidden">
@@ -652,7 +654,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates{transition:background-color 1.4s eas
           <div class="wave" id="wave"></div>
           <p>Breathwork &amp; Grounding — Audio Only</p>
         </div></div>
-        <div class="scrub"><span>0:00</span><div class="scrubline"></div><span>8:00</span></div>
+        <div class="scrub"><span class="scrub-now"></span><div class="scrubline"></div><span class="scrub-total"></span></div>
       </div>
 
       <!-- QUIET SHORT ALTERNATIVE -->
@@ -671,7 +673,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates{transition:background-color 1.4s eas
       <details class="journey-details" open>
       <summary class="trihead">
         <span class="l">The journey begins</span>
-        <span class="r">One continuous experience · 8 minutes <span class="journey-toggle"></span></span>
+        <span class="r">One continuous experience <span class="journey-toggle"></span></span>
       </summary>
 
       <figure class="journey">
@@ -742,7 +744,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates{transition:background-color 1.4s eas
       </div>
     </div>
 
-    <div class="delta"><span class="dv" id="deltaval">−4</span><span class="dl" id="deltatext">Your nervous system moved four points in eight minutes.</span></div>
+    <div class="delta"><span class="dv" id="deltaval">−4</span><span class="dl" id="deltatext">Your nervous system moved four points across the session.</span></div>
 
     <div style="margin-top:24px">
       <span class="flabel">Which step did you reach or focus on?</span>
@@ -1012,7 +1014,7 @@ function calcDelta(){
   document.getElementById('postval').textContent=b;
   var d=b-a,el=document.getElementById('deltaval'),tx=document.getElementById('deltatext');
   el.textContent=(d>0?'+':'')+d;
-  if(d<0){el.style.color='var(--safe)';tx.textContent='Your nervous system moved '+Math.abs(d)+' point'+(Math.abs(d)===1?'':'s')+' in eight minutes.';}
+  if(d<0){el.style.color='var(--safe)';tx.textContent='Your nervous system moved '+Math.abs(d)+' point'+(Math.abs(d)===1?'':'s')+' across the session.';}
   else if(d===0){el.style.color='var(--text3)';tx.textContent='No movement this time. That is still data — log it.';}
   else{el.style.color='var(--mob)';tx.textContent='It went up. Worth noting what was underneath it.';}
 }

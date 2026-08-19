@@ -30,7 +30,7 @@ var SHARED = {
     { name: 'Rise',        body: 'You finish as the person on the other side of it, and leave carrying the state rather than the memory of it.', cite: 'Mental rehearsal \u00B7 Observer stance' }
   ],
   resources: [
-    ['play',  'Guided Meditation',    'Do it with me.',              'The full session, voiced and paced \u2014 audio, or follow-along video. Ten minutes, headphones, nothing to read.'],
+    ['play',  'Guided Meditation',    'Do it with me.',              'The full session, voiced and paced \u2014 audio, or follow-along video. Headphones, nothing to read.'],
     ['warn',  'Cue Card',             'Do it yourself.',             'Printable, two sides: the four-line version for when it is happening, and the full step sequence for when you have longer.'],
     /* SR-077 · Source Insights merged in here. Its subtitle stays 'Why it works.';
        the framework attribution it carried now sits in this description. */
@@ -376,7 +376,7 @@ var T3 = {
   price: PRICING.t3,
 
     art: {
-      band:   'corridor four minutes before the room, desk log, reading at day\u2019s end',
+      band:   'corridor moments before the room, desk log, reading at day\u2019s end',
       cost:   'one person at work \u2014 early, midday, still there late',
       range:  'the same professional before a meeting \u2014 braced, settled, absent',
       change: 'someone leaving work at a reasonable hour, unhurried'
@@ -455,7 +455,7 @@ var T3 = {
   },
 
   journey: {
-    title: 'Ten minutes before the room.<br>Not a debrief afterwards.',
+    title: 'Before the room.<br>Not a debrief afterwards.',
     sub: 'Three parts, built for a working day rather than a retreat.',
     experience: 'The guided meditation for the protocol you are running, plus a short version for the gap between meetings and a Cue Card sized for the walk down the corridor. Nothing here requires a quiet house.',
     log: 'Log the session against the situation \u2014 the pitch, the review, the conversation you were dreading. The pattern in your own working week becomes readable within a month.',
@@ -471,13 +471,13 @@ var T3 = {
 
   priceList: [
     'All thirty protocols \u2014 Professional, Relationship Healing and Personal Transformation',
-    'Full sessions plus four-minute versions built for a working day',
+    'Full sessions plus short versions built for a working day',
     'Attention Advisory and conflict scripts throughout',
     'Journal and progress tracking, private to you \u2014 never visible to an employer',
     'New protocols and resources, included as the tracks grow'
   ],
   priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Access is cumulative \u2014 Professional includes Relationship Healing and Personal Transformation in full.',
-  stickyLine: 'Ten minutes before the room, not a debrief after it.'
+  stickyLine: 'Before the room, not a debrief after it.'
 };
 
 TRACKS[2] = T2;
@@ -605,9 +605,12 @@ SHARED.faq = [
   ['Do I need any experience with meditation?',
    ['None. Every protocol is guided from start to finish \u2014 you are told what to do, when, and for how long. If you have tried meditation before and found that being left alone with your thoughts made things worse, this is deliberately not that.']],
 
-  ['How long does a session take, and what do I need?',
-   ['Around ten minutes. Headphones if you have them, somewhere you will not be interrupted, and the ability to sit or lie down. Nothing else \u2014 no journal to prepare, no reading first.',
-    'There is also a Cue Card in every protocol: a four-line version for moments when ten minutes is not realistic.']],
+  /* SR-080 · the question no longer asks how long. Session lengths vary by
+     protocol and track and the real figures are not known until the recording
+     sprint is finished; nothing states or implies one until then. */
+  ['What do I need for a session?',
+   ['Headphones if you have them, somewhere you will not be interrupted, and the ability to sit or lie down. Nothing else \u2014 no journal to prepare, no reading first.',
+    'There is also a Cue Card in every protocol: a four-line version for moments when a full session is not realistic.']],
 
   ['Is any of this based on real science?',
    ['The core of it rests on peer-reviewed work: Stephen Porges on the nervous system, the HeartMath Institute on heart-rhythm coherence, and Gabor Mat\u00E9\u2019s clinical practice. Carl Jung\u2019s frameworks and the observer stance are included as interpretive layers rather than clinical evidence, and we try to be clear about which is which.',
@@ -689,14 +692,14 @@ TRACKS[3].faq = [
    ['No. This is a personal account. Nothing is reported to an employer, and there is no manager view.',
     'If your company buys access for a team, that stays true \u2014 they get licences, not your data.']],
   ['When am I supposed to do this during a workday?',
-   ['Before the thing, not after it. Every protocol in this track has a four-minute version for the gap between meetings, and a Cue Card sized for the walk down the corridor.',
-    'The full ten-minute session is for the start or the end of the day, if you want it.']],
+   ['Before the thing, not after it. Every protocol in this track has a short version for the gap between meetings, and a Cue Card sized for the walk down the corridor.',
+    'The full session is for the start or the end of the day, if you want it.']],
   ['Is this the same as executive coaching?',
    ['No. A coach works on your decisions, your strategy and your career. This works on the state you are making those decisions from.',
     'They combine well. Plenty of people bring what surfaces here into a coaching session.']],
-  ['I do not have ten minutes.',
-   ['Then use the four-minute version, or the Cue Card. The method is designed to compress rather than to be skipped.',
-    'If you genuinely cannot find four minutes in a day, that is worth noticing. The Burnout &amp; Overload Protocol starts there.']],
+  ['I do not have time for a full session.',
+   ['Then use the short version, or the Cue Card. The method is designed to compress rather than to be skipped.',
+    'If you genuinely cannot find a gap anywhere in a day, that is worth noticing. The Burnout &amp; Overload Protocol starts there.']],
   ['What if the problem is the job, not me?',
    ['Then regulating will not fix it, and this track does not claim it will. What it does is give you access to your own judgement, which is what you need in order to see the situation clearly and decide what to do about it.',
     'The Career Transition and Ambition Recovery protocols exist because sometimes the answer is to leave.']],

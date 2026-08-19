@@ -132,7 +132,7 @@
         '<div class="sr-tp-jcol"><p class="sr-tp-jtag" style="color:var(--gold)">01 · Start here</p>' +
           '<p class="sr-tp-jname">Experience</p><p class="sr-tp-jvalue" style="color:var(--gold-lt)">Change your state, now.</p>' +
           '<p class="sr-tp-jbody">' + val(j.experience, 'journey.experience') + '</p>' +
-          '<p class="sr-tp-jbody">Use the Cue Card when ten minutes isn’t realistic.</p></div>' +
+          '<p class="sr-tp-jbody">Use the Cue Card when a full session isn’t realistic.</p></div>' +
         '<div class="sr-tp-jcol"><p class="sr-tp-jtag" style="color:var(--text2)">02 · Every time</p>' +
           '<p class="sr-tp-jname">Log &amp; Journal</p><p class="sr-tp-jvalue">Turn change into a record.</p>' +
           '<p class="sr-tp-jbody">' + val(j.log, 'journey.log') + '</p>' +

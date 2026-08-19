@@ -504,7 +504,7 @@
           </div>
           <div class="sr-dash-entry" style="margin-top:16px">
             <p class="sr-dash-entrydate">08 Aug · Shutdown Recovery</p>
-            <p class="sr-dash-entrytext">Flat all day. Sat for four minutes instead of ten. Still counted.</p>
+            <p class="sr-dash-entrytext">Flat all day. Sat for the short version instead of the full one. Still counted.</p>
           </div>
           <div class="sr-dash-entrythemes">
             <p class="sr-dash-usekick">Recurring in your entries</p>
@@ -726,15 +726,17 @@
         <button class="sr-dash-player-play" id="srPlayerPlay" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></button>
       </div>
       <div class="sr-dash-player-bar">
-        <span class="sr-dash-player-time" id="srPlayerNow">3:24</span>
-        <span class="sr-dash-player-rail"><i id="srPlayerFill" style="width:34%"></i></span>
-        <span class="sr-dash-player-time">10:00</span>
+        <!-- SR-080 · both readouts fill from the media once the real files
+             exist. The elements stay; no placeholder number goes in them. -->
+        <span class="sr-dash-player-time" id="srPlayerNow"></span>
+        <span class="sr-dash-player-rail"><i id="srPlayerFill" style="width:0"></i></span>
+        <span class="sr-dash-player-time" id="srPlayerTotal"></span>
       </div>
     </div>
     <div class="sr-modalin">
       <p class="sr-modalkick">Settle in</p>
       <h3>The Clearing</h3>
-      <p>Ten guided minutes to quiet the noise and bring you into a state where the work can land. Nothing is required of you but to listen.</p>
+      <p>A guided session to quiet the noise and bring you into a state where the work can land. Nothing is required of you but to listen.</p>
       <div class="sr-modalfoot">
         <p>Logged to your record when it finishes. You can stop at any point and it still counts.</p>
         <button class="sr-dash-addbtn" data-close>Close</button>
@@ -864,45 +866,36 @@
        band:'p1',
        cols:[
         {tag:'01 · Start here', tagcol:'var(--gold)', name:'Experience', value:'Change your state, now.', valcol:'var(--gold-lt)',
-         body:['The guided meditation for the protocol you are running, voiced start to finish. Breathwork and Somatic Release sit alongside it for the days you will not sit down, and the Cue Card carries the four-line version for when it is actually happening.'],
-         meta:'Guided · ~10 min · Immediate'},
+         body:['The guided meditation for the protocol you are running, voiced start to finish. Breathwork and Somatic Release sit alongside it for the days you will not sit down, and the Cue Card carries the four-line version for when it is actually happening.']},
         {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn change into a record.',
-         body:['Rate your state before and after, note the practice you used, and write what surfaced. Progress Tracking holds the numbers, the Progress Journal holds your words, and together they build the record that shows the route back getting shorter.'],
-         meta:'Private to you · After every session'},
+         body:['Rate your state before and after, note the practice you used, and write what surfaced. Progress Tracking holds the numbers, the Progress Journal holds your words, and together they build the record that shows the route back getting shorter.']},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Integrate. Choose.', valcol:'var(--teal)',
          body:['How This Works explains the mechanism and names the frameworks each step rests on, and the Attention Advisory says plainly where self-guided practice stops.'],
-         note:'Individuation sits here: insight and shadow integration move into The Decision.',
-         meta:'Read anytime · No fixed order'}],},
+         note:'Individuation sits here: insight and shadow integration move into The Decision.'}],},
 
     2:{note:'Relationship Healing · run facing each other', title:'Practise it together. Record it separately.<br>Go deeper when you\u2019re both ready.',
        sub:'Three parts, held inside one practice run facing each other.',
        band:'p2',
        cols:[
         {tag:'01 · Start here', tagcol:'var(--sr-track02)', name:'Experience', value:'Change the state in the room.', valcol:'var(--sr-track02)',
-         body:['The Session Guide runs the four steps with both of you present, one reading aloud. Run the Safety Score first — on yourself and on them — and use the Invitation to Repair as the script for opening it when they are not in the room yet.'],
-         meta:'Together · ~10 min · Same room'},
+         body:['The Session Guide runs the four steps with both of you present, one reading aloud. Run the Safety Score first — on yourself and on them — and use the Invitation to Repair as the script for opening it when they are not in the room yet.']},
         {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn repair into a record.',
-         body:['Each of you logs separately and neither reads the other. Note what ruptured, what got said, and how long contact took to return — repair arriving faster is the measure, not whether rupture happened at all.'],
-         meta:'Private to each of you · After every session'},
+         body:['Each of you logs separately and neither reads the other. Note what ruptured, what got said, and how long contact took to return — repair arriving faster is the measure, not whether rupture happened at all.']},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Repair. Choose.', valcol:'var(--teal)',
          body:['The same library, with the full session script, the Disclosure &amp; Support guide for explaining this to people outside the relationship, and third-party invitation scripts for when someone else has to be brought in.'],
-         note:'Repair sits here: what the pattern does to the two of you, and what changes it.',
-         meta:'Read anytime · Either of you'}],},
+         note:'Repair sits here: what the pattern does to the two of you, and what changes it.'}],},
 
-    3:{note:'Professional Performance · ten minutes, before or after', title:'Run it before the room. Record what held.<br>Go deeper between them.',
+    3:{note:'Professional Performance · before or after the room', title:'Run it before the room. Record what held.<br>Go deeper between them.',
        sub:'Three parts, sized to fit inside a working day.',
        band:'p3',
        cols:[
         {tag:'01 · Start here', tagcol:'var(--sr-track03)', name:'Experience', value:'Change your state before it costs you.', valcol:'var(--sr-track03)',
-         body:['The guided meditation for the protocol you are running, sized for before the room or after it, with short forms for the gap between meetings and a four-line Cue Card you can read at a desk without anyone noticing.'],
-         meta:'Guided · ~10 min · Before or after'},
+         body:['The guided meditation for the protocol you are running, sized for before the room or after it, with short forms for the gap between meetings and a four-line Cue Card you can read at a desk without anyone noticing.']},
         {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn performance into a record.',
-         body:['Log the situation, what was actually at stake, and whether presence or rehearsal won. Across a quarter the record shows which kind of room still gets you fastest, and whether the activation before it is easing.'],
-         meta:'Private to you · After every session'},
+         body:['Log the situation, what was actually at stake, and whether presence or rehearsal won. Across a quarter the record shows which kind of room still gets you fastest, and whether the activation before it is easing.']},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Recover. Choose.', valcol:'var(--teal)',
          body:['The same library, sized for a working day — the mechanism and its sources, meditation scripts, somatic practices between meetings, and the Disclosure guide for explaining a practice to people at work.'],
-         note:'Recovery sits here: ambition, burnout, and decisions you are too depleted to make well.',
-         meta:'Read anytime · No fixed order'}],},
+         note:'Recovery sits here: ambition, burnout, and decisions you are too depleted to make well.'}],},
 
     4:{note:'Elevation Series · opening soon', title:'The same three parts, taken further.',
        sub:'Structure confirmed. Detail opens with the Series.',
@@ -1063,7 +1056,7 @@
     'flat|person':  [2,'09','The Pursue & Withdraw Protocol','Flat between two people is usually withdrawal. This names the loop without blame.'],
     'raw|person':   [2,'03','The Trust & Betrayal Protocol','Raw around another person is where trust work belongs.'],
     'steady|person':[2,'08','The Appreciation & Support Protocol','A steady day is the right day to do the repair that is not urgent.'],
-    'wired|work':   [3,'01','The High-Stakes Presence Protocol','Ten minutes before the room. Presence rather than rehearsal.'],
+    'wired|work':   [3,'01','The High-Stakes Presence Protocol','Before the room. Presence rather than rehearsal.'],
     'heavy|work':   [3,'09','The Burnout & Overload Protocol','Heavy at work over weeks is load, not mood.'],
     'flat|work':    [3,'06','The Ambition Recovery Protocol','Flat about work you used to want has its own protocol.'],
     'raw|work':     [3,'03','The Imposter Dissolution Protocol','Raw and exposed at work is imposter territory.'],
@@ -1222,7 +1215,7 @@
     method:     ['Where the method comes from', 'The six frameworks in full — what each one says, what SafeRise takes from it, which protocols rest on it, and where the evidence stops.', '/method'],
     coaching:   ['Sessions & workshops', 'The full calendar, booking, and everything you have attended.', '/sessions'],
     account:    ['Account & plan', 'Your plan and billing, preferences, privacy and data export, and closing your account.', '/account'],
-    clearing:   ['The Clearing', 'Ten guided minutes, with the player and the log that records it.', '/clearing'],
+    clearing:   ['The Clearing', 'The guided session, with the player and the log that records it.', '/clearing'],
     checkout:   ['Add a track', 'Checkout. Adds to your plan without touching your existing access.', '/checkout'],
     plans:      ['Plans', 'What each track includes and what it costs. Access is cumulative.', '/plans'],
     article:    ['Article', 'A short written piece from Andre.', '/writing'],
@@ -1615,7 +1608,7 @@
     {tag:'', kick:'This week', art:'a1',
      title:'The pattern is not the person.',
      sub:'A short note on why the route back matters more than whether the state arrives at all.',
-     meta:'2 min read', cta:'Read it'},
+     cta:'Read it'},
     {tag:'New', kick:'Opening 1 September', art:'a2',
      title:'Relationship Healing.',
      sub:'Ten protocols run facing another person — session guides, safety scoring and repair scripts.',
@@ -1624,7 +1617,7 @@
     {tag:'Episode 04', kick:'The SafeRise podcast', art:'a3', media:true,
      title:'Discipline is not the opposite of rest.',
      sub:'Andre and Dwight Williams on why the men who burn out hardest are usually the most disciplined.',
-     meta:'48 min \u00B7 Released Thursday', cta:'Play episode'}
+     meta:'Released Thursday', cta:'Play episode'}
   ];
   var HERO_ART = {
     // NEEDS ART — each slide takes a 1600x520 photograph or poster frame
@@ -1718,7 +1711,7 @@
   var SOURCES = {"Guided Experience": "Porges · Polyvagal Theory — peer-reviewed", "Breathwork": "HeartMath · cardiac coherence near 0.1 Hz — peer-reviewed", "Somatic Release": "Porges · Polyvagal Theory — peer-reviewed", "Progress Journal": "Maté · Compassionate Inquiry — clinical practice", "Progress Tracking": "SafeRise measurement · not an external claim", "How This Works": "All six frameworks, each with its register named", "Protocol Guide": "SafeRise practice material · no external claim", "Cue Card": "Working-memory narrowing under threat — established", "Attention Advisory": "Scope boundary · reviewed with Dr Keny F. Bastien MD", "Disclosure &amp; Invitation": "SafeRise practice material · no external claim"};
   var RES = [
     ['play','Guided<br>Experience','Guided Experience','Step-by-step audio.',
-     'The full session, voiced and paced. Headphones, ten minutes, nothing to read.',
+     'The full session, voiced and paced. Headphones, nothing to read.',
      'Why audio','A state cannot be reasoned into changing while you are reading instructions. Voice removes the reading, so attention stays in the body where the change actually happens.'],
     ['breath','Breathwork','Breathwork','The pacing, on its own.',
      'In for four, out for six \u2014 roughly six breaths a minute, held for as long as you have.',
