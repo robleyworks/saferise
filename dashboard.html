@@ -150,22 +150,9 @@
           <p class="sr-begin-no"><b>02</b>Carry on</p>
           <h3>Where you left off</h3>
 
-          <div class="sr-begin-slot">
-            <button class="sr-resume" id="srResume"
-                    data-protocol="The Anxiety Reset Protocol" data-no="01" data-track="1" data-resource="07">
-              <span class="sr-resume-art">
-                <img src="https://deploy-preview-14--the-saferise-protocol.netlify.app/assets/covers/01.jpg" alt="" onerror="this.style.display='none'">
-              </span>
-              <span class="sr-resume-scrim"></span>
-              <span class="sr-resume-copy">
-                <span class="sr-resume-name">The Anxiety Reset Protocol</span>
-                <span class="sr-resume-meta">Resource 07 of 08 · The Decision</span>
-              </span>
-              <span class="sr-resume-rail"><i style="width:87%"></i></span>
-            </button>
-          </div>
+          <div class="sr-begin-slot" id="srResumeSlot"></div>
 
-          <p class="sr-begin-act">
+          <p class="sr-begin-act" id="srResumeAct" hidden>
             <span class="sr-link">Pick up where you left off <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></span>
           </p>
         </article>
@@ -429,16 +416,15 @@
     <div class="sr-dash-sechead">
       <p class="eyebrow">Your record</p>
       <h2>Follow your transformation journey.</h2>
-      <p class="note">Private to you · 20 sessions logged</p>
+      <p class="note" id="srRecNote">Private to you</p>
     </div>
 
     <!-- 1 · what SafeRise notices — the summariser -->
     <div class="sr-sum">
       <div class="sr-sum-main">
         <p class="sr-sum-kick">What your record shows</p>
-        <p class="sr-sum-body" id="srSumBody">Across twenty sessions your average state after practice has risen from <b>2.4 to 3.6</b>, and the gap between before and after has narrowed. The pattern still arrives — you have opened Anxiety Reset eleven times since June — but the route back is now around <b>four minutes</b> rather than the twenty it took in your first fortnight. Your entries have changed tense: June reads as description, August reads as recognition.</p>
+        <p class="sr-sum-body" id="srSumBody"></p>
         <div class="sr-sum-acts">
-          <button class="sr-dash-addbtn sr-dash-addbtn--solid" id="srSumGen">Generate August summary <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
           <button class="sr-dash-go" data-modal="record" style="background:none;border:0;cursor:pointer;font-family:inherit;padding:0">See your record <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
         </div>
         <p class="sr-sum-note">Summaries are generated from your own logs and entries. They are never shared and never used to score you.</p>
@@ -453,7 +439,7 @@
     <div class="sr-dash-arch">
       <div class="sr-dash-archmain">
         <div class="sr-dash-archbanner">
-          <div class="sr-dash-archbannerin"><p>“The tightness went before the thought did.”</p></div>
+          <div class="sr-dash-archbannerin"><p id="srArcQuote"></p></div>
         </div>
         <div class="sr-dash-archin">
           <div class="sr-dash-arc" style="margin-bottom:24px">
@@ -462,53 +448,32 @@
               <path d="M12 82a63 63 0 0 1 30-53" fill="none" stroke="#C97A5A" stroke-width="13" stroke-linecap="round"/>
               <path d="M48 26a63 63 0 0 1 54 0" fill="none" stroke="#7FA88C" stroke-width="13" stroke-linecap="round"/>
               <path d="M108 29a63 63 0 0 1 30 53" fill="none" stroke="#5A6B84" stroke-width="13" stroke-linecap="round"/>
-              <circle cx="86" cy="24" r="6" fill="#F5EDD8"/><circle cx="86" cy="24" r="10" fill="none" stroke="#F5EDD8" stroke-opacity=".3"/>
+              <g id="srArcDot" hidden><circle cx="86" cy="24" r="6" fill="#F5EDD8"/><circle cx="86" cy="24" r="10" fill="none" stroke="#F5EDD8" stroke-opacity=".3"/></g>
             </svg>
             <div class="sr-dash-arclegend">
               <span><i style="background:#C97A5A"></i>Mobilised</span>
               <span><i style="background:#7FA88C"></i>Safe — your regulated range</span>
               <span><i style="background:#5A6B84"></i>Shut down</span>
             </div>
-            <p class="sr-dash-arcnote">Where your last session finished. A position in your range, not a score — there is no target and nothing to beat.</p>
+            <p class="sr-dash-arcnote" id="srArcNote">The three states a session moves between. Your last session marks its place here once you have run one.</p>
           </div>
-          <p class="sr-dash-archkick">State before and after · last twelve sessions</p>
-          <div class="sr-dash-tiers">
-            <div class="sr-dash-bar" style="height:42%"></div><div class="sr-dash-bar" style="height:54%"></div>
-            <div class="sr-dash-bar" style="height:38%"></div><div class="sr-dash-bar" style="height:61%"></div>
-            <div class="sr-dash-bar" style="height:49%"></div><div class="sr-dash-bar" style="height:70%"></div>
-            <div class="sr-dash-bar" style="height:58%"></div><div class="sr-dash-bar" style="height:76%"></div>
-            <div class="sr-dash-bar" style="height:66%"></div><div class="sr-dash-bar" style="height:82%"></div>
-            <div class="sr-dash-bar" style="height:74%"></div><div class="sr-dash-bar" style="height:88%"></div>
-          </div>
-          <div class="sr-dash-axis"><span>June</span><span>August</span></div>
+          <p class="sr-dash-archkick" id="srTiersKick">State before and after</p>
+          <div class="sr-dash-tiers" id="srTiers"></div>
+          <div class="sr-dash-axis" id="srTiersAxis"></div>
         </div>
       </div>
 
       <div class="sr-dash-archside">
         <div class="sr-dash-tpanel sr-dash-tpanel--banner">
           <div class="sr-dash-archbanner sr-dash-archbanner--journal">
-            <div class="sr-dash-archbannerin"><p>“Named it properly for once — not anxious, afraid the call would go badly.”</p></div>
+            <div class="sr-dash-archbannerin"><p id="srJournalQuote"></p></div>
           </div>
           <div class="sr-dash-entryhead">
             <p class="eyebrow" style="margin-bottom:8px">In your own words</p>
             <h3>Recent journal entries</h3>
-            <p>Fourteen entries · about 2,100 words since June.</p>
+            <p id="srJournalCount"></p>
           </div>
-          <div class="sr-dash-entry">
-            <p class="sr-dash-entrydate">12 Aug · Anxiety Reset</p>
-            <p class="sr-dash-entrytext">The tightness went before the thought did. That has not happened before.</p>
-          </div>
-          <div class="sr-dash-entry" style="margin-top:16px">
-            <p class="sr-dash-entrydate">08 Aug · Shutdown Recovery</p>
-            <p class="sr-dash-entrytext">Flat all day. Sat for the short version instead of the full one. Still counted.</p>
-          </div>
-          <div class="sr-dash-entrythemes">
-            <p class="sr-dash-usekick">Recurring in your entries</p>
-            <span class="sr-tag">anticipation <b>6</b></span>
-            <span class="sr-tag">being misread <b>4</b></span>
-            <span class="sr-tag">work calls <b>4</b></span>
-            <span class="sr-tag">naming it <b>3</b></span>
-          </div>
+          <div id="srRecentEntries"></div>
           <div style="margin-top:18px;display:flex;gap:18px;flex-wrap:wrap">
             <button class="sr-dash-go" data-modal="journal" style="background:none;border:0;cursor:pointer;font-family:inherit;padding:0">Read everything you have written <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
           </div>
@@ -519,7 +484,7 @@
     <!-- 3 · cadence and coverage — the two numbers that predict return.
          The ranked protocol and resource charts moved to the full archive. -->
     <div class="sr-cadence">
-      <p class="sr-cadence-line">Last practice <b>2 days ago</b> · <b>seven</b> of ten protocols still unopened · <b>14</b> entries written since June.</p>
+      <p class="sr-cadence-line" id="srCadence"></p>
       <button class="sr-dash-go" data-modal="record" style="background:none;border:0;cursor:pointer;font-family:inherit;padding:0">Open your record <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
     </div>
 
@@ -530,7 +495,6 @@
         <span>
           <span class="sr-dash-idname">The Chosen Self</span>
           <span class="sr-dash-idbody">The identity you are practising into. Written by you, revisited whenever the old one gets loud.</span>
-          <span class="sr-dash-idmeta">Last revised 2 August</span>
         </span>
       </button>
       <button type="button" class="sr-dash-idcard" data-route-link="decisions">
@@ -538,7 +502,6 @@
         <span>
           <span class="sr-dash-idname">Your Decisions</span>
           <span class="sr-dash-idbody">The choices you made once the pattern was no longer making them for you.</span>
-          <span class="sr-dash-idmeta">4 recorded</span>
         </span>
       </button>
     </div>
@@ -1579,34 +1542,177 @@
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModals(); });
 
 
-  // ── what SafeRise suggests next ──
-  // Reads the record: state trend, protocol coverage, resource gaps, entry themes.
-  // Rules for now; the same shape takes a model later.
-  var SUGGESTIONS = [
-    {icon:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-     title:'Run Anxiety Reset before Thursday',
-     why:'Four of your entries mention work calls. Your last two were logged after, not before.'},
-    {icon:'<path d="M4 5h7v15H4zM13 5h7v15h-7z"/>',
-     title:'Open How This Works on Anxiety Reset',
-     why:'You practise more than you read. This is the one resource you have never opened.'},
-    {icon:'<path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9z"/>',
-     title:'Being misread keeps returning',
-     why:'Four entries in six weeks. That pattern lives in Relationship Healing, not Personal Transformation.'}
-  ];
-  var sug2 = document.getElementById('srSuggest2');
-  if(sug2){
-    sug2.innerHTML = SUGGESTIONS.map(function(x){
-      return '<div class="sr-sug"><span class="sr-sug-i"><svg viewBox="0 0 24 24">' + x.icon + '</svg></span>' +
-        '<button><span class="sr-sug-t">' + x.title + '</span><span class="sr-sug-w">' + x.why + '</span></button></div>';
-    }).join('');
-  }
-  var sumGen = document.getElementById('srSumGen');
-  if(sumGen){
-    sumGen.addEventListener('click', function(){
-      sumGen.textContent = 'Preparing your summary…';
-      setTimeout(function(){ sumGen.innerHTML = 'August summary ready ' + ARROW; }, 900);
-    });
-  }
+  /* ══════════ SR-085 · YOUR RECORD, BUILT FROM THE RECORD ══════════
+     Every surface in this section used to be written into the markup: twenty
+     sessions logged, a twelve-bar chart, an arc dot, two dated entries, "about
+     2,100 words since June", four recurring themes, a Chosen Self last revised
+     2 August, and three suggestions citing entries nobody had written. The
+     Record modal on the same page read "Nothing logged yet", so the page
+     contradicted itself and the honest half was the modal.
+
+     Everything below is computed from Store or it is not shown. Where the
+     platform records nothing — entry themes, minutes-to-settle, revisions of
+     the Chosen Self — the surface is gone rather than estimated. */
+
+  /* The three bands the arc legend already names. A recorded state maps to its
+     band, and the bar height is that band — not a score. There is no numeric
+     rating anywhere in the record, and inventing one here would be the same
+     defect in a new place. */
+  var SR_BAND = { Shutdown:.16, Collapsed:.16, Numb:.16,
+                  Mobilised:.40, Agitated:.40, Braced:.44, Unsteady:.52,
+                  Settled:.88, Present:.90, Safe:.88 };
+  var SR_ARCPT = { mob:[20,51], safe:[75,19], shut:[130,51] };
+  function srBand(state){ var v = SR_BAND[state]; return typeof v === 'number' ? v : .5; }
+
+  (function srBuildDashRecord(){
+    var runs    = Store.get(K_RUNS, []);
+    var entries = Store.get(K_ENTRIES, []);
+    if(!Array.isArray(runs))    runs = [];
+    if(!Array.isArray(entries)) entries = [];
+
+    var total = (typeof TRACKS !== 'undefined' && TRACKS[1] && TRACKS[1].protocols)
+                ? TRACKS[1].protocols.length : 0;
+    function set(id, text){ var el = document.getElementById(id); if(el) el.textContent = text; }
+    function html(id, markup){ var el = document.getElementById(id); if(el) el.innerHTML = markup; }
+    function hideBanner(quoteId){
+      var q = document.getElementById(quoteId);
+      if(q && q.closest('.sr-dash-archbanner')) q.closest('.sr-dash-archbanner').hidden = true;
+    }
+    function words(t){ return String(t || '').split(/\s+/).filter(Boolean).length; }
+
+    /* ── section note ── */
+    set('srRecNote', 'Private to you' +
+        (runs.length ? ' · ' + runs.length + (runs.length === 1 ? ' session logged' : ' sessions logged') : ''));
+
+    /* ── the summariser ── */
+    if(!runs.length && !entries.length){
+      set('srSumBody', 'Nothing recorded yet. Once you have run a session and written ' +
+          'an entry, what your record shows is described back to you here — from your ' +
+          'own logs, and nowhere else.');
+    } else {
+      var settled = runs.filter(function(r){ return srBand(r.after) > .7; }).length;
+      var names = {}; runs.forEach(function(r){ if(r && r.protocol) names[r.protocol] = (names[r.protocol]||0)+1; });
+      var distinct = Object.keys(names).length;
+      var bits = [];
+      if(runs.length) bits.push('You have logged ' + runs.length +
+          (runs.length === 1 ? ' session' : ' sessions') +
+          (distinct ? ' across ' + distinct + (distinct === 1 ? ' protocol' : ' protocols') : '') + '.');
+      if(runs.length) bits.push(settled + ' of them finished in your regulated range.');
+      if(entries.length) bits.push('You have written ' + entries.length +
+          (entries.length === 1 ? ' entry' : ' entries') + ' alongside them.');
+      set('srSumBody', bits.join(' '));
+    }
+
+    /* ── what SafeRise suggests next · rules over the record, never invented
+       evidence. Only a suggestion with somewhere to go gets a link. ── */
+    var ICON = { clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+                 book :'<path d="M4 5h7v15H4zM13 5h7v15h-7z"/>',
+                 mark :'<path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9z"/>' };
+    var sugs = [];
+    if(!runs.length){
+      sugs.push({icon:ICON.clock, title:'Run your first protocol',
+                 why:'Nothing is logged until you run one. Everything on this page fills itself in from there.',
+                 href:'protocol.html'});
+    } else if(!entries.length){
+      sugs.push({icon:ICON.book, title:'Write an entry after your next session',
+                 why:'Writing happens on the protocol page, so each entry stays attached to the protocol it came out of.',
+                 href:'protocol.html'});
+    }
+    if(runs.length && total){
+      var opened = {}; runs.forEach(function(r){ if(r && r.protocol) opened[r.protocol] = 1; });
+      var left = total - Object.keys(opened).length;
+      if(left > 0) sugs.push({icon:ICON.mark, title:left + ' of ' + total + ' protocols still unopened',
+                              why:'Each one is a whole session in its own right. There is no order you are meant to follow.',
+                              href:'protocol.html'});
+    }
+    html('srSuggest2', sugs.length
+      ? sugs.map(function(x){
+          return '<div class="sr-sug"><span class="sr-sug-i"><svg viewBox="0 0 24 24">' + x.icon + '</svg></span>' +
+            (x.href ? '<a href="' + x.href + '">' : '<span>') +
+            '<span class="sr-sug-t">' + srEsc(x.title) + '</span>' +
+            '<span class="sr-sug-w">' + srEsc(x.why) + '</span>' +
+            (x.href ? '</a>' : '</span>') + '</div>';
+        }).join('')
+      : '<p class="sr-sug-w">Suggestions appear here once there is enough in your record to base one on.</p>');
+
+    /* ── the state arc and its bar chart ── */
+    var arcDot = document.getElementById('srArcDot');
+    if(runs.length){
+      var last = runs[runs.length - 1];
+      var b = srBand(last && last.after);
+      var pt = b > .7 ? SR_ARCPT.safe : (b < .3 ? SR_ARCPT.shut : SR_ARCPT.mob);
+      set('srArcNote', 'Where your last session finished. A position in your range, ' +
+          'not a score — there is no target and nothing to beat.');
+      if(arcDot){
+        arcDot.removeAttribute('hidden');
+        arcDot.querySelectorAll('circle').forEach(function(c){
+          c.setAttribute('cx', pt[0]); c.setAttribute('cy', pt[1]);
+        });
+      }
+      var shown = runs.slice(-12);
+      set('srTiersKick', 'State before and after · last ' + shown.length +
+          (shown.length === 1 ? ' session' : ' sessions'));
+      html('srTiers', shown.map(function(r){
+        return '<div class="sr-dash-bar" style="height:' + Math.round(srBand(r.after) * 100) + '%"></div>';
+      }).join(''));
+      var mon = function(iso){ var d = new Date(iso + 'T00:00:00');
+        return isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-GB',{month:'long'}); };
+      var first = mon(shown[0] && shown[0].date), lastm = mon(shown[shown.length-1] && shown[shown.length-1].date);
+      html('srTiersAxis', first && lastm && first !== lastm
+        ? '<span>' + srEsc(first) + '</span><span>' + srEsc(lastm) + '</span>'
+        : (first ? '<span>' + srEsc(first) + '</span>' : ''));
+    } else {
+      if(arcDot) arcDot.setAttribute('hidden','');
+      set('srTiersKick', 'State before and after');
+      html('srTiers', '');
+      html('srTiersAxis', '');
+      var kick = document.getElementById('srTiersKick');
+      if(kick) kick.textContent = 'Your state before and after each session appears here once you have run one.';
+    }
+
+    /* ── journal panel ── */
+    if(entries.length){
+      var w = entries.reduce(function(a,e){ return a + words(e && e.text); }, 0);
+      var approx = w < 100 ? w : Math.round(w / 50) * 50;
+      var earliest = entries[0] && entries[0].date ? new Date(entries[0].date + 'T00:00:00') : null;
+      var since = earliest && !isNaN(earliest.getTime())
+        ? ' since ' + earliest.toLocaleDateString('en-GB',{month:'long'}) : '';
+      set('srJournalCount', entries.length + (entries.length === 1 ? ' entry' : ' entries') +
+          ' · about ' + approx.toLocaleString('en-GB') + (approx === 1 ? ' word' : ' words') + since + '.');
+      html('srRecentEntries', entries.slice(-2).reverse().map(function(e, i){
+        return '<div class="sr-dash-entry"' + (i ? ' style="margin-top:16px"' : '') + '>' +
+          '<p class="sr-dash-entrydate">' + srFmtDate(e.date) + ' · ' + srEsc(e.protocol || '') + '</p>' +
+          '<p class="sr-dash-entrytext">' + srEsc(e.text || '') + '</p></div>';
+      }).join(''));
+      var q = entries[entries.length - 1];
+      set('srJournalQuote', q && q.text ? '“' + q.text + '”' : '');
+      if(!(q && q.text)) hideBanner('srJournalQuote');
+      var aq = entries.length > 1 ? entries[entries.length - 2] : null;
+      if(aq && aq.text) set('srArcQuote', '“' + aq.text + '”'); else hideBanner('srArcQuote');
+    } else {
+      set('srJournalCount', 'Nothing written yet. Entries you write on the protocol page appear here.');
+      html('srRecentEntries', '');
+      hideBanner('srJournalQuote');
+      hideBanner('srArcQuote');
+    }
+
+    /* ── cadence ── */
+    if(!runs.length && !entries.length){
+      set('srCadence', 'Nothing logged yet' + (total ? ' · ' + total + ' protocols to choose from' : '') + '.');
+    } else {
+      var parts = [];
+      var lastRun = runs.length ? runs[runs.length - 1] : null;
+      if(lastRun && lastRun.date) parts.push('Last practice ' + srFmtDate(lastRun.date));
+      if(runs.length && total){
+        var seen = {}; runs.forEach(function(r){ if(r && r.protocol) seen[r.protocol] = 1; });
+        var un = total - Object.keys(seen).length;
+        if(un > 0) parts.push(un + ' of ' + total + ' protocols still unopened');
+      }
+      if(entries.length) parts.push(entries.length +
+        (entries.length === 1 ? ' entry written' : ' entries written'));
+      set('srCadence', parts.join(' · ') + '.');
+    }
+  })();
 
   // ── folds: resources and frameworks ──
   [['srResBtn','srResBody','srFoldRes']].forEach(function(t){
@@ -2011,17 +2117,46 @@
     }, 460);
   }
 
-  // ── return to your path ──
-  var resumeEl = document.getElementById('srResume');
-  if(resumeEl){
-    resumeEl.addEventListener('click', function(e){
+  /* ── return to your path ──
+     SR-085 · this card used to claim, in the markup, that the member was on
+     "Resource 07 of 08 · The Decision" of the Anxiety Reset Protocol with an
+     87% progress rail — to every visitor, including one who had never opened
+     anything. Nothing writes sr.resume yet, so the empty state is what every
+     member sees on day one. It has to read as correct, not broken. */
+  (function buildResume(){
+    var slot = document.getElementById('srResumeSlot');
+    var act  = document.getElementById('srResumeAct');
+    if(!slot) return;
+    var r = Store.get('sr.resume', null);
+    if(!r || !r.protocol){
+      slot.innerHTML = srEmpty('Nothing to pick up yet',
+        'Once you leave a protocol part-way through, it waits for you here.',
+        'Choose a protocol', 'protocol.html');
+      if(act) act.hidden = true;
+      return;
+    }
+    var pct = (typeof r.percent === 'number') ? Math.max(0, Math.min(100, r.percent)) : 0;
+    var meta = (r.resource && r.resourceTotal)
+      ? 'Resource ' + srEsc(r.resource) + ' of ' + srEsc(r.resourceTotal) +
+        (r.resourceName ? ' · ' + srEsc(r.resourceName) : '')
+      : '';
+    slot.innerHTML =
+      '<button class="sr-resume" id="srResume">' +
+        '<span class="sr-resume-art">' +
+          (r.cover ? '<img src="' + srEsc(r.cover) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
+        '</span><span class="sr-resume-scrim"></span>' +
+        '<span class="sr-resume-copy">' +
+          '<span class="sr-resume-name">' + srEsc(r.protocol) + '</span>' +
+          (meta ? '<span class="sr-resume-meta">' + meta + '</span>' : '') +
+        '</span>' +
+        '<span class="sr-resume-rail"><i style="width:' + pct + '%"></i></span>' +
+      '</button>';
+    if(act) act.hidden = false;
+    slot.querySelector('#srResume').addEventListener('click', function(e){
       e.preventDefault();
-      openProtocol(resumeEl.getAttribute('data-protocol'), '',
-                   resumeEl.getAttribute('data-no'),
-                   +resumeEl.getAttribute('data-track'),
-                   resumeEl.getAttribute('data-resource'));
+      openProtocol(r.protocol, '', r.no, +r.track, r.resource);
     });
-  }
+  })();
   function closeProtocol(){
     document.body.classList.remove('reading','shifting');
     frame.src = 'about:blank';
