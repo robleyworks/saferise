@@ -16,7 +16,14 @@ var PRICING = {
   t1:      { amount: '\u20AC9',   per: '/ month', words: 'Nine euros a month.' },
   t2:      { amount: '\u20AC19',  per: '/ month', words: 'Nineteen euros a month.' },
   t3:      { amount: '\u20AC29',  per: '/ month', words: 'Twenty-nine euros a month.' },
-  workshop:{ amount: '\u20AC29',  per: 'per person' },
+  /* SR-091 · there was one 'workshop' key holding €29 — Track 03's monthly
+     price, never a workshop price. Workshops are priced per format, so there
+     are two keys and the block reads 'from' the lower one. */
+  workshopPersonal:     { amount: '\u20AC59',  per: 'per person' },
+  workshopRelationship: { amount: '\u20AC139', per: 'per couple' },
+  premium:  { amount: '\u20AC275', per: '/ session' },
+  /* SR-057 · open: premium1 and premium3 may be retired tiers. Nothing in
+     the repo renders either one. Left in place pending that decision. */
   premium1:{ amount: '\u20AC129', per: 'per hour' },
   premium3:{ amount: '\u20AC299', per: 'for three hours' }
 };
