@@ -1,0 +1,488 @@
+/* ══════════════════════════════════════════════════════════════════════
+   SAFERISE — /method  ·  framework page system
+   Loaded by: method.html, method-porges.html, and the five framework
+   pages still to be built. Nothing else loads this file.
+
+   This stylesheet carries its own :root token block. Those tokens
+   duplicate css/saferise-dashboard.css by value — see SR-051. The
+   duplication is deliberate and page-isolated: no page loads both this
+   file and saferise-dashboard.css, so there is no cascade collision.
+   Do not "align" --accent to the repo's var(--sr-track01): these pages
+   do not load saferise-system.css, where --sr-track01 is defined, and
+   the accent would resolve to nothing. See SR-051 before consolidating.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════════════
+   SAFERISE — FRAMEWORK PAGE SYSTEM  (sr-fw-)
+   Tokens, type stack, rail and theme lifted verbatim from
+   saferise-dashboard-v41.html. Nothing below redefines a shared token.
+   ══════════════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#08080C; --band:#0E0E1A; --band2:#101020; --card:#15151F; --hair:#22222E;
+  --gold:#D4A843; --gold-lt:#ECC96A; --teal:#4E9AA6;
+  --text:#F5EDD8; --text2:#9C9AA4; --text3:#6A6874;
+  --mob:#C97A5A; --safe:#7FA88C; --shut:#5A6B84;
+  --accent:var(--gold);
+  --pad:30px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.65;
+  -webkit-font-smoothing:antialiased;padding-left:74px}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold-lt);outline-offset:3px;border-radius:3px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+
+/* Line A — enclosures sit on the shell edge (111px at 1440).
+   Line B — all text sits --pad in from it (141px at 1440). */
+.shell{max-width:1340px;margin:0 auto;padding:0 24px}
+
+h1{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(30px,4.4vw,48px);line-height:1.14}
+h2{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(22px,2.6vw,30px);line-height:1.24}
+h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
+.eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:17px;color:var(--text2);line-height:1.68}
+.note{font-size:12.5px;color:var(--text3);line-height:1.7}
+.gold{color:var(--gold)}
+.skip{position:fixed;left:16px;top:-90px;z-index:60;background:var(--gold);color:#08080C;
+  font:700 12.5px/1 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;
+  padding:14px 22px;border-radius:3px;transition:top .2s}
+.skip:focus{top:16px}
+
+/* ── icon rail, verbatim from the dashboard ── */
+.sr-dash-navrail{position:fixed;left:0;top:0;bottom:0;width:74px;z-index:50;background:#0B0B12;
+  border-right:1px solid var(--hair);display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 0}
+.sr-dash-navrailmark{width:34px;height:34px;border-radius:50%;border:1px solid var(--gold);display:grid;
+  place-items:center;color:var(--gold);font-size:14px;margin-bottom:16px;flex:0 0 auto}
+.sr-dash-navrailbtn{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:transparent;
+  border:0;cursor:pointer;position:relative;transition:background .18s}
+.sr-dash-navrailbtn svg{width:19px;height:19px;stroke:var(--text3);fill:none;stroke-width:1.35;transition:stroke .18s}
+.sr-dash-navrailbtn:hover{background:rgba(255,255,255,.04)}
+.sr-dash-navrailbtn:hover svg{stroke:var(--text2)}
+.sr-dash-navrailbtn.on{background:rgba(212,168,67,.12)}
+.sr-dash-navrailbtn.on svg{stroke:var(--gold)}
+.sr-dash-navrailbtn.on:before{content:"";position:absolute;left:-15px;top:12px;bottom:12px;width:2px;
+  background:var(--gold);border-radius:0 2px 2px 0}
+.sr-dash-navrailbtn span{position:absolute;left:56px;white-space:nowrap;background:#1C1C21;border:1px solid var(--hair);
+  border-radius:5px;padding:7px 11px;font-size:11.5px;letter-spacing:.06em;color:var(--text2);opacity:0;
+  pointer-events:none;transition:opacity .16s;z-index:3}
+.sr-dash-navrailbtn:hover span{opacity:1}
+.sr-dash-navrailfoot{margin-top:auto}
+
+/* ── theme toggle, shared shape with the reader ── */
+.sr-theme{display:inline-flex;border:1px solid rgba(255,255,255,.22);border-radius:24px;overflow:hidden;
+  background:rgba(8,8,12,.66);backdrop-filter:blur(8px)}
+.sr-theme button{background:transparent;border:0;cursor:pointer;font:700 9.5px/1 'DM Sans',sans-serif;
+  letter-spacing:.17em;text-transform:uppercase;color:rgba(245,237,216,.6);padding:10px 15px;transition:.18s}
+.sr-theme button.on{background:rgba(212,168,67,.16);color:var(--gold)}
+
+/* ── sunrise ── */
+body.rd-soft{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card:#54648C;--hair:#8492B4;
+  --text:#FFFDF8;--text2:#DDE3F0;--text3:#AEB7CE}
+body.rd-soft .sr-dash-navrail{background:#3C4B78}
+body,.sr-dash-navrail,.sr-fw-panel,.sr-fw-limit,.sr-fw-disc,.sr-fw-card,.sr-fw-step,.sr-fw-src,
+.sr-fw-pager a,.sr-fw-tile,.sr-fw-diagram{transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
+
+/* ══════════ REGISTER CHIPS ══════════
+   Gold is the evidence colour, teal the interpretive one. Peer-reviewed is
+   filled; clinical practice is the same hue held back to an outline, because
+   "proven" and "practised" must not read at the same weight. */
+.sr-fw-reg{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.19em;
+  text-transform:uppercase;padding:7px 13px;border-radius:20px;line-height:1;white-space:nowrap}
+.sr-fw-reg:before{content:"";width:6px;height:6px;border-radius:50%;flex:0 0 auto}
+.sr-fw-reg--peer{background:rgba(212,168,67,.15);border:1px solid var(--gold);color:var(--gold-lt)}
+.sr-fw-reg--peer:before{background:var(--gold)}
+.sr-fw-reg--clin{background:transparent;border:1px solid rgba(212,168,67,.42);color:var(--gold)}
+.sr-fw-reg--clin:before{background:transparent;border:1px solid var(--gold)}
+.sr-fw-reg--int{background:transparent;border:1px solid rgba(78,154,166,.5);color:var(--teal)}
+.sr-fw-reg--int:before{background:var(--teal)}
+body.rd-soft .sr-fw-reg--peer{background:rgba(255,216,148,.22);border-color:var(--gold);color:#FFF6E2}
+body.rd-soft .sr-fw-reg--clin{border-color:rgba(255,216,148,.55)}
+body.rd-soft .sr-fw-reg--int{color:#BFE4EA;border-color:rgba(191,228,234,.55)}
+body.rd-soft .sr-fw-reg--int:before{background:#BFE4EA}
+
+/* ══════════ BACK BAR ══════════ */
+.sr-fw-backbar{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:20px var(--pad) 16px;
+  border-bottom:1px solid var(--hair)}
+.sr-fw-back{display:inline-flex;align-items:center;gap:9px;font-size:11px;font-weight:700;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--text3);min-height:32px;transition:color .18s}
+.sr-fw-back:hover{color:var(--gold)}
+.sr-fw-back svg{width:14px;height:9px;stroke:currentColor;fill:none;stroke-width:1.5;transition:transform .18s}
+.sr-fw-back:hover svg{transform:translateX(-4px)}
+.sr-fw-barspacer{margin-left:auto}
+
+/* ══════════ MASTHEAD ══════════ */
+.sr-fw-mast{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:56px;
+  align-items:center;padding:56px var(--pad) 50px}
+.sr-fw-masthead-copy{max-width:46ch}
+.sr-fw-mast h1{margin:18px 0 0}
+.sr-fw-attrib{font-size:13px;color:var(--text2);margin-top:14px;letter-spacing:.02em}
+.sr-fw-stance{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:clamp(19px,1.7vw,23px);color:var(--text);line-height:1.55;max-width:44ch;
+  margin-top:26px;border-left:1px solid var(--gold);padding-left:24px}
+.sr-fw-tile{width:200px;height:200px;border-radius:50%;border:1px solid var(--hair);display:grid;place-items:center;
+  background:var(--band);position:relative;flex:0 0 auto}
+.sr-fw-tile:after{content:"";position:absolute;inset:-13px;border-radius:50%;border:1px solid rgba(212,168,67,.2)}
+.sr-fw-tileart{width:154px;height:154px;border:1px dashed rgba(212,168,67,.45);border-radius:50%;display:grid;
+  place-items:center;align-content:center;text-align:center;font-size:8.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text3);line-height:1.9;padding:18px}
+.sr-fw-tileart b{display:block;color:var(--gold);font-weight:700;font-size:9px}
+
+/* ══════════ SECTIONS ══════════
+   Eyebrow + h2 only. No third line. */
+.sr-fw-sec{padding:0 0 12px}
+.sr-fw-sechead{padding:52px var(--pad) 26px}
+.sr-fw-sechead .eyebrow{display:block;margin-bottom:12px}
+.sr-fw-sechead h2{max-width:20ch}
+.sr-fw-num{font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:.2em;margin-right:12px}
+
+/* reading measure — 68ch. Starts on line B, stops short of the right edge. */
+.sr-fw-body{padding:0}
+/* prose is the only thing that takes the text line itself; enclosures sit on
+   line A and inset their own contents with --pad. */
+.sr-fw-measure{max-width:68ch;margin-left:var(--pad);margin-right:var(--pad)}
+.sr-fw-panel .sr-fw-measure,.sr-fw-limit .sr-fw-measure,.sr-fw-step .sr-fw-measure{margin-left:0;margin-right:0}
+.sr-fw-measure p{font-size:16.5px;color:var(--text2);line-height:1.82;margin-bottom:20px}
+.sr-fw-measure p strong{color:var(--text);font-weight:500}
+.sr-fw-measure p:last-child{margin-bottom:0}
+/* pull quote hangs off the text line, not a third line */
+.sr-fw-pull{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:23px;line-height:1.5;
+  color:var(--text);margin:34px 0;padding-left:24px;border-left:2px solid var(--gold);max-width:38ch}
+.sr-fw-pull cite{display:block;font-style:normal;font-family:'DM Sans',sans-serif;font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-top:14px}
+.sr-fw-term{color:var(--text);border-bottom:1px dotted rgba(212,168,67,.55);cursor:help}
+
+/* ══════════ PANELS ══════════ */
+.sr-fw-panel{background:var(--band);border:1px solid var(--hair);border-radius:14px;padding:30px var(--pad);
+  margin:0 0 22px}
+
+/* the three-state diagram (page-specific slot; each framework gets one) */
+.sr-fw-diagram{background:var(--band);border:1px solid var(--hair);border-radius:14px;padding:32px var(--pad);
+  margin:38px 0 6px;display:grid;grid-template-columns:minmax(0,290px) minmax(0,1fr);gap:48px;
+  align-items:center;justify-items:start}
+.sr-fw-statelist{display:flex;flex-direction:column;gap:20px;max-width:56ch}
+.sr-fw-state{border-left:2px solid var(--s);padding-left:18px}
+.sr-fw-state b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:15px;color:var(--text);margin-bottom:5px}
+.sr-fw-state em{font-style:normal;color:var(--s);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:700;display:block;margin-bottom:7px}
+.sr-fw-state span{display:block;font-size:13.5px;color:var(--text2);line-height:1.7}
+
+/* four-step mapping */
+.sr-fw-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:6px}
+.sr-fw-step{background:var(--band);border:1px solid var(--hair);border-radius:12px;padding:24px var(--pad)}
+.sr-fw-step--off{opacity:.5}
+.sr-fw-stepno{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:10px}
+.sr-fw-step--off .sr-fw-stepno{color:var(--text3)}
+.sr-fw-step h3{font-size:15px;margin-bottom:10px}
+.sr-fw-step p{font-size:13.5px;color:var(--text2);line-height:1.72}
+
+/* where it loads — named, concrete */
+.sr-fw-loads{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
+.sr-fw-card{background:var(--band);border:1px solid var(--hair);border-radius:12px;padding:24px var(--pad);
+  display:block;transition:border-color .18s,background .18s}
+a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
+.sr-fw-cardkick{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
+  display:block;margin-bottom:9px}
+.sr-fw-card h3{font-size:15.5px;margin-bottom:9px}
+.sr-fw-card p{font-size:13.5px;color:var(--text2);line-height:1.72}
+.sr-fw-cardgo{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--gold);margin-top:14px}
+.sr-fw-cardgo svg{width:12px;height:8px;stroke:currentColor;fill:none;stroke-width:1.5}
+
+/* ══════════ WHERE THE EVIDENCE STOPS ══════════
+   Deliberately not a warning panel. Same furniture, cooler border, so it
+   reads as part of the argument rather than a legal aside. */
+.sr-fw-limit{border:1px solid var(--hair);border-left:2px solid var(--text3);border-radius:0 14px 14px 0;
+  background:rgba(255,255,255,.018);padding:32px var(--pad)}
+.sr-fw-limit .eyebrow{color:var(--text2)}
+.sr-fw-limit h3{margin:12px 0 18px;font-size:19px}
+.sr-fw-split{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:0;
+  margin:28px calc(var(--pad) * -1) -4px;border-top:1px solid var(--hair)}
+.sr-fw-splitcol{padding:24px var(--pad) 4px;border-right:1px solid var(--hair)}
+.sr-fw-splitcol:last-child{border-right:0}
+.sr-fw-splitcol h4{font-size:10.5px;letter-spacing:.19em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
+.sr-fw-splitcol--holds h4{color:var(--gold)}
+.sr-fw-splitcol--disputed h4{color:var(--text2)}
+.sr-fw-splitcol ul{list-style:none}
+.sr-fw-splitcol li{font-size:13.5px;color:var(--text2);line-height:1.7;padding-left:18px;position:relative;margin-bottom:12px}
+.sr-fw-splitcol li:before{content:"";position:absolute;left:0;top:9px;width:7px;height:1px;background:var(--text3)}
+.sr-fw-splitcol--holds li:before{background:var(--gold)}
+
+/* standing disclaimer — identical on all six pages */
+.sr-fw-disc{border:1px solid var(--hair);border-radius:14px;background:var(--band);padding:26px var(--pad);
+  margin-top:22px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start}
+.sr-fw-discmark{width:34px;height:34px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;
+  color:var(--gold);font-size:14px;flex:0 0 auto}
+.sr-fw-disc p{font-size:13.5px;color:var(--text2);line-height:1.75;max-width:64ch}
+.sr-fw-disc p+p{margin-top:12px}
+.sr-fw-disc b{color:var(--text);font-weight:500}
+
+/* sources */
+.sr-fw-src{list-style:none;border-top:1px solid var(--hair)}
+.sr-fw-src li{border-bottom:1px solid var(--hair);padding:18px var(--pad);display:grid;
+  grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:baseline}
+.sr-fw-srcname{font-size:14.5px;color:var(--text);line-height:1.6}
+.sr-fw-srcname span{display:block;font-size:12.5px;color:var(--text3);margin-top:4px}
+.sr-fw-srctag{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);white-space:nowrap}
+
+/* pager */
+.sr-fw-pager{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:56px 0 0}
+.sr-fw-pager a{border:1px solid var(--hair);border-radius:12px;padding:24px var(--pad);background:var(--band);
+  transition:border-color .18s}
+.sr-fw-pager a:hover{border-color:rgba(212,168,67,.5)}
+.sr-fw-pagerkick{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:9px}
+.sr-fw-pager h3{font-size:15.5px;margin-bottom:10px}
+
+.sr-fw-foot{padding:44px var(--pad) 64px;margin-top:56px;border-top:1px solid var(--hair)}
+.sr-fw-foot p{font-size:12.5px;color:var(--text3);line-height:1.8;max-width:70ch}
+
+/* ══════════ RESPONSIVE ══════════ */
+@media(max-width:1040px){
+  .sr-fw-mast{grid-template-columns:1fr;gap:38px}
+  .sr-fw-stance{max-width:none}
+  .sr-fw-tile{order:-1}
+  .sr-fw-diagram{grid-template-columns:1fr;gap:30px}
+}
+@media(max-width:700px){
+  /* the mark leads on tablet, the name leads on a phone */
+  .sr-fw-tile{order:0;width:150px;height:150px}
+  .sr-fw-tileart{width:112px;height:112px;padding:12px;font-size:8px}
+  body{padding-left:0;padding-bottom:66px}
+  .sr-dash-navrail{top:auto;left:0;right:0;bottom:0;width:auto;height:66px;flex-direction:row;
+    justify-content:space-around;padding:0 6px;border-right:0;border-top:1px solid var(--hair)}
+  .sr-dash-navrailmark,.sr-dash-navrailfoot{display:none}
+  .sr-dash-navrailbtn.on:before{left:12px;right:12px;top:-1px;bottom:auto;width:auto;height:2px;border-radius:0 0 2px 2px}
+  .sr-dash-navrailbtn span{display:none}
+}
+@media(max-width:640px){
+  :root{--pad:20px}
+  .sr-fw-mast{padding:38px var(--pad) 36px}
+  .sr-fw-splitcol{border-right:0;border-bottom:1px solid var(--hair)}
+  .sr-fw-splitcol:last-child{border-bottom:0}
+  .sr-fw-disc{grid-template-columns:1fr}
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════
+   ART REGIONS
+   Four slot types. Only one of them is a new commission; the other three
+   fill themselves from assets that already exist or are already planned.
+
+   A · MASTHEAD TILE ......... 200×200, one per framework. Already specified.
+   B · SECTION BAND .......... 1340×360 (2680×720 @2x). NEW — six needed.
+   C · LOAD-CARD COVER ....... reuses assets/covers/NN.jpg. Zero new art.
+   D · TILE REUSE ............ the 200×200 tile again at 64px / 88px, on the
+                               pager and the index cards. Zero new art.
+
+   Deliberately NO art in "where the evidence stops". That section is the
+   one that has to read as testimony rather than presentation. A picture
+   there makes it look staged.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── B · section band ──────────────────────────────────────────────────
+   Sits on line A, full enclosure width. Carries one line of Cormorant
+   over a scrim — never a heading, because the section header above it
+   has already done that job. */
+.sr-fw-band{position:relative;margin:44px 0 8px;border-radius:14px;overflow:hidden;
+  min-height:360px;display:grid;align-items:end;isolation:isolate;
+  background:linear-gradient(118deg,#0C0C14,#121220 46%,#0A0A12)}
+.sr-fw-bandart{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.sr-fw-bandscrim{position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(4deg,rgba(8,8,12,.92) 0%,rgba(8,8,12,.55) 42%,rgba(8,8,12,.18) 100%)}
+.sr-fw-bandin{padding:34px var(--pad);z-index:2;max-width:46ch}
+.sr-fw-bandin p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:clamp(18px,2vw,25px);line-height:1.48;color:var(--text);text-shadow:0 2px 20px rgba(0,0,0,.7)}
+.sr-fw-bandin span{display:block;font-family:'DM Sans',sans-serif;font-style:normal;font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:14px;font-weight:700}
+/* placeholder — removed the moment a real asset lands in .sr-fw-bandart */
+.sr-fw-needsart{position:absolute;top:16px;left:var(--pad);z-index:3;font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--text3);border:1px dashed rgba(212,168,67,.45);border-radius:4px;
+  padding:7px 11px;line-height:1.5;background:rgba(8,8,12,.5)}
+.sr-fw-needsart b{color:var(--gold);font-weight:700}
+
+/* ── C · load-card covers ──────────────────────────────────────────────
+   Covers carry their kicker word and number INSIDE the image, exactly as
+   on the dashboard. Draw no overlay text on one or the text doubles. */
+.sr-fw-card{overflow:hidden;padding:0}
+.sr-fw-cardart{position:relative;aspect-ratio:16/9;width:100%;
+  background:linear-gradient(128deg,#12121C,#191926 52%,#0F0F18);border-bottom:1px solid var(--hair)}
+.sr-fw-cardart img{width:100%;height:100%;object-fit:cover}
+.sr-fw-cardart--none{display:none}
+.sr-fw-cardbody{padding:24px var(--pad)}
+.sr-fw-cardslug{position:absolute;left:14px;bottom:12px;font-size:8.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--text3);border:1px dashed rgba(212,168,67,.4);border-radius:3px;
+  padding:5px 8px;background:rgba(8,8,12,.55)}
+.sr-fw-cardslug b{color:var(--gold);font-weight:700}
+
+/* ── D · tile reuse ────────────────────────────────────────────────────*/
+.sr-fw-pager a{display:grid;grid-template-columns:64px minmax(0,1fr);gap:20px;align-items:center}
+.sr-fw-pagertile{width:64px;height:64px;border-radius:50%;border:1px solid var(--hair);
+  background:var(--band2);display:grid;place-items:center;font-size:7.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text3);text-align:center;line-height:1.4}
+.sr-fw-pagertile--int{border-color:rgba(78,154,166,.45)}
+
+@media(max-width:640px){
+  .sr-fw-band{min-height:260px}
+  .sr-fw-pager a{grid-template-columns:1fr}
+  .sr-fw-pagertile{display:none}
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   PAGE-SPECIFIC · /method INDEX ONLY  (sr-mi-)
+   Everything below this line styles method.html and nothing else. The
+   selectors are all sr-mi-, which no framework page uses, so framework
+   pages inherit none of it. Kept out of the shared region above on
+   purpose — do not merge the two.
+   ══════════════════════════════════════════════════════════════════════ */
+/* ══ page-specific · /method index only (sr-mi-) ══ */
+.sr-mi-mast{padding:60px var(--pad) 44px;max-width:none}
+.sr-mi-mast h1{max-width:20ch;margin-top:18px}
+.sr-mi-mast .sr-fw-stance{max-width:52ch;font-size:21px;margin-top:26px}
+.sr-mi-key{display:flex;gap:10px;flex-wrap:wrap;padding:0 var(--pad) 8px;align-items:center}
+.sr-mi-keylab{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);margin-right:6px}
+
+.sr-mi-band{padding:46px 0 6px}
+.sr-mi-bandhead{padding:0 var(--pad) 24px}
+.sr-mi-bandhead .eyebrow{white-space:nowrap}
+.sr-mi-bandhead h2{max-width:28ch;margin-bottom:16px}
+.sr-mi-bandhead .eyebrow{display:block;margin-bottom:12px}
+.sr-mi-bandnote{font-size:14.5px;color:var(--text2);line-height:1.78;max-width:62ch}
+.sr-mi-bandhead--int .eyebrow{color:var(--teal)}
+body.rd-soft .sr-mi-bandhead--int .eyebrow{color:#BFE4EA}
+
+.sr-mi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:0}
+@media(max-width:1160px){ .sr-mi-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media(max-width:720px){ .sr-mi-grid{grid-template-columns:1fr} }
+.sr-mi-card{background:var(--band);border:1px solid var(--hair);border-radius:14px;padding:26px var(--pad);
+  display:flex;flex-direction:column;gap:0;transition:border-color .18s,background .18s;position:relative}
+a.sr-mi-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
+.sr-mi-card--int{border-top:2px solid rgba(78,154,166,.55)}
+a.sr-mi-card--int:hover{border-color:rgba(78,154,166,.6);border-top-color:var(--teal)}
+.sr-mi-card--peer{border-top:2px solid var(--gold)}
+.sr-mi-card--clin{border-top:2px solid rgba(212,168,67,.42)}
+.sr-mi-cardtop{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.sr-mi-cardno{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;color:var(--text3)}
+.sr-mi-card h3{font-size:17px;margin-bottom:4px}
+.sr-mi-who{font-size:12.5px;color:var(--text3);margin-bottom:14px}
+.sr-mi-says{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:18px}
+.sr-mi-holds{border-top:1px solid var(--hair);padding-top:14px;margin-top:auto;font-size:12.5px;color:var(--text2);line-height:1.7}
+.sr-mi-holds b{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
+  font-weight:700;margin-bottom:6px}
+.sr-mi-go{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--gold);margin-top:16px}
+.sr-mi-card--int .sr-mi-go{color:var(--teal)}
+body.rd-soft .sr-mi-card--int .sr-mi-go{color:#BFE4EA}
+.sr-mi-go svg{width:12px;height:8px;stroke:currentColor;fill:none;stroke-width:1.5;transition:transform .18s}
+a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
+
+.sr-mi-claim{margin:56px 0 0;border:1px solid var(--hair);border-radius:14px;background:var(--band);
+  display:grid;grid-template-columns:auto minmax(0,1fr);gap:36px;align-items:center;padding:34px var(--pad)}
+.sr-mi-claimfig{font-family:'Cinzel',serif;font-size:clamp(34px,4.6vw,52px);color:var(--gold);line-height:1;white-space:nowrap}
+.sr-mi-claimfig span{display:block;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--text3);margin-top:12px;font-weight:700}
+.sr-mi-claim p{font-size:15px;color:var(--text2);line-height:1.78;max-width:68ch}
+.sr-mi-claim p b{color:var(--text);font-weight:500}
+.sr-mi-claim p+p{margin-top:12px}
+/* ART · each card wears its own 200×200 tile at 88px. Zero new assets — the
+   same six tiles the framework mastheads need. */
+.sr-mi-cardtile{width:88px;height:88px;border-radius:50%;border:1px solid var(--hair);
+  background:var(--band2);display:grid;place-items:center;text-align:center;font-size:8px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text3);line-height:1.5;margin-bottom:18px}
+.sr-mi-card--int .sr-mi-cardtile{border-color:rgba(78,154,166,.42)}
+.sr-mi-cardtile b{color:var(--gold);font-weight:700;display:block}
+.sr-mi-card--int .sr-mi-cardtile b{color:var(--teal)}
+/* ART · index hero band. REUSE, not a commission — the nervous-system range
+   photograph already in v29 ("The Science" tile). 1340×300. */
+.sr-mi-hero{position:relative;margin:30px 0 8px;border-radius:14px;overflow:hidden;min-height:300px;
+  display:grid;align-items:end;isolation:isolate;background:linear-gradient(114deg,#0C0C14,#131322 52%,#0A0A12)}
+.sr-mi-hero .sr-fw-bandscrim{position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(6deg,rgba(8,8,12,.93) 0%,rgba(8,8,12,.5) 46%,rgba(8,8,12,.2) 100%)}
+.sr-mi-heroin{padding:32px var(--pad);z-index:2;max-width:52ch}
+.sr-mi-heroin p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:clamp(18px,1.9vw,24px);line-height:1.5;color:var(--text);text-shadow:0 2px 20px rgba(0,0,0,.7)}
+.sr-mi-heroin span{display:block;font-family:'DM Sans',sans-serif;font-style:normal;font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:20px;font-weight:700}
+/* ── founder's note. One per site, on the index only. ── */
+.sr-mi-note{margin:56px 0 0;border:1px solid var(--hair);border-radius:14px;background:var(--band);
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);gap:0;overflow:hidden}
+.sr-mi-notemain{padding:34px var(--pad)}
+.sr-mi-noteside{padding:34px var(--pad);border-left:1px solid var(--hair);
+  background:rgba(255,255,255,.018);display:flex;flex-direction:column;justify-content:flex-start;gap:22px}
+.sr-mi-note .eyebrow{display:block;margin-bottom:12px}
+.sr-mi-note h2{max-width:24ch;margin-bottom:22px}
+.sr-mi-note p{font-size:16px;color:var(--text2);line-height:1.82;max-width:66ch;margin-bottom:18px}
+.sr-mi-note p:last-child{margin-bottom:0}
+.sr-mi-note p strong{color:var(--text);font-weight:500}
+.sr-mi-sig{margin-top:26px;padding-top:20px;border-top:1px solid var(--hair);display:flex;
+  align-items:center;gap:16px;flex-wrap:wrap}
+.sr-mi-sigmark{width:52px;height:52px;border-radius:50%;border:1px solid var(--hair);background:var(--band2);
+  display:grid;place-items:center;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text3);text-align:center;line-height:1.4;flex:0 0 auto}
+.sr-mi-signame{font-family:'Cinzel',serif;font-size:15px;color:var(--text);line-height:1.4}
+.sr-mi-signame span{display:block;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text3);margin-top:4px}
+.sr-mi-noteside h3{font-size:14px;margin-bottom:10px}
+.sr-mi-noteside p{font-size:13.5px;line-height:1.74;margin-bottom:0}
+@media(max-width:860px){ .sr-mi-note{grid-template-columns:1fr}
+  .sr-mi-noteside{border-left:0;border-top:1px solid var(--hair)} }
+/* ── why a guided session · the delivery argument ── */
+.sr-mi-veh{margin:56px 0 0;border:1px solid var(--hair);border-radius:14px;background:var(--band);
+  padding:36px var(--pad) 32px}
+.sr-mi-veh>.eyebrow{display:block;margin-bottom:12px}
+.sr-mi-veh h2{max-width:26ch;margin-bottom:22px}
+.sr-mi-vehlead{font-size:16.5px;color:var(--text2);line-height:1.82;max-width:68ch;margin-bottom:8px}
+.sr-mi-vehlead strong{color:var(--text);font-weight:500}
+.sr-mi-vehgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;
+  margin:30px calc(var(--pad) * -1) 0;border-top:1px solid var(--hair)}
+.sr-mi-vehcol{padding:26px var(--pad) 6px;border-right:1px solid var(--hair)}
+.sr-mi-vehcol:last-child{border-right:0}
+.sr-mi-vehcol b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:14px;
+  color:var(--text);margin-bottom:10px}
+.sr-mi-vehcol p{font-size:13.5px;color:var(--text2);line-height:1.72}
+.sr-mi-vehclose{margin-top:30px;padding-top:24px;border-top:1px solid var(--hair)}
+.sr-mi-vehclose p{font-size:16px;color:var(--text2);line-height:1.8;max-width:68ch}
+.sr-mi-vehclose p+p{margin-top:16px}
+.sr-mi-vehclose strong{color:var(--text);font-weight:500}
+.sr-mi-vehpull{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:clamp(21px,2.1vw,27px);line-height:1.45;color:var(--text);
+  border-left:2px solid var(--gold);padding-left:24px;max-width:34ch;margin:34px 0 32px}
+@media(max-width:900px){
+  .sr-mi-vehgrid{grid-template-columns:1fr}
+  .sr-mi-vehcol{border-right:0;border-bottom:1px solid var(--hair)}
+  .sr-mi-vehcol:last-child{border-bottom:0}
+}
+
+/* ── the four steps, held beside the registers as the reader scrolls ── */
+.sr-mi-bands{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:36px;align-items:start;margin-top:8px}
+.sr-mi-steprail{position:sticky;top:24px;background:var(--band);border:1px solid var(--hair);
+  border-radius:14px;padding:26px var(--pad)}
+.sr-mi-steprail>.eyebrow{display:block;margin-bottom:6px}
+.sr-mi-railintro{font-size:12.5px;color:var(--text3);line-height:1.7;margin-bottom:20px}
+.sr-mi-step{border-left:2px solid var(--hair);padding:0 0 0 16px;margin-bottom:18px;
+  transition:border-color .45s ease,opacity .45s ease;opacity:.4}
+.sr-mi-step:last-child{margin-bottom:0}
+.sr-mi-step.on{opacity:1;border-left-color:var(--accent)}
+.sr-mi-step b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:9.5px;
+  letter-spacing:.2em;color:var(--text3);margin-bottom:5px;transition:color .45s ease}
+.sr-mi-step.on b{color:var(--accent)}
+.sr-mi-stepname{display:block;font-size:14px;color:var(--text);line-height:1.35;margin-bottom:5px}
+.sr-mi-stepdesc{display:block;font-size:12.5px;color:var(--text2);line-height:1.65}
+.sr-mi-railfoot{margin-top:22px;padding-top:16px;border-top:1px solid var(--hair);
+  font-size:11.5px;color:var(--text3);line-height:1.65;min-height:52px}
+.sr-mi-bands--int{--accent:var(--teal)}
+@media(max-width:1100px){
+  .sr-mi-bands{grid-template-columns:1fr;gap:0}
+  .sr-mi-steprail{position:static;margin-bottom:28px;order:-1}
+  .sr-mi-step{opacity:1}
+  .sr-mi-railfoot{display:none}
+}
+@media(max-width:760px){ .sr-mi-claim{grid-template-columns:1fr;gap:20px} .sr-mi-hero{min-height:230px} }
+
+/* ── five framework pages not built yet · SR-050 ────────────────────────
+   Mirrors the .sr-dash-navlinks a.soon pattern from saferise-dashboard.css,
+   restated here because the /method pages do not load that stylesheet.
+   The cards are <div>, not <a> — there is nothing to navigate to. */
+.sr-mi-card.soon{opacity:.45;cursor:default}
+.sr-mi-card.soon:hover{border-color:var(--hair);background:var(--band)}
+.sr-mi-go--soon{color:var(--text3)}
+.sr-mi-go--soon:after{content:"soon";font-size:8px;letter-spacing:.14em;margin-left:6px;color:var(--text3)}

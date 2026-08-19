@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — /method INDEX — the six frameworks
+
+  Design system lifted verbatim from saferise-dashboard-v41.html: token block,
+  type stack, 74px icon rail, Midnight/Sunrise theme, --pad gutter.
+  Two alignment lines preserved: enclosures at 111 and text at 141 (measured
+  at 1440 = 74 rail + 13 shell margin + 24 shell pad + 30 --pad).
+
+  Integrated. The shared layer now lives in css/saferise-method.css; nothing
+  in this file styles itself. Image slots are marked NEEDS ART with exact
+  dimensions and their <img> tags stay commented until the asset exists — SR-059.
+
+  ⚠ SR-060 · DURATION-FREE COPY. This page states no session length, in any
+  form, anywhere — not in copy, not on a player. Lengths vary by protocol and by
+  track and are not known until the recording sprint is complete. This is an
+  accuracy rule, not a style preference. Do not add one.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Where the method comes from</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ═══ ICON RAIL — verbatim from the dashboard. /method is the active route. ═══ -->
+<nav class="sr-dash-navrail" aria-label="Sections">
+  <span class="sr-dash-navrailmark">◈</span>
+  <button class="sr-dash-navrailbtn" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
+  <button class="sr-dash-navrailbtn" data-route="library"><svg viewBox="0 0 24 24"><path d="M5 4h6v16H5zM13 4h6v16h-6z"/></svg><span>Protocol library</span></button>
+  <button class="sr-dash-navrailbtn" data-route="journal"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/></svg><span>Journal</span></button>
+  <button class="sr-dash-navrailbtn" data-route="record"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-8M22 20H2"/></svg><span>Your record</span></button>
+  <button class="sr-dash-navrailbtn" data-route="laboratory"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.4L5.6 17A2 2 0 0 0 7.4 20h9.2a2 2 0 0 0 1.8-3L14 8.4V3"/><path d="M7.6 14h8.8"/></svg><span>The Life Laboratory</span></button>
+  <button class="sr-dash-navrailbtn on" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
+  <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
+  <button class="sr-dash-navrailbtn sr-dash-navrailbtn--crisis" data-modal="crisis" aria-label="Cue Card">
+    <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 11h6M6.5 14h4"/></svg>
+    <span>Cue Card · always one tap away</span>
+  </button>
+  <div class="sr-dash-navrailfoot">
+    <button class="sr-dash-navrailbtn" data-route="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.2H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/></svg><span>Account &amp; plan</span></button>
+  </div>
+</nav>
+
+
+
+<main id="main" class="shell">
+
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="dashboard.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Dashboard
+  </a>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<header class="sr-fw-mast sr-mi-mast" style="display:block">
+  <span class="eyebrow">Where the method comes from</span>
+  <h1>Six sources,<br>one sequence</h1>
+  <p class="sr-fw-stance">Six bodies of work sit under the four steps — three of them
+    research, three of them ways of seeing. We have committed to them openly, built the
+    method around what each does best, and every page below tells you how far it reaches.</p>
+</header>
+
+<div class="sr-mi-key">
+  <span class="sr-mi-keylab">Register</span>
+  <span class="sr-fw-reg sr-fw-reg--peer">Peer-reviewed · load-bearing</span>
+  <span class="sr-fw-reg sr-fw-reg--clin">Clinical practice · supporting</span>
+  <span class="sr-fw-reg sr-fw-reg--int">Interpretive layer</span>
+</div>
+
+<!-- ART SLOT · INDEX HERO · 1340×300 · REUSE the v29 nervous-system range
+     photograph. Not a new commission. -->
+<figure class="sr-mi-hero">
+  <!-- <img class="sr-fw-bandart" src="assets/method/method-hero.jpg" alt=""> -->
+  <div class="sr-fw-bandscrim"></div>
+  <span class="sr-fw-needsart"><b>Reuse</b>1340 × 300 · v29 range photograph</span>
+  <figcaption class="sr-mi-heroin">
+    <p>Decades of research and clinical practice, arranged into something you can
+      actually use on a Tuesday morning.</p>
+    <span>What the four steps are built on</span>
+  </figcaption>
+</figure>
+
+
+<div class="sr-mi-bands" id="srBands">
+<div class="sr-mi-bandcol">
+
+<!-- ══ BAND 1 · PEER-REVIEWED ══ -->
+<section class="sr-mi-band" data-steps="01,02" data-railnote="Porges gives Step 01 its reason; HeartMath gives Step 02 its rate.">
+  <div class="sr-mi-bandhead">
+    <div>
+      <span class="eyebrow">Peer-reviewed · load-bearing</span>
+      <h2>The science we stand on</h2>
+    </div>
+    <p class="sr-mi-bandnote">These two give the method its measurable parts — a breathing rate
+      that works, and an account of why a state has to settle before anything else becomes
+      possible. We have committed to both, follow the literature on both, and each page tells
+      you where the debate currently stands.</p>
+  </div>
+
+  <div class="sr-mi-grid">
+    <a class="sr-mi-card sr-mi-card--peer" href="method-porges.html">
+      <div class="sr-mi-cardtop">
+        <span class="sr-mi-cardno">01</span>
+      </div>
+      <span class="sr-mi-cardtile" aria-hidden="true"><b>Tile 01</b>200×200</span>
+      <h3>Polyvagal Theory</h3>
+      <p class="sr-mi-who">Stephen W. Porges</p>
+      <p class="sr-mi-says">Your system detects danger and safety faster than you can think
+        about it, and the state it lands in decides what you are capable of next.</p>
+      <div class="sr-mi-holds"><b>Load-bearing for</b>Step 01 · the three-state model · the arc
+        in Your record · Somatic Release · Shutdown Recovery</div>
+      <span class="sr-mi-go">Read the page <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+    </a>
+
+    <div class="sr-mi-card sr-mi-card--peer soon">
+      <div class="sr-mi-cardtop">
+        <span class="sr-mi-cardno">02</span>
+      </div>
+      <span class="sr-mi-cardtile" aria-hidden="true"><b>Tile 02</b>200×200</span>
+      <h3>Cardiac coherence</h3>
+      <p class="sr-mi-who">HeartMath Institute</p>
+      <p class="sr-mi-says">Breathing at roughly six breaths a minute produces a measurable,
+        repeatable change in heart-rate variability for most people.</p>
+      <div class="sr-mi-holds"><b>Load-bearing for</b>Step 02 · Breathwork · the one specific
+        empirical claim SafeRise makes</div>
+      <span class="sr-mi-go sr-mi-go--soon">Not yet published</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ BAND 2 · CLINICAL PRACTICE ══ -->
+<section class="sr-mi-band" data-steps="03" data-railnote="Compassionate Inquiry is what makes Step 03 a decision rather than a wait.">
+  <div class="sr-mi-bandhead">
+    <div>
+      <span class="eyebrow">Clinical practice · supporting</span>
+      <h2>The practice we learned from</h2>
+    </div>
+    <p class="sr-mi-bandnote">Refined over decades of clinical work with people in real
+      difficulty, and it shows in the tone of every recorded session. This is the standard we
+      hold the voice to — hard-won practice rather than trial evidence, and named as such
+      wherever it appears.</p>
+  </div>
+
+  <div class="sr-mi-grid">
+    <div class="sr-mi-card sr-mi-card--clin soon">
+      <div class="sr-mi-cardtop">
+        <span class="sr-mi-cardno">03</span>
+      </div>
+      <span class="sr-mi-cardtile" aria-hidden="true"><b>Tile 03</b>200×200</span>
+      <h3>Compassionate Inquiry</h3>
+      <p class="sr-mi-who">Gabor Maté</p>
+      <p class="sr-mi-says">What you are doing was once an adaptation. Meeting it without
+        hostility is a decision you make, not a feeling you wait for.</p>
+      <div class="sr-mi-holds"><b>Supporting</b>Step 03 · acceptance as decision · the tone
+        every recorded voice is held to</div>
+      <span class="sr-mi-go sr-mi-go--soon">Not yet published</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ BAND 3 · INTERPRETIVE ══ -->
+<section class="sr-mi-band" data-steps="04" data-accent="int" data-railnote="Step 04 is shaped here — and Watts sits under all four as the disposition they run on.">
+  <div class="sr-mi-bandhead sr-mi-bandhead--int">
+    <div>
+      <span class="eyebrow">Interpretive layer</span>
+      <h2>The thinking we take our bearings from</h2>
+    </div>
+    <p class="sr-mi-bandnote">These three shape how the method is written, what it points at,
+      and the disposition it asks you to bring. Ways of seeing rather than findings, and the
+      reason the practice reaches past symptom management.</p>
+  </div>
+
+  <div class="sr-mi-grid">
+    <div class="sr-mi-card sr-mi-card--int soon">
+      <div class="sr-mi-cardtop">
+        <span class="sr-mi-cardno">04</span>
+      </div>
+      <span class="sr-mi-cardtile" aria-hidden="true"><b>Tile 04</b>200×200</span>
+      <h3>Shadow &amp; individuation</h3>
+      <p class="sr-mi-who">Carl Jung</p>
+      <p class="sr-mi-says">The parts of yourself you refuse to look at do not leave. They
+        run the room from behind a curtain.</p>
+      <div class="sr-mi-holds"><b>A frame for</b>Go Deeper · The Decision · The Chosen Self</div>
+      <span class="sr-mi-go sr-mi-go--soon">Not yet published</span>
+    </div>
+
+    <div class="sr-mi-card sr-mi-card--int soon">
+      <div class="sr-mi-cardtop">
+        <span class="sr-mi-cardno">05</span>
+      </div>
+      <span class="sr-mi-cardtile" aria-hidden="true"><b>Tile 05</b>200×200</span>
+      <h3>The observer stance</h3>
+      <p class="sr-mi-who">Mechanism only · mental rehearsal</p>
+      <p class="sr-mi-says">Watching your own state rather than being inside it, and rehearsing
+        a version of yourself that has already come through — a recognised practice, cited as
+        practice.</p>
+      <div class="sr-mi-holds"><b>A frame for</b>Step 04 · Gratitude &amp; Expansion</div>
+      <span class="sr-mi-go sr-mi-go--soon">Not yet published</span>
+    </div>
+
+    <div class="sr-mi-card sr-mi-card--int soon">
+      <div class="sr-mi-cardtop">
+        <span class="sr-mi-cardno">06</span>
+      </div>
+      <span class="sr-mi-cardtile" aria-hidden="true"><b>Tile 06</b>200×200</span>
+      <h3>Non-resistance</h3>
+      <p class="sr-mi-who">Alan Watts</p>
+      <p class="sr-mi-says">Struggling against a state is most of what makes it unbearable.
+        Letting it be there is not surrender; it is the only position from which anything moves.</p>
+      <div class="sr-mi-holds"><b>A frame for</b>The disposition the whole method runs on</div>
+      <span class="sr-mi-go sr-mi-go--soon">Not yet published</span>
+    </div>
+  </div>
+</section>
+
+
+</div>
+
+<!-- ══ THE FOUR STEPS · sticky beside the registers ══
+     Each band declares which steps it feeds via data-steps; the rail lights those
+     steps as the band enters view. Below 1100px the rail goes static at the top
+     and all four steps show at full strength — no highlight without scroll. ══ -->
+<aside class="sr-mi-steprail" aria-label="The Four-Step Method">
+  <span class="eyebrow">The method</span>
+  <p class="sr-mi-railintro">Every protocol runs the same four steps, in this order. The
+    sources beside them are what each step is built on.</p>
+
+  <div class="sr-mi-step" data-step="01">
+    <b>Step 01</b>
+    <span class="sr-mi-stepname">Identify &amp; Name</span>
+    <span class="sr-mi-stepdesc">Name the state specifically, before doing anything to it.</span>
+  </div>
+  <div class="sr-mi-step" data-step="02">
+    <b>Step 02</b>
+    <span class="sr-mi-stepname">Redirect to Heart</span>
+    <span class="sr-mi-stepdesc">Hand to heart, about six breaths a minute, exhale longer
+      than the inhale.</span>
+  </div>
+  <div class="sr-mi-step" data-step="03">
+    <b>Step 03</b>
+    <span class="sr-mi-stepname">Accept &amp; Release</span>
+    <span class="sr-mi-stepdesc">Stop fighting what is there. Acceptance as a decision,
+      not a feeling.</span>
+  </div>
+  <div class="sr-mi-step" data-step="04">
+    <b>Step 04</b>
+    <span class="sr-mi-stepname">Gratitude &amp; Expansion</span>
+    <span class="sr-mi-stepdesc">One breath taken as the person on the other side of it.</span>
+  </div>
+
+  <p class="sr-mi-railfoot" id="srRailFoot">Scroll to see which sources carry which step.</p>
+</aside>
+</div>
+
+
+<!-- ══ THE ONE CLAIM ══ -->
+<div class="sr-mi-claim">
+  <div class="sr-mi-claimfig">≈6<span>breaths per minute</span></div>
+  <div>
+    <p><b>This is the only specific empirical claim SafeRise makes.</b> Around six breaths a
+      minute — 0.1 Hz — is where heart-rate variability peaks for most people. It is measurable,
+      it has been replicated, and it is why Step 02 asks for a longer exhale than inhale.</p>
+    <p>Everything else on this site is framing, mechanism or practice. If you ever see SafeRise
+      state a number that is not this one, treat it as an error and tell us.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     WHY A GUIDED SESSION — the delivery argument.
+
+     Sits after the ≈6 claim (which establishes the rate) and before the founder's
+     note (which explains the six). Order matters: what it rests on → how it
+     reaches you → why they were combined.
+
+     ⚠ NO DURATION ANYWHERE — SR-060. Session lengths vary by protocol and track, and
+     the real figures are not known until the recording sprint is finished. Nothing on
+     this page or any framework page states or implies a length. The rule stands until
+     every meditation audio and video asset is complete; it is not a style preference.
+     ⚠ NO PITCH OR FREQUENCY CLAIM. Tempo is defensible; specific hertz values are
+     not, and the page says so explicitly rather than staying quiet about it.
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="sr-mi-veh">
+  <span class="eyebrow">Why a guided session</span>
+  <h2>The form is not a preference</h2>
+
+  <p class="sr-mi-vehlead">Everything above describes what the method rests on. This is why it
+    reaches you as a voice rather than an article, a worksheet or a set of prompts on a screen.
+    <strong>The delivery is not a packaging decision — it is the only format that survives the
+    state you arrive in.</strong></p>
+
+  <div class="sr-mi-vehgrid">
+    <div class="sr-mi-vehcol">
+      <b>Reading is the thing you lost</b>
+      <p>When you are mobilised or shut down, the capacity to read carefully, hold instructions
+        in mind and apply them in order is exactly what has gone offline. A worksheet asks for
+        the one faculty the state has taken. Eyes closed and ears open is the channel still
+        open to you.</p>
+    </div>
+    <div class="sr-mi-vehcol">
+      <b>A steady voice is itself a signal</b>
+      <p>Tone, pace and an unhurried delivery are read by the same system that reads threat, and
+        they register as evidence of safety. A recorded voice does part of the settling before
+        it has asked you to do anything. Text cannot do this. It is also why the group
+        workshops exist.</p>
+    </div>
+    <div class="sr-mi-vehcol">
+      <b>Someone has to hold the tempo</b>
+      <p>Nobody reads an instruction and keeps a slow breathing rhythm at the same time — the
+        counting takes the attention the breathing needs. The guide carries the pace so you
+        don't have to track it, which is the whole reason the rate in Step 02 is reachable
+        at all.</p>
+    </div>
+  </div>
+
+  <div class="sr-mi-vehclose">
+    <p>The music is a metronome you never have to count. Its tempo paces your breathing
+      underneath conscious attention, which is craft rather than science, and we treat it that
+      way. <strong>We make no claim about specific pitches or frequencies</strong>, because
+      there is no good evidence for any — and a site that argues this carefully about its
+      sources cannot make an exception for its own soundtrack.</p>
+
+    <p>Sessions vary in length by protocol and by track. Some are short enough to run before a
+      difficult conversation; others are built to be sat with. What does not vary is the
+      sequence and what it is for.</p>
+
+    <p class="sr-mi-vehpull">The practice buys you the state. What you do with the state is
+      yours.</p>
+
+    <p>That is the whole utility, stated as plainly as we can. Noticing a pattern, choosing
+      differently, holding your ground in a conversation that used to flatten you, becoming
+      someone the people around you experience differently — <strong>we do not claim the
+      practice causes any of it.</strong> We claim something narrower and more useful: those
+      things are close to impossible in a mobilised or shut-down state, and available in a
+      settled one. The session is how you get from one to the other, repeatably, without
+      needing anyone else in the room.</p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     FOUNDER'S NOTE — index only, never on the six framework pages.
+
+     WHY IT SITS HERE: it answers the question the six cards above provoke and
+     cannot answer themselves — "who are you to put these together?" It sits
+     AFTER the register bands and AFTER the one empirical claim, so it reads as
+     an explanation of an argument already made, not as the argument itself.
+
+     ⚠ THE SECOND PARAGRAPH IS ANDRE'S TO WRITE. It is marked below. Everything
+     else here is structural and can stand as drafted; that paragraph cannot be
+     drafted by anyone else without inventing a biography, and it would sit three
+     inches beneath a section where every claim carries a DOI.
+
+     Keep it under ~250 words. A long founder's note on a page about evidentiary
+     restraint undoes the page.
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="sr-mi-note">
+  <div class="sr-mi-notemain">
+    <span class="eyebrow">A note from the founder</span>
+    <h2>Why six, and not one</h2>
+
+    <p>Every one of these frameworks is incomplete on its own, and each is incomplete
+      in a way another one covers. Porges describes the state you are in but not what
+      to do about your relationship to it. Maté answers that and says nothing about
+      breath. HeartMath gives a rate that works and no account of why a person cannot
+      simply decide to feel better. Watts describes the disposition all of it requires
+      and offers no method at all. <strong>Picking one and building a product on it
+      would have meant pretending the gaps were not there.</strong></p>
+
+    <!-- ⚠⚠ ANDRE — THIS PARAGRAPH IS YOURS ⚠⚠
+         The personal reason. Not credentials, not a mission statement. The specific
+         thing you saw that made a four-step sequence the obvious answer, and why
+         you were the one who noticed. One paragraph. Written the way you'd say it
+         to one person, not to an audience. If it takes more than five sentences it
+         has turned into marketing.
+         PLACEHOLDER BELOW — DO NOT SHIP AS WRITTEN. -->
+    <p style="border-left:2px dashed rgba(212,168,67,.5);padding-left:20px;color:var(--text3)">
+      [ Andre's paragraph. Placeholder — not for publication. The specific reason
+      this sequence exists, in his own words. ]</p>
+
+    <p>What SafeRise adds is <strong>the order</strong>. Name the state before you touch
+      it, because you cannot work on something you have not identified. Settle the body
+      before the mind, because the reasoning you need is not available until you do.
+      Accept before releasing, because fighting a state is most of what sustains it.
+      Then, and only then, look forward. The sequence is the contribution. The evidence
+      underneath it belongs to the people named above, and the pages tell you exactly
+      how far each of them reaches.</p>
+
+    <div class="sr-mi-sig">
+      <!-- ART · reuse the pangolin mark or the founder's initial. 52×52. No portrait —
+           the no-likeness rule applies to the founder too, and a founder photograph
+           here would be the only face on a page arguing for restraint. -->
+      <span class="sr-mi-sigmark" aria-hidden="true">Mark<br>52px</span>
+      <span class="sr-mi-signame">Andre Robley
+        <span>Founder · SafeRise Protocol · Kenor International BV</span></span>
+    </div>
+  </div>
+
+  <aside class="sr-mi-noteside">
+    <div>
+      <h3>Not a clinician</h3>
+      <p>Andre is not a doctor and does not present as one. Dr Keny F. Bastien MD is
+        engaged as clinical collaborator on scope and safety.</p>
+    </div>
+    <div>
+      <h3>Where the line is</h3>
+      <p>The arrangement of these six into a repeatable sequence is original work. The research
+        underneath it is not ours, and every page above says so.</p>
+    </div>
+    <div>
+      <h3>No affiliation</h3>
+      <p>None of the six is connected to SafeRise in any way. They have not reviewed, endorsed
+        or approved this method, and several are no longer living. We build on published work;
+        we do not claim their backing.</p>
+    </div>
+  </aside>
+</section>
+
+<div class="sr-fw-body" style="margin-top:22px">
+  <div class="sr-fw-disc">
+    <span class="sr-fw-discmark">◈</span>
+    <div>
+      <p>SafeRise has not been through a clinical trial. It is a structured practice built on
+        established frameworks, not a treatment with proven outcomes of its own.
+        <b>Dr Keny F. Bastien MD</b> is engaged as clinical collaborator on scope and safety.</p>
+    </div>
+  </div>
+
+  <footer class="sr-fw-foot">
+    <p>SafeRise Protocol · Kenor International BV, Sint Maarten. Clinical collaborator
+      Dr Keny F. Bastien MD. These pages describe the reasoning behind a structured practice.
+      They are not medical advice and do not diagnose, treat or replace care from a clinician.</p>
+  </footer>
+</div>
+
+</main>
+
+<script>
+(function(){
+  // Which steps each register feeds. Declared on the section, not hardcoded here,
+  // so the five unbuilt framework pages can extend this without touching the JS.
+  var bands = Array.prototype.slice.call(document.querySelectorAll('.sr-mi-band[data-steps]'));
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.sr-mi-step'));
+  var wrap  = document.getElementById('srBands');
+  var foot  = document.getElementById('srRailFoot');
+  if(!bands.length || !steps.length || !wrap) return;
+
+  var DEFAULT = 'Scroll to see which sources carry which step.';
+
+  function light(band){
+    var on = band ? (band.getAttribute('data-steps')||'').split(',') : [];
+    steps.forEach(function(s){
+      s.classList.toggle('on', on.indexOf(s.getAttribute('data-step')) > -1);
+    });
+    wrap.classList.toggle('sr-mi-bands--int', !!(band && band.getAttribute('data-accent')==='int'));
+    foot.textContent = band ? (band.getAttribute('data-railnote')||DEFAULT) : DEFAULT;
+  }
+
+  if(!('IntersectionObserver' in window)){
+    steps.forEach(function(s){ s.classList.add('on'); });
+    return;
+  }
+
+  var visible = [];
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var idx = visible.indexOf(e.target);
+      if(e.isIntersecting && idx === -1) visible.push(e.target);
+      if(!e.isIntersecting && idx > -1)  visible.splice(idx,1);
+    });
+    // topmost band currently in the band means the reader is reading it
+    visible.sort(function(a,b){ return a.getBoundingClientRect().top - b.getBoundingClientRect().top; });
+    light(visible[0] || null);
+  }, { rootMargin: '-28% 0px -46% 0px', threshold: 0 });
+
+  bands.forEach(function(b){ io.observe(b); });
+})();
+</script>
+
+
+<script>
+(function(){
+  // ── reading mode, shared with the dashboard and reader (body.rd-soft) ──
+  var THEME_KEY = 'sr-theme';
+  function setTheme(mode){
+    document.body.classList.toggle('rd-soft', mode === 'sunrise');
+    document.querySelectorAll('[data-theme]').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-theme') === mode);
+    });
+    try{ sessionStorage.setItem(THEME_KEY, mode); }catch(e){}
+  }
+  document.querySelectorAll('[data-theme]').forEach(function(b){
+    b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme')); });
+  });
+  var saved = 'midnight';
+  try{ saved = sessionStorage.getItem(THEME_KEY) || 'midnight'; }catch(e){}
+  setTheme(saved);
+
+  // ── rail routes ──
+  // The dashboard resolves every rail route through openRoute(), which opens a
+  // route modal that only exists in dashboard.html. These pages carry no such
+  // modal, so the rail leaves for the dashboard and lets it answer. /method is
+  // the page you are already on.
+  var PAGES = { method: 'method.html', dashboard: 'dashboard.html' };
+  document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var key = b.getAttribute('data-route');
+      if(key === 'method') return;                 // already here
+      window.location.href = PAGES[key] || 'dashboard.html';
+    });
+  });
+})();
+</script>
+</body>
+</html>

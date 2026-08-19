@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — FRAMEWORK PAGE TEMPLATE, proven on Porges
+
+  Design system lifted verbatim from saferise-dashboard-v41.html: token block,
+  type stack, 74px icon rail, Midnight/Sunrise theme, --pad gutter.
+  Two alignment lines preserved: enclosures at 111 and text at 141 (measured
+  at 1440 = 74 rail + 13 shell margin + 24 shell pad + 30 --pad).
+
+  Integrated. The shared layer now lives in css/saferise-method.css; nothing
+  in this file styles itself. Image slots are marked NEEDS ART with exact
+  dimensions and their <img> tags stay commented until the asset exists — SR-059.
+
+  ⚠ SR-060 · DURATION-FREE COPY. This page states no session length, in any
+  form, anywhere — not in copy, not on a player. Lengths vary by protocol and by
+  track and are not known until the recording sprint is complete. This is an
+  accuracy rule, not a style preference. Do not add one.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Polyvagal Theory, Stephen Porges</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ═══ ICON RAIL — verbatim from the dashboard. /method is the active route. ═══ -->
+<nav class="sr-dash-navrail" aria-label="Sections">
+  <span class="sr-dash-navrailmark">◈</span>
+  <button class="sr-dash-navrailbtn" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
+  <button class="sr-dash-navrailbtn" data-route="library"><svg viewBox="0 0 24 24"><path d="M5 4h6v16H5zM13 4h6v16h-6z"/></svg><span>Protocol library</span></button>
+  <button class="sr-dash-navrailbtn" data-route="journal"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/></svg><span>Journal</span></button>
+  <button class="sr-dash-navrailbtn" data-route="record"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-8M22 20H2"/></svg><span>Your record</span></button>
+  <button class="sr-dash-navrailbtn" data-route="laboratory"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.4L5.6 17A2 2 0 0 0 7.4 20h9.2a2 2 0 0 0 1.8-3L14 8.4V3"/><path d="M7.6 14h8.8"/></svg><span>The Life Laboratory</span></button>
+  <button class="sr-dash-navrailbtn on" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
+  <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
+  <button class="sr-dash-navrailbtn sr-dash-navrailbtn--crisis" data-modal="crisis" aria-label="Cue Card">
+    <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 11h6M6.5 14h4"/></svg>
+    <span>Cue Card · always one tap away</span>
+  </button>
+  <div class="sr-dash-navrailfoot">
+    <button class="sr-dash-navrailbtn" data-route="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.2H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/></svg><span>Account &amp; plan</span></button>
+  </div>
+</nav>
+
+<main id="main" class="shell">
+
+<!-- ╔══ TEMPLATE REGION 0 · BACK BAR ═══════════════════════════════════════╗
+     Identical on all six pages. Register chip changes; nothing else does. -->
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="method.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Where the method comes from
+  </a>
+  <span class="sr-fw-reg sr-fw-reg--peer">Peer-reviewed · load-bearing</span>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<!-- ╔══ TEMPLATE REGION 1 · MASTHEAD ══════════════════════════════════════╗
+     Eyebrow → name → attribution → stance line. Symbol tile at 200×200.
+     No likenesses of living people anywhere in this system. -->
+<header class="sr-fw-mast">
+  <div class="sr-fw-masthead-copy">
+    <span class="eyebrow">Framework 01 of 06</span>
+    <h1>Polyvagal<br>Theory</h1>
+    <p class="sr-fw-attrib">Stephen W. Porges · first published 1995, from his 1994 presidential
+      address to the Society for Psychophysiological Research · widely adopted in trauma-informed
+      practice, and formally disputed since.</p>
+
+    <!-- the stance sits directly under the copy it qualifies, at every width -->
+    <p class="sr-fw-stance">Your body decides whether you are safe before you have a chance to
+      think about it. Step 01 exists because of that one sentence.</p>
+  </div>
+
+  <!-- NEEDS ART · 200×200 · abstract gold line motif, no likeness. -->
+  <div class="sr-fw-tile" aria-hidden="true">
+    <div class="sr-fw-tileart"><b>Needs art</b>200 × 200<br>gold symbol tile</div>
+  </div>
+</header>
+
+
+<!-- ╔══ TEMPLATE REGION 2 · WHAT IT SAYS ══════════════════════════════════╗
+     Plain language. No jargon that is not immediately unpacked. Headers state
+     a mechanism, never "About polyvagal theory". Eyebrow + h2, no third line. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">01</span>What the theory says</span>
+    <h2>Safety is decided before thought</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-measure">
+      <p>The autonomic nervous system runs the parts of you that you do not operate by hand —
+        heart rate, breathing, digestion, the tone of your face and voice. Porges's central
+        proposal is that this system is continuously scanning for danger and for safety, and
+        that it does so <strong>faster than conscious appraisal and without asking you.</strong>
+        He named that scanning <span class="sr-fw-term" title="Porges's term for threat and safety detection that occurs without conscious awareness">neuroception</span>.</p>
+
+      <p>The second proposal is that the system does not simply run hot or cold. It has
+        <strong>a small number of distinct states</strong>, and it moves between them in a
+        predictable order. Each state was useful at some point. None of them is a malfunction.</p>
+
+      <p>The third proposal is the one that makes the theory clinically useful: the state you
+        are in <strong>determines what is available to you</strong>. Reasoning, warmth, patience
+        and perspective are functions of one state. When you are in another, they are not
+        weakened — they are largely offline. This is why being told to calm down has never
+        calmed anybody down, and why insight arrives after regulation rather than causing it.</p>
+
+      <blockquote class="sr-fw-pull">
+        You cannot talk a system out of a state it entered without consulting you.
+        <cite>The working sentence behind Step 01</cite>
+      </blockquote>
+
+      <p>The last piece is <strong>co-regulation</strong>. Cues from other people — a face that
+        is not braced, an unhurried voice, a steady presence — are read by the same machinery
+        and register as evidence of safety. Human nervous systems settle in company more
+        readily than alone. That is the whole argument for the workshops, and the reason a
+        recorded voice is doing work that text cannot do.</p>
+    </div>
+
+    <!-- PAGE-SPECIFIC DIAGRAM SLOT · one per framework -->
+    <div class="sr-fw-diagram">
+      <!-- Vertical ladder, drawn to the mob / safe / shut tokens already in the system. -->
+      <svg viewBox="0 0 300 260" role="img" aria-label="The three states: safe and social at the top, mobilised in the middle, shut down at the base, with movement possible in both directions.">
+        <defs>
+          <marker id="ar" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M0 0 L8 4 L0 8 z" fill="#6A6874"/>
+          </marker>
+        </defs>
+        <!-- rails -->
+        <line x1="42" y1="30" x2="42" y2="230" stroke="#22222E" stroke-width="1"/>
+        <line x1="258" y1="30" x2="258" y2="230" stroke="#22222E" stroke-width="1"/>
+        <!-- bands -->
+        <rect x="42" y="18" width="216" height="52" rx="8" fill="rgba(127,168,140,.12)" stroke="#7FA88C" stroke-width="1"/>
+        <rect x="42" y="104" width="216" height="52" rx="8" fill="rgba(201,122,90,.12)" stroke="#C97A5A" stroke-width="1"/>
+        <rect x="42" y="190" width="216" height="52" rx="8" fill="rgba(90,107,132,.14)" stroke="#5A6B84" stroke-width="1"/>
+        <text x="150" y="49" text-anchor="middle" font-family="Cinzel, serif" font-size="14" fill="#7FA88C">Safe &amp; social</text>
+        <text x="150" y="135" text-anchor="middle" font-family="Cinzel, serif" font-size="14" fill="#C97A5A">Mobilised</text>
+        <text x="150" y="221" text-anchor="middle" font-family="Cinzel, serif" font-size="14" fill="#5A6B84">Shut down</text>
+        <!-- two-way movement -->
+        <path d="M150 104 L150 76" stroke="#6A6874" stroke-width="1" marker-end="url(#ar)"/>
+        <path d="M150 70 L150 98" stroke="#6A6874" stroke-width="1" marker-end="url(#ar)" opacity=".45"/>
+        <path d="M150 190 L150 162" stroke="#6A6874" stroke-width="1" marker-end="url(#ar)"/>
+        <path d="M150 156 L150 184" stroke="#6A6874" stroke-width="1" marker-end="url(#ar)" opacity=".45"/>
+      </svg>
+
+      <div class="sr-fw-statelist">
+        <div class="sr-fw-state" style="--s:#7FA88C">
+          <em>Available</em><b>Safe and social</b>
+          <span>Settled enough to think, listen, be touched, change your mind. Not a mood — a
+            physiological condition that makes those things possible.</span>
+        </div>
+        <div class="sr-fw-state" style="--s:#C97A5A">
+          <em>Charged</em><b>Mobilised</b>
+          <span>Energy for action. Anxiety, urgency, irritation, racing thought. The system
+            has decided something must be dealt with and has funded it.</span>
+        </div>
+        <div class="sr-fw-state" style="--s:#5A6B84">
+          <em>Withdrawn</em><b>Shut down</b>
+          <span>Flat, numb, heavy, far away. The oldest protection there is: when neither
+            fighting nor fleeing will work, conserve. Not laziness and not depression.</span>
+        </div>
+        <p class="note">Recovery runs through the middle. Coming up out of shutdown means
+          passing through mobilisation, which is why the first honest sign of movement is
+          often anger or agitation rather than calm.</p>
+      </div>
+    </div>
+  </div>
+
+    <!-- ART SLOT B · SECTION BAND · NEEDS ART · 1340×360 (2680×720 @2x)
+         Abstract and tonal. No faces, no figures in focus, no clinical imagery.
+         For Porges: something that reads as a threshold or a change of light.
+         One per framework page — six in total. -->
+    <figure class="sr-fw-band">
+      <!-- <img class="sr-fw-bandart" src="assets/method/porges-band.jpg" alt=""> -->
+      <div class="sr-fw-bandscrim"></div>
+      <span class="sr-fw-needsart"><b>Needs art</b>1340 × 360 · slot B</span>
+      <figcaption class="sr-fw-bandin">
+        <p>Nothing here is a flaw in you. Every one of these states kept somebody alive,
+          and yours is running the same programme.</p>
+        <span>Why the method does not begin by fixing anything</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 3 · WHAT SAFERISE TAKES ═══════════════════════════╗
+     Mapped to the four steps. Steps this framework does NOT support are shown
+     dimmed and labelled — a framework that appears to justify everything
+     justifies nothing. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">02</span>What SafeRise takes</span>
+    <h2>Name it before you touch it</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-measure">
+      <p>If threat detection runs ahead of thought, then the first useful move is not to
+        argue, reframe or fix. It is to <strong>identify what state is actually present</strong>
+        — because the state, not the story attached to it, is what determines the next
+        few minutes. Every protocol therefore opens the same way.</p>
+    </div>
+
+    <div class="sr-fw-steps">
+      <div class="sr-fw-step">
+        <span class="sr-fw-stepno">Step 01</span>
+        <h3>Identify &amp; Name</h3>
+        <p>Load-bearing. Naming the state specifically — mobilised, shut down, or somewhere
+          between — replaces a verdict about yourself with a description of a condition.
+          The three-state vocabulary comes directly from here.</p>
+      </div>
+      <div class="sr-fw-step">
+        <span class="sr-fw-stepno">Step 02</span>
+        <h3>Redirect to Heart</h3>
+        <p>Shared with HeartMath. Porges supplies the reason breath and posture reach the
+          system at all; HeartMath supplies the specific rate. See the cardiac coherence page
+          for the one empirical claim SafeRise makes.</p>
+      </div>
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 03</span>
+        <h3>Accept &amp; Release</h3>
+        <p>Not this framework. Acceptance as a decision rather than a feeling comes from
+          Compassionate Inquiry. Polyvagal theory describes the state; it does not tell you
+          what to do about your relationship to it.</p>
+      </div>
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 04</span>
+        <h3>Gratitude &amp; Expansion</h3>
+        <p>Not this framework. Rehearsing a future self is a separate practice with a
+          separate and weaker evidence base, held in the interpretive layer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 4 · WHERE IT LOADS ════════════════════════════════╗
+     Concrete and named. No "informs our approach to wellbeing". -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">03</span>Where it loads in the product</span>
+    <h2>Six places you already meet this</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-loads">
+      <a class="sr-fw-card" href="protocol.html"><div class="sr-fw-cardart"><img src="assets/covers/01.jpg" alt=""><span class="sr-fw-cardslug"><b>Art</b> cover 01 · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Every protocol · Step 01</span>
+        <h3>The arrival check-in</h3>
+        <p>The question asked before anything begins, and the vocabulary the answers are
+          offered in. You are choosing a state, not rating a day.</p>
+        <span class="sr-fw-cardgo">Open a protocol <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="dashboard.html"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Your record</span>
+        <h3>The arc, and why it has no good end</h3>
+        <p>Your record plots movement between the three states over time. It is deliberately
+          not a score, because there is no state you are supposed to end on.</p>
+        <span class="sr-fw-cardgo">See your record <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="resource.html"><div class="sr-fw-cardart"><!-- <img src="assets/method/res-somatic.jpg" alt=""> --><span class="sr-fw-cardslug"><b>Art</b> resource art · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Resource · in every protocol</span>
+        <h3>Somatic Release</h3>
+        <p>Posture, contact, weight and movement exist as a resource because they reach a
+          system that insight does not. This is the whole justification for that resource.</p>
+        <span class="sr-fw-cardgo">Read the resource <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="protocol.html"><div class="sr-fw-cardart"><img src="assets/covers/07.jpg" alt=""><span class="sr-fw-cardslug"><b>Art</b> cover 07 · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Track 01 · Protocol</span>
+        <h3>The Shutdown Recovery Protocol</h3>
+        <p>Built directly on the withdrawn state: small movement, contact and warmth before
+          anything cognitive, and no expectation of arriving at calm in one pass.</p>
+        <span class="sr-fw-cardgo">Open the protocol <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="resource.html"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Resource · scope boundary</span>
+        <h3>Attention Advisory</h3>
+        <p>The page that says what this practice is not for. Informed by the same account:
+          some states need a person in the room, not a recording.</p>
+        <span class="sr-fw-cardgo">Read the advisory <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <div class="sr-fw-card"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Sessions &amp; workshops</span>
+        <h3>Why the group format exists</h3>
+        <p>Co-regulation is the reason a room of people settles faster than a person alone.
+          The workshops are not a delivery convenience; they are the mechanism.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 5 · WHERE THE EVIDENCE STOPS ══════════════════════╗
+     The section that makes the other four credible. Written unprompted,
+     stated plainly, and never softened by a closing reassurance. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">04</span>Where the evidence stops</span>
+    <h2>A vocabulary, not a mechanism</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-limit">
+      <span class="eyebrow">Stated plainly</span>
+      <h3>In February 2026 this stopped being a footnote.</h3>
+      <div class="sr-fw-measure">
+        <p>Thirty-nine specialists in vagal physiology and vertebrate evolution — several of them
+          previously cited in the polyvagal literature as supporting it — published a joint
+          evaluation in <em>Clinical Neuropsychiatry</em> concluding that the theory is
+          <strong>untenable on neurophysiological and evolutionary grounds</strong>. Porges published
+          a detailed rebuttal in the same issue, arguing the critique addresses a version of the
+          theory he does not hold. The dispute is live, public and unresolved.</p>
+        <p>We are telling you this on our own page, unprompted, because you will find it in one
+          search and we would rather you found it here first.</p>
+        <p><strong>What it changes for SafeRise is less than you might expect, and here is exactly
+          why.</strong> The disputed claims are mechanistic — which brainstem nucleus does what,
+          whether the arrangement is uniquely mammalian, whether heart-rate variability can be read
+          as an index of one vagal pathway. SafeRise never rested on any of them. What the method
+          rests on is observable without them: that states shift, that they are not chosen, that
+          breath and posture and contact change them, and that people settle more readily in
+          company. Those hold whichever way the anatomy resolves.</p>
+        <p>What it does change is the word we are entitled to use. Polyvagal theory gave this
+          practice a <strong>vocabulary</strong>, not a proof. We are keeping the vocabulary and
+          dropping any suggestion that the mechanism behind it is settled.</p>
+      </div>
+
+      <div class="sr-fw-split">
+        <div class="sr-fw-splitcol sr-fw-splitcol--holds">
+          <h4>What SafeRise leans on</h4>
+          <ul>
+            <li>Threat and safety are registered faster than conscious appraisal</li>
+            <li>People move between recognisable states, and capacity changes with them</li>
+            <li>Breath, posture, movement and contact influence those states</li>
+            <li>Other people's cues affect regulation — co-regulation is observable</li>
+            <li>The three-state language helps people describe what is happening to them</li>
+          </ul>
+        </div>
+        <div class="sr-fw-splitcol sr-fw-splitcol--disputed">
+          <h4>What SafeRise does not claim</h4>
+          <ul>
+            <li>That the polyvagal account of vagal anatomy is correct</li>
+            <li>That the proposed evolutionary sequence is established</li>
+            <li>That a named vagal branch can be read off a heart-rate measure</li>
+            <li>That the three states map onto distinct, identified circuits</li>
+            <li>That any of this constitutes treatment for a diagnosed condition</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- STANDING DISCLAIMER · identical on all six framework pages -->
+    <div class="sr-fw-disc">
+      <span class="sr-fw-discmark">◈</span>
+      <div>
+        <p>SafeRise has not been through a clinical trial. It is a structured practice built on
+          established frameworks, not a treatment with proven outcomes of its own.
+          <b>Dr Keny F. Bastien MD</b> is engaged as clinical collaborator on scope and safety.</p>
+        <p class="note">If you are in crisis, or under the care of a clinician, the Attention
+          Advisory is the page to read before this one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 6 · SOURCES ═══════════════════════════════════════╗
+     Includes the critical literature. A reading list that only cites the
+     advocate is a reading list nobody trusts. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">05</span>Read it yourself</span>
+    <h2>Both sides, including ours</h2>
+  </div>
+  <div class="sr-fw-body">
+    <ul class="sr-fw-src">
+      <li>
+        <span class="sr-fw-srcname">Porges, S. W. (1995). "Orienting in a defensive world: mammalian
+          modifications of our evolutionary heritage. A Polyvagal Theory." <em>Psychophysiology</em>, 32(4), 301–318.
+          <span>The original statement, from his 1994 presidential address. doi:10.1111/j.1469-8986.1995.tb01213.x</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Porges, S. W. (2011). <em>The Polyvagal Theory</em>. W. W. Norton.
+          <span>Book-length development of the theory, including neuroception and the three-state account.</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Porges, S. W. (2022). "Polyvagal Theory: A Science of Safety."
+          <em>Frontiers in Integrative Neuroscience</em>, 16, 871227.
+          <span>Shorter and more recent, and the better place to start. doi:10.3389/fnint.2022.871227</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Grossman, P. &amp; Taylor, E. W. (2007). "Toward understanding respiratory
+          sinus arrhythmia." <em>Biological Psychology</em>, 74(2), 263–285.
+          <span>The foundational objection to reading a vagal pathway off heart-rate variability. doi:10.1016/j.biopsycho.2005.11.014</span></span>
+        <span class="sr-fw-srctag">Critique</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Grossman, P. (2023). "Fundamental challenges and likely refutations of the
+          five basic premises of the polyvagal theory." <em>Biological Psychology</em>, 180, 108589.
+          <span>Premise-by-premise challenge to the theory's anatomical and evolutionary claims. doi:10.1016/j.biopsycho.2023.108589</span></span>
+        <span class="sr-fw-srctag">Critique</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Grossman, P. et al. (2026). "Why the Polyvagal Theory Is Untenable."
+          <em>Clinical Neuropsychiatry</em>, 23(1), 100–112.
+          <span>Thirty-nine specialists in vagal physiology and vertebrate evolution. The most serious challenge to date. doi:10.36131/cnfioritieditore20260110</span></span>
+        <span class="sr-fw-srctag">Critique · 2026</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Porges, S. W. (2026). "When a Critique Becomes Untenable: A Scholarly
+          Response to Grossman et al." <em>Clinical Neuropsychiatry</em>, 23(1), 113–128.
+          <span>The rebuttal, in the same issue. Read it alongside the paper above, not instead of it. doi:10.36131/cnfioritieditore20260111</span></span>
+        <span class="sr-fw-srctag">Reply · 2026</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Dana, D. (2018). <em>The Polyvagal Theory in Therapy</em>. W. W. Norton.
+          <span>How the frame is used in practice, which is closer to how SafeRise uses it.</span></span>
+        <span class="sr-fw-srctag">Applied</span>
+      </li>
+    </ul>
+    <p class="note" style="padding:16px var(--pad) 0">Citations verified against the published record,
+      August 2026. If you find an error here, that is a defect and we want to hear about it.</p>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 7 · PAGER ═════════════════════════════════════════╗ -->
+<div class="sr-fw-body">
+  <nav class="sr-fw-pager" aria-label="Other frameworks">
+    <a href="method.html">
+      <span class="sr-fw-pagertile" aria-hidden="true">All<br>six</span>
+      <div>
+      <span class="sr-fw-pagerkick">Back to</span>
+      <h3>All six frameworks</h3>
+      <p class="note">What the method rests on, and where each source stops.</p>
+      </div>
+    </a>
+  </nav>
+
+  <footer class="sr-fw-foot">
+    <p>SafeRise Protocol · Kenor International BV, Sint Maarten. Clinical collaborator
+      Dr Keny F. Bastien MD. This page describes the reasoning behind a structured practice.
+      It is not medical advice and does not diagnose, treat or replace care from a clinician.</p>
+  </footer>
+</div>
+
+</main>
+
+<script>
+(function(){
+  // ── reading mode, shared with the dashboard and reader (body.rd-soft) ──
+  var THEME_KEY = 'sr-theme';
+  function setTheme(mode){
+    document.body.classList.toggle('rd-soft', mode === 'sunrise');
+    document.querySelectorAll('[data-theme]').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-theme') === mode);
+    });
+    try{ sessionStorage.setItem(THEME_KEY, mode); }catch(e){}
+  }
+  document.querySelectorAll('[data-theme]').forEach(function(b){
+    b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme')); });
+  });
+  var saved = 'midnight';
+  try{ saved = sessionStorage.getItem(THEME_KEY) || 'midnight'; }catch(e){}
+  setTheme(saved);
+
+  // ── rail routes ──
+  // The dashboard resolves every rail route through openRoute(), which opens a
+  // route modal that only exists in dashboard.html. These pages carry no such
+  // modal, so the rail leaves for the dashboard and lets it answer. /method is
+  // the page you are already on.
+  var PAGES = { method: 'method.html', dashboard: 'dashboard.html' };
+  document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var key = b.getAttribute('data-route');
+      if(key === 'method') return;                 // already here
+      window.location.href = PAGES[key] || 'dashboard.html';
+    });
+  });
+})();
+</script>
+</body>
+</html>

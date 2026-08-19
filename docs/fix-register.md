@@ -9,7 +9,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
-- Highest ID currently issued: **SR-055**.
+- Highest ID currently issued: **SR-060**.
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
 has since shipped. Numbering continues from SR-044 so no ID is ever reused.*
@@ -68,6 +68,42 @@ Clearing cover still opens `#mMedia` with `.sr-dash-player` styled by the
 dashboard sheet.
 
 *Status:* complete · *Raised:* 17 Aug 2026 · *Merged:* 17 Aug 2026
+
+### SR-058 · Porges page rests on a live, unresolved scientific dispute
+`method-porges.html` section 04 reports the February 2026 *Clinical Neuropsychiatry*
+exchange: Grossman et al., "Why the Polyvagal Theory Is Untenable" (23(1), 100–112),
+and Porges's rebuttal in the same issue (23(1), 113–128). The dispute is live and
+public, so the section is accurate today and will go stale without anyone noticing.
+
+Two decisions are outstanding and neither is a copy edit. First, the page needs a
+review date and an owner — a claim this load-bearing cannot sit unchecked. Second,
+Porges is currently framework 01 of 06 and the lead credibility anchor for the whole
+`/method` section; if the dispute resolves against the theory, cardiac coherence
+(HeartMath) is the candidate to take that position, because it carries the one
+specific empirical claim SafeRise makes.
+
+Section 04 and the sources list are not to be edited outside this item. Every
+citation was verified against the published record; changes go through the register.
+
+*Status:* open · *Raised:* 18 Aug 2026
+
+### SR-060 · Duration-free copy rule
+No page states or implies a session length — no "10 minutes", no "ten-minute", no
+"≈10 min", no runtime on a player. Session lengths vary by protocol and by track, and
+the real figures are not known until the recording sprint is complete. The rule holds
+across all pages until every meditation audio and video asset is finished; only then
+is it revisited against actual runtimes. It is a factual-accuracy rule, not a style
+preference.
+
+`method.html` and `method-porges.html` are clean and carry an inline comment saying
+why, so the rule survives the next person to edit them.
+
+**Known pre-existing conflict, out of scope for this branch.** The Track 03 scripts are
+all built to ≈10 minutes, and `SafeRise_Claude_Source_Lite.html` renders "10:00" on
+every audio player. Both contradict this rule. They need their own item when that page
+is next touched — do not fix them here.
+
+*Status:* open · *Raised:* 18 Aug 2026
 
 ---
 
@@ -183,6 +219,66 @@ against a sha256-verified mirror under the session scratchpad, which is what thi
 session's measurements were taken from.
 
 *Status:* partial — repo-side fixed, needs a macOS permission grant · *Raised:* 18 Aug 2026
+
+### SR-056 · Five /method framework pages not built
+`/method` ships with one of six framework pages. `method-porges.html` exists; HeartMath,
+Maté, Jung, the observer stance and Watts do not. On `method.html` those five cards
+render as non-anchor `<div class="sr-mi-card … soon">` rather than links, mirroring the
+`.sr-dash-navlinks a.soon` treatment from `css/saferise-dashboard.css` — restated in
+`css/saferise-method.css` because the `/method` pages do not load the dashboard sheet.
+
+Stub pages were considered and rejected: five stubs would be forgotten, and a card that
+navigates to an empty page is worse than one that says it is not ready.
+
+The pager on `method-porges.html` is single-item for the same reason — the HeartMath
+"next" card is removed, not disabled, and comes back when page 02 lands.
+`method-porges.html` is the template the other five are built against.
+
+*Status:* open · *Raised:* 18 Aug 2026
+
+### SR-057 · css/saferise-method.css carries its own :root token block
+`css/saferise-method.css` opens with a `:root` block defining `--bg`, `--band`, `--hair`,
+`--gold` and the rest. Those duplicate `css/saferise-dashboard.css:22` **by value** —
+the four watched tokens are byte-identical.
+
+The duplication is currently harmless because it is page-isolated: `method.html` and
+`method-porges.html` load `saferise-method.css` and nothing else, and `dashboard.html`
+loads system + dashboard and never loads method. No page resolves two competing `:root`
+blocks, so there is no cascade collision to trip over.
+
+**One token genuinely diverges.** The method sheet sets `--accent:var(--gold)`; the
+dashboard sets `--accent:var(--sr-track01)`, sourced from `saferise-system.css`. The
+method pages do not load `saferise-system.css`, so aligning them to the repo would
+resolve `--accent` to nothing and silently kill the accent on `.sr-mi-step.on` and the
+interpretive-layer cards. Do not "fix" this without moving the token source first.
+
+Consolidation is deferred deliberately, not overlooked. The canonical token source is
+still unresolved — see [[SR-045]], which is the same argument between the design system
+and the dashboard. Merging the method sheet into either now would bury that question
+rather than answer it.
+
+*Status:* open · *Raised:* 18 Aug 2026
+
+---
+
+## LOW
+
+### SR-059 · Framework page art slots unfilled
+The `/method` pages carry placeholder markup for every art slot, with the real `<img>`
+commented out beside a `NEEDS ART` / `Reuse` / `Tonal fallback` span stating exact
+dimensions. Outstanding: six 1340×360 section bands (slot B, one per framework, the only
+genuinely new commission) and six 200×200 symbol tiles (slot A, reused at 88px on the
+index cards and 64px on the pager).
+
+Two slots are already filled: the arrival check-in and Shutdown Recovery load cards on
+`method-porges.html` point at `assets/covers/01.jpg` and `assets/covers/07.jpg`, both of
+which exist in the repo. Every other `<img>` stays commented out — uncommenting one
+without the asset produces a broken image, which is worse than the placeholder.
+
+Covers carry their kicker word and number inside the image. Do not add CSS overlay text
+to a cover or the text doubles.
+
+*Status:* open · *Raised:* 18 Aug 2026
 
 ---
 
