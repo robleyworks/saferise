@@ -38,7 +38,7 @@ var SHARED = {
     ['heart', 'Somatic Release Activities', 'Between sessions.',     'Small physical practices that hold the work on the days you will not sit down.'],
     ['comp',  'Safe Practice',        'When and how to proceed.',    'Pacing, what to expect, when to slow down, and when this is not the right tool today.'],
     ['pin',   'Proximity Guide',      'How close to stay.',          'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.'],
-    ['shield','Disclosure &amp; Support','A script for someone close.','Words for explaining what you are doing and what you need, without over-explaining.'],
+    ['shield','Disclosure & Support','A script for someone close.','Words for explaining what you are doing and what you need, without over-explaining.'],
     ['mail',  'Invitation to Repair', 'Reopening it with them.',     'A structured way to open repair with another person when the pattern involves them.'],
     ['pen',   'Your Record',          'What changed, in your words.','Prompts tied to this protocol, and the log that tracks your state before and after each session.']
   ],
@@ -99,7 +99,7 @@ var TRACKS = {
       ['07','Restore',    'The Shutdown Recovery Protocol',        'Come back to yourself slowly, and start feeling things again.',                          'Numb, flat, unreachable. Sleep that doesn\u2019t restore.',                     ['I feel nothing','I am unreachable, including to myself','I cannot make myself care']],
       ['08','Release',    'The Jealousy Release Protocol',         'See what the sting is telling you, and get back to your own path.',       'Tightening at others\u2019 success, a running tally you didn\u2019t choose.',    ['I keep score','Other people\u2019s wins take something from me','I cannot be glad for them']],
       ['09','Anchor',     'The Insecurity Anchor Protocol',        'Quiet the doubt, and stay steady when you feel judged or exposed.',       'Bracing to be seen. Doubt arriving before any evidence.',                       ['I doubt myself before anyone speaks','Being seen costs me something','I am waiting to be found out']],
-      ['10','Reclaim',    'The Powerlessness &amp; Despair Protocol','Find what is still in your reach, and take the next step that matters.',          'No fight left. Sleep as escape. Nothing yours to influence.',                   ['Nothing I do changes anything','I have no fight left','Sleep is the only relief']]
+      ['10','Reclaim',    'The Powerlessness & Despair Protocol','Find what is still in your reach, and take the next step that matters.',          'No fight left. Sleep as escape. Nothing yours to influence.',                   ['Nothing I do changes anything','I have no fight left','Sleep is the only relief']]
     ],
 
     cost: {
@@ -145,10 +145,10 @@ var TRACKS = {
       h2: 'Change becomes visible <span class="gold">across daily life.</span>',
       lede: 'Six areas where a more regulated state becomes visible \u2014 to you and to the people around you.',
       items: [
-        ['\u25CD','Mind',         '#C97A5A','from loops, fog &amp; paralysis',   'The loop stops circling. Decisions that felt impossible become ordinary.'],
-        ['\u25C7','Body',         '#C97A5A','from chronic tension &amp; pain',   'Jaw unclenches. Chest opens. Tension you had stopped noticing begins to let go.'],
+        ['\u25CD','Mind',         '#C97A5A','from loops, fog & paralysis',   'The loop stops circling. Decisions that felt impossible become ordinary.'],
+        ['\u25C7','Body',         '#C97A5A','from chronic tension & pain',   'Jaw unclenches. Chest opens. Tension you had stopped noticing begins to let go.'],
         ['\u263E','Rest',         '#D4A843','from a racing mind at night',       'When the system winds down during the day, it stops keeping you up at night.'],
-        ['\u26A1','Energy',       '#D4A843','from peaks &amp; crashes',          'Less swing. When you start regulated, the drops become smaller.'],
+        ['\u26A1','Energy',       '#D4A843','from peaks & crashes',          'Less swing. When you start regulated, the drops become smaller.'],
         ['\u25CE','Relationships','#7FA88C','from leaked irritability',          'Small things stop triggering large reactions. People often notice before you do.'],
         ['\u25C8','Identity',     '#4E9AA6','from eroded self-trust',            'The hard thing is still hard \u2014 but your state now supports how you meet it.']
       ],
@@ -179,14 +179,14 @@ var TRACKS = {
     price: PRICING.t2,
     protocols: [
       ['01','Speak',     'The Safe Conversation Protocol',       '','',[]],
-      ['02','Repair',    'The Rupture &amp; Repair Protocol',    '','',[]],
-      ['03','Rebuild',   'The Trust &amp; Betrayal Protocol',    '','',[]],
+      ['02','Repair',    'The Rupture & Repair Protocol',    '','',[]],
+      ['03','Rebuild',   'The Trust & Betrayal Protocol',    '','',[]],
       ['04','Release',   'The Resentment Release Protocol',      '','',[]],
       ['05','Open',      'The Intimacy Barrier Protocol',        '','',[]],
       ['06','Level',     'The Double Standard Protocol',         '','',[]],
       ['07','Clarify',   'The Projection Clarity Protocol',      '','',[]],
-      ['08','Appreciate','The Appreciation &amp; Support Protocol','','',[]],
-      ['09','Meet',      'The Pursue &amp; Withdraw Protocol',   '','',[]],
+      ['08','Appreciate','The Appreciation & Support Protocol','','',[]],
+      ['09','Meet',      'The Pursue & Withdraw Protocol',   '','',[]],
       ['10','Close',     'The Conscious Separation Protocol',    '','',[]]
     ],
     cost: null, range: null, journey: null, change: null,
@@ -211,7 +211,7 @@ var TRACKS = {
       ['06','Recover', 'The Ambition Recovery Protocol',      '','',[]],
       ['07','Cross',   'The Career Transition Protocol',      '','',[]],
       ['08','Decide',  'The Decision Fatigue Protocol',       '','',[]],
-      ['09','Refill',  'The Burnout &amp; Overload Protocol', '','',[]],
+      ['09','Refill',  'The Burnout & Overload Protocol', '','',[]],
       ['10','Unlock',  'The Creative Flow Protocol',          '','',[]]
     ],
     cost: null, range: null, journey: null, change: null,
@@ -268,11 +268,11 @@ var T2 = {
      'Make it safe enough to say the true thing and be heard.',
      'Rehearsing the sentence, bracing for the reaction, saying the safe version instead.',
      ['I rehearse conversations before I have them','I say the safe version instead of the true one','It becomes a fight before I finish']],
-    ['02','Repair',    'The Rupture &amp; Repair Protocol',
+    ['02','Repair',    'The Rupture & Repair Protocol',
      'Close the gap after a fight instead of waiting for it to fade.',
      'Days of politeness, the subject stepped around, nothing actually settled.',
      ['We never finish a fight, we just stop','We go quiet until it passes','I do not know how to come back in']],
-    ['03','Rebuild',   'The Trust &amp; Betrayal Protocol',
+    ['03','Rebuild',   'The Trust & Betrayal Protocol',
      'Rebuild ground under a relationship after trust was broken.',
      'Checking, replaying, needing a detail that never quite settles it.',
      ['I check things I should not check','I keep asking and it never lands','I cannot tell whether I am safe here']],
@@ -292,11 +292,11 @@ var T2 = {
      'Tell what they actually did apart from what your past says they meant.',
      'You are sure why they did it, before you have any proof.',
      ['I know exactly what they meant, and I am often wrong','This feels older than this relationship','I am reacting to someone who is not in the room']],
-    ['08','Appreciate','The Appreciation &amp; Support Protocol',
+    ['08','Appreciate','The Appreciation & Support Protocol',
      'Get back the habit of noticing what the other one is carrying.',
      'Everything lands as not enough. Neither of you says thank you any more.',
      ['I only notice what is missing','We have stopped thanking each other','I feel invisible inside my own effort']],
-    ['09','Meet',      'The Pursue &amp; Withdraw Protocol',
+    ['09','Meet',      'The Pursue & Withdraw Protocol',
      'Break the chase-and-retreat loop by changing your half of it.',
      'One reaching harder, one moving further. Neither able to stop first.',
      ['The more I reach, the further they go','I need space and it reads as leaving','We are stuck in the same loop']],
@@ -340,7 +340,7 @@ var T2 = {
     sub: 'Three parts, and none of them require the other person\u2019s agreement to start.',
     experience: 'The guided session, voiced start to finish, in a version for running alone and a version for running together. Most people start alone \u2014 changing your own half is the only half you control.',
     log: 'Log the session and note what shifted, in the dynamic as well as in you. What repeats becomes visible far faster in a relationship than it does on your own.',
-    deeper: 'The full resource library, plus the two that carry the most weight here: the Invitation to Repair, and the Disclosure &amp; Support script for explaining what you are doing without turning it into a demand.',
+    deeper: 'The full resource library, plus the two that carry the most weight here: the Invitation to Repair, and the Disclosure & Support script for explaining what you are doing without turning it into a demand.',
     deeperNote: 'Individuation sits here too: what belongs to you, what belongs to them, and what belongs to something older than either of you.'
   },
 
@@ -415,7 +415,7 @@ var T3 = {
      'Make small decisions small again.',
      'Small choices cost as much as big ones. Putting it off, and calling it care.',
      ['Every decision costs the same now','I keep gathering information instead of deciding','I am exhausted by choices that do not matter']],
-    ['09','Refill',  'The Burnout &amp; Overload Protocol',
+    ['09','Refill',  'The Burnout & Overload Protocol',
      'Refill enough to work at the level you are actually being paid for.',
      'You stopped caring about work you used to love. Rest that does not rest.',
      ['I do not care about work I used to love','The weekend does not touch it','I am running on reserve and have been for months']],
@@ -498,7 +498,7 @@ var FRAMEWORKS = {
   porges:    { name: 'Polyvagal Theory',      person: 'Stephen Porges', short: 'Porges',  register: 'peer-reviewed',    step: 1, colour: 'var(--gold)' },
   heartmath: { name: 'Cardiac coherence',     person: 'HeartMath', short: 'HeartMath',       register: 'peer-reviewed',    step: 2, colour: 'var(--gold)' },
   mate:      { name: 'Compassionate Inquiry', person: 'Gabor Mat\u00E9', short: 'Mat\u00E9', register: 'clinical practice',step: 3, colour: 'var(--gold)' },
-  jung:      { name: 'Shadow &amp; individuation', person: 'Carl Jung', short: 'Jung',  register: 'interpretive',     step: 0, colour: 'var(--teal)' },
+  jung:      { name: 'Shadow & individuation', person: 'Carl Jung', short: 'Jung',  register: 'interpretive',     step: 0, colour: 'var(--teal)' },
   dispenza:  { name: 'Observer stance',       person: 'mechanism only', short: 'Dispenza',  register: 'interpretive',     step: 4, colour: 'var(--teal)' },
   watts:     { name: 'Non-resistance',        person: 'Alan Watts', short: 'Watts',      register: 'interpretive',     step: 0, colour: 'var(--teal)' }
 };
@@ -599,7 +599,7 @@ SHARED.faq = [
     'Plenty of people use it alongside therapy. It gives you something practical to do in the moment a pattern shows up, between the sessions where you work out why it is there.']],
 
   ['What if I am already working with a therapist?',
-   ['That combination tends to work well, and it is worth telling them you are doing it. Every protocol includes a Disclosure &amp; Support script partly for this \u2014 a short way to explain what the practice involves so they can tell you whether it fits what you are working on together.',
+   ['That combination tends to work well, and it is worth telling them you are doing it. Every protocol includes a Disclosure & Support script partly for this \u2014 a short way to explain what the practice involves so they can tell you whether it fits what you are working on together.',
     'If your therapist advises against it, follow their guidance. They know your situation. A website does not.']],
 
   ['Do I need any experience with meditation?',
@@ -672,7 +672,7 @@ TRACKS[2].faq = [
     'Every protocol has a version for running alone and a version for running together. You can move between them whenever you want.']],
   ['What if my partner will not take part?',
    ['Then run it alone. Nothing here requires their agreement, their attendance or their belief in it.',
-    'If and when you want to open the subject, each protocol includes a Disclosure &amp; Support script \u2014 a way to explain what you are doing without it landing as a demand or an accusation.']],
+    'If and when you want to open the subject, each protocol includes a Disclosure & Support script \u2014 a way to explain what you are doing without it landing as a demand or an accusation.']],
   ['Is this couples therapy?',
    ['No. Couples therapy is a professional relationship with a trained clinician in the room. This is a structured practice the two of you can run yourselves, and it does not replace that.',
     'If there is abuse, coercion or fear in the relationship, this is not the right tool. Speak to a professional.']],
@@ -699,7 +699,7 @@ TRACKS[3].faq = [
     'They combine well. Plenty of people bring what surfaces here into a coaching session.']],
   ['I do not have time for a full session.',
    ['Then use the short version, or the Cue Card. The method is designed to compress rather than to be skipped.',
-    'If you genuinely cannot find a gap anywhere in a day, that is worth noticing. The Burnout &amp; Overload Protocol starts there.']],
+    'If you genuinely cannot find a gap anywhere in a day, that is worth noticing. The Burnout & Overload Protocol starts there.']],
   ['What if the problem is the job, not me?',
    ['Then regulating will not fix it, and this track does not claim it will. What it does is give you access to your own judgement, which is what you need in order to see the situation clearly and decide what to do about it.',
     'The Career Transition and Ambition Recovery protocols exist because sometimes the answer is to leave.']],
