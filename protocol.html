@@ -786,6 +786,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates{transition:background-color 1.4s eas
       <div class="prompts"><p class="pq" id="promptq2">"What activated me?"</p></div>
       <textarea id="journalentry" placeholder="Write freely about what's coming up with this protocol…" aria-label="Journal entry"></textarea>
       <div style="margin-top:15px"><button class="pill" onclick="saveJournalResult()">Save entry</button></div>
+      <p class="empty" style="margin-top:10px">Entries are saved on this device.</p>
       <div class="recorded-results">
         <div class="results-head"><span class="flabel">Journal results</span><span id="journalresultcount">No entries yet</span></div>
         <div id="journalresults"><p class="empty">Nothing here yet. Your first entry is the baseline everything else gets measured against.</p></div>
@@ -1048,9 +1049,75 @@ function saveLogResult(){
   setTimeout(function(){journal.classList.remove('next-step')},2300);
 }
 
+/* ══════════ SR-071 · JOURNAL ENTRIES ══════════
+   The write block lives here, inside the protocol context, so every entry
+   carries the protocol it came out of. The dashboard Journal view reads the
+   same key back.
+
+   Same Store interface as the dashboard, including the write probe and the
+   in-memory fallback: Safari in private browsing throws SecurityError on
+   setItem, and a page that takes a member's writing must not lose it to an
+   exception it never catches. */
+var Store = (function(){
+  var mem = {}, ok = false;
+  try { var k='sr.probe'; window.localStorage.setItem(k,'1'); window.localStorage.removeItem(k); ok = true; } catch(e){ ok = false; }
+  return {
+    persistent: ok,
+    get: function(key, fallback){
+      try { var raw = ok ? window.localStorage.getItem(key) : mem[key];
+            return raw ? JSON.parse(raw) : fallback; }
+      catch(e){ return fallback; }
+    },
+    set: function(key, val){
+      var raw = JSON.stringify(val);
+      try { if(ok) window.localStorage.setItem(key, raw); else mem[key] = raw; }
+      catch(e){ mem[key] = raw; }
+    }
+  };
+})();
+
+var K_ENTRIES = 'sr.journal.entries';
+
+/* This page is Track 01, protocol 01. protocolId is the join key the Journal
+   view filters on — it groups on `protocol` for display but filters on this,
+   and getting the two the wrong way round gives a journal that looks right
+   and filters wrong. The id follows the track/protocol key already used for
+   cover paths (track id + protocol number). */
+var PAGE_PROTOCOL = { protocolId: 't1-p01', protocol: 'The Anxiety Reset Protocol', trackId: 1 };
+
+function todayISO(){
+  var d = new Date(), p = function(n){ return (n<10?'0':'') + n; };
+  return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate());
+}
+
+/* read, push, write — never assign a fresh array over the key, or one write
+   from this page wipes every entry made from another. */
+function appendJournalEntry(text){
+  var entries = Store.get(K_ENTRIES, []);
+  if(!Array.isArray(entries)) entries = [];
+  entries.push({
+    id:         'e' + Date.now() + '-' + Math.random().toString(36).slice(2,7),
+    protocolId: PAGE_PROTOCOL.protocolId,
+    protocol:   PAGE_PROTOCOL.protocol,
+    trackId:    PAGE_PROTOCOL.trackId,
+    date:       todayISO(),
+    /* The log on this page measures activation 0-10, which is not the same
+       measurement as the nervous-system state the Journal view's shift row
+       names. Rather than invent a mapping from one to the other, these are
+       written null — the schema allows it and the view renders no shift row
+       for an entry without them. */
+    before:     null,
+    after:      null,
+    text:       text
+  });
+  Store.set(K_ENTRIES, entries);
+  return entries.length;
+}
+
 function saveJournalResult(){
-  var field=document.getElementById('journalentry'),copy=field.value.trim()||'I noticed more space between the feeling and what I chose to do next.';
-  copy=copy.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});
+  var field=document.getElementById('journalentry'),raw=field.value.trim()||'I noticed more space between the feeling and what I chose to do next.';
+  appendJournalEntry(raw);          /* SR-071 · the stored entry keeps the member's own text, unescaped */
+  var copy=raw.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});
   document.getElementById('journalresults').innerHTML=entryMarkup('After practice · just now',copy);
   document.getElementById('journalresultcount').textContent='Latest reflection';
   field.value='';
