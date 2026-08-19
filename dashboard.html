@@ -1661,7 +1661,9 @@
           '<p class="sr-dash-hero-kick">' + b.kick + '</p>' +
           '<p class="sr-dash-hero-title">' + b.title + '</p>' +
           '<p class="sr-dash-hero-sub">' + b.sub + '</p>' +
-          '<p class="sr-dash-hero-meta">' + b.meta + '</p>' +
+          /* SR-080 · guarded. The article slide lost its "2 min read" and this
+             printed the word "undefined" into the hero until it was. */
+          (b.meta ? '<p class="sr-dash-hero-meta">' + b.meta + '</p>' : '') +
           '<div class="sr-dash-hero-cta"><button class="sr-dash-addbtn">' + b.cta + ' ' + ARROW + '</button></div>' +
         '</div></article>';
     }).join(''));
