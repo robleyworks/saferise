@@ -362,7 +362,7 @@
         <div class="sr-dash-offer">
           <div class="sr-dash-offerhead">
             <p class="sr-dash-offername">Workshops</p>
-            <p class="sr-dash-offerprice">from €59</p>
+            <p class="sr-dash-offerprice">from <span data-sr-price="workshop"></span></p>
           </div>
           <p class="sr-dash-offerbody">Run the protocol in a room with other people, facilitated live.</p>
           <ul class="sr-dash-offerlist">
@@ -642,8 +642,8 @@
         </div>
       </div>
       <div class="sr-modalfoot">
-        <p>€59 per person. Cancel free up to 48 hours before. A recording is shared with everyone who attends.</p>
-        <button class="sr-dash-addbtn sr-dash-addbtn--solid">Reserve my place · €59 <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
+        <p><span data-sr-price="workshop"></span> per person. Cancel free up to 48 hours before. A recording is shared with everyone who attends.</p>
+        <button class="sr-dash-addbtn sr-dash-addbtn--solid">Reserve my place · <span data-sr-price="workshop"></span> <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
       </div>
     </div>
   </div>
@@ -695,11 +695,11 @@
       <h3>August and September</h3>
       <p>Workshops run monthly per track. Private sessions open in two-week blocks. Times are shown in your timezone.</p>
       <div class="sr-slotpick" data-pick style="gap:8px">
-        <button class="sr-slotopt on"><b>22 Aug</b><span>Anxiety Reset · group workshop<em>18:00–20:00 · Online · 6 places left · €59</em></span></button>
+        <button class="sr-slotopt on"><b>22 Aug</b><span>Anxiety Reset · group workshop<em>18:00–20:00 · Online · 6 places left · <span data-sr-price="workshop"></span></em></span></button>
         <button class="sr-slotopt"><b>29 Aug</b><span>Rupture &amp; Repair · couples workshop<em>18:00–20:00 · Online · 2 places left · €139 per couple</em></span></button>
         <button class="sr-slotopt"><b>03 Sep</b><span>Premium 1:1 with Andre<em>Three times available · 90 min · €275</em></span></button>
         <button class="sr-slotopt" disabled><b>12 Sep</b><span>Shutdown Recovery · group workshop<em>Full — join the waitlist</em></span></button>
-        <button class="sr-slotopt"><b>26 Sep</b><span>Anger Alchemy · group workshop<em>18:00–20:00 · Online · 10 places · €59</em></span></button>
+        <button class="sr-slotopt"><b>26 Sep</b><span>Anger Alchemy · group workshop<em>18:00–20:00 · Online · 10 places · <span data-sr-price="workshop"></span></em></span></button>
       </div>
       <div class="sr-modalfoot">
         <p>Cancel free up to 48 hours before a workshop, 72 hours before a 1:1.</p>
@@ -796,35 +796,43 @@
 
 </main>
 
+<script src="content/tracks.js"></script>
 <script>
 (function(){
   // COVER_01 is embedded for this mockup; 02–10 resolve from assets/covers/NN.jpg
   var COVER_01 = "assets/covers/01.jpg";
 
-  var TRACKS = {
-    1:{accent:'var(--sr-track01)', cls:'t-1', note:'Personal Transformation · included with your plan', unlocked:true,
-       items:[
-      ['Regulate','The Anxiety Reset Protocol'],['Transmute','The Anger Alchemy Protocol'],
-      ['Reduce Load','The Overwhelm Threshold Protocol'],['Repair','The Abandonment Wound Protocol'],
-      ['Dissolve','The Shame Dissolution Protocol'],['Integrate','The Grief Integration Protocol'],
-      ['Restore','The Shutdown Recovery Protocol'],['Release','The Jealousy Release Protocol'],
-      ['Anchor','The Insecurity Anchor Protocol'],['Reclaim','The Powerlessness & Despair Protocol']]},
-    2:{accent:'var(--sr-track02)', cls:'t-2', note:'Relationship Healing · not on your plan yet', unlocked:false,
-       items:[
-      ['Speak','The Safe Conversation Protocol'],['Repair','The Rupture & Repair Protocol'],
-      ['Rebuild','The Trust & Betrayal Protocol'],['Release','The Resentment Release Protocol'],
-      ['Open','The Intimacy Barrier Protocol'],['Level','The Double Standard Protocol'],
-      ['Clarify','The Projection Clarity Protocol'],['Appreciate','The Appreciation & Support Protocol'],
-      ['Meet','The Pursue & Withdraw Protocol'],['Close','The Conscious Separation Protocol']]},
-    3:{accent:'var(--sr-track03)', cls:'t-3', note:'Professional Performance · not on your plan yet', unlocked:false,
-       items:[
-      ['Steady','The High-Stakes Presence Protocol'],['Navigate','The Conflict Navigation Protocol'],
-      ['Dissolve','The Imposter Dissolution Protocol'],['Loosen','The Perfectionism Release Protocol'],
-      ['Perform','The Performance Anxiety Protocol'],['Recover','The Ambition Recovery Protocol'],
-      ['Cross','The Career Transition Protocol'],['Decide','The Decision Fatigue Protocol'],
-      ['Refill','The Burnout & Overload Protocol'],['Unlock','The Creative Flow Protocol']]},
-    4:{accent:'var(--sr-track04)', cls:'t-4', note:'Elevation Series · opening soon', unlocked:false, items:[]}
+  /* SR-063 · The protocol names, track names and prices used to be typed
+     out again here. They now come from content/tracks.js, which is the only
+     place any of them is written. What stays local is the part that is
+     genuinely dashboard state and not content: the accent token, the theme
+     class, and whether the member has this track on their plan.
+
+     Named DASHTRACKS, not TRACKS — content/tracks.js already owns the
+     global TRACKS and shadowing it here would give the two files a silent
+     disagreement, which is the failure this whole branch exists to end. */
+  var ENTITLED = {1:true, 2:false, 3:false, 4:false};
+  var TRACKMETA = {
+    1:{accent:'var(--sr-track01)', cls:'t-1', state:'included with your plan'},
+    2:{accent:'var(--sr-track02)', cls:'t-2', state:'not on your plan yet'},
+    3:{accent:'var(--sr-track03)', cls:'t-3', state:'not on your plan yet'},
+    4:{accent:'var(--sr-track04)', cls:'t-4', state:'opening soon'}
   };
+  var DASHTRACKS = (function(){
+    var out = {};
+    Object.keys(TRACKMETA).forEach(function(k){
+      var src = TRACKS[k] || {};
+      var m   = TRACKMETA[k];
+      out[k] = {
+        accent: m.accent,
+        cls: m.cls,
+        note: (src.name || '') + ' \u00B7 ' + m.state,
+        unlocked: !!ENTITLED[k],
+        items: (src.protocols || []).map(function(p){ return [p[1], p[2]]; })
+      };
+    });
+    return out;
+  })();
 
   // The three parts are the same shape in every track — Experience, Log, Go Deeper.
   // What changes is who is in the room, what the Experience actually is, and what
@@ -926,7 +934,7 @@
 
   var CURRENT_TRACK = 1;
   function render(n){
-    var t = TRACKS[n];
+    var t = DASHTRACKS[n];
     CURRENT_TRACK = +n;
     row.className = 'sr-dash-carrow ' + t.cls;
     row.style.setProperty('--accent', t.accent);
@@ -974,11 +982,12 @@
     if(lock){
       if(t.unlocked || !t.items.length){ lock.classList.remove('show'); }
       else {
-        var PRICE = {2:'\u20AC29 / month', 3:'\u20AC49 / month'};
         document.getElementById('srLockText').innerHTML =
           '<b>' + TRACKNAME[n] + ' is not on your plan yet.</b> ' +
           'Adding it opens all ten protocols and every resource inside them. Your existing access stays exactly as it is.';
-        document.getElementById('srLockBtn').innerHTML = 'Add for ' + (PRICE[n] || '') + ' ' + ARROW;
+        var up = TRACKS[n] && TRACKS[n].price;
+        document.getElementById('srLockBtn').innerHTML =
+          'Add for ' + (up ? up.amount + ' ' + up.per : '') + ' ' + ARROW;
         lock.classList.add('show');
       }
     }
@@ -1003,8 +1012,8 @@
       rail.forEach(function(x){ x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
       b.classList.add('on'); b.setAttribute('aria-selected','true');
       var n = b.getAttribute('data-track');
-      b.style.setProperty('--accent', TRACKS[n].accent);
-      document.getElementById('srJourney').style.setProperty('--accent', TRACKS[n].accent);
+      b.style.setProperty('--accent', DASHTRACKS[n].accent);
+      document.getElementById('srJourney').style.setProperty('--accent', DASHTRACKS[n].accent);
       render(n);
       renderJourney(n);
     });
@@ -1044,8 +1053,30 @@
     'steady|work':  [3,'10','The Creative Flow Protocol','Steady is the state creative work actually needs.']
   };
   var OWNED = {1:true, 2:false, 3:false, 4:false};
-  var TRACKNAME = {1:'Personal Transformation', 2:'Relationship Healing', 3:'Professional Performance'};
-  var TRACKPRICE = {2:'\u20AC29/mo', 3:'\u20AC49/mo'};
+  /* SR-063/SR-064 · derived, not typed. The old TRACKPRICE said €29 and €49,
+     which were the retired tiers — the locked record is t2 €19 and t3 €29. */
+  /* SR-064 · Static price strings in the markup are placeholders now.
+     Each carries data-sr-price="<key>" and is filled from PRICING at load,
+     so the number exists in exactly one place in the repo. */
+  (function hydratePrices(){
+    var nodes = document.querySelectorAll('[data-sr-price]');
+    for (var i = 0; i < nodes.length; i++) {
+      var rec = PRICING[nodes[i].getAttribute('data-sr-price')];
+      if (rec) nodes[i].textContent = rec.amount;
+    }
+  })();
+
+  var TRACKNAME = (function(){
+    var o = {}; [1,2,3].forEach(function(n){ o[n] = TRACKS[n].name; }); return o;
+  })();
+  var TRACKPRICE = (function(){
+    var o = {};
+    [2,3].forEach(function(n){
+      var p = TRACKS[n].price;
+      o[n] = p.amount + p.per.replace('/ ', '/').replace(' month', 'mo');
+    });
+    return o;
+  })();
   // ── COVERS ──────────────────────────────────────────────────────────────
   // Only 01 is embedded in this mockup. Covers 02–10 are requested from these
   // paths and appear the moment the file exists; until then each card falls back
@@ -1169,12 +1200,29 @@
 
 
   // ── route layer: every link resolves to something ──
+  /* prose counts read as words, not numerals — the string this feeds
+     used to say "seven", and "the 8 stages" reads like a spec sheet. */
+  function SR_NUMWORD(n){
+    var w = ['zero','one','two','three','four','five','six','seven','eight',
+             'nine','ten','eleven','twelve'];
+    return w[n] || String(n);
+  }
+
   var ROUTES = {
     dashboard:  ['This page', 'You are here.', '/dashboard'],
     library:    ['Protocol library', 'All thirty protocols across the four tracks, filterable by the state you are in rather than the protocol name.', '/library'],
     journal:    ['Journal', 'Every entry you have written, searchable and filterable by protocol, date or theme.', '/journal'],
     record:     ['Your record', 'The full archive: state history, per-protocol history, resource history, and the report builder.', '/record'],
-    laboratory: ['The Life Laboratory', 'Your observations, the seven stages from Live to Serve, and the workspace for examining and documenting what your experience has taught you.', '/laboratory'],
+    laboratory: ['The Life Laboratory',
+      /* SR-065 · the count follows LIFE_LAB.stages, which is eight
+         (LIVE NOTICE EXAMINE LEARN TEST DOCUMENT TRANSLATE SERVE).
+         It read 'seven' here, from before TRANSLATE was added. */
+      'Your observations, the ' + SR_NUMWORD(LIFE_LAB.stages.length) + ' stages from ' +
+      LIFE_LAB.stages[0][0].toLowerCase().replace(/^./, function(c){ return c.toUpperCase(); }) +
+      ' to ' +
+      LIFE_LAB.stages[LIFE_LAB.stages.length-1][0].toLowerCase().replace(/^./, function(c){ return c.toUpperCase(); }) +
+      ', and the workspace for examining and documenting what your experience has taught you.',
+      '/laboratory'],
     method:     ['Where the method comes from', 'The six frameworks in full — what each one says, what SafeRise takes from it, which protocols rest on it, and where the evidence stops.', '/method'],
     coaching:   ['Sessions & workshops', 'The full calendar, booking, and everything you have attended.', '/sessions'],
     account:    ['Account & plan', 'Your plan and billing, preferences, privacy and data export, and closing your account.', '/account'],
@@ -1327,7 +1375,8 @@
     {tag:'New', kick:'Opening 1 September', art:'a2',
      title:'Relationship Healing.',
      sub:'Ten protocols run facing another person — session guides, safety scoring and repair scripts.',
-     meta:'Relationship Healing · \u20AC29 / month', cta:'See what is included'},
+     meta: TRACKS[2].name + ' \u00B7 ' + TRACKS[2].price.amount + ' ' + TRACKS[2].price.per,
+     cta:'See what is included'},
     {tag:'Episode 04', kick:'The SafeRise podcast', art:'a3', media:true,
      title:'Discipline is not the opposite of rest.',
      sub:'Andre and Dwight Williams on why the men who burn out hardest are usually the most disciplined.',

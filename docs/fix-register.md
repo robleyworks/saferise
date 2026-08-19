@@ -9,7 +9,14 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
-- Highest ID currently issued: **SR-060**.
+- Highest ID currently issued: **SR-080**.
+- **SR-068 to SR-080 are reserved, not yet issued.** The block was taken in
+  advance on 19 Aug 2026 for the modal-shell work. IDs collided three times
+  because parallel branches each read this ceiling and allocated from it at the
+  same moment; reserving the range up front is what stops the fourth. A gap
+  between the last written entry and this ceiling is expected — do not "tidy"
+  it by lowering the number, and do not allocate inside the reserved range
+  from another branch.
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
 has since shipped. Numbering continues from SR-044 so no ID is ever reused.*
@@ -362,3 +369,86 @@ footer heights are **byte-identical at 1440, 1100 and 390**, with zero horizonta
 overflow and zero slide/toggle overlap at 390.
 
 *Status:* complete · *Raised:* 17 Aug 2026 · *Merged:* 17 Aug 2026
+
+### SR-061 · No single content source; every page held its own copy
+`content/tracks.js` lands as the one record of PRICING, SHARED, TRACKS, STATES,
+FRAMEWORKS, META, LIFE_LAB and `frameworkReach()`. Pages read it; pages never author.
+
+Validated with JavaScriptCore (`jsc`, ships with macOS) rather than `node --check` —
+node is not installed on this machine, so the handoff's validation gate could not run
+as written. All three live tracks carry ten protocols, six own FAQ items and complete
+cost/range/journey/change records. The approved mockup's Appendix C claims those fields
+are Track 01 only; that appendix is stale and the delivered data is complete.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-062 · One track template, three routes
+`personal-transformation.html`, `relationship-healing.html` and
+`professional-performance.html` are thin shells over `js/saferise-track.js`, differing
+only in the track id they pass. Eleven beats in the mockup's fixed order; the scope
+block is unconditional.
+
+Namespaced `sr-tp-`, not plain `sr-`: five template class names (`.note` `.on` `.scope`
+`.sechead` `.pbody`) already existed under `sr-`. `.gold` keeps its literal name — it is
+embedded in sixteen spans of copy inside the content source.
+
+Covers are path references, verified 10/10 loading per track. No inline base64. Art is
+unproduced, so every image slot renders its `track.art` brief as a labelled placeholder
+and the pages are correct with zero art present.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-063 · Dashboard carried its own TRACKS, TRACKNAME and TRACKPRICE
+All three duplicated the content source and all three had drifted — `TRACKPRICE` said
+t2 €29 / t3 €49, the retired tiers. The local record is renamed `DASHTRACKS`, since
+`content/tracks.js` owns the global `TRACKS` and shadowing it would give the two files a
+silent disagreement. Accent token, theme class and plan entitlement stay local: those
+are facts about a viewer, not about a track.
+
+`RES` and `SOURCES` are deliberately retained. They are not duplicates of
+`SHARED.resources` — both hold twelve entries but only four names overlap, and `RES`
+carries per-resource "why" copy that exists nowhere else. See [[SR-067]].
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-065 · Stale strings repo-wide, and Track 03 still on a waitlist
+`Crisis Card` → `Cue Card` (22), `Life Companion` → `Somatic Release Activities` (59),
+`Career & Performance` → `Professional Performance` (4), all in `index.html`. Verified
+safe first: `KIND_CLASS` keys on eight resource kinds, none of them these, and the
+reader's only `kind` comparisons are Founder Video, Protocol Guide, Reference Case and
+Safety Score.
+
+`SERIES_CONFIG.corporate` loses its "Track 03 · Coming Soon" badge and its Join Waitlist
+CTA now points at `corporate-protoList`, which already holds ten protocols. The
+"content is in production — join the waitlist" sentence is deleted rather than reworded,
+being a claim that is no longer true.
+
+The Life Laboratory count in the dashboard's route table said "seven stages"; `LIFE_LAB`
+holds eight. Now derived. Note there is **no stage rail** anywhere in this repo — that
+one sentence was the only place the count appeared.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-066 · Framework protocol counts on the About page were hand-tallied
+Every one of the six was wrong: Porges 21→16, HeartMath 21→7, Dispenza 15→6,
+Maté 15→14, Jung 15→11, Watts 10→7. Now read from `frameworkReach()` over `META` at
+load, along with the `+N more` overflow pill which carried the same bad arithmetic.
+
+Five cards on that page — Mooji, David Bayer, Peter Levine, Kübler-Ross, Weller — have
+no key in `FRAMEWORKS`, so there is nothing to derive them from. Left untouched.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-067 · Resource reader and content source name different resources
+`SHARED.resources` and the dashboard's `RES` both hold twelve entries, but only four
+names match: Cue Card, How This Works, Source Insights, Reference Case. The reader has
+Guided Experience, Breathwork, Progress Journal, Progress Tracking, Protocol Guide,
+Attention Advisory and Disclosure & Invitation; the content source has Guided
+Meditation, Why I Built This One, Somatic Release Activities, Safe Practice, Proximity
+Guide, Disclosure & Support and Invitation to Repair.
+
+The track pages promise the content source's twelve. `RES` additionally carries
+per-resource "why" copy with no home in `tracks.js`, so this cannot be resolved by
+deleting either side — it needs a decision about which set of twelve is real.
+
+*Status:* open · *Raised:* 19 Aug 2026
