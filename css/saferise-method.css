@@ -197,17 +197,19 @@ a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
   background:rgba(255,255,255,.018);padding:32px var(--pad)}
 .sr-fw-limit .eyebrow{color:var(--text2)}
 .sr-fw-limit h3{margin:12px 0 18px;font-size:19px}
-.sr-fw-split{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:0;
-  margin:28px calc(var(--pad) * -1) -4px;border-top:1px solid var(--hair)}
-.sr-fw-splitcol{padding:24px var(--pad) 4px;border-right:1px solid var(--hair)}
-.sr-fw-splitcol:last-child{border-right:0}
-.sr-fw-splitcol h4{font-size:10.5px;letter-spacing:.19em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
-.sr-fw-splitcol--holds h4{color:var(--gold)}
-.sr-fw-splitcol--disputed h4{color:var(--text2)}
-.sr-fw-splitcol ul{list-style:none}
-.sr-fw-splitcol li{font-size:13.5px;color:var(--text2);line-height:1.7;padding-left:18px;position:relative;margin-bottom:12px}
-.sr-fw-splitcol li:before{content:"";position:absolute;left:0;top:9px;width:7px;height:1px;background:var(--text3)}
-.sr-fw-splitcol--holds li:before{background:var(--gold)}
+/* SR-074 · the load-bearing findings — one column, no counterpart list.
+   Replaces .sr-fw-split / .sr-fw-splitcol, which existed only to set a "what
+   holds" column against a "what we do not claim" column. That shape is gone from
+   both pages and the rules were orphaned with it; confirmed against method.html
+   and method-porges.html before removal. */
+.sr-fw-rests{list-style:none;margin:26px calc(var(--pad) * -1) 0;border-top:1px solid var(--hair)}
+.sr-fw-rests li{padding:20px var(--pad);border-bottom:1px solid var(--hair);
+  display:grid;grid-template-columns:minmax(0,30ch) minmax(0,1fr);gap:32px;align-items:start}
+.sr-fw-rests li:last-child{border-bottom:0}
+.sr-fw-rests b{font-family:'Cinzel',serif;font-weight:400;font-size:14.5px;color:var(--text);
+  line-height:1.4}
+.sr-fw-rests span{font-size:14px;color:var(--text2);line-height:1.74;max-width:56ch}
+@media(max-width:860px){ .sr-fw-rests li{grid-template-columns:1fr;gap:10px} }
 
 /* standing disclaimer — identical on all six pages */
 .sr-fw-disc{border:1px solid var(--hair);border-radius:14px;background:var(--band);padding:26px var(--pad);
@@ -258,8 +260,6 @@ a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
 @media(max-width:640px){
   :root{--pad:20px}
   .sr-fw-mast{padding:38px var(--pad) 36px}
-  .sr-fw-splitcol{border-right:0;border-bottom:1px solid var(--hair)}
-  .sr-fw-splitcol:last-child{border-bottom:0}
   .sr-fw-disc{grid-template-columns:1fr}
 }
 
@@ -404,11 +404,12 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
 .sr-mi-heroin span{display:block;font-family:'DM Sans',sans-serif;font-style:normal;font-size:10px;
   letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:20px;font-weight:700}
 /* ── founder's note. One per site, on the index only. ── */
+/* SR-074 · one column. The side column (Not a clinician / Where the line is /
+   No affiliation) is gone; the affiliation is now one line in the footer, so the
+   860px query that unstacked those two columns went with it. */
 .sr-mi-note{margin:56px 0 0;border:1px solid var(--hair);border-radius:14px;background:var(--band);
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);gap:0;overflow:hidden}
+  overflow:hidden}
 .sr-mi-notemain{padding:34px var(--pad)}
-.sr-mi-noteside{padding:34px var(--pad);border-left:1px solid var(--hair);
-  background:rgba(255,255,255,.018);display:flex;flex-direction:column;justify-content:flex-start;gap:22px}
 .sr-mi-note .eyebrow{display:block;margin-bottom:12px}
 .sr-mi-note h2{max-width:24ch;margin-bottom:22px}
 .sr-mi-note p{font-size:16px;color:var(--text2);line-height:1.82;max-width:66ch;margin-bottom:18px}
@@ -421,10 +422,6 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
   color:var(--text3);text-align:center;line-height:1.4;flex:0 0 auto}
 .sr-mi-signame{font-family:'Cinzel',serif;font-size:15px;color:var(--text);line-height:1.4}
 .sr-mi-signame span{display:block;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text3);margin-top:4px}
-.sr-mi-noteside h3{font-size:14px;margin-bottom:10px}
-.sr-mi-noteside p{font-size:13.5px;line-height:1.74;margin-bottom:0}
-@media(max-width:860px){ .sr-mi-note{grid-template-columns:1fr}
-  .sr-mi-noteside{border-left:0;border-top:1px solid var(--hair)} }
 /* ── why a guided session · the delivery argument ── */
 .sr-mi-veh{margin:56px 0 0;border:1px solid var(--hair);border-radius:14px;background:var(--band);
   padding:36px var(--pad) 32px}
@@ -462,6 +459,10 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
   transition:border-color .45s ease,opacity .45s ease;opacity:.4}
 .sr-mi-step:last-child{margin-bottom:0}
 .sr-mi-step.on{opacity:1;border-left-color:var(--accent)}
+/* SR-074 · the third shape: a source that sits beneath all four rather than
+   carrying one. Half-light, dashed rule — visibly different from lit and unlit. */
+.sr-mi-step.beneath{opacity:.78;border-left-style:dashed;border-left-color:var(--accent)}
+.sr-mi-step.beneath b{color:var(--accent)}
 .sr-mi-step b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:9.5px;
   letter-spacing:.2em;color:var(--text3);margin-bottom:5px;transition:color .45s ease}
 .sr-mi-step.on b{color:var(--accent)}
@@ -486,3 +487,39 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
 .sr-mi-card.soon:hover{border-color:var(--hair);background:var(--band)}
 .sr-mi-go--soon{color:var(--text3)}
 .sr-mi-go--soon:after{content:"soon";font-size:8px;letter-spacing:.14em;margin-left:6px;color:var(--text3)}
+
+
+/* ══════════ SR-074 · CLAIM BLOCK ART ══════════ */
+.sr-mi-claimart{display:flex;flex-direction:column;gap:16px;flex:0 0 auto}
+.sr-mi-claimart svg{width:300px;max-width:100%}
+
+/* ══════════ SR-074 · GUIDED-MEDITATION IMAGE SLOT ══════════ */
+.sr-mi-vehart{position:relative;margin:30px calc(var(--pad) * -1) 0;min-height:420px;
+  display:grid;align-items:end;isolation:isolate;overflow:hidden;
+  background:linear-gradient(116deg,#0C0C14,#12121F 54%,#0A0A12)}
+.sr-mi-vehart figcaption{position:relative;z-index:2;padding:28px var(--pad);
+  font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:clamp(18px,1.9vw,23px);color:var(--text);text-shadow:0 2px 20px rgba(0,0,0,.7)}
+@media(max-width:640px){ .sr-mi-vehart{min-height:280px} }
+
+/* ══════════ SR-074 · ADDITIONAL VOICES · FOOTNOTE BLOCK ══════════ */
+.sr-mi-foot-voices{margin:56px 0 0;padding-top:34px;border-top:1px solid var(--hair)}
+.sr-mi-foot-voices>.eyebrow{display:block;padding:0 var(--pad);margin-bottom:12px}
+.sr-mi-foot-voices h2{padding:0 var(--pad);max-width:26ch;margin-bottom:18px}
+.sr-mi-voicelead{padding:0 var(--pad);font-size:14.5px;color:var(--text2);line-height:1.78;
+  max-width:62ch;margin-bottom:28px}
+.sr-mi-voices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;
+  border-top:1px solid var(--hair)}
+.sr-mi-voice{padding:22px var(--pad) 18px;border-right:1px solid var(--hair);
+  border-bottom:1px solid var(--hair)}
+.sr-mi-voice:nth-child(3n){border-right:0}
+.sr-mi-voice b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:15px;
+  color:var(--text);margin-bottom:10px}
+.sr-mi-voice .sr-fw-reg{margin-bottom:12px}
+.sr-mi-voice p{font-size:13px;color:var(--text2);line-height:1.7}
+.sr-mi-voice:last-child{border-right:0}
+@media(max-width:960px){ .sr-mi-voices{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sr-mi-voice:nth-child(3n){border-right:1px solid var(--hair)}
+  .sr-mi-voice:nth-child(2n){border-right:0} }
+@media(max-width:640px){ .sr-mi-voices{grid-template-columns:1fr}
+  .sr-mi-voice{border-right:0!important} }

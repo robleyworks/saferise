@@ -132,7 +132,7 @@
         '<div class="sr-tp-jcol"><p class="sr-tp-jtag" style="color:var(--gold)">01 · Start here</p>' +
           '<p class="sr-tp-jname">Experience</p><p class="sr-tp-jvalue" style="color:var(--gold-lt)">Change your state, now.</p>' +
           '<p class="sr-tp-jbody">' + val(j.experience, 'journey.experience') + '</p>' +
-          '<p class="sr-tp-jbody">Use the Cue Card when ten minutes isn’t realistic.</p></div>' +
+          '<p class="sr-tp-jbody">Use the Cue Card when a full session isn’t realistic.</p></div>' +
         '<div class="sr-tp-jcol"><p class="sr-tp-jtag" style="color:var(--text2)">02 · Every time</p>' +
           '<p class="sr-tp-jname">Log &amp; Journal</p><p class="sr-tp-jvalue">Turn change into a record.</p>' +
           '<p class="sr-tp-jbody">' + val(j.log, 'journey.log') + '</p>' +
@@ -157,9 +157,16 @@
                  'nine','ten','eleven','twelve','thirteen','fourteen','fifteen',
                  'sixteen','seventeen','eighteen','nineteen','twenty'];
   function countWord(n) { return NUMWORD[n] || String(n); }
+  /* SR-078 · also matches the spaced form. "twelve-resource library" was
+     rewritten here already; "each with twelve resources" was not, and went
+     stale on its own. Both shapes are covered now. */
   function resourceCount(s) {
-    return String(s).replace(/\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)(-resource\b)/gi,
-      function (_, tail) { return countWord(SHARED.resources.length) + tail; });
+    var WORDS = 'zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty';
+    return String(s)
+      .replace(new RegExp('\\b(?:' + WORDS + ')(-resource\\b)', 'gi'),
+        function (_, tail) { return countWord(SHARED.resources.length) + tail; })
+      .replace(new RegExp('\\b(?:' + WORDS + ')(\\s+resources\\b)', 'gi'),
+        function (_, tail) { return countWord(SHARED.resources.length) + tail; });
   }
 
   /* ── 02 · cost ───────────────────────────────────────────────────── */
@@ -295,7 +302,7 @@
       '<div class="sr-tp-pricebox"><p class="sr-tp-pricenum">' + t.price.amount +
         '<span class="sr-tp-priceper"> ' + t.price.per + '</span></p>' +
       '<div class="sr-tp-pricelist">' +
-        t.priceList.map(function (l) { return '<p>' + l + '</p>'; }).join('') + '</div>' +
+        t.priceList.map(function (l) { return '<p>' + resourceCount(l) + '</p>'; }).join('') + '</div>' +
       '<a href="#start" class="sr-tp-pill">Get Started — ' + t.price.amount +
         t.price.per.replace('/ ', '/') + '</a>' +
       '<p class="sr-tp-note" style="margin-top:14px">' + val(t.priceNote, 'priceNote') + '</p>' +

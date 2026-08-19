@@ -30,12 +30,11 @@ var SHARED = {
     { name: 'Rise',        body: 'You finish as the person on the other side of it, and leave carrying the state rather than the memory of it.', cite: 'Mental rehearsal \u00B7 Observer stance' }
   ],
   resources: [
-    ['play',  'Guided Meditation',    'Do it with me.',              'The full session, voiced and paced \u2014 audio, or follow-along video. Ten minutes, headphones, nothing to read.'],
+    ['play',  'Guided Meditation',    'Do it with me.',              'The full session, voiced and paced \u2014 audio, or follow-along video. Headphones, nothing to read.'],
     ['warn',  'Cue Card',             'Do it yourself.',             'Printable, two sides: the four-line version for when it is happening, and the full step sequence for when you have longer.'],
-    ['face',  'Why I Built This One', 'From Andre.',                 'Two minutes on why this protocol exists, and what it was built out of.'],
-    ['gear',  'How This Works',       'Why it works.',               'What is happening in your body during this state, and why the four steps land in that order.'],
-    ['bulb',  'Source Insights',      'Where it comes from.',        'The frameworks behind this protocol, in plain language.'],
-    ['case',  'Reference Case',       'Someone who lived it.',       'A real figure who carried this exact pattern, and what actually shifted it.'],
+    /* SR-077 · Source Insights merged in here. Its subtitle stays 'Why it works.';
+       the framework attribution it carried now sits in this description. */
+    ['gear',  'How This Works',       'Why it works.',               'What is happening in your body during this state, why the four steps land in that order, and which framework each step rests on \u2014 in plain language.'],
     ['heart', 'Somatic Release Activities', 'Between sessions.',     'Small physical practices that hold the work on the days you will not sit down.'],
     ['comp',  'Safe Practice',        'When and how to proceed.',    'Pacing, what to expect, when to slow down, and when this is not the right tool today.'],
     ['pin',   'Proximity Guide',      'How close to stay.',          'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.'],
@@ -135,9 +134,9 @@ var TRACKS = {
     journey: {
       title: 'Experience it. Record what shifts.<br>Go deeper when you\u2019re ready.',
       sub: 'Three parts, held inside one continuous practice.',
-      experience: 'The Protocol Foundation Meditation guides you from start to finish. Breathwork and Somatic Release sit here too \u2014 with clear direction on what to do and for how long.',
+      experience: 'The guided meditation for the protocol you are running takes you from start to finish. Breathwork and Somatic Release sit here too \u2014 with clear direction on what to do.',
       log: 'Log the session directly in the app and note what shifted. Track your state, the practice you used and what helped.',
-      deeper: 'Explore the full resource library: Source Insights, reference cases, scripts, somatic practices and companion guides.',
+      deeper: 'Explore the full resource library: how the mechanism works, scripts, somatic practices and companion guides.',
       deeperNote: 'Individuation sits here: insight and shadow integration move into The Decision \u2014 who you choose to become.'
     },
 
@@ -157,9 +156,9 @@ var TRACKS = {
     },
 
     priceList: [
-      'Every protocol in the track, each with twelve resources',
+      'Every protocol in the track, each with its full resource library',
       'Guided audio, follow-along video, cue cards',
-      'Source citations and reference cases at every step',
+      'Source citations at every step',
       'Journal and progress tracking, private to you',
       'New protocols and resources, included as the track grows'
     ],
@@ -341,7 +340,7 @@ var T2 = {
     sub: 'Three parts, and none of them require the other person\u2019s agreement to start.',
     experience: 'The guided session, voiced start to finish, in a version for running alone and a version for running together. Most people start alone \u2014 changing your own half is the only half you control.',
     log: 'Log the session and note what shifted, in the dynamic as well as in you. What repeats becomes visible far faster in a relationship than it does on your own.',
-    deeper: 'The twelve-resource library, plus the two that carry the most weight here: the Invitation to Repair, and the Disclosure &amp; Support script for explaining what you are doing without turning it into a demand.',
+    deeper: 'The full resource library, plus the two that carry the most weight here: the Invitation to Repair, and the Disclosure &amp; Support script for explaining what you are doing without turning it into a demand.',
     deeperNote: 'Individuation sits here too: what belongs to you, what belongs to them, and what belongs to something older than either of you.'
   },
 
@@ -377,7 +376,7 @@ var T3 = {
   price: PRICING.t3,
 
     art: {
-      band:   'corridor four minutes before the room, desk log, reading at day\u2019s end',
+      band:   'corridor moments before the room, desk log, reading at day\u2019s end',
       cost:   'one person at work \u2014 early, midday, still there late',
       range:  'the same professional before a meeting \u2014 braced, settled, absent',
       change: 'someone leaving work at a reasonable hour, unhurried'
@@ -456,11 +455,11 @@ var T3 = {
   },
 
   journey: {
-    title: 'Ten minutes before the room.<br>Not a debrief afterwards.',
+    title: 'Before the room.<br>Not a debrief afterwards.',
     sub: 'Three parts, built for a working day rather than a retreat.',
-    experience: 'The guided session, plus a four-minute version for the gap between meetings and a Cue Card sized for the walk down the corridor. Nothing here requires an hour or a quiet house.',
+    experience: 'The guided meditation for the protocol you are running, plus a short version for the gap between meetings and a Cue Card sized for the walk down the corridor. Nothing here requires a quiet house.',
     log: 'Log the session against the situation \u2014 the pitch, the review, the conversation you were dreading. The pattern in your own working week becomes readable within a month.',
-    deeper: 'The twelve-resource library, with the Attention Advisory doing real work here: where your energy belongs today, and which fights are not yours.',
+    deeper: 'The full resource library, with the Attention Advisory doing real work here: where your energy belongs today, and which fights are not yours.',
     deeperNote: 'Ambition, identity and what you were trained to want sit in this layer \u2014 the questions underneath the performance.'
   },
 
@@ -472,13 +471,13 @@ var T3 = {
 
   priceList: [
     'All thirty protocols \u2014 Professional, Relationship Healing and Personal Transformation',
-    'Full sessions plus four-minute versions built for a working day',
+    'Full sessions plus short versions built for a working day',
     'Attention Advisory and conflict scripts throughout',
     'Journal and progress tracking, private to you \u2014 never visible to an employer',
     'New protocols and resources, included as the tracks grow'
   ],
   priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Access is cumulative \u2014 Professional includes Relationship Healing and Personal Transformation in full.',
-  stickyLine: 'Ten minutes before the room, not a debrief after it.'
+  stickyLine: 'Before the room, not a debrief after it.'
 };
 
 TRACKS[2] = T2;
@@ -517,6 +516,29 @@ var STATES = {
 /* extras — the two conditional resources. null means UNVERIFIED, not none.
    T1 mapping is taken from SafeRise_PersonalTransformation_ProductionChecklist.
    T2 and T3 need the same confirmation before the protocol page can be honest. */
+/* SR-078 · a protocol's library size is derived, never typed.
+   SHARED.resources holds every resource. Two of them are conditional: the
+   Proximity Guide and the Invitation to Repair only appear where an ongoing
+   external source is genuinely part of the pattern, which META[].extras
+   records as 'advisory' and 'invitation'.
+
+   extras:null means UNVERIFIED, not none — T2 and T3 still need the same
+   confirmation T1 got. Both null and [] therefore yield the unconditional set,
+   which is the honest floor: a protocol carrying neither conditional resource
+   shows seven, and a hardcoded number would be wrong on every one of them. */
+var CONDITIONAL_RESOURCES = { 'Proximity Guide': 'advisory', 'Invitation to Repair': 'invitation' };
+
+function protocolResources(key) {
+  var extras = (META[key] || {}).extras;
+  return SHARED.resources.filter(function (r) {
+    var needs = CONDITIONAL_RESOURCES[r[1]];
+    if (!needs) return true;
+    return Object.prototype.toString.call(extras) === '[object Array]' &&
+           extras.indexOf(needs) > -1;
+  });
+}
+function protocolResourceCount(key) { return protocolResources(key).length; }
+
 var META = {
   /* Track 01 · Personal Transformation */
   't1-01': { extras: [], state: 'agitated',    frameworks: ['porges','heartmath'] },
@@ -583,9 +605,12 @@ SHARED.faq = [
   ['Do I need any experience with meditation?',
    ['None. Every protocol is guided from start to finish \u2014 you are told what to do, when, and for how long. If you have tried meditation before and found that being left alone with your thoughts made things worse, this is deliberately not that.']],
 
-  ['How long does a session take, and what do I need?',
-   ['Around ten minutes. Headphones if you have them, somewhere you will not be interrupted, and the ability to sit or lie down. Nothing else \u2014 no journal to prepare, no reading first.',
-    'There is also a Cue Card in every protocol: a four-line version for moments when ten minutes is not realistic.']],
+  /* SR-080 · the question no longer asks how long. Session lengths vary by
+     protocol and track and the real figures are not known until the recording
+     sprint is finished; nothing states or implies one until then. */
+  ['What do I need for a session?',
+   ['Headphones if you have them, somewhere you will not be interrupted, and the ability to sit or lie down. Nothing else \u2014 no journal to prepare, no reading first.',
+    'There is also a Cue Card in every protocol: a four-line version for moments when a full session is not realistic.']],
 
   ['Is any of this based on real science?',
    ['The core of it rests on peer-reviewed work: Stephen Porges on the nervous system, the HeartMath Institute on heart-rhythm coherence, and Gabor Mat\u00E9\u2019s clinical practice. Carl Jung\u2019s frameworks and the observer stance are included as interpretive layers rather than clinical evidence, and we try to be clear about which is which.',
@@ -603,7 +628,7 @@ SHARED.faq = [
     'Anything promising a feeling will never return is making a claim about you it has no way of making.']],
 
   ['What actually comes with a protocol?',
-   ['A guided audio session, a printable step guide, an explanation of what is happening in your body, a reference case, body-based practices for between sessions, journalling prompts, and a Cue Card. Some protocols also carry an Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.',
+   ['A guided audio session, a printable step guide, an explanation of what is happening in your body, body-based practices for between sessions, journalling prompts, and a Cue Card. Some protocols also carry an Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.',
     'You are not expected to use all of it. Most people use two or three and ignore the rest.']],
 
   ['What if it does not work for me?',
@@ -667,14 +692,14 @@ TRACKS[3].faq = [
    ['No. This is a personal account. Nothing is reported to an employer, and there is no manager view.',
     'If your company buys access for a team, that stays true \u2014 they get licences, not your data.']],
   ['When am I supposed to do this during a workday?',
-   ['Before the thing, not after it. Every protocol in this track has a four-minute version for the gap between meetings, and a Cue Card sized for the walk down the corridor.',
-    'The full ten-minute session is for the start or the end of the day, if you want it.']],
+   ['Before the thing, not after it. Every protocol in this track has a short version for the gap between meetings, and a Cue Card sized for the walk down the corridor.',
+    'The full session is for the start or the end of the day, if you want it.']],
   ['Is this the same as executive coaching?',
    ['No. A coach works on your decisions, your strategy and your career. This works on the state you are making those decisions from.',
     'They combine well. Plenty of people bring what surfaces here into a coaching session.']],
-  ['I do not have ten minutes.',
-   ['Then use the four-minute version, or the Cue Card. The method is designed to compress rather than to be skipped.',
-    'If you genuinely cannot find four minutes in a day, that is worth noticing. The Burnout &amp; Overload Protocol starts there.']],
+  ['I do not have time for a full session.',
+   ['Then use the short version, or the Cue Card. The method is designed to compress rather than to be skipped.',
+    'If you genuinely cannot find a gap anywhere in a day, that is worth noticing. The Burnout &amp; Overload Protocol starts there.']],
   ['What if the problem is the job, not me?',
    ['Then regulating will not fix it, and this track does not claim it will. What it does is give you access to your own judgement, which is what you need in order to see the situation clearly and decide what to do about it.',
     'The Career Transition and Ambition Recovery protocols exist because sometimes the answer is to leave.']],
@@ -754,5 +779,8 @@ if (typeof module !== 'undefined') {
      while it is — exporting an undeclared binding throws on require(). */
   module.exports = { PRICING:PRICING, SHARED:SHARED, TRACKS:TRACKS, STATES:STATES,
                      FRAMEWORKS:FRAMEWORKS, META:META, frameworkReach:frameworkReach,
+                     CONDITIONAL_RESOURCES:CONDITIONAL_RESOURCES,
+                     protocolResources:protocolResources,
+                     protocolResourceCount:protocolResourceCount,
                      CHANGE_PROPOSALS:CHANGE_PROPOSALS };
 }

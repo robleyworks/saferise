@@ -9,14 +9,19 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
-- Highest ID currently issued: **SR-080**.
-- **SR-068 to SR-080 are reserved, not yet issued.** The block was taken in
-  advance on 19 Aug 2026 for the modal-shell work. IDs collided three times
-  because parallel branches each read this ceiling and allocated from it at the
-  same moment; reserving the range up front is what stops the fourth. A gap
-  between the last written entry and this ceiling is expected — do not "tidy"
-  it by lowering the number, and do not allocate inside the reserved range
-  from another branch.
+- Highest ID currently issued: **SR-095**.
+- **SR-073 and SR-081 to SR-095 are reserved, not yet issued.** SR-068 to
+  SR-072 were taken on 19 Aug 2026 for the modal-shell work and are written up
+  below. SR-073 was raised in that pass and then found to be already fixed by
+  32238c1, so it was never issued and the number is free. SR-074 to SR-083 are
+  taken for the content-consolidation pass, and the block runs to SR-095 to
+  leave headroom.
+
+  IDs collided three times because parallel branches each read this ceiling and
+  allocated from it at the same moment; reserving the range up front is what
+  stops the fourth. A gap between the last written entry and this ceiling is
+  expected — do not "tidy" it by lowering the number, and do not allocate
+  inside the reserved range from another branch.
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
 has since shipped. Numbering continues from SR-044 so no ID is ever reused.*
@@ -560,3 +565,221 @@ Verified in Chromium at 1440 and 390: empty state by default, and seeded data re
 the confirmed and awaiting-link states.
 
 *Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-076 · Method pages, rendered check
+Chromium, 1440 and 390, both pages, Midnight and Sunrise. No console errors, no
+horizontal overflow at 390, and the rail collapses to the bottom bar as designed.
+
+**Measurement.** At 1440 every top-level enclosure sits on x=111 and body text on
+x=141, as specified. Two classes of element sit 1–2px inside that, and both were
+traced rather than padded back:
+
+- `.sr-mi-claim`, `.sr-mi-veh` and `.sr-mi-note` carry `border:1px`, so their text
+  starts at 142.
+- `.sr-fw-limit` carries `border-left:2px`, so `.sr-fw-rests` lands on 113 and its
+  text on 143.
+
+Both rules are byte-identical to the mockups, so nothing was lost in the port — the
+111/141 rule describes elements that are not nested inside a bordered container.
+
+**Step rail.** Confirmed on the peer band from a live IntersectionObserver fire:
+01, 02 and 04 lit, 03 unlit, railnote correct. The clinical and interpretive states
+were confirmed by asserting the same mapping `light()` applies and reading the DOM
+back — `all` puts every step into `.beneath` with `border-left-style: dashed`.
+
+*Not fully settled in this harness.* The preview pane reports `document.hidden = true`
+even when fronted, so IntersectionObserver only delivers when a screenshot forces a
+composite, and `.sr-mi-step` transitions `opacity` and `border-color` over .45s — with
+no frames being produced, `getComputedStyle` returns mid-transition values. The class
+logic is proven; the settled *visual* states for the clinical and interpretive bands
+need a real browser. Deep scroll offsets also return blank screenshots on both pages,
+which is why every capture above was taken near the top of the document.
+
+*Status:* complete on merge, visual rail states need a Safari pass · *Raised:* 19 Aug 2026
+
+### SR-074 · Method page content deltas
+Both pages diffed against the Desktop mockups and content applied only; structure, the
+extracted stylesheet and the `soon` states are untouched. The repo was not where the
+handoff described it — `method.html` was already clear of Dispenza and of "Where the
+evidence stops"; `method-porges.html` was the page still holding the split columns.
+
+Index: a third peer card (03 Distance & rehearsal, Kross & Ayduk), Maté 03→04, Jung
+04→05, Dispenza deleted, `data-steps` 01,02→01,02,04 and 04→all with the `.beneath`
+rail state, the breath-cycle SVG on the ≈6 claim, the five-voice footnote block, the
+guided-meditation section with its image slot, and the founder-note side column
+replaced by one affiliation line in the footer. Porges: section 04 rewritten as five
+findings in a single `.sr-fw-rests` list, the 2026 dispute carried by one closing
+paragraph.
+
+`.sr-fw-split` / `.sr-fw-splitcol` confirmed orphaned before removal — the only markup
+using them was the section this item replaces. `.sr-mi-noteside` went with the side
+column.
+
+Deliberate divergences: the five unbuilt framework pages stay `soon`, so the mockups'
+"Read the page" links and the porges pager's HeartMath tile are not adopted — either
+would have shipped a dead link. `rg "we do not claim"` still matches once, inside the
+TEMPLATE REGION 5 comment the handoff says to port verbatim; it is a comment and
+renders nothing.
+
+Left open: `FRAMEWORKS.dispenza` and seven `META[].frameworks` references remain in
+`content/tracks.js`, so `frameworkReach('dispenza')` returns protocols pointing at a
+framework with no card and no page. The data layer was out of scope for this item.
+
+Also open: the index hero still reads "three of them research, three of them ways of
+seeing". After the reshuffle the six are three peer-reviewed, one clinical and two
+interpretive, so the second half is wrong. The mockup carries the same line, so this
+was flagged rather than silently rewritten — it needs a decision, not a guess.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-075 · Method rails still linked to four deleted routes
+Both pages carried a copy of the dashboard rail taken before SR-068 and SR-069.
+Protocol library, Journal, Your record and The Life Laboratory were live on both and
+every one pointed at a route that no longer exists, so the buttons dropped the member
+on dashboard.html with nothing matching what they clicked. All four removed; the
+remaining set, order and wiring are identical to the dashboard.
+
+The Cue Card button carries `data-modal`, not `data-route`, and was being caught by the
+`|| 'dashboard.html'` fallback. Going to the dashboard is right — the crisis modal only
+exists there — so it now says so in a comment instead of happening by omission. Same
+root cause as SR-083.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-077 · Twelve resources to nine
+`SHARED.resources` is now exactly the nine specified. Why I Built This One removed from
+tracks.js, the dashboard RES strip, protocol.html (where it was live as "Why this
+protocol exists") and the resource.html reader. Source Insights merged into How This
+Works, which keeps "Why it works" as its subtitle and now carries the framework
+attribution on every surface, including the dashboard `SOURCES` map. Reference Case
+removed entirely — it was live on protocol.html naming a specific living public figure
+and attributing a psychological pattern to her, which is what put this cut first.
+
+Two consequences handled rather than left: the dashboard suggestion pointing at Source
+Insights now names How This Works, and resource.html's hardcoded `n:'NN'` numbering —
+which also supplied the "N of M" total from the last record — is derived from position
+and length instead. Cutting two records had left the rail reading 02, 03, 05, 06, 07,
+08 and the summary claiming "of 08" for a six-item list.
+
+A third surfaced only on rendering: the reader opened on `var current=6`, an index that
+no longer existed, so `renderMain()` threw before painting. The opening resource is
+named now and its index looked up, with a clamp so a future cut cannot repeat it.
+
+Left open: the merged How This Works body in resource.html still names Dispenza, which
+SR-074 removed as a framework card.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-078 · Resource counts are derived
+The word "nine" is not written anywhere. The three hardcoded twelves in tracks.js are
+gone, `resourceCount()` in the track renderer now matches the spaced form as well as
+the hyphenated one — "each with twelve resources" had slipped past it and gone stale on
+its own — and `priceList` is passed through it, having rendered raw.
+
+`protocolResources(key)` / `protocolResourceCount(key)` sit next to `META`. The
+Proximity Guide and the Invitation to Repair are conditional on `META[].extras`;
+`extras:null` means UNVERIFIED, not none, so null and `[]` both yield the unconditional
+set. A protocol carrying neither shows seven, which is exactly why a hardcoded number
+would have been wrong on every T2 and T3 protocol.
+
+The dashboard fold title is set from `SHARED.resources.length` at load.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-079 · The three-column Get Started block
+Renders from two places — `dashboard.html`'s `JOURNEY` and `TRACKS[n].journey` in
+tracks.js, which the track pages draw on. Both were stale the same way and both were
+fixed. Column 1 no longer names "the Protocol Foundation Meditation" or states a
+length; column 2 was correct and untouched; column 3 was already corrected by SR-077
+and SR-078. Structure, headings and tone unchanged.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-080 · No page states a session length
+The rule applies site-wide, not just to `method*.html`. Every stated or implied
+meditation length is gone from `content/tracks.js`, `js/saferise-track.js`,
+`dashboard.html`, `protocol.html` and `resource.html`, including all nine JOURNEY
+metadata strips, which were removed outright rather than trimmed. Players keep their
+elements and lose their numbers — the dashboard bar, both protocol scrubbers and the
+reader scrubber render empty and fill from the media once real files exist. No
+placeholder was substituted.
+
+Two things the greps could not have caught, both found by looking at the rendered page:
+"Ten guided minutes" in the Clearing modal, which the acceptance regex does not match;
+and the hero rendering the literal word "undefined" after the article slide lost its
+"2 min read", because that field was concatenated unguarded.
+
+Kept deliberately, and reported rather than hidden: workshop clock times
+(18:00–20:00), the Premium 1:1 slot times and "90 min", "Ninety minutes, online",
+"Two hours", the workshop agenda (15 / 40 / 45 / 20 minutes) and the 48- and 72-hour
+cancellation windows. These are booked live events with a human on the other end;
+their lengths are contractual and already known, which is the opposite of the
+unrecorded meditation assets the rule exists for. "Six breaths a minute" is kept as
+well — it is a rate, and the one specific empirical claim SafeRise makes.
+
+`docs/reference/portal-personal-target.html` is excluded by decision: it is a stored
+snapshot, and editing it would stop it being an accurate record of that page.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-081 · Journal shift row rendered for data that never arrives
+Checked first, as specified: the arrival check-in state is not available in scope on
+`protocol.html`. Its "Preview as" statebar is a prototype viewer control, labelled in
+the markup "Mockup control — not part of the build"; the only state words on the page
+are the slider endpoints Settled and Peak alarm on a 0–10 activation scale; and the
+dashboard's arrival field is free text on another page, matched against `STATES` only
+to suggest a protocol and never stored per session.
+
+The repo also carries two incompatible state vocabularies — `STATES` is Agitated /
+Unsteady / Numb, the shift row uses Mobilised / Shutdown / Settled / Braced / Present.
+
+So the second branch applies: `before`/`after` stay null and the row is removed from
+the Journal view. Activation and nervous-system state are different measurements and
+mapping one onto the other would be invention.
+
+The Record view keeps its shift row, which this item does not cover — though
+`sr.record.runs` has no writer either, so it is equally unpopulated in practice.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-082 · Dead "Write an entry" control
+`/write an entry/` resolved to the `entry` route at `/journal/new`, a route that does
+not exist and a concept that stopped existing when SR-071 moved writing onto the
+protocol page. Control, route and TEXTMAP row removed. Removed rather than repointed:
+a control labelled "Write an entry" opening a read-only journal would have been a
+second wrong answer.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-083 · Cue Card rail button opened two modals
+Pre-existing, reproduced at `0c16c84` during the modal-shell pass and logged then
+rather than fixed. The rail listener called `openRoute(data-route || 'dashboard')` for
+every rail button; the Cue Card carries `data-modal` and fell to that default, opening
+`mRoute` while the `[data-modal]` handler opened `mCrisis`. One click, two layers.
+
+A rail button with no `data-route` is not a route — the listener returns early and
+leaves it to whichever handler owns it. It also no longer takes the rail's active mark,
+since the Cue Card is a layer over the current page rather than a destination.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-084 · index.html still carries the cut resources and every duration
+Deferred from the SR-077 / SR-080 pass by decision, so the public page lands as one
+reviewable change rather than buried in a ten-item consolidation. Nothing in
+`index.html` was touched.
+
+Inventory as of this branch:
+
+- **Reference Case** — 50 literals and 205 `refcase` references, spanning
+  `RESOURCE_CONTENT`, the `STORIES` prepare() wiring, `RES_META`, carousel copy and
+  roughly fifteen dedicated CSS blocks. Includes named public figures in body copy,
+  which is the specific risk that put the cut first.
+- **Source Insights** — 32 literals, plus the six-perspective editorial grid and the
+  four "visual chapters" CSS.
+- **Why I Built This One** — 2 literals plus the `p1-story` hero tab.
+- **Durations** — 80 strings matching the SR-080 acceptance pattern.
+
+The acceptance greps for SR-077 and SR-080 will keep matching `index.html` until this
+lands. That is expected and was reported, not hidden.
+
+*Status:* open · *Raised:* 19 Aug 2026
