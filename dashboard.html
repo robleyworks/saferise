@@ -46,9 +46,6 @@
 <nav class="sr-dash-navrail" aria-label="Sections">
   <span class="sr-dash-navrailmark">◈</span>
   <button class="sr-dash-navrailbtn on" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
-  <button class="sr-dash-navrailbtn" data-route="library"><svg viewBox="0 0 24 24"><path d="M5 4h6v16H5zM13 4h6v16h-6z"/></svg><span>Protocol library</span></button>
-  <button class="sr-dash-navrailbtn" data-route="journal"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/></svg><span>Journal</span></button>
-  <button class="sr-dash-navrailbtn" data-route="record"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-8M22 20H2"/></svg><span>Your record</span></button>
   <button class="sr-dash-navrailbtn" data-route="laboratory"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.4L5.6 17A2 2 0 0 0 7.4 20h9.2a2 2 0 0 0 1.8-3L14 8.4V3"/><path d="M7.6 14h8.8"/></svg><span>The Life Laboratory</span></button>
   <button class="sr-dash-navrailbtn" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
   <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
@@ -71,11 +68,9 @@
     </a>
     <div class="sr-dash-navlinks">
       <a href="#" class="on">Dashboard</a>
-      <a href="#">Protocol Library</a>
       <a href="#">Resources</a>
       <a href="#">Coaching</a>
       <a href="#" class="soon">My Journey</a>
-      <a href="#" class="soon">Journal</a>
     </div>
     <button class="sr-dash-acct" aria-label="Your account">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg>
@@ -1210,9 +1205,6 @@
 
   var ROUTES = {
     dashboard:  ['This page', 'You are here.', '/dashboard'],
-    library:    ['Protocol library', 'All thirty protocols across the four tracks, filterable by the state you are in rather than the protocol name.', '/library'],
-    journal:    ['Journal', 'Every entry you have written, searchable and filterable by protocol, date or theme.', '/journal'],
-    record:     ['Your record', 'The full archive: state history, per-protocol history, resource history, and the report builder.', '/record'],
     laboratory: ['The Life Laboratory',
       /* SR-065 · the count follows LIFE_LAB.stages, which is eight
          (LIVE NOTICE EXAMINE LEARN TEST DOCUMENT TRANSLATE SERVE).
@@ -1264,15 +1256,20 @@
   });
 
   // map the remaining in-page links by their text, so nothing is left at "#"
+  /* SR-068 · the library, journal and record routes are gone, so every row that
+     resolved to one has gone with them: 'full archive | in the archive' and
+     'try source insights' (record), 'all entries' (journal), and
+     'browse your library' (library). A row left behind here keeps a dead route
+     reachable from any link that happens to carry the same text. */
   var TEXTMAP = [
     [/play the clearing/i,'clearing'], [/^read it$/i,'article'], [/what is included/i,'plans'],
-    [/play episode/i,'podcast'], [/^add /i,'checkout'], [/full archive|in the archive/i,'record'],
-    [/protocol report/i,'report'], [/write an entry/i,'entry'], [/all entries/i,'journal'],
+    [/play episode/i,'podcast'], [/^add /i,'checkout'],
+    [/protocol report/i,'report'], [/write an entry/i,'entry'],
     [/chosen self/i,'chosen'], [/your decisions/i,'decisions'], [/life laboratory/i,'laboratory'],
     [/the science|the frameworks|the method|the stories/i,'reading'], [/read the faq|^faq$/i,'faq'],
     [/^account$/i,'account'], [/^billing$/i,'account'], [/^support$/i,'faq'],
-    [/^terms$/i,'legal'], [/^privacy$/i,'legal'], [/try source insights/i,'record'],
-    [/tell me when it opens/i,'plans'], [/browse your library/i,'library']
+    [/^terms$/i,'legal'], [/^privacy$/i,'legal'],
+    [/tell me when it opens/i,'plans']
   ];
   document.addEventListener('click', function(e){
     var el = e.target.closest('a[href="#"], a[href^="#"]:not([href="#main"]), button');
