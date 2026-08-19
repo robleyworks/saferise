@@ -9,7 +9,14 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
-- Highest ID currently issued: **SR-067**.
+- Highest ID currently issued: **SR-080**.
+- **SR-068 to SR-080 are reserved, not yet issued.** The block was taken in
+  advance on 19 Aug 2026 for the modal-shell work. IDs collided three times
+  because parallel branches each read this ceiling and allocated from it at the
+  same moment; reserving the range up front is what stops the fourth. A gap
+  between the last written entry and this ceiling is expected — do not "tidy"
+  it by lowering the number, and do not allocate inside the reserved range
+  from another branch.
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
 has since shipped. Numbering continues from SR-044 so no ID is ever reused.*
