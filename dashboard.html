@@ -525,22 +525,22 @@
 
     <!-- 4 · identity -->
     <div class="sr-dash-identity">
-      <a class="sr-dash-idcard" href="#">
+      <button type="button" class="sr-dash-idcard" data-route-link="chosen">
         <span class="sr-dash-idicon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span>
         <span>
           <span class="sr-dash-idname">The Chosen Self</span>
           <span class="sr-dash-idbody">The identity you are practising into. Written by you, revisited whenever the old one gets loud.</span>
           <span class="sr-dash-idmeta">Last revised 2 August</span>
         </span>
-      </a>
-      <a class="sr-dash-idcard" href="#">
+      </button>
+      <button type="button" class="sr-dash-idcard" data-route-link="decisions">
         <span class="sr-dash-idicon"><svg viewBox="0 0 24 24"><path d="M12 4v7M12 11l6 4M12 11l-6 4"/><circle cx="12" cy="4" r="1.6"/><circle cx="18" cy="16" r="1.6"/><circle cx="6" cy="16" r="1.6"/></svg></span>
         <span>
           <span class="sr-dash-idname">Your Decisions</span>
           <span class="sr-dash-idbody">The choices you made once the pattern was no longer making them for you.</span>
           <span class="sr-dash-idmeta">4 recorded</span>
         </span>
-      </a>
+      </button>
     </div>
   </section>
 
@@ -1359,11 +1359,21 @@
            ' &rarr; <span class="sr-dot '+(SR_STATE_CLASS[to]||'sr-dot--safe')+'"></span>'+srEsc(to)+'</span>';
   }
 
-  function srEmpty(title, body, cta){
+  /* SR-087 · the call to action needs somewhere to go. It used to carry only
+     data-close, so the only thing "Run a protocol" did was shut the modal it
+     was written in — an empty state whose one control was decorative. A dest
+     ending .html is a page and renders as a real link; anything else is a key
+     in MODALS and swaps the layer in place. No dest, no button. */
+  function srEmpty(title, body, cta, dest){
+    var act = '';
+    if(cta && dest){
+      act = /\.html/.test(dest)
+        ? '<a class="sr-dash-addbtn sr-dash-addbtn--solid" href="'+srEsc(dest)+'">'+srEsc(cta)+'</a>'
+        : '<button class="sr-dash-addbtn sr-dash-addbtn--solid" data-modal="'+srEsc(dest)+'">'+srEsc(cta)+'</button>';
+    }
     return '<div class="sr-empty">'+
       '<svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h9"/></svg>'+
-      '<h4>'+srEsc(title)+'</h4><p>'+srEsc(body)+'</p>'+
-      (cta ? '<button class="sr-dash-addbtn sr-dash-addbtn--solid" data-close>'+srEsc(cta)+'</button>' : '')+
+      '<h4>'+srEsc(title)+'</h4><p>'+srEsc(body)+'</p>'+ act +
       '</div>';
   }
 
@@ -1375,7 +1385,7 @@
     if(!runs.length){
       el.innerHTML = srEmpty('Nothing logged yet',
         'Your record fills in as you run sessions. Each one notes the state you arrived in, the step you reached, and where you left it.',
-        'Run a protocol');
+        'Run a protocol', 'protocol.html');
       return;
     }
 
@@ -1423,7 +1433,7 @@
     if(!entries.length){
       el.innerHTML = srEmpty('Your entries will appear here once you have run a session',
         'Writing happens on the protocol page, so every entry stays attached to the protocol it came out of. This is where you read them all back.',
-        'Go to a protocol');
+        'Go to a protocol', 'protocol.html');
       return;
     }
 
@@ -1480,7 +1490,7 @@
     if(!booked.length){
       el.innerHTML = srEmpty('Nothing booked yet',
         'Sessions and workshops you reserve will show here with the date, the format, and the joining link when it is issued.',
-        'See what is available') + '<div style="height:16px"></div>' + provider;
+        'See what is available', 'calendar') + '<div style="height:16px"></div>' + provider;
       return;
     }
     var html = '<ul class="sr-booked">';
