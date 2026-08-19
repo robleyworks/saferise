@@ -1191,7 +1191,12 @@
     entry:      ['Write an entry', 'A new journal entry, attached to a protocol if you want it to be.', '/journal/new'],
     legal:      ['Terms and privacy', 'Including how your record is stored, what is never used for training, and how to export or delete it.', '/legal']
   };
+  // Routes that now have a real page of their own. Checked before ROUTES so the
+  // rail and any [data-route-link] navigate there instead of opening the
+  // "Not built yet" modal. Add to this map as each page lands.
+  var PAGES = { method: 'method.html' };
   function openRoute(key){
+    if(PAGES[key]){ window.location.href = PAGES[key]; return; }
     var r = ROUTES[key] || ROUTES.dashboard;
     document.getElementById('srRouteTitle').textContent = r[0];
     document.getElementById('srRouteBody').textContent  = r[1];
