@@ -870,7 +870,7 @@
          body:['Rate your state before and after, note the practice you used, and write what surfaced. Progress Tracking holds the numbers, the Progress Journal holds your words, and together they build the record that shows the route back getting shorter.'],
          meta:'Private to you · After every session'},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Integrate. Choose.', valcol:'var(--teal)',
-         body:['How This Works explains the mechanism. Source Insights names the frameworks. The Reference Case shows a documented life that ran the same pattern, and the Attention Advisory says plainly where self-guided practice stops.'],
+         body:['How This Works explains the mechanism and names the frameworks each step rests on, and the Attention Advisory says plainly where self-guided practice stops.'],
          note:'Individuation sits here: insight and shadow integration move into The Decision.',
          meta:'Read anytime · No fixed order'}],},
 
@@ -886,7 +886,7 @@
          meta:'Private to each of you · After every session'},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Repair. Choose.', valcol:'var(--teal)',
          body:['The same twelve, with the full session script, the Disclosure & Support guide for explaining this to people outside the relationship, and third-party invitation scripts for when someone else has to be brought in.'],
-         note:'Reference cases sit here: couples who ran the same pattern, and what changed it.',
+         note:'Repair sits here: what the pattern does to the two of you, and what changes it.',
          meta:'Read anytime · Either of you'}],},
 
     3:{note:'Professional Performance · ten minutes, before or after', title:'Run it before the room. Record what held.<br>Go deeper between them.',
@@ -1227,7 +1227,7 @@
     plans:      ['Plans', 'What each track includes and what it costs. Access is cumulative.', '/plans'],
     article:    ['Article', 'A short written piece from Andre.', '/writing'],
     podcast:    ['The SafeRise podcast', 'Episode player and the back catalogue.', '/podcast'],
-    reading:    ['Understanding SafeRise', 'The science, the frameworks, the method and the reference cases.', '/about'],
+    reading:    ['Understanding SafeRise', 'The science, the frameworks and the method.', '/about'],
     faq:        ['FAQ', 'What the evidence shows, whether your journal is private, what to do mid-episode, and what happens if you stop.', '/faq'],
     chosen:     ['The Chosen Self', 'The identity you are practising into, in your own words.', '/record/chosen-self'],
     decisions:  ['Your Decisions', 'The choices you made once the pattern was no longer making them.', '/record/decisions'],
@@ -1560,7 +1560,7 @@
      title:'Run Anxiety Reset before Thursday',
      why:'Four of your entries mention work calls. Your last two were logged after, not before.'},
     {icon:'<path d="M4 5h7v15H4zM13 5h7v15h-7z"/>',
-     title:'Open Source Insights on Anxiety Reset',
+     title:'Open How This Works on Anxiety Reset',
      why:'You practise more than you read. This is the one resource you have never opened.'},
     {icon:'<path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9z"/>',
      title:'Being misread keeps returning',
@@ -1700,7 +1700,7 @@
     alert:'<path d="M12 3.5L21 19H3z"/><path d="M12 10v4M12 16.6v.1"/>',
     speak:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>'
   };
-  var SOURCES = {"Guided Experience": "Porges · Polyvagal Theory — peer-reviewed", "Breathwork": "HeartMath · cardiac coherence near 0.1 Hz — peer-reviewed", "Somatic Release": "Porges · Polyvagal Theory — peer-reviewed", "Progress Journal": "Maté · Compassionate Inquiry — clinical practice", "Progress Tracking": "SafeRise measurement · not an external claim", "How This Works": "Porges and HeartMath — peer-reviewed", "Source Insights": "All six frameworks, each with its register named", "Protocol Guide": "SafeRise practice material · no external claim", "Reference Case": "Documented biography · historical, not clinical", "Cue Card": "Working-memory narrowing under threat — established", "Attention Advisory": "Scope boundary · reviewed with Dr Keny F. Bastien MD", "Disclosure &amp; Invitation": "SafeRise practice material · no external claim"};
+  var SOURCES = {"Guided Experience": "Porges · Polyvagal Theory — peer-reviewed", "Breathwork": "HeartMath · cardiac coherence near 0.1 Hz — peer-reviewed", "Somatic Release": "Porges · Polyvagal Theory — peer-reviewed", "Progress Journal": "Maté · Compassionate Inquiry — clinical practice", "Progress Tracking": "SafeRise measurement · not an external claim", "How This Works": "All six frameworks, each with its register named", "Protocol Guide": "SafeRise practice material · no external claim", "Cue Card": "Working-memory narrowing under threat — established", "Attention Advisory": "Scope boundary · reviewed with Dr Keny F. Bastien MD", "Disclosure &amp; Invitation": "SafeRise practice material · no external claim"};
   var RES = [
     ['play','Guided<br>Experience','Guided Experience','Step-by-step audio.',
      'The full session, voiced and paced. Headphones, ten minutes, nothing to read.',
@@ -1717,18 +1717,14 @@
     ['chart','Progress<br>Tracking','Progress Tracking','Measure the change.',
      'Log each session and watch the tier move \u2014 before and after, in your own data.',
      'Why measure','The change is gradual enough that memory misses it. A before-and-after tier per session is the only way most people notice that the route back has got shorter.'],
-    ['gear','How This<br>Works','How This Works','See the mechanisms.',
-     'What is happening in your body during this state, and why the four steps land in that order.',
-     'Why explain','People who understand what their body is doing stop reading it as a personal failing. That reframe is doing work before any practice starts.'],
-    ['book','Source<br>Insights','Source Insights','Understand the root causes.',
-     'The six frameworks behind this protocol, in plain language \u2014 Porges, HeartMath, Dispenza, Mat\u00E9, Jung, Watts.',
-     'Why show the sources','So you can check them. Each protocol names where its claims come from, and which are peer-reviewed versus interpretive.'],
+    /* SR-077 · Source Insights merged in here. The framework attribution it
+       carried is now part of this entry's body. */
+    ['gear','How This<br>Works','How This Works','Why it works.',
+     'What is happening in your body during this state, why the four steps land in that order, and which framework each step rests on \u2014 in plain language.',
+     'Why explain','People who understand what their body is doing stop reading it as a personal failing. That reframe is doing work before any practice starts. It also names where each claim comes from, and which are peer-reviewed rather than interpretive.'],
     ['guide','Protocol<br>Guide','Protocol Guide','Clear guidance on how to use it.',
      'The printable step guide, formatted for your phone or the fridge door.',
      'Why printable','The moment you need it is rarely the moment you can open an app.'],
-    ['person','Reference<br>Case','Reference Case','A real-world example.',
-     'A historical figure who lived this exact pattern, and what actually shifted it.',
-     'Why a real life','Documented lives, not testimonials. The pattern is easier to recognise in someone else first.'],
     ['card','Cue<br>Card','Cue Card','The four-line version.',
      'For the moment it is actually happening, when reading anything longer is not realistic.',
      'Why four lines','Working memory narrows under threat. Anything longer will not be used, so this is the whole thing.'],

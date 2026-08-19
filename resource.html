@@ -901,43 +901,33 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
 
 <script>
 var RESOURCES=[
- {n:'01',key:'why',eyebrow:'Origin',title:'Why I built this one',
-  sub:'Andre on where the Anxiety Reset came from.',
-  meta:'Founder perspective · Video',read:'5 min',type:'meta',glyph:'▶',
-  audio:true,dur:'1:40',pdf:false,railTitle:'Why I Built This',railMeta:'5 min read',
-  body:'<p>Every protocol in Track 01 started with a pattern I could not think my way out of. This one started with the forecasting — the part of the mind that runs tomorrow before the morning has finished.</p><p>Short founder video. It is context, not instruction: nothing here is required before you practise.</p>'},
-
- {n:'02',key:'guided',eyebrow:'Practise',title:'The guided protocol',
+ {key:'guided',eyebrow:'Practise',title:'The guided protocol',
   sub:'The full Four-Step sequence, guided end to end.',
   meta:'Guided practice · Video',read:'12 min',type:'core',glyph:'◫',
   audio:true,dur:'2:05',pdf:true,railTitle:'Guided Protocol',railMeta:'12 min',
   body:'<p>Identify and name what is present. Redirect attention to the heart. Accept and release. Close with gratitude and expansion.</p><p>The sequence pairs a slow breath rhythm near six breaths a minute with a deliberate shift of attention. The breath rate is the part with the most evidence behind it; the attention shift is what makes it repeatable without the audio.</p>'},
 
- {n:'03',key:'sources',eyebrow:'Understand',title:'Six perspectives on anxiety',
-  sub:'What each framework contributes, and what it does not.',
-  meta:'Source Insights',read:'15 min read',type:'evidence',glyph:'◑',
-  audio:true,dur:'2:30',pdf:true,railTitle:'Six Perspectives',railMeta:'15 min read',
+ /* SR-077 · was the Source Insights record. Merged into How This Works: the
+    framework attribution it carried is the body of this resource now. */
+ {key:'how',eyebrow:'Understand',title:'How this works',
+  sub:'Why it works.',
+  meta:'Mechanism &amp; sources',read:'',type:'evidence',glyph:'◑',
+  audio:true,dur:'',pdf:true,railTitle:'How This Works',railMeta:'',
   body:'<p>Porges gives the clearest account of why a body braced for threat cannot simply be reasoned into calm, and why breath and attention reach it when argument does not. HeartMath supplies the measurable part: a slow, even breath rhythm produces a more ordered heart rhythm, and that pattern is well documented.</p><p>Dispenza and Jung sit further out, as ways of thinking about observation and about the parts of a pattern you did not choose. They are useful as framing. They are not the evidence base, and this guide does not present them as such.</p><p>Maté on what the response was protecting. Watts on what happens when you stop fighting the sensation. Six views of one pattern — take what is useful.</p>'},
 
- {n:'04',key:'case',eyebrow:'Recognise',title:'Someone who lived this pattern',
-  sub:'Learning to work with panic instead of organising a life around it.',
-  meta:'Reference Cases &amp; True Stories',read:'8 min read',type:'evidence',glyph:'♡',
-  audio:true,dur:'2:10',pdf:true,railTitle:'Reference Case',railMeta:'8 min read',
-  body:'<p>Seeing the pattern in someone else makes it easier to see as a pattern rather than as a personal defect.</p><p class="sr-tight">Look for the turning point.</p><p class="sr-tight">Look for the choice.</p><p>Look for what changed after it.</p>'},
-
- {n:'05',key:'somatic',eyebrow:'Release',title:'Between sessions',
+ {key:'somatic',eyebrow:'Release',title:'Between sessions',
   sub:'Small physical practices that hold the work between sittings.',
   meta:'Somatic Release Guide',read:'7 options',type:'relational',glyph:'⊘',
   audio:true,dur:'1:50',pdf:true,railTitle:'Somatic Release',railMeta:'7 options',
   body:'<p>Rhythmic walking. Weight across the chest. A stone in the pocket you can find without looking. Cold water on the wrists.</p><p>None of these replace the protocol. They give the body somewhere to put the charge on a day you cannot sit down for twelve minutes.</p>'},
 
- {n:'06',key:'disclosure',eyebrow:'Tell',title:'Telling someone what this is',
+ {key:'disclosure',eyebrow:'Tell',title:'Telling someone what this is',
   sub:'A script for a partner, a friend, or family.',
   meta:'Disclosure &amp; Support Guide',read:'4 min read',type:'relational',glyph:'⚿',
   audio:true,dur:'1:45',pdf:true,railTitle:'Disclosure &amp; Support',railMeta:'4 min read',
   body:'<p>People close to you will notice the change before you explain it. Explaining it badly tends to end in a conversation about whether it works.</p><p>This is a short script for saying what you are doing, what you would like from them, and what you are not asking them to do.</p>'},
 
- {n:'07',key:'decision',eyebrow:'Choose',title:'The Decision',
+ {key:'decision',eyebrow:'Choose',title:'The Decision',
   sub:'Choose who handles this pattern next.',
   meta:'Identity &amp; Embodiment',read:'7 min read',type:'identity',glyph:'↺',
   audio:true,dur:'2:18',pdf:true,railTitle:'The Decision',railMeta:'7 min read',
@@ -957,14 +947,14 @@ var RESOURCES=[
    +'<div class="integration" style="margin-top:22px"><p class="q">“Who am I choosing to become?”</p>'
    +'<p class="ip" style="margin-bottom:0">Write the answer somewhere you will see it before the next session. The decision is made once and practised many times.</p></div></div>'},
 
- {n:'08',key:'fourline',eyebrow:'Carry',title:'Anxiety Reset — the four-line version',
+ {key:'fourline',eyebrow:'Carry',title:'Anxiety Reset — the four-line version',
   sub:'The whole protocol, short enough to use standing up.',
   meta:'Portable version',read:'2 min read',type:'meta',glyph:'◇',
   audio:true,dur:'1:20',pdf:true,railTitle:'Anxiety Reset — 4-Line Version',railMeta:'2 min read',
   body:'<p class="sr-tight">Name it. “This is fear, and it is here now.”</p><p class="sr-tight">Drop attention to the centre of the chest and lengthen the breath.</p><p class="sr-tight">Let the sensation be there without arguing with it.</p><p>Find one thing that is genuinely fine right now, and stay with it for three breaths.</p>'}
 ];
 
-var PROXIMITY={n:'06',key:'proximity',eyebrow:'Locate',title:'Where to direct your attention',
+var PROXIMITY={key:'proximity',eyebrow:'Locate',title:'Where to direct your attention',
   sub:'How close to stay to the sources of the distress — and who is safe to have near you while you work.',
   meta:'Proximity Guide · Three tiers',read:'6 min read',type:'relational',glyph:'!',advisory:true,
   audio:true,dur:'2:00',pdf:true,railTitle:'Where to Direct Your Attention',railMeta:'6 min read',
@@ -993,12 +983,18 @@ function visible(){
   return v.map(function(r,i){return Object.assign({},r,{n:('0'+(i+1)).slice(-2)});});
 }
 
+/* SR-077 · the position in the list is the number. It used to be a hardcoded
+   n:'NN' on every record, which went out of sequence the moment a resource was
+   cut — and the "N of M" summary read the last record's n as the total, so it
+   was wrong twice over. */
+function padN(i){ return (i < 10 ? '0' : '') + i; }
+
 function renderRail(){
   var list=document.getElementById('raillist'),html='';
   visible().forEach(function(r,i){
     html+='<button class="sr-item'+(i===current?' on':'')+(r.advisory?' advisory':'')+'" onclick="select('+i+')">'
       +'<span class="sr-ic" data-type="'+r.type+'">'+r.glyph+'</span>'
-      +'<span><span class="sr-n">'+r.n+'</span><span class="sr-t">'+r.railTitle+'</span>'
+      +'<span><span class="sr-n">'+padN(i+1)+'</span><span class="sr-t">'+r.railTitle+'</span>'
       +'<span class="sr-m">'+r.railMeta+'</span></span></button>';
   });
   list.innerHTML=html;
@@ -1012,7 +1008,7 @@ function renderMain(){
   document.getElementById('rmeta').innerHTML=r.meta;
   document.getElementById('rread').textContent=r.read;
   document.getElementById('rbody').innerHTML=r.body;
-  document.getElementById('railsum').innerHTML=r.n+' of '+v[v.length-1].n+' · '+r.title;
+  document.getElementById('railsum').innerHTML=padN(current+1)+' of '+padN(v.length)+' · '+r.title;
 
   document.getElementById('guide').classList.toggle('hidden',!r.audio);
   document.getElementById('dur').textContent=r.dur||'2:00';

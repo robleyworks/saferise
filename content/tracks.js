@@ -32,10 +32,9 @@ var SHARED = {
   resources: [
     ['play',  'Guided Meditation',    'Do it with me.',              'The full session, voiced and paced \u2014 audio, or follow-along video. Ten minutes, headphones, nothing to read.'],
     ['warn',  'Cue Card',             'Do it yourself.',             'Printable, two sides: the four-line version for when it is happening, and the full step sequence for when you have longer.'],
-    ['face',  'Why I Built This One', 'From Andre.',                 'Two minutes on why this protocol exists, and what it was built out of.'],
-    ['gear',  'How This Works',       'Why it works.',               'What is happening in your body during this state, and why the four steps land in that order.'],
-    ['bulb',  'Source Insights',      'Where it comes from.',        'The frameworks behind this protocol, in plain language.'],
-    ['case',  'Reference Case',       'Someone who lived it.',       'A real figure who carried this exact pattern, and what actually shifted it.'],
+    /* SR-077 · Source Insights merged in here. Its subtitle stays 'Why it works.';
+       the framework attribution it carried now sits in this description. */
+    ['gear',  'How This Works',       'Why it works.',               'What is happening in your body during this state, why the four steps land in that order, and which framework each step rests on \u2014 in plain language.'],
     ['heart', 'Somatic Release Activities', 'Between sessions.',     'Small physical practices that hold the work on the days you will not sit down.'],
     ['comp',  'Safe Practice',        'When and how to proceed.',    'Pacing, what to expect, when to slow down, and when this is not the right tool today.'],
     ['pin',   'Proximity Guide',      'How close to stay.',          'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.'],
@@ -137,7 +136,7 @@ var TRACKS = {
       sub: 'Three parts, held inside one continuous practice.',
       experience: 'The Protocol Foundation Meditation guides you from start to finish. Breathwork and Somatic Release sit here too \u2014 with clear direction on what to do and for how long.',
       log: 'Log the session directly in the app and note what shifted. Track your state, the practice you used and what helped.',
-      deeper: 'Explore the full resource library: Source Insights, reference cases, scripts, somatic practices and companion guides.',
+      deeper: 'Explore the full resource library: how the mechanism works, scripts, somatic practices and companion guides.',
       deeperNote: 'Individuation sits here: insight and shadow integration move into The Decision \u2014 who you choose to become.'
     },
 
@@ -159,7 +158,7 @@ var TRACKS = {
     priceList: [
       'Every protocol in the track, each with twelve resources',
       'Guided audio, follow-along video, cue cards',
-      'Source citations and reference cases at every step',
+      'Source citations at every step',
       'Journal and progress tracking, private to you',
       'New protocols and resources, included as the track grows'
     ],
@@ -603,7 +602,7 @@ SHARED.faq = [
     'Anything promising a feeling will never return is making a claim about you it has no way of making.']],
 
   ['What actually comes with a protocol?',
-   ['A guided audio session, a printable step guide, an explanation of what is happening in your body, a reference case, body-based practices for between sessions, journalling prompts, and a Cue Card. Some protocols also carry an Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.',
+   ['A guided audio session, a printable step guide, an explanation of what is happening in your body, body-based practices for between sessions, journalling prompts, and a Cue Card. Some protocols also carry an Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.',
     'You are not expected to use all of it. Most people use two or three and ignore the rest.']],
 
   ['What if it does not work for me?',
