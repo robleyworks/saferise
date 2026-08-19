@@ -453,6 +453,90 @@ deleting either side — it needs a decision about which set of twelve is real.
 
 *Status:* open · *Raised:* 19 Aug 2026
 
+### SR-068 · Protocol Library, Your Record and Journal still in nav
+Three nav destinations with nothing behind them. Removing the markup is only half of
+it: the dashboard resolves in-page links by their text through `TEXTMAP`, so a route
+stays reachable from any link carrying matching text even after its button is gone.
+
+Removed the icon-rail buttons, the "Protocol Library" and Journal links in the top
+nav, the three `ROUTES` entries, and every `TEXTMAP` row resolving to one of them —
+`/full archive|in the archive/` and `/try source insights/` (record), `/all entries/`
+(journal), `/browse your library/` (library). The last two matched no control text
+anywhere in the markup and were already dead.
+
+"My Journey" is a separate route and was not named by this item, so it stays.
+`/write an entry/` → `entry` (`/journal/new`) also stays: SR-071 moves writing to the
+protocol page, which leaves that control pointing at a concept that no longer exists.
+Flagged rather than changed — it was not in scope.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-069 · Life Laboratory out of production until the Elevation Series
+Every surface removed — rail button, `ROUTES` row, `TEXTMAP` row, identity card, and
+the `sr-dash-identity--three` modifier and `sr-dash-idcard--lab` rule that existed only
+for it. `SR_NUMWORD()`, added by SR-065 solely to word the stage count in that route
+copy, went with them.
+
+Done in the order agreed in Phase 0.2, option 1: reads removed first, confirmed at zero
+by grep, and only then the object commented out in `content/tracks.js` — headed with
+the reservation, the canonical eight-stage list including LEARN, and the rule that
+`caveat` is never omitted from a surface showing the stages. `extension` and `caveat`
+stay inside the block. Line comments, not a block comment: the object carries block
+comments of its own. Removed from `module.exports`, which throws on require otherwise.
+
+The `LIFE LABORATORY` header in `css/saferise-dashboard.css` had drifted — most of the
+rules under it (`.sr-dash-readsrc`, `.sr-cadence`) are unrelated and live. Only the
+Life Laboratory rules were removed, `.sr-lab` among them, which had no markup anywhere.
+
+`method.html` and `method-porges.html` keep their laboratory rail button until SR-075
+on `feat/method-updates`. Until that lands, the removal is incomplete on those two
+pages.
+
+*Status:* complete on merge, pending SR-075 for the two method pages · *Raised:* 19 Aug 2026
+
+### SR-070 · Modal shell — one layer, three views
+Record, Journal and Sessions render into a single `#mLayer` dialog driven by the same
+`openModal()`/`closeModals()` pair as the six booking modals. `openModal` now takes a
+view key and sets kicker, title, lede, art class and footer from a `VIEWS` config;
+`openRoute()` no longer opens `#mRoute` itself but calls through the same function, so
+scroll lock and focus handling live in one place. `closeModals()` restores focus to the
+opening element — behaviour the old controller never had.
+
+Two mockup selectors were deliberately not shipped. `.sr-modallabel` already exists and
+is reused. `.sr-arrow` is already a 46px circular carousel button in
+`saferise-system.css`, which loads last and wins by cascade, so the state-shift glyph is
+emitted as bare text — the same class of collision as `.track` and the video scrubber.
+The `.sr-dot` state modifiers are namespaced rather than the mockup's bare
+`.d-mob`/`.d-shut`/`.d-safe`.
+
+Helpers are `srEsc`/`srFmtDate`/`srShift`/`srEmpty`: the dashboard IIFE already has an
+`esc()` for the track renderer that escapes only `&` and `<`, and a second
+`function esc` would have replaced it for the whole scope.
+
+The third stat card ships as `Most run / <protocol name>`, counted from logged runs. The
+mockup's "Early signs / Where you land" is a tier the page cannot compute from local
+data. "Build a protocol report" and "Open the full archive" are gone with the `report`
+route; two further controls stranded by the SR-068 route removals were repointed at the
+record and journal views rather than left dead.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-071 · Journal entries on the protocol page never persisted
+The write block on `protocol.html` wrote to the DOM only — the entry vanished on reload
+and never reached the dashboard. Now appends to `sr.journal.entries` through the same
+`Store` adapter: read, push, write, never assigning a fresh array over the key.
+
+Entries carry the full schema. `protocolId` (`t1-p01`, following the track/protocol key
+already used for cover paths) is the join key the Journal view filters on, while display
+groups on `protocol`.
+
+`before`/`after` ship as null. The log on that page measures activation 0–10; the shift
+row names a nervous-system state. They are not the same measurement, and mapping one
+onto the other would be invention. Whether those two readings should be reconciled is
+an open decision.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
 ### SR-072 · Sessions view — booked dates, no provider chosen
 Shipped inside the SR-070 commit rather than its own: the sessions view is one of the
 three bodies the shell renders, and there was no code to separate from it. Recorded
