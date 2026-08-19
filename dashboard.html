@@ -514,7 +514,6 @@
             <span class="sr-tag">naming it <b>3</b></span>
           </div>
           <div style="margin-top:18px;display:flex;gap:18px;flex-wrap:wrap">
-            <a class="sr-dash-go" href="#">Write an entry <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
             <button class="sr-dash-go" data-modal="journal" style="background:none;border:0;cursor:pointer;font-family:inherit;padding:0">Read everything you have written <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
           </div>
         </div>
@@ -1224,7 +1223,6 @@
     faq:        ['FAQ', 'What the evidence shows, whether your journal is private, what to do mid-episode, and what happens if you stop.', '/faq'],
     chosen:     ['The Chosen Self', 'The identity you are practising into, in your own words.', '/record/chosen-self'],
     decisions:  ['Your Decisions', 'The choices you made once the pattern was no longer making them.', '/record/decisions'],
-    entry:      ['Write an entry', 'A new journal entry, attached to a protocol if you want it to be.', '/journal/new'],
     legal:      ['Terms and privacy', 'Including how your record is stored, what is never used for training, and how to export or delete it.', '/legal']
   };
   // Routes that now have a real page of their own. Checked before ROUTES so the
@@ -1267,7 +1265,6 @@
   var TEXTMAP = [
     [/play the clearing/i,'clearing'], [/^read it$/i,'article'], [/what is included/i,'plans'],
     [/play episode/i,'podcast'], [/^add /i,'checkout'],
-    [/write an entry/i,'entry'],
     [/chosen self/i,'chosen'], [/your decisions/i,'decisions'],
     [/the science|the frameworks|the method|the stories/i,'reading'], [/read the faq|^faq$/i,'faq'],
     [/^account$/i,'account'], [/^billing$/i,'account'], [/^support$/i,'faq'],
