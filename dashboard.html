@@ -48,10 +48,6 @@
   <button class="sr-dash-navrailbtn on" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
   <button class="sr-dash-navrailbtn" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
   <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
-  <button class="sr-dash-navrailbtn sr-dash-navrailbtn--crisis" data-modal="crisis" aria-label="Cue Card">
-    <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 11h6M6.5 14h4"/></svg>
-    <span>Cue Card · always one tap away</span>
-  </button>
   <div class="sr-dash-navrailfoot">
     <button class="sr-dash-navrailbtn" data-route="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.2H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/></svg><span>Account &amp; plan</span></button>
   </div>
@@ -1248,22 +1244,15 @@
   }
 
   // rail
-  /* SR-083 · the Cue Card button carries data-modal, not data-route. This
-     listener used to fall back to 'dashboard' for it, so a single click opened
-     mRoute here AND mCrisis from the [data-modal] handler — two layers at
-     once. A rail button with no data-route is not a route; it is left to
-     whichever handler owns it.
-
-     It also no longer steals the active mark: the Cue Card is a layer over the
-     page you are on, not a destination, so the rail's "on" state must stay
-     where it was. */
+  /* SR-086 · every rail button is a destination and carries data-route. The
+     SR-083 guard that returned early for a routeless button went with the Cue
+     Card button it was written for — the Cue Card is protocol-specific and now
+     lives only on protocol.html, drawn from the protocol being run. */
   document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
     b.addEventListener('click', function(){
-      var key = b.getAttribute('data-route');
-      if(!key) return;
       document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(x){ x.classList.remove('on'); });
       b.classList.add('on');
-      openRoute(key);
+      openRoute(b.getAttribute('data-route'));
     });
   });
 
