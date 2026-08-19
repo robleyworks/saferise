@@ -565,3 +565,34 @@ Verified in Chromium at 1440 and 390: empty state by default, and seeded data re
 the confirmed and awaiting-link states.
 
 *Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-076 · Method pages, rendered check
+Chromium, 1440 and 390, both pages, Midnight and Sunrise. No console errors, no
+horizontal overflow at 390, and the rail collapses to the bottom bar as designed.
+
+**Measurement.** At 1440 every top-level enclosure sits on x=111 and body text on
+x=141, as specified. Two classes of element sit 1–2px inside that, and both were
+traced rather than padded back:
+
+- `.sr-mi-claim`, `.sr-mi-veh` and `.sr-mi-note` carry `border:1px`, so their text
+  starts at 142.
+- `.sr-fw-limit` carries `border-left:2px`, so `.sr-fw-rests` lands on 113 and its
+  text on 143.
+
+Both rules are byte-identical to the mockups, so nothing was lost in the port — the
+111/141 rule describes elements that are not nested inside a bordered container.
+
+**Step rail.** Confirmed on the peer band from a live IntersectionObserver fire:
+01, 02 and 04 lit, 03 unlit, railnote correct. The clinical and interpretive states
+were confirmed by asserting the same mapping `light()` applies and reading the DOM
+back — `all` puts every step into `.beneath` with `border-left-style: dashed`.
+
+*Not fully settled in this harness.* The preview pane reports `document.hidden = true`
+even when fronted, so IntersectionObserver only delivers when a screenshot forces a
+composite, and `.sr-mi-step` transitions `opacity` and `border-color` over .45s — with
+no frames being produced, `getComputedStyle` returns mid-transition values. The class
+logic is proven; the settled *visual* states for the clinical and interpretive bands
+need a real browser. Deep scroll offsets also return blank screenshots on both pages,
+which is why every capture above was taken near the top of the document.
+
+*Status:* complete on merge, visual rail states need a Safari pass · *Raised:* 19 Aug 2026
