@@ -10,7 +10,10 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
 - Highest ID currently issued: **SR-095**.
-- **SR-073 and SR-081 to SR-095 are reserved, not yet issued.** SR-068 to
+- **SR-085 to SR-095 are now issued** by the correctness pass and written up below.
+  The reserved range is exhausted: two findings in SR-093 and one in SR-092 have no
+  ID and are recorded inside those entries. Reserve a fresh block before the next pass.
+- **SR-073 and SR-081 to SR-084 are reserved, not yet issued.** SR-068 to
   SR-072 were taken on 19 Aug 2026 for the modal-shell work and are written up
   below. SR-073 was raised in that pass and then found to be already fixed by
   32238c1, so it was never issued and the number is free. SR-074 to SR-083 are
@@ -781,5 +784,219 @@ Inventory as of this branch:
 
 The acceptance greps for SR-077 and SR-080 will keep matching `index.html` until this
 lands. That is expected and was reported, not hidden.
+
+*Status:* open · *Raised:* 19 Aug 2026
+
+### SR-085 · Dashboard showed fabricated member data
+The page rendered a populated practice belonging to nobody, to every visitor, with
+empty storage: twenty sessions logged, a twelve-bar before/after chart, an arc dot
+marking where the last session finished, "Fourteen entries · about 2,100 words since
+June", two dated entries, four recurring themes, a Chosen Self last revised 2 August,
+four decisions recorded, and three suggestions citing entries nobody had written. The
+Record modal on the same page read "Nothing logged yet", so the page contradicted
+itself and the honest half was the modal.
+
+Every surface in Your record now computes from `Store` or does not appear, reusing
+`srEmpty` rather than introducing new empty states. Where the platform records nothing
+the surface is removed rather than estimated: entry themes have no tagging behind them,
+and minutes-to-settle is not recorded anywhere. Bar height is the state band the arc
+legend already names, not an invented score — there is no numeric rating in the record
+and adding one would have been the same defect in a new place.
+
+Two surfaces not in the original list were fabricating the same way and were fixed with
+the rest: the suggestions panel, and the "Where you left off" card above the fold, which
+claimed the member was on "Resource 07 of 08 · The Decision" with an 87% progress rail.
+Nothing writes `sr.resume` yet, so it follows the pattern already set for
+`sr.sessions.booked` — the empty state is what every member sees on day one.
+
+Found by rendering, not by grep: the arc dot carried `hidden` and stayed painted,
+because the UA sheet's `[hidden]{display:none}` does not reach children of an `<svg>`.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-086 · Cue Card removed from the rail
+The Cue Card is protocol-specific — four lines drawn from the protocol being run. With
+no protocol in context the rail button showed the wrong card, and from the method pages
+it did not even do that: those rails carry no `mCrisis`, so `PAGES[null]` fell through
+to `dashboard.html` and the click bounced there, needing a second click to open.
+
+Removed from all three rails with its wiring: the SR-083 guard for a routeless rail
+button is gone, since every remaining button is a destination carrying `data-route`.
+The card stays on `protocol.html`, and `mCrisis` stays reachable from the dashboard
+resources strip, which is a real resource entry rather than a global control.
+
+`LAYERS` was kept. Its comment attributes it to the Cue Card, but it is what lets
+`coaching` be a rail destination that opens a view while keeping the active mark —
+still needed, and needed more now that the routeless-button guard is gone.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-087 · Three dashboard controls going nowhere
+The Chosen Self and Your Decisions were `<a href="#">`, so both advertised
+`dashboard.html#` on hover and reached `openRoute()` only by matching their own label
+text in `TEXTMAP`. Now `<button data-route-link>`: no false URL, and the route no longer
+depends on the visible copy staying the same.
+
+"Run a protocol" carried only `data-close`, so the one control in the Record empty state
+did nothing but shut the modal it was written in. `srEmpty` now takes a destination — a
+`.html` dest renders a real link, anything else is a `MODALS` key. Fixed in all three
+empty states, not just the named one: Journal and Sessions were dead the same way.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-088 · Protocol names double-escaped to a literal `&amp;`
+The entity lived in the data, not the renderer. `content/tracks.js` stored twenty
+strings with HTML entities baked in, because `js/saferise-track.js` injects them raw.
+The dashboard carousel escapes properly via `esc()`, so it escaped the escape.
+
+Fixed at source: the data holds plain text, and the entity- and tag-preserving `esc()`
+that the track renderer already defined but never called is wired at the ten sites that
+consume those fields. It leaves `<br>` and `<span class="gold">` alone, which is why it
+was written that way and why it is safe on fields carrying markup.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-089 · Dispenza was half-deleted from the framework data
+Framework 05 was cut from `method.html` and replaced there by Distance & rehearsal, but
+`content/tracks.js` still carried `FRAMEWORKS.dispenza` and six `META[].frameworks`
+references. `frameworkReach('dispenza')` returned six protocols pointing at a framework
+with no card and no page. Note the original report said seven references: it is six
+`META` entries plus the record itself.
+
+Replaced rather than deleted, by decision. Deleting would have left `FRAMEWORKS` at five
+records while every surface says six sources, and dropped real attribution from six
+protocols. The record is now Distance & rehearsal — Kross & Ayduk, Best Possible Self,
+register peer-reviewed, step 4 — and record order now matches method.html's 01–06 cards.
+
+`resource.html`'s How This Works named Dispenza on a member-facing surface. Rewritten to
+describe the mechanism and move it into the measured band, leaving Jung as interpretive.
+
+**Not closed:** `index.html` still carries twenty references including a full Dr. Joe
+Dispenza expert bio whose counter is driven live by `frameworkReach` via
+`data-sr-reach="dispenza"`, which now resolves to zero protocols. That file is SR-084
+and deliberately out of scope, so `rg -ni "dispenza"` cannot come back clean until it
+lands. Expected and reported, not hidden.
+
+*Status:* complete on merge, with the index.html remainder open under SR-084
+*Raised:* 19 Aug 2026
+
+### SR-090 · Method index hero stated a split that is no longer true
+"Three of them research, three of them ways of seeing." After Distance & rehearsal was
+promoted into the peer-reviewed band the six are three peer-reviewed, one clinical
+practice, two interpretive — wrong on the page whose whole argument is evidentiary
+precision. Count dropped rather than restated: the register chips and three band headers
+already say the split three ways, and a count in prose is a fourth place to drift. The
+mockup in `docs/reference` carries the same stale line and was left alone, not copied.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-091 · Sessions and workshops pricing contradicted itself
+`PRICING.workshop` held €29 — Track 03's monthly price, never a workshop price — so the
+block advertised "from €29" directly above its own bullet reading Personal €59 ·
+Relationship €139. One key could never have been right: workshops are priced per format.
+Replaced with `workshopPersonal` €59 and `workshopRelationship` €139; the block reads
+"from €59". Premium 1:1 was €275 hardcoded in four places; added `PRICING.premium` and
+bound it. Twelve `data-sr-price` nodes, no euro amount left in the markup.
+
+Durations kept — booked live events with a human on the other end, contractual and known.
+
+Audited the rest of the record as asked: `t1`/`t2`/`t3` are each attached to the track
+they are named for, and Elevation is priceless and hidden. `workshop` was the only key
+named for one product and used for another.
+
+`premium1` (€129/hr) and `premium3` (€299/3hr) left exactly as they were — SR-057 is an
+open decision. Nothing in the repo renders either one; noted beside them in the data so
+the next reader does not assume they are live.
+
+**Remainder, no ID left in the reserved block:** `protocol.html` carries its own booking
+block with €275 hardcoded twice. It cannot bind, because it does not load
+`content/tracks.js` at all — so making it match the dashboard means giving that page the
+pricing record first. Out of scope here, which was the dashboard block, but it is the
+same defect and the same €275 that SR-091 was raised for.
+
+*Status:* complete on merge, with the protocol.html booking block outstanding
+*Raised:* 19 Aug 2026
+
+### SR-092 · Dead links on the method pages — audited, none found
+Every `href` on both pages resolves to a file that exists, all five unbuilt frameworks
+are `<div class="soon">` rather than anchors, and neither page carries an `onclick`.
+No change was needed; the item is closed as verified rather than fixed.
+
+One adjacent gap found and **not** fixed, as it is outside this item: the method rails'
+`coaching` and `account` buttons navigate to `dashboard.html` without opening the view
+they name, because `PAGES` has no entry for either and the default is a bare redirect.
+That is the same shape as the Cue Card bounce closed in SR-086 and needs its own ID.
+
+*Status:* verified, no change · *Raised:* 19 Aug 2026
+
+### SR-093 · Performance and layout shift — measurement
+Profiled rather than optimised, per the item. No fix applied.
+
+**Page weight, as served**
+
+| page | doc | render-blocking in `<head>` | notes |
+|---|---|---|---|
+| `protocol.html` | 4.58 MB | 2.31 MB | `<body>` does not open until byte 2,417,113 — 50.3% into the file |
+| `index.html` | 1.36 MB | 199 K inline CSS | 532 K inline JS |
+| `resource.html` | 220 K | 127 K inline CSS | 83 K inline JS at 60% |
+| `dashboard.html` | 118 K | 242 K external CSS | + 60 K `tracks.js`, + 1.5 MB of covers |
+| `method.html` | 30 K | 35 K external CSS | cheapest page in the repo |
+
+**Where protocol.html's 4.58 MB actually is:** two base64 PNGs, and nothing else of
+consequence. One is 1086×1448px / 1.69 MB, embedded as a `url()` inside the head
+`<style>` — so it is render-blocking. The other is 2172×724px / 1.68 MB as an `<img>`
+in the body. Both are photographic content stored as PNG.
+
+**The reflow is the webfont swap, not late CSS.** The stated hypothesis was
+partially-styled content rendering before CSS resolves. That is not what happens: every
+stylesheet on `protocol.html` is in `<head>` and blocking, so there is no window in
+which unstyled content paints. The Google Fonts link carries `display=swap`, and the
+measured metric gap is large:
+
+| face | fallback width | webfont width | shift |
+|---|---|---|---|
+| Cinzel | 576 px | 775 px | **+34.6%** |
+| Cormorant Garamond | 629 px | 551 px | −12.5% |
+| DM Sans | 638 px | 658 px | +3.0% |
+
+Cinzel sets every heading. Headings paint at fallback width and then jump a third wider
+when the face arrives — "paints at one width and then reflows", exactly.
+
+**Not measured, and why:** the preview pane keeps the page `document.hidden === true`,
+so Chromium emits no `paint` entries and records no `layout-shift`. Time to first paint
+and CLS could not be captured here and need a visible browser. Parse timings on
+localhost were: `protocol.html` domInteractive 193 ms against 38 ms responseEnd — 155 ms
+of it parsing; `dashboard.html` 83 ms; `resource.html` 33 ms; `method.html` 17 ms.
+
+**Recommendations, logged as SR-094 and SR-095 below.** Two further findings need IDs
+beyond the reserved range and are recorded here rather than left in a run report:
+`dashboard.html` loads `saferise-system.css` *before* `saferise-dashboard.css`, against
+the rule in CLAUDE.md that the system sheet loads last (blast radius is one class,
+`.sr-cover`, but the ordering is wrong); and the dashboard requests all ten protocol
+covers, ~1.5 MB, without `loading="lazy"` on the below-fold ones.
+
+*Status:* measurement complete · *Raised:* 19 Aug 2026
+
+### SR-094 · protocol.html carries 4.5 MB in two embedded PNGs
+Extract both to `assets/`, convert to JPEG or WebP, and size them to the box they are
+drawn in. At their rendered dimensions these are roughly 100–250 K each, so the page
+goes from 4.58 MB to under 500 K — the largest single win available in the repo. The
+head one matters twice over: it sits inside a `url()` in the render-blocking `<style>`,
+so 2.26 MB of base64 must be parsed before the stylesheet can be used at all.
+
+Not done in the SR-093 pass because the item asked for measurement only, and because
+moving an image out of a data URI changes what the page requests at runtime — it wants
+its own before/after render, not a drive-by edit.
+
+*Status:* open · *Raised:* 19 Aug 2026
+
+### SR-095 · Heading reflow on every page from the Cinzel swap
+`display=swap` plus a 34.6% metric gap between Cinzel and its `serif` fallback means
+every heading on the site paints narrow and then jumps. Options, cheapest first: add
+`size-adjust` / `ascent-override` metric overrides on an `@font-face` for the fallback
+so the two agree; self-host the three faces and preload the Cinzel weights actually used
+(400 and 500); or accept the swap and stop the jump mattering by not sizing anything off
+heading width. Measure with a visible browser — see the note in SR-093 about why CLS
+could not be captured in the preview pane.
 
 *Status:* open · *Raised:* 19 Aug 2026

@@ -500,6 +500,13 @@ body.reading #srLibrary{margin-top:22px}
 .sr-dash-archbannerin p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:16px;color:var(--text2);line-height:1.5}
 .sr-dash-archin{padding:24px 0 26px}
 .sr-dash-archkick{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:16px}
+/* SR-085 · the HTML [hidden] attribute does not reach SVG children — the UA
+   sheet's [hidden]{display:none} does not apply inside <svg> — so the arc dot
+   stayed painted with hidden set, marking a last session that never happened.
+   Hidden explicitly here. The chart and its axis collapse when there is
+   nothing to plot rather than leaving a 96px hole. */
+#srArcDot[hidden]{display:none}
+.sr-dash-tiers:empty,.sr-dash-axis:empty{display:none}
 .sr-dash-tiers{display:flex;align-items:flex-end;gap:6px;height:96px;margin:20px 0 10px}
 .sr-dash-bar{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--gold),rgba(212,168,67,.22))}
 .sr-dash-axis{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);letter-spacing:.1em;
@@ -807,8 +814,12 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
 
 /* identity cards inside Your record */
 .sr-dash-identity{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+/* SR-087 · these are <button>, not <a href="#">, so they no longer advertise
+   dashboard.html# on hover. The resets are what a button needs to keep the
+   card look: left text, inherited type, full width, pointer. */
 .sr-dash-idcard{display:grid;grid-template-columns:46px 1fr;gap:18px;align-items:start;
-  background:var(--band);border:1px solid var(--hair);border-radius:14px;padding:24px var(--pad);transition:border-color .18s}
+  background:var(--band);border:1px solid var(--hair);border-radius:14px;padding:24px var(--pad);transition:border-color .18s;
+  width:100%;text-align:left;font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
 .sr-dash-idcard:hover{border-color:rgba(212,168,67,.45)}
 .sr-dash-idicon{width:46px;height:46px;border-radius:50%;border:1px solid rgba(212,168,67,.38);display:grid;place-items:center}
 .sr-dash-idicon svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:1.2}
@@ -890,6 +901,9 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
 .sr-begin-slot{padding-top:2px;flex:0 0 auto}
 .sr-begin-card > .sr-dash-field{flex:0 0 auto}
 .sr-begin-act{margin:auto 0 0;padding-top:12px;border-top:1px solid var(--hair);display:flex;align-items:center;min-height:44px}
+/* SR-085 · display:flex above beats the UA [hidden] rule, and the resume
+   card hides this line when there is nothing to pick up. */
+.sr-begin-act[hidden]{display:none}
 .sr-begin-meta{font-size:12px;color:var(--text3);line-height:1.5}
 
 /* one quiet link style for the whole row */

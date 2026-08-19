@@ -92,11 +92,11 @@
           '<span class="sr-tp-pkick">' + p[1] + '</span>' +
           '<span class="sr-tp-pno">' + p[0] + '</span>' +
         '</div>' +
-        '<div class="sr-tp-pmeta"><h3>' + p[2] + '</h3>' +
-        '<p class="sr-tp-pdesc">' + val(p[3], 'promise:' + p[2]) + '</p>' +
-        '<p class="sr-tp-pbody">' + val(p[4], 'signature:' + p[2]) + '</p>' +
+        '<div class="sr-tp-pmeta"><h3>' + esc(p[2]) + '</h3>' +
+        '<p class="sr-tp-pdesc">' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
+        '<p class="sr-tp-pbody">' + esc(val(p[4], 'signature:' + p[2])) + '</p>' +
         '<p class="sr-tp-struggle">' + (has(p[5])
-            ? p[5].map(function (s) { return '<span>“' + s + '”</span>'; }).join('')
+            ? p[5].map(function (s) { return '<span>“' + esc(s) + '”</span>'; }).join('')
             : '') + '</p>' +
         '</div></article>';
     }).join('');
@@ -139,7 +139,7 @@
           '<p class="sr-tp-jbody">Over time, the record shows patterns changing and the route back becoming shorter.</p></div>' +
         '<div class="sr-tp-jcol"><p class="sr-tp-jtag" style="color:var(--teal)">03 · Optional depth</p>' +
           '<p class="sr-tp-jname">Go Deeper</p><p class="sr-tp-jvalue" style="color:var(--teal)">Understand. Integrate. Choose.</p>' +
-          '<p class="sr-tp-jbody">' + resourceCount(val(j.deeper, 'journey.deeper')) + '</p>' +
+          '<p class="sr-tp-jbody">' + esc(resourceCount(val(j.deeper, 'journey.deeper'))) + '</p>' +
           '<p class="sr-tp-jnote">' + val(j.deeperNote, 'journey.deeperNote') + '</p></div>' +
       '</div>' +
       '<div class="sr-tp-jopt"><div><p class="sr-tp-jopttag">Optional support</p>' +
@@ -257,8 +257,8 @@
         c.items.map(function (i) {
           return '<div class="sr-tp-sixitem"><span class="sr-tp-sixi" style="border-color:' + i[2] +
             ';color:' + i[2] + '">' + i[0] + '</span>' +
-            '<p class="sr-tp-sixname" style="color:' + i[2] + '">' + i[1] + '</p>' +
-            '<p class="sr-tp-sixfrom">' + i[3] + '</p><p class="sr-tp-sixbody">' + i[4] + '</p></div>';
+            '<p class="sr-tp-sixname" style="color:' + i[2] + '">' + esc(i[1]) + '</p>' +
+            '<p class="sr-tp-sixfrom">' + esc(i[3]) + '</p><p class="sr-tp-sixbody">' + esc(i[4]) + '</p></div>';
         }).join('') + '</div><p class="sr-tp-sixkick" style="margin:26px 0 0">More access to choice</p></div>' +
       '</div>' +
       '<p class="sr-tp-sixclose">' + c.close + '</p>' +
@@ -276,7 +276,7 @@
       '<div class="sr-tp-inc">' + SHARED.resources.map(function (r) {
         return '<div class="sr-tp-incitem"><div class="sr-tp-icon"><svg viewBox="0 0 24 24" aria-hidden="true">' +
           (ICONS[r[0]] || '') + '</svg></div>' +
-          '<div><h3>' + r[1] + '</h3><p class="sr-tp-inctag">' + r[2] + '</p><p>' + r[3] + '</p></div></div>';
+          '<div><h3>' + esc(r[1]) + '</h3><p class="sr-tp-inctag">' + esc(r[2]) + '</p><p>' + esc(r[3]) + '</p></div></div>';
       }).join('') + '</div>' +
       '<p class="sr-tp-note sr-tp-footnote">' + resourceCount(SHARED.resourceNote) + '</p>' +
     '</div></div>';
@@ -318,9 +318,9 @@
       return '<div class="sr-tp-faqcol">' + list.map(function (q) {
         n++;
         return '<div class="sr-tp-faqitem"><button class="sr-tp-faqq" aria-expanded="false" aria-controls="faqa-' + n +
-          '" id="faqq-' + n + '"><span class="sr-tp-plus" aria-hidden="true">+</span>' + q[0] + '</button>' +
+          '" id="faqq-' + n + '"><span class="sr-tp-plus" aria-hidden="true">+</span>' + esc(q[0]) + '</button>' +
           '<div class="sr-tp-faqa" id="faqa-' + n + '" role="region" aria-labelledby="faqq-' + n + '">' +
-          q[1].map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div></div>';
+          q[1].map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div></div>';
       }).join('') + '</div>';
     }
     return '<div class="sr-tp-band"><div class="sr-tp-wide">' +
