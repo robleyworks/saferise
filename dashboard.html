@@ -46,7 +46,6 @@
 <nav class="sr-dash-navrail" aria-label="Sections">
   <span class="sr-dash-navrailmark">◈</span>
   <button class="sr-dash-navrailbtn on" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
-  <button class="sr-dash-navrailbtn" data-route="laboratory"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.4L5.6 17A2 2 0 0 0 7.4 20h9.2a2 2 0 0 0 1.8-3L14 8.4V3"/><path d="M7.6 14h8.8"/></svg><span>The Life Laboratory</span></button>
   <button class="sr-dash-navrailbtn" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
   <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
   <button class="sr-dash-navrailbtn sr-dash-navrailbtn--crisis" data-modal="crisis" aria-label="Cue Card">
@@ -530,8 +529,8 @@
       <a class="sr-dash-go" href="#">See it all in the archive <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
     </div>
 
-    <!-- 4 · identity and the laboratory -->
-    <div class="sr-dash-identity sr-dash-identity--three">
+    <!-- 4 · identity -->
+    <div class="sr-dash-identity">
       <a class="sr-dash-idcard" href="#">
         <span class="sr-dash-idicon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span>
         <span>
@@ -546,14 +545,6 @@
           <span class="sr-dash-idname">Your Decisions</span>
           <span class="sr-dash-idbody">The choices you made once the pattern was no longer making them for you.</span>
           <span class="sr-dash-idmeta">4 recorded</span>
-        </span>
-      </a>
-      <a class="sr-dash-idcard sr-dash-idcard--lab" href="#" id="srLabCard">
-        <span class="sr-dash-idicon"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.4L5.6 17A2 2 0 0 0 7.4 20h9.2a2 2 0 0 0 1.8-3L14 8.4V3"/><path d="M7.6 14h8.8"/></svg></span>
-        <span>
-          <span class="sr-dash-idname">The Life Laboratory</span>
-          <span class="sr-dash-idbody">What your experience is teaching you, and what it might be worth to someone else.</span>
-          <span class="sr-dash-idmeta">9 observations · 2 ready to examine</span>
         </span>
       </a>
     </div>
@@ -1195,26 +1186,8 @@
 
 
   // ── route layer: every link resolves to something ──
-  /* prose counts read as words, not numerals — the string this feeds
-     used to say "seven", and "the 8 stages" reads like a spec sheet. */
-  function SR_NUMWORD(n){
-    var w = ['zero','one','two','three','four','five','six','seven','eight',
-             'nine','ten','eleven','twelve'];
-    return w[n] || String(n);
-  }
-
   var ROUTES = {
     dashboard:  ['This page', 'You are here.', '/dashboard'],
-    laboratory: ['The Life Laboratory',
-      /* SR-065 · the count follows LIFE_LAB.stages, which is eight
-         (LIVE NOTICE EXAMINE LEARN TEST DOCUMENT TRANSLATE SERVE).
-         It read 'seven' here, from before TRANSLATE was added. */
-      'Your observations, the ' + SR_NUMWORD(LIFE_LAB.stages.length) + ' stages from ' +
-      LIFE_LAB.stages[0][0].toLowerCase().replace(/^./, function(c){ return c.toUpperCase(); }) +
-      ' to ' +
-      LIFE_LAB.stages[LIFE_LAB.stages.length-1][0].toLowerCase().replace(/^./, function(c){ return c.toUpperCase(); }) +
-      ', and the workspace for examining and documenting what your experience has taught you.',
-      '/laboratory'],
     method:     ['Where the method comes from', 'The six frameworks in full — what each one says, what SafeRise takes from it, which protocols rest on it, and where the evidence stops.', '/method'],
     coaching:   ['Sessions & workshops', 'The full calendar, booking, and everything you have attended.', '/sessions'],
     account:    ['Account & plan', 'Your plan and billing, preferences, privacy and data export, and closing your account.', '/account'],
@@ -1265,7 +1238,7 @@
     [/play the clearing/i,'clearing'], [/^read it$/i,'article'], [/what is included/i,'plans'],
     [/play episode/i,'podcast'], [/^add /i,'checkout'],
     [/protocol report/i,'report'], [/write an entry/i,'entry'],
-    [/chosen self/i,'chosen'], [/your decisions/i,'decisions'], [/life laboratory/i,'laboratory'],
+    [/chosen self/i,'chosen'], [/your decisions/i,'decisions'],
     [/the science|the frameworks|the method|the stories/i,'reading'], [/read the faq|^faq$/i,'faq'],
     [/^account$/i,'account'], [/^billing$/i,'account'], [/^support$/i,'faq'],
     [/^terms$/i,'legal'], [/^privacy$/i,'legal'],

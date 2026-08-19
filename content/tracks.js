@@ -694,35 +694,65 @@ TRACKS[3].faq = [
    page, and the Elevation Series.
    ═══════════════════════════════════════════════════════════════════════ */
 
-var LIFE_LAB = {
-  stages: [
-    ['LIVE',      'You already did this part. The material is the life you actually lived.'],
-    ['NOTICE',    'Something repeats, or something lands harder than it should. You catch it happening.'],
-    ['EXAMINE',   'Look at what actually happened \u2014 not the story you have been telling about it.'],
-    ['LEARN',     'Take the principle out of the event. This is where material becomes knowledge, and it is the step almost everyone skips.'],
-    ['TEST',      'Try it on purpose, in a situation you choose. If it does not hold up, it was a story rather than a lesson.'],
-    ['DOCUMENT',  'Write it down while it is still accurate. Memory rewrites what it cannot hold.'],
-    ['TRANSLATE', 'Put it in words someone who has not lived it can actually use.'],
-    ['SERVE',     'Give it to someone it would save time, or save from something.']
-  ],
+/* ═══════════════════════════════════════════════════════════════════════
+   SR-069 · COMMENTED OUT — RESERVED FOR THE ELEVATION SERIES.
 
-  /* The second arc — Elevation Series only. Not shown on member surfaces
-     before someone has run the first eight. */
-  extension: [
-    ['CREATE VALUE', 'What you know becomes something other people can hold.'],
-    ['EARN',         'Being paid for it is not a betrayal of it.'],
-    ['REINVEST',     'Earnings buy reach.'],
-    ['SERVE MORE',   'The laboratory of one life enters the laboratories of others.']
-  ],
+   Not deleted. The Life Laboratory returns with the Elevation Series, and
+   this is the record it returns from.
 
-  /* The qualification that keeps this honest. Never omit it from a surface
-     that shows the stages. */
-  caveat: 'Experience does not automatically become wisdom. It becomes material. What happens to the material is the work \u2014 and it needs examination, humility, context, testing and discernment before it is worth handing to anyone else.'
-};
+   The eight-stage list below is CANONICAL — LIVE NOTICE EXAMINE LEARN TEST
+   DOCUMENT TRANSLATE SERVE. LEARN is part of it. It was missing from an
+   earlier seven-stage version carried in the dashboard rail; do not restore
+   that version, and do not re-derive the count from anything else.
+
+   The `caveat` string must NEVER be omitted from any surface that shows the
+   stages. It is the qualification that keeps the doctrine honest, not a
+   footnote to it.
+
+   `extension` (the second arc — Elevation Series only) and `caveat` are both
+   kept inside this block.
+
+   Commented with line comments rather than a block comment on purpose: the
+   object carries block comments of its own, and a wrapping block comment
+   would terminate at the first inner close marker.
+
+   Also removed while this is out: LIFE_LAB from module.exports below (the
+   export throws otherwise), the dashboard rail button, the laboratory ROUTES
+   row, its TEXTMAP row, the identity card, and the LIFE LABORATORY block in
+   css/saferise-dashboard.css.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+// var LIFE_LAB = {
+//   stages: [
+//     ['LIVE',      'You already did this part. The material is the life you actually lived.'],
+//     ['NOTICE',    'Something repeats, or something lands harder than it should. You catch it happening.'],
+//     ['EXAMINE',   'Look at what actually happened \u2014 not the story you have been telling about it.'],
+//     ['LEARN',     'Take the principle out of the event. This is where material becomes knowledge, and it is the step almost everyone skips.'],
+//     ['TEST',      'Try it on purpose, in a situation you choose. If it does not hold up, it was a story rather than a lesson.'],
+//     ['DOCUMENT',  'Write it down while it is still accurate. Memory rewrites what it cannot hold.'],
+//     ['TRANSLATE', 'Put it in words someone who has not lived it can actually use.'],
+//     ['SERVE',     'Give it to someone it would save time, or save from something.']
+//   ],
+//
+//   /* The second arc — Elevation Series only. Not shown on member surfaces
+//      before someone has run the first eight. */
+//   extension: [
+//     ['CREATE VALUE', 'What you know becomes something other people can hold.'],
+//     ['EARN',         'Being paid for it is not a betrayal of it.'],
+//     ['REINVEST',     'Earnings buy reach.'],
+//     ['SERVE MORE',   'The laboratory of one life enters the laboratories of others.']
+//   ],
+//
+//   /* The qualification that keeps this honest. Never omit it from a surface
+//      that shows the stages. */
+//   caveat: 'Experience does not automatically become wisdom. It becomes material. What happens to the material is the work \u2014 and it needs examination, humility, context, testing and discernment before it is worth handing to anyone else.'
+// };
 
 
 if (typeof module !== 'undefined') {
+  /* SR-069 · LIFE_LAB is commented out above and must stay out of this list
+     while it is — exporting an undeclared binding throws on require(). */
   module.exports = { PRICING:PRICING, SHARED:SHARED, TRACKS:TRACKS, STATES:STATES,
                      FRAMEWORKS:FRAMEWORKS, META:META, frameworkReach:frameworkReach,
-                     LIFE_LAB:LIFE_LAB, CHANGE_PROPOSALS:CHANGE_PROPOSALS };
+                     CHANGE_PROPOSALS:CHANGE_PROPOSALS };
 }

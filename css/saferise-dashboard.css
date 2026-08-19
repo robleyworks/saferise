@@ -756,10 +756,14 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
   border:1px solid var(--hair);border-radius:20px;padding:6px 12px;margin:0 7px 7px 0}
 .sr-tag b{font-family:'Cinzel',serif;font-weight:400;color:var(--gold);font-size:11px}
 
-/* ══════════ LIFE LABORATORY ══════════ */
+/* SR-069 · the LIFE LABORATORY header that stood here is gone with the feature.
+   It had drifted: most of the rules that followed it (.sr-dash-readsrc,
+   .sr-cadence) are unrelated and live, so only the Life Laboratory ones were
+   removed — .sr-lab from the selector list below, .sr-dash-identity--three
+   and .sr-dash-idcard--lab further down. */
 
 @media(max-width:1000px){
-  .sr-sum,.sr-use,.sr-lab{grid-template-columns:1fr}
+  .sr-sum,.sr-use{grid-template-columns:1fr}
   .sr-sum-side{border-left:0;border-top:1px solid var(--hair)}
 }
 
@@ -775,10 +779,6 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
   margin-top:20px;padding:18px var(--pad);background:var(--band);border:1px solid var(--hair);border-radius:14px}
 .sr-cadence-line{font-size:13.5px;color:var(--text2);line-height:1.7}
 .sr-cadence-line b{color:var(--text);font-weight:500}
-.sr-dash-identity--three{grid-template-columns:repeat(3,minmax(0,1fr))}
-.sr-dash-idcard--lab{border-color:rgba(212,168,67,.3);
-  background:linear-gradient(130deg,rgba(212,168,67,.06),transparent 60%),var(--band)}
-@media(max-width:1080px){ .sr-dash-identity--three{grid-template-columns:1fr} }
 
 /* ══════════ BEGIN HERE ══════════
    Every card runs the same five-row grid so titles, bodies, controls and captions
