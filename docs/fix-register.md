@@ -908,7 +908,14 @@ named for one product and used for another.
 open decision. Nothing in the repo renders either one; noted beside them in the data so
 the next reader does not assume they are live.
 
-*Status:* complete on merge · *Raised:* 19 Aug 2026
+**Remainder, no ID left in the reserved block:** `protocol.html` carries its own booking
+block with €275 hardcoded twice. It cannot bind, because it does not load
+`content/tracks.js` at all — so making it match the dashboard means giving that page the
+pricing record first. Out of scope here, which was the dashboard block, but it is the
+same defect and the same €275 that SR-091 was raised for.
+
+*Status:* complete on merge, with the protocol.html booking block outstanding
+*Raised:* 19 Aug 2026
 
 ### SR-092 · Dead links on the method pages — audited, none found
 Every `href` on both pages resolves to a file that exists, all five unbuilt frameworks
