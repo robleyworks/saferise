@@ -1248,11 +1248,22 @@
   }
 
   // rail
+  /* SR-083 · the Cue Card button carries data-modal, not data-route. This
+     listener used to fall back to 'dashboard' for it, so a single click opened
+     mRoute here AND mCrisis from the [data-modal] handler — two layers at
+     once. A rail button with no data-route is not a route; it is left to
+     whichever handler owns it.
+
+     It also no longer steals the active mark: the Cue Card is a layer over the
+     page you are on, not a destination, so the rail's "on" state must stay
+     where it was. */
   document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
     b.addEventListener('click', function(){
+      var key = b.getAttribute('data-route');
+      if(!key) return;
       document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(x){ x.classList.remove('on'); });
       b.classList.add('on');
-      openRoute(b.getAttribute('data-route') || 'dashboard');
+      openRoute(key);
     });
   });
 
