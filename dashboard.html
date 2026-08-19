@@ -295,9 +295,9 @@
         <span class="sr-dash-foldsign"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
         <span>
           <span class="eyebrow" style="display:block;margin-bottom:6px">What every protocol opens</span>
-          <span class="sr-dash-foldtitle">Twelve resources, one for each kind of moment.</span>
+          <span class="sr-dash-foldtitle" id="srFoldTitle">One resource for each kind of moment.</span>
         </span>
-        <span class="sr-dash-foldnote">Guided audio · breathwork · somatic<br>journal · sources · cue card</span>
+        <span class="sr-dash-foldnote">Guided audio · breathwork · somatic<br>journal · mechanism · cue card</span>
       </button>
       <div class="sr-dash-foldbody" id="srResBody" hidden>
         <div class="sr-dash-strip" id="srStrip" role="tablist" aria-label="Protocol resources"></div>
@@ -885,7 +885,7 @@
          body:['Each of you logs separately and neither reads the other. Note what ruptured, what got said, and how long contact took to return — repair arriving faster is the measure, not whether rupture happened at all.'],
          meta:'Private to each of you · After every session'},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Repair. Choose.', valcol:'var(--teal)',
-         body:['The same twelve, with the full session script, the Disclosure & Support guide for explaining this to people outside the relationship, and third-party invitation scripts for when someone else has to be brought in.'],
+         body:['The same library, with the full session script, the Disclosure &amp; Support guide for explaining this to people outside the relationship, and third-party invitation scripts for when someone else has to be brought in.'],
          note:'Repair sits here: what the pattern does to the two of you, and what changes it.',
          meta:'Read anytime · Either of you'}],},
 
@@ -900,7 +900,7 @@
          body:['Log the situation, what was actually at stake, and whether presence or rehearsal won. Across a quarter the record shows which kind of room still gets you fastest, and whether the activation before it is easing.'],
          meta:'Private to you · After every session'},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Recover. Choose.', valcol:'var(--teal)',
-         body:['The same twelve, sized for a working day — mechanism, sources, meditation scripts, somatic practices between meetings, and the Disclosure guide for explaining a practice to people at work.'],
+         body:['The same library, sized for a working day — the mechanism and its sources, meditation scripts, somatic practices between meetings, and the Disclosure guide for explaining a practice to people at work.'],
          note:'Recovery sits here: ambition, burnout, and decisions you are too depleted to make well.',
          meta:'Read anytime · No fixed order'}],},
 
@@ -1299,6 +1299,21 @@
     }
   }, true);
 
+  /* ══════════ SR-078 · THE LIBRARY COUNT IS DERIVED ══════════
+     This line used to read "Twelve resources". The number now comes from
+     SHARED.resources.length so a cut can never leave it stale again — and it
+     is never typed as a word anywhere in the markup. */
+  (function(){
+    var el = document.getElementById('srFoldTitle');
+    if(!el || typeof SHARED === 'undefined' || !SHARED.resources) return;
+    var W = ['zero','one','two','three','four','five','six','seven','eight','nine',
+             'ten','eleven','twelve','thirteen','fourteen','fifteen'];
+    var n = SHARED.resources.length;
+    var word = (W[n] || String(n));
+    el.textContent = word.charAt(0).toUpperCase() + word.slice(1) +
+                     ' resources, one for each kind of moment.';
+  })();
+
   /* ══════════ SR-070 · STORAGE ══════════
      Device storage with an in-memory fallback. Ported from the mockup as-is,
      including the write probe: Safari in private browsing throws SecurityError
@@ -1685,7 +1700,7 @@
   try{ if(sessionStorage.getItem(THEME_KEY) === 'sunrise') setTheme('sunrise'); }catch(e){}
 
 
-  // ── twelve resources: strip is the index, the reader carries the detail ──
+  // ── the resource strip is the index; the reader carries the detail ──
   var ICO = {
     play:'<circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/>',
     breath:'<path d="M4 14c3 0 3-4 6-4s3 4 6 4 4-2 4-2"/><path d="M4 18c3 0 3-3 6-3s3 3 6 3 4-1.5 4-1.5"/><circle cx="12" cy="6" r="2.6"/>',

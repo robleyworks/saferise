@@ -157,9 +157,16 @@
                  'nine','ten','eleven','twelve','thirteen','fourteen','fifteen',
                  'sixteen','seventeen','eighteen','nineteen','twenty'];
   function countWord(n) { return NUMWORD[n] || String(n); }
+  /* SR-078 · also matches the spaced form. "twelve-resource library" was
+     rewritten here already; "each with twelve resources" was not, and went
+     stale on its own. Both shapes are covered now. */
   function resourceCount(s) {
-    return String(s).replace(/\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)(-resource\b)/gi,
-      function (_, tail) { return countWord(SHARED.resources.length) + tail; });
+    var WORDS = 'zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty';
+    return String(s)
+      .replace(new RegExp('\\b(?:' + WORDS + ')(-resource\\b)', 'gi'),
+        function (_, tail) { return countWord(SHARED.resources.length) + tail; })
+      .replace(new RegExp('\\b(?:' + WORDS + ')(\\s+resources\\b)', 'gi'),
+        function (_, tail) { return countWord(SHARED.resources.length) + tail; });
   }
 
   /* ── 02 · cost ───────────────────────────────────────────────────── */
@@ -295,7 +302,7 @@
       '<div class="sr-tp-pricebox"><p class="sr-tp-pricenum">' + t.price.amount +
         '<span class="sr-tp-priceper"> ' + t.price.per + '</span></p>' +
       '<div class="sr-tp-pricelist">' +
-        t.priceList.map(function (l) { return '<p>' + l + '</p>'; }).join('') + '</div>' +
+        t.priceList.map(function (l) { return '<p>' + resourceCount(l) + '</p>'; }).join('') + '</div>' +
       '<a href="#start" class="sr-tp-pill">Get Started — ' + t.price.amount +
         t.price.per.replace('/ ', '/') + '</a>' +
       '<p class="sr-tp-note" style="margin-top:14px">' + val(t.priceNote, 'priceNote') + '</p>' +

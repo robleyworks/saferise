@@ -156,7 +156,7 @@ var TRACKS = {
     },
 
     priceList: [
-      'Every protocol in the track, each with twelve resources',
+      'Every protocol in the track, each with its full resource library',
       'Guided audio, follow-along video, cue cards',
       'Source citations at every step',
       'Journal and progress tracking, private to you',
@@ -340,7 +340,7 @@ var T2 = {
     sub: 'Three parts, and none of them require the other person\u2019s agreement to start.',
     experience: 'The guided session, voiced start to finish, in a version for running alone and a version for running together. Most people start alone \u2014 changing your own half is the only half you control.',
     log: 'Log the session and note what shifted, in the dynamic as well as in you. What repeats becomes visible far faster in a relationship than it does on your own.',
-    deeper: 'The twelve-resource library, plus the two that carry the most weight here: the Invitation to Repair, and the Disclosure &amp; Support script for explaining what you are doing without turning it into a demand.',
+    deeper: 'The full resource library, plus the two that carry the most weight here: the Invitation to Repair, and the Disclosure &amp; Support script for explaining what you are doing without turning it into a demand.',
     deeperNote: 'Individuation sits here too: what belongs to you, what belongs to them, and what belongs to something older than either of you.'
   },
 
@@ -459,7 +459,7 @@ var T3 = {
     sub: 'Three parts, built for a working day rather than a retreat.',
     experience: 'The guided session, plus a four-minute version for the gap between meetings and a Cue Card sized for the walk down the corridor. Nothing here requires an hour or a quiet house.',
     log: 'Log the session against the situation \u2014 the pitch, the review, the conversation you were dreading. The pattern in your own working week becomes readable within a month.',
-    deeper: 'The twelve-resource library, with the Attention Advisory doing real work here: where your energy belongs today, and which fights are not yours.',
+    deeper: 'The full resource library, with the Attention Advisory doing real work here: where your energy belongs today, and which fights are not yours.',
     deeperNote: 'Ambition, identity and what you were trained to want sit in this layer \u2014 the questions underneath the performance.'
   },
 
@@ -516,6 +516,29 @@ var STATES = {
 /* extras — the two conditional resources. null means UNVERIFIED, not none.
    T1 mapping is taken from SafeRise_PersonalTransformation_ProductionChecklist.
    T2 and T3 need the same confirmation before the protocol page can be honest. */
+/* SR-078 · a protocol's library size is derived, never typed.
+   SHARED.resources holds every resource. Two of them are conditional: the
+   Proximity Guide and the Invitation to Repair only appear where an ongoing
+   external source is genuinely part of the pattern, which META[].extras
+   records as 'advisory' and 'invitation'.
+
+   extras:null means UNVERIFIED, not none — T2 and T3 still need the same
+   confirmation T1 got. Both null and [] therefore yield the unconditional set,
+   which is the honest floor: a protocol carrying neither conditional resource
+   shows seven, and a hardcoded number would be wrong on every one of them. */
+var CONDITIONAL_RESOURCES = { 'Proximity Guide': 'advisory', 'Invitation to Repair': 'invitation' };
+
+function protocolResources(key) {
+  var extras = (META[key] || {}).extras;
+  return SHARED.resources.filter(function (r) {
+    var needs = CONDITIONAL_RESOURCES[r[1]];
+    if (!needs) return true;
+    return Object.prototype.toString.call(extras) === '[object Array]' &&
+           extras.indexOf(needs) > -1;
+  });
+}
+function protocolResourceCount(key) { return protocolResources(key).length; }
+
 var META = {
   /* Track 01 · Personal Transformation */
   't1-01': { extras: [], state: 'agitated',    frameworks: ['porges','heartmath'] },
@@ -753,5 +776,8 @@ if (typeof module !== 'undefined') {
      while it is — exporting an undeclared binding throws on require(). */
   module.exports = { PRICING:PRICING, SHARED:SHARED, TRACKS:TRACKS, STATES:STATES,
                      FRAMEWORKS:FRAMEWORKS, META:META, frameworkReach:frameworkReach,
+                     CONDITIONAL_RESOURCES:CONDITIONAL_RESOURCES,
+                     protocolResources:protocolResources,
+                     protocolResourceCount:protocolResourceCount,
                      CHANGE_PROPOSALS:CHANGE_PROPOSALS };
 }
