@@ -1449,8 +1449,20 @@
     entries.filter(function(e){
       return srJournalFilter === 'all' || e.protocolId === srJournalFilter;
     }).slice().reverse().forEach(function(e){
+      /* SR-081 · no shift row here. Entries are written on the protocol page,
+         which captures a 0-10 activation reading, not a named nervous-system
+         state — and mapping one onto the other would be invention, not data.
+         The two are different measurements. Nothing else on protocol.html
+         holds an arrival state either: its "Preview as" statebar is a mockup
+         control, and the dashboard's arrival field is free text on another
+         page that is never stored per session.
+
+         So before/after stay null and the row is gone until something
+         actually populates it. The Record view keeps its shift row, which
+         SR-081 does not cover — sr.record.runs has no writer either, and that
+         is worth its own look. */
       html += '<article class="sr-entry"><header><h5>'+srEsc(e.protocol)+'</h5><time>'+srFmtDate(e.date)+'</time></header>'+
-              '<p>'+srEsc(e.text)+'</p>'+ (e.before ? srShift(e.before, e.after) : '') +'</article>';
+              '<p>'+srEsc(e.text)+'</p></article>';
     });
     el.innerHTML = html + '</div>';
   }
