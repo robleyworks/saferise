@@ -134,7 +134,7 @@ var TRACKS = {
     journey: {
       title: 'Experience it. Record what shifts.<br>Go deeper when you\u2019re ready.',
       sub: 'Three parts, held inside one continuous practice.',
-      experience: 'The Protocol Foundation Meditation guides you from start to finish. Breathwork and Somatic Release sit here too \u2014 with clear direction on what to do and for how long.',
+      experience: 'The guided meditation for the protocol you are running takes you from start to finish. Breathwork and Somatic Release sit here too \u2014 with clear direction on what to do.',
       log: 'Log the session directly in the app and note what shifted. Track your state, the practice you used and what helped.',
       deeper: 'Explore the full resource library: how the mechanism works, scripts, somatic practices and companion guides.',
       deeperNote: 'Individuation sits here: insight and shadow integration move into The Decision \u2014 who you choose to become.'
@@ -457,7 +457,7 @@ var T3 = {
   journey: {
     title: 'Ten minutes before the room.<br>Not a debrief afterwards.',
     sub: 'Three parts, built for a working day rather than a retreat.',
-    experience: 'The guided session, plus a four-minute version for the gap between meetings and a Cue Card sized for the walk down the corridor. Nothing here requires an hour or a quiet house.',
+    experience: 'The guided meditation for the protocol you are running, plus a short version for the gap between meetings and a Cue Card sized for the walk down the corridor. Nothing here requires a quiet house.',
     log: 'Log the session against the situation \u2014 the pitch, the review, the conversation you were dreading. The pattern in your own working week becomes readable within a month.',
     deeper: 'The full resource library, with the Attention Advisory doing real work here: where your energy belongs today, and which fights are not yours.',
     deeperNote: 'Ambition, identity and what you were trained to want sit in this layer \u2014 the questions underneath the performance.'
