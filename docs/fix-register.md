@@ -9,10 +9,13 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
-- Highest ID currently issued: **SR-095**.
-- **SR-085 to SR-095 are now issued** by the correctness pass and written up below.
-  The reserved range is exhausted: two findings in SR-093 and one in SR-092 have no
-  ID and are recorded inside those entries. Reserve a fresh block before the next pass.
+- Highest ID currently issued: **SR-120**.
+- **SR-096 to SR-120 are reserved, not yet issued.** Reserved 19 Aug 2026 for the
+  index.html / entity / noindex pass, which allocates from SR-096. The previous block
+  ran out mid-pass, which is what this reservation is for.
+- **SR-085 to SR-095 are issued** by the correctness pass and written up below. The
+  three findings that pass had no ID for — recorded inside SR-092 and SR-093 — are
+  now issued as SR-104, SR-105 and SR-106.
 - **SR-073 and SR-081 to SR-084 are reserved, not yet issued.** SR-068 to
   SR-072 were taken on 19 Aug 2026 for the modal-shell work and are written up
   below. SR-073 was raised in that pass and then found to be already fixed by
