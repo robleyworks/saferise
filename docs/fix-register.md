@@ -1003,3 +1003,39 @@ heading width. Measure with a visible browser — see the note in SR-093 about w
 could not be captured in the preview pane.
 
 *Status:* open · *Raised:* 19 Aug 2026
+
+### SR-104 · Method rails land on the dashboard without opening what they name
+Found during SR-092 and recorded there for want of an ID. On `method.html` and
+`method-porges.html` the rail's `coaching` and `account` buttons navigate to
+`dashboard.html` and stop. `PAGES` on those pages holds only `method` and `dashboard`,
+so both fall through to a bare redirect and the member arrives at the dashboard with
+neither the Sessions view nor Account open.
+
+Same shape as the Cue Card bounce closed in SR-086: a control that names a destination
+and does not reach it. The dashboard already routes both through `openRoute`, so the fix
+is a deep link the dashboard reads on load rather than new wiring on the method pages.
+
+*Status:* open · *Raised:* 19 Aug 2026
+
+### SR-105 · dashboard.html loads the system stylesheet before the dashboard one
+Found during SR-093. `dashboard.html` loads `css/saferise-system.css` and then
+`css/saferise-dashboard.css`, against the rule in CLAUDE.md that the system sheet loads
+last and wins by cascade order rather than `!important`.
+
+Blast radius today is one class, `.sr-cover`, which both files define — so the dashboard
+copy currently wins where the system copy should. Small, but the ordering is wrong and
+the next shared class will be a silent regression rather than a visible one. Swapping the
+two lines is not trivially safe: it changes which declaration wins for any overlapping
+selector, so it needs a render pass, which is why SR-093 measured it and left it.
+
+*Status:* open · *Raised:* 19 Aug 2026
+
+### SR-106 · Ten protocol covers load eagerly on the dashboard
+Found during SR-093. The dashboard requests all ten covers — roughly 1.5 MB — with no
+`loading="lazy"` on the below-fold ones. Only the first two or three are visible before
+the carousel is scrolled.
+
+Note the covers carry their kicker word and number inside the image, so they cannot be
+swapped for a text overlay; lazy-loading is the whole fix.
+
+*Status:* open · *Raised:* 19 Aug 2026
