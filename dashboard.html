@@ -443,7 +443,7 @@
         <p class="sr-sum-body" id="srSumBody">Across twenty sessions your average state after practice has risen from <b>2.4 to 3.6</b>, and the gap between before and after has narrowed. The pattern still arrives — you have opened Anxiety Reset eleven times since June — but the route back is now around <b>four minutes</b> rather than the twenty it took in your first fortnight. Your entries have changed tense: June reads as description, August reads as recognition.</p>
         <div class="sr-sum-acts">
           <button class="sr-dash-addbtn sr-dash-addbtn--solid" id="srSumGen">Generate August summary <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
-          <a class="sr-dash-go" href="#">Build a protocol report <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
+          <button class="sr-dash-go" data-modal="record" style="background:none;border:0;cursor:pointer;font-family:inherit;padding:0">See your record <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
         </div>
         <p class="sr-sum-note">Summaries are generated from your own logs and entries. They are never shared and never used to score you.</p>
       </div>
@@ -485,7 +485,6 @@
             <div class="sr-dash-bar" style="height:74%"></div><div class="sr-dash-bar" style="height:88%"></div>
           </div>
           <div class="sr-dash-axis"><span>June</span><span>August</span></div>
-          <div style="margin-top:20px"><a class="sr-dash-go" href="#">Open the full archive <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a></div>
         </div>
       </div>
 
@@ -516,7 +515,7 @@
           </div>
           <div style="margin-top:18px;display:flex;gap:18px;flex-wrap:wrap">
             <a class="sr-dash-go" href="#">Write an entry <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
-            <a class="sr-dash-go" href="#">All entries <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
+            <button class="sr-dash-go" data-modal="journal" style="background:none;border:0;cursor:pointer;font-family:inherit;padding:0">Read everything you have written <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
           </div>
         </div>
       </div>
@@ -526,7 +525,7 @@
          The ranked protocol and resource charts moved to the full archive. -->
     <div class="sr-cadence">
       <p class="sr-cadence-line">Last practice <b>2 days ago</b> · <b>seven</b> of ten protocols still unopened · <b>14</b> entries written since June.</p>
-      <a class="sr-dash-go" href="#">See it all in the archive <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></a>
+      <button class="sr-dash-go" data-modal="record" style="background:none;border:0;cursor:pointer;font-family:inherit;padding:0">Open your record <svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></button>
     </div>
 
     <!-- 4 · identity -->
@@ -776,6 +775,38 @@
       </div>
 
       <p class="sr-crisis-safety"><b>If you are in immediate danger</b>, contact your local emergency service. SafeRise is self-guided practice, not crisis care.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SR-070 · THE SHELL — one layer, three views ══════════
+     Record, Journal and Sessions all render into this one dialog. It is
+     driven by the SAME openModal()/closeModals() pair as the six booking
+     layers above, through a VIEWS config; there is no second modal system
+     on this page. The kicker, title, lede, art class and footer line are
+     all set from that config, so the markup below carries no view-specific
+     copy of its own.
+
+     The lede is a bare <p> because .sr-modalin > p already styles it — the
+     mockup's .lede class is not defined in either sheet this page loads. -->
+<div class="sr-modal" id="mLayer" role="dialog" aria-modal="true" aria-labelledby="srLayerTitle">
+  <div class="sr-modalbox">
+    <div class="sr-modalart m1" id="srLayerArt">
+      <button class="sr-modalclose" data-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+    <div class="sr-modalin">
+      <p class="sr-modalkick" id="srLayerKick"></p>
+      <h3 id="srLayerTitle"></h3>
+      <p id="srLayerLede"></p>
+
+      <div class="sr-view" id="vRecord"><div id="srRecordBody"></div></div>
+      <div class="sr-view" id="vJournal"><div id="srJournalBody"></div></div>
+      <div class="sr-view" id="vSessions"><div id="srSessionsBody"></div></div>
+
+      <div class="sr-modalfoot">
+        <p id="srLayerFoot"></p>
+        <button class="sr-dash-addbtn" data-close>Close</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1198,7 +1229,6 @@
     podcast:    ['The SafeRise podcast', 'Episode player and the back catalogue.', '/podcast'],
     reading:    ['Understanding SafeRise', 'The science, the frameworks, the method and the reference cases.', '/about'],
     faq:        ['FAQ', 'What the evidence shows, whether your journal is private, what to do mid-episode, and what happens if you stop.', '/faq'],
-    report:     ['Protocol report', 'A printable summary of one protocol across your whole history.', '/record/report'],
     chosen:     ['The Chosen Self', 'The identity you are practising into, in your own words.', '/record/chosen-self'],
     decisions:  ['Your Decisions', 'The choices you made once the pattern was no longer making them.', '/record/decisions'],
     entry:      ['Write an entry', 'A new journal entry, attached to a protocol if you want it to be.', '/journal/new'],
@@ -1208,15 +1238,22 @@
   // rail and any [data-route-link] navigate there instead of opening the
   // "Not built yet" modal. Add to this map as each page lands.
   var PAGES = { method: 'method.html' };
+  /* Routes that are now a view in the shell rather than a page. Checked after
+     PAGES and before ROUTES, so the rail reaches them without carrying a
+     data-modal of its own — the rail's own listener would otherwise fire
+     openRoute() alongside the modal handler and open two layers at once. */
+  var LAYERS = { coaching: 'sessions' };
   function openRoute(key){
     if(PAGES[key]){ window.location.href = PAGES[key]; return; }
+    if(LAYERS[key]){ openModal(LAYERS[key]); return; }
     var r = ROUTES[key] || ROUTES.dashboard;
     document.getElementById('srRouteTitle').textContent = r[0];
     document.getElementById('srRouteBody').textContent  = r[1];
     document.getElementById('srRoutePath').textContent  = r[2];
     document.getElementById('srRouteKick').textContent  = key === 'dashboard' ? 'You are here' : 'Not built yet';
-    document.getElementById('mRoute').classList.add('on');
-    document.body.style.overflow = 'hidden';
+    /* goes through the shared controller so focus return and scroll lock are
+       handled in exactly one place */
+    openModal('route');
   }
 
   // rail
@@ -1237,7 +1274,7 @@
   var TEXTMAP = [
     [/play the clearing/i,'clearing'], [/^read it$/i,'article'], [/what is included/i,'plans'],
     [/play episode/i,'podcast'], [/^add /i,'checkout'],
-    [/protocol report/i,'report'], [/write an entry/i,'entry'],
+    [/write an entry/i,'entry'],
     [/chosen self/i,'chosen'], [/your decisions/i,'decisions'],
     [/the science|the frameworks|the method|the stories/i,'reading'], [/read the faq|^faq$/i,'faq'],
     [/^account$/i,'account'], [/^billing$/i,'account'], [/^support$/i,'faq'],
@@ -1262,20 +1299,240 @@
     }
   }, true);
 
-  // ── booking layers ──
-  var MODALS = {workshop:'mWorkshop', oneone:'mOneone', calendar:'mCalendar', route:'mRoute', media:'mMedia', crisis:'mCrisis'};
+  /* ══════════ SR-070 · STORAGE ══════════
+     Device storage with an in-memory fallback. Ported from the mockup as-is,
+     including the write probe: Safari in private browsing throws SecurityError
+     on setItem, and a bare localStorage read throws before it can be caught
+     anywhere useful. Every read below goes through Store.get(key, fallback),
+     which survives a missing key, a corrupt value and a throwing store without
+     taking the page down with it. There is no backend behind any of this. */
+  var Store = (function(){
+    var mem = {}, ok = false;
+    try { var k='sr.probe'; window.localStorage.setItem(k,'1'); window.localStorage.removeItem(k); ok = true; } catch(e){ ok = false; }
+    return {
+      persistent: ok,
+      get: function(key, fallback){
+        try { var raw = ok ? window.localStorage.getItem(key) : mem[key];
+              return raw ? JSON.parse(raw) : fallback; }
+        catch(e){ return fallback; }
+      },
+      set: function(key, val){
+        var raw = JSON.stringify(val);
+        try { if(ok) window.localStorage.setItem(key, raw); else mem[key] = raw; }
+        catch(e){ mem[key] = raw; }
+      }
+    };
+  })();
+
+  var K_ENTRIES = 'sr.journal.entries';
+  var K_RUNS    = 'sr.record.runs';
+  var K_BOOKED  = 'sr.sessions.booked';
+
+  /* The device-only line. It is the only place a member is told their writing
+     does not follow them to another device, so it ships verbatim. */
+  var DEVICE_ONLY = 'Stored on this device only. Clearing your browser data removes it, and it will not follow you to another device.';
+
+  var SR_STATE_CLASS = { Mobilised:'sr-dot--mob', Shutdown:'sr-dot--shut', Settled:'sr-dot--safe',
+                         Braced:'sr-dot--mob', Present:'sr-dot--safe' };
+
+  /* named srEsc, not esc: this IIFE already has an esc() for the track
+     renderer that escapes only & and <, and a second `function esc` here
+     would quietly replace it for the whole scope. */
+  function srEsc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  function srFmtDate(iso){
+    var d = new Date(iso + 'T00:00:00');
+    if(isNaN(d.getTime())) return srEsc(iso);
+    return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  }
+
+  /* the glyph is bare text: .sr-arrow is already a 46px circular button in
+     saferise-system.css, which loads last and would win. */
+  function srShift(from,to){
+    return '<span class="sr-shift"><span class="sr-dot '+(SR_STATE_CLASS[from]||'sr-dot--shut')+'"></span>'+srEsc(from)+
+           ' &rarr; <span class="sr-dot '+(SR_STATE_CLASS[to]||'sr-dot--safe')+'"></span>'+srEsc(to)+'</span>';
+  }
+
+  function srEmpty(title, body, cta){
+    return '<div class="sr-empty">'+
+      '<svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h9"/></svg>'+
+      '<h4>'+srEsc(title)+'</h4><p>'+srEsc(body)+'</p>'+
+      (cta ? '<button class="sr-dash-addbtn sr-dash-addbtn--solid" data-close>'+srEsc(cta)+'</button>' : '')+
+      '</div>';
+  }
+
+  /* ── view: record ── */
+  function srBuildRecord(){
+    var runs = Store.get(K_RUNS, []);
+    if(!Array.isArray(runs)) runs = [];
+    var el = document.getElementById('srRecordBody');
+    if(!runs.length){
+      el.innerHTML = srEmpty('Nothing logged yet',
+        'Your record fills in as you run sessions. Each one notes the state you arrived in, the step you reached, and where you left it.',
+        'Run a protocol');
+      return;
+    }
+
+    /* Third card is Most run, counted from the logged runs. The mockup had
+       "Early signs / Where you land" here — a tier this page cannot compute
+       from local data, which is the same defect as a play control with no
+       audio behind it. */
+    var counts = {}, top = '', topN = 0;
+    runs.forEach(function(r){
+      var n = r && r.protocol ? String(r.protocol) : '';
+      if(!n) return;
+      counts[n] = (counts[n] || 0) + 1;
+      if(counts[n] > topN){ topN = counts[n]; top = n; }
+    });
+    /* the full name stays on every row below; the card shows the distinctive
+       part so a 25px Cinzel line does not wrap to three */
+    var topShort = top.replace(/^The\s+/i,'').replace(/\s+Protocol$/i,'') || '—';
+
+    var stats = [
+      [runs.length, 'Sessions logged'],
+      [Object.keys(counts).length, 'Protocols run'],
+      [topShort, 'Most run']
+    ];
+    var html = '<div class="sr-statgrid">' + stats.map(function(s){
+      return '<div class="sr-stat"><b>'+srEsc(s[0])+'</b><span>'+srEsc(s[1])+'</span></div>';
+    }).join('') + '</div>';
+
+    html += '<p class="sr-modallabel">Every session, in order</p><ul class="sr-runlist">';
+    runs.slice().reverse().forEach(function(r){
+      html += '<li><div><strong>'+srEsc(r.protocol)+'</strong><em>'+srFmtDate(r.date)+' &middot; reached '+srEsc(r.step)+'</em></div>'+
+              srShift(r.before, r.after)+'</li>';
+    });
+    el.innerHTML = html + '</ul>';
+  }
+
+  /* ── view: journal ── */
+  /* Grouped on `protocol` for display, filtered on `protocolId`. Getting that
+     the wrong way round gives a journal that looks right and filters wrong. */
+  var srJournalFilter = 'all';
+
+  function srBuildJournal(){
+    var entries = Store.get(K_ENTRIES, []);
+    if(!Array.isArray(entries)) entries = [];
+    var el = document.getElementById('srJournalBody');
+    if(!entries.length){
+      el.innerHTML = srEmpty('Your entries will appear here once you have run a session',
+        'Writing happens on the protocol page, so every entry stays attached to the protocol it came out of. This is where you read them all back.',
+        'Go to a protocol');
+      return;
+    }
+
+    var groups = [], seen = {};
+    entries.forEach(function(e){
+      var id = e && e.protocolId ? String(e.protocolId) : '';
+      if(!id || seen[id]) return;
+      seen[id] = true;
+      groups.push({ id: id, name: e.protocol || id });
+    });
+    if(srJournalFilter !== 'all' && !seen[srJournalFilter]) srJournalFilter = 'all';
+
+    var html = '<div class="sr-chips"><button class="sr-chip'+(srJournalFilter==='all'?' on':'')+'" data-filter="all">Everything ('+entries.length+')</button>';
+    groups.forEach(function(g){
+      var count = entries.filter(function(e){ return e.protocolId === g.id; }).length;
+      html += '<button class="sr-chip'+(srJournalFilter===g.id?' on':'')+'" data-filter="'+srEsc(g.id)+'">'+srEsc(g.name)+' ('+count+')</button>';
+    });
+    html += '</div><div class="sr-scroll">';
+
+    entries.filter(function(e){
+      return srJournalFilter === 'all' || e.protocolId === srJournalFilter;
+    }).slice().reverse().forEach(function(e){
+      html += '<article class="sr-entry"><header><h5>'+srEsc(e.protocol)+'</h5><time>'+srFmtDate(e.date)+'</time></header>'+
+              '<p>'+srEsc(e.text)+'</p>'+ (e.before ? srShift(e.before, e.after) : '') +'</article>';
+    });
+    el.innerHTML = html + '</div>';
+  }
+
+  /* ── view: sessions ── */
+  function srBuildSessions(){
+    var booked = Store.get(K_BOOKED, []);
+    if(!Array.isArray(booked)) booked = [];
+    var el = document.getElementById('srSessionsBody');
+    /* Zoom and Calendly are both still open. Nothing here embeds either one,
+       loads either SDK, or calls an API against a provider that has not been
+       picked — the block states the open decision instead. */
+    var provider = '<div class="sr-provider"><p><b>Booking provider not yet set.</b> '+
+      'This block takes the scheduling embed once Zoom or Calendly is chosen. Until then it is the only part of this view without live data.</p></div>';
+
+    /* sr.sessions.booked has no writer, so the empty state is what every
+       member sees on day one. It has to read as correct, not broken. */
+    if(!booked.length){
+      el.innerHTML = srEmpty('Nothing booked yet',
+        'Sessions and workshops you reserve will show here with the date, the format, and the joining link when it is issued.',
+        'See what is available') + '<div style="height:16px"></div>' + provider;
+      return;
+    }
+    var html = '<ul class="sr-booked">';
+    booked.forEach(function(b){
+      var d = new Date(b.date + 'T00:00:00');
+      var day = isNaN(d.getTime()) ? '--' : d.getDate();
+      var mon = isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-GB',{month:'short'});
+      html += '<li><div class="sr-date"><b>'+day+'</b><span>'+mon+'</span></div>'+
+              '<div><h5>'+srEsc(b.title)+'</h5><em>'+srEsc(b.time)+' &middot; '+srEsc(b.format)+'</em></div>'+
+              '<span class="sr-pill'+(b.confirmed?' live':'')+'">'+(b.confirmed?'Confirmed':'Awaiting link')+'</span></li>';
+    });
+    el.innerHTML = html + '</ul>' + provider;
+  }
+
+  /* ══════════ SR-070 · THE SHARED CONTROLLER ══════════
+     One openModal()/closeModals() pair for all nine layers. The six booking
+     modals are plain ids; the three views share #mLayer and additionally
+     carry a VIEWS config that sets kicker, title, lede, art class and footer
+     before the layer opens. There is no second modal system on this page. */
+  var MODALS = {workshop:'mWorkshop', oneone:'mOneone', calendar:'mCalendar', route:'mRoute', media:'mMedia', crisis:'mCrisis',
+                record:'mLayer', journal:'mLayer', sessions:'mLayer'};
+
+  var VIEWS = {
+    record:   { view:'vRecord',   art:'m2', kick:'Your record',
+                title:'What has actually changed',
+                lede:'Every session you have run, the state you arrived in, and where you left it.',
+                foot:DEVICE_ONLY, build:srBuildRecord },
+    journal:  { view:'vJournal',  art:'m1', kick:'Journal',
+                title:'Everything you have written',
+                lede:'Grouped by the protocol it came out of. Filter to one, or read straight through.',
+                foot:DEVICE_ONLY, build:srBuildJournal },
+    sessions: { view:'vSessions', art:'m3', kick:'Sessions & workshops',
+                title:'Your booked dates',
+                lede:'What you have reserved, and when. Booking and rescheduling happen with the scheduling tool.',
+                foot:'Booking is handled by the scheduling tool. Changes made there appear here.',
+                build:srBuildSessions }
+  };
+
+  var srLastFocus = null;
+
   function openModal(key){
     var m = document.getElementById(MODALS[key]);
     if(!m) return;
+    var v = VIEWS[key];
+    if(v){
+      document.getElementById('srLayerKick').textContent  = v.kick;
+      document.getElementById('srLayerTitle').textContent = v.title;
+      document.getElementById('srLayerLede').textContent  = v.lede;
+      document.getElementById('srLayerFoot').textContent  = v.foot;
+      document.getElementById('srLayerArt').className     = 'sr-modalart ' + v.art;
+      Object.keys(VIEWS).forEach(function(k){
+        document.getElementById(VIEWS[k].view).classList.toggle('on', k === key);
+      });
+      v.build();
+    }
+    srLastFocus = document.activeElement;
     m.classList.add('on');
     document.body.style.overflow = 'hidden';
     var c = m.querySelector('[data-close]'); if(c) c.focus();
   }
   function closeModals(){
+    var wasOpen = false;
     Object.keys(MODALS).forEach(function(k){
-      var m = document.getElementById(MODALS[k]); if(m) m.classList.remove('on');
+      var m = document.getElementById(MODALS[k]);
+      if(m && m.classList.contains('on')){ wasOpen = true; m.classList.remove('on'); }
     });
     document.body.style.overflow = '';
+    if(wasOpen && srLastFocus && srLastFocus.focus) srLastFocus.focus();
+    srLastFocus = null;
   }
   document.addEventListener('click', function(e){
     var rl = e.target.closest('[data-route-link]');
@@ -1283,7 +1540,9 @@
     var open = e.target.closest('[data-modal]');
     if(open){ e.preventDefault(); openModal(open.getAttribute('data-modal')); return; }
     if(e.target.closest('[data-close]')){ closeModals(); return; }
-    if(e.target.classList && e.target.classList.contains('sr-modal')) closeModals();
+    if(e.target.classList && e.target.classList.contains('sr-modal')){ closeModals(); return; }
+    var chip = e.target.closest('[data-filter]');
+    if(chip){ e.preventDefault(); srJournalFilter = chip.getAttribute('data-filter'); srBuildJournal(); return; }
     var pick = e.target.closest('.sr-slotopt');
     if(pick && !pick.disabled){
       pick.parentNode.querySelectorAll('.sr-slotopt').forEach(function(b){ b.classList.remove('on'); });
