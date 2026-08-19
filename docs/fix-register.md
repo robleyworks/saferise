@@ -452,3 +452,27 @@ per-resource "why" copy with no home in `tracks.js`, so this cannot be resolved 
 deleting either side — it needs a decision about which set of twelve is real.
 
 *Status:* open · *Raised:* 19 Aug 2026
+
+### SR-072 · Sessions view — booked dates, no provider chosen
+Shipped inside the SR-070 commit rather than its own: the sessions view is one of the
+three bodies the shell renders, and there was no code to separate from it. Recorded
+here so the ID stays traceable.
+
+Booked dates only — booking itself stays with the third-party tool. Zoom and Calendly
+are both still open, so the dashed `.sr-provider` block ships as the mockup has it,
+naming the open decision. Nothing embeds either widget, loads either SDK, or calls an
+API against a provider that has not been picked.
+
+`sr.sessions.booked` has no writer anywhere in the repo, so the empty state is what
+every member sees on day one. It reads as correct rather than broken, and the provider
+block sits below it.
+
+Reached from the "Sessions & workshops" rail button, through a `LAYERS` map inside
+`openRoute()` rather than a `data-modal` on the button — the rail has its own click
+listener that calls `openRoute()` for every rail button, so a `data-modal` there opens
+two layers at once.
+
+Verified in Chromium at 1440 and 390: empty state by default, and seeded data renders
+the confirmed and awaiting-link states.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
