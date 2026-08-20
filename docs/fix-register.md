@@ -210,11 +210,25 @@ Run C confirmed it at exactly that line and confirmed it is the **only** URL of 
 in the repo — the two other grep hits are Run A's log describing it. The local
 `assets/covers/01.jpg` exists.
 
-**Fix spec** (confirmed 20 Aug 2026): replace with the local relative path to
-`assets/covers/01.jpg`, matching the path convention already used by the other cover
-references on that page rather than inventing one.
+**Resolution.** Replaced with `assets/covers/01.jpg` — document-relative, no leading
+slash, no `./`, which is the convention every other asset reference on the page already
+uses: `assets/dashboard/hero-corridor.jpg` at :106, `var COVER_01 = "assets/covers/01.jpg"`
+at :784, `var BASE = 'assets/covers/'` at :1057. The page's own header comment at :13
+already documented `assets/covers/01.jpg` as the intended path — line 717 was the single
+survivor of the standalone-mockup era, when the file was reviewed outside the repo and had
+no local assets to point at. One line changed; nothing invented.
 
-*Status:* open · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+Verified on a cold load (fresh tab, `no-store`, cache-busted, mirror served from the
+working tree): the request resolves to `assets/covers/01.jpg` → 200, the image decodes at
+900×1200, `onerror` does not fire, and the page issues **zero** requests to any
+`netlify.app` host. The probe was proved live by repointing the same `<img>` at a
+non-existent sentinel path — `naturalWidth` fell to 0 and the `onerror` handler set
+`display:none` — then restored.
+
+No `netlify.app` URL remains in any tracked non-doc file. The four remaining matches are
+this register and the Run A / Run C logs describing the defect, which is historical record.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026 · *Fixed:* 20 Aug 2026
 
 ---
 

@@ -93,3 +93,84 @@ survives. It is cross-linked to SR-120, where `[]` is a genuinely wrong value.
 - `git status` — two files, both under `docs/`. **No code touched**, as the phase requires.
 
 *Result: pass.*
+
+---
+
+## Phase 2 — SR-115, the deploy-preview cover URL
+
+**Reproduced first.** [dashboard.html:717](dashboard.html:717), inside the Cue Card modal
+`#mCrisis`, sourced its cover from
+`https://deploy-preview-14--the-saferise-protocol.netlify.app/assets/covers/01.jpg`.
+
+### The convention, found rather than invented
+
+Every other asset reference on the page is **document-relative — no leading slash, no
+`./`**:
+
+| line | reference |
+|---|---|
+| 106 | `src="assets/dashboard/hero-corridor.jpg"` |
+| 784 | `var COVER_01 = "assets/covers/01.jpg";` |
+| 1057 | `var BASE = 'assets/covers/';` |
+
+And the page's **own header comment at :13** already names the intended path —
+`· Protocol cover 01 ....... assets/covers/01.jpg (the real Anxiety Reset cover)`.
+
+So the convention was not a judgement call. Line 717 was the single survivor of the
+standalone-mockup era, when the file was reviewed outside the repo and had no local assets
+to point at; the header comment at :8 still says so — *"embedded here for review; in the
+repo these become file paths"*. Everything else was converted. This one was missed.
+
+**Change: one line.** `src="assets/covers/01.jpg"`.
+
+### Verification — cold, fresh tab, and proved live
+
+The preview runner's sandbox refuses `tools/serve.py` by relative path (`Errno 1,
+Operation not permitted`) — Run C hit this too. It also **cannot read the project
+directory at all**: an absolute-`ROOT` server pointed at the repo returned 404 for every
+path. So verification ran against a scratchpad mirror of the tracked files, copied from the
+working tree so it carried the fix, served with `Cache-Control: no-store` + `Pragma:
+no-cache` + `Expires: 0`. `.claude/launch.json` was repointed at that server and **restored
+to its committed contents before the commit** — confirmed by `git diff` returning empty for
+that file.
+
+Port 8642 confirmed free before starting.
+
+| check | result |
+|---|---|
+| fresh tab, cache-busted (`?cb=srd115cold3render`), never a reused tab | — |
+| resolved URL | `http://localhost:8642/assets/covers/01.jpg` → **200** |
+| image decoded | `naturalWidth` 900, `naturalHeight` 1200, `complete` true |
+| `onerror` fired? | **no** — `style.display` stayed empty |
+| rendered on screen with the modal open | 163 × 150 at top 57 |
+| requests to any `netlify.app` host | **zero** |
+| console errors on a clean cold load | **zero** |
+| div balance `dashboard.html` | 176 / 176 |
+| CSS brace balance, all three sheets | 663/663, 299/299, 1083/1083 |
+| JS parse | `node` not installed; inline block (81,770 B) parsed clean via `new Function` |
+
+**Both null results were proved real, per the standing rule.**
+
+- *Image probe:* the same `<img>` was repointed at
+  `assets/covers/__SENTINEL_DOES_NOT_EXIST__.jpg`. `naturalWidth` fell 900 → **0** and the
+  `onerror` handler set `display:none`. Restored to 900. The probe can see failure.
+- *Parse probe:* `new Function('var x = ;')` threw `SyntaxError`. The check can fail.
+
+One honest correction during the phase: the first attempt to open the modal used
+`.classList.add('open')` and reported `display:none` with a 0×0 image. The class is `.on`
+([css/saferise-dashboard.css:698](css/saferise-dashboard.css:698)), not `.open`. That was
+my error, not a defect — re-run with `.on`, the modal opened and the cover rendered.
+
+### Uniqueness re-confirmed before committing
+
+`git ls-files -z | xargs -0 grep -nI 'deploy-preview'` — **every tracked file, every
+extension, never a `*.html` glob.** Four matches remain, all under `docs/`: this register
+and the Run A / Run C logs describing the defect. That is historical record and stays.
+**No `netlify.app` URL remains in any tracked non-doc file.**
+
+### Teardown
+
+Server stopped via `preview_stop`. `lsof -ti:8642` → free. `lsof -nP -iTCP -sTCP:LISTEN` →
+zero rows. `ps` → no `coldserve` or `serve.py`. `.claude/launch.json` restored.
+
+*Result: pass. One line changed.*
