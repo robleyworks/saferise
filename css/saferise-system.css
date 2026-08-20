@@ -38,11 +38,16 @@
   --sr-c09-1:#4B2A12; --sr-c09-2:#E39A5C; --sr-c09-3:#231208; /* Insecurity   */
   --sr-c10-1:#2B1148; --sr-c10-2:#D4A843; --sr-c10-3:#120620; /* Powerlessness*/
 
-  /* track accents — used on portal headers and plan cards */
+  /* track accents — the single source of truth (SR-108). Every track
+     accent in the product reads these; index.html no longer restates
+     them as literals. 02/03/04 previously held a more saturated set
+     (#FF6FA8 / #5BC8D8 / #B57BFF) that only the dashboard ever showed,
+     while every rendered page used the softer values below. The
+     rendered design won, so the tokens now carry it. */
   --sr-track01:#D4A843;
-  --sr-track02:#FF6FA8;
-  --sr-track03:#5BC8D8;
-  --sr-track04:#B57BFF;
+  --sr-track02:#E87090;
+  --sr-track03:#38C8BE;
+  --sr-track04:#9B7FD4;
 }
 
 /* ═════════════════════════════════════════════════════════════
@@ -841,8 +846,8 @@ details.sr-q .sr-a a{color:var(--primary2)}
    #corporate- mount ids), so nothing here touches #prog-personal,
    the home page, or the Reader. Gold is replaced throughout by
    var(--sr-accent)/-wash/-border, already declared per-track
-   inline on the .prog-overlay root (rose #E87090 for couples,
-   teal #38C8BE for corporate) — one shared rule renders in each
+   inline on the .prog-overlay root (rose var(--sr-track02) for
+   couples, teal var(--sr-track03) for corporate) — one shared rule renders in each
    track's own colour automatically. Couples/Corporate protocol
    content uses .simple-expand (not .proto-expand.journey) as its
    reveal wrapper, so the gutter/border-cleanup rules below target
@@ -860,9 +865,9 @@ details.sr-q .sr-a a{color:var(--primary2)}
    matching how Relationship/Professional already do rose/teal. The
    old sr-c01..sr-c10 rules and --sr-c0N-1/-2/-3 vars are left in
    place, just unreferenced now — nothing else used them. */
-.sr-cover-rose{--c1:#3A0F1E;--c2:#E87090;--c3:#1A0509}
-.sr-cover-teal{--c1:#06282A;--c2:#38C8BE;--c3:#031415}
-.sr-cover-gold{--c1:#2E2308;--c2:#D4A843;--c3:#140E03}
+.sr-cover-rose{--c1:#3A0F1E;--c2:var(--sr-track02);--c3:#1A0509}
+.sr-cover-teal{--c1:#06282A;--c2:var(--sr-track03);--c3:#031415}
+.sr-cover-gold{--c1:#2E2308;--c2:var(--sr-track01);--c3:#140E03}
 
 /* B12 · Personal Transformation — open protocol page banner ───
    Full-bleed banner replaces the old cover-led header. The cover
