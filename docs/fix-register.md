@@ -15,7 +15,8 @@ Canonical record of defects and design decisions. Commits reference the ID:
   ran out mid-pass, which is what this reservation is for.
 - **SR-085 to SR-095 are issued** by the correctness pass and written up below. The
   three findings that pass had no ID for — recorded inside SR-092 and SR-093 — are
-  now issued as SR-104, SR-105 and SR-106.
+  now issued as SR-104, SR-105 and SR-106. SR-096 to SR-103 and SR-107 are issued by
+  the index.html / entity / noindex pass.
 - **SR-073 and SR-081 to SR-084 are reserved, not yet issued.** SR-068 to
   SR-072 were taken on 19 Aug 2026 for the modal-shell work and are written up
   below. SR-073 was raised in that pass and then found to be already fixed by
@@ -1037,5 +1038,180 @@ the carousel is scrolled.
 
 Note the covers carry their kicker word and number inside the image, so they cannot be
 swapped for a text overlay; lazy-loading is the whole fix.
+
+*Status:* open · *Raised:* 19 Aug 2026
+
+### SR-096 · Dispenza on index.html
+Live regression from the SR-089 merge. `FRAMEWORKS.dispenza` was replaced by `distance`,
+and index.html's expert card reads its count from `frameworkReach()` through
+`data-sr-reach="dispenza"` — so the public page rendered "Contributes insight to 0
+protocols". Reproduced in the browser before anything was touched.
+
+53 occurrences, not the ~20 the line count suggested: lines 4009 and 4022 are
+single-line JSON blobs carrying the same strings nine times over.
+
+The `.expert-card2` bio and the `.sci-card` in the science strip were removed whole.
+Both grids drop six to five and reflow 3+2; they are `auto-fit`, so the five keep full
+width and the empty cell reads as whitespace.
+
+**Deviation, easy to overturn:** the framework *lists* keep six. Dropping to five would
+contradict method.html's "Six sources, one sequence" and the six records still in
+FRAMEWORKS — the drift SR-089 and SR-090 were raised to end. The name became the
+mechanism instead, "Mental rehearsal", which `SHARED.fourSteps` already uses for step 4,
+so nothing was invented and no count changed. "the Quantum Field" attributions went with
+the name rather than being reworded: that framing is his, not the method's.
+
+**Not closed:** no card now carries the step-4 distancing framework that replaced him.
+Logged as SR-107.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-097 · Reference Case, Source Insights and Why I Built This One on index.html
+Taken in the order the handoff set, Reference Case first.
+
+**Reference Case** assigned a psychological pattern to 30 named, identifiable people —
+Monica Lewinsky, Simone Biles, Lady Gaga, Nelson Mandela, the Obamas, Jacinda Ardern to
+burnout — each with a source URL and each labelled "true reference case" and "TRUE STORY
+· RECENT HISTORY". Not a list but an ID convention through five layers. Nine dedicated
+blocks removed whole (including the 84 KB `sr-v17-reference-system-runtime` holding the
+29-person `STORIES` map, and four `anger-reference-case-v13..v16` pairs holding a 30th,
+Terry Crews), 30 `RESOURCE_CONTENT` entries, 31 key-array members, 22 `res-item` blocks,
+the map rows, and 19 refcase rules from *inside* the shared 151-rule sr-v29 stylesheet.
+
+**Source Insights** was wired deeper still: 8 script blocks, 5 style blocks, 45
+`data-v29-kind="insights"` selectors. Seven dedicated blocks removed whole, plus 20
+`RESOURCE_CONTENT` entries, 32 key-array members, 12 `res-item` blocks, two feature
+cards, the SR-002 title binder whose target no longer exists, and the p2 override.
+
+**Why I Built This One** was two hero tabs and two slides. Both players are left with a
+single tab — functional and correctly labelled, but a tab bar with nothing to switch to.
+Reported, not changed; it is a design call.
+
+index.html 1,413,723 → 1,104,000 chars.
+
+Three things rendering and reading caught that grep did not:
+
+- `ptResFromContent('refcase', …)` dereferences `RESOURCE_CONTENT[pk+'-refcase'].title`,
+  so removing the data alone would have thrown a TypeError on every protocol page.
+- Deleting the two builders orphaned whole CSS families — nothing sets
+  `data-unified-reference` or emits `.rr-*`/`.sr28-*` any more. 53 + 29 rules removed
+  after verifying nothing feeds them, and the `:where()` lists pruned; one emptied
+  completely and would have shipped as `:where()` with no selector.
+- **My own regex broke the file.** Stripping `'*-insights'` members assumed array
+  position, but `READER_QUOTES` is an object literal keyed the same way, so it collapsed
+  `'p1-insights':'…'` pairs into `'a':'b':'c'`. Audited across both passes afterwards:
+  `-refcase` had zero key-style occurrences, so only that one object was affected.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-098 · No stated session length on index.html
+Same rule and same precedent as SR-080: players keep their elements and lose their
+numbers, no placeholder substituted. 147 `.v-time` / `.audio-time` readouts render empty.
+
+Removed 80 static readouts, both dynamic ones, 10 `audioLabel` suffixes, 10 `audioMin`
+properties, the `FOUNDER_VIDEOS` runtimes and the "Video · 2:50" meta they fed, 10
+track-03 audio labels, 10 session-guide metas, and the prose. Three FAQ questions asked
+"How long does a session take…" — the question changed with the answer, since answering
+it without a length leaves it hanging.
+
+Kept and reported: 60 minutes with the founder, 90-minute workshop and retreat segments,
+half-day lengths, live-video booking lines, and "Walk for 5–15 minutes" in a Somatic
+Release activity — an instruction, not the length of an unrecorded asset.
+
+Two more found by reading rather than grepping. The journey strip concatenated
+`parseInt(d.audioMin)` unguarded and would have shipped "One continuous experience · NaN
+minutes" — the same defect class as the "undefined" SR-080 hit. And emptying the two
+*dynamic* readouts terminated their JS strings early, leaving `<span class="v-time">'`;
+JavaScriptCore caught it as Unexpected EOF.
+
+Fixed in passing: a founder video caption read "Andre Robin", not Andre Robley.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-099 · Kenor International BV removed
+SafeRise Protocol is independent and owned by Andre Robley personally. Wider than
+scoped: Kenor was on six shipped pages and index.html was not one of them — the three
+track pages, method.html twice (footer and founder signature) and method-porges.html;
+index.html and protocol.html carried a bare "Sint Maarten".
+
+The jurisdiction went with the company and nothing replaced it: no address, registration
+number or trading name is settled. No sentence broke. `docs/INTEGRATION.md` updated too,
+since it is the markup contract new pages are built from.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-100 · Site noindexed until soft launch
+The domain was live and resolving with no crawl protection of any kind. `robots.txt` at
+the root and `<meta name="robots" content="noindex, nofollow">` in all nine shipped
+heads. Both, because robots.txt alone does not reliably keep a linked page out of an
+index — the meta is what prevents indexing, and the crawler has to be allowed to read
+the page to see it.
+
+Verified served: each page fetched and parsed with `parentElement === HEAD` confirmed. A
+meta landing after `</head>` is silently relocated into body and a source grep would not
+have shown it.
+
+**Comes off on soft-launch day**, both the file and the nine metas.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-101 · Social-proof strip corrected; no placeholder testimonials exist
+The premise did not hold. There are no placeholder testimonial blocks and no "replace
+before launch" anywhere in the repo, and no star ratings or attributed quotes. The
+section already reads "Built and ready. Not yet reviewed… Nothing here is borrowed or
+invented in the meantime", which is honest and was kept.
+
+What was wrong was the stat strip, which a grep for "testimonial" does not reach. Each
+claim checked against tracks.js under JavaScriptCore: "37 Modules Across 4 Tracks" was
+false twice over (30 protocols, 3 visible tracks — Elevation is `visible:false` with no
+protocols and no price) and "14m To Your First Shift" was a promised time to an outcome
+on a page saying "Not yet reviewed" two lines above, and a duration SR-098's patterns
+missed. "6 Science Frameworks" and "€0 To Begin" verified true and kept.
+
+Found by screenshot: the same false counts were also in the **hero eyebrow**, above the
+fold, the first factual claim a visitor reads.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-102 · Contact route added
+No way to contact the business existed anywhere; the only `mailto:` was a share link
+with an empty recipient. Raised as blocked, and `contact@thesaferiseprotocol.com`
+supplied and confirmed as a live mailbox. One line beside the entity line on eight
+pages — including index.html, whose footer is a `<template>` cloned into all twelve
+surfaces, verified live rather than in source.
+
+`resource.html` is the exception: the Reader has no footer element and no copyright line
+at all, so there is nowhere to put it without inventing a component. It is always
+reached from a page that carries the footer.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-103 · Dead footer legal links removed
+Audited against what resolves, not intent. `index.html`'s `/terms`, `/privacy` and
+`/cookies` all returned HTTP 404 against the server; `protocol.html`'s Terms, Privacy
+and Cookies were `href="#"` and clicking each opened nothing — verified in the browser,
+since `href="#"` alone does not tell you whether a handler is attached. All removed,
+along with the `.footer-legal` CSS they orphaned.
+
+`dashboard.html`'s FAQ, Account, Billing, Support, Terms and Privacy were kept: all six
+open `mRoute`, confirmed opening, which renders "Not built yet" and names the path.
+
+**Still missing, for scheduling:** Terms, Privacy, Cookies and a refund policy. They name
+a contracting party and a data controller, so they need the entity question settled
+first. When the privacy policy is written it has to state that journals never leave the
+device — `Store` writes to localStorage only and there is no backend behind any of it.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026
+
+### SR-107 · No card carries the step-4 distancing framework
+SR-096 removed the Dispenza expert card and science-strip card, leaving five of each
+where there are six frameworks in `FRAMEWORKS`. The sixth — Distance & rehearsal, Kross
+& Ayduk, the Best Possible Self literature, already written up on method.html by
+SR-089/SR-090 — has no card on index.html, and no `data-sr-reach="distance"` anywhere,
+so its six protocols are not shown.
+
+Adding one means writing a bio, a role and an avatar for a literature rather than a
+person, which is content authoring rather than a fix, so it was deliberately not done in
+the removal pass.
 
 *Status:* open · *Raised:* 19 Aug 2026
