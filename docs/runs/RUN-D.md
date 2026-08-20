@@ -755,3 +755,58 @@ rather than quietly dropped.
 
 Server stopped → `lsof -ti:8642` free, zero listeners → `launch.json` restored, `git diff`
 empty → **then** staged and committed.
+
+---
+
+## Phase 5 — SR-120. **Does not reproduce. Nothing changed.**
+
+ID confirmed before writing, not assumed: SR-120 was reserved for exactly this, is
+cross-linked from SR-117, and had no entry.
+
+### The premise is false
+
+The brief: *"`p1-advisory` is written and the Reader serves it, but `META['t1-01'].extras`
+is `[]`."*
+
+**`p1-advisory` has never existed in this repo.** The advisory keys are `p2-`, `p3-`, `p4-`,
+`p8-`, `p9-`, `p10-advisory`. `p1`'s seven keys are `companion`, `crisiscard`, `disclosure`,
+`guide`, `listen`, `walkthrough`, `watch` — no conditional resource among them.
+
+### The mapping is right in both directions
+
+The second conditional is keyed **`-repair`, not `-invitation`**, which is what makes this
+easy to get wrong from the outside:
+
+| conditional | `extras` value | content key | claimed by | content exists for |
+|---|---|---|---|---|
+| Proximity Guide | `advisory` | `pN-advisory` | t1-02, 03, 04, 08, 09, 10 | p2, p3, p4, p8, p9, p10 |
+| Invitation to Repair | `invitation` | `pN-repair` | t1-02, 04, 08, 09 | p2, p4, p8, p9 |
+
+Both exact. Swept **all thirty protocols across all three tracks**: **zero** cases where
+`extras` claims content that does not exist.
+
+### The null result was proved real before being trusted
+
+The sweep was re-run against a sentinel copy of `content/tracks.js` in which `t1-01` was
+given an `'advisory'` it has no content for. It reported **exactly one** mismatch —
+`t1-01 -> p1-advisory` — and the real tree reported zero. A probe that could not see the
+defect it was looking for would not have been evidence.
+
+### Confirmed live
+
+On `personal-transformation.html`, cold: `protocolResourceCount('t1-01')` → **7** (the seven
+unconditional resources, neither conditional present). `protocolResourceCount('t1-02')` →
+**9** (both present). `SHARED.resources.length` → 9.
+
+**`t1-01: extras: []` is correct** — verified, and neither conditional applies. It is not
+the "wrong `[]`" the brief described.
+
+### A correction to my own earlier work
+
+The SR-117 entry I wrote in Phase 1 said the `null` sentinel *"is not the same as a wrong
+`[]` — see SR-120, where `[]` contradicts content that demonstrably exists."* **That
+sentence was wrong**, written from the brief before the item was investigated. The entry now
+carries the correction in place. The `null` / `[]` distinction itself still stands; only the
+example was false.
+
+*Result: does not reproduce. Register updated, no code touched.*

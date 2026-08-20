@@ -665,9 +665,12 @@ and :532 — *"null means UNVERIFIED, not none"* — distinct from `[]`, which m
 and empty.
 
 **Standing decision, 20 Aug 2026: the twenty `null` values stay `null`.** Changing them to
-`[]` would assert a verification nobody performed. Do not "tidy" this in a later pass. This
-is not the same as a wrong `[]` — see [[SR-120]], where `[]` contradicts content that
-demonstrably exists.
+`[]` would assert a verification nobody performed. Do not "tidy" this in a later pass.
+
+*Correction, same day:* this entry originally pointed at [[SR-120]] as the contrasting case
+where `[]` is a wrong value. **It is not** — SR-120 was investigated and does not reproduce.
+No `[]` in the tree contradicts its content. The `null` / `[]` distinction still stands as
+written above; only the example was wrong.
 
 Closed without code.
 
@@ -739,6 +742,39 @@ track pages that no longer exist. Same shape as [[SR-121]] — if it goes, it go
 commit.
 
 *Status:* open · *Raised:* 20 Aug 2026
+
+### SR-120 · `t1-01` extras — does not reproduce
+Raised as: `p1-advisory` is written and the Reader serves it, but `META['t1-01'].extras` is
+`[]`, so content and data disagree and the `[]` is a wrong value rather than an unverified
+one.
+
+**`p1-advisory` does not exist.** The advisory keys in the tree are `p2-`, `p3-`, `p4-`,
+`p8-`, `p9-` and `p10-advisory`. There is no `p1-advisory` in any tracked file, and `p1`'s
+seven keys are `companion`, `crisiscard`, `disclosure`, `guide`, `listen`, `walkthrough`,
+`watch` — no conditional resource among them.
+
+**The mapping is exactly right, in both directions and on both conditionals.** Note the
+second is keyed `-repair`, not `-invitation`, which is what makes it easy to miss:
+
+| conditional | `extras` key | content key | protocols claiming it | content present for |
+|---|---|---|---|---|
+| Proximity Guide | `advisory` | `pN-advisory` | t1-02, 03, 04, 08, 09, 10 | p2, p3, p4, p8, p9, p10 |
+| Invitation to Repair | `invitation` | `pN-repair` | t1-02, 04, 08, 09 | p2, p4, p8, p9 |
+
+Checked across **all thirty protocols**, all three tracks: **zero** cases where `extras`
+claims a conditional resource the content does not carry. The probe was proved sensitive
+first — re-run against a sentinel copy giving `t1-01` an `'advisory'` it has no content for,
+it reported exactly one mismatch, `t1-01 -> p1-advisory`.
+
+Confirmed live on the Track 01 page: `protocolResourceCount('t1-01')` → **7**, the seven
+unconditional resources, with neither conditional present; `protocolResourceCount('t1-02')`
+→ **9**, both conditionals present. `SHARED.resources.length` is 9.
+
+So `t1-01: extras: []` is **correct** — verified, and neither conditional applies. Nothing
+was changed. Do not "correct" this in a later pass; the brief that raised it was working
+from a key name (`p1-advisory`) that has never existed in this repo.
+
+*Status:* closed — does not reproduce · *Raised:* 20 Aug 2026 · *Closed:* 20 Aug 2026
 
 ---
 
