@@ -539,3 +539,67 @@ items already listed in 4a — the `tab-purple` CSS and the stale comments at 83
 5342, which are documentation rather than surfaces.
 
 *Result: pass.*
+
+---
+
+## SR-121 — `SERIES_CONFIG`, removed on its own ID
+
+Split out of SR-110 deliberately: it is a separate finding, it predates this run, and
+burying 117 deleted lines inside an Elevation commit would make both diffs harder to read.
+
+### Condition 1 — no live caller. Checked across every tracked file.
+
+`SERIES_CONFIG`, `renderSeriesHero`, `renderProtocolBrowseHead` and
+`renderWhatsIncludedHTML` appear **only** in their own definitions and in each other. No
+`hero-mount-`, `protocols-head-mount-` or `whats-included-mount-` id exists anywhere in the
+repo. A closed island. Nothing turned up, so nothing to stop for.
+
+### Condition 2 — prove the hardcoded-markup claim by rendering
+
+Not reasoned from. Each of the seven surviving overlays was fingerprinted **before** the
+removal and again **after**, on cold loads: rendered `innerHTML` byte length, normalised
+text length, element count, `.proto-item` count, and a rolling content hash over the full
+markup.
+
+| overlay | before | after |
+|---|---|---|
+| `prog-personal` | 319,380 B · 5,131 el · hash 2607618881 | **identical** |
+| `prog-couples` | 278,929 B · 5,048 el · hash 3406980494 | **identical** |
+| `prog-corporate` | 237,185 B · 4,069 el · hash 1164681881 | **identical** |
+| `prog-compare` | 17,601 B · 144 el · hash 1798882367 | **identical** |
+| `prog-services` | 20,943 B · 179 el · hash 2173745352 | **identical** |
+| `prog-workshops` | 22,113 B · 173 el · hash 911637805 | **identical** |
+| `prog-about` | 53,412 B · 523 el · hash 785733212 | **identical** |
+
+All seven byte-identical, hashes included. The three track heroes still render their own
+headings — "PersonalTransformation", "RelationshipHealing", "Career& Performance".
+
+**Fingerprint proved sensitive:** appending a single character to one paragraph moved
+`prog-personal` from 319,380 B / 2607618881 to 319,381 B / 2135190279; restoring it returned
+both exactly. A probe that cannot see a one-character change would not have been evidence.
+
+### After removal
+
+117 lines gone. All four symbols throw `ReferenceError`. Ten inline blocks parse (sentinel
+`caught SyntaxError`). Console clean. Div balance 2812/2812.
+
+---
+
+## A rule I broke, and the correction
+
+**`.claude/launch.json` was committed pointing at the scratchpad server** in the first 4b
+commit. I restored it *after* committing instead of before — the teardown ran in the wrong
+order relative to `git commit`.
+
+Audited all five commits: **only that one** was affected; `1a4ef46`, `52ed940`, `ca2a39c`
+and `0f4668d` all carry `tools/serve.py`.
+
+Corrected by amending rather than stacking a fixup, because a merge to main would otherwise
+carry a commit pointing the dev server at a scratchpad path that exists on no other machine.
+The SERIES_CONFIG work was held aside, the amend applied, then the work restored.
+
+**The 4b commit SHA changed: `6615107` → `2bb754b`.** Every commit re-audited afterwards;
+all five now carry `tools/serve.py`.
+
+The order that actually works, and which the standing rules should say explicitly: stop the
+server, restore `launch.json`, *then* stage and commit.

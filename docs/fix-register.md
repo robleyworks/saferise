@@ -15,10 +15,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   accents/rails/a11y run (SR-108, SR-109) and the track-pages/audit run (SR-110 to
   SR-119). All are written up below. The previous block ran out mid-pass, which is what
   that reservation was for.
-- **SR-114, SR-116 and SR-120 were never issued and are free.** They are gaps inside a
-  range other branches have already read past, so allocate **SR-120** — the top of the
-  reservation — before reaching back for SR-114 or SR-116. Taking a number out of the
-  middle of a read range is what caused the three collisions described below.
+- **SR-120 and SR-121 are issued** by the Elevation-hide run — SR-121 below, SR-120 for the
+  `t1-01` extras correction. **SR-114 and SR-116 were never issued and remain free.** They
+  are gaps inside a range other branches have already read past; do not reach back for them
+  while a higher number is available. Taking a number out of the middle of a read range is
+  what caused the three collisions described below.
 - **SR-085 to SR-095 are issued** by the correctness pass and written up below. The
   three findings that pass had no ID for — recorded inside SR-092 and SR-093 — are
   now issued as SR-104, SR-105 and SR-106. SR-096 to SR-103 and SR-107 are issued by
@@ -606,6 +607,38 @@ config file: clean.
 Closed — verification performed, result clean, no code required.
 
 *Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-121 · `SERIES_CONFIG` and its three renderers were dead code
+A closed island of 117 lines in `index.html`: `SERIES_CONFIG`, `renderSeriesHero`,
+`renderProtocolBrowseHead`, `renderWhatsIncludedHTML`, and the `DOMContentLoaded` loop that
+wired them to `hero-mount-*` / `protocols-head-mount-*` / `whats-included-mount-*`.
+
+**It had no mount targets.** Checked against the tree before [[SR-110]] touched anything:
+the only such elements in `index.html` were the three `-elevation` ones. The `personal`,
+`couples` and `corporate` entries in `SERIES_CONFIG` had **never** rendered — those overlays
+carry hardcoded hero markup. So this predates the Elevation removal; removing the overlay
+only made it visible.
+
+Verified as a closed island across every tracked file: the four symbols appear nowhere
+except their own definitions and each other, and no mount id exists anywhere.
+
+**Proved by rendering, not by reasoning.** Each of the seven surviving overlays was
+fingerprinted before and after removal — rendered `innerHTML` byte length, normalised text
+length, element count, `.proto-item` count, and a content hash over the full markup. **All
+seven are byte-identical, hashes included.** `prog-personal` 319,380 B / hash 2607618881,
+`prog-couples` 278,929 B / 3406980494, `prog-corporate` 237,185 B / 1164681881, and the four
+non-track overlays likewise. The three track heroes still render their own headings. The
+fingerprint was proved sensitive by appending one character to a paragraph, which moved both
+byte count and hash, then restoring it.
+
+After removal the four symbols throw `ReferenceError`, all ten inline blocks parse, and the
+console is clean.
+
+Removed rather than documented as a deliberate non-fix: there is no reason for it to stay.
+Given its own ID and its own commit so it is revertable and reviewable apart from the
+Elevation work.
+
+*Status:* complete on merge · *Raised:* 20 Aug 2026 · *Fixed:* 20 Aug 2026
 
 ---
 
