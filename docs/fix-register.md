@@ -3,39 +3,87 @@
 Canonical record of defects and design decisions. Commits reference the ID:
 `fix: SR-0NN …` or `feat: SR-0NN …`.
 
-**Rules**
+**Rules — numbering**
 - Never renumber an existing ID.
 - New items go at the bottom of their severity block with the next free number.
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
-- Highest ID currently issued: **SR-119**. Ceiling of the current reservation: **SR-120**.
-- **SR-096 to SR-119 are issued.** Reserved 19 Aug 2026 for the index.html / entity /
-  noindex pass, which allocated from SR-096; the block was then drawn down further by the
-  accents/rails/a11y run (SR-108, SR-109) and the track-pages/audit run (SR-110 to
-  SR-119). All are written up below. The previous block ran out mid-pass, which is what
-  that reservation was for.
-- **SR-120 to SR-128 are issued** by the Elevation-hide run — SR-121 to SR-128 below,
-  SR-120 for the `t1-01` extras correction. **SR-114 and SR-116 were never issued and remain free.** They
-  are gaps inside a range other branches have already read past; do not reach back for them
-  while a higher number is available. Taking a number out of the middle of a read range is
-  what caused the three collisions described below.
-- **SR-085 to SR-095 are issued** by the correctness pass and written up below. The
-  three findings that pass had no ID for — recorded inside SR-092 and SR-093 — are
-  now issued as SR-104, SR-105 and SR-106. SR-096 to SR-103 and SR-107 are issued by
-  the index.html / entity / noindex pass.
-- **SR-073 and SR-081 to SR-084 are reserved, not yet issued.** SR-068 to
-  SR-072 were taken on 19 Aug 2026 for the modal-shell work and are written up
-  below. SR-073 was raised in that pass and then found to be already fixed by
-  32238c1, so it was never issued and the number is free. SR-074 to SR-083 are
-  taken for the content-consolidation pass, and the block runs to SR-095 to
-  leave headroom.
+- **Highest ID issued: SR-128.** Reserved block open: **SR-129 to SR-150**, ceiling
+  **SR-150**, reserved 20 Aug 2026 by the Elevation-hide run. Allocate from SR-129.
+- **SR-044 to SR-128 are issued.** All are written up below except four:
+  - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
+    written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
+    Not free.
+  - **SR-073, SR-114, SR-116** — raised and then dropped without ever being issued, so the
+    numbers are free. **Do not reach back for them while a higher number is available.**
+    They sit inside ranges other branches have already read past, and taking a number from
+    the middle of a read range is what caused the three collisions below.
 
-  IDs collided three times because parallel branches each read this ceiling and
-  allocated from it at the same moment; reserving the range up front is what
-  stops the fourth. A gap between the last written entry and this ceiling is
-  expected — do not "tidy" it by lowering the number, and do not allocate
-  inside the reserved range from another branch.
+  IDs collided three times because parallel branches each read the ceiling and allocated
+  from it at the same moment; reserving the range up front is what stops the fourth. A gap
+  between the last written entry and the ceiling is expected — do not "tidy" it by lowering
+  the number, and do not allocate inside a reserved range from another branch.
+
+**Rules — method**
+
+Earned across Run C and Run D. Each cost something to learn; the worked example is named so
+the rule can be checked rather than taken on trust.
+
+1. **A deliberate non-fix gets a register entry** carrying the reasoning and an explicit
+   do-not-tidy line. An undocumented correct refusal is indistinguishable from an oversight,
+   and the next run will "fix" it. Worked examples: `extras: null` ([[SR-117]]), the
+   `PRICING` launch/standard pair ([[SR-124]]), the relocated
+   `#personal-protocol-page .sr-tile` rule ([[SR-123]]).
+2. **Reproduce before fixing.** If it does not reproduce, stop and report rather than
+   editing toward the brief. **Five items in Run D did not reproduce at all** — [[SR-111]],
+   [[SR-112]], [[SR-113]], [[SR-117]], [[SR-118]] — and a sixth, 4c's "remove the
+   Elevation-only rows", described a table shape the tree does not have: every row carried
+   content in all four columns, so there was nothing to remove. A spec anticipating a case
+   the tree lacks is a note for the record, not an instruction to satisfy.
+3. **When notes and the tree disagree, the tree is right.** Held six times in one branch,
+   including a brief that named a resource key which has never existed and a note claiming
+   `SHARED.resources` held twelve entries when it holds nine.
+4. **Run the JS parse check first**, before div balance and CSS braces. Neither of those can
+   see a broken script brace. A splice that deleted one `}` passed both and took the whole
+   page's JS down with it.
+5. **Stop server → restore `launch.json` → stage → commit.** In that order. Committing
+   first ships a dev-server config pointing at a scratchpad path that exists on no other
+   machine.
+6. **Anchor structural edits by line and assert against neighbours.** Never by pattern where
+   the pattern repeats: `repeat(4,1fr)` appeared three times with one target;
+   `€19/mo` sixteen times, three of them carrying the wrong ladder.
+7. **Verification globs cover every tracked file and every encoding form.** Never `*.html` —
+   SR-096 was declared complete against a `.html` glob and missed `content/tracks.js`, the
+   source of truth. Never only the glyph — `PRICING` stores `\u20AC` escapes, so a `€`
+   sweep misses the price record itself.
+8. **Runtime-built values are invisible to static greps.** `index.html` builds much of
+   `RESOURCE_CONTENT` through single-quoted assignments inside IIFEs; `dashboard.html`
+   builds prices from `data-sr-price` at load. **Measure the live object graph.**
+9. **Prove null results with a sentinel pair, and prove any new probe sensitive before
+   trusting it** — but **a sentinel only proves a probe works within its own method. It
+   cannot tell you the method itself is wrong.** [[SR-120]] is the worked example: a
+   sensitive probe, a confident null, and a conclusion that was false because the whole
+   approach could not see runtime-built keys.
+10. **Report capture artifacts rather than letting them stand as evidence.** A black
+    screenshot or a zero-width viewport invalidates **every** measurement taken in it,
+    including ones already reported. A number that looks authoritative and is not is worse
+    than no number.
+11. **A template cloned into multiple overlays counts once at source and many times in the
+    DOM.** `index.html`'s footer is one `<template>` rendered twelve times. Record the
+    multiplier so a future count does not read as a discrepancy.
+12. **A count is only as good as the artefact it is reconciled against.** Where a finding
+    sits in prose but not in the table, **the table is wrong.** Reconcile against the
+    enumerated list, and record every movement in a count with its cause — [[SR-110]] moved
+    17 → 18 → 19 and both moves are written down.
+13. **No undated promises.** "Soon", "coming soon", "opening soon", "TBA" and equivalents
+    are marketing claims about something with no date.
+14. **A rule with no visible effect is not necessarily dead.** Distinguish **inert** —
+    matches nothing, or is fully overridden — from **dormant**: matches, wins on some
+    properties, and is masked only on the one that would show. A dormant rule **resumes** the
+    moment whatever masks it changes; it does not need re-adding. **Measure computed style,
+    not rendered geometry, before concluding anything is dead.** [[SR-123]] is the worked
+    example.
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
 has since shipped. Numbering continues from SR-044 so no ID is ever reused.*

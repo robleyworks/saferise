@@ -1060,3 +1060,79 @@ Div 2812 / 175 / 126 balanced. CSS braces 663 / 299 / **1084**. Console clean on
 That second move generalises: **a count is only as good as the artefact that carries it.**
 A finding recorded in prose but absent from the enumerated list makes the list wrong, and the
 list is what a future audit checks.
+
+---
+
+## Phase 7 — close-out
+
+### The register's rules block
+
+Fourteen method rules written in, each naming the worked example so it can be checked
+rather than taken on trust. They are in the register, not only here, because a rule that
+lives in a run log does not survive the next run.
+
+The numbering rules were rewritten for accuracy at the same time. **SR-064** turned out to be
+issued and referenced in `dashboard.html:1005` / `:1007` but never written up — it is
+**not free**, and the header now says so. **SR-073, SR-114 and SR-116** were raised and
+dropped without ever being issued, so those three numbers are free, with the standing
+instruction not to reach back into a read range for them.
+
+**Fresh reservation: SR-129 to SR-150, ceiling SR-150.** Allocate from SR-129.
+
+One correction made while writing rule 2: the draft said "six items did not reproduce". The
+accurate count is **five** clean non-reproductions — SR-111, SR-112, SR-113, SR-117,
+SR-118 — plus a sixth of a different kind, 4c's "remove the Elevation-only rows", which
+described a table shape the tree does not have. Rounding those together would have made the
+rule's own evidence sloppy.
+
+### Register verified structurally
+
+81 entries · **zero** missing a `*Status:*` line · **zero** duplicate headings · rules 1–14
+all present.
+
+### Commits — 12, in order
+
+| SHA | item |
+|---|---|
+| `1a4ef46` | docs: SR-111/112/113/117/118 closed, verified already satisfied |
+| `52ed940` | fix: SR-115 the cue-card cover loads from the repo, not a deploy preview |
+| `ca2a39c` | fix: SR-110 the Elevation waitlist control and its route are removed |
+| `0f4668d` | fix: SR-110 4a overlay, nav entries, routes and waitlist form |
+| `2bb754b` | fix: SR-110 4b copy fragments, the pricing tier, and a `showProg` guard |
+| `d153434` | fix: SR-121 remove `SERIES_CONFIG` and its three dead renderers |
+| `5f3197b` | fix: SR-110 4c remove the Elevation column from the comparison table |
+| `9e8841f` | docs: SR-110 clear the Elevation documentation residue |
+| `98e1c52` | docs: SR-120 `t1-01` extras does not reproduce |
+| `eefbcc3` | docs: SR-125 count derives from the wrong list; **SR-120 corrected** |
+| `225464f` | fix: SR-124 one price record, and `index.html` derives from it |
+| `fee9176` | fix: SR-123 relocate one live rule, then remove the dead block |
+
+One SHA changed during the run: the 4b commit was `6615107` before being amended to
+`2bb754b`, because it had shipped `.claude/launch.json` pointing at a scratchpad path.
+
+### Closed this run
+
+SR-110 (19 surfaces, all), SR-111, SR-112, SR-113, SR-115, SR-117, SR-118, SR-119, SR-121,
+SR-123. SR-108 and SR-109 written up as already complete.
+
+### Open, logged during Run D — Andre's decisions
+
+| ID | what | why it was not fixed |
+|---|---|---|
+| **SR-120** | `t1-01 extras: []` omits an advisory the Reader serves | blocked on SR-125 — setting `['advisory']` would claim a Proximity Guide the protocol does not have |
+| **SR-122** | undated promises on shipping-track surfaces | the team-programme clause is separable; the rest resolve when SR-124 lands |
+| **SR-125** | the declared library and the Reader's manifest are two inventories; the count derives from the wrong one | deriving, authoring, or reconciling are three different products |
+| **SR-126** | the €9 introductory rate has no label on any surface | wording is a copy decision; the `data-sr-intro` hook is in place and unused |
+| **SR-127** | `protocol.html` renders three prices and never loads `tracks.js` | fixing it changes what the page loads |
+| **SR-128** | the comparison table prices three tracks as three products | the data (`includes`) is in place; the fix is copy and layout |
+
+Also open and pre-existing: SR-110's **column-width sub-item**, which could not be measured
+because the preview viewport collapsed to 0×0. One measurement in a real viewport settles it.
+
+### The one thing a reader should take from this run
+
+Six briefed defects did not exist, one "does not reproduce" verdict was itself wrong, and
+the largest finding — that the resource count derives from the wrong list — was not on the
+brief at all. The method that produced that is in the rules block now. Rule 9 is the one
+that matters most: **a sentinel proves a probe works within its own method; it cannot tell
+you the method is wrong.**
