@@ -280,3 +280,173 @@ appearing to overshoot.
 `serve.py` processes. `.claude/launch.json` restored — `git diff` on it is empty.
 
 *Result: pass. Two removals, one comment added.*
+
+---
+
+## Phase 4a — bounded removals
+
+### The Netlify form — what I checked and what I did not
+
+The form is real: `name="elevation-waitlist"`, `method="POST"`, `data-netlify="true"`,
+`netlify-honeypot="bot-field"`, hidden `form-name`, a required `email` input and a submit
+button, posting through `srSubmit` → `srPost` → `fetch('/')`. Confirmed live in the DOM
+before removal.
+
+**Submission count: taken on Andre's word, not verified here.** He confirmed the form is
+empty. This run has no Netlify credentials, did not attempt to obtain any, and did not open
+the Netlify dashboard. That is the honest state of the evidence — the removal proceeded on
+an explicit instruction, not on a check I performed.
+
+**Do submissions survive removal? Yes.** Netlify stores submissions server-side against the
+site, not in the repository. Deleting the markup stops new submissions and drops the form
+from form detection on the next build; **it does not delete anything already collected.**
+Anything previously submitted stays in Netlify's own store, under the site's Forms tab,
+until someone deletes it there. Nothing in this commit can destroy a submission.
+
+The unrelated `affiliate-application` Netlify form is untouched and still present —
+verified after the change.
+
+### Reproduced before removing — all four surfaces
+
+| surface | reproduction |
+|---|---|
+| `index.html` nav tab | clicked → `prog-elevation` active, `#main-content` hidden |
+| `index.html` footer link | clicked → `prog-elevation` active |
+| `dashboard.html` rail button | Phase 3, clicked → track 4 empty state rendered |
+| `protocol.html` footer link | clicked → inert; `href="#"`, no `onclick`, URL gains a bare `#` |
+
+The overlay carried 7 protocol cards and the form. All four reproduced. **Nothing failed to
+reproduce.**
+
+### Drift found against Run C
+
+**The footer link is one source line but twelve rendered links.** `index.html` holds a
+single `<template id="sr-footer-template">` cloned into `#main-content` and every
+`.prog-overlay` ([index.html:3036](index.html:3036)). Run C's count of one footer surface is
+correct at source level; the DOM carried **12** Elevation links. Removing the one `<li>`
+removed all twelve, and removing the overlay dropped a clone target — footers went 12 → 11.
+Recorded because a DOM-level audit would otherwise read as a twelve-fold discrepancy.
+
+**One index.html surface missing from Run C's inventory:** a code comment at what is now
+[index.html:5342](index.html:5342) naming "Elevation's single-preview resources". Not in the
+§1e table. Left in place — see below.
+
+### Removed
+
+**`index.html`**
+
+| what | detail |
+|---|---|
+| `#prog-elevation` overlay | 52 lines — back button, two mounts, 7 `elev-` cards, workshop/1:1 pair, whats-included mount, waitlist panel **and the Netlify form** |
+| nav tab | `.nav-link.tab-purple` + its absolute-positioned "Soon" badge |
+| footer `<li>` | the `showProg('elevation')` link inside the footer template |
+| `SERIES_CONFIG.elevation` | badge *"Track 04 · Premium Tier · Phase 4 · Coming Soon"* |
+| `RESOURCE_CONTENT` | seven `elev-1…7` records, each *"Coming Soon"*, *"Not yet in production"*, *"Join the waitlist below"* |
+| CSS | `#elevation-protoList.pcard-grid .proto-item{…}` — dead selector |
+
+**`dashboard.html`** — the `data-track="4"` rail button and its "Coming soon" meta.
+**`protocol.html`** — the inert `Elevation Series` footer link.
+
+`TRACKS[4]` untouched.
+
+### A mistake I made, and how it was caught
+
+The `SERIES_CONFIG` splice used `before[:-3]` where it needed `[:-2]`. That deleted the
+**closing brace of the `corporate` entry**, not just the trailing comma, and produced
+`SyntaxError: Unexpected token ';'` — which took `renderProtocolPage` and `READER_ICONS`
+down with it. The whole page's JS was broken.
+
+It was caught on the cold load, by console errors. **It would have been caught before the
+load if I had run the JS parse check with the div and CSS balance checks instead of after
+them** — I ran `<div>` balance and CSS braces, both of which passed, and treated that as
+sufficient. Neither can see a JS brace. Fixed by restoring the brace, then re-verified with
+the parse check run *first*: 10 inline blocks, all parse, parser sentinel
+`caught SyntaxError`.
+
+Recorded rather than quietly repaired, because the process lesson is the useful part: **the
+balance checks and the JS check are not interchangeable, and the JS check has to run before
+the render, not after it.**
+
+### Verified cold — fresh tabs, `no-store`, cache-busted
+
+| check | before | after |
+|---|---|---|
+| `#prog-elevation` | present | **absent** |
+| `form[name="elevation-waitlist"]` | 1 | **0** |
+| other `data-netlify` forms | `affiliate-application` | `affiliate-application` (untouched) |
+| nav tabs | 8, incl. "Elevation SeriesSoon" | **7**, no Elevation |
+| footer Elevation links (rendered) | 12 | **0** |
+| cloned footers | 12 | 11 (one fewer overlay) |
+| `.prog-overlay` count | 11 | 10 |
+| dashboard rail buttons | 4 | **3**, no `data-track="4"` |
+| dashboard Elevation / "coming soon" text nodes | present | **0** |
+| `protocol.html` track links | 4 | **3** |
+| console errors | — | **zero** |
+| JS parse | — | 10 blocks OK; sentinel `caught SyntaxError` |
+| div balance | — | index 2840/2840, dashboard 176/176, protocol 126/126 |
+| CSS braces | — | 663/663, 299/299, 1083/1083 |
+
+**Regression check.** All five surviving overlays still open — `prog-personal`,
+`prog-couples`, `prog-corporate`, `prog-compare`, `prog-services` — and all three surviving
+dashboard rail buttons still render (20 cards each, identical across tracks).
+
+**Sentinel pair.** A `nav-link tab-purple` button carrying
+`showProg('elevation')`, injected into the real nav bar and clicked → **no overlay
+activated**. The same button shape carrying `showProg('corporate')`, same parent → opened
+`prog-corporate`. Route dead, mechanism live.
+
+### ⚠ Exposed by 4a — reported, not acted on
+
+**1. `showProg('elevation')` now blanks the page. Reproduced.**
+`showProg` hides `#main-content`, then activates `prog-<id>` if it exists. With the overlay
+gone it hides main content and activates nothing: `{active: [], main: "none"}` — a blank
+viewport. `showMain()` recovers it, but nothing calls that automatically.
+
+Three callers remain, all 4b/4c surfaces:
+[index.html:2863](index.html:2863) plans-strip panel · [index.html:7599](index.html:7599)
+plans card · [index.html:8048](index.html:8048) workshop card.
+
+**This branch must not merge between 4a and 4b.** 4b/4c remove all three callers and the
+hazard closes. Flagged rather than fixed because the boundary instruction was explicit and
+these are 4b/4c surfaces — but a guard in `showProg` is one line if you would rather the
+intermediate state be safe.
+
+**2. `SERIES_CONFIG` existed only to serve Elevation.** The `.sr-dash-empty` pattern again,
+and larger. Checked against `HEAD` before the edit: the **only** `hero-mount-*`,
+`protocols-head-mount-*` and `whats-included-mount-*` elements in `index.html` were the
+three `-elevation` ones. The `personal`, `couples` and `corporate` entries in
+`SERIES_CONFIG` had no mount points and never rendered — they were already dead before this
+run.
+
+So `SERIES_CONFIG` (now 3 entries), `renderSeriesHero` (:4986),
+`renderProtocolBrowseHead` (:5003), `renderWhatsIncludedHTML` (:5016) and the
+`DOMContentLoaded` mount loop (:5086) are a closed island — no callers outside each other,
+no mount targets left. **~110 lines of dead code.** The three surviving overlays render
+their heroes from hardcoded markup and are unaffected, confirmed by opening all three.
+Left in place; whether it goes is a judgement for Andre.
+
+**3. Smaller residue, all left alone**
+
+| where | what | why left |
+|---|---|---|
+| [index.html:47-49](index.html:47) | `.nav-link.tab-purple` rules | dead once the tab went; harmless |
+| [index.html:830](index.html:830), [:865](index.html:865) | CSS comments naming Elevation as a live 4th track | now stale, but rewriting comments is copy editing |
+| [index.html:5342](index.html:5342) | code comment naming "Elevation's single-preview resources" | same; also missing from Run C's inventory |
+| [index.html:4755](index.html:4755) | `key.indexOf('elev-')` → `'Elevation Series'`, **`'€222 one-time'`** | dead branch now, but it carries the pricing tier — **4b** |
+
+Items 2863, 7595–7599, 7613, 7726, 8044–8048, 8426 in `index.html` and 858, 913 in
+`dashboard.html` are the 4b/4c surfaces and were not touched.
+
+### Surface reconciliation
+
+Corrected total **18**. Closed so far: **6** — the CTA and its `TEXTMAP` route (Phase 3),
+plus overlay, index nav tab, index footer link, dashboard rail button, protocol.html footer
+link (4a). Counting the routes/data removals as part of the overlay surface rather than
+separately, as Run C's table does. **12 remain**, all 4b/4c.
+
+### Teardown
+
+`preview_stop` called. `lsof -ti:8642` → free. Zero listening sockets. No `coldserve` or
+`serve.py`. `.claude/launch.json` restored — `git diff` empty.
+
+*Result: pass, with one self-inflicted syntax error found and fixed before commit.*

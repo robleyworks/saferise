@@ -219,7 +219,44 @@ the prose below it. The real dashboard total is **4**, and the repo-wide total *
 and a paragraph ending *"Opening after the recording sprint"*, which is an undated promise
 and goes with the rest of the block.
 
-*Status:* open — CTA and route done, 16 surfaces remain · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+**Done — 4a, the bounded removals (20 Aug 2026).** Overlay, four navigation entries, the
+routes and data behind them, and the live Netlify form.
+
+- `index.html` — the whole `#prog-elevation` overlay (52 lines: back button, hero and
+  head mounts, seven `elev-` protocol cards, workshop/1:1 pair, waitlist panel and the
+  form); the `tab-purple` nav tab and its "Soon" badge; the footer `<li>`;
+  `SERIES_CONFIG.elevation`; the seven `elev-1…7` records in `RESOURCE_CONTENT`; the dead
+  `#elevation-protoList.pcard-grid` rule.
+- `dashboard.html` — the `data-track="4"` rail button and its "Coming soon" meta.
+- `protocol.html` — the inert `Elevation Series` footer link.
+
+**The Netlify form.** `name="elevation-waitlist"`, `data-netlify="true"`, honeypot
+`bot-field`, POST to `/`. Confirmed by Andre as holding **no submissions**; that was taken
+on his word, not independently checked — this run has no Netlify credentials and did not
+attempt to acquire any. Removing the markup stops collection and drops the form from
+Netlify's next build detection; it does **not** delete anything already collected. Any
+submissions remain in Netlify's own store under the site's Forms tab until deleted there.
+The unrelated `affiliate-application` form is untouched and still present.
+
+`TRACKS[4]` in `content/tracks.js` untouched throughout.
+
+**Exposed by the removal — reported, not acted on.** See `docs/runs/RUN-D.md` §4a for the
+full list with line numbers. The two that matter:
+
+1. **`showProg('elevation')` now blanks the page.** `showProg` hides `#main-content` and
+   activates `prog-<id>`; with no such overlay it activates nothing, leaving a blank
+   viewport. Three callers remain — the plans-strip panel, the plans card and the workshop
+   card — all of them 4b/4c surfaces. Reproduced. **This branch must not merge between 4a
+   and 4b.**
+2. **`SERIES_CONFIG` existed only to drive the Elevation overlay.** The only
+   `hero-mount-*` / `protocols-head-mount-*` / `whats-included-mount-*` elements in
+   `index.html` were the three `-elevation` ones — verified against `HEAD` before the edit,
+   so this predates this run. `SERIES_CONFIG`, `renderSeriesHero`,
+   `renderProtocolBrowseHead`, `renderWhatsIncludedHTML` and the `DOMContentLoaded` mount
+   loop are now a closed island of dead code (~110 lines). The other three tracks render
+   their heroes from hardcoded markup and are unaffected. Whether it goes is Andre's call.
+
+*Status:* open — CTA, route and 4a done; copy fragments (4b) and pricing table (4c) remain · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
 
 ### SR-115 · A dashboard cover loads from an ephemeral Netlify deploy preview
 [dashboard.html:717](dashboard.html:717) sources a protocol cover from
