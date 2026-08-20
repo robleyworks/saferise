@@ -450,3 +450,92 @@ separately, as Run C's table does. **12 remain**, all 4b/4c.
 `serve.py`. `.claude/launch.json` restored — `git diff` empty.
 
 *Result: pass, with one self-inflicted syntax error found and fixed before commit.*
+
+---
+
+## Phase 4b — copy fragments and the pricing tier
+
+**Process change in force from here:** the JS parse check runs **first**, before div
+balance and CSS braces. 4a proved those two cannot see a broken script brace.
+
+### Reproduced before removing
+
+| surface | reproduction |
+|---|---|
+| plans-strip panel | grid measured 4 children / 4 tracks, last = *"Coming Soon Elevation Series Coming Soon Pricing TBA"* |
+| plans card | grid 4 children, last = *"Track 04 — Premium Elevation Series…"* |
+| workshop card | grid 4 children, last = *"Coming Soon Elevation Coming Soon Pricing TBA"* |
+| workshops copy | *"…Relationship from €139/couple · Professional & Elevation workshops coming soon."* |
+| "See all plans" button | *"See all plans — Relationship, Professional & Elevation"* |
+| `€222` branch | **already unreachable** — 112 `RESOURCE_CONTENT` keys, **zero** beginning `elev-`, zero `[data-resource^="elev-"]`. A dead branch carrying a live price. |
+
+### A trap found before it was sprung
+
+`index.html` has **three** grids matching `repeat(4,1fr)` and only one is a plans grid — the
+others hold "Guided Video…Workbook" and "Founder-Led…Logistics Arranged". A pattern-based
+edit would have collapsed two unrelated layouts. **Every grid edit was anchored by line
+number and asserted against its neighbours instead.**
+
+### Changed
+
+`index.html` — plans-strip panel, plans card, workshop card, the `elev-` → `'€222
+one-time'` branch. Workshops sentence now ends *"…Relationship from €139/couple."*; the
+*"Professional & Elevation workshops coming soon"* clause went **entirely**, not trimmed to
+"Professional", because it fails the no-undated-promises rule independently. Button now
+reads **"See all plans"**.
+
+`dashboard.html` — `ENTITLED[4]`, `TRACKMETA[4]`, `JOURNEY[4]`, and the `.sr-dash-empty`
+branch. All unreachable once the rail button went; the branch existed solely to render
+Track 04, since every shipping track has ten protocols and `items.length` is never 0. A
+comment records that a future empty track needs its own copy, not the retired one's.
+
+Three grids closed to three columns. Verified: 3 children, 3 computed tracks, Professional
+last, **no empty cell in any of them**.
+
+### `showProg` guard — taken
+
+```js
+const target = document.getElementById('prog-' + id);
+if (!target) return;
+```
+
+resolved first, before anything is hidden.
+
+| call | before | after |
+|---|---|---|
+| `showProg('elevation')` | `{active: [], main: "none"}` — blank page | `{active: [], main: ""}` |
+| `showProg('does-not-exist')` | blank page | `{active: [], main: ""}` |
+| `showProg('corporate')` (sentinel) | opens | **still opens** |
+
+General, not a patch for this removal — any future hidden series hits the same lookup.
+
+### Verified cold
+
+| check | result |
+|---|---|
+| JS parse (**run first**) | index 10 blocks OK, dashboard 1 block OK; sentinel `caught SyntaxError` |
+| div balance | index 2822/2822, dashboard 175/175, protocol 126/126 |
+| CSS braces | 663/663, 299/299, 1083/1083 |
+| console errors, index + dashboard | **zero** |
+| `showProg('elevation')` callers | **0** |
+| `€222` anywhere in the DOM | **false** |
+| rendered "Elevation" text nodes, index | **1** — the comparison-table `<th>`, which is 4c |
+| dashboard rendered residue (Elevation / opening soon / coming soon / recording sprint / to be confirmed) | **none** |
+| dashboard `.sr-dash-empty` | absent |
+| **regression** — all three dashboard tracks | 20 cards + 3 journey columns each, correct notes |
+
+### Reported, not touched
+
+Two undated promises survive on `index.html`, both about **Track 03, a shipping track**,
+not Elevation: *"Coming Soon / Pricing TBA"* on the Professional plans-strip panel and
+*"Pricing to be announced · team programmes priced separately"* on the Professional plans
+card. They fail the no-undated-promises rule on their own but are outside the Elevation
+scope. They need their own item and a date or a price.
+
+### Reconciliation
+
+**14 of 18 closed.** Remaining: the comparison-table column (4c) and the three residue
+items already listed in 4a — the `tab-purple` CSS and the stale comments at 830 / 865 /
+5342, which are documentation rather than surfaces.
+
+*Result: pass.*

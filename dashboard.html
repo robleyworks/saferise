@@ -788,12 +788,11 @@
      Named DASHTRACKS, not TRACKS — content/tracks.js already owns the
      global TRACKS and shadowing it here would give the two files a silent
      disagreement, which is the failure this whole branch exists to end. */
-  var ENTITLED = {1:true, 2:false, 3:false, 4:false};
+  var ENTITLED = {1:true, 2:false, 3:false};
   var TRACKMETA = {
     1:{accent:'var(--sr-track01)', cls:'t-1', state:'included with your plan'},
     2:{accent:'var(--sr-track02)', cls:'t-2', state:'not on your plan yet'},
-    3:{accent:'var(--sr-track03)', cls:'t-3', state:'not on your plan yet'},
-    4:{accent:'var(--sr-track04)', cls:'t-4', state:'opening soon'}
+    3:{accent:'var(--sr-track03)', cls:'t-3', state:'not on your plan yet'}
   };
   var DASHTRACKS = (function(){
     var out = {};
@@ -853,18 +852,7 @@
          body:['Log the situation, what was actually at stake, and whether presence or rehearsal won. Across a quarter the record shows which kind of room still gets you fastest, and whether the activation before it is easing.']},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Recover. Choose.', valcol:'var(--teal)',
          body:['The same library, sized for a working day — the mechanism and its sources, meditation scripts, somatic practices between meetings, and the Disclosure guide for explaining a practice to people at work.'],
-         note:'Recovery sits here: ambition, burnout, and decisions you are too depleted to make well.'}],},
-
-    4:{note:'Elevation Series · opening soon', title:'The same three parts, taken further.',
-       sub:'Structure confirmed. Detail opens with the Series.',
-       band:'p4',
-       cols:[
-        {tag:'01 · Start here', tagcol:'var(--sr-track04)', name:'Experience', value:'Extended practice.', valcol:'var(--sr-track04)',
-         body:['Longer guided sessions, built on the same four steps.'], meta:''},
-        {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'The same record, carried forward.',
-         body:['Your existing log continues into the Series — nothing restarts.'], meta:''},
-        {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Integrate. Choose.', valcol:'var(--teal)',
-         body:['Resource library to be confirmed.'], meta:''}],}
+         note:'Recovery sits here: ambition, burnout, and decisions you are too depleted to make well.'}],}
   };
 
   var jNote  = document.getElementById('srJNote');
@@ -908,22 +896,11 @@
     row.style.setProperty('--accent', t.accent);
     note.textContent = t.note;
 
-    if(!t.items.length){
-      row.innerHTML = '<div class="sr-dash-empty">'+
-        '<h3>Elevation Series</h3>'+
-        '<p>Seven protocols for people who have finished the foundational work and want to go further. Opening after the recording sprint.</p></div>';
-      /* SR-110 · No control here. This block used to carry
-         "Tell me when it opens", which the TEXTMAP row below routed to /plans —
-         a waitlist button that opened a price list. Elevation is off the launch
-         path, so the control was removed rather than repointed: there is no
-         waitlist to reach, and one that does not exist is worse than none. */
-      // A track with nothing in it has nothing to sell. This returns before the
-      // lock block below, so the previous track's CTA has to be cleared here or
-      // it stays on screen offering the wrong track at the wrong price (SR-044).
-      var emptyLock = document.getElementById('srLockCta');
-      if(emptyLock) emptyLock.classList.remove('show');
-      offset = 0; apply(); sync(); return;
-    }
+    /* SR-110 · The empty-track branch that used to sit here rendered the
+       Track 04 placeholder, and it was the only thing that could reach it —
+       every shipping track carries ten protocols. It went with the series.
+       If a future track ever ships with no protocols, restore a guard here with
+       that track's own copy, not the retired one's. */
 
     var CARDS = t.items.map(function(it,i){
       var no  = String(i+1).padStart(2,'0');

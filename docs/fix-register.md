@@ -256,7 +256,41 @@ full list with line numbers. The two that matter:
    loop are now a closed island of dead code (~110 lines). The other three tracks render
    their heroes from hardcoded markup and are unaffected. Whether it goes is Andre's call.
 
-*Status:* open — CTA, route and 4a done; copy fragments (4b) and pricing table (4c) remain · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+**Done — 4b, copy fragments and the pricing tier (20 Aug 2026).**
+
+- `index.html` — the plans-strip Elevation panel (*"Coming Soon / Pricing TBA"*), the
+  Track 04 plans card (*"Premium tier · Waitlist open now"*), the Elevation workshop card,
+  and the `key.indexOf('elev-')` branch carrying **`'€222 one-time'`** — verified
+  unreachable first: 112 `RESOURCE_CONTENT` keys, none beginning `elev-`, and zero
+  `[data-resource^="elev-"]` in the DOM.
+- Two sentences rewritten to name only shipping tracks: the workshops line now ends
+  *"…Relationship from €139/couple."* — the *"Professional & Elevation workshops coming
+  soon"* clause went **entirely** rather than being trimmed to "Professional", because it
+  fails the no-undated-promises rule on its own; and the button now reads **"See all
+  plans"**.
+- `dashboard.html` — `ENTITLED[4]`, `TRACKMETA[4]`, `JOURNEY[4]` and the `.sr-dash-empty`
+  branch. All four were unreachable once the rail button went, and the branch existed only
+  to render Track 04: every shipping track carries ten protocols, so `items.length` is
+  never 0. A comment records that a future empty track needs its own copy, not the retired
+  one's.
+
+Three four-column grids closed to three — `1.7fr 1fr 1fr 1fr` → `1.7fr 1fr 1fr`,
+`repeat(4,1fr)` → `repeat(3,1fr)`, `1fr 1fr 1fr 1fr` → `1fr 1fr 1fr`. Each verified at 3
+children / 3 tracks with Professional last and no empty cell. Two *other* `repeat(4,1fr)`
+grids on the page are unrelated and were not touched — the edits are anchored by line, not
+by pattern.
+
+**`showProg` now guards.** It resolves `prog-<id>` **first** and returns if absent, instead
+of hiding `#main-content` and then activating nothing. Before: `{active: [], main: "none"}`
+— a blank viewport with no way back. After: `{active: [], main: ""}`. Verified for both
+`elevation` and a nonsense id, with a real overlay still opening from the same state. Any
+future hidden series hits the same lookup, so the guard is general rather than a patch for
+this removal.
+
+**Remaining: 4c only** — the comparison-table column. Exactly one rendered "Elevation" text
+node survives in `index.html`, and it is that `<th>`.
+
+*Status:* open — 4c (comparison table) only · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
 
 ### SR-115 · A dashboard cover loads from an ephemeral Netlify deploy preview
 [dashboard.html:717](dashboard.html:717) sources a protocol cover from
