@@ -34,10 +34,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- The system stylesheet supplies --sr-track01..04, the single source of truth
-     for the four track accents (SR-045). The dashboard sheet follows it and
-     wins by cascade order, not by !important. -->
-<link rel="stylesheet" href="css/saferise-system.css">
+     for the four track accents (SR-045).
+     It loads LAST and owns the cascade (CLAUDE.md, SR-105). The three dashboard
+     declarations that must survive that order — section padding, .eyebrow tracking
+     and the .sr-cover ground — carry a raised-specificity selector in
+     saferise-dashboard.css rather than !important. -->
 <link rel="stylesheet" href="css/saferise-dashboard.css">
+<link rel="stylesheet" href="css/saferise-system.css">
 </head>
 <body>
 

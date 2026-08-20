@@ -1,7 +1,10 @@
 /* ==========================================================================
    SafeRise — member dashboard
    Extracted verbatim from the inline <style> block of the v41 mockup.
-   Loads AFTER css/saferise-system.css, which supplies the track accents.
+   Loads BEFORE css/saferise-system.css, which supplies the track accents and
+   owns the cascade (CLAUDE.md, SR-105). Anything in here that must beat a
+   system rule therefore needs specificity, not position — see the three
+   `body`-prefixed selectors below. Do not reach for !important.
    The final ALIGNMENT block must stay last — several rules above it would
    otherwise win, and it resolves the two-line margin system.
    ========================================================================== */
@@ -34,9 +37,11 @@ a{color:inherit;text-decoration:none}
 /* saferise-system.css sets section{padding-block:clamp(72px,9vw,128px)} for the
    marketing page's full-bleed bands. This page spaces its sections with
    margin-top:56px instead, so that padding is purely additive — it added 2048px
-   of dead space across nine sections before this reset (SR-048). Cascade order
-   carries it; no !important needed. */
-section{padding-block:0}
+   of dead space across nine sections before this reset (SR-048).
+   The system sheet now loads last (SR-105), so cascade order no longer carries
+   this. `body section` (0,0,2) beats the system's `section` (0,0,1) regardless
+   of order. Specificity, not !important. */
+body section{padding-block:0}
 :focus-visible{outline:2px solid var(--gold-lt);outline-offset:3px;border-radius:3px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 
@@ -44,7 +49,9 @@ section{padding-block:0}
 h1{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(30px,4.4vw,48px);line-height:1.14}
 h2{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(22px,2.6vw,30px);line-height:1.24}
 h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
-.eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700}
+/* system .eyebrow sets letter-spacing:.38em at equal specificity; since SR-105 it
+   also loads last. `body .eyebrow` (0,1,1) holds the dashboard's tighter .24em. */
+body .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700}
 .note{font-size:12.5px;color:var(--text3);line-height:1.7}
 .gold{color:var(--gold)}
 .skip{position:fixed;left:16px;top:-90px;z-index:60;background:var(--gold);color:#08080C;font:700 12.5px/1 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:14px 22px;border-radius:3px;transition:top .2s}
@@ -948,7 +955,10 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
 
 /* ── 01 · the Clearing: the card IS the cover ── */
 .sr-begin-card--media{padding:0;display:block}
-.sr-cover{position:relative;display:block;width:100%;height:100%;min-height:300px;border:0;padding:0;
+/* `body` prefix (0,1,1) holds background:#0C0C14 against the system sheet's
+   .sr-cover{background:none}, which loads last since SR-105. The override below
+   at line ~1051 carries the same prefix so the two keep their relative order. */
+body .sr-cover{position:relative;display:block;width:100%;height:100%;min-height:300px;border:0;padding:0;
   cursor:pointer;background:#0C0C14;overflow:hidden;text-align:left}
 .sr-cover-art{position:absolute;inset:0;
   /* NEEDS ART — SWAP: <img> banner, 1100x900, subject low or right, quiet left third */
@@ -1048,7 +1058,7 @@ body.shifting .sr-dash-top{opacity:0;transition:opacity .42s ease}
 
 /* 01 keeps the full bleed */
 .sr-begin-card--media{padding:0}
-.sr-cover{min-height:340px}
+body .sr-cover{min-height:340px}  /* same 0,1,1 as the base rule above — order preserved */
 .sr-cover-art{
   background:radial-gradient(48% 58% at 44% 60%,rgba(236,201,106,.4),transparent 72%),
              linear-gradient(150deg,#0A0A10 0%,#1B1206 50%,#33240F 100%)}
