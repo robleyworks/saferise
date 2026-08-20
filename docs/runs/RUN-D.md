@@ -174,3 +174,109 @@ Server stopped via `preview_stop`. `lsof -ti:8642` → free. `lsof -nP -iTCP -sT
 zero rows. `ps` → no `coldserve` or `serve.py`. `.claude/launch.json` restored.
 
 *Result: pass. One line changed.*
+
+---
+
+## Phase 3 — the Elevation CTA
+
+### Reproduced first, by clicking
+
+Cold mirror of the **pre-change** tree, fresh tab, `?cb=srd3repro1`. Elevation selected
+through the real rail control (`.sr-dash-railbtn[data-track="4"]`), not by calling
+`render(4)` directly. The CTA was then clicked as a real mouse click on the resolved
+element reference — `left_click at (467, 360)` — not a synthetic `dispatchEvent`.
+
+**Result: `mRoute` opened, `aria-label="Destination"`, reading *"Not built yet · Plans ·
+What each track includes and what it costs. Access is cumulative. · /plans"*.**
+
+A control that says *"Tell me when it opens"* opened a price list. Confirmed, not inferred.
+
+### The structure it sat in — checked before deciding how far to cut
+
+The CTA was the third child of a JS-built block:
+
+```
+.sr-dash-empty
+  ├── <h3>Elevation Series</h3>
+  ├── <p>Seven protocols … Opening after the recording sprint.</p>
+  └── <a class="sr-dash-go" href="#">Tell me when it opens →</a>   ← removed
+```
+
+That branch is reached only when `t.items.length` is 0. `DASHTRACKS[n].items` derives from
+`TRACKS[n].protocols`; tracks 1–3 carry 10 each and `TRACKS[4]` has no `protocols` key at
+all — so **the empty state exists solely to render Elevation.**
+
+Removing the `<a>` therefore does **not** leave an empty framed box. It leaves a heading
+and the paragraph that explains it — a coherent passive empty state with no control, which
+is a valid intermediate. The `<h3>` and `<p>` are the remainder of Run C's surface
+`917–919` and belong to Phase 4, so the phase boundary held. Measured after the change:
+`.sr-dash-empty` renders at 156 × 406 with **0** controls inside it.
+
+### Changed
+
+- `dashboard.html:919` — the `<a>` removed, with a comment in its place recording what was
+  there and why it is not coming back.
+- `dashboard.html:1262` — the `TEXTMAP` row `[/tell me when it opens/i,'plans']` removed.
+
+`TRACKS[4]` in `content/tracks.js` untouched, as instructed.
+
+### Verified cold — and the route proved dead by sentinel pair
+
+Fresh tabs, `no-store`, cache-busted, re-mirrored from the working tree.
+
+| check | result |
+|---|---|
+| controls inside `.sr-dash-empty` after Elevation selected | **0** |
+| any `<a>`/`<button>` in the DOM matching the CTA text | **0** |
+| modal opened on selecting Elevation | none |
+| console errors, clean cold load | **zero** |
+| div balance | 176 / 176 |
+| CSS braces | 663/663, 299/299, 1083/1083 |
+| JS parse (`node` absent — `new Function`) | 82,030 B, OK; parser sentinel `caught SyntaxError` |
+
+**Sentinel pair on the route itself.** A link carrying the exact removed text was injected
+into the exact old parent and clicked → **no modal opened**. Then a link reading `Account`
+was injected into the same parent and clicked → **`mRoute` opened**. So the route is dead
+*and* the delegated handler is still alive at that position; the negative result is real
+and not an artifact of injecting into an excluded container.
+
+### One measurement I could not take
+
+Screenshots of this tab returned uniformly black frames, before and after the change, at
+every scroll position and with the tab fronted. The DOM disagrees with the image —
+`#mRoute` measured 1280 × 720, `opacity: 1`, `visibility: visible`, box 560 × 374 at
+top 56 — and `computer{action:"scroll"}` timed out with *"The Browser pane is currently
+hidden."* So this is a capture artifact of the preview pane in this session, not a page
+defect. **Every visual claim in this phase rests on measured DOM geometry and computed
+style, not on a screenshot.** Recorded rather than passed off.
+
+### Siblings found — reported, not removed
+
+Phase boundary kept deliberately so the surface count stays checkable.
+
+| where | text | Run C surface |
+|---|---|---|
+| `.sr-dash-railname` / `.sr-dash-railmeta` (dashboard:240) | "Elevation Series" / "Coming soon" | #1 — Phase 4 |
+| `p.note` from `JOURNEY[4]` (dashboard:862) | "Elevation Series · opening soon" | #2 — Phase 4 |
+| `.sr-dash-empty p` (dashboard:918) | "…**Opening after the recording sprint**." | remainder of #3 — Phase 4 |
+| `.sr-dash-jbody` from `JOURNEY[4]` | "Resource library to be confirmed." | inside #2 — Phase 4 |
+
+No second waitlist and no second live form on this surface. Two further undated strings —
+`band photograph pending`, `Banner photograph pending` — are asset placeholders, not
+product promises, and are not Elevation surfaces; they sit outside this run's scope and are
+noted only so the sweep is complete.
+
+### Inventory correction against Run C
+
+**`TEXTMAP:1262` is not one of the 17.** Run C's §1e table lists three dashboard surfaces
+(240, 862, 917–919); the route row appears only in the prose beneath it. Phase 3 removed
+one surface-part plus that route, so the true totals are **4 dashboard surfaces and 18
+repo-wide**, not 3 and 17. Recorded now so the Phase 7 reconciliation balances rather than
+appearing to overshoot.
+
+### Teardown
+
+`preview_stop` called. `lsof -ti:8642` → free. Zero listening sockets. No `coldserve` or
+`serve.py` processes. `.claude/launch.json` restored — `git diff` on it is empty.
+
+*Result: pass. Two removals, one comment added.*

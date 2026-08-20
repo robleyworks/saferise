@@ -915,8 +915,12 @@
     if(!t.items.length){
       row.innerHTML = '<div class="sr-dash-empty">'+
         '<h3>Elevation Series</h3>'+
-        '<p>Seven protocols for people who have finished the foundational work and want to go further. Opening after the recording sprint.</p>'+
-        '<a class="sr-dash-go" href="#">Tell me when it opens '+ARROW+'</a></div>';
+        '<p>Seven protocols for people who have finished the foundational work and want to go further. Opening after the recording sprint.</p></div>';
+      /* SR-110 · No control here. This block used to carry
+         "Tell me when it opens", which the TEXTMAP row below routed to /plans —
+         a waitlist button that opened a price list. Elevation is off the launch
+         path, so the control was removed rather than repointed: there is no
+         waitlist to reach, and one that does not exist is worse than none. */
       // A track with nothing in it has nothing to sell. This returns before the
       // lock block below, so the previous track's CTA has to be cleared here or
       // it stays on screen offering the wrong track at the wrong price (SR-044).
@@ -1258,8 +1262,7 @@
     [/chosen self/i,'chosen'], [/your decisions/i,'decisions'],
     [/the science|the frameworks|the method|the stories/i,'reading'], [/read the faq|^faq$/i,'faq'],
     [/^account$/i,'account'], [/^billing$/i,'account'], [/^support$/i,'faq'],
-    [/^terms$/i,'legal'], [/^privacy$/i,'legal'],
-    [/tell me when it opens/i,'plans']
+    [/^terms$/i,'legal'], [/^privacy$/i,'legal']
   ];
   document.addEventListener('click', function(e){
     var el = e.target.closest('a[href="#"], a[href^="#"]:not([href="#main"]), button');

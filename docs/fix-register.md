@@ -198,7 +198,28 @@ placeholder column: an empty row asks the reader what was there.
 
 Full inventory with line numbers: `docs/runs/RUN-C-consolidated.md` §1e.
 
-*Status:* open · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+**Done so far — the dashboard waitlist CTA and its route (20 Aug 2026).** Carried in from
+[[SR-109]] §c. `dashboard.html:919` rendered
+`<a class="sr-dash-go" href="#">Tell me when it opens →</a>` inside the `.sr-dash-empty`
+block, and `TEXTMAP` carried `[/tell me when it opens/i,'plans']`. The delegated handler
+matches on **text content**, so the control that promised a waitlist opened the Plans
+route dialog — *"Not built yet · Plans · /plans"*. Reproduced by clicking it before any
+edit.
+
+Both removed, not repointed: there is no waitlist to reach, and a control promising one
+that does not exist is worse than no control. A comment in place records why, so the next
+reader does not restore it.
+
+**Inventory correction.** `TEXTMAP:1262` is not one of Run C's 17 surfaces — the §1e table
+lists three dashboard surfaces (240, 862, 917–919) and the route row is documented only in
+the prose below it. The real dashboard total is **4**, and the repo-wide total **18**, not
+17. Counted here so the end-of-run reconciliation balances.
+
+**Still open — 16 surfaces, Phase 4.** The `.sr-dash-empty` block still renders its `<h3>`
+and a paragraph ending *"Opening after the recording sprint"*, which is an undated promise
+and goes with the rest of the block.
+
+*Status:* open — CTA and route done, 16 surfaces remain · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
 
 ### SR-115 · A dashboard cover loads from an ephemeral Netlify deploy preview
 [dashboard.html:717](dashboard.html:717) sources a protocol cover from
