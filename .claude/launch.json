@@ -9,6 +9,15 @@
         "8642"
       ],
       "port": 8642
+    },
+    {
+      "name": "sr-index-pass",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "/private/tmp/claude-501/-Users-arobley-Documents-GitHub-saferise/b8a1001b-e556-413e-8cf8-59841940a08d/scratchpad/mirror2/tools/serve.py",
+        "8771"
+      ],
+      "port": 8771
     }
   ]
 }
