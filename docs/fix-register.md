@@ -15,7 +15,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   accents/rails/a11y run (SR-108, SR-109) and the track-pages/audit run (SR-110 to
   SR-119). All are written up below. The previous block ran out mid-pass, which is what
   that reservation was for.
-- **SR-120 to SR-125 are issued** by the Elevation-hide run — SR-121 to SR-125 below,
+- **SR-120 to SR-128 are issued** by the Elevation-hide run — SR-121 to SR-128 below,
   SR-120 for the `t1-01` extras correction. **SR-114 and SR-116 were never issued and remain free.** They
   are gaps inside a range other branches have already read past; do not reach back for them
   while a higher number is available. Taking a number out of the middle of a read range is
@@ -288,6 +288,12 @@ of hiding `#main-content` and then activating nothing. Before: `{active: [], mai
 future hidden series hits the same lookup, so the guard is general rather than a patch for
 this removal.
 
+**One dead key missed, found later during [[SR-124]]:** `dashboard.html:1004` still reads
+`var OWNED = {1:true, 2:false, 3:false, 4:false}`. `OWNED[4]` is unreachable — its only
+reader is `OWNED[track]` at :1047, and `track` comes from the recommender, whose covers map
+(`COVERDIR`) has keys 1–3 only. Dead, not live, and left alone rather than reopening a closed
+phase. Remove it whenever `dashboard.html` is next edited.
+
 **Remaining: 4c only** — the comparison-table column. Exactly one rendered "Elevation" text
 node survives in `index.html`, and it is that `<th>`.
 
@@ -374,10 +380,64 @@ commercial decision, not a code fix**, so nothing was changed. Once it is settle
 the same shape as SR-063: read `PRICING` from `content/tracks.js`, which the page already
 loads, rather than typing figures into markup.
 
+**It was live and public.** `personal-transformation.html` rendered **€9** for Personal
+Transformation while `index.html` rendered **€19** for the same product, at the same time,
+both reachable. Two prices for one thing, not a code-quality issue.
+
 Found while logging [[SR-122]]; not part of the Elevation work and deliberately not fixed
 inside it.
 
-*Status:* open · *Raised:* 20 Aug 2026
+**Resolution (20 Aug 2026).** Ladder confirmed by Andre: standard **€19 / €29 / €39**,
+access cumulative, and **€9 is an introductory rate on Track 01 only**. `index.html:6103`
+was the correct ladder; `:4746` was wrong on Professional; `PRICING` was right only on t1.
+
+`PRICING` now carries launch and standard **separately**:
+
+```js
+t1: { amount:'€9', per:'/ month', words:'Nine euros a month.',
+      introductory:true,
+      standard:{ amount:'€19', per:'/ month', words:'Nineteen euros a month.' },
+      includes:['t1'] },
+t2: { amount:'€29', …, includes:['t1','t2'] },
+t3: { amount:'€39', …, includes:['t1','t2','t3'] },
+```
+
+`amount` keeps its existing meaning — **what a member is charged today** — so no consumer
+changed behaviour as a side effect and Track 01 keeps showing €9. Making `amount` mean
+*standard* was considered and rejected: it would have silently removed €9 from the live site
+the moment it merged, and a data refactor must not change what a customer is charged.
+`standard` holds the list price it returns to; deleting either figure destroys the evidence
+that a promotion ran. **Both are correct. Do not collapse them** — the comment above `t1`
+says so in place, same class of deliberate double-record as `extras: null` ([[SR-117]]).
+
+`includes` states cumulative access as data rather than as copy.
+
+**`index.html` now derives.** All 23 track-price strings replaced — 20 markup nodes using the
+`data-sr-price` convention `dashboard.html` already had, plus the three-price cumulative
+sentence at :6103, plus three JS assignments in the resource paywall that now read
+`PRICING.tN.amount`. A hydrator mirroring `dashboard.html`'s `hydratePrices()` fills them at
+load, with a `data-sr-price-form` attribute for the site's `€19` / `€19/mo` / `€19/month` /
+`€19 / month` / word forms. Nodes for an introductory track also receive `data-sr-intro` and
+`data-sr-standard`, so a label can be attached without a second lookup.
+
+Anchored by line and asserted against neighbours, never by pattern — three of the lines
+carried the wrong ladder and `€19/mo` appears sixteen times, so a pattern edit would have
+been the `repeat(4,1fr)` hazard again.
+
+**A pre-existing defect fixed as a side effect.** `index.html` already carried two
+`data-sr-price="t3"` spans — markup wired for derivation with **no hydrator on the page**, so
+they rendered empty. The public Professional section read *"part of the Professional plan —
+/mo"* and a button read **"Start — /mo"**. Both now render €39.
+
+Verified cold: 26 nodes hydrate, **0 empty after hydration**, no `€49` anywhere, 16 nodes
+carry the introductory flag, the paywall reads €9 / €29 / €39 for t1/t2/t3, 11 inline blocks
+parse, console clean. Nodes proved to genuinely derive by a sentinel — setting
+`PRICING.t3.amount` to `€777` moved every t3 node and restoring returned them exactly.
+
+Out of scope and untouched: competitor and value-stack figures, workshops, premium 1:1,
+retreats, and `protocol.html` — see [[SR-126]] and [[SR-127]].
+
+*Status:* complete on merge · *Raised:* 20 Aug 2026 · *Fixed:* 20 Aug 2026
 
 ### SR-125 · The declared library and the Reader's manifest are two different inventories
 Every protocol page and the dashboard describe a resource library. **Two unrelated sources
@@ -676,6 +736,77 @@ the record, so writing a figure into these surfaces now would just add a third. 
 ladder first, then have these read `PRICING`.
 
 *Status:* open · *Raised:* 20 Aug 2026
+
+### SR-126 · The introductory rate has no label, on any surface
+`PRICING.t1` is €9 with `introductory: true` and a standard of €19. **No surface says so.**
+After [[SR-124]], sixteen nodes on `index.html` carry `data-sr-intro="true"` and
+`data-sr-standard="€19…"`, and the three track pages render `t.price.amount` through
+[js/saferise-track.js:302](js/saferise-track.js:302) — none of them prints a label.
+
+A member who subscribes at €9 and later sees €19 without having been told has been switched,
+whatever the intent.
+
+**The promise, confirmed 20 Aug 2026:** early subscribers keep €9 **for as long as they stay
+subscribed**. Cancel and return, and they return at the standard rate. That is not a
+countdown, so the label must not read as one — "€9 for now" or any expiry framing fails the
+no-undated-promises rule and misdescribes the offer besides.
+
+**Where the label is needed** — reported, wording not written:
+
+| surface | what renders €9 today |
+|---|---|
+| `personal-transformation.html` | the `€9` price numeral and the "Get Started — €9/month" pill, both from `rPrice()` |
+| `index.html` — 16 nodes | the hero and plan CTAs, the compare row, the pricing note, the foundation panel, the resource paywall button |
+| `dashboard.html` | no €9 surface today — Track 01 is the owned track, so no price is shown for it |
+
+The hook exists and is unused: any node with `data-sr-intro` can be labelled without a second
+lookup. On the track pages the natural place is the `priceNote` beneath the price, which
+already carries the cumulative-access sentence.
+
+*Status:* open — copy decision · *Raised:* 20 Aug 2026
+
+### SR-127 · `protocol.html` prices have no connection to the record
+`protocol.html` renders **€275**, **€59** and **€139** as hardcoded literals at :858, :875 and
+:880. It **does not load `content/tracks.js` at all**, so `PRICING` is not merely unread — it
+is unreachable.
+
+Those three figures happen to match `PRICING.premium`, `workshopPersonal` and
+`workshopRelationship` today. Nothing keeps them matching. This is the same defect class as
+[[SR-124]] one layer removed: SR-124 was a page that loaded the record and ignored it; this is
+a page that never sees it.
+
+Fixing it means adding a `<script src="content/tracks.js">` to a page that currently has no
+dependency on it, then converting three literals to `data-sr-price` nodes and adding the
+hydrator — small, but it changes what the page loads, so it was not folded into SR-124.
+
+Not in the Elevation or pricing-reconciliation scope. Logged, not fixed.
+
+*Status:* open · *Raised:* 20 Aug 2026
+
+### SR-128 · The comparison table prices three tracks as three products
+`#prog-compare` on `index.html` shows Personal / Couples / Career with an **Entry price** row
+and no statement anywhere in the table that access is cumulative. Three prices in three
+columns read as three things to buy.
+
+They are not. `PRICING[t].includes` now records it as data ([[SR-124]]): €29 buys Tracks
+01–02 and €39 buys all three. Every other price surface says so in prose — the track pages
+carry *"Access is cumulative — Relationship Healing includes the whole of Personal
+Transformation"*, and `index.html`'s pricing note spells out all three. **The comparison
+table, the one surface built specifically for comparing, is the only one that does not.**
+
+The effect is the wrong way round: shown as three products, €39 is the expensive option;
+shown with its inclusion, €39 is the obvious one.
+
+Two further things the table says that no longer match the record — both resolved by
+[[SR-122]] and its dependency on SR-124, listed here so the table is assessed once:
+*"Entry price: TBA"* for Relationship and Professional, which both have prices; and
+*"Available: Coming Soon"* for both.
+
+Not fixed. The fix is a copy and layout decision — what the row is called, whether inclusion
+is a row or a footnote, whether "Entry price" survives — and that is authoring, not a
+correction. The data it would need is in place.
+
+*Status:* open — copy and design decision · *Raised:* 20 Aug 2026
 
 ---
 

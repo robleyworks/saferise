@@ -11,11 +11,40 @@
    Pricing locked 2026-08. Elevation hidden for launch (visible:false).
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── PRICING · locked 2026-08 · one record, referenced everywhere ── */
+/* ── PRICING · one record, referenced everywhere ── */
+/* SR-124 · the ladder was wrong in three places at once and each disagreed with
+   the others. index.html carried €19/29/49 in the resource paywall and
+   €19/29/39 in the pricing note, while this record said €9/19/29 under a
+   'locked 2026-08' marker that was only ever right about t1. Confirmed
+   20 Aug 2026: standard is €19 / €29 / €39.
+
+   READ THIS BEFORE "TIDYING" t1 · amount and standard are BOTH correct and
+   both are meant to be here. `amount` is what a member is charged today.
+   `standard` is the list price it returns to. t1 currently charges €9, an
+   introductory rate; €19 is what it becomes after soft launch. Neither figure
+   is stale — deleting either one destroys the evidence that a promotion ran,
+   which is exactly what a disputed charge asks for. Same class of deliberate
+   double-record as extras:null in META — do not collapse it.
+
+   `introductory: true` is the flag a surface MUST check before printing
+   `amount`. A price shown without the label reads as the permanent rate, and a
+   member who signs up at €9 and later sees €19 with no warning has been
+   switched. The promise is that early subscribers keep €9 for as long as they
+   stay subscribed; cancel and return, and they return at `standard`.
+
+   `includes` states cumulative access as data rather than as copy. €29 buys
+   Tracks 01–02 and €39 buys all three — these are not three separate
+   products, and a surface that prints the price without the inclusion makes
+   the top tier look expensive instead of obvious. */
 var PRICING = {
-  t1:      { amount: '\u20AC9',   per: '/ month', words: 'Nine euros a month.' },
-  t2:      { amount: '\u20AC19',  per: '/ month', words: 'Nineteen euros a month.' },
-  t3:      { amount: '\u20AC29',  per: '/ month', words: 'Twenty-nine euros a month.' },
+  t1:      { amount: '\u20AC9',   per: '/ month', words: 'Nine euros a month.',
+             introductory: true,
+             standard: { amount: '\u20AC19', per: '/ month', words: 'Nineteen euros a month.' },
+             includes: ['t1'] },
+  t2:      { amount: '\u20AC29',  per: '/ month', words: 'Twenty-nine euros a month.',
+             includes: ['t1', 't2'] },
+  t3:      { amount: '\u20AC39',  per: '/ month', words: 'Thirty-nine euros a month.',
+             includes: ['t1', 't2', 't3'] },
   /* SR-091 · there was one 'workshop' key holding €29 — Track 03's monthly
      price, never a workshop price. Workshops are priced per format, so there
      are two keys and the block reads 'from' the lower one. */

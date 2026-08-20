@@ -905,3 +905,88 @@ guidance, not the Proximity Guide's relational distance, so `extras: ['advisory'
 would claim a Proximity Guide the protocol does not have.
 
 `git status` empty. Server stopped, `launch.json` restored, `lsof` clear — in that order.
+
+---
+
+## SR-124 — pricing reconciliation
+
+**Your `SHARED.resources` note was wrong and the tree won again (sixth time).** It holds
+**nine** entries, not twelve. No *Reference Case*; *Source Insights* appears only in a comment
+at [content/tracks.js:42](content/tracks.js:42) recording that SR-077 merged it into "How
+This Works". Not added to SR-125.
+
+### Two grep blind spots
+
+1. **`PRICING` stores its values as `€` escapes.** A `€` sweep misses the record itself —
+   a price audit grepping for the glyph would have concluded the source of truth did not exist.
+2. **Runtime-built values are invisible to static greps.** `dashboard.html` fills prices from
+   `data-sr-price` at load; `index.html` builds `RESOURCE_CONTENT` in IIFEs. Same lesson as
+   Phase 6.
+
+### The live contradiction, now named in the register
+
+`personal-transformation.html` rendered **€9** while `index.html` rendered **€19** for the
+same product, both public, at the same time.
+
+### The shape, as confirmed
+
+`amount` keeps its existing meaning — **charged today** — so nothing changed behaviour as a
+side effect and Track 01 keeps showing €9. `standard` holds the list price. `introductory`
+is the flag a surface must check. `includes` states cumulative access as data. A long comment
+above `t1` records why both figures exist and says **do not collapse them**, the same shape as
+the `extras: null` note.
+
+### `index.html` derives — 23 strings
+
+20 markup nodes on the `data-sr-price` convention `dashboard.html` already used, the
+three-price cumulative sentence at :6103, and three JS assignments in the resource paywall.
+A hydrator mirroring `hydratePrices()` fills them, with `data-sr-price-form` for the site's
+five rendering forms. Introductory tracks also get `data-sr-intro` and `data-sr-standard`.
+
+**Anchored by line, asserted against neighbours.** `€19/mo` appears sixteen times and three
+lines carried the wrong ladder — a pattern edit would have been the `repeat(4,1fr)` hazard.
+
+**Placeholders are the standard ladder**, deliberately: with JS off the page shows €19/29/39
+and never advertises €9 without its label.
+
+### A pre-existing defect fixed as a side effect
+
+`index.html` already had two `data-sr-price="t3"` spans — markup wired for derivation with
+**no hydrator on the page**. They rendered empty. The live Professional section read
+*"part of the Professional plan — /mo"* and a button read **"Start — /mo"**. Both now
+render €39.
+
+### Verified cold
+
+26 nodes hydrate, **0 empty**, no `€49` anywhere, 16 carry the introductory flag, paywall
+reads €9 / €29 / €39, 11 inline blocks parse (sentinel `caught SyntaxError`), div 2812/2812,
+span 1377/1377, CSS balanced, console clean.
+
+**Sentinel proved the nodes genuinely derive:** setting `PRICING.t3.amount` to `€777` moved
+every t3 node; restoring returned them exactly.
+
+### a · Where the introductory label is needed — SR-126
+
+`personal-transformation.html` (price numeral + "Get Started" pill, both from `rPrice()`) and
+**16 nodes on `index.html`**. `dashboard.html` shows no €9 — Track 01 is the owned track.
+The `data-sr-intro` hook exists and is unused. Wording not written: the promise is that early
+subscribers keep €9 **for as long as they stay subscribed**, so the label must not read as a
+countdown.
+
+### b · How each surface frames cumulative access — SR-128
+
+Track pages strongest (`priceNote`); `index.html:6103` correct in one line; plans cards
+partial — Relationship says "includes Personal Transformation", Professional says nothing;
+**the comparison table says nothing at all**, which is the framing that makes €39 look
+expensive instead of obvious. Dashboard's lock CTA speaks to retention, not inclusion.
+
+### Logged, not fixed
+
+- **SR-126** — the introductory rate has no label on any surface.
+- **SR-127** — `protocol.html` renders €275/€59/€139 and **does not load `tracks.js` at all**.
+  Same defect class one layer removed: SR-124 was a page ignoring the record, this is a page
+  that never sees it.
+- **SR-128** — the comparison table prices three tracks as three products.
+- **One surface SR-110 missed**, found here: `dashboard.html:1004` `OWNED` still carries key
+  `4`. Unreachable — `COVERDIR` has keys 1–3 — so dead, not live. Noted on SR-110 rather than
+  reopening a closed phase.
