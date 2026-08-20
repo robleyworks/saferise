@@ -1355,7 +1355,7 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
 
       <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;color:var(--text2);font-style:italic;line-height:1.65;max-width:460px;margin-bottom:36px;">Powerful resources for Emotional Regulation, Relationship Repair, and Professional Performance — grounded in neuroscience, delivered from lived experience.</p>
 
-      <p style="font-size:10px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;font-family:'DM Sans',sans-serif;">37 Modules · 4 Tracks · Science-Backed · Founder-Led</p>
+      <p style="font-size:10px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;font-family:'DM Sans',sans-serif;">30 Protocols · 3 Tracks · Science-Backed · Founder-Led</p>
     <div style="margin-top:36px;display:flex;gap:14px;flex-wrap:wrap;">
       <a href="javascript:void(0)" onclick="showProg('personal')" style="background:var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:15px 32px;border-radius:2px;text-decoration:none;display:inline-block;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Begin Free — No Registration ◆</a>
       <a href="javascript:void(0)" onclick="document.getElementById('all-plans-pricing').scrollIntoView({behavior:'smooth'});" style="border:1px solid var(--primary);color:var(--primary);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:15px 28px;border-radius:2px;text-decoration:none;display:inline-block;">See All Plans &amp; Tracks</a>
@@ -5012,9 +5012,10 @@ function renderProtocolBrowseHead(cfg){
 }
 
 /* ---- Shared "What's Included" resource checklist ----
-   Same 12 items across all 4 tracks (display-only marketing
+   Same 10 items across all 3 visible tracks (display-only marketing
    copy, not wired to KIND_META/RESOURCE_CONTENT), so this takes
-   no per-track arguments. */
+   no per-track arguments. SR-097 removed the Reference Case and Source
+   Insights rows; SR-101 corrected the track count. */
 function renderWhatsIncludedHTML(){
   const rows = [
     ['#6C8FC7','Guided Experience','Step-by-step audio &amp; video'],
