@@ -235,10 +235,6 @@
             <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="8.6" cy="7.4" r="2.9"/><path d="M3 20a5.6 5.6 0 0 1 11.2 0"/><path d="M16.6 17.2V20M19.2 13.8V20M21.8 10.4V20"/></svg>
             <span><span class="sr-dash-railname">Professional Performance</span><span class="sr-dash-railmeta">10 protocols</span></span>
           </button>
-          <button class="sr-dash-railbtn" role="tab" aria-selected="false" data-track="4">
-            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="12" cy="11" r="2.9"/><path d="M6 20.4a6 6 0 0 1 12 0"/><path d="M7.8 5.6L12 1.8l4.2 3.8"/></svg>
-            <span><span class="sr-dash-railname">Elevation Series</span><span class="sr-dash-railmeta">Coming soon</span></span>
-          </button>
         </div>
         <div class="sr-dash-carwrap">
           <div class="sr-dash-carviewport" id="srCarViewport"><div class="sr-dash-carrow t-1" id="srCarRow"></div></div>
@@ -714,7 +710,7 @@
 <div class="sr-modal" id="mCrisis" role="dialog" aria-modal="true" aria-label="Cue Card">
   <div class="sr-modalbox sr-crisis">
     <div class="sr-crisis-art">
-      <img src="https://deploy-preview-14--the-saferise-protocol.netlify.app/assets/covers/01.jpg" alt="" onerror="this.style.display='none'">
+      <img src="assets/covers/01.jpg" alt="" onerror="this.style.display='none'">
       <span class="sr-crisis-scrim"></span>
       <span class="sr-crisis-label">Cue Card<em>Four lines. Always here.</em></span>
     </div>
@@ -792,12 +788,11 @@
      Named DASHTRACKS, not TRACKS — content/tracks.js already owns the
      global TRACKS and shadowing it here would give the two files a silent
      disagreement, which is the failure this whole branch exists to end. */
-  var ENTITLED = {1:true, 2:false, 3:false, 4:false};
+  var ENTITLED = {1:true, 2:false, 3:false};
   var TRACKMETA = {
     1:{accent:'var(--sr-track01)', cls:'t-1', state:'included with your plan'},
     2:{accent:'var(--sr-track02)', cls:'t-2', state:'not on your plan yet'},
-    3:{accent:'var(--sr-track03)', cls:'t-3', state:'not on your plan yet'},
-    4:{accent:'var(--sr-track04)', cls:'t-4', state:'opening soon'}
+    3:{accent:'var(--sr-track03)', cls:'t-3', state:'not on your plan yet'}
   };
   var DASHTRACKS = (function(){
     var out = {};
@@ -857,18 +852,7 @@
          body:['Log the situation, what was actually at stake, and whether presence or rehearsal won. Across a quarter the record shows which kind of room still gets you fastest, and whether the activation before it is easing.']},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Recover. Choose.', valcol:'var(--teal)',
          body:['The same library, sized for a working day — the mechanism and its sources, meditation scripts, somatic practices between meetings, and the Disclosure guide for explaining a practice to people at work.'],
-         note:'Recovery sits here: ambition, burnout, and decisions you are too depleted to make well.'}],},
-
-    4:{note:'Elevation Series · opening soon', title:'The same three parts, taken further.',
-       sub:'Structure confirmed. Detail opens with the Series.',
-       band:'p4',
-       cols:[
-        {tag:'01 · Start here', tagcol:'var(--sr-track04)', name:'Experience', value:'Extended practice.', valcol:'var(--sr-track04)',
-         body:['Longer guided sessions, built on the same four steps.'], meta:''},
-        {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'The same record, carried forward.',
-         body:['Your existing log continues into the Series — nothing restarts.'], meta:''},
-        {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Integrate. Choose.', valcol:'var(--teal)',
-         body:['Resource library to be confirmed.'], meta:''}],}
+         note:'Recovery sits here: ambition, burnout, and decisions you are too depleted to make well.'}],}
   };
 
   var jNote  = document.getElementById('srJNote');
@@ -912,18 +896,11 @@
     row.style.setProperty('--accent', t.accent);
     note.textContent = t.note;
 
-    if(!t.items.length){
-      row.innerHTML = '<div class="sr-dash-empty">'+
-        '<h3>Elevation Series</h3>'+
-        '<p>Seven protocols for people who have finished the foundational work and want to go further. Opening after the recording sprint.</p>'+
-        '<a class="sr-dash-go" href="#">Tell me when it opens '+ARROW+'</a></div>';
-      // A track with nothing in it has nothing to sell. This returns before the
-      // lock block below, so the previous track's CTA has to be cleared here or
-      // it stays on screen offering the wrong track at the wrong price (SR-044).
-      var emptyLock = document.getElementById('srLockCta');
-      if(emptyLock) emptyLock.classList.remove('show');
-      offset = 0; apply(); sync(); return;
-    }
+    /* SR-110 · The empty-track branch that used to sit here rendered the
+       Track 04 placeholder, and it was the only thing that could reach it —
+       every shipping track carries ten protocols. It went with the series.
+       If a future track ever ships with no protocols, restore a guard here with
+       that track's own copy, not the retired one's. */
 
     var CARDS = t.items.map(function(it,i){
       var no  = String(i+1).padStart(2,'0');
@@ -1024,7 +1001,7 @@
     'raw|work':     [3,'03','The Imposter Dissolution Protocol','Raw and exposed at work is imposter territory.'],
     'steady|work':  [3,'10','The Creative Flow Protocol','Steady is the state creative work actually needs.']
   };
-  var OWNED = {1:true, 2:false, 3:false, 4:false};
+  var OWNED = {1:true, 2:false, 3:false};
   /* SR-063/SR-064 · derived, not typed. The old TRACKPRICE said €29 and €49,
      which were the retired tiers — the locked record is t2 €19 and t3 €29. */
   /* SR-064 · Static price strings in the markup are placeholders now.
@@ -1258,8 +1235,7 @@
     [/chosen self/i,'chosen'], [/your decisions/i,'decisions'],
     [/the science|the frameworks|the method|the stories/i,'reading'], [/read the faq|^faq$/i,'faq'],
     [/^account$/i,'account'], [/^billing$/i,'account'], [/^support$/i,'faq'],
-    [/^terms$/i,'legal'], [/^privacy$/i,'legal'],
-    [/tell me when it opens/i,'plans']
+    [/^terms$/i,'legal'], [/^privacy$/i,'legal']
   ];
   document.addEventListener('click', function(e){
     var el = e.target.closest('a[href="#"], a[href^="#"]:not([href="#main"]), button');

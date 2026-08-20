@@ -3,32 +3,87 @@
 Canonical record of defects and design decisions. Commits reference the ID:
 `fix: SR-0NN …` or `feat: SR-0NN …`.
 
-**Rules**
+**Rules — numbering**
 - Never renumber an existing ID.
 - New items go at the bottom of their severity block with the next free number.
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
-- Highest ID currently issued: **SR-120**.
-- **SR-096 to SR-120 are reserved, not yet issued.** Reserved 19 Aug 2026 for the
-  index.html / entity / noindex pass, which allocates from SR-096. The previous block
-  ran out mid-pass, which is what this reservation is for.
-- **SR-085 to SR-095 are issued** by the correctness pass and written up below. The
-  three findings that pass had no ID for — recorded inside SR-092 and SR-093 — are
-  now issued as SR-104, SR-105 and SR-106. SR-096 to SR-103 and SR-107 are issued by
-  the index.html / entity / noindex pass.
-- **SR-073 and SR-081 to SR-084 are reserved, not yet issued.** SR-068 to
-  SR-072 were taken on 19 Aug 2026 for the modal-shell work and are written up
-  below. SR-073 was raised in that pass and then found to be already fixed by
-  32238c1, so it was never issued and the number is free. SR-074 to SR-083 are
-  taken for the content-consolidation pass, and the block runs to SR-095 to
-  leave headroom.
+- **Highest ID issued: SR-128.** Reserved block open: **SR-129 to SR-150**, ceiling
+  **SR-150**, reserved 20 Aug 2026 by the Elevation-hide run. Allocate from SR-129.
+- **SR-044 to SR-128 are issued.** All are written up below except four:
+  - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
+    written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
+    Not free.
+  - **SR-073, SR-114, SR-116** — raised and then dropped without ever being issued, so the
+    numbers are free. **Do not reach back for them while a higher number is available.**
+    They sit inside ranges other branches have already read past, and taking a number from
+    the middle of a read range is what caused the three collisions below.
 
-  IDs collided three times because parallel branches each read this ceiling and
-  allocated from it at the same moment; reserving the range up front is what
-  stops the fourth. A gap between the last written entry and this ceiling is
-  expected — do not "tidy" it by lowering the number, and do not allocate
-  inside the reserved range from another branch.
+  IDs collided three times because parallel branches each read the ceiling and allocated
+  from it at the same moment; reserving the range up front is what stops the fourth. A gap
+  between the last written entry and the ceiling is expected — do not "tidy" it by lowering
+  the number, and do not allocate inside a reserved range from another branch.
+
+**Rules — method**
+
+Earned across Run C and Run D. Each cost something to learn; the worked example is named so
+the rule can be checked rather than taken on trust.
+
+1. **A deliberate non-fix gets a register entry** carrying the reasoning and an explicit
+   do-not-tidy line. An undocumented correct refusal is indistinguishable from an oversight,
+   and the next run will "fix" it. Worked examples: `extras: null` ([[SR-117]]), the
+   `PRICING` launch/standard pair ([[SR-124]]), the relocated
+   `#personal-protocol-page .sr-tile` rule ([[SR-123]]).
+2. **Reproduce before fixing.** If it does not reproduce, stop and report rather than
+   editing toward the brief. **Five items in Run D did not reproduce at all** — [[SR-111]],
+   [[SR-112]], [[SR-113]], [[SR-117]], [[SR-118]] — and a sixth, 4c's "remove the
+   Elevation-only rows", described a table shape the tree does not have: every row carried
+   content in all four columns, so there was nothing to remove. A spec anticipating a case
+   the tree lacks is a note for the record, not an instruction to satisfy.
+3. **When notes and the tree disagree, the tree is right.** Held six times in one branch,
+   including a brief that named a resource key which has never existed and a note claiming
+   `SHARED.resources` held twelve entries when it holds nine.
+4. **Run the JS parse check first**, before div balance and CSS braces. Neither of those can
+   see a broken script brace. A splice that deleted one `}` passed both and took the whole
+   page's JS down with it.
+5. **Stop server → restore `launch.json` → stage → commit.** In that order. Committing
+   first ships a dev-server config pointing at a scratchpad path that exists on no other
+   machine.
+6. **Anchor structural edits by line and assert against neighbours.** Never by pattern where
+   the pattern repeats: `repeat(4,1fr)` appeared three times with one target;
+   `€19/mo` sixteen times, three of them carrying the wrong ladder.
+7. **Verification globs cover every tracked file and every encoding form.** Never `*.html` —
+   SR-096 was declared complete against a `.html` glob and missed `content/tracks.js`, the
+   source of truth. Never only the glyph — `PRICING` stores `\u20AC` escapes, so a `€`
+   sweep misses the price record itself.
+8. **Runtime-built values are invisible to static greps.** `index.html` builds much of
+   `RESOURCE_CONTENT` through single-quoted assignments inside IIFEs; `dashboard.html`
+   builds prices from `data-sr-price` at load. **Measure the live object graph.**
+9. **Prove null results with a sentinel pair, and prove any new probe sensitive before
+   trusting it** — but **a sentinel only proves a probe works within its own method. It
+   cannot tell you the method itself is wrong.** [[SR-120]] is the worked example: a
+   sensitive probe, a confident null, and a conclusion that was false because the whole
+   approach could not see runtime-built keys.
+10. **Report capture artifacts rather than letting them stand as evidence.** A black
+    screenshot or a zero-width viewport invalidates **every** measurement taken in it,
+    including ones already reported. A number that looks authoritative and is not is worse
+    than no number.
+11. **A template cloned into multiple overlays counts once at source and many times in the
+    DOM.** `index.html`'s footer is one `<template>` rendered twelve times. Record the
+    multiplier so a future count does not read as a discrepancy.
+12. **A count is only as good as the artefact it is reconciled against.** Where a finding
+    sits in prose but not in the table, **the table is wrong.** Reconcile against the
+    enumerated list, and record every movement in a count with its cause — [[SR-110]] moved
+    17 → 18 → 19 and both moves are written down.
+13. **No undated promises.** "Soon", "coming soon", "opening soon", "TBA" and equivalents
+    are marketing claims about something with no date.
+14. **A rule with no visible effect is not necessarily dead.** Distinguish **inert** —
+    matches nothing, or is fully overridden — from **dormant**: matches, wins on some
+    properties, and is masked only on the one that would show. A dormant rule **resumes** the
+    moment whatever masks it changes; it does not need re-adding. **Measure computed style,
+    not rendered geometry, before concluding anything is dead.** [[SR-123]] is the worked
+    example.
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
 has since shipped. Numbering continues from SR-044 so no ID is ever reused.*
@@ -123,6 +178,398 @@ every audio player. Both contradict this rule. They need their own item when tha
 is next touched — do not fix them here.
 
 *Status:* open · *Raised:* 18 Aug 2026
+
+### SR-108 · Track accent tokens did not hold the values the site renders
+[[SR-045]] made `saferise-system.css` the single source of truth for the four track
+accents, but tokens 02/03/04 still carried the pre-consolidation hues while `index.html`
+restated the shipped ones as colour literals. The token and the rendered pixel disagreed,
+so anyone editing the token moved nothing.
+
+**Resolution.** Tokens 02/03/04 repointed to the values the site actually renders; 183
+literals in `index.html` converted to `var(--sr-trackNN)`; the cover helpers repointed at
+the tokens. `index.html` verified value-preserving across 217,680 probed element-rows.
+`dashboard.html` shifts 7/6/9 elements on tracks 02/03/04 — that shift is the correction,
+not a regression. No contrast pair falls below 4.5:1.
+
+Deliberately not converted: the accent `rgba()` restatements — `--sr-accent-wash`,
+`--sr-accent-border`, the nav-tab `border-bottom-color` and several tinted panel grounds.
+A hex token cannot go inside `rgba()`; closing those needs an `--sr-trackNN-rgb` channel
+triple, which is its own item and was not invented here.
+
+Shipped `b9e5ff5`, merged to main in `7ba529b`. Run B — `docs/runs/RUN-B-accents-rails-a11y.md`.
+
+*Status:* complete · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+
+### SR-109 · The modal layer did not keep the promise `aria-modal` makes
+Seven dialogs declared `aria-modal="true"` with no focus trap and no inert background, so
+Tab walked straight out of the dialog into the page behind it. Six close buttons carried
+no accessible name.
+
+**Resolution.** Focus trap and background `inert` added to the shared modal controller —
+one place, all seven dialogs. Six close buttons named. Verified by running the actual
+keystroke sequence, and regression-checked across all seven dialogs.
+
+**Part (c) did not reproduce and was not edited.** The brief placed the mis-wired
+Elevation CTA in `index.html`; it is in `dashboard.html`, and `index.html`'s Elevation
+waitlist is a real, working Netlify form. Carried forward and issued as its own item —
+see [[SR-110]].
+
+Shipped `f259e1e`, merged to main in `7ba529b`. Run B — `docs/runs/RUN-B-accents-rails-a11y.md`.
+
+*Status:* complete · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+
+### SR-110 · Track 04 is hidden in the data and sold on every public surface
+`TRACKS[4].visible` is `false`, and that flag is read in **exactly two places in the whole
+repo** — [js/saferise-track.js:352](js/saferise-track.js:352) (`renderNav`) and
+[js/saferise-track.js:399](js/saferise-track.js:399) (`renderTrack`). Both live in the
+track-page renderer, loaded only by the three track pages. `index.html`, `dashboard.html`
+and `protocol.html` never read it.
+
+There is no routing layer to fix. The site is static HTML served directly; Track 04 has no
+page of its own and therefore no route to remove. Every Elevation surface is hardcoded
+markup or hardcoded JS inside three pages, so `visible: false` never had anything to act
+on. `renderNav` additionally gates on `ROUTES[k]`, which has no key `4` — Track 04 is
+excluded twice over on the surfaces that consult the data, and not at all on the surfaces
+that do not.
+
+**17 surfaces, inventoried by Run C** — `index.html` 13, `dashboard.html` 3,
+`protocol.html` 1. Not routes: they include a live Netlify waitlist form
+(`name="elevation-waitlist"`, real `onsubmit`), a seven-record block in `RESOURCE_CONTENT`,
+a public pricing tier (`€222 one-time`), a column in the plan comparison table, a workshop
+card, and three pieces of body copy naming Elevation inside sentences about other tracks.
+
+Scope confirmed 20 Aug 2026 as **all 17**, not the bounded subset. A partial removal leaves
+the site arguing with itself — a hidden track with a public price is a worse state than
+either a shipped track or an absent one. The comparison table goes to three columns
+(Personal Transformation, Relationship Healing, Professional Performance), equal widths,
+Elevation-only rows removed entirely rather than left empty, and no "coming soon"
+placeholder column: an empty row asks the reader what was there.
+
+Full inventory with line numbers: `docs/runs/RUN-C-consolidated.md` §1e.
+
+**Done so far — the dashboard waitlist CTA and its route (20 Aug 2026).** Carried in from
+[[SR-109]] §c. `dashboard.html:919` rendered
+`<a class="sr-dash-go" href="#">Tell me when it opens →</a>` inside the `.sr-dash-empty`
+block, and `TEXTMAP` carried `[/tell me when it opens/i,'plans']`. The delegated handler
+matches on **text content**, so the control that promised a waitlist opened the Plans
+route dialog — *"Not built yet · Plans · /plans"*. Reproduced by clicking it before any
+edit.
+
+Both removed, not repointed: there is no waitlist to reach, and a control promising one
+that does not exist is worse than no control. A comment in place records why, so the next
+reader does not restore it.
+
+**Inventory correction.** `TEXTMAP:1262` is not one of Run C's 17 surfaces — the §1e table
+lists three dashboard surfaces (240, 862, 917–919) and the route row is documented only in
+the prose below it. The real dashboard total is **4**, and the repo-wide total **18**, not
+17. Counted here so the end-of-run reconciliation balances.
+
+**Still open — 16 surfaces, Phase 4.** The `.sr-dash-empty` block still renders its `<h3>`
+and a paragraph ending *"Opening after the recording sprint"*, which is an undated promise
+and goes with the rest of the block.
+
+**Done — 4a, the bounded removals (20 Aug 2026).** Overlay, four navigation entries, the
+routes and data behind them, and the live Netlify form.
+
+- `index.html` — the whole `#prog-elevation` overlay (52 lines: back button, hero and
+  head mounts, seven `elev-` protocol cards, workshop/1:1 pair, waitlist panel and the
+  form); the `tab-purple` nav tab and its "Soon" badge; the footer `<li>`;
+  `SERIES_CONFIG.elevation`; the seven `elev-1…7` records in `RESOURCE_CONTENT`; the dead
+  `#elevation-protoList.pcard-grid` rule.
+- `dashboard.html` — the `data-track="4"` rail button and its "Coming soon" meta.
+- `protocol.html` — the inert `Elevation Series` footer link.
+
+**The Netlify form.** `name="elevation-waitlist"`, `data-netlify="true"`, honeypot
+`bot-field`, POST to `/`. Confirmed by Andre as holding **no submissions**; that was taken
+on his word, not independently checked — this run has no Netlify credentials and did not
+attempt to acquire any. Removing the markup stops collection and drops the form from
+Netlify's next build detection; it does **not** delete anything already collected. Any
+submissions remain in Netlify's own store under the site's Forms tab until deleted there.
+The unrelated `affiliate-application` form is untouched and still present.
+
+`TRACKS[4]` in `content/tracks.js` untouched throughout.
+
+**Exposed by the removal — reported, not acted on.** See `docs/runs/RUN-D.md` §4a for the
+full list with line numbers. The two that matter:
+
+1. **`showProg('elevation')` now blanks the page.** `showProg` hides `#main-content` and
+   activates `prog-<id>`; with no such overlay it activates nothing, leaving a blank
+   viewport. Three callers remain — the plans-strip panel, the plans card and the workshop
+   card — all of them 4b/4c surfaces. Reproduced. **This branch must not merge between 4a
+   and 4b.**
+2. **`SERIES_CONFIG` existed only to drive the Elevation overlay.** The only
+   `hero-mount-*` / `protocols-head-mount-*` / `whats-included-mount-*` elements in
+   `index.html` were the three `-elevation` ones — verified against `HEAD` before the edit,
+   so this predates this run. `SERIES_CONFIG`, `renderSeriesHero`,
+   `renderProtocolBrowseHead`, `renderWhatsIncludedHTML` and the `DOMContentLoaded` mount
+   loop are now a closed island of dead code (~110 lines). The other three tracks render
+   their heroes from hardcoded markup and are unaffected. Whether it goes is Andre's call.
+
+**Done — 4b, copy fragments and the pricing tier (20 Aug 2026).**
+
+- `index.html` — the plans-strip Elevation panel (*"Coming Soon / Pricing TBA"*), the
+  Track 04 plans card (*"Premium tier · Waitlist open now"*), the Elevation workshop card,
+  and the `key.indexOf('elev-')` branch carrying **`'€222 one-time'`** — verified
+  unreachable first: 112 `RESOURCE_CONTENT` keys, none beginning `elev-`, and zero
+  `[data-resource^="elev-"]` in the DOM.
+- Two sentences rewritten to name only shipping tracks: the workshops line now ends
+  *"…Relationship from €139/couple."* — the *"Professional & Elevation workshops coming
+  soon"* clause went **entirely** rather than being trimmed to "Professional", because it
+  fails the no-undated-promises rule on its own; and the button now reads **"See all
+  plans"**.
+- `dashboard.html` — `ENTITLED[4]`, `TRACKMETA[4]`, `JOURNEY[4]` and the `.sr-dash-empty`
+  branch. All four were unreachable once the rail button went, and the branch existed only
+  to render Track 04: every shipping track carries ten protocols, so `items.length` is
+  never 0. A comment records that a future empty track needs its own copy, not the retired
+  one's.
+
+Three four-column grids closed to three — `1.7fr 1fr 1fr 1fr` → `1.7fr 1fr 1fr`,
+`repeat(4,1fr)` → `repeat(3,1fr)`, `1fr 1fr 1fr 1fr` → `1fr 1fr 1fr`. Each verified at 3
+children / 3 tracks with Professional last and no empty cell. Two *other* `repeat(4,1fr)`
+grids on the page are unrelated and were not touched — the edits are anchored by line, not
+by pattern.
+
+**`showProg` now guards.** It resolves `prog-<id>` **first** and returns if absent, instead
+of hiding `#main-content` and then activating nothing. Before: `{active: [], main: "none"}`
+— a blank viewport with no way back. After: `{active: [], main: ""}`. Verified for both
+`elevation` and a nonsense id, with a real overlay still opening from the same state. Any
+future hidden series hits the same lookup, so the guard is general rather than a patch for
+this removal.
+
+**Final surface count: 19. It moved twice, and both moves are recorded here so a future
+audit does not re-derive them.**
+
+| count | when | why it changed |
+|---|---|---|
+| 17 | Run C's §1e table | the original inventory |
+| 18 | Phase 3 | `TEXTMAP:1262` was in Run C's **prose** but not its **table**. The table is the artefact that gets reconciled against, so the table was wrong. |
+| **19** | during [[SR-124]] | `dashboard.html:1004` `OWNED` still carried key `4` |
+
+`OWNED[4]` was unreachable — its only reader is `OWNED[track]` at :1047, and `track` comes
+from the recommender, whose covers map (`COVERDIR`) has keys 1–3 only. Dead rather than live,
+so it was not worth reopening a closed phase; it was removed with [[SR-123]] as a one-line
+change. **All 19 closed.**
+
+**Remaining: 4c only** — the comparison-table column. Exactly one rendered "Elevation" text
+node survives in `index.html`, and it is that `<th>`.
+
+**Done — 4c, the comparison table (20 Aug 2026).** The `Elevation` `<th>` and the Elevation
+`<td>` from all six body rows. Table goes from five columns to four — label plus Personal,
+Couples, Career — with 6 rows × 4 cells, **zero empty cells**, no `colspan`/`rowspan`, and
+no rendered "Elevation" anywhere in `index.html`.
+
+**The spec's "Elevation-only rows removed rather than emptied" had no work to do.** Every
+one of the six rows carried content in all four track columns — Format, Protocols, Who it's
+for, Entry price, Best for, Available. There were no Elevation-only rows and no empty cells
+before or after. Recorded so nobody looks for the removal later.
+
+**"Equal widths" was NOT delivered — deliberately.** Before the removal the columns already
+sized to content (200 / 123 / 123 / 121 / 133 px), and after it they were uneven again. A
+`.sr-cmp-col{width:calc((100% - 200px)/3)}` rule was written into `saferise-system.css` with
+a class on the three `<th>`s, then **reverted** when the preview viewport collapsed to 0×0
+and every width and overflow number became unmeasurable — including the ones taken minutes
+earlier. Shipping an unverifiable layout change would have contradicted this run's own
+standard. The structural removal is verified by DOM facts, which the collapsed viewport does
+not affect; column widths need one measurement in a real viewport before the rule is
+restored. **Open sub-item, not forgotten.**
+
+Two naming notes found while in the table, not acted on: the headers read "Couples" and
+"Career", not the record's `Relationship Healing` and `Professional Performance`. [[SR-111]]
+scanned for the full names and so never saw these. And the table still shows "TBA" /
+"Coming Soon" for both — see [[SR-122]].
+
+*Status:* open — one sub-item: comparison-table column widths, pending a usable viewport · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+
+### SR-115 · A dashboard cover loads from an ephemeral Netlify deploy preview
+[dashboard.html:717](dashboard.html:717) sources a protocol cover from
+`https://deploy-preview-14--the-saferise-protocol.netlify.app/assets/covers/01.jpg`. Deploy
+previews are torn down; the member dashboard would show a broken cover the moment PR 14's
+preview expires, and until then it makes the dashboard depend on a build of a branch.
+
+Run C confirmed it at exactly that line and confirmed it is the **only** URL of that shape
+in the repo — the two other grep hits are Run A's log describing it. The local
+`assets/covers/01.jpg` exists.
+
+**Resolution.** Replaced with `assets/covers/01.jpg` — document-relative, no leading
+slash, no `./`, which is the convention every other asset reference on the page already
+uses: `assets/dashboard/hero-corridor.jpg` at :106, `var COVER_01 = "assets/covers/01.jpg"`
+at :784, `var BASE = 'assets/covers/'` at :1057. The page's own header comment at :13
+already documented `assets/covers/01.jpg` as the intended path — line 717 was the single
+survivor of the standalone-mockup era, when the file was reviewed outside the repo and had
+no local assets to point at. One line changed; nothing invented.
+
+Verified on a cold load (fresh tab, `no-store`, cache-busted, mirror served from the
+working tree): the request resolves to `assets/covers/01.jpg` → 200, the image decodes at
+900×1200, `onerror` does not fire, and the page issues **zero** requests to any
+`netlify.app` host. The probe was proved live by repointing the same `<img>` at a
+non-existent sentinel path — `naturalWidth` fell to 0 and the `onerror` handler set
+`display:none` — then restored.
+
+No `netlify.app` URL remains in any tracked non-doc file. The four remaining matches are
+this register and the Run A / Run C logs describing the defect, which is historical record.
+
+*Status:* complete on merge · *Raised:* 19 Aug 2026 · *Fixed:* 20 Aug 2026
+
+### SR-124 · `index.html` contradicts the price record, and itself
+`content/tracks.js` holds the canonical ladder, marked *locked 2026-08*:
+
+```
+PRICING.t1 €9 / month   ·   PRICING.t2 €19 / month   ·   PRICING.t3 €29 / month
+```
+
+`index.html` loads `content/tracks.js` and then ignores it, carrying **two different
+hardcoded ladders of its own**:
+
+| source | Personal | Relationship | Professional |
+|---|---|---|---|
+| `content/tracks.js` — the record | **€9** | **€19** | **€29** |
+| [index.html:4746](index.html:4746) locked-resource mapping | €19 | €29 | €49 |
+| [index.html:6103](index.html:6103) `.pt-note` | €19 | €29 | **€39** |
+
+Every track disagrees with the record, and the two in-page ladders disagree with each other
+on Professional (€49 vs €39). A visitor comparing the resource paywall against the pricing
+note is told two different prices for the same plan.
+
+This looks like [[SR-063]]'s consolidation reaching the dashboard but never reaching
+`index.html`, leaving an older ladder — or ladders — behind. **Which ladder is correct is a
+commercial decision, not a code fix**, so nothing was changed. Once it is settled the fix is
+the same shape as SR-063: read `PRICING` from `content/tracks.js`, which the page already
+loads, rather than typing figures into markup.
+
+**It was live and public.** `personal-transformation.html` rendered **€9** for Personal
+Transformation while `index.html` rendered **€19** for the same product, at the same time,
+both reachable. Two prices for one thing, not a code-quality issue.
+
+Found while logging [[SR-122]]; not part of the Elevation work and deliberately not fixed
+inside it.
+
+**Resolution (20 Aug 2026).** Ladder confirmed by Andre: standard **€19 / €29 / €39**,
+access cumulative, and **€9 is an introductory rate on Track 01 only**. `index.html:6103`
+was the correct ladder; `:4746` was wrong on Professional; `PRICING` was right only on t1.
+
+`PRICING` now carries launch and standard **separately**:
+
+```js
+t1: { amount:'€9', per:'/ month', words:'Nine euros a month.',
+      introductory:true,
+      standard:{ amount:'€19', per:'/ month', words:'Nineteen euros a month.' },
+      includes:['t1'] },
+t2: { amount:'€29', …, includes:['t1','t2'] },
+t3: { amount:'€39', …, includes:['t1','t2','t3'] },
+```
+
+`amount` keeps its existing meaning — **what a member is charged today** — so no consumer
+changed behaviour as a side effect and Track 01 keeps showing €9. Making `amount` mean
+*standard* was considered and rejected: it would have silently removed €9 from the live site
+the moment it merged, and a data refactor must not change what a customer is charged.
+`standard` holds the list price it returns to; deleting either figure destroys the evidence
+that a promotion ran. **Both are correct. Do not collapse them** — the comment above `t1`
+says so in place, same class of deliberate double-record as `extras: null` ([[SR-117]]).
+
+`includes` states cumulative access as data rather than as copy.
+
+**`index.html` now derives.** All 23 track-price strings replaced — 20 markup nodes using the
+`data-sr-price` convention `dashboard.html` already had, plus the three-price cumulative
+sentence at :6103, plus three JS assignments in the resource paywall that now read
+`PRICING.tN.amount`. A hydrator mirroring `dashboard.html`'s `hydratePrices()` fills them at
+load, with a `data-sr-price-form` attribute for the site's `€19` / `€19/mo` / `€19/month` /
+`€19 / month` / word forms. Nodes for an introductory track also receive `data-sr-intro` and
+`data-sr-standard`, so a label can be attached without a second lookup.
+
+Anchored by line and asserted against neighbours, never by pattern — three of the lines
+carried the wrong ladder and `€19/mo` appears sixteen times, so a pattern edit would have
+been the `repeat(4,1fr)` hazard again.
+
+**A pre-existing defect fixed as a side effect.** `index.html` already carried two
+`data-sr-price="t3"` spans — markup wired for derivation with **no hydrator on the page**, so
+they rendered empty. The public Professional section read *"part of the Professional plan —
+/mo"* and a button read **"Start — /mo"**. Both now render €39.
+
+Verified cold: 26 nodes hydrate, **0 empty after hydration**, no `€49` anywhere, 16 nodes
+carry the introductory flag, the paywall reads €9 / €29 / €39 for t1/t2/t3, 11 inline blocks
+parse, console clean. Nodes proved to genuinely derive by a sentinel — setting
+`PRICING.t3.amount` to `€777` moved every t3 node and restoring returned them exactly.
+
+Out of scope and untouched: competitor and value-stack figures, workshops, premium 1:1,
+retreats, and `protocol.html` — see [[SR-126]] and [[SR-127]].
+
+*Status:* complete on merge · *Raised:* 20 Aug 2026 · *Fixed:* 20 Aug 2026
+
+### SR-125 · The declared library and the Reader's manifest are two different inventories
+Every protocol page and the dashboard describe a resource library. **Two unrelated sources
+answer that question, and neither knows about the other.**
+
+| | `SHARED.resources` — the *declared* library | `READER_PROTOCOLS[pk].keys` — the *served* manifest |
+|---|---|---|
+| shape | one fixed 9-item list, identical for all 30 protocols | a per-protocol list, authored individually |
+| filtered by | `META[].extras` and `CONDITIONAL_RESOURCES` | nothing — it is the literal content list |
+| counted by | `protocolResourceCount()` | the Reader's own page-building loop |
+| vocabulary | resource **titles** — "Proximity Guide", "Your Record" | key **suffixes** — `advisory`, `founder`, `decision` |
+
+**The vocabularies do not correspond.** Three concepts line up cleanly — `crisiscard` = Cue
+Card, `companion` = Somatic Release Activities, `disclosure` = Disclosure & Support. The rest
+do not. The manifest carries `founder` (Founder Video), `decision` (The Decision) and
+`safety` (Safety Score), **none of which appear in `SHARED.resources` at all**; the declared
+library carries Guided Meditation, Safe Practice, How This Works and Your Record, none of
+which has a matching key suffix.
+
+### Measured, live, across all thirty protocols
+
+| track | `protocolResourceCount` claims | Reader manifest serves | every manifest key has content? |
+|---|---|---|---|
+| 01 | 7 – 9 | 6 – 8 | **yes** |
+| 02 | 7 (all ten) | **2** (all ten) | **yes** |
+| 03 | 7 (all ten) | **2** (all ten) | **yes** |
+
+### It is **missing content**, not a mapping artifact
+
+This was the question worth settling, and the answer is unambiguous. Of **112**
+`RESOURCE_CONTENT` keys, **112 are referenced** by a Reader manifest or a `data-resource`
+attribute — **zero orphans**. There is no hidden Track 02/03 content sitting under names
+nothing looks up. Track 02 has 20 content records for ten protocols; Track 03 has 20; Track
+01 has 71.
+
+Both probes were proved sensitive before their null results were trusted: injecting an
+unbacked key into a manifest produced exactly one missing-content report, and injecting an
+unreferenced record produced exactly one orphan. Both restored cleanly.
+
+So Track 02 and Track 03 genuinely carry **two resources per protocol** — T2 a Session Guide
+and a Safety Score, T3 a Meditation Script and Somatic Release Activities — against a page
+that names nine.
+
+### Where it is claimed — all derived, none hardcoded
+
+| surface | file · line | derived from | renders |
+|---|---|---|---|
+| Track-page "What's included" list | [js/saferise-track.js:276](js/saferise-track.js:276) | `SHARED.resources` | **all nine, by name**, on all three track pages |
+| Track-page copy numeral | [js/saferise-track.js:163](js/saferise-track.js:163) `resourceCount()` | `SHARED.resources.length` | nothing currently — no track copy contains a numeral+"resources" string, so the substitution is live but idle |
+| Dashboard fold title | [dashboard.html:1262](dashboard.html:1262) | `SHARED.resources.length` | **"Nine resources, one for each kind of moment."** |
+| `protocolResourceCount()` | [content/tracks.js:547](content/tracks.js:547) | `SHARED.resources` − conditionals | **nothing** — zero callers outside `tracks.js` and its `module.exports` |
+
+**No hardcoded count exists anywhere.** [[SR-078]] and [[SR-054]] did that work and it held.
+The overstatement is not a stale numeral — it is that the derived number is derived from the
+wrong list.
+
+**The sharpest surface is not a number.** `relationship-healing.html` renders all nine
+resources **by title**, Proximity Guide and Invitation to Repair included, while the Reader
+delivers two. A wrong numeral is a typo; a named list of nine is a specific promise.
+
+### Not fixed. This is a product decision.
+
+Three routes, and they are not equivalent:
+
+1. **Make the count derive from the manifest.** Honest immediately, and Track 02/03 pages
+   then advertise two resources.
+2. **Author the missing Track 02/03 content** so the nine-item library is real.
+3. **Reconcile the vocabularies** so one source answers the question.
+
+Fixing the number without deciding the copy silently changes what the site promises, so
+nothing was changed. [[SR-120]] is blocked on the same question: `p1-advisory` exists but is
+*attention-inward* guidance, not the Proximity Guide's *relational distance*, so whether
+`advisory` names one resource or two has to be settled before `t1-01`'s `extras` can be
+corrected honestly.
+
+*Status:* open · *Raised:* 20 Aug 2026
 
 ---
 
@@ -278,6 +725,145 @@ rather than answer it.
 
 *Status:* open · *Raised:* 18 Aug 2026
 
+### SR-112 · Track 02 and 03 pages — already built, already data-driven
+Raised on the belief that only the Track 01 page existed and that Tracks 02 and 03 needed
+building. **All three pages exist and all three are fully data-driven.** Each is a shell —
+empty `<nav id="navlinks">`, empty `<div id="page">` — that loads `content/tracks.js` and
+`js/saferise-track.js` and calls `SafeRiseTrack.render(N)`:
+
+| page | body | data |
+|---|---|---|
+| `personal-transformation.html` | 1,878 B | `SafeRiseTrack.render(1)` |
+| `relationship-healing.html` | 1,865 B | `SafeRiseTrack.render(2)` |
+| `professional-performance.html` | 1,872 B | `SafeRiseTrack.render(3)` |
+
+Measured live by Run C: 0 gaps on all three, 10 protocol cards each, 18 FAQ entries each.
+The renderer's template-inherited `GAPS` counter is renamed `MISSING` and surfaced on
+`window.SR_TRACK_MISSING` rather than rendered, "so a live page stays quiet"
+([js/saferise-track.js:43](js/saferise-track.js:43)).
+
+Nothing to wire. Closed without code.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-113 · FAQ data — already in `content/tracks.js`, not only in the template
+Raised on the belief that `faq` lived only in the upstream template. It is in the repo's
+own data: `SHARED.faq` at [content/tracks.js:603](content/tracks.js:603) (12 entries), and
+`TRACKS[1].faq` :655, `TRACKS[2].faq` :676, `TRACKS[3].faq` :697 (6 each). **18 render per
+track page**, confirmed live on all three.
+
+Run C's field-set comparison found zero fields present in the template and absent from the
+repo, in either direction, for tracks 1–3 — and found the repo newer than the template on
+every value that differs. Closed without code.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-118 · Dispenza in the track data — already removed; the key is `distance`
+Raised as 7 `dispenza` occurrences in `content/tracks.js` and 6 in `META[].frameworks`.
+**`content/tracks.js` has zero.** The framework is present under its real key:
+`FRAMEWORKS.distance` at [content/tracks.js:507](content/tracks.js:507), and the six named
+protocols carry `'distance'` — `t1-09`, `t1-10`, `t2-08`, `t3-03`, `t3-08`, `t3-10`,
+exactly the list the brief named. [[SR-089]] did this work; the brief predated it.
+
+The only non-comment residue repo-wide is `docs/reference/portal-personal-target.html`
+lines 536 and 701, which this register already scopes out at [[SR-084]] as a reference
+target under `docs/`, not a served page. Reported by Run C, not touched. Closed without code.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-122 · Undated promises on surfaces for tracks that have a price
+Three surfaces on `index.html` still say a shipping track is unpriced or unavailable. They
+fail the no-undated-promises rule independently of the Elevation removal, and were left
+alone during [[SR-110]] because rewording them is not the fix.
+
+| # | surface | where | what it promises | is it about the track or the team programme? | does that thing have a price in the data? |
+|---|---|---|---|---|---|
+| 1 | Plans-strip Professional panel | `index.html`, the four-panel strip under the plans heading | *"Coming Soon"* + *"Pricing TBA"* | **The track.** The panel sits beside Personal and Relationship panels and lists the same per-track contents. | **Yes** — `PRICING.t3` = €29/month, locked 2026-08 |
+| 2 | Professional plans card | `index.html`, the three-card plans grid | *"Coming Soon"* + *"Pricing to be announced · team programmes priced separately"* | **Both, in one line.** The card is the track's; the trailing clause is about team programmes. | **Track: yes**, `PRICING.t3` = €29/month. **Team programmes: no** — no key for them exists in `PRICING`. |
+| 3 | Comparison table, Relationship and Professional columns | `index.html`, `#prog-compare` | *"Entry price: TBA"* for both, *"Available: Coming Soon"* for both | **The tracks.** | **Yes for both** — `PRICING.t2` = €19/month, `PRICING.t3` = €29/month |
+
+So surfaces 1 and 3 are **stale, not undecided** — the price exists and is locked. Surface 2
+is a mixed case: the track half is stale, and the team-programme half names something that
+genuinely has no price anywhere in the data, so **removing that clause is the fix rather
+than filling it in**.
+
+Blocked on [[SR-124]]: the page carries two hardcoded price ladders and both disagree with
+the record, so writing a figure into these surfaces now would just add a third. Settle the
+ladder first, then have these read `PRICING`.
+
+*Status:* open · *Raised:* 20 Aug 2026
+
+### SR-126 · The introductory rate has no label, on any surface
+`PRICING.t1` is €9 with `introductory: true` and a standard of €19. **No surface says so.**
+After [[SR-124]], sixteen nodes on `index.html` carry `data-sr-intro="true"` and
+`data-sr-standard="€19…"`, and the three track pages render `t.price.amount` through
+[js/saferise-track.js:302](js/saferise-track.js:302) — none of them prints a label.
+
+A member who subscribes at €9 and later sees €19 without having been told has been switched,
+whatever the intent.
+
+**The promise, confirmed 20 Aug 2026:** early subscribers keep €9 **for as long as they stay
+subscribed**. Cancel and return, and they return at the standard rate. That is not a
+countdown, so the label must not read as one — "€9 for now" or any expiry framing fails the
+no-undated-promises rule and misdescribes the offer besides.
+
+**Where the label is needed** — reported, wording not written:
+
+| surface | what renders €9 today |
+|---|---|
+| `personal-transformation.html` | the `€9` price numeral and the "Get Started — €9/month" pill, both from `rPrice()` |
+| `index.html` — 16 nodes | the hero and plan CTAs, the compare row, the pricing note, the foundation panel, the resource paywall button |
+| `dashboard.html` | no €9 surface today — Track 01 is the owned track, so no price is shown for it |
+
+The hook exists and is unused: any node with `data-sr-intro` can be labelled without a second
+lookup. On the track pages the natural place is the `priceNote` beneath the price, which
+already carries the cumulative-access sentence.
+
+*Status:* open — copy decision · *Raised:* 20 Aug 2026
+
+### SR-127 · `protocol.html` prices have no connection to the record
+`protocol.html` renders **€275**, **€59** and **€139** as hardcoded literals at :858, :875 and
+:880. It **does not load `content/tracks.js` at all**, so `PRICING` is not merely unread — it
+is unreachable.
+
+Those three figures happen to match `PRICING.premium`, `workshopPersonal` and
+`workshopRelationship` today. Nothing keeps them matching. This is the same defect class as
+[[SR-124]] one layer removed: SR-124 was a page that loaded the record and ignored it; this is
+a page that never sees it.
+
+Fixing it means adding a `<script src="content/tracks.js">` to a page that currently has no
+dependency on it, then converting three literals to `data-sr-price` nodes and adding the
+hydrator — small, but it changes what the page loads, so it was not folded into SR-124.
+
+Not in the Elevation or pricing-reconciliation scope. Logged, not fixed.
+
+*Status:* open · *Raised:* 20 Aug 2026
+
+### SR-128 · The comparison table prices three tracks as three products
+`#prog-compare` on `index.html` shows Personal / Couples / Career with an **Entry price** row
+and no statement anywhere in the table that access is cumulative. Three prices in three
+columns read as three things to buy.
+
+They are not. `PRICING[t].includes` now records it as data ([[SR-124]]): €29 buys Tracks
+01–02 and €39 buys all three. Every other price surface says so in prose — the track pages
+carry *"Access is cumulative — Relationship Healing includes the whole of Personal
+Transformation"*, and `index.html`'s pricing note spells out all three. **The comparison
+table, the one surface built specifically for comparing, is the only one that does not.**
+
+The effect is the wrong way round: shown as three products, €39 is the expensive option;
+shown with its inclusion, €39 is the obvious one.
+
+Two further things the table says that no longer match the record — both resolved by
+[[SR-122]] and its dependency on SR-124, listed here so the table is assessed once:
+*"Entry price: TBA"* for Relationship and Professional, which both have prices; and
+*"Available: Coming Soon"* for both.
+
+Not fixed. The fix is a copy and layout decision — what the row is called, whether inclusion
+is a row or a footnote, whether "Entry price" survives — and that is authoring, not a
+correction. The data it would need is in place.
+
+*Status:* open — copy and design decision · *Raised:* 20 Aug 2026
+
 ---
 
 ## LOW
@@ -298,6 +884,211 @@ Covers carry their kicker word and number inside the image. Do not add CSS overl
 to a cover or the text doubles.
 
 *Status:* open · *Raised:* 18 Aug 2026
+
+### SR-111 · Hardcoded track names — all correct; a coupling question, not a defect
+Raised as nav showing stale or wrong track names. Run C read every occurrence of a Track
+01–03 name across eight files: **121 strings, and every one matches `TRACKS[n].name`
+exactly.** No stale value exists in the tree.
+
+The nav the brief tabulates — the three track pages' — is already bound to `tracks.js` and
+already correct. The three pages' one static occurrence each is the `<title>` and
+`<meta name="description">`; `renderTrack` overwrites `document.title` from `t.name` at
+runtime ([js/saferise-track.js:411](js/saferise-track.js:411)), so the served title is
+data-driven and the static one is a no-JS fallback.
+
+What remains is coupling, not correctness: 121 correct strings that are not bound to the
+record and would go stale together if a track were ever renamed. That is a separate,
+lower-value item and was not opened here.
+
+Noted in passing: `CLAUDE.md` names the third series "Professional" where the data says
+"Professional Performance". The document is out of step with the data, not the pages.
+
+Closed without code.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-117 · `extras: null` — no consumer throws, and `null` is the intended value
+Raised as `extras: null` crashing consumers. **There is one reader in the repo.**
+`extras` appears in four places, all in `content/tracks.js`: three comment lines (523, 529,
+532) and one read, `protocolResources` ([content/tracks.js:538](content/tracks.js:538)),
+which array-checks before use:
+
+```js
+return Object.prototype.toString.call(extras) === '[object Array]' &&
+       extras.indexOf(needs) > -1;
+```
+
+`protocolResourceCount` (:547) delegates to it. Neither has a caller outside `tracks.js`
+and its `module.exports`. Verified live: `protocolResourceCount('t2-01')` → `7`, no error,
+console clean on all three track pages. **The crash does not exist.**
+
+§8b, on whether `null` is an unfilled field: it is not. [[SR-078]] wrote it as a
+deliberate sentinel, documented in place at [content/tracks.js:523](content/tracks.js:523)
+and :532 — *"null means UNVERIFIED, not none"* — distinct from `[]`, which means verified
+and empty.
+
+**Standing decision, 20 Aug 2026: the twenty `null` values stay `null`.** Changing them to
+`[]` would assert a verification nobody performed. Do not "tidy" this in a later pass.
+
+*Correction, same day:* this entry originally pointed at [[SR-120]] as the contrasting case
+where `[]` is a wrong value. **It is not** — SR-120 was investigated and does not reproduce.
+No `[]` in the tree contradicts its content. The `null` / `[]` distinction still stands as
+written above; only the example was wrong.
+
+Closed without code.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-119 · Dispenza re-verification across all tracked file types
+The earlier sweep had been run over a subset of extensions. Re-run properly:
+`git ls-files -z | xargs -0 grep -ni dispenza` — every tracked file, every extension.
+
+Two files hit, both under `docs/`: this register (historical record of the removal,
+acceptable) and `docs/reference/portal-personal-target.html` at 536 and 701, already scoped
+out at [[SR-084]]. `content/tracks.js`, `index.html`, and every `.js`, `.css`, `.json` and
+config file: clean.
+
+Closed — verification performed, result clean, no code required.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-121 · `SERIES_CONFIG` and its three renderers were dead code
+A closed island of 117 lines in `index.html`: `SERIES_CONFIG`, `renderSeriesHero`,
+`renderProtocolBrowseHead`, `renderWhatsIncludedHTML`, and the `DOMContentLoaded` loop that
+wired them to `hero-mount-*` / `protocols-head-mount-*` / `whats-included-mount-*`.
+
+**It had no mount targets.** Checked against the tree before [[SR-110]] touched anything:
+the only such elements in `index.html` were the three `-elevation` ones. The `personal`,
+`couples` and `corporate` entries in `SERIES_CONFIG` had **never** rendered — those overlays
+carry hardcoded hero markup. So this predates the Elevation removal; removing the overlay
+only made it visible.
+
+Verified as a closed island across every tracked file: the four symbols appear nowhere
+except their own definitions and each other, and no mount id exists anywhere.
+
+**Proved by rendering, not by reasoning.** Each of the seven surviving overlays was
+fingerprinted before and after removal — rendered `innerHTML` byte length, normalised text
+length, element count, `.proto-item` count, and a content hash over the full markup. **All
+seven are byte-identical, hashes included.** `prog-personal` 319,380 B / hash 2607618881,
+`prog-couples` 278,929 B / 3406980494, `prog-corporate` 237,185 B / 1164681881, and the four
+non-track overlays likewise. The three track heroes still render their own headings. The
+fingerprint was proved sensitive by appending one character to a paragraph, which moved both
+byte count and hash, then restoring it.
+
+After removal the four symbols throw `ReferenceError`, all ten inline blocks parse, and the
+console is clean.
+
+Removed rather than documented as a deliberate non-fix: there is no reason for it to stay.
+Given its own ID and its own commit so it is revertable and reviewable apart from the
+Elevation work.
+
+*Status:* complete on merge · *Raised:* 20 Aug 2026 · *Fixed:* 20 Aug 2026
+
+### SR-123 · `<style id="sr-series-hero">` is now dead
+The block at [index.html:823](index.html:823) defines two families: `.sr-hero-badge` /
+`.sr-hero-eyebrow` / `.sr-hero-accent`, and everything scoped under `.pcard-grid`.
+
+Both are now unused on the page. The hero classes were emitted by `renderSeriesHero`,
+removed by [[SR-121]]; the only `.pcard-grid` element was `#elevation-protoList`, removed by
+[[SR-110]]. Measured on a cold load: **0** `.pcard-grid` elements, **0** `.sr-hero-*`
+elements. The 62 surviving `.proto-item` elements sit outside any `.pcard-grid` and are
+styled by the base rules defined earlier in the file, which the block's own comment says are
+deliberately left untouched — so nothing regresses.
+
+The three track pages do **not** load this block; they are separate documents rendered by
+`js/saferise-track.js`. Repo-wide, `pcard-grid` and `pcard-cols` appear only inside this
+block's own rules and comments.
+
+**One of the 26 rules was not dead, and the block description was wrong.** The last rule,
+`#personal-protocol-page .sr-tile{aspect-ratio:auto;height:240px}`, has nothing to do with
+series heroes — it is a Personal-portal fix that happened to be appended to this block. It
+**matches and applies**: the view-swap script relocates a `.proto-item` into
+`#personal-protocol-page`, and the rule caps the tile there.
+
+Its rendered effect is nil, because
+[css/saferise-system.css:562](css/saferise-system.css:562) —
+`#personal-protocol-page .proto-item .sr-tile{display:none}` — loads later and wins.
+Measured with the view swap triggered, by deleting the rule from the live CSSOM and
+restoring it:
+
+| | rule present | rule removed |
+|---|---|---|
+| computed `aspect-ratio` | `auto` | `3 / 4` |
+| computed `height` | `240px` | `auto` |
+| rendered box | **0 × 0** | **0 × 0** |
+| page height | **4051px** | **4051px** |
+
+Computed style differs; nothing renders differently. **Deleting it would have looked safe and
+been wrong** — the hazard it prevents (a 3/4 tile scaling to ~1300px in the full-width mount)
+is real and merely masked. Remove the `display:none`, or stop nesting the tile inside
+`.proto-item`, and the rule becomes load-bearing again with nothing connecting the two events.
+
+**Resolution (20 Aug 2026).** The rule was **relocated into
+`css/saferise-system.css`, directly adjacent to the `display:none` it interacts with**, under
+a comment recording what it prevents, why it currently shows no effect, and that it must not
+be tidied. Registered as a deliberate keep, same class as `extras: null` ([[SR-117]]) and the
+launch/standard pair in `PRICING` ([[SR-124]]).
+
+The move was proved cascade-neutral rather than assumed. `saferise-system.css` loads last and
+wins by cascade order ([[SR-105]]), and the two properties do not collide with the
+`display:none`; with the view swap triggered, computed `aspect-ratio`, `height`, `display` and
+the rendered rect are **identical before and after**, and the rule is now served by
+`saferise-system.css`.
+
+The block then went — all 26 rules, 83 lines. After removal: `<style id="sr-series-hero">`
+absent, **0** `.sr-hero*` elements, **0** `.pcard-grid` elements, 62 `.proto-item` elements
+unaffected (they are styled by the base rules defined earlier, which the block's own comment
+said were deliberately left alone). All ten surviving overlays fingerprinted before and after
+— **byte-identical, hashes included** — with the probe proved sensitive by a one-character
+perturbation that moved both byte count and hash and restored exactly.
+
+*Status:* complete on merge · *Raised:* 20 Aug 2026 · *Fixed:* 20 Aug 2026
+
+### SR-120 · `t1-01` extras — **reproduces.** My first finding was wrong.
+Raised as: `p1-advisory` is written and the Reader serves it, but `META['t1-01'].extras` is
+`[]`, so content and data disagree and the `[]` is a wrong value rather than an unverified
+one.
+
+**`p1-advisory` exists, and the Reader serves it.** Measured on the live object graph:
+`RESOURCE_CONTENT['p1-advisory']` is present with `kind: 'Attention Advisory'`, title
+*"Anxiety Reset — Where to Direct Your Attention"*, and `READER_PROTOCOLS['p1'].keys` lists
+it **first** of seven.
+
+**How I got this wrong the first time, and it matters.** My initial sweep matched
+`"p1-advisory"` — double-quoted, the JSON-literal form. This resource is created by a
+runtime assignment at [index.html:4691](index.html:4691),
+`RESOURCE_CONTENT['p1-advisory'] = {…}`, single-quoted, inside an IIFE added by SR-002.
+`index.html` builds a large part of `RESOURCE_CONTENT` this way — several later blocks add
+and overwrite entries after the literal is parsed. **A static grep cannot enumerate this
+file's resource keys.** Only the live object graph can. That is now the method for any
+resource-key question here.
+
+**The `extras` → content-key mapping, which is still worth recording.** The second
+conditional is keyed `-repair`, not `-invitation` — the value in `extras` and the suffix in
+the content key do not share a name, so any audit matching by name reports a gap that is not
+there:
+
+| conditional | `extras` key | content key | protocols claiming it | content present for |
+|---|---|---|---|---|
+| Proximity Guide | `advisory` | `pN-advisory` | t1-02, 03, 04, 08, 09, 10 | p1, p2, p3, p4, p8, p9, p10 |
+| Invitation to Repair | `invitation` | `pN-repair` | t1-02, 04, 08, 09 | p2, p4, p8, p9 |
+
+`p1` is the one row where content exists and `extras` does not claim it. Every other cell
+matches in both directions, and no `extras` entry anywhere claims content that is absent.
+
+**So `t1-01: extras: []` is wrong** — `[]` asserts *verified, neither conditional applies*,
+while the Reader serves an Attention Advisory for that protocol. `protocolResourceCount('t1-01')`
+returns **7**, omitting the Proximity Guide, while the Reader's `p1` manifest carries
+`p1-advisory`.
+
+**Not fixed yet, and it should not be fixed in isolation.** The two inventories are not the
+same list — see [[SR-125]]. `p1-advisory` is *"how do I turn attention inward safely"*, while
+`SHARED.resources`' Proximity Guide is *"How close to stay"* — relational distance, which is
+the `p2-advisory` content. Setting `extras: ['advisory']` on `t1-01` would make the count 8
+by claiming a **Proximity Guide the protocol does not have**. The honest fix depends on
+whether `advisory` means one resource or two, which is the SR-125 question.
+
+*Status:* open — reproduces; blocked on [[SR-125]] · *Raised:* 20 Aug 2026
 
 ---
 
