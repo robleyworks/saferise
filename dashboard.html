@@ -1223,6 +1223,29 @@
     });
   });
 
+  /* SR-104 · a rail route can arrive from another page. method.html and
+     method-porges.html carry the same rail but none of the modals it opens, so
+     they hand the route over in the hash (dashboard.html#route=coaching) and
+     this resolves it through the same openRoute() the rail here uses — one
+     resolver, not two. Deferred to DOMContentLoaded because openModal() reads
+     MODALS and VIEWS, which are assigned further down this same script.
+     PAGES keys are ignored so a stray #route=method cannot bounce the member
+     straight back out to the page they just left. The hash is cleared before
+     the route opens, so a reload lands on the dashboard rather than reopening. */
+  document.addEventListener('DOMContentLoaded', function(){
+    var m = /^#route=([\w-]+)$/.exec(window.location.hash || '');
+    if(!m) return;
+    var key = m[1];
+    if(PAGES[key] || !(LAYERS[key] || ROUTES[key])) return;
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    if(document.querySelector('.sr-dash-navrailbtn[data-route="' + key + '"]')){
+      document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(x){
+        x.classList.toggle('on', x.getAttribute('data-route') === key);
+      });
+    }
+    openRoute(key);
+  });
+
   // map the remaining in-page links by their text, so nothing is left at "#"
   /* SR-068 · the library, journal and record routes are gone, so every row that
      resolved to one has gone with them: 'full archive | in the archive' and

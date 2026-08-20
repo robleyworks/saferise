@@ -192,3 +192,105 @@ not introduced here, and explicitly outside this item — **reported, not adjust
 All 10 inline `<script>` blocks in `index.html` (largest 179,750 chars), plus
 `content/tracks.js` and `js/saferise-system.js`, parse clean via `new Function`. The browser
 reports 959 rules parsed from `saferise-system.css` and zero console errors on load.
+
+
+---
+
+## SR-104 · Method rails land on the dashboard without opening what they name
+
+### Step 1 — reproduced first, by clicking
+
+Before any edit, every rail button on both pages was clicked with a real mouse click at
+1440×900 and the landing state read back — URL, which modal was open, which rail button
+carried `on`.
+
+| from | button | lands on | modal open | verdict |
+|---|---|---|---|---|
+| `method.html` | Dashboard | `dashboard.html` | — | correct, the dashboard *is* the destination |
+| `method.html` | Where the method comes from | stays on `method.html` | — | correct, already here |
+| `method.html` | **Sessions & workshops** | `dashboard.html` | **none** | **defect** |
+| `method.html` | **Account & plan** | `dashboard.html` | **none** | **defect** |
+| `method-porges.html` | Dashboard | `dashboard.html` | — | correct |
+| `method-porges.html` | Where the method comes from | stays on `method-porges.html` | — | **see "reported, not fixed"** |
+| `method-porges.html` | **Sessions & workshops** | `dashboard.html` | **none** | **defect** |
+| `method-porges.html` | **Account & plan** | `dashboard.html` | **none** | **defect** |
+
+The register's description holds exactly. `PAGES` on those pages was
+`{ method, dashboard }`, so `coaching` and `account` matched nothing and fell through to
+`window.location.href = PAGES[key] || 'dashboard.html'` — a bare redirect. The member
+arrives on the dashboard with the view they asked for never opened.
+
+For the record, what "arriving correctly" looks like was established by clicking the same
+two buttons on the dashboard's own rail, where they work:
+
+| dashboard rail button | opens |
+|---|---|
+| Sessions & workshops | `#mLayer`, the Sessions view — heading "Your booked dates" |
+| Account & plan | `#mRoute` — "Account & plan · Not built yet · /account" |
+
+### The fix — the route travels with the navigation
+
+The dashboard already resolves every rail route through `openRoute()`, which checks `PAGES`
+→ `LAYERS` → `ROUTES`. Rather than teach the method pages a second copy of that logic, they
+now hand the route over and let the one resolver answer:
+
+`method.html` / `method-porges.html` — a route with no page of its own leaves for
+`dashboard.html#route=<key>` instead of a bare `dashboard.html`.
+
+`dashboard.html` — an arrival handler reads the hash and calls the same `openRoute()` the
+rail here uses. Four details are load-bearing:
+
+- **Deferred to `DOMContentLoaded`.** `openModal()` reads `MODALS` and `VIEWS`, which are
+  `var`s assigned further down the same 78,606-char inline block. Function declarations
+  hoist; their data does not. Running the handler where it is written in source would call
+  `openModal` with `MODALS` still `undefined`.
+- **`PAGES` keys are ignored.** A stray `#route=method` would otherwise send the member
+  straight back to the page they just left, in a loop. Verified: `dashboard.html#route=method`
+  stays on the dashboard, opens nothing, and does not bounce.
+- **Unknown keys are ignored.** `#route=nonsense` opens nothing and throws nothing.
+- **The hash is cleared with `history.replaceState` before the route opens**, so a reload
+  lands on the dashboard rather than reopening the layer. Verified by reloading after arrival:
+  no modal, rail back to `dashboard`.
+
+The rail's `on` state is moved to the arriving route as well, but only when a rail button
+for that route actually exists — otherwise a route with no rail button would strip `on` from
+every button and leave the rail showing nothing.
+
+### Verification — by clicking, all four paths
+
+Real mouse clicks at 1440×900, fresh page load before each, mirror re-synced and served
+`no-store`:
+
+| from | button | lands on | modal open | rail `on` | hash |
+|---|---|---|---|---|---|
+| `method.html` | Sessions & workshops | `dashboard.html` | **`mLayer` — "Your booked dates"** | `coaching` | cleared |
+| `method.html` | Account & plan | `dashboard.html` | **`mRoute` — "Account & plan", `/account`** | `account` | cleared |
+| `method-porges.html` | Sessions & workshops | `dashboard.html` | **`mLayer` — "Your booked dates"** | `coaching` | cleared |
+| `method-porges.html` | Account & plan | `dashboard.html` | **`mRoute` — "Account & plan", `/account`** | `account` | cleared |
+
+Focus after arrival lands on the modal's close button (`BUTTON.sr-modalclose`), the same as
+opening the layer from the dashboard's own rail.
+
+Whole-rail regression, also by clicking: the Dashboard button on both pages still lands on a
+plain dashboard with nothing open; the method button on `method.html` still no-ops; the
+dashboard's own rail still opens both views. No console errors on any page. All four inline
+`<script>` blocks across the three files parse clean via `new Function`.
+
+`method.html` and `method-porges.html` and `dashboard.html` are the only three files in the
+repo carrying `.sr-dash-navrailbtn`, and no `PAGES[key] || 'dashboard.html'` fall-through
+remains anywhere.
+
+### Reported, not fixed — one more control that names a destination it does not reach
+
+On **`method-porges.html`**, the rail button labelled **"Where the method comes from"** is
+marked `on` and returns early on `key === 'method'` — "already here". But this page is
+`method-porges.html`, a framework sub-page; `method.html` is a different page, and the
+backbar directly above the rail links to it. Clicking the rail button does nothing at all.
+
+Verified by clicking: URL and title unchanged, nothing opens.
+
+This is the same shape as the item just fixed — a control naming a destination it does not
+reach — but it is a *different* control on a *different* condition, so per the brief it is
+**reported, not fixed**. The fix is one line (`if(key === 'method' && /method\.html$/.test(location.pathname)) return;`)
+but it changes which page the rail considers "here", which is a decision about how the
+framework sub-pages sit under the method section, not a bug fix. New register item.

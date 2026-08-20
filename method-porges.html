@@ -497,12 +497,19 @@
   // route modal that only exists in dashboard.html. These pages carry no such
   // modal, so the rail leaves for the dashboard and lets it answer. /method is
   // the page you are already on.
+  //
+  // SR-104 · leaving is not arriving. 'coaching' and 'account' matched nothing
+  // in PAGES and fell through to a bare `dashboard.html`, so the member landed
+  // on the dashboard with neither the Sessions view nor Account open — the
+  // control named a destination it did not reach. The route now travels in the
+  // hash and dashboard.html runs openRoute() with it on arrival.
   var PAGES = { method: 'method.html', dashboard: 'dashboard.html' };
   document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
     b.addEventListener('click', function(){
       var key = b.getAttribute('data-route');
       if(key === 'method') return;                 // already here
-      window.location.href = PAGES[key] || 'dashboard.html';
+      if(PAGES[key]){ window.location.href = PAGES[key]; return; }
+      window.location.href = 'dashboard.html#route=' + encodeURIComponent(key);
     });
   });
 })();
