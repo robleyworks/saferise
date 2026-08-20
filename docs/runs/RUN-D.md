@@ -603,3 +603,88 @@ all five now carry `tools/serve.py`.
 
 The order that actually works, and which the standing rules should say explicitly: stop the
 server, restore `launch.json`, *then* stage and commit.
+
+---
+
+## Phase 4c — the comparison table
+
+### Reproduced first
+
+`#prog-compare` holds one table: a header row of 5 `<th>` — blank, Personal, Couples,
+Career, Elevation — and 6 body rows of 5 cells each.
+
+| row | Personal | Couples | Career | Elevation |
+|---|---|---|---|---|
+| Format | Self-Paced | Self-Paced | Self-Paced | Self-Paced |
+| Protocols | 10 | 10 | 10 | 7 |
+| Who it's for | Individuals | Couples | Individuals | Advanced practitioners |
+| Entry price | Free → €19/mo | TBA | TBA | Waitlist |
+| Best for | Anxiety, anger… | Rupture, intimacy… | Pressure, rejection… | Wealth, health… |
+| Available | Now | Coming Soon | Coming Soon | Coming Soon |
+
+**The spec's "Elevation-only rows removed entirely rather than left with empty cells" had
+no work to do.** Every row carried content in all four track columns; `empty_cells` measured
+**0** before the edit. There were no Elevation-only rows. Reported rather than invented —
+the spec anticipated a shape this table does not have.
+
+### Changed
+
+One `<th>` and one `<td>` from each of the six rows. Anchored by line: the header neighbours
+were asserted in order (`Personal` / `Couples` / `Career` / `Elevation` / `</tr>`) before
+the delete, and **each removed `<td>` was matched against its expected Elevation text** —
+`Self-Paced`, `7`, `Advanced practitioners`, `Waitlist`, `Wealth, health, wisdom,
+creativity, purpose`, `Coming Soon` — with a cell-count assertion of 5 before and 4 after on
+every row. No pattern matching anywhere.
+
+### Verified
+
+JS parse first: 10 blocks, all OK, sentinel `caught SyntaxError`. Div balance 2812/2812.
+CSS braces 663/299/1083.
+
+Tag balance run properly this time: `<table>` 2/2, `<thead>` 2/2, `<tbody>` 2/2, `<tr>`
+14/14, `<th>` 8/8, `<td>` 48/48. **A first pass reported `<th>` 10/8** — a false alarm from
+counting `<th` as a prefix, which also matches `<thead`. Re-run with `\b` boundaries and it
+balances. Recorded because a naive tag counter is exactly the kind of check that looks
+authoritative and is not.
+
+DOM after: 4 headers, 6 rows, **4 cells in every row**, **0 empty cells**, 0
+`colspan`/`rowspan`, **0 rendered "Elevation" text nodes anywhere on the page**, console
+clean.
+
+### ⚠ "Equal widths" was not delivered, and why
+
+The spec asked for equal widths. The table uses `table-layout:auto`, so columns size to
+content — they were **already unequal before this run** (200 / 123 / 123 / 121 / 133).
+
+I wrote `.sr-cmp-col{width:calc((100% - 200px)/3)}` into `css/saferise-system.css` — the
+system sheet rather than an inline style, per CLAUDE.md — with the class on the three track
+`<th>`s. Then the measurements started disagreeing with each other, and the cause turned out
+to be that **the preview viewport had collapsed to 0×0**: `window.innerWidth`, `innerHeight`,
+`document.documentElement.clientWidth` and `body.getBoundingClientRect().width` all returned
+**0**. A new tab and `resize_window` to the desktop preset did not recover it. Earlier in
+this same run the pane reported 1280×720, so it degraded mid-session — the same class of
+artifact as the black screenshots in Phase 3.
+
+**Every width and overflow number I took in this phase is therefore invalid, including the
+"253 / 275 / 252, no overflow" reading I took before noticing.** A table inside a 0-width
+`overflow-x:auto` wrapper collapses to its `min-width:700px` and reports overflow
+unconditionally; none of it describes a real browser.
+
+**So the rule and the class were reverted.** `css/saferise-system.css` is byte-identical to
+`HEAD`. Shipping a layout change I could not measure would have contradicted the standard
+this run has held to everywhere else. The structural removal stands on DOM facts — cell
+counts, empty-cell counts, text content — which a collapsed viewport does not affect.
+
+**Outstanding:** one measurement in a real viewport, then restore the rule if the columns
+are uneven. Logged on SR-110 as an open sub-item.
+
+### Found in passing, not acted on
+
+The headers read **"Couples"** and **"Career"**, not the record's `Relationship Healing` and
+`Professional Performance`. SR-111 scanned for the full track names and so never saw these
+short forms. Not a 4c surface; noted on SR-110.
+
+### Teardown — in the corrected order
+
+Server stopped → `lsof -ti:8642` free, zero listeners → `.claude/launch.json` restored,
+`git diff` empty → **then** staged and committed.

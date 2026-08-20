@@ -291,7 +291,32 @@ this removal.
 **Remaining: 4c only** — the comparison-table column. Exactly one rendered "Elevation" text
 node survives in `index.html`, and it is that `<th>`.
 
-*Status:* open — 4c (comparison table) only · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+**Done — 4c, the comparison table (20 Aug 2026).** The `Elevation` `<th>` and the Elevation
+`<td>` from all six body rows. Table goes from five columns to four — label plus Personal,
+Couples, Career — with 6 rows × 4 cells, **zero empty cells**, no `colspan`/`rowspan`, and
+no rendered "Elevation" anywhere in `index.html`.
+
+**The spec's "Elevation-only rows removed rather than emptied" had no work to do.** Every
+one of the six rows carried content in all four track columns — Format, Protocols, Who it's
+for, Entry price, Best for, Available. There were no Elevation-only rows and no empty cells
+before or after. Recorded so nobody looks for the removal later.
+
+**"Equal widths" was NOT delivered — deliberately.** Before the removal the columns already
+sized to content (200 / 123 / 123 / 121 / 133 px), and after it they were uneven again. A
+`.sr-cmp-col{width:calc((100% - 200px)/3)}` rule was written into `saferise-system.css` with
+a class on the three `<th>`s, then **reverted** when the preview viewport collapsed to 0×0
+and every width and overflow number became unmeasurable — including the ones taken minutes
+earlier. Shipping an unverifiable layout change would have contradicted this run's own
+standard. The structural removal is verified by DOM facts, which the collapsed viewport does
+not affect; column widths need one measurement in a real viewport before the rule is
+restored. **Open sub-item, not forgotten.**
+
+Two naming notes found while in the table, not acted on: the headers read "Couples" and
+"Career", not the record's `Relationship Healing` and `Professional Performance`. [[SR-111]]
+scanned for the full names and so never saw these. And the table still shows "TBA" /
+"Coming Soon" for both — see [[SR-122]].
+
+*Status:* open — one sub-item: comparison-table column widths, pending a usable viewport · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
 
 ### SR-115 · A dashboard cover loads from an ephemeral Netlify deploy preview
 [dashboard.html:717](dashboard.html:717) sources a protocol cover from
