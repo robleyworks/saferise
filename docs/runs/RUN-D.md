@@ -688,3 +688,70 @@ short forms. Not a 4c surface; noted on SR-110.
 
 Server stopped → `lsof -ti:8642` free, zero listeners → `.claude/launch.json` restored,
 `git diff` empty → **then** staged and committed.
+
+---
+
+## Phase 4c (part 2) — documentation residue
+
+Separate commit from the table, as instructed.
+
+### Removed
+
+`.nav-link.tab-purple` × 3 rules at [index.html:47](index.html:47). Confirmed dead first:
+`tab-purple` appeared **3 times in the whole repo**, all three being those rules, and **0**
+elements carried the class in the DOM.
+
+### Corrected — and then corrected again
+
+Three comments named Elevation as a live thing. My first rewrite of the
+`<style id="sr-series-hero">` header said *"Applies to all 3 track pages"*.
+
+**That was false, and I caught it before committing.** The block is inline in `index.html`;
+the three track pages are separate documents rendered by `js/saferise-track.js` and never
+load it. Worse, the block is now dead on `index.html` too — measured on a cold load: **0**
+`.pcard-grid` elements, **0** `.sr-hero-*` elements. Trading one false comment for another
+would have been the worst outcome of the phase.
+
+Final state of the three:
+
+| line | now says |
+|---|---|
+| 823 header | that the block is **currently unused**, why (SR-110 took the only `.pcard-grid`, SR-121 took the `.sr-hero-*` emitter), that the track pages do not load it, and points at SR-123 |
+| 861 `--pcard-cols` | that the only grid ever setting it above the default was Elevation's 7-item list, and nothing sets it now |
+| 5211 reader fallback | names `crisis-p10` — verified as **the only one of 91 resource keys** that fails the protocol-key pattern and takes the popup path — instead of Elevation's removed previews |
+
+### Verified
+
+JS parse first: 10 blocks OK, sentinel `caught SyntaxError`. Div 2812/2812.
+`.tab-purple` 0, `.pcard-grid` 0, `.sr-hero-*` 0, `.proto-item` **62** (unaffected, base
+rules), overlays 10, **rendered "Elevation" text nodes: 0**.
+
+Outside `<style>`, `<script>` and comments, `index.html` contains the string "Elevation"
+**zero** times. The two remaining occurrences are in the SR-referencing comments above.
+
+**One console reading discarded.** The reused `seed` tab reported eight
+`ERR_CONNECTION_REFUSED` errors — stale, from that tab hitting the previous server across a
+stop/start. A fresh tab on the running server reported none. The stale reading is recorded
+rather than quietly dropped.
+
+### Three findings logged, none fixed
+
+- **SR-124 · HIGH — `index.html` contradicts the price record, and itself.**
+  `content/tracks.js` holds `PRICING` marked *locked 2026-08*: **€9 / €19 / €29**.
+  `index.html` loads that file and ignores it, carrying two hardcoded ladders:
+  [:4746](index.html:4746) says €19 / €29 / **€49**, and [:6103](index.html:6103) says
+  €19 / €29 / **€39**. Every track disagrees with the record, and the two in-page ladders
+  disagree with each other on Professional. Found while answering question 3 of the SR-122
+  brief. Which ladder is correct is commercial, not technical.
+- **SR-122 · MEDIUM — the undated promises**, recorded with the three data points asked for.
+  Surfaces 1 and 3 are **stale, not undecided** — `PRICING.t3` exists and is locked. Surface
+  2 is mixed: the track half is stale; the *"team programmes priced separately"* clause names
+  something with **no price anywhere in the data**, so removing that clause is the fix.
+  Blocked on SR-124 — writing a figure now would add a third ladder.
+- **SR-123 · LOW — the dead `sr-series-hero` block**, same shape as SR-121, left for its own
+  commit.
+
+### Teardown — corrected order
+
+Server stopped → `lsof -ti:8642` free, zero listeners → `launch.json` restored, `git diff`
+empty → **then** staged and committed.

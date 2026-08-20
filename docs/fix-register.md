@@ -15,8 +15,8 @@ Canonical record of defects and design decisions. Commits reference the ID:
   accents/rails/a11y run (SR-108, SR-109) and the track-pages/audit run (SR-110 to
   SR-119). All are written up below. The previous block ran out mid-pass, which is what
   that reservation was for.
-- **SR-120 and SR-121 are issued** by the Elevation-hide run — SR-121 below, SR-120 for the
-  `t1-01` extras correction. **SR-114 and SR-116 were never issued and remain free.** They
+- **SR-120 to SR-124 are issued** by the Elevation-hide run — SR-121 to SR-124 below,
+  SR-120 for the `t1-01` extras correction. **SR-114 and SR-116 were never issued and remain free.** They
   are gaps inside a range other branches have already read past; do not reach back for them
   while a higher number is available. Taking a number out of the middle of a read range is
   what caused the three collisions described below.
@@ -348,6 +348,37 @@ this register and the Run A / Run C logs describing the defect, which is histori
 
 *Status:* complete on merge · *Raised:* 19 Aug 2026 · *Fixed:* 20 Aug 2026
 
+### SR-124 · `index.html` contradicts the price record, and itself
+`content/tracks.js` holds the canonical ladder, marked *locked 2026-08*:
+
+```
+PRICING.t1 €9 / month   ·   PRICING.t2 €19 / month   ·   PRICING.t3 €29 / month
+```
+
+`index.html` loads `content/tracks.js` and then ignores it, carrying **two different
+hardcoded ladders of its own**:
+
+| source | Personal | Relationship | Professional |
+|---|---|---|---|
+| `content/tracks.js` — the record | **€9** | **€19** | **€29** |
+| [index.html:4746](index.html:4746) locked-resource mapping | €19 | €29 | €49 |
+| [index.html:6103](index.html:6103) `.pt-note` | €19 | €29 | **€39** |
+
+Every track disagrees with the record, and the two in-page ladders disagree with each other
+on Professional (€49 vs €39). A visitor comparing the resource paywall against the pricing
+note is told two different prices for the same plan.
+
+This looks like [[SR-063]]'s consolidation reaching the dashboard but never reaching
+`index.html`, leaving an older ladder — or ladders — behind. **Which ladder is correct is a
+commercial decision, not a code fix**, so nothing was changed. Once it is settled the fix is
+the same shape as SR-063: read `PRICING` from `content/tracks.js`, which the page already
+loads, rather than typing figures into markup.
+
+Found while logging [[SR-122]]; not part of the Elevation work and deliberately not fixed
+inside it.
+
+*Status:* open · *Raised:* 20 Aug 2026
+
 ---
 
 ## MEDIUM
@@ -548,6 +579,28 @@ target under `docs/`, not a served page. Reported by Run C, not touched. Closed 
 
 *Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
 
+### SR-122 · Undated promises on surfaces for tracks that have a price
+Three surfaces on `index.html` still say a shipping track is unpriced or unavailable. They
+fail the no-undated-promises rule independently of the Elevation removal, and were left
+alone during [[SR-110]] because rewording them is not the fix.
+
+| # | surface | where | what it promises | is it about the track or the team programme? | does that thing have a price in the data? |
+|---|---|---|---|---|---|
+| 1 | Plans-strip Professional panel | `index.html`, the four-panel strip under the plans heading | *"Coming Soon"* + *"Pricing TBA"* | **The track.** The panel sits beside Personal and Relationship panels and lists the same per-track contents. | **Yes** — `PRICING.t3` = €29/month, locked 2026-08 |
+| 2 | Professional plans card | `index.html`, the three-card plans grid | *"Coming Soon"* + *"Pricing to be announced · team programmes priced separately"* | **Both, in one line.** The card is the track's; the trailing clause is about team programmes. | **Track: yes**, `PRICING.t3` = €29/month. **Team programmes: no** — no key for them exists in `PRICING`. |
+| 3 | Comparison table, Relationship and Professional columns | `index.html`, `#prog-compare` | *"Entry price: TBA"* for both, *"Available: Coming Soon"* for both | **The tracks.** | **Yes for both** — `PRICING.t2` = €19/month, `PRICING.t3` = €29/month |
+
+So surfaces 1 and 3 are **stale, not undecided** — the price exists and is locked. Surface 2
+is a mixed case: the track half is stale, and the team-programme half names something that
+genuinely has no price anywhere in the data, so **removing that clause is the fix rather
+than filling it in**.
+
+Blocked on [[SR-124]]: the page carries two hardcoded price ladders and both disagree with
+the record, so writing a figure into these surfaces now would just add a third. Settle the
+ladder first, then have these read `PRICING`.
+
+*Status:* open · *Raised:* 20 Aug 2026
+
 ---
 
 ## LOW
@@ -664,6 +717,28 @@ Given its own ID and its own commit so it is revertable and reviewable apart fro
 Elevation work.
 
 *Status:* complete on merge · *Raised:* 20 Aug 2026 · *Fixed:* 20 Aug 2026
+
+### SR-123 · `<style id="sr-series-hero">` is now dead
+The block at [index.html:823](index.html:823) defines two families: `.sr-hero-badge` /
+`.sr-hero-eyebrow` / `.sr-hero-accent`, and everything scoped under `.pcard-grid`.
+
+Both are now unused on the page. The hero classes were emitted by `renderSeriesHero`,
+removed by [[SR-121]]; the only `.pcard-grid` element was `#elevation-protoList`, removed by
+[[SR-110]]. Measured on a cold load: **0** `.pcard-grid` elements, **0** `.sr-hero-*`
+elements. The 62 surviving `.proto-item` elements sit outside any `.pcard-grid` and are
+styled by the base rules defined earlier in the file, which the block's own comment says are
+deliberately left untouched — so nothing regresses.
+
+The three track pages do **not** load this block; they are separate documents rendered by
+`js/saferise-track.js`. Repo-wide, `pcard-grid` and `pcard-cols` appear only inside this
+block's own rules and comments.
+
+Not removed in the same pass that emptied it, so the deletion can be judged on its own. The
+block's header comment now says it is unused and points here, rather than describing four
+track pages that no longer exist. Same shape as [[SR-121]] — if it goes, it goes on its own
+commit.
+
+*Status:* open · *Raised:* 20 Aug 2026
 
 ---
 

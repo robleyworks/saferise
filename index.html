@@ -44,9 +44,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;ove
 .nav-link.tab-teal{color:var(--text3);}
 .nav-link.tab-teal:hover{color:var(--sr-track03);border-bottom-color:rgba(56,200,190,0.4);}
 .nav-link.tab-teal.active{color:var(--sr-track03);border-bottom-color:var(--sr-track03);}
-.nav-link.tab-purple{color:var(--text3);}
-.nav-link.tab-purple:hover{color:var(--sr-track04);border-bottom-color:rgba(155,127,212,0.4);}
-.nav-link.tab-purple.active{color:var(--sr-track04);border-bottom-color:var(--sr-track04);}
 /* Program pages */
 .prog-page{display:none;padding-top:88px;}
 .prog-page.active-prog{display:block;}
@@ -826,8 +823,16 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
 <style id="sr-series-hero">
 /* ============================================================
    SHARED SERIES LANDING HERO + COMPACT PROTOCOL CARD SYSTEM
-   Applies to all 4 track pages (Personal/Relationship/
-   Professional/Elevation). Additive only — the base
+
+   CURRENTLY UNUSED — see SR-123. Every rule below is scoped to
+   .pcard-grid or to .sr-hero-*, and after SR-110 removed the
+   Elevation overlay this page has no .pcard-grid element and no
+   .sr-hero-* markup left. The three track pages do not load this
+   block; they are separate documents rendered by
+   js/saferise-track.js. Kept rather than deleted in the same pass
+   that emptied it, so the removal can be judged on its own.
+
+   Additive only — the base
    .proto-item/.proto-grid/.proto-num/.proto-name/.proto-trigger
    rules (defined earlier) are left untouched because two
    decorative homepage device-mockup previews also reuse those
@@ -861,9 +866,10 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
 .sr-hero-cta:hover{filter:brightness(1.08);}
 
 /* ---- Compact protocol/module card grid ----
-   --pcard-cols drives column count so a per-track desktop count
-   (10-item tracks use 5, Elevation's 7-item track uses 7) can
-   coexist with one shared set of responsive breakpoints. */
+   --pcard-cols drove the desktop column count so a per-track count could
+   coexist with one shared set of responsive breakpoints. The only grid
+   that ever set it to anything but the default was Elevation's 7-item
+   list, removed by SR-110; nothing sets it now. */
 .proto-grid.pcard-grid{grid-template-columns:repeat(var(--pcard-cols,5),1fr);gap:16px;align-items:start;}
 @media(max-width:1100px){.proto-grid.pcard-grid{--pcard-cols:3!important;}}
 @media(max-width:768px){.proto-grid.pcard-grid{--pcard-cols:2!important;}}
@@ -5208,8 +5214,9 @@ document.addEventListener('DOMContentLoaded', function(){
       e.stopPropagation();
       const key = el.dataset.resource;
       // Every protocol with a registered entry in READER_PROTOCOLS opens the
-      // left-tab Reader; anything else (e.g. Elevation's single-preview
-      // resources) falls back to the small single-resource popup.
+      // left-tab Reader; anything else falls back to the small single-resource
+      // popup. Of the 91 resource keys, `crisis-p10` is currently the only one
+      // that takes that path — it does not match the protocol-key pattern below.
       const protoMatch = key.match(/^(t2-p\d+|t3-p\d+|p\d+)-/);
       const protoKey = protoMatch ? protoMatch[1] : null;
       if (protoKey && READER_PROTOCOLS[protoKey]) {
