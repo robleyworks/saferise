@@ -9,10 +9,16 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
-- Highest ID currently issued: **SR-120**.
-- **SR-096 to SR-120 are reserved, not yet issued.** Reserved 19 Aug 2026 for the
-  index.html / entity / noindex pass, which allocates from SR-096. The previous block
-  ran out mid-pass, which is what this reservation is for.
+- Highest ID currently issued: **SR-119**. Ceiling of the current reservation: **SR-120**.
+- **SR-096 to SR-119 are issued.** Reserved 19 Aug 2026 for the index.html / entity /
+  noindex pass, which allocated from SR-096; the block was then drawn down further by the
+  accents/rails/a11y run (SR-108, SR-109) and the track-pages/audit run (SR-110 to
+  SR-119). All are written up below. The previous block ran out mid-pass, which is what
+  that reservation was for.
+- **SR-114, SR-116 and SR-120 were never issued and are free.** They are gaps inside a
+  range other branches have already read past, so allocate **SR-120** — the top of the
+  reservation — before reaching back for SR-114 or SR-116. Taking a number out of the
+  middle of a read range is what caused the three collisions described below.
 - **SR-085 to SR-095 are issued** by the correctness pass and written up below. The
   three findings that pass had no ID for — recorded inside SR-092 and SR-093 — are
   now issued as SR-104, SR-105 and SR-106. SR-096 to SR-103 and SR-107 are issued by
@@ -123,6 +129,92 @@ every audio player. Both contradict this rule. They need their own item when tha
 is next touched — do not fix them here.
 
 *Status:* open · *Raised:* 18 Aug 2026
+
+### SR-108 · Track accent tokens did not hold the values the site renders
+[[SR-045]] made `saferise-system.css` the single source of truth for the four track
+accents, but tokens 02/03/04 still carried the pre-consolidation hues while `index.html`
+restated the shipped ones as colour literals. The token and the rendered pixel disagreed,
+so anyone editing the token moved nothing.
+
+**Resolution.** Tokens 02/03/04 repointed to the values the site actually renders; 183
+literals in `index.html` converted to `var(--sr-trackNN)`; the cover helpers repointed at
+the tokens. `index.html` verified value-preserving across 217,680 probed element-rows.
+`dashboard.html` shifts 7/6/9 elements on tracks 02/03/04 — that shift is the correction,
+not a regression. No contrast pair falls below 4.5:1.
+
+Deliberately not converted: the accent `rgba()` restatements — `--sr-accent-wash`,
+`--sr-accent-border`, the nav-tab `border-bottom-color` and several tinted panel grounds.
+A hex token cannot go inside `rgba()`; closing those needs an `--sr-trackNN-rgb` channel
+triple, which is its own item and was not invented here.
+
+Shipped `b9e5ff5`, merged to main in `7ba529b`. Run B — `docs/runs/RUN-B-accents-rails-a11y.md`.
+
+*Status:* complete · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+
+### SR-109 · The modal layer did not keep the promise `aria-modal` makes
+Seven dialogs declared `aria-modal="true"` with no focus trap and no inert background, so
+Tab walked straight out of the dialog into the page behind it. Six close buttons carried
+no accessible name.
+
+**Resolution.** Focus trap and background `inert` added to the shared modal controller —
+one place, all seven dialogs. Six close buttons named. Verified by running the actual
+keystroke sequence, and regression-checked across all seven dialogs.
+
+**Part (c) did not reproduce and was not edited.** The brief placed the mis-wired
+Elevation CTA in `index.html`; it is in `dashboard.html`, and `index.html`'s Elevation
+waitlist is a real, working Netlify form. Carried forward and issued as its own item —
+see [[SR-110]].
+
+Shipped `f259e1e`, merged to main in `7ba529b`. Run B — `docs/runs/RUN-B-accents-rails-a11y.md`.
+
+*Status:* complete · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+
+### SR-110 · Track 04 is hidden in the data and sold on every public surface
+`TRACKS[4].visible` is `false`, and that flag is read in **exactly two places in the whole
+repo** — [js/saferise-track.js:352](js/saferise-track.js:352) (`renderNav`) and
+[js/saferise-track.js:399](js/saferise-track.js:399) (`renderTrack`). Both live in the
+track-page renderer, loaded only by the three track pages. `index.html`, `dashboard.html`
+and `protocol.html` never read it.
+
+There is no routing layer to fix. The site is static HTML served directly; Track 04 has no
+page of its own and therefore no route to remove. Every Elevation surface is hardcoded
+markup or hardcoded JS inside three pages, so `visible: false` never had anything to act
+on. `renderNav` additionally gates on `ROUTES[k]`, which has no key `4` — Track 04 is
+excluded twice over on the surfaces that consult the data, and not at all on the surfaces
+that do not.
+
+**17 surfaces, inventoried by Run C** — `index.html` 13, `dashboard.html` 3,
+`protocol.html` 1. Not routes: they include a live Netlify waitlist form
+(`name="elevation-waitlist"`, real `onsubmit`), a seven-record block in `RESOURCE_CONTENT`,
+a public pricing tier (`€222 one-time`), a column in the plan comparison table, a workshop
+card, and three pieces of body copy naming Elevation inside sentences about other tracks.
+
+Scope confirmed 20 Aug 2026 as **all 17**, not the bounded subset. A partial removal leaves
+the site arguing with itself — a hidden track with a public price is a worse state than
+either a shipped track or an absent one. The comparison table goes to three columns
+(Personal Transformation, Relationship Healing, Professional Performance), equal widths,
+Elevation-only rows removed entirely rather than left empty, and no "coming soon"
+placeholder column: an empty row asks the reader what was there.
+
+Full inventory with line numbers: `docs/runs/RUN-C-consolidated.md` §1e.
+
+*Status:* open · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
+
+### SR-115 · A dashboard cover loads from an ephemeral Netlify deploy preview
+[dashboard.html:717](dashboard.html:717) sources a protocol cover from
+`https://deploy-preview-14--the-saferise-protocol.netlify.app/assets/covers/01.jpg`. Deploy
+previews are torn down; the member dashboard would show a broken cover the moment PR 14's
+preview expires, and until then it makes the dashboard depend on a build of a branch.
+
+Run C confirmed it at exactly that line and confirmed it is the **only** URL of that shape
+in the repo — the two other grep hits are Run A's log describing it. The local
+`assets/covers/01.jpg` exists.
+
+**Fix spec** (confirmed 20 Aug 2026): replace with the local relative path to
+`assets/covers/01.jpg`, matching the path convention already used by the other cover
+references on that page rather than inventing one.
+
+*Status:* open · *Raised:* 19 Aug 2026 · *Entry written:* 20 Aug 2026
 
 ---
 
@@ -278,6 +370,52 @@ rather than answer it.
 
 *Status:* open · *Raised:* 18 Aug 2026
 
+### SR-112 · Track 02 and 03 pages — already built, already data-driven
+Raised on the belief that only the Track 01 page existed and that Tracks 02 and 03 needed
+building. **All three pages exist and all three are fully data-driven.** Each is a shell —
+empty `<nav id="navlinks">`, empty `<div id="page">` — that loads `content/tracks.js` and
+`js/saferise-track.js` and calls `SafeRiseTrack.render(N)`:
+
+| page | body | data |
+|---|---|---|
+| `personal-transformation.html` | 1,878 B | `SafeRiseTrack.render(1)` |
+| `relationship-healing.html` | 1,865 B | `SafeRiseTrack.render(2)` |
+| `professional-performance.html` | 1,872 B | `SafeRiseTrack.render(3)` |
+
+Measured live by Run C: 0 gaps on all three, 10 protocol cards each, 18 FAQ entries each.
+The renderer's template-inherited `GAPS` counter is renamed `MISSING` and surfaced on
+`window.SR_TRACK_MISSING` rather than rendered, "so a live page stays quiet"
+([js/saferise-track.js:43](js/saferise-track.js:43)).
+
+Nothing to wire. Closed without code.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-113 · FAQ data — already in `content/tracks.js`, not only in the template
+Raised on the belief that `faq` lived only in the upstream template. It is in the repo's
+own data: `SHARED.faq` at [content/tracks.js:603](content/tracks.js:603) (12 entries), and
+`TRACKS[1].faq` :655, `TRACKS[2].faq` :676, `TRACKS[3].faq` :697 (6 each). **18 render per
+track page**, confirmed live on all three.
+
+Run C's field-set comparison found zero fields present in the template and absent from the
+repo, in either direction, for tracks 1–3 — and found the repo newer than the template on
+every value that differs. Closed without code.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-118 · Dispenza in the track data — already removed; the key is `distance`
+Raised as 7 `dispenza` occurrences in `content/tracks.js` and 6 in `META[].frameworks`.
+**`content/tracks.js` has zero.** The framework is present under its real key:
+`FRAMEWORKS.distance` at [content/tracks.js:507](content/tracks.js:507), and the six named
+protocols carry `'distance'` — `t1-09`, `t1-10`, `t2-08`, `t3-03`, `t3-08`, `t3-10`,
+exactly the list the brief named. [[SR-089]] did this work; the brief predated it.
+
+The only non-comment residue repo-wide is `docs/reference/portal-personal-target.html`
+lines 536 and 701, which this register already scopes out at [[SR-084]] as a reference
+target under `docs/`, not a served page. Reported by Run C, not touched. Closed without code.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
 ---
 
 ## LOW
@@ -298,6 +436,70 @@ Covers carry their kicker word and number inside the image. Do not add CSS overl
 to a cover or the text doubles.
 
 *Status:* open · *Raised:* 18 Aug 2026
+
+### SR-111 · Hardcoded track names — all correct; a coupling question, not a defect
+Raised as nav showing stale or wrong track names. Run C read every occurrence of a Track
+01–03 name across eight files: **121 strings, and every one matches `TRACKS[n].name`
+exactly.** No stale value exists in the tree.
+
+The nav the brief tabulates — the three track pages' — is already bound to `tracks.js` and
+already correct. The three pages' one static occurrence each is the `<title>` and
+`<meta name="description">`; `renderTrack` overwrites `document.title` from `t.name` at
+runtime ([js/saferise-track.js:411](js/saferise-track.js:411)), so the served title is
+data-driven and the static one is a no-JS fallback.
+
+What remains is coupling, not correctness: 121 correct strings that are not bound to the
+record and would go stale together if a track were ever renamed. That is a separate,
+lower-value item and was not opened here.
+
+Noted in passing: `CLAUDE.md` names the third series "Professional" where the data says
+"Professional Performance". The document is out of step with the data, not the pages.
+
+Closed without code.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-117 · `extras: null` — no consumer throws, and `null` is the intended value
+Raised as `extras: null` crashing consumers. **There is one reader in the repo.**
+`extras` appears in four places, all in `content/tracks.js`: three comment lines (523, 529,
+532) and one read, `protocolResources` ([content/tracks.js:538](content/tracks.js:538)),
+which array-checks before use:
+
+```js
+return Object.prototype.toString.call(extras) === '[object Array]' &&
+       extras.indexOf(needs) > -1;
+```
+
+`protocolResourceCount` (:547) delegates to it. Neither has a caller outside `tracks.js`
+and its `module.exports`. Verified live: `protocolResourceCount('t2-01')` → `7`, no error,
+console clean on all three track pages. **The crash does not exist.**
+
+§8b, on whether `null` is an unfilled field: it is not. [[SR-078]] wrote it as a
+deliberate sentinel, documented in place at [content/tracks.js:523](content/tracks.js:523)
+and :532 — *"null means UNVERIFIED, not none"* — distinct from `[]`, which means verified
+and empty.
+
+**Standing decision, 20 Aug 2026: the twenty `null` values stay `null`.** Changing them to
+`[]` would assert a verification nobody performed. Do not "tidy" this in a later pass. This
+is not the same as a wrong `[]` — see [[SR-120]], where `[]` contradicts content that
+demonstrably exists.
+
+Closed without code.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
+
+### SR-119 · Dispenza re-verification across all tracked file types
+The earlier sweep had been run over a subset of extensions. Re-run properly:
+`git ls-files -z | xargs -0 grep -ni dispenza` — every tracked file, every extension.
+
+Two files hit, both under `docs/`: this register (historical record of the removal,
+acceptable) and `docs/reference/portal-personal-target.html` at 536 and 701, already scoped
+out at [[SR-084]]. `content/tracks.js`, `index.html`, and every `.js`, `.css`, `.json` and
+config file: clean.
+
+Closed — verification performed, result clean, no code required.
+
+*Status:* closed — already satisfied · *Raised:* 19 Aug 2026 · *Closed:* 20 Aug 2026
 
 ---
 
