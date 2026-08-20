@@ -288,11 +288,19 @@ of hiding `#main-content` and then activating nothing. Before: `{active: [], mai
 future hidden series hits the same lookup, so the guard is general rather than a patch for
 this removal.
 
-**One dead key missed, found later during [[SR-124]]:** `dashboard.html:1004` still reads
-`var OWNED = {1:true, 2:false, 3:false, 4:false}`. `OWNED[4]` is unreachable — its only
-reader is `OWNED[track]` at :1047, and `track` comes from the recommender, whose covers map
-(`COVERDIR`) has keys 1–3 only. Dead, not live, and left alone rather than reopening a closed
-phase. Remove it whenever `dashboard.html` is next edited.
+**Final surface count: 19. It moved twice, and both moves are recorded here so a future
+audit does not re-derive them.**
+
+| count | when | why it changed |
+|---|---|---|
+| 17 | Run C's §1e table | the original inventory |
+| 18 | Phase 3 | `TEXTMAP:1262` was in Run C's **prose** but not its **table**. The table is the artefact that gets reconciled against, so the table was wrong. |
+| **19** | during [[SR-124]] | `dashboard.html:1004` `OWNED` still carried key `4` |
+
+`OWNED[4]` was unreachable — its only reader is `OWNED[track]` at :1047, and `track` comes
+from the recommender, whose covers map (`COVERDIR`) has keys 1–3 only. Dead rather than live,
+so it was not worth reopening a closed phase; it was removed with [[SR-123]] as a one-line
+change. **All 19 closed.**
 
 **Remaining: 4c only** — the comparison-table column. Exactly one rendered "Elevation" text
 node survives in `index.html`, and it is that `<th>`.
@@ -943,12 +951,50 @@ The three track pages do **not** load this block; they are separate documents re
 `js/saferise-track.js`. Repo-wide, `pcard-grid` and `pcard-cols` appear only inside this
 block's own rules and comments.
 
-Not removed in the same pass that emptied it, so the deletion can be judged on its own. The
-block's header comment now says it is unused and points here, rather than describing four
-track pages that no longer exist. Same shape as [[SR-121]] — if it goes, it goes on its own
-commit.
+**One of the 26 rules was not dead, and the block description was wrong.** The last rule,
+`#personal-protocol-page .sr-tile{aspect-ratio:auto;height:240px}`, has nothing to do with
+series heroes — it is a Personal-portal fix that happened to be appended to this block. It
+**matches and applies**: the view-swap script relocates a `.proto-item` into
+`#personal-protocol-page`, and the rule caps the tile there.
 
-*Status:* open · *Raised:* 20 Aug 2026
+Its rendered effect is nil, because
+[css/saferise-system.css:562](css/saferise-system.css:562) —
+`#personal-protocol-page .proto-item .sr-tile{display:none}` — loads later and wins.
+Measured with the view swap triggered, by deleting the rule from the live CSSOM and
+restoring it:
+
+| | rule present | rule removed |
+|---|---|---|
+| computed `aspect-ratio` | `auto` | `3 / 4` |
+| computed `height` | `240px` | `auto` |
+| rendered box | **0 × 0** | **0 × 0** |
+| page height | **4051px** | **4051px** |
+
+Computed style differs; nothing renders differently. **Deleting it would have looked safe and
+been wrong** — the hazard it prevents (a 3/4 tile scaling to ~1300px in the full-width mount)
+is real and merely masked. Remove the `display:none`, or stop nesting the tile inside
+`.proto-item`, and the rule becomes load-bearing again with nothing connecting the two events.
+
+**Resolution (20 Aug 2026).** The rule was **relocated into
+`css/saferise-system.css`, directly adjacent to the `display:none` it interacts with**, under
+a comment recording what it prevents, why it currently shows no effect, and that it must not
+be tidied. Registered as a deliberate keep, same class as `extras: null` ([[SR-117]]) and the
+launch/standard pair in `PRICING` ([[SR-124]]).
+
+The move was proved cascade-neutral rather than assumed. `saferise-system.css` loads last and
+wins by cascade order ([[SR-105]]), and the two properties do not collide with the
+`display:none`; with the view swap triggered, computed `aspect-ratio`, `height`, `display` and
+the rendered rect are **identical before and after**, and the rule is now served by
+`saferise-system.css`.
+
+The block then went — all 26 rules, 83 lines. After removal: `<style id="sr-series-hero">`
+absent, **0** `.sr-hero*` elements, **0** `.pcard-grid` elements, 62 `.proto-item` elements
+unaffected (they are styled by the base rules defined earlier, which the block's own comment
+said were deliberately left alone). All ten surviving overlays fingerprinted before and after
+— **byte-identical, hashes included** — with the probe proved sensitive by a one-character
+perturbation that moved both byte count and hash and restored exactly.
+
+*Status:* complete on merge · *Raised:* 20 Aug 2026 · *Fixed:* 20 Aug 2026
 
 ### SR-120 · `t1-01` extras — **reproduces.** My first finding was wrong.
 Raised as: `p1-advisory` is written and the Reader serves it, but `META['t1-01'].extras` is

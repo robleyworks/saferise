@@ -990,3 +990,73 @@ expensive instead of obvious. Dashboard's lock CTA speaks to retention, not incl
 - **One surface SR-110 missed**, found here: `dashboard.html:1004` `OWNED` still carries key
   `4`. Unreachable — `COVERDIR` has keys 1–3 — so dead, not live. Noted on SR-110 rather than
   reopening a closed phase.
+
+---
+
+## SR-123 — the `sr-series-hero` block, and one rule that was not dead
+
+### Stopped before editing: the item was larger than described
+
+25 of 26 rules were dead as expected. **The 26th was not.**
+`#personal-protocol-page .sr-tile{aspect-ratio:auto;height:240px}` has nothing to do with
+series heroes — a Personal-portal fix appended to the bottom of the block. It **matches and
+applies**: the view-swap script relocates a `.proto-item` into `#personal-protocol-page`.
+
+Its rendered effect is nil because [css/saferise-system.css:562](css/saferise-system.css:562)
+`#personal-protocol-page .proto-item .sr-tile{display:none}` loads later and wins. Proved
+non-destructively — deleting the rule from the live CSSOM with the view swap triggered, then
+restoring it:
+
+| | rule present | rule removed |
+|---|---|---|
+| computed `aspect-ratio` | `auto` | `3 / 4` |
+| computed `height` | `240px` | `auto` |
+| rendered box | **0 × 0** | **0 × 0** |
+| page height | **4051px** | **4051px** |
+
+**Computed style differs; nothing renders differently.** This is the exact case where a
+delete looks safe and is wrong: the hazard — a 3/4 tile scaling to ~1300px in the full-width
+mount — is real and only masked by a rule in a different file.
+
+### Relocated, not deleted
+
+Moved into `css/saferise-system.css` **directly adjacent** to the `display:none` it interacts
+with, under a comment that says what it prevents, why it shows no effect today, and that it
+must not be tidied — because a future reader will measure zero rendered change and conclude
+it is dead code. Registered as a deliberate keep alongside `extras: null` and the
+launch/standard pair.
+
+**Cascade-neutrality proved, not assumed.** With the view swap triggered, computed
+`aspect-ratio`, `height`, `display` and the rendered rect are **identical before and after**
+the move, and the rule is now served by `saferise-system.css`.
+
+### Then the block went
+
+All 26 rules, 83 lines. After: `<style id="sr-series-hero">` absent, **0** `.sr-hero*`
+elements, **0** `.pcard-grid` elements, **62** `.proto-item` unaffected.
+
+**All ten surviving overlays byte-identical**, hashes included — `prog-personal`,
+`prog-couples`, `prog-corporate`, `prog-compare`, `prog-services`, `prog-premium1on1`,
+`prog-workshops`, `prog-retreats`, `prog-foundation`, `prog-about`. **Probe proved sensitive
+first:** one appended character moved both byte count and hash; restoring returned both
+exactly.
+
+JS parse first — index 11 blocks, dashboard 1 block, all OK, sentinel `caught SyntaxError`.
+Div 2812 / 175 / 126 balanced. CSS braces 663 / 299 / **1084**. Console clean on both pages.
+
+### The dead `OWNED` key
+
+`dashboard.html:1004`, `4:false` removed. One line. All three rail buttons still render
+20 cards and 3 journey columns each; console clean.
+
+### SR-110 reconciled: **19**, all closed
+
+| count | when | why |
+|---|---|---|
+| 17 | Run C §1e table | original inventory |
+| 18 | Phase 3 | `TEXTMAP:1262` was in Run C's **prose** but not its **table** — and the table is what gets reconciled against |
+| **19** | during SR-124 | `OWNED[4]` |
+
+That second move generalises: **a count is only as good as the artefact that carries it.**
+A finding recorded in prose but absent from the enumerated list makes the list wrong, and the
+list is what a future audit checks.

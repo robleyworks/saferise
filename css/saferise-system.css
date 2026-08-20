@@ -560,6 +560,32 @@ details.sr-q .sr-a a{color:var(--primary2)}
 .sr-proto-banner-media{display:none}
 #personal-protocol-page .proto-item{display:block}
 #personal-protocol-page .proto-item .sr-tile{display:none}
+
+/* SR-123 · THESE TWO RULES ARE A PAIR. DO NOT DELETE THE SECOND ONE.
+   Relocated here from an inline <style id="sr-series-hero"> block in
+   index.html, whose other 25 rules were dead and were removed. It is here,
+   adjacent to the display:none above, because the two only make sense
+   together.
+
+   What it prevents · .sr-tile carries aspect-ratio:3/4, sized for the ~230px
+   carousel card it was designed for. The view-swap script relocates a
+   .proto-item into the full-width #personal-protocol-page mount, where that
+   same ratio would scale the tile to roughly 1300px tall — a wall of gradient
+   where a page banner belongs. Capping to a fixed height is what stops that.
+
+   Why it currently changes nothing you can see · the display:none directly
+   above wins, so the tile has no box at all. Measured with the view swap
+   triggered: removing this rule moves computed aspect-ratio 'auto' -> '3 / 4'
+   and height '240px' -> 'auto', while the rendered box stays 0x0 and the page
+   height does not move by a pixel.
+
+   Why it stays anyway · the hazard is real and only masked. Delete the
+   display:none above, or stop nesting the tile inside .proto-item, and this
+   rule becomes load-bearing again with nothing in the tree connecting the two
+   events. A future reader will measure zero rendered change and conclude this
+   is dead code — it is not. Registered as a deliberate keep under SR-123,
+   same class as extras:null in META and the launch/standard pair in PRICING. */
+#personal-protocol-page .sr-tile{aspect-ratio:auto;height:240px}
 /* Resources-Final diff, Group 1 — supersedes the previous "compact banner
    strip" pass entirely: the mockup has no separate banner strip at any
    width. The cover photo lives behind #experience .sechead--lead
