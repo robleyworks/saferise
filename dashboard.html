@@ -563,7 +563,7 @@
 <div class="sr-modal" id="mWorkshop" role="dialog" aria-modal="true" aria-label="Workshop booking">
   <div class="sr-modalbox">
     <div class="sr-modalart m2">
-      <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+      <button class="sr-modalclose" data-close aria-label="Close workshop booking"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
     </div>
     <div class="sr-modalin">
       <p class="sr-modalkick">Group workshop</p>
@@ -599,7 +599,7 @@
 <div class="sr-modal" id="mOneone" role="dialog" aria-modal="true" aria-label="Premium 1:1 booking">
   <div class="sr-modalbox">
     <div class="sr-modalart m1">
-      <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+      <button class="sr-modalclose" data-close aria-label="Close Premium 1:1 booking"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
     </div>
     <div class="sr-modalin">
       <p class="sr-modalkick">Premium 1:1</p>
@@ -635,7 +635,7 @@
 <div class="sr-modal" id="mCalendar" role="dialog" aria-modal="true" aria-label="Full calendar">
   <div class="sr-modalbox">
     <div class="sr-modalart m3">
-      <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+      <button class="sr-modalclose" data-close aria-label="Close full calendar"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
     </div>
     <div class="sr-modalin">
       <p class="sr-modalkick">Everything scheduled</p>
@@ -664,7 +664,7 @@
 <div class="sr-modal" id="mRoute" role="dialog" aria-modal="true" aria-label="Destination">
   <div class="sr-modalbox" style="max-width:560px">
     <div class="sr-modalart m3">
-      <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+      <button class="sr-modalclose" data-close aria-label="Close destination"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
     </div>
     <div class="sr-modalin">
       <p class="sr-modalkick" id="srRouteKick">Not built yet</p>
@@ -684,7 +684,7 @@
   <div class="sr-modalbox" style="max-width:900px">
     <div class="sr-dash-player">
       <div class="sr-dash-player-stage">
-        <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+        <button class="sr-modalclose" data-close aria-label="Close The Clearing"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
         <button class="sr-dash-player-play" id="srPlayerPlay" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></button>
       </div>
       <div class="sr-dash-player-bar">
@@ -719,7 +719,7 @@
       <span class="sr-crisis-label">Cue Card<em>Four lines. Always here.</em></span>
     </div>
     <div class="sr-crisis-body">
-      <button class="sr-modalclose" data-close><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+      <button class="sr-modalclose" data-close aria-label="Close Cue Card"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
       <p class="sr-crisis-kick">In the moment</p>
       <h3>You do not have to remember anything. Read the four lines and follow them.</h3>
 
@@ -1539,6 +1539,7 @@
     srLastFocus = document.activeElement;
     m.classList.add('on');
     document.body.style.overflow = 'hidden';
+    srInertBehind(m);
     var c = m.querySelector('[data-close]'); if(c) c.focus();
   }
   function closeModals(){
@@ -1548,8 +1549,72 @@
       if(m && m.classList.contains('on')){ wasOpen = true; m.classList.remove('on'); }
     });
     document.body.style.overflow = '';
+    /* released before focus is restored — focus cannot land inside an inert
+       subtree, and the opening control is out here in the background */
+    srReleaseBehind();
     if(wasOpen && srLastFocus && srLastFocus.focus) srLastFocus.focus();
     srLastFocus = null;
+  }
+
+  /* ══════════ SR-109 · aria-modal="true" HAS TO BE TRUE ══════════
+     Every one of these dialogs declares aria-modal="true", which is a promise
+     that nothing behind it is reachable. Three parts of that promise were
+     already kept by the controller above — focus moves in on open, Escape
+     closes, focus returns to the opening control on close. Two were not: Tab
+     walked straight out of the dialog on the third press (measured: close →
+     Close → "Skip to content" → the nav rail), and the page behind stayed in
+     the accessibility tree. A screen reader user was told they were in a modal
+     and then left standing outside it. Both are closed here.
+
+     srInertBehind marks every sibling on the path from the dialog up to <body>
+     as inert — the dialogs live inside <main>, so inerting the body's children
+     would take the dialog with them. inert removes those elements from the
+     accessibility tree and from the tab order in one attribute; aria-hidden is
+     set alongside it for assistive technology that does not implement inert
+     yet. srTrapTab then wraps Tab and Shift+Tab at the ends of the dialog so
+     the cycle is closed rather than merely fenced. */
+  var srInerted = [];
+  function srInertBehind(modal){
+    srReleaseBehind();
+    var node = modal;
+    while(node && node !== document.body && node.parentElement){
+      for(var sib = node.parentElement.firstElementChild; sib; sib = sib.nextElementSibling){
+        if(sib === node || sib.tagName === 'SCRIPT' || sib.hasAttribute('inert')) continue;
+        sib.setAttribute('inert', '');
+        sib.setAttribute('aria-hidden', 'true');
+        srInerted.push(sib);
+      }
+      node = node.parentElement;
+    }
+  }
+  function srReleaseBehind(){
+    srInerted.forEach(function(n){
+      n.removeAttribute('inert');
+      n.removeAttribute('aria-hidden');
+    });
+    srInerted = [];
+  }
+  function srOpenModal(){
+    var keys = Object.keys(MODALS);
+    for(var i = 0; i < keys.length; i++){
+      var m = document.getElementById(MODALS[keys[i]]);
+      if(m && m.classList.contains('on')) return m;
+    }
+    return null;
+  }
+  var SR_FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]),' +
+                     ' select:not([disabled]), textarea:not([disabled]),' +
+                     ' [tabindex]:not([tabindex="-1"])';
+  function srTrapTab(e){
+    if(e.key !== 'Tab') return;
+    var m = srOpenModal(); if(!m) return;
+    var f = [].filter.call(m.querySelectorAll(SR_FOCUSABLE), function(el){
+      return el.offsetWidth || el.offsetHeight || el.getClientRects().length;
+    });
+    if(!f.length){ e.preventDefault(); return; }
+    var first = f[0], last = f[f.length - 1], here = document.activeElement;
+    if(e.shiftKey && (here === first || !m.contains(here))){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && (here === last || !m.contains(here))){ e.preventDefault(); first.focus(); }
   }
   document.addEventListener('click', function(e){
     var rl = e.target.closest('[data-route-link]');
@@ -1566,7 +1631,10 @@
       pick.classList.add('on');
     }
   });
-  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModals(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ closeModals(); return; }
+    srTrapTab(e);
+  });
 
 
   /* ══════════ SR-085 · YOUR RECORD, BUILT FROM THE RECORD ══════════

@@ -294,3 +294,238 @@ reach — but it is a *different* control on a *different* condition, so per the
 **reported, not fixed**. The fix is one line (`if(key === 'method' && /method\.html$/.test(location.pathname)) return;`)
 but it changes which page the rail considers "here", which is a decision about how the
 framework sub-pages sit under the method section, not a bug fix. New register item.
+
+
+---
+
+## SR-109 · Checkout drawer accessibility
+
+### Where the checkout drawer actually lives
+
+The register described these against `saferise-plans-v1.html`. That file does not exist —
+Run A already established it is in no branch and no commit. Located instead by searching for
+the mechanism rather than the filename:
+
+- `aria-modal="true"` appears **seven times in the whole repo**, all in `dashboard.html`
+  (`:563, 599, 635, 664, 683, 714, 756`). No other page declares a modal at all.
+- The checkout path is: track rail → select a track you do not own → **`#srLockBtn`
+  "Add for €19 / month"** → matched by `TEXTMAP` `/^add /i` → `openRoute('checkout')` →
+  **`#mRoute`**, which renders "Add a track · Checkout · `/checkout`".
+
+So **the checkout drawer is `#mRoute` in `dashboard.html`**, and it is one of seven dialogs
+driven by a single shared controller (`openModal`/`closeModals`, the SR-070 pair at
+`dashboard.html:1498+`). Fixing the layer fixes checkout, workshop booking, the Premium 1:1
+booking, the calendar, The Clearing, the Cue Card and the Sessions/Record/Journal views in
+one place. That is why the fix is in the controller and not in the checkout markup.
+
+Opened and confirmed by clicking before anything was changed: `#mRoute` on, title
+"Add a track", path `/checkout`, `body` overflow hidden.
+
+### a. `aria-modal="true"` — three of five parts were already true
+
+The register says "No focus move on open, no trap, no restore on close." Measured on the real
+drawer, keyboard only. **Two of those three claims do not reproduce.**
+
+| the promise `aria-modal="true"` makes | before this run | evidence |
+|---|---|---|
+| focus moves into the dialog on open | **already worked** | focus went to `BUTTON.sr-modalclose` on open |
+| Escape closes | **already worked** | Escape closed it |
+| focus returns to the opening control on close | **already worked** | focus returned to `#srLockBtn` |
+| Tab and Shift+Tab are trapped | **missing** | see the escape trace below |
+| content behind is inert to assistive technology | **missing** | `document.querySelectorAll('[inert]').length === 0`, no `aria-hidden` anywhere |
+
+The escape, measured with real Tab keypresses from the drawer's initial focus:
+
+```
+close button (in drawer)  →  "Close" button (in drawer)  →  "Skip to content"  ← OUT
+→  Dashboard  →  Where the method comes from  →  Sessions & workshops  →  Account & plan
+```
+
+Three presses and the member is in the nav rail, behind a dialog they were told they could
+not leave. That is the defect, and it is the whole of it.
+
+Reporting it this precisely matters: had the register been taken at face value, the fix would
+have added a second focus-move and a second focus-restore on top of the ones already there,
+and the drawer would have fought itself.
+
+### The fix
+
+Both missing halves are added to the shared controller, and nothing that already worked was
+touched.
+
+`srInertBehind(modal)` walks from the dialog up to `<body>`, marking every **sibling** on the
+way as `inert` plus `aria-hidden="true"`. Sibling-walking rather than "inert the body's
+children" is required here: **the dialogs live inside `<main id="main">`**, so inerting the
+body's children would take the dialog with them. Measured while the checkout drawer is open —
+12 elements inert (`a.skip`, both `<nav>`s, the header, `.shell`, `#srProto`, and the six
+other modals), `#main` correctly **not** inert, the open dialog itself **not** inert.
+
+`inert` removes those elements from the accessibility tree and the tab order in one
+attribute; `aria-hidden` is set alongside for assistive technology that has not implemented
+`inert`. `inert` is supported in this browser (`'inert' in HTMLElement.prototype === true`).
+
+`srTrapTab(e)` wraps Tab and Shift+Tab at the ends of the dialog, so the cycle is closed
+rather than merely fenced. It hangs off the existing `keydown` listener that already handled
+Escape — one listener, not two.
+
+`srReleaseBehind()` runs in `closeModals()` **before** focus is restored. Order matters:
+focus cannot land inside an inert subtree, and the opening control is out in the background
+that was just inerted.
+
+### b. Six unlabelled close buttons — the count was exactly right
+
+The register calls them `.railbtn`; that class does not exist. What does exist is
+**seven** `.sr-modalclose` buttons, icon-only (an SVG X, no `<title>`), of which
+`#mLayer`'s already carried `aria-label="Close"`. **Six were unlabelled** — the register's
+number, on the nose.
+
+An audit of every `button`, `a[href]`, `[role]`, `input`, `select` and `textarea` on the page,
+computing the accessible name from `aria-label` → `aria-labelledby` → visible text → `alt` →
+SVG `<title>` → `placeholder` → `title`, found exactly those six and nothing else.
+
+Names were taken from the click handler, not the icon. The handler is
+`if(e.target.closest('[data-close]')){ closeModals(); }` — each one closes the dialog it sits
+in — so each is named for the dialog it closes, matching that dialog's own `aria-label`:
+
+| dialog | dialog's `aria-label` | close button now reads |
+|---|---|---|
+| `#mWorkshop` | Workshop booking | Close workshop booking |
+| `#mOneone` | Premium 1:1 booking | Close Premium 1:1 booking |
+| `#mCalendar` | Full calendar | Close full calendar |
+| `#mRoute` | Destination | Close destination |
+| `#mMedia` | The Clearing | Close The Clearing |
+| `#mCrisis` | Cue Card | Close Cue Card |
+
+`#mLayer`'s existing "Close" was left alone — it is already named, and its dialog title is
+dynamic (`aria-labelledby="srLayerTitle"`), so a fixed suffix would go stale.
+
+Re-audited after the change: **zero unlabelled controls on the page.**
+
+### c. The Elevation CTA — DOES NOT REPRODUCE, not edited
+
+The register says the Elevation CTA "looks and focuses like a live control and does nothing."
+It is not inert. Measured by clicking it:
+
+The only Elevation CTA in the repo is `<a class="sr-dash-go" href="#">Tell me when it opens</a>`,
+rendered by `render()` into the empty-track branch when Track 04 is selected
+(`dashboard.html:918`). Clicking it opens `#mRoute` with title **"Plans"**, kick "Not built
+yet", path `/plans` — because `TEXTMAP` carries `[/tell me when it opens/i, 'plans']`
+(`dashboard.html:1258`). It responds.
+
+Everything else checked before concluding:
+
+- `#srLockBtn` for Track 04 — exists but its container `.sr-dash-lockcta` is `display:none`
+  without `.show` (`saferise-dashboard.css:212`), so it is not focusable and cannot be the
+  control described.
+- The Track 04 rail tab ("Elevation Series / Coming soon") is a live tab and selects the track.
+- The dashboard hero has four slides; none is Elevation.
+- `index.html`'s Elevation waitlist (`:7604`) is a real Netlify form with an `onsubmit`
+  handler, and its "Join Waitlist" buttons all carry `onclick="showProg('elevation')"`.
+
+Per the run's standing constraint — reproduce first, do not edit toward a phantom — **no
+change was made for (c)**, and no control was marked `disabled` or `aria-disabled`.
+
+**Raised for the register instead:** the CTA says "Tell me when it opens" and reaches
+`/plans`. That is not inertness, it is the SR-104 shape — a control naming a destination it
+does not reach. It should either reach a waitlist or stop promising one. Also worth noting
+while it is open: `TRACKS[4]` carries `visible: false` (`content/tracks.js:228`) and the rail
+tab says "Coming soon", which is the marketing claim the brief objected to — but it is on a
+tab that works, not on an inert control, so changing that wording is a copy decision, not
+this fix.
+
+### Verification — the keystroke sequence actually run
+
+Keyboard-only, at 1440×900, on a freshly loaded page served `no-store`:
+
+```
+[mouse] click track 02 in the rail          → "Add for €19 / month" appears
+[mouse] click "Add for €19 / month"         → #mRoute opens: "Add a track", /checkout
+                                              focus → close button, aria-label "Close destination"
+                                              12 elements inert behind, #main not inert
+Tab                                         → "Close"                    (in drawer)
+Tab                                         → close button               (in drawer, wrapped)
+Tab                                         → "Close"                    (in drawer)
+Tab                                         → close button               (in drawer)
+Shift+Tab                                   → "Close"                    (in drawer, wrapped back)
+Shift+Tab                                   → close button               (in drawer)
+Escape                                      → drawer closed
+                                              inert 0, aria-hidden 0, body overflow released
+                                              focus → #srLockBtn "Add for €19 / month"
+```
+
+Four Tabs and two Shift+Tabs, every one of them landing inside the dialog. Before the change
+the third Tab was already outside.
+
+**Note on the harness, so the sequence is not over-read.** `Tab`, `Shift+Tab` and `Escape`
+were sent as real key events and behave normally. Two things about this environment had to be
+worked around and are not page defects:
+
+1. A synthetic `Enter` on a focused `<button>` does not produce the browser's implicit
+   activation — verified directly: the `keydown` arrives at the button with
+   `defaultPrevented === false` and no `click` event follows. Activation therefore used a real
+   mouse click. A real keyboard would activate on Enter or Space.
+2. Key events are not delivered to a page that has never been clicked since navigation. The
+   first Escape after a fresh `#route=coaching` arrival appeared to do nothing; after one
+   click anywhere on the page the same Escape closed the drawer, released all 12 inert
+   elements and restored `body` overflow. Every keyboard result above was taken after the
+   pane had focus.
+
+### Regression across all seven dialogs
+
+Each dialog was opened from its real trigger, inspected, and closed with Escape:
+
+| opened via | dialog | inert behind | `#main` inert | focus inside | first focusable's name | after close: open / inert / aria-hidden / focus returned |
+|---|---|---|---|---|---|---|
+| The Clearing cover | `#mMedia` | 12 | no | yes | Close The Clearing | 0 / 0 / 0 / yes |
+| "Book a session" | `#mOneone` | 12 | no | yes | Close Premium 1:1 booking | 0 / 0 / 0 / yes |
+| "Reserve a place" | `#mWorkshop` | 12 | no | yes | Close workshop booking | 0 / 0 / 0 / yes |
+| "See the full calendar" | `#mCalendar` | 12 | no | yes | Close full calendar | 0 / 0 / 0 / yes |
+| "See your record" | `#mLayer` | 12 | no | yes | Close | 0 / 0 / 0 / yes |
+| "Read everything you have written" | `#mLayer` | 12 | no | yes | Close | 0 / 0 / 0 / yes |
+| "Add for €19 / month" | `#mRoute` | 12 | no | yes | Close destination | 0 / 0 / 0 / yes |
+
+Six open/close cycles in a row leave **zero** leaked `inert` and **zero** leaked
+`aria-hidden`. Backdrop click still closes and still restores focus. The SR-104 arrival path
+(`dashboard.html#route=coaching`) opens `#mLayer` with the same 12 inert elements and focus on
+its close button, and Escape releases everything — the two fixes compose.
+
+`#mCrisis` has no trigger left on the dashboard (the Cue Card moved to `protocol.html`), so it
+could not be opened from here; its close button is labelled with the rest.
+
+The single inline `<script>` block (81,770 chars) parses clean via `new Function`, and the
+console reports zero errors across every path exercised.
+
+---
+
+## Run summary
+
+| item | outcome |
+|---|---|
+| **SR-108** | **done** — `b9e5ff5`. Tokens 02/03/04 repointed, 183 literals in `index.html` converted, cover helpers point at the tokens. index.html value-preserving across 217,680 probed element-rows; dashboard shifts 7/6/9 elements on tracks 02/03/04 as intended. No contrast pair below 4.5:1. |
+| **SR-104** | **done** — `860dae3`. All four broken paths reproduced by clicking, fixed by handing the route to the dashboard's own `openRoute()`, and re-verified by clicking. One further rail control reported, not fixed. |
+| **SR-109** | **(a) and (b) done. (c) does not reproduce — reported, not edited.** Focus trap and inert background added to the shared modal controller; six close buttons named; the Elevation CTA is live and was left alone. |
+
+Nothing was pushed, merged or opened as a PR; no branch was switched. `.claude/launch.json`
+was repointed at a scratchpad mirror during rendering (the preview sandbox cannot read the
+project directory) and **restored to its committed contents before every commit**.
+
+### Raised by this run, for the register
+
+1. **`method-porges.html`'s "Where the method comes from" rail button does nothing.** It is
+   marked `on` and returns early as "already here", but the page is not `method.html` — the
+   backbar directly above it links there. (SR-104 §reported.)
+2. **The Elevation CTA reaches the wrong place.** "Tell me when it opens" opens the Plans
+   dialog (`/plans`), not a waitlist. (SR-109 §c.)
+3. **The accent `rgba()` restatements are the last piece of SR-108.** `--sr-accent-wash`,
+   `--sr-accent-border`, the nav-tab `border-bottom-color` and several tinted panel grounds
+   restate the three accents as `rgba(232,112,144,…)` / `rgba(56,200,190,…)` /
+   `rgba(155,127,212,…)`. A hex token cannot go inside `rgba()`; closing this needs an
+   `--sr-trackNN-rgb` channel triple.
+4. **`.sr-svc-group{--accent:#5BC8D8}`** (`saferise-system.css:402`) is now the only place in
+   the repo still carrying the retired `#5BC8D8`. It is a services colour, not a track accent
+   — it renders identically on the Relationship and Professional sections — but it reads like
+   a stale track token and will invite exactly the wrong "fix".
+5. **White text on the `#E87090` button fill is 2.94:1** (e.g. `index.html:6354`), on the
+   Relationship track's revenue path. Pre-existing; the dark-text fills are all fine.
+6. **Track 04's accent passes contrast with no headroom** — 4.56:1 on the `rgb(38,36,59)`
+   services card. Any future darkening of that ground breaks it.
