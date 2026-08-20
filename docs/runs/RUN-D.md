@@ -810,3 +810,98 @@ carries the correction in place. The `null` / `[]` distinction itself still stan
 example was false.
 
 *Result: does not reproduce. Register updated, no code touched.*
+
+---
+
+## Phase 6 — resource-count inventory. **No code changed.**
+
+### First: Phase 5 was wrong, and this phase found it
+
+`p1-advisory` **exists and the Reader serves it.** `RESOURCE_CONTENT['p1-advisory']` is
+present with `kind: 'Attention Advisory'`, and `READER_PROTOCOLS['p1'].keys` lists it first
+of seven.
+
+**Why I missed it.** My Phase 5 sweep matched `"p1-advisory"` — the double-quoted JSON form.
+This record is created by a runtime assignment at [index.html:4691](index.html:4691),
+`RESOURCE_CONTENT['p1-advisory'] = {…}`, single-quoted, inside an IIFE added by SR-002.
+`index.html` builds much of `RESOURCE_CONTENT` this way, with later blocks adding and
+overwriting entries after the literal is parsed.
+
+**A static grep cannot enumerate this file's resource keys.** My "probe proved sensitive"
+step in Phase 5 did not save me: the probe was sensitive *within its own method*, and the
+method was the thing that was wrong. A sentinel proves a probe can detect a failure it is
+capable of seeing — it says nothing about failures outside its reach. The live object graph
+is the only instrument for resource keys here, and that is now recorded in SR-120.
+
+SR-120 is corrected in place: heading, finding, and status. It **reproduces**.
+
+### 1 · Every surface where a count is displayed
+
+| surface | file · line | derived or hardcoded | what it renders |
+|---|---|---|---|
+| Track-page "What's included" | [js/saferise-track.js:276](js/saferise-track.js:276) | **derived** — `SHARED.resources` | **all nine resources by name**, all three track pages |
+| Track-page numeral substitution | [js/saferise-track.js:163](js/saferise-track.js:163) | **derived** — `SHARED.resources.length` | **nothing today** — no track copy contains a numeral+"resources" string; live but idle |
+| Dashboard fold title | [dashboard.html:1262](dashboard.html:1262) | **derived** — `SHARED.resources.length` | **"Nine resources, one for each kind of moment."** |
+| `protocolResourceCount()` | [content/tracks.js:547](content/tracks.js:547) | **derived** — `SHARED.resources` − conditionals | **nothing** — zero callers outside `tracks.js` |
+
+**No hardcoded count exists anywhere.** SR-078 and SR-054 did that work and it held. Also
+worth stating plainly: the "claimed 7–9" figure Run C attributes to
+`protocolResourceCount` **is not rendered on any surface** — that function has no consumer.
+The number a visitor actually sees is **nine**, from `SHARED.resources.length`, and the
+nine-item named list.
+
+### 2 · What a true count returns, all thirty
+
+| track | claimed by `protocolResourceCount` | Reader manifest serves | manifest keys with content |
+|---|---|---|---|
+| 01 | 7–9 (7,9,8,9,7,7,7,9,9,8) | 6–8 (7,7,7,8,6,6,6,8,8,8) | **all** |
+| 02 | 7 × 10 | **2 × 10** | **all** |
+| 03 | 7 × 10 | **2 × 10** | **all** |
+
+**Drift against Run C:** Run C recorded Track 02 delivering **0**. The tree says **2** —
+a Session Guide and a Safety Score per protocol. Track 03 also 2, which Run C had right.
+
+### 3 · Missing content, not a mapping artifact — the question you asked
+
+**Unambiguous: it is missing content.**
+
+Of **112** `RESOURCE_CONTENT` keys, **112 are referenced** by a Reader manifest or a
+`data-resource` attribute. **Zero orphans.** There is no Track 02/03 content keyed under
+names nothing looks up. T2 holds 20 records for ten protocols, T3 holds 20, T1 holds 71.
+
+Both probes were proved sensitive before their nulls were trusted — an unbacked manifest key
+produced exactly one missing-content report; an unreferenced record produced exactly one
+orphan; both restored clean.
+
+**But the `-repair` shape is present in a different place.** The two count sources are
+separate inventories with non-corresponding vocabularies:
+
+- `SHARED.resources` — 9 **titles**, identical for every protocol, filtered by `extras`
+- `READER_PROTOCOLS[pk].keys` — per-protocol **key suffixes**, authored individually
+
+Three concepts align (`crisiscard`=Cue Card, `companion`=Somatic Release, `disclosure`=
+Disclosure & Support). The rest do not: the manifest has `founder`, `decision`, `safety`,
+none of which exist in `SHARED.resources`; the declared library has Guided Meditation, Safe
+Practice, How This Works, Your Record, none of which has a key suffix.
+
+So the overstatement is **not** a rename hiding real content — but it **is** a naming
+mismatch, one layer up: two lists that were authored separately, never reconciled, and are
+now both called "the resources".
+
+Logged as **SR-125**.
+
+### The sharpest surface is not a number
+
+`relationship-healing.html` renders all nine resources **by title** — Proximity Guide and
+Invitation to Repair included — while the Reader delivers two. A wrong numeral is a typo. A
+named list of nine is a specific promise.
+
+### Nothing fixed
+
+Three routes, not equivalent: derive from the manifest (honest now, advertises two on T2/T3);
+author the missing content; or reconcile the vocabularies. That is a pricing and copy
+decision. **SR-120 is blocked on the same question** — `p1-advisory` is attention-inward
+guidance, not the Proximity Guide's relational distance, so `extras: ['advisory']` on `t1-01`
+would claim a Proximity Guide the protocol does not have.
+
+`git status` empty. Server stopped, `launch.json` restored, `lsof` clear — in that order.

@@ -15,7 +15,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   accents/rails/a11y run (SR-108, SR-109) and the track-pages/audit run (SR-110 to
   SR-119). All are written up below. The previous block ran out mid-pass, which is what
   that reservation was for.
-- **SR-120 to SR-124 are issued** by the Elevation-hide run — SR-121 to SR-124 below,
+- **SR-120 to SR-125 are issued** by the Elevation-hide run — SR-121 to SR-125 below,
   SR-120 for the `t1-01` extras correction. **SR-114 and SR-116 were never issued and remain free.** They
   are gaps inside a range other branches have already read past; do not reach back for them
   while a higher number is available. Taking a number out of the middle of a read range is
@@ -376,6 +376,82 @@ loads, rather than typing figures into markup.
 
 Found while logging [[SR-122]]; not part of the Elevation work and deliberately not fixed
 inside it.
+
+*Status:* open · *Raised:* 20 Aug 2026
+
+### SR-125 · The declared library and the Reader's manifest are two different inventories
+Every protocol page and the dashboard describe a resource library. **Two unrelated sources
+answer that question, and neither knows about the other.**
+
+| | `SHARED.resources` — the *declared* library | `READER_PROTOCOLS[pk].keys` — the *served* manifest |
+|---|---|---|
+| shape | one fixed 9-item list, identical for all 30 protocols | a per-protocol list, authored individually |
+| filtered by | `META[].extras` and `CONDITIONAL_RESOURCES` | nothing — it is the literal content list |
+| counted by | `protocolResourceCount()` | the Reader's own page-building loop |
+| vocabulary | resource **titles** — "Proximity Guide", "Your Record" | key **suffixes** — `advisory`, `founder`, `decision` |
+
+**The vocabularies do not correspond.** Three concepts line up cleanly — `crisiscard` = Cue
+Card, `companion` = Somatic Release Activities, `disclosure` = Disclosure & Support. The rest
+do not. The manifest carries `founder` (Founder Video), `decision` (The Decision) and
+`safety` (Safety Score), **none of which appear in `SHARED.resources` at all**; the declared
+library carries Guided Meditation, Safe Practice, How This Works and Your Record, none of
+which has a matching key suffix.
+
+### Measured, live, across all thirty protocols
+
+| track | `protocolResourceCount` claims | Reader manifest serves | every manifest key has content? |
+|---|---|---|---|
+| 01 | 7 – 9 | 6 – 8 | **yes** |
+| 02 | 7 (all ten) | **2** (all ten) | **yes** |
+| 03 | 7 (all ten) | **2** (all ten) | **yes** |
+
+### It is **missing content**, not a mapping artifact
+
+This was the question worth settling, and the answer is unambiguous. Of **112**
+`RESOURCE_CONTENT` keys, **112 are referenced** by a Reader manifest or a `data-resource`
+attribute — **zero orphans**. There is no hidden Track 02/03 content sitting under names
+nothing looks up. Track 02 has 20 content records for ten protocols; Track 03 has 20; Track
+01 has 71.
+
+Both probes were proved sensitive before their null results were trusted: injecting an
+unbacked key into a manifest produced exactly one missing-content report, and injecting an
+unreferenced record produced exactly one orphan. Both restored cleanly.
+
+So Track 02 and Track 03 genuinely carry **two resources per protocol** — T2 a Session Guide
+and a Safety Score, T3 a Meditation Script and Somatic Release Activities — against a page
+that names nine.
+
+### Where it is claimed — all derived, none hardcoded
+
+| surface | file · line | derived from | renders |
+|---|---|---|---|
+| Track-page "What's included" list | [js/saferise-track.js:276](js/saferise-track.js:276) | `SHARED.resources` | **all nine, by name**, on all three track pages |
+| Track-page copy numeral | [js/saferise-track.js:163](js/saferise-track.js:163) `resourceCount()` | `SHARED.resources.length` | nothing currently — no track copy contains a numeral+"resources" string, so the substitution is live but idle |
+| Dashboard fold title | [dashboard.html:1262](dashboard.html:1262) | `SHARED.resources.length` | **"Nine resources, one for each kind of moment."** |
+| `protocolResourceCount()` | [content/tracks.js:547](content/tracks.js:547) | `SHARED.resources` − conditionals | **nothing** — zero callers outside `tracks.js` and its `module.exports` |
+
+**No hardcoded count exists anywhere.** [[SR-078]] and [[SR-054]] did that work and it held.
+The overstatement is not a stale numeral — it is that the derived number is derived from the
+wrong list.
+
+**The sharpest surface is not a number.** `relationship-healing.html` renders all nine
+resources **by title**, Proximity Guide and Invitation to Repair included, while the Reader
+delivers two. A wrong numeral is a typo; a named list of nine is a specific promise.
+
+### Not fixed. This is a product decision.
+
+Three routes, and they are not equivalent:
+
+1. **Make the count derive from the manifest.** Honest immediately, and Track 02/03 pages
+   then advertise two resources.
+2. **Author the missing Track 02/03 content** so the nine-item library is real.
+3. **Reconcile the vocabularies** so one source answers the question.
+
+Fixing the number without deciding the copy silently changes what the site promises, so
+nothing was changed. [[SR-120]] is blocked on the same question: `p1-advisory` exists but is
+*attention-inward* guidance, not the Proximity Guide's *relational distance*, so whether
+`advisory` names one resource or two has to be settled before `t1-01`'s `extras` can be
+corrected honestly.
 
 *Status:* open · *Raised:* 20 Aug 2026
 
@@ -743,38 +819,51 @@ commit.
 
 *Status:* open · *Raised:* 20 Aug 2026
 
-### SR-120 · `t1-01` extras — does not reproduce
+### SR-120 · `t1-01` extras — **reproduces.** My first finding was wrong.
 Raised as: `p1-advisory` is written and the Reader serves it, but `META['t1-01'].extras` is
 `[]`, so content and data disagree and the `[]` is a wrong value rather than an unverified
 one.
 
-**`p1-advisory` does not exist.** The advisory keys in the tree are `p2-`, `p3-`, `p4-`,
-`p8-`, `p9-` and `p10-advisory`. There is no `p1-advisory` in any tracked file, and `p1`'s
-seven keys are `companion`, `crisiscard`, `disclosure`, `guide`, `listen`, `walkthrough`,
-`watch` — no conditional resource among them.
+**`p1-advisory` exists, and the Reader serves it.** Measured on the live object graph:
+`RESOURCE_CONTENT['p1-advisory']` is present with `kind: 'Attention Advisory'`, title
+*"Anxiety Reset — Where to Direct Your Attention"*, and `READER_PROTOCOLS['p1'].keys` lists
+it **first** of seven.
 
-**The mapping is exactly right, in both directions and on both conditionals.** Note the
-second is keyed `-repair`, not `-invitation`, which is what makes it easy to miss:
+**How I got this wrong the first time, and it matters.** My initial sweep matched
+`"p1-advisory"` — double-quoted, the JSON-literal form. This resource is created by a
+runtime assignment at [index.html:4691](index.html:4691),
+`RESOURCE_CONTENT['p1-advisory'] = {…}`, single-quoted, inside an IIFE added by SR-002.
+`index.html` builds a large part of `RESOURCE_CONTENT` this way — several later blocks add
+and overwrite entries after the literal is parsed. **A static grep cannot enumerate this
+file's resource keys.** Only the live object graph can. That is now the method for any
+resource-key question here.
+
+**The `extras` → content-key mapping, which is still worth recording.** The second
+conditional is keyed `-repair`, not `-invitation` — the value in `extras` and the suffix in
+the content key do not share a name, so any audit matching by name reports a gap that is not
+there:
 
 | conditional | `extras` key | content key | protocols claiming it | content present for |
 |---|---|---|---|---|
-| Proximity Guide | `advisory` | `pN-advisory` | t1-02, 03, 04, 08, 09, 10 | p2, p3, p4, p8, p9, p10 |
+| Proximity Guide | `advisory` | `pN-advisory` | t1-02, 03, 04, 08, 09, 10 | p1, p2, p3, p4, p8, p9, p10 |
 | Invitation to Repair | `invitation` | `pN-repair` | t1-02, 04, 08, 09 | p2, p4, p8, p9 |
 
-Checked across **all thirty protocols**, all three tracks: **zero** cases where `extras`
-claims a conditional resource the content does not carry. The probe was proved sensitive
-first — re-run against a sentinel copy giving `t1-01` an `'advisory'` it has no content for,
-it reported exactly one mismatch, `t1-01 -> p1-advisory`.
+`p1` is the one row where content exists and `extras` does not claim it. Every other cell
+matches in both directions, and no `extras` entry anywhere claims content that is absent.
 
-Confirmed live on the Track 01 page: `protocolResourceCount('t1-01')` → **7**, the seven
-unconditional resources, with neither conditional present; `protocolResourceCount('t1-02')`
-→ **9**, both conditionals present. `SHARED.resources.length` is 9.
+**So `t1-01: extras: []` is wrong** — `[]` asserts *verified, neither conditional applies*,
+while the Reader serves an Attention Advisory for that protocol. `protocolResourceCount('t1-01')`
+returns **7**, omitting the Proximity Guide, while the Reader's `p1` manifest carries
+`p1-advisory`.
 
-So `t1-01: extras: []` is **correct** — verified, and neither conditional applies. Nothing
-was changed. Do not "correct" this in a later pass; the brief that raised it was working
-from a key name (`p1-advisory`) that has never existed in this repo.
+**Not fixed yet, and it should not be fixed in isolation.** The two inventories are not the
+same list — see [[SR-125]]. `p1-advisory` is *"how do I turn attention inward safely"*, while
+`SHARED.resources`' Proximity Guide is *"How close to stay"* — relational distance, which is
+the `p2-advisory` content. Setting `extras: ['advisory']` on `t1-01` would make the count 8
+by claiming a **Proximity Guide the protocol does not have**. The honest fix depends on
+whether `advisory` means one resource or two, which is the SR-125 question.
 
-*Status:* closed — does not reproduce · *Raised:* 20 Aug 2026 · *Closed:* 20 Aug 2026
+*Status:* open — reproduces; blocked on [[SR-125]] · *Raised:* 20 Aug 2026
 
 ---
 
