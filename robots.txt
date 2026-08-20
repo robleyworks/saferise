@@ -1,0 +1,6 @@
+# SafeRise Protocol — pre-launch.
+# The site is live and resolving but not ready to be indexed: copy, pricing
+# and the legal pages are still in flux. Removed on soft-launch day, together
+# with the noindex meta in every page <head>.
+User-agent: *
+Disallow: /

@@ -213,7 +213,7 @@ Native `<details>` — no JavaScript, keyboard and screen-reader accessible, can
     </div>
     <div class="sr-foot-grid"> …four columns… </div>
     <div class="sr-foot-bottom">
-      <p>© 2026 SafeRise Protocol · Sint Maarten</p>
+      <p>© 2026 SafeRise Protocol · an independent practice created by Andre Robley</p>
       <span class="sr-spacer"></span>
       <a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/contact">Contact</a>
     </div>
