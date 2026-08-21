@@ -48,13 +48,20 @@ var PRICING = {
   /* SR-091 · there was one 'workshop' key holding €29 — Track 03's monthly
      price, never a workshop price. Workshops are priced per format, so there
      are two keys and the block reads 'from' the lower one. */
-  workshopPersonal:     { amount: '\u20AC59',  per: 'per person' },
-  workshopRelationship: { amount: '\u20AC139', per: 'per couple' },
-  premium:  { amount: '\u20AC275', per: '/ session' },
-  /* SR-057 · open: premium1 and premium3 may be retired tiers. Nothing in
-     the repo renders either one. Left in place pending that decision. */
+  workshopPersonal:     { amount: '\u20AC29',  per: 'per person' },
+  workshopRelationship: { amount: '\u20AC49',  per: 'per couple' },
+  /* SR-136/SR-137 · there is no `premium` key. It held \u20AC275 / session for the
+     1:1, which turned out to be the SAME offer as `premium1` under a second name —
+     dashboard.html and protocol.html sold "Premium 1:1" at \u20AC275 / 90 min while
+     index.html sold it at \u20AC129 / 60 min. The duplicate key was removed and every
+     surface repointed at `premium1`, so the 1:1 now has one price in one place.
+     Do not re-add `premium`. */
+  /* SR-057 · ANSWERED by SR-138. premium1 and premium3 are LIVE products and these
+     values are correct. They previously had zero consumers while index.html rendered
+     the same two figures as literals — sold from copies rather than from the record.
+     Both now derive. Keep them. */
   premium1:{ amount: '\u20AC129', per: 'per hour' },
-  premium3:{ amount: '\u20AC299', per: 'for three hours' }
+  premium3:{ amount: '\u20AC299', per: 'for three sessions' }
 };
 
 /* ── SHARED · identical on every track. Edited here, never per track. ── */
@@ -102,7 +109,41 @@ var SHARED = {
   scope: 'SafeRise is a self-guided nervous-system tool, not a replacement for therapy or crisis care \u2014 many members use both together. It is a practical nervous-system tool you can use in daily life, alongside any other support you are receiving.'
 };
 
-/* ── TRACKS · four records. Elevation carries visible:false for launch. ── */
+/* ── CHANGE_PROPOSALS · the `items` of the live `change` section on Tracks 02
+      and 03. Referenced by identity at :334 and :452, never copied — mutating an
+      entry here changes what the track page renders.
+
+      SR-133 · the comment that stood here described this as unfinished material.
+      It has been live member-facing copy since T2 and T3 were authored, and the
+      name is historical. A brief written from that stale description nearly had
+      the six-areas section deleted from two of the three track pages.
+
+      DO NOT MOVE THIS BELOW `var TRACKS`. The TRACKS literal reads it during
+      evaluation, so a later declaration leaves the binding hoisted-but-undefined
+      and throws a TypeError. That ordering is why T2 and T3 used to be assigned
+      over empty stubs instead of living in the literal (SR-129). ── */
+var CHANGE_PROPOSALS = {
+  2: [
+    ['\u25CD','Conversation',  '#C97A5A','from words landing as attack',      'The same sentence lands as information, not as an attack.'],
+    ['\u25C7','Repair',        '#C97A5A','from ruptures left open',           'The gap after a fight closes in hours instead of days.'],
+    ['\u263E','Predictability','#D4A843','from guessing what is safe to say', 'You stop rehearsing before you speak.'],
+    ['\u26A1','Reactivity',    '#D4A843','from nought to furious',            'There is a gap between what they do and what you do next.'],
+    ['\u25CE','Closeness',     '#7FA88C','from managed distance',             'Being known stops feeling like exposure.'],
+    ['\u25C8','Separateness',  '#4E9AA6','from losing yourself in it',        'You can stay yourself and stay in the room.']
+  ],
+  3: [
+    ['\u25CD','Presence',   '#C97A5A','from rehearsing the worst case',    'You arrive in the room instead of arriving braced.'],
+    ['\u25C7','Recovery',   '#C97A5A','from carrying it home',             'The meeting ends when the meeting ends.'],
+    ['\u263E','Endurance',  '#D4A843','from running on reserve',           'The week stops being something to survive.'],
+    ['\u26A1','Judgement',  '#D4A843','from decisions that take days',     'Choices get made at the size they actually are.'],
+    ['\u25CE','Conflict',   '#7FA88C','from avoidance or escalation',      'Disagreement becomes something you can stay in.'],
+    ['\u25C8','Standing',   '#4E9AA6','from waiting to be found out',      'Competence stops needing constant re-proving.']
+  ]
+};
+
+/* ── TRACKS · four records. Elevation carries visible:false for launch.
+      Tracks 02 and 03 read CHANGE_PROPOSALS above during evaluation — read the
+      note there before reordering anything in this file (SR-129). ── */
 var TRACKS = {
 
   1: {
@@ -198,35 +239,128 @@ var TRACKS = {
       'Journal and progress tracking, private to you',
       'New protocols and resources, included as the track grows'
     ],
-    priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Relationship and Professional build on this track \u2014 Track 01 is the prerequisite, not the cheap tier.',
+    /* SR-126 · the introductory line comes first because it qualifies the number
+       directly above it. All three segments are conditions of sale. */
+    priceNote: 'Introductory rate \u2014 yours for as long as you stay subscribed<br>Cancel anytime \u00B7 keep everything you\u2019ve written<br>Relationship and Professional build on this track \u2014 Track 01 is the prerequisite, not the cheap tier.',
     stickyLine: 'Your SafeRise is ready when you are.'
   },
 
-  /* ── T2 and T3 hold structure and protocol names only.
-        Empty strings are the matrix gaps and render as visible markers. ── */
   2: {
     id: 2, visible: true, status: 'live',
     name: 'Relationship Healing',
     kicker: 'Track 02 \u2014 Relationship Healing',
     heroTitle: 'Relationship<br><span class="gold">Healing</span>',
-    heroRule: '',
-    heroBody: [],
+    heroRule: 'Two nervous systems in one room, each reacting to the other\u2019s reaction.',
+    heroBody: [
+      'The argument is rarely the problem. The problem is what both bodies do in the seconds before either of you speaks.',
+      'These protocols work on your half of it \u2014 the half you can actually reach. Run them alone or together. Nobody has to agree to anything first.'
+    ],
     relation: 'run with another',
     price: PRICING.t2,
+
+      art: {
+        band:   'two people: one listening alone, one writing, both reading together',
+        cost:   'two people in one room not looking at each other \u2014 evening, night, morning',
+        range:  'the same pair three times \u2014 one pressing, both settled, one gone',
+        change: 'two people at ease in a shared space, facing each other'
+      },
+
     protocols: [
-      ['01','Speak',     'The Safe Conversation Protocol',       '','',[]],
-      ['02','Repair',    'The Rupture & Repair Protocol',    '','',[]],
-      ['03','Rebuild',   'The Trust & Betrayal Protocol',    '','',[]],
-      ['04','Release',   'The Resentment Release Protocol',      '','',[]],
-      ['05','Open',      'The Intimacy Barrier Protocol',        '','',[]],
-      ['06','Level',     'The Double Standard Protocol',         '','',[]],
-      ['07','Clarify',   'The Projection Clarity Protocol',      '','',[]],
-      ['08','Appreciate','The Appreciation & Support Protocol','','',[]],
-      ['09','Meet',      'The Pursue & Withdraw Protocol',   '','',[]],
-      ['10','Close',     'The Conscious Separation Protocol',    '','',[]]
+      ['01','Speak',     'The Safe Conversation Protocol',
+       'Make it safe enough to say the true thing and be heard.',
+       'Rehearsing the sentence, bracing for the reaction, saying the safe version instead.',
+       ['I rehearse conversations before I have them','I say the safe version instead of the true one','It becomes a fight before I finish']],
+      ['02','Repair',    'The Rupture & Repair Protocol',
+       'Close the gap after a fight instead of waiting for it to fade.',
+       'Days of politeness, the subject stepped around, nothing actually settled.',
+       ['We never finish a fight, we just stop','We go quiet until it passes','I do not know how to come back in']],
+      ['03','Rebuild',   'The Trust & Betrayal Protocol',
+       'Rebuild ground under a relationship after trust was broken.',
+       'Checking, replaying, needing a detail that never quite settles it.',
+       ['I check things I should not check','I keep asking and it never lands','I cannot tell whether I am safe here']],
+      ['04','Release',   'The Resentment Release Protocol',
+       'Put down the score you have been keeping, so it stops running the room.',
+       'A score you never meant to keep. Warmth that comes late, or not at all.',
+       ['I keep a list I never say out loud','I give, then hold it against them','I am not angry any more, I am done']],
+      ['05','Open',      'The Intimacy Barrier Protocol',
+       'Stay open when someone gets close, instead of pulling away.',
+       'Turning away right when they reach you. Distance you did not choose.',
+       ['I go somewhere else when we get close','I want it and I avoid it','Being wanted makes me tense']],
+      ['06','Level',     'The Double Standard Protocol',
+       'Name the rule that only one of you has to follow.',
+       'One person\u2019s needs read as reasonable, the other\u2019s as too much.',
+       ['There is one rule for me and another for them','My needs feel like too much to ask','I accept things I would never do']],
+      ['07','Clarify',   'The Projection Clarity Protocol',
+       'Tell what they actually did apart from what your past says they meant.',
+       'You are sure why they did it, before you have any proof.',
+       ['I know exactly what they meant, and I am often wrong','This feels older than this relationship','I am reacting to someone who is not in the room']],
+      ['08','Appreciate','The Appreciation & Support Protocol',
+       'Get back the habit of noticing what the other one is carrying.',
+       'Everything lands as not enough. Neither of you says thank you any more.',
+       ['I only notice what is missing','We have stopped thanking each other','I feel invisible inside my own effort']],
+      ['09','Meet',      'The Pursue & Withdraw Protocol',
+       'Break the chase-and-retreat loop by changing your half of it.',
+       'One reaching harder, one moving further. Neither able to stop first.',
+       ['The more I reach, the further they go','I need space and it reads as leaving','We are stuck in the same loop']],
+      ['10','Close',     'The Conscious Separation Protocol',
+       'End it, or step back from it, without destroying what it was.',
+       'Prolonged limbo. Sharpness neither of you means. The decision kept just out of reach.',
+       ['We are ending and pretending not to','I want to leave this well','Neither of us will say it first']]
     ],
-    cost: null, range: null, journey: null, change: null,
-    priceList: [], priceNote: '', stickyLine: ''
+
+    cost: {
+      eyebrow: 'And why it matters now',
+      h2: 'Think about what this costs.<br><span class="gold">Not the fights.</span>',
+      lede: 'Not the arguments you remember. The ordinary evenings in between, and who you both become inside them.',
+      caps: [['9 PM','The room goes careful'],['2 AM','One of you is still awake'],['Morning','Neither of you mentions it']],
+      note: 'Most couples live with a pattern for years before they name it out loud. By then it is rarely the argument \u2014 it is the architecture around the argument.',
+      items: [
+        ['Ease',      'Being in the same room without checking the mood every few minutes.',                       'var(--mob)'],
+        ['Honesty',   'The things you stopped saying because of what saying them costs.',                       '#C99A5A'],
+        ['Desire',    'What closeness turns into when the body is braced before contact.',                      'var(--gold)'],
+        ['Time',      'Evenings spent managing a dynamic rather than living in one.',                           '#8FA98C'],
+        ['Who you were', 'The person they met, and how rarely either of you sees them now.',                    'var(--teal)']
+      ],
+      close: 'Neither of you is the problem. Two nervous systems are running a pattern that neither of you chose, and both of you maintain.'
+    },
+
+    range: {
+      eyebrow: 'The state it\u2019s holding',
+      h2: 'Two systems,<br><span class="gold">one shared state.</span>',
+      lede: 'Regulation is contagious in both directions. Whichever state you bring into the room is the one the other person\u2019s body starts answering.',
+      cols: [
+        ['\u201CIf I don\u2019t fix this right now it gets worse.\u201D', 'Pressing, explaining, needing resolution tonight. The urgency reads to them as attack, and their system answers accordingly.', 'var(--mob)'],
+        ['\u201CThis is hard. It isn\u2019t a war.\u201D',                 'The subject stays hard, the room does not. You can hear a sentence you disagree with without your body preparing a response.', 'var(--safe)'],
+        ['\u201CSay what you like. I\u2019m not here.\u201D',              'Present and unreachable. Not stonewalling as strategy \u2014 a system that has left the room to protect itself.', 'var(--shut)']
+      ],
+      closeQ: 'You have both been in the settled version of this.',
+      closeK: 'The work is getting one of you there first, on purpose.'
+    },
+
+    journey: {
+      title: 'Run it alone. Run it together.<br>Repair when you\u2019re both ready.',
+      sub: 'Three parts, and none of them require the other person\u2019s agreement to start.',
+      experience: 'The guided session, voiced start to finish, in a version for running alone and a version for running together. Most people start alone \u2014 changing your own half is the only half you control.',
+      log: 'Log the session and note what shifted, in the dynamic as well as in you. What repeats becomes visible far faster in a relationship than it does on your own.',
+      deeper: 'The full resource library, plus the two that carry the most weight here: the Invitation to Repair, and the Disclosure & Support script for explaining what you are doing without turning it into a demand.',
+      deeperNote: 'Individuation sits here too: what belongs to you, what belongs to them, and what belongs to something older than either of you.'
+    },
+
+    change: { eyebrow: 'What changes when it does',
+      h2: 'Change becomes visible <span class="gold">in the room.</span>',
+      lede: 'Six places where a more regulated state shows up between two people \u2014 usually noticed by the other person first.',
+      items: CHANGE_PROPOSALS[2],
+      close: 'Fewer fights, faster repair, and time together that stops costing you.' },
+
+    priceList: [
+      'All twenty protocols \u2014 Relationship Healing and Personal Transformation',
+      'Solo and shared versions of every guided session',
+      'Invitation to Repair and Disclosure scripts throughout',
+      'Journal and progress tracking, private to you \u2014 not shared with a partner',
+      'New protocols and resources, included as the tracks grow'
+    ],
+    priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Access is cumulative \u2014 Relationship Healing includes the whole of Personal Transformation.',
+    stickyLine: 'Your half of it is the half you can reach.'
   },
 
   3: {
@@ -234,290 +368,127 @@ var TRACKS = {
     name: 'Professional Performance',
     kicker: 'Track 03 \u2014 Professional Performance',
     heroTitle: 'Professional<br><span class="gold">Performance</span>',
-    heroRule: '',
-    heroBody: [],
+    heroRule: 'You are the same nervous system at nine in the morning that you are at home.',
+    heroBody: [
+      'Pressure, exposure, conflict and self-doubt do not become different problems because they happen at work. They become the same problems with a professional face on.',
+      'Ten protocols for the states that follow high performers into every room \u2014 run before the meeting, not discussed after it.'
+    ],
     relation: 'run at work',
     price: PRICING.t3,
+
+      art: {
+        band:   'corridor moments before the room, desk log, reading at day\u2019s end',
+        cost:   'one person at work \u2014 early, midday, still there late',
+        range:  'the same professional before a meeting \u2014 braced, settled, absent',
+        change: 'someone leaving work at a reasonable hour, unhurried'
+      },
+
     protocols: [
-      ['01','Steady',  'The High-Stakes Presence Protocol',   '','',[]],
-      ['02','Navigate','The Conflict Navigation Protocol',    '','',[]],
-      ['03','Dissolve','The Imposter Dissolution Protocol',   '','',[]],
-      ['04','Loosen',  'The Perfectionism Release Protocol',  '','',[]],
-      ['05','Perform', 'The Performance Anxiety Protocol',    '','',[]],
-      ['06','Recover', 'The Ambition Recovery Protocol',      '','',[]],
-      ['07','Cross',   'The Career Transition Protocol',      '','',[]],
-      ['08','Decide',  'The Decision Fatigue Protocol',       '','',[]],
-      ['09','Refill',  'The Burnout & Overload Protocol', '','',[]],
-      ['10','Unlock',  'The Creative Flow Protocol',          '','',[]]
+      ['01','Steady',  'The High-Stakes Presence Protocol',
+       'Settle before you walk in, so you arrive as yourself.',
+       'Shallow breath, rehearsed worst cases, the meeting running before the meeting.',
+       ['I rehearse the worst version on the way in','I am not myself in the room that matters','My best thinking arrives afterwards']],
+      ['02','Navigate','The Conflict Navigation Protocol',
+       'Stay in the disagreement without blowing it up or walking away.',
+       'Heat, then either the sharp version of the point or the silent one.',
+       ['I go sharp or I go quiet','I win the exchange and lose the room','I avoid the conversation for weeks']],
+      ['03','Dissolve','The Imposter Dissolution Protocol',
+       'Stop believing you only got here by luck.',
+       'Praise slides off. You work twice as hard for the confidence others get free.',
+       ['I am waiting to be found out','Praise does not land, criticism does','I over-prepare for things I already know']],
+      ['04','Loosen',  'The Perfectionism Release Protocol',
+       'Let it be finished when it is good enough.',
+       'Final passes that add nothing. Deadlines met, at a private cost nobody sees.',
+       ['I cannot call it done','The last ten percent takes half the time','Good enough feels like failing']],
+      ['05','Perform', 'The Performance Anxiety Protocol',
+       'Keep access to what you know while people are watching you use it.',
+       'You did the work, and it leaves you the moment people look.',
+       ['I know it until people are watching','My mind goes blank on cue','I dread the thing I am good at']],
+      ['06','Recover', 'The Ambition Recovery Protocol',
+       'Find what you actually want, under what you were taught to want.',
+       'Arriving and feeling nothing. The next target set before the last one landed.',
+       ['I hit the goal and felt nothing','I do not know if I want this','I am chasing something I never chose']],
+      ['07','Cross',   'The Career Transition Protocol',
+       'Move from one role to the next without losing your footing in between.',
+       'The old role gone, the new one unproven, no ground underneath either.',
+       ['I do not know who I am without the title','I left and I have not landed','Everything I was good at is behind me']],
+      ['08','Decide',  'The Decision Fatigue Protocol',
+       'Make small decisions small again.',
+       'Small choices cost as much as big ones. Putting it off, and calling it care.',
+       ['Every decision costs the same now','I keep gathering information instead of deciding','I am exhausted by choices that do not matter']],
+      ['09','Refill',  'The Burnout & Overload Protocol',
+       'Refill enough to work at the level you are actually being paid for.',
+       'You stopped caring about work you used to love. Rest that does not rest.',
+       ['I do not care about work I used to love','The weekend does not touch it','I am running on reserve and have been for months']],
+      ['10','Unlock',  'The Creative Flow Protocol',
+       'Get back to the work that used to come easily.',
+       'Starting, stopping, judging it before it even exists.',
+       ['I judge it before it is finished','I cannot start','It used to come easily and now it does not']]
     ],
-    cost: null, range: null, journey: null, change: null,
-    priceList: [], priceNote: '', stickyLine: ''
+
+    cost: {
+      eyebrow: 'And why it matters now',
+      h2: 'Think about what this costs.<br><span class="gold">Not the salary.</span>',
+      lede: 'Not the crisis quarter. The ordinary weeks, and how much of your capacity is spent on the state rather than the work.',
+      caps: [['7 AM','Already behind'],['1 PM','The good hours, spent bracing'],['9 PM','Still answering']],
+      note: 'The hours are rarely the issue. What costs is running them in a state that removes access to judgement, patience and the work you are actually paid for.',
+      items: [
+        ['Focus',      'The deep hours lost to a background hum that never fully quiets.',       'var(--mob)'],
+        ['Recovery',   'Evenings and weekends spent decompressing rather than living.',          '#C99A5A'],
+        ['Judgement',  'Decisions made from urgency, and the cost of unwinding them later.',     'var(--gold)'],
+        ['People',     'What your team gets from you on a Thursday, versus what you meant to give.', '#8FA98C'],
+        ['The work',   'The reaction you would take back, the room that remembers it, and the promotion that quietly went elsewhere.', 'var(--teal)']
+      ],
+      close: 'You have not lost the capability. It is unavailable in the state you are running it from.'
+    },
+
+    range: {
+      eyebrow: 'The state it\u2019s holding',
+      h2: 'The room reads<br><span class="gold">your state first.</span>',
+      lede: 'Competence is not the variable. Access to it is \u2014 and access closes in exactly the conditions where the stakes are highest.',
+      cols: [
+        ['\u201CIt\u2019s all urgent and it\u2019s all on me.\u201D', 'Fast, short, over-committed. Decisive in a way that costs later. The email sent before the sentence was finished thinking.', 'var(--mob)'],
+        ['\u201CHard week. I know what comes first.\u201D',            'The load is unchanged. Priority is available again, and so is the difference between what is urgent and what is loud.', 'var(--safe)'],
+        ['\u201CNone of it matters, so why start.\u201D',              'Flat, detached, present in name. Not laziness \u2014 a system rationing what is left of itself.', 'var(--shut)']
+      ],
+      closeQ: 'You already know your regulated professional self.',
+      closeK: 'The work is arriving as that person on the days it counts.'
+    },
+
+    journey: {
+      title: 'Before the room.<br>Not a debrief afterwards.',
+      sub: 'Three parts, built for a working day rather than a retreat.',
+      experience: 'The guided meditation for the protocol you are running, plus a short version for the gap between meetings and a Cue Card sized for the walk down the corridor. Nothing here requires a quiet house.',
+      log: 'Log the session against the situation \u2014 the pitch, the review, the conversation you were dreading. The pattern in your own working week becomes readable within a month.',
+      deeper: 'The full resource library, with the Attention Advisory doing real work here: where your energy belongs today, and which fights are not yours.',
+      deeperNote: 'Ambition, identity and what you were trained to want sit in this layer \u2014 the questions underneath the performance.'
+    },
+
+    change: { eyebrow: 'What changes when it does',
+      h2: 'Change becomes visible <span class="gold">at work.</span>',
+      lede: 'Six places where a more regulated state shows up professionally \u2014 usually in how the week ends rather than how it starts.',
+      items: CHANGE_PROPOSALS[3],
+      close: 'Clearer decisions, weeks you recover from, and reactions that stop costing you.' },
+
+    priceList: [
+      'All thirty protocols \u2014 Professional, Relationship Healing and Personal Transformation',
+      'Full sessions plus short versions built for a working day',
+      'Attention Advisory and conflict scripts throughout',
+      'Journal and progress tracking, private to you \u2014 never visible to an employer',
+      'New protocols and resources, included as the tracks grow'
+    ],
+    priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Access is cumulative \u2014 Professional includes Relationship Healing and Personal Transformation in full.',
+    stickyLine: 'Before the room, not a debrief after it.'
   },
+
 
   4: { id: 4, visible: false, status: 'hidden', name: 'Elevation Series' }
 };
 
-/* ── Proposed six areas for T2 and T3 — for the appendix, not yet live ── */
-var CHANGE_PROPOSALS = {
-  2: [
-    ['\u25CD','Conversation',  '#C97A5A','from words landing as attack',      'The same sentence lands as information, not as an attack.'],
-    ['\u25C7','Repair',        '#C97A5A','from ruptures left open',           'The gap after a fight closes in hours instead of days.'],
-    ['\u263E','Predictability','#D4A843','from guessing what is safe to say', 'You stop rehearsing before you speak.'],
-    ['\u26A1','Reactivity',    '#D4A843','from nought to furious',            'There is a gap between what they do and what you do next.'],
-    ['\u25CE','Closeness',     '#7FA88C','from managed distance',             'Being known stops feeling like exposure.'],
-    ['\u25C8','Separateness',  '#4E9AA6','from losing yourself in it',        'You can stay yourself and stay in the room.']
-  ],
-  3: [
-    ['\u25CD','Presence',   '#C97A5A','from rehearsing the worst case',    'You arrive in the room instead of arriving braced.'],
-    ['\u25C7','Recovery',   '#C97A5A','from carrying it home',             'The meeting ends when the meeting ends.'],
-    ['\u263E','Endurance',  '#D4A843','from running on reserve',           'The week stops being something to survive.'],
-    ['\u26A1','Judgement',  '#D4A843','from decisions that take days',     'Choices get made at the size they actually are.'],
-    ['\u25CE','Conflict',   '#7FA88C','from avoidance or escalation',      'Disagreement becomes something you can stay in.'],
-    ['\u25C8','Standing',   '#4E9AA6','from waiting to be found out',      'Competence stops needing constant re-proving.']
-  ]
-};
 
 
 /* ── TRACK 02 ─────────────────────────────────────────────────────── */
-var T2 = {
-  id: 2, visible: true, status: 'live',
-  name: 'Relationship Healing',
-  kicker: 'Track 02 \u2014 Relationship Healing',
-  heroTitle: 'Relationship<br><span class="gold">Healing</span>',
-  heroRule: 'Two nervous systems in one room, each reacting to the other\u2019s reaction.',
-  heroBody: [
-    'The argument is rarely the problem. The problem is what both bodies do in the seconds before either of you speaks.',
-    'These protocols work on your half of it \u2014 the half you can actually reach. Run them alone or together. Nobody has to agree to anything first.'
-  ],
-  relation: 'run with another',
-  price: PRICING.t2,
 
-    art: {
-      band:   'two people: one listening alone, one writing, both reading together',
-      cost:   'two people in one room not looking at each other \u2014 evening, night, morning',
-      range:  'the same pair three times \u2014 one pressing, both settled, one gone',
-      change: 'two people at ease in a shared space, facing each other'
-    },
-
-  protocols: [
-    ['01','Speak',     'The Safe Conversation Protocol',
-     'Make it safe enough to say the true thing and be heard.',
-     'Rehearsing the sentence, bracing for the reaction, saying the safe version instead.',
-     ['I rehearse conversations before I have them','I say the safe version instead of the true one','It becomes a fight before I finish']],
-    ['02','Repair',    'The Rupture & Repair Protocol',
-     'Close the gap after a fight instead of waiting for it to fade.',
-     'Days of politeness, the subject stepped around, nothing actually settled.',
-     ['We never finish a fight, we just stop','We go quiet until it passes','I do not know how to come back in']],
-    ['03','Rebuild',   'The Trust & Betrayal Protocol',
-     'Rebuild ground under a relationship after trust was broken.',
-     'Checking, replaying, needing a detail that never quite settles it.',
-     ['I check things I should not check','I keep asking and it never lands','I cannot tell whether I am safe here']],
-    ['04','Release',   'The Resentment Release Protocol',
-     'Put down the score you have been keeping, so it stops running the room.',
-     'A score you never meant to keep. Warmth that comes late, or not at all.',
-     ['I keep a list I never say out loud','I give, then hold it against them','I am not angry any more, I am done']],
-    ['05','Open',      'The Intimacy Barrier Protocol',
-     'Stay open when someone gets close, instead of pulling away.',
-     'Turning away right when they reach you. Distance you did not choose.',
-     ['I go somewhere else when we get close','I want it and I avoid it','Being wanted makes me tense']],
-    ['06','Level',     'The Double Standard Protocol',
-     'Name the rule that only one of you has to follow.',
-     'One person\u2019s needs read as reasonable, the other\u2019s as too much.',
-     ['There is one rule for me and another for them','My needs feel like too much to ask','I accept things I would never do']],
-    ['07','Clarify',   'The Projection Clarity Protocol',
-     'Tell what they actually did apart from what your past says they meant.',
-     'You are sure why they did it, before you have any proof.',
-     ['I know exactly what they meant, and I am often wrong','This feels older than this relationship','I am reacting to someone who is not in the room']],
-    ['08','Appreciate','The Appreciation & Support Protocol',
-     'Get back the habit of noticing what the other one is carrying.',
-     'Everything lands as not enough. Neither of you says thank you any more.',
-     ['I only notice what is missing','We have stopped thanking each other','I feel invisible inside my own effort']],
-    ['09','Meet',      'The Pursue & Withdraw Protocol',
-     'Break the chase-and-retreat loop by changing your half of it.',
-     'One reaching harder, one moving further. Neither able to stop first.',
-     ['The more I reach, the further they go','I need space and it reads as leaving','We are stuck in the same loop']],
-    ['10','Close',     'The Conscious Separation Protocol',
-     'End it, or step back from it, without destroying what it was.',
-     'Prolonged limbo. Sharpness neither of you means. The decision kept just out of reach.',
-     ['We are ending and pretending not to','I want to leave this well','Neither of us will say it first']]
-  ],
-
-  cost: {
-    eyebrow: 'And why it matters now',
-    h2: 'Think about what this costs.<br><span class="gold">Not the fights.</span>',
-    lede: 'Not the arguments you remember. The ordinary evenings in between, and who you both become inside them.',
-    caps: [['9 PM','The room goes careful'],['2 AM','One of you is still awake'],['Morning','Neither of you mentions it']],
-    note: 'Most couples live with a pattern for years before they name it out loud. By then it is rarely the argument \u2014 it is the architecture around the argument.',
-    items: [
-      ['Ease',      'Being in the same room without checking the mood every few minutes.',                       'var(--mob)'],
-      ['Honesty',   'The things you stopped saying because of what saying them costs.',                       '#C99A5A'],
-      ['Desire',    'What closeness turns into when the body is braced before contact.',                      'var(--gold)'],
-      ['Time',      'Evenings spent managing a dynamic rather than living in one.',                           '#8FA98C'],
-      ['Who you were', 'The person they met, and how rarely either of you sees them now.',                    'var(--teal)']
-    ],
-    close: 'Neither of you is the problem. Two nervous systems are running a pattern that neither of you chose, and both of you maintain.'
-  },
-
-  range: {
-    eyebrow: 'The state it\u2019s holding',
-    h2: 'Two systems,<br><span class="gold">one shared state.</span>',
-    lede: 'Regulation is contagious in both directions. Whichever state you bring into the room is the one the other person\u2019s body starts answering.',
-    cols: [
-      ['\u201CIf I don\u2019t fix this right now it gets worse.\u201D', 'Pressing, explaining, needing resolution tonight. The urgency reads to them as attack, and their system answers accordingly.', 'var(--mob)'],
-      ['\u201CThis is hard. It isn\u2019t a war.\u201D',                 'The subject stays hard, the room does not. You can hear a sentence you disagree with without your body preparing a response.', 'var(--safe)'],
-      ['\u201CSay what you like. I\u2019m not here.\u201D',              'Present and unreachable. Not stonewalling as strategy \u2014 a system that has left the room to protect itself.', 'var(--shut)']
-    ],
-    closeQ: 'You have both been in the settled version of this.',
-    closeK: 'The work is getting one of you there first, on purpose.'
-  },
-
-  journey: {
-    title: 'Run it alone. Run it together.<br>Repair when you\u2019re both ready.',
-    sub: 'Three parts, and none of them require the other person\u2019s agreement to start.',
-    experience: 'The guided session, voiced start to finish, in a version for running alone and a version for running together. Most people start alone \u2014 changing your own half is the only half you control.',
-    log: 'Log the session and note what shifted, in the dynamic as well as in you. What repeats becomes visible far faster in a relationship than it does on your own.',
-    deeper: 'The full resource library, plus the two that carry the most weight here: the Invitation to Repair, and the Disclosure & Support script for explaining what you are doing without turning it into a demand.',
-    deeperNote: 'Individuation sits here too: what belongs to you, what belongs to them, and what belongs to something older than either of you.'
-  },
-
-  change: { eyebrow: 'What changes when it does',
-    h2: 'Change becomes visible <span class="gold">in the room.</span>',
-    lede: 'Six places where a more regulated state shows up between two people \u2014 usually noticed by the other person first.',
-    items: CHANGE_PROPOSALS[2],
-    close: 'Fewer fights, faster repair, and time together that stops costing you.' },
-
-  priceList: [
-    'All twenty protocols \u2014 Relationship Healing and Personal Transformation',
-    'Solo and shared versions of every guided session',
-    'Invitation to Repair and Disclosure scripts throughout',
-    'Journal and progress tracking, private to you \u2014 not shared with a partner',
-    'New protocols and resources, included as the tracks grow'
-  ],
-  priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Access is cumulative \u2014 Relationship Healing includes the whole of Personal Transformation.',
-  stickyLine: 'Your half of it is the half you can reach.'
-};
-
-/* ── TRACK 03 ─────────────────────────────────────────────────────── */
-var T3 = {
-  id: 3, visible: true, status: 'live',
-  name: 'Professional Performance',
-  kicker: 'Track 03 \u2014 Professional Performance',
-  heroTitle: 'Professional<br><span class="gold">Performance</span>',
-  heroRule: 'You are the same nervous system at nine in the morning that you are at home.',
-  heroBody: [
-    'Pressure, exposure, conflict and self-doubt do not become different problems because they happen at work. They become the same problems with a professional face on.',
-    'Ten protocols for the states that follow high performers into every room \u2014 run before the meeting, not discussed after it.'
-  ],
-  relation: 'run at work',
-  price: PRICING.t3,
-
-    art: {
-      band:   'corridor moments before the room, desk log, reading at day\u2019s end',
-      cost:   'one person at work \u2014 early, midday, still there late',
-      range:  'the same professional before a meeting \u2014 braced, settled, absent',
-      change: 'someone leaving work at a reasonable hour, unhurried'
-    },
-
-  protocols: [
-    ['01','Steady',  'The High-Stakes Presence Protocol',
-     'Settle before you walk in, so you arrive as yourself.',
-     'Shallow breath, rehearsed worst cases, the meeting running before the meeting.',
-     ['I rehearse the worst version on the way in','I am not myself in the room that matters','My best thinking arrives afterwards']],
-    ['02','Navigate','The Conflict Navigation Protocol',
-     'Stay in the disagreement without blowing it up or walking away.',
-     'Heat, then either the sharp version of the point or the silent one.',
-     ['I go sharp or I go quiet','I win the exchange and lose the room','I avoid the conversation for weeks']],
-    ['03','Dissolve','The Imposter Dissolution Protocol',
-     'Stop believing you only got here by luck.',
-     'Praise slides off. You work twice as hard for the confidence others get free.',
-     ['I am waiting to be found out','Praise does not land, criticism does','I over-prepare for things I already know']],
-    ['04','Loosen',  'The Perfectionism Release Protocol',
-     'Let it be finished when it is good enough.',
-     'Final passes that add nothing. Deadlines met, at a private cost nobody sees.',
-     ['I cannot call it done','The last ten percent takes half the time','Good enough feels like failing']],
-    ['05','Perform', 'The Performance Anxiety Protocol',
-     'Keep access to what you know while people are watching you use it.',
-     'You did the work, and it leaves you the moment people look.',
-     ['I know it until people are watching','My mind goes blank on cue','I dread the thing I am good at']],
-    ['06','Recover', 'The Ambition Recovery Protocol',
-     'Find what you actually want, under what you were taught to want.',
-     'Arriving and feeling nothing. The next target set before the last one landed.',
-     ['I hit the goal and felt nothing','I do not know if I want this','I am chasing something I never chose']],
-    ['07','Cross',   'The Career Transition Protocol',
-     'Move from one role to the next without losing your footing in between.',
-     'The old role gone, the new one unproven, no ground underneath either.',
-     ['I do not know who I am without the title','I left and I have not landed','Everything I was good at is behind me']],
-    ['08','Decide',  'The Decision Fatigue Protocol',
-     'Make small decisions small again.',
-     'Small choices cost as much as big ones. Putting it off, and calling it care.',
-     ['Every decision costs the same now','I keep gathering information instead of deciding','I am exhausted by choices that do not matter']],
-    ['09','Refill',  'The Burnout & Overload Protocol',
-     'Refill enough to work at the level you are actually being paid for.',
-     'You stopped caring about work you used to love. Rest that does not rest.',
-     ['I do not care about work I used to love','The weekend does not touch it','I am running on reserve and have been for months']],
-    ['10','Unlock',  'The Creative Flow Protocol',
-     'Get back to the work that used to come easily.',
-     'Starting, stopping, judging it before it even exists.',
-     ['I judge it before it is finished','I cannot start','It used to come easily and now it does not']]
-  ],
-
-  cost: {
-    eyebrow: 'And why it matters now',
-    h2: 'Think about what this costs.<br><span class="gold">Not the salary.</span>',
-    lede: 'Not the crisis quarter. The ordinary weeks, and how much of your capacity is spent on the state rather than the work.',
-    caps: [['7 AM','Already behind'],['1 PM','The good hours, spent bracing'],['9 PM','Still answering']],
-    note: 'The hours are rarely the issue. What costs is running them in a state that removes access to judgement, patience and the work you are actually paid for.',
-    items: [
-      ['Focus',      'The deep hours lost to a background hum that never fully quiets.',       'var(--mob)'],
-      ['Recovery',   'Evenings and weekends spent decompressing rather than living.',          '#C99A5A'],
-      ['Judgement',  'Decisions made from urgency, and the cost of unwinding them later.',     'var(--gold)'],
-      ['People',     'What your team gets from you on a Thursday, versus what you meant to give.', '#8FA98C'],
-      ['The work',   'The reaction you would take back, the room that remembers it, and the promotion that quietly went elsewhere.', 'var(--teal)']
-    ],
-    close: 'You have not lost the capability. It is unavailable in the state you are running it from.'
-  },
-
-  range: {
-    eyebrow: 'The state it\u2019s holding',
-    h2: 'The room reads<br><span class="gold">your state first.</span>',
-    lede: 'Competence is not the variable. Access to it is \u2014 and access closes in exactly the conditions where the stakes are highest.',
-    cols: [
-      ['\u201CIt\u2019s all urgent and it\u2019s all on me.\u201D', 'Fast, short, over-committed. Decisive in a way that costs later. The email sent before the sentence was finished thinking.', 'var(--mob)'],
-      ['\u201CHard week. I know what comes first.\u201D',            'The load is unchanged. Priority is available again, and so is the difference between what is urgent and what is loud.', 'var(--safe)'],
-      ['\u201CNone of it matters, so why start.\u201D',              'Flat, detached, present in name. Not laziness \u2014 a system rationing what is left of itself.', 'var(--shut)']
-    ],
-    closeQ: 'You already know your regulated professional self.',
-    closeK: 'The work is arriving as that person on the days it counts.'
-  },
-
-  journey: {
-    title: 'Before the room.<br>Not a debrief afterwards.',
-    sub: 'Three parts, built for a working day rather than a retreat.',
-    experience: 'The guided meditation for the protocol you are running, plus a short version for the gap between meetings and a Cue Card sized for the walk down the corridor. Nothing here requires a quiet house.',
-    log: 'Log the session against the situation \u2014 the pitch, the review, the conversation you were dreading. The pattern in your own working week becomes readable within a month.',
-    deeper: 'The full resource library, with the Attention Advisory doing real work here: where your energy belongs today, and which fights are not yours.',
-    deeperNote: 'Ambition, identity and what you were trained to want sit in this layer \u2014 the questions underneath the performance.'
-  },
-
-  change: { eyebrow: 'What changes when it does',
-    h2: 'Change becomes visible <span class="gold">at work.</span>',
-    lede: 'Six places where a more regulated state shows up professionally \u2014 usually in how the week ends rather than how it starts.',
-    items: CHANGE_PROPOSALS[3],
-    close: 'Clearer decisions, weeks you recover from, and reactions that stop costing you.' },
-
-  priceList: [
-    'All thirty protocols \u2014 Professional, Relationship Healing and Personal Transformation',
-    'Full sessions plus short versions built for a working day',
-    'Attention Advisory and conflict scripts throughout',
-    'Journal and progress tracking, private to you \u2014 never visible to an employer',
-    'New protocols and resources, included as the tracks grow'
-  ],
-  priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Access is cumulative \u2014 Professional includes Relationship Healing and Personal Transformation in full.',
-  stickyLine: 'Before the room, not a debrief after it.'
-};
-
-TRACKS[2] = T2;
-TRACKS[3] = T3;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
