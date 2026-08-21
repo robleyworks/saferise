@@ -719,3 +719,81 @@ the same comment-matches-its-own-grep pattern seen in Run D.
 Div balance 175/175 and 126/126. `tracks.js` braces 91/91. Console clean.
 
 *Result: pass. One product, one price, one place.*
+
+---
+
+## Phase 2B · Commit 4 — SR-139, durations
+
+### Changed — 21 strings, six more than the brief listed
+
+**`dashboard.html` (17)** · 1:1 in the words idiom: `:329`, `:602` "Ninety" → "Sixty".
+1:1 in the numeral idiom: `:384, 617, 618, 619, 643` "90 min" → "60 min". Workshop time
+ranges: `:366, 375, 393, 581, 582, 583, 641, 642, 645` `18:00–20:00` → `18:00–19:00`.
+Plus **`:346`** — *"Two hours, online or in person"* on the Workshops offer card, **not in the
+brief**, identical in shape to the approved `protocol.html:879`.
+
+**`protocol.html` (4)** · `:879` → *"One hour, online or in person"*, and **three more not in
+the brief** — `:898` and `:914` time ranges, `:906` "90 min". That page carries its own
+sessions module mirroring the dashboard's; leaving them would have shipped a page
+contradicting itself and the dashboard.
+
+`protocol.html:862` was completed in Commit 3 and **was not re-done**.
+
+Each time range asserted **verbatim in full** before editing, with a single-occurrence check
+per line — never a bare `20:00`.
+
+### Verified
+
+`dashboard.html`: `18:00–19:00` ×9, `18:00–20:00` **0**, `60 min` ×5, `90 min` **0**,
+"Sixty minutes" ×2, "Ninety minutes" **0**. Offer cards read *"Premium 1:1 · €129 / session ·
+Sixty minutes, online"* and *"Workshops from €29 · One hour, online or in person"*. Modal h3:
+*"Sixty minutes, private, with Andre"*.
+
+`protocol.html`: all four wrong forms absent; renders *"A private hour"*, *"Sixty minutes,
+online"*, *"One hour, online or in person"*, `18:00–19:00`, *"Three times available · 60 min"*.
+
+Console clean on both. JS parse first, div 175/175 and 126/126.
+
+**A measurement artifact caught:** a first count via `body.textContent.match(/60 min\b/g)`
+returned **2** where a tree-walk found **5**. The regex undercounted across concatenated text
+nodes. The tree walk is authoritative; the `match()` figure was discarded.
+
+### ⚠ Held — cannot be fixed without inventing a commercial fact
+
+**`dashboard.html:567` and its agenda at `:572–575`.** The line reads *"**Two hours**,
+facilitated live"* and the agenda beneath it is:
+
+| segment | minutes |
+|---|---|
+| Arrival and Clearing | 15 |
+| The four steps, run together | 40 |
+| Facilitated discussion | 45 |
+| Close and integration | 20 |
+| **total** | **120** |
+
+Changing :567 to "One hour" alone would leave a run-sheet summing to twice the stated length.
+Reworking it means **inventing four new segment lengths**, which is content authoring.
+Reported, untouched. This is the only remaining "Two hours" in the tree.
+
+### ⚠ Reported, deliberately not touched — index.html workshop durations
+
+The brief said *"index.html is already correct — do not touch it."* **That is true of the
+1:1** (`:7691` "Length: 60 minutes", `:6733`/`:7340` "60 minutes"). **It is not true of
+workshops.** `prog-workshops` says:
+
+| line | text |
+|---|---|
+| 7741 | *"Live video, small group, roughly **90 minutes**."* |
+| 7781 | *"Roughly **90 minutes**, one evening."* |
+| 7835 | *"◆ Length: approximately **90 minutes**, live video"* |
+
+Three public strings stating a workshop length that the confirmed fact contradicts. **Not
+edited**, because the instruction not to touch `index.html` was explicit and the rules say to
+report a conflict rather than resolve it silently.
+
+`:7888` and `:7975` also say 60–90 minutes but describe **retreat segments** within a half
+day — a different product, and correct as they stand.
+
+`content/tracks.js:55` retains "90 min" inside the SR-137 comment, which is historical record.
+
+*Result: pass, with one block held and three index.html strings reported.*
