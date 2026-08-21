@@ -144,3 +144,97 @@ price — sticky bar *"Get Started — €29/month"*, panel numeral *"€29 / mo
 front of me; Phase 2 stays held.
 
 *Result: pass. Data byte-identical, mechanism removed.*
+
+---
+
+## Phase 4 — SR-132. **Does not reproduce. Nothing changed.**
+
+**There is no `dispenza` key in `FRAMEWORKS`.** The six keys are `porges, heartmath,
+distance, mate, jung, watts`, and the fourth is:
+
+```js
+distance: { name: 'Distance & rehearsal',
+            person: 'Kross & Ayduk · Best Possible Self literature',
+            short: 'Kross & Ayduk',
+            register: 'peer-reviewed', step: 4, colour: 'var(--gold)' }
+```
+
+Every specific in the brief inverts: `kross` and `ayduk` **are** present, `Distance &
+rehearsal` **is** the name, the register **is** `peer-reviewed`, the colour **is** gold.
+`dispenza` appears **zero times** in any non-doc tracked file, checked plain and
+`\u`-escaped; every hit is under `docs/`. **`mock-05-record-audit.html` is not in the
+repo** — untracked, absent, and no `*record*` / `*audit*` file exists.
+
+Duplicate of Run D's [[SR-118]], closed as *"already removed; the key is `distance`"*.
+
+### 1 · The six META entries — mapped to `distance`
+
+| key | track | protocol | other frameworks |
+|---|---|---|---|
+| `t1-09` | 01 | Anchor — The Insecurity Anchor Protocol | `jung` |
+| `t1-10` | 01 | Reclaim — The Powerlessness & Despair Protocol | `porges`, `watts` |
+| `t2-08` | 02 | Appreciate — The Appreciation & Support Protocol | `heartmath` |
+| `t3-03` | 03 | Dissolve — The Imposter Dissolution Protocol | `jung` |
+| `t3-08` | 03 | Decide — The Decision Fatigue Protocol | `porges` |
+| `t3-10` | 03 | Unlock — The Creative Flow Protocol | `watts` |
+
+### 2 · Surfaces printing a framework `short` or `name`: **none**
+
+Nothing reads `.short`, `.name`, `.person`, `.register` or `.colour`. The only consumer is
+`frameworkReach(key)` ([content/tracks.js:570](content/tracks.js:570)), which returns protocol
+keys; the hydrator at [index.html:10477](index.html:10477) prints **a count, never a name**.
+Framework names on pages are hardcoded prose.
+
+### 3 · The band split is inert
+
+`register` and `colour` are declared and read by nothing. Gold/teal exists only as hardcoded
+CSS ([css/saferise-method.css:88](css/saferise-method.css:88)) and prose
+(`method-porges.html:311–313`). Changing `register` moves nothing.
+
+### Carried for the register — SR-107 evidence
+
+Five `data-sr-reach` cards: `porges`, `heartmath`, `mate`, `jung`, `watts`. **No `distance`
+card**, so its six protocols surface nowhere. Live reach across 30 META entries: porges 16,
+mate 14, jung 11, heartmath 7, watts 7, **distance 6**.
+
+---
+
+## Phase 6 — SR-131. **Does not reproduce as briefed — and the truth is the inverse.**
+
+### Reproduced against the repo, all three track pages
+
+| page | section heading | items | "proposed" / "appendix" / "not yet live" on page |
+|---|---|---|---|
+| Personal Transformation | *Change becomes visible across daily life.* | Mind, Body, Rest, Energy, Relationships, Identity | **NONE** |
+| Relationship Healing | *Change becomes visible in the room.* | Conversation, Repair, Predictability, Reactivity, Closeness, Separateness | **NONE** |
+| Professional Performance | *Change becomes visible at work.* | Presence, Recovery, Endurance, Judgement, Conflict, Standing | **NONE** |
+
+The string *"Six areas of change — proposed for Track 02"* **does not exist in the repo.**
+The rendered kicker is `Six areas of change`, hardcoded in the renderer at
+[js/saferise-track.js:256](js/saferise-track.js:256), with no track name and no "proposed".
+The only occurrence of *proposed* or *appendix* anywhere outside `docs/` is the comment
+itself, at [content/tracks.js:106](content/tracks.js:106).
+
+### The comment is what is wrong, not the rendering
+
+`CHANGE_PROPOSALS[2]` and `[3]` are the **`items` of the live `change` section** for Tracks
+02 and 03 — [content/tracks.js:334](content/tracks.js:334) and
+[:452](content/tracks.js:452). Their `eyebrow`, `h2`, `lede` and `close` are ordinary live
+copy authored around them. This is the same object identity Phase 3 found.
+
+So the data described as *"for the appendix, not yet live"* **is** the live Track 02/03
+content, and has been since T2/T3 were authored. The comment records an intention that was
+superseded.
+
+**Hiding it would delete the six-areas section from two of the three track pages.** That is
+the opposite of the brief's intent, which was to stop unfinished material leaking to the
+public. There is no leak: this is finished, track-specific copy, distinct per track and
+matched to each track's voice.
+
+**Nothing changed.** No visibility flag was added — there is nothing to hide, and per the
+Phase 3 note any flag would have had to avoid mutating an object with two consumers.
+
+The stale comment is worth correcting, but the correct wording depends on what Andre intends
+the appendix to be, so it is logged rather than guessed.
+
+*Result: does not reproduce. No code touched.*
