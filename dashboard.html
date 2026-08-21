@@ -882,11 +882,48 @@
   var rail = document.querySelectorAll('.sr-dash-railbtn');
   var prev = document.querySelector('.sr-dash-carprev');
   var next = document.querySelector('.sr-dash-carnext');
-  var CURRENT = 'The Anxiety Reset Protocol';
   var ARROW = '<svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg>';
   var LOCK  = '<svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>';
 
   function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+  /* SR-161 · the protocol you were last in, derived — never a literal. This
+     used to be `var CURRENT = 'The Anxiety Reset Protocol'`, which ringed one
+     card, labelled it "Continue" and ribboned it "Step 03 of 07" for every
+     visitor, including one who had opened nothing.
+     Read at render time, not here: Store is assigned further down this same
+     IIFE. `sr.resume` is the intended source and has no writer yet (SR-165);
+     `sr.journal.entries` is the only sr.* key anything actually writes, and a
+     member who has written a reflection has demonstrably been in that
+     protocol. Both empty returns '', which matches no item, so every card
+     reads Begin and none is ringed. That is the honest state. */
+  function currentProtocol(){
+    var r = Store.get('sr.resume', null);
+    if(r && r.protocol) return r.protocol;
+    var entries = Store.get('sr.journal.entries', []);
+    for(var i = entries.length - 1; i >= 0; i--){
+      if(entries[i] && entries[i].protocol) return entries[i].protocol;
+    }
+    return '';
+  }
+
+  /* SR-161 · the ribbon carries a real position or nothing at all. "Step 03 of
+     07" was not a stale number, it was an invented measurement: nothing in the
+     record holds a step position and no writer could create one.
+     Where no writer exists for a measurement, the nearest available number is
+     a DIFFERENT measurement, and substituting it is worse than showing
+     nothing. SR-081 refused exactly this when it declined to map a 0-10
+     activation reading onto a named nervous-system state. `sr.resume` defines
+     resource/resourceTotal, which is what the resume card already reads
+     (SR-085), so that is the only phrasing this ribbon will ever carry.
+     With no writer, it emits nothing. */
+  function ribbonFor(isCurrent){
+    if(!isCurrent) return '';
+    var r = Store.get('sr.resume', null);
+    if(!r || !r.resource || !r.resourceTotal) return '';
+    return '<span class="sr-dash-ribbon">Resource ' + esc(String(r.resource)) +
+           ' of ' + esc(String(r.resourceTotal)) + '</span>';
+  }
 
   var CURRENT_TRACK = 1;
   function render(n){
@@ -902,6 +939,8 @@
        If a future track ever ships with no protocols, restore a guard here with
        that track's own copy, not the retired one's. */
 
+    var CURRENT = currentProtocol();
+
     var CARDS = t.items.map(function(it,i){
       var no  = String(i+1).padStart(2,'0');
       var src = COVERDIR[n] + no + '.jpg';
@@ -912,7 +951,7 @@
       var img = '<img src="'+src+'" alt="" loading="lazy" '+
                 'onload="this.parentNode.querySelector(\'.sr-dash-fallback\').remove()" '+
                 'onerror="this.remove()">';
-      var ribbon = cur ? '<span class="sr-dash-ribbon">Step 03 of 07</span>' : '';
+      var ribbon = ribbonFor(cur);
       var action = t.unlocked
         ? '<a class="sr-dash-go" href="#">'+(cur?'Continue':'Begin')+' '+ARROW+'</a>'
         : '<span class="sr-dash-lock">'+LOCK+'Locked</span>';

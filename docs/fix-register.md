@@ -17,10 +17,10 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-161.** Reserved block open: **SR-154 to SR-175**, ceiling
-  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-162.
+- **Highest ID issued: SR-165.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-166.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
-  lane, then allocated **SR-160** and **SR-161** from findings raised mid-run, and **SR-154**
+  lane, then allocated **SR-160**, **SR-161** and **SR-165** from findings raised mid-run, and **SR-154**
   for the sandbox record — so the block is now contiguous with no gap to explain.
   The previous block (SR-129–SR-150) is exhausted through SR-153; SR-150 was passed because
   the run issued beyond its ceiling and the reservation was extended rather than renumbered.
@@ -32,7 +32,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
   Run E: prices in words exist only in the record, one derived span and one comment.
 - **`€59`, `€139` and `€275` appear nowhere.** Retired by SR-136/SR-141.
-- **SR-044 to SR-161 are issued.** All are written up below except four:
+- **SR-044 to SR-165 are issued.** All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -775,7 +775,7 @@ made this call once, on the dashboard, for the same reason.
 *Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
 
 ### SR-161 · The dashboard's "Step 03 of 07" ribbon is a literal
-Raised by the sweep [[SR-160]] called for. **Reported only, not fixed, pending Andre.**
+Raised by the sweep [[SR-160]] called for, and fixed in the same run.
 
 `dashboard.html:885` holds `var CURRENT = 'The Anxiety Reset Protocol';` — a hardcoded literal.
 Every visitor, including one who has opened nothing, sees the Anxiety Reset card ribboned
@@ -797,7 +797,67 @@ state; `1 of 1` at `index.html:3829` is initial markup overwritten at runtime; *
 adults"* and the SVG label *"SESSION 01"* are editorial content. `protocol.html` renders no
 metric-shaped string at all after [[SR-160]].
 
-*Status:* open - reported, awaiting Andre · *Raised:* 21 Aug 2026
+**The fix, in three parts.**
+
+`CURRENT` is now **derived at render time**, not declared: `sr.resume`'s `protocol` first, then
+the most recent `sr.journal.entries` protocol — the only `sr.*` key anything writes. Both empty
+returns `''`, which matches no item, so every card reads **Begin** and none is ringed. It is
+read inside `render()` rather than at the top of the IIFE because `Store` is assigned further
+down the same closure.
+
+**"Step 03 of 07" was deleted, not derived, and the reason generalises: where no writer exists
+for a measurement, the nearest available number is a DIFFERENT measurement, and substituting it
+is worse than showing nothing.** Nothing in the record holds a step position. The nearest
+number is `resource N of total`, which is what `sr.resume` defines and what the resume card
+reads — a different thing counted differently. [[SR-081]] refused exactly this substitution when
+it declined to map a 0-10 activation reading onto a named nervous-system state, and wrote
+`before`/`after` as null instead. The ribbon now emits **only** when `sr.resume` supplies both
+`resource` and `resourceTotal`, phrased as the resume card phrases it, and emits nothing
+otherwise. Today that is nothing.
+
+`Continue` and the `is-current` accent stay: both derive cleanly from "which protocol you were
+last in" and both vanish with no state.
+
+**The template needed no guard — it already degraded correctly.** `cur === false` was live on 18
+of 20 cards before the fix, and on all 20 of a locked track, so the empty path was already
+proven in the page.
+
+**Verified on both sides, because an empty path cannot otherwise be told from a broken one
+(Rule 20).** Seeded `sr.resume` → **2 ribbons reading "Resource 07 of 08", 2 ringed, both named
+"The Overwhelm Threshold Protocol"** — the protocol the record names, not the one that used to be
+hardcoded — and 18 Begin. Entries only, no `sr.resume` → **2 ringed on "The Grief Integration
+Protocol", 2 Continue, 0 ribbons**: the fallback fires and refuses to invent a position.
+`localStorage` cleared → **20 cards, 0 ribbons, 0 ringed, 0 Continue, 20 Begin**, and no
+`step N of M` string anywhere in the rendered page. Counter `1 / 10` throughout — `updateCount()`
+already halves the doubled set, so the duplication was never the defect; it only doubled the
+exposure of one. Zero new console errors.
+
+**One test failure worth recording, because it was mine and not the page's.** The first fallback
+probe seeded `"The Self-Worth Restoration Protocol"`, a name that exists in no track. Nothing
+ringed, and for a moment that read as the fallback failing. It was the code behaving correctly:
+an unknown or stale name degrades to *no card ringed* rather than throwing or ringing the wrong
+one. Rule 16 applies to the tester's own fixtures as much as to a brief.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-165 · Nothing writes `sr.resume` — the platform has no progress writer
+**Blocked, deliberately, and not on effort.** [[SR-161]] derives the current protocol from
+`sr.resume` and falls back to journal entries. `sr.resume` has a reader (`buildResume`), a known
+shape — `{protocol, no, track, resource, resourceTotal, resourceName, percent}` — and **no
+writer anywhere in the repo**. The same is true of `sr.record.runs` and `sr.sessions.booked`.
+The single `sr.*` write in the entire tree is `protocol.html:1089`,
+`Store.set('sr.journal.entries', …)`.
+
+Having `openProtocol()` write `sr.resume` is the obvious next move and **would give the platform
+its first progress writer** — the thing [[SR-085]], [[SR-160]] and [[SR-161]] have each worked
+around rather than solved.
+
+**It belongs with the auth work, not here.** `Store` writes to `localStorage` only, with no
+account behind it, so a progress writer would record progress **for whoever last used the
+browser** — a shared machine hands one person's practice history to the next. That is a worse
+defect than the empty state it would replace.
+
+*Status:* blocked — needs accounts · *Raised:* 21 Aug 2026
 
 
 ### SR-156 · The Dashboard control answered "You are here" instead of going home
