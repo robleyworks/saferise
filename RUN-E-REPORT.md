@@ -463,3 +463,66 @@ Two independent confirmations in one run that spelled-out forms evade every swee
 symbols or identifiers.
 
 *Result: pass. One line added; three-column shape intact.*
+
+---
+
+## SR-134 — spelled-out counts that survived the Elevation removal
+
+Issued from the reservation. Swept the whole tree before editing, as instructed.
+
+### The sweep
+
+245 raw hits for `<number-word> <noun>` across all tracked non-doc files — too broad to act on,
+so narrowed to the two classes that can actually be wrong:
+
+**Class B · prices in words — clean.** Spelled prices exist only in `content/tracks.js`
+(`PRICING.words`, the canonical record), the now-derived span at `index.html:6009`, and one
+comment. Nothing spells a price independently.
+
+**Class A · counts of tracks / programmes / series / tiers / plans — two rendered defects.**
+
+| file · line | text | reality below it |
+|---|---|---|
+| [index.html:2690](index.html:2690) | *"**Four plans.** Each one nested inside the next."* | grid `1.7fr 1fr 1fr` with **3** panels |
+| [index.html:7359](index.html:7359) | *"One methodology. **Four programs.**"* | grid `repeat(3,1fr)` with **3** cards |
+| [index.html:2693](index.html:2693) | `<!-- Four plan tiers -->` | stale comment |
+| [index.html:7362](index.html:7362) | `<!-- Four program cards -->` | stale comment |
+
+All four corrected to **Three**. Anchored by line, each asserted against the grid beneath it
+so the claim was checked against the thing it describes, not just replaced.
+
+### Reported, not changed — these say "four" and are correct
+
+- `content/tracks.js:3` *"all four tracks"* — `TRACKS` genuinely has four keys; Elevation is
+  `visible:false`, retained by decision.
+- `css/saferise-dashboard.css:20`, `dashboard.html:37` — *"four track accents"*; four accent
+  tokens genuinely exist.
+- `CLAUDE.md` / `AGENTS.md` *"ALL FOUR series"* — governance documents describing the design,
+  not a rendered surface. Not mine to edit.
+- *"Three tiers"* (Proximity Guide), *"all ten Track 01 protocol pages"* — accurate.
+
+### Verified
+
+At a **real 1440×1000 viewport** with `viewport_usable: true` asserted:
+
+| surface | claim | rendered |
+|---|---|---|
+| plans strip | *"Three plans. Each one nested inside the next."* | **3** panels |
+| compare lede | *"One methodology. Three programs."* | **3** cards — Personal Transformation, Relationship Healing, Professional Performance |
+
+`four plans/programs/programmes/tracks/series/tiers` in the rendered DOM: **NONE**. Table
+headers unchanged. JS parse first — 11 blocks, sentinel throws. Div 2812/2812, `<p>`
+1389/1389, `<h2>` 37/37. Console clean on a fresh tab.
+
+**Two measurement artifacts caught and discarded:** a first pass reported `cards_rendered: 5`
+because my selector grabbed the first `repeat(3,1fr)` grid on the page rather than the one in
+the overlay — re-scoped by document position, it reads 3. And the reused tab again showed
+eight stale `ERR_CONNECTION_REFUSED` across a server restart; a fresh tab was clean.
+
+### Worth recording
+
+`index.html:2690`'s second clause — *"Each one nested inside the next"* — **already states
+cumulative inclusion**, on the plans strip. So the site said it in one place and not in the
+comparison table, which is what SR-128 closed.
+
+*Result: pass. Two rendered claims and two comments corrected; the rest verified accurate.*
