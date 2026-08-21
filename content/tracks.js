@@ -102,8 +102,19 @@ var SHARED = {
   scope: 'SafeRise is a self-guided nervous-system tool, not a replacement for therapy or crisis care \u2014 many members use both together. It is a practical nervous-system tool you can use in daily life, alongside any other support you are receiving.'
 };
 
-/* ── TRACKS · four records. Elevation carries visible:false for launch. ── */
-/* ── Proposed six areas for T2 and T3 — for the appendix, not yet live ── */
+/* ── CHANGE_PROPOSALS · the `items` of the live `change` section on Tracks 02
+      and 03. Referenced by identity at :334 and :452, never copied — mutating an
+      entry here changes what the track page renders.
+
+      SR-133 · the comment that stood here described this as unfinished material.
+      It has been live member-facing copy since T2 and T3 were authored, and the
+      name is historical. A brief written from that stale description nearly had
+      the six-areas section deleted from two of the three track pages.
+
+      DO NOT MOVE THIS BELOW `var TRACKS`. The TRACKS literal reads it during
+      evaluation, so a later declaration leaves the binding hoisted-but-undefined
+      and throws a TypeError. That ordering is why T2 and T3 used to be assigned
+      over empty stubs instead of living in the literal (SR-129). ── */
 var CHANGE_PROPOSALS = {
   2: [
     ['\u25CD','Conversation',  '#C97A5A','from words landing as attack',      'The same sentence lands as information, not as an attack.'],
@@ -123,11 +134,9 @@ var CHANGE_PROPOSALS = {
   ]
 };
 
-/* SR-129 · CHANGE_PROPOSALS sits above TRACKS because TRACKS[2].change and
-   TRACKS[3].change reference it directly. It used to be declared below, which
-   is why T2 and T3 could not live in the literal and were assigned over empty
-   stubs 300 lines later instead. Keep it above TRACKS. */
-
+/* ── TRACKS · four records. Elevation carries visible:false for launch.
+      Tracks 02 and 03 read CHANGE_PROPOSALS above during evaluation — read the
+      note there before reordering anything in this file (SR-129). ── */
 var TRACKS = {
 
   1: {

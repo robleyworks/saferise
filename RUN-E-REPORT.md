@@ -238,3 +238,85 @@ The stale comment is worth correcting, but the correct wording depends on what A
 the appendix to be, so it is logged rather than guessed.
 
 *Result: does not reproduce. No code touched.*
+
+---
+
+## SR-133 — the stale `CHANGE_PROPOSALS` comment
+
+Issued from the reservation. Comments only; no data or logic touched.
+
+Replaced the header above `CHANGE_PROPOSALS` with one that states what the object actually
+is: the `items` of the live `change` section on Tracks 02 and 03, referenced **by identity**
+at :334 and :452 and never copied, so mutating an entry changes what the track page renders.
+It carries the **DO NOT MOVE THIS BELOW `var TRACKS`** note with the reason — the literal
+reads it during evaluation, so a later declaration leaves the binding hoisted-but-undefined
+and throws — and records that the name is historical.
+
+No occurrence of *proposed*, *appendix* or *not yet live* survives anywhere in the file.
+
+**One thing my own Phase 3 edit had left broken, fixed here.** Hoisting `CHANGE_PROPOSALS`
+stranded the `/* ── TRACKS · four records ── */` banner above it, so the file read as though
+that banner described `CHANGE_PROPOSALS`. The banner is back above `var TRACKS`, now
+cross-referencing the ordering note.
+
+**A trap I walked into and had to back out of:** my first draft of the new comment *quoted*
+the phrases it was replacing — "not yet live" — which failed the constraint that no
+draft-status wording survive. Caught by the assertion, rewritten to describe rather than
+quote. Same shape as Run D's `Tell me when it opens` comment.
+
+**Verified:** `JSON.stringify(TRACKS)` is **30,467 bytes, hash 2778865564** — identical to the
+Phase 3 baseline. Object identity intact on both tracks.
+
+Raw bracket counts moved (`[]` 286→284, `()` 52→54) purely because the comment prose contains
+brackets. Recorded because it is a useful demonstration that **raw character counting includes
+comments and is not a structural check** — the JSON equality is what proves the data unchanged.
+
+**Follow-up logged, not done:** the name `CHANGE_PROPOSALS` is itself now misleading.
+Renaming touches three references plus the `module.exports` line and is a separate change.
+
+---
+
+## Phase 7 — SR-126. **Premise check: there is no label to reword.**
+
+Per Rule 16 the premise was checked before editing. Result: **no introductory or launch-rate
+label exists on any surface in the tree.** Count of surfaces carrying the current label:
+**zero**.
+
+| probe | result |
+|---|---|
+| `introductory` / `launch rate` / `for as long as you stay` / `founder pricing` in any tracked non-doc file | **no rendered copy** — only `content/tracks.js` comments and the `PRICING.t1.introductory` flag itself |
+| nodes carrying `data-sr-intro` on `index.html` | **16** |
+| of those, any with accompanying label text | **0** |
+| CSS targeting `[data-sr-intro]` or `[data-sr-standard]` | **none** |
+| label text anywhere in the rendered DOM | **none** |
+
+The sixteen flagged nodes render bare: `€9/mo`, `Today, just €9/mo`, `Start — €9/mo`,
+`Unlock — €9/mo`, `Get Started — €9/mo`. The hook Run D installed is set by the hydrator at
+[index.html:10528](index.html:10528) and **read by nothing** — exactly as SR-126 recorded it.
+
+**So this is not a rewording. It is authoring the label for the first time**, and it is larger
+than the phase describes — stopped and reported rather than edited.
+
+### What it would actually touch
+
+**Two rendering paths, not one.**
+
+1. **`index.html` — 16 nodes**, all `data-sr-price="t1"` spans hydrated at load. A label can
+   attach off the existing `data-sr-intro` hook with no new data.
+2. **`personal-transformation.html` — 2 surfaces** that never touch the hydrator: the price
+   numeral and the "Get Started" pill, both built by `rPrice()` in
+   [js/saferise-track.js:300–306](js/saferise-track.js:300), plus the sticky bar at :406.
+   These read `t.price.amount` / `t.price.words` directly, so the hook does not reach them and
+   a second mechanism is needed.
+
+The footer `<template>` is **not** involved — it carries no price.
+
+### Decisions I am not making
+
+- Whether all 16 index nodes get the label, or only the primary CTAs. Sixteen repetitions of a
+  20-word line would dominate the page.
+- Placement: inline after the price, or a separate line beneath.
+- Whether the track-page path gets it via `priceNote` (which already carries the
+  cumulative-access sentence) or a new element.
+
+*Result: does not reproduce as briefed — no existing label. Held for a decision.*
