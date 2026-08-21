@@ -849,3 +849,64 @@ is better than a run-sheet with invented numbers.** The four segment lengths are
 facilitation decision. Recorded here so they can be rebalanced to 60 in one pass.
 
 This is the only remaining "Two hours" in the tree.
+
+---
+
+## Phase 2B · Commits 6–8
+
+### Commit 6 — SR-138, the 1:1 prices derive
+
+`index.html:7674, :7676, :7680, :7683` converted to `data-sr-price` spans. Verified by
+hydration: `premium1` **€129** ×2, `premium3` **€299** ×2, all four non-empty and matching the
+record, **0 empty spans of 31**. CTAs read *"Book Single Session — €129"* and *"Book
+3-Session Series — €299"* rather than trailing off after the dash.
+
+**Sentinel:** forcing both keys to €111/€333 moved all four nodes; restoring returned them
+exactly.
+
+**Reported, not converted:** `:7681` renders *"≈€99.67/session"* — arithmetic over
+`premium3`, not a record value. Deriving it needs a computed-price mechanism that does not
+exist; adding one is larger than this commit. **Closes SR-057.**
+
+### Commit 7 — SR-140, `premium3.per`
+
+`'for three hours'` → `'for three sessions'`. One string aligned to seven that already agreed:
+*"3-Session Series"*, *"≈€99.67/session"*, *"tracked across multiple sessions"*, *"Space
+sessions out as you need"*, *"the 3-session series lets you space sessions out"*. With the 1:1
+at one hour, a single three-hour block cannot coexist with sessions spaced as you need.
+
+**No rendered sentence changed, and that is the honest result.** `premium3.per` has **zero
+consumers**: no `data-sr-price-form="per"` node exists anywhere, and every `.per` reader in
+the tree operates on **track** prices. The string was **inert** — corrected because the record
+is the source of truth and a wrong value there is a defect by construction. Series copy is
+byte-identical before and after; *"three hours"* appears nowhere in the rendered DOM.
+
+### Commit 8 — SR-141, workshop prices
+
+| site | before | after |
+|---|---|---|
+| `index.html:7513` sentence | from €59/person · from €139/couple | **derives** |
+| `index.html:7809, :7812` | €59 | **derives** `workshopPersonal` |
+| `index.html:7816, :7819` | €139 | **derives** `workshopRelationship` |
+| `protocol.html:875, :880` | €59 / €139 | **literals corrected** to €29 / €49 |
+
+**The sentence reads correctly at the new figures:** *"Live group sessions for teams or
+communities — a single offsite session or an ongoing series, run through the same four-step
+methodology. Personal Transformation from **€29**/person · Relationship from **€49**/couple."*
+Both figures now derive; the `/person` and `/couple` units sit outside the spans and are
+unaffected.
+
+**Where the mechanism does not exist, reported rather than added:** `protocol.html` loads
+**no external scripts at all** and has no hydrator, so its two figures were corrected as
+literals. Wiring it is SR-127's follow-up and was explicitly out of scope.
+
+**Verified across all three pages.** `index.html`: `workshopPersonal` **€29** ×3,
+`workshopRelationship` **€49** ×3, 0 empty of 37, cards read *"Book — €29"* /
+*"Book — €49/couple"*. `dashboard.html`: `premium1` €129 ×4, `workshopPersonal` €29 ×6,
+`workshopRelationship` €49 ×2, 0 empty of 12. `protocol.html`: *"from €29"*, *"Personal €29 ·
+Relationship €49 per couple"*.
+
+**€59, €139 and €275 appear nowhere in any tracked non-doc file, in any form.**
+
+Console clean on fresh tabs; one more stale `ERR_CONNECTION_REFUSED` set discarded from a
+reused tab across a restart. Div 2812/2812 and 126/126, spans 1388/1388 and 96/96.
