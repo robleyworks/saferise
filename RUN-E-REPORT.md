@@ -398,3 +398,68 @@ JS parse first: 11 inline blocks on `index.html`, all pass, sentinel `caught Syn
 Div 2812/2812, span 1378/1378. Console clean.
 
 *Result: pass. One label, two placements, and a live price contradiction closed with it.*
+
+---
+
+## Phase 8 — SR-128, cumulative inclusion. **Reproduces.**
+
+### Reproduced first
+
+The table renders four header cells — blank, **Personal**, **Couples**, **Career** — and six
+body rows, with **no statement anywhere in the table that access is cumulative**.
+
+The two things that might have satisfied it do not reach the table:
+
+- `PRICING[t].includes` is data, read by nothing on this surface.
+- `TRACKS[1].priceNote` states the rule, but renders on `personal-transformation.html`, not
+  inside `#prog-compare`.
+
+Inclusion language inside the compare overlay is limited to **one plans card** —
+Relationship's *"Cancel anytime · includes Personal Transformation"*. **Professional's card
+says nothing about inclusion**, and the table says nothing at all. A visitor reading the
+table alone sees three prices and three products.
+
+### Changed — one line, nothing else
+
+Inserted directly beneath the *"Detailed Comparison"* kicker, above the table wrapper:
+
+> Each track includes the ones before it.
+
+Anchored by line, asserted against both neighbours. Muted `12px` DM Sans in `var(--text3)`,
+matching the page's supporting-line idiom.
+
+### Verified
+
+**Run D's three-column shape untouched:** 4 header cells, 6 body rows, 4 cells in every row,
+headers unchanged. One instance of the line, positioned before the table
+(`compareDocumentPosition` confirmed). No new columns, no restructuring.
+
+Rendered at a **real 1440×1000 viewport**: line 12px, single line, no wrap, 12px below the
+kicker and 18px above the table, table not overflowing. JS parse first — 11 blocks, sentinel
+`caught SyntaxError`. Div 2812/2812, `<p>` 1389/1389, `<table>` 2/2. Console clean.
+
+### ⚠ A viewport collapse, caught and recovered
+
+The first measurement pass reported `window.innerWidth: 0, innerHeight: 0` — the same
+collapse that invalidated a full set of Run D measurements. **No geometry claim was made from
+that pass**; the structural assertions used DOM position and element counts, which a
+zero-width viewport does not affect.
+
+**An explicit `resize_window` to 1440×1000 recovered it**, and every geometry figure above was
+taken after that and with `viewport_usable: true` asserted alongside. That is the procedure
+for Phase 10.
+
+### Found in passing — reported, not fixed
+
+**`#prog-compare` still says "Four programs".** Its lede reads *"One methodology. **Four
+programs.** Find the right starting point for where you are."* The table beneath shows three.
+
+This survived Run D's entire 19-surface Elevation removal because it **names a number, not the
+track** — no sweep for `Elevation` could find it. Exactly the same class as
+`index.html:6008`'s *"Nineteen euros a month"*, which survived SR-124's pricing sweep for the
+same reason: **the fact was spelled out in words.**
+
+Two independent confirmations in one run that spelled-out forms evade every sweep aimed at
+symbols or identifiers.
+
+*Result: pass. One line added; three-column shape intact.*
