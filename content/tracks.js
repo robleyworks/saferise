@@ -61,7 +61,7 @@ var PRICING = {
      the same two figures as literals — sold from copies rather than from the record.
      Both now derive. Keep them. */
   premium1:{ amount: '\u20AC129', per: 'per hour' },
-  premium3:{ amount: '\u20AC299', per: 'for three hours' }
+  premium3:{ amount: '\u20AC299', per: 'for three sessions' }
 };
 
 /* ── SHARED · identical on every track. Edited here, never per track. ── */
