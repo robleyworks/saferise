@@ -17,8 +17,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-153.** Reserved block open: **SR-154 to SR-175**, ceiling
-  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-154.
+- **Highest ID issued: SR-161.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-162.
+  The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
+  lane, then allocated **SR-160** and **SR-161** from findings raised mid-run, and **SR-154**
+  for the sandbox record — so the block is now contiguous with no gap to explain.
   The previous block (SR-129–SR-150) is exhausted through SR-153; SR-150 was passed because
   the run issued beyond its ceiling and the reservation was extended rather than renumbered.
 
@@ -29,7 +32,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
   Run E: prices in words exist only in the record, one derived span and one comment.
 - **`€59`, `€139` and `€275` appear nowhere.** Retired by SR-136/SR-141.
-- **SR-044 to SR-153 are issued.** All are written up below except four:
+- **SR-044 to SR-161 are issued.** All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -707,6 +710,95 @@ missing target: **0, 0, 0, 0.** This was the only one.
 **Found only because [[SR-145]]'s entry-point inventory said which CTAs to exercise.**
 
 *Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-155 · Mockup scaffolding was live on the served domain
+A persona switcher labelled **"Mockup control — not part of the build"** rendered at the top
+of `protocol.html` — 51px tall, the first thing above the banner — reading *PREVIEW AS · FIRST
+TIME · RETURNING · ANXIOUS · ESTABLISHED · 6 SESSIONS*. The brief named one. **There were
+two**: `resource.html` carried the same component with different buttons — *"Open decisions ·
+Proximity guide: off (p1 has none)"*, labelled *"Mockup only — not in the repo"*, which is
+false twice over: it is in the repo and it is served.
+
+**The "renders then disappears" report was a load-order artifact, and it is measurable.** The
+embed bridge that hides this chrome under `?embed=1` sits at the very end of each file. On
+`protocol.html` the statebar starts at byte **2,417,128** and the `<style>` that hides it is
+injected at byte **4,802,722** — **2,385,594 bytes of markup in between**, on the exact path
+the dashboard uses (`#srProtoFrame` loads `protocol.html?embed=1`). The same gap on
+`resource.html` is 89,585 bytes. Removing the elements removes the flash; nothing else could.
+
+**Rule 15 paid again.** `setState('new')` at the foot of `protocol.html` was not a mockup
+call: it seeds the empty log and journal states, opens the journey details and closes the
+journal. Its first line was
+`['new','ret','est'].forEach(function(k){document.getElementById('btn-'+k).classList.toggle(...)})`.
+Deleting the three buttons while leaving that line and its load-time call would have thrown a
+`TypeError` on `null` and taken every script below it down, while still looking clean in a
+diff. The seeding was kept as `seedArrivalState()`; only the persona branches went.
+
+**Deliberately kept — do not tidy.** `advisoryOn` in `resource.html` is **dormant, not dead**
+(Rule 14): `visible()` splices the `PROXIMITY` resource into the reader rail when it is true,
+so the flag controls rail composition. Only the removed switcher ever set it. The variable and
+the branch stay, with a comment naming what they control. Rail composition proved unchanged:
+`RESOURCES` holds exactly 6 keys and 6 rail items render.
+
+**Reported and not removed:** `protocol.html`'s `.bnavlinks` (5 links, all `href="#"`) and
+`resource.html`'s `.sr-topnav` (6 links, all `href="#"`). Both are scaffold navs, but each is
+its page's *only* navigation and four of five targets exist. Routing them is [[SR-156]], not
+deletion work.
+
+Verified on all nine served pages loaded fresh, and inside the dashboard shell with a protocol
+open in the iframe: zero rendered hits for *mockup*, *preview as*, *not part of the build*,
+*not in the repo*, *open decisions*, *you are here*, or any persona label. The remaining
+source hits are this run's own explanatory comments, which do not render.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-160 · Invented member figures in a hidden block on protocol.html
+`#resume` on `protocol.html` read **"Welcome back. Last practised 3 days ago · 4 sessions
+logged · average drop -3.2"**. It carried `.hidden`, and **the only thing that ever revealed
+it was the persona switcher [[SR-155]] removes** — so it was one CSS change from visible, which
+is deferred, not safe.
+
+Container and contents were separated before acting, as briefed. The container is not a real
+surface with fake copy: **its entire text is the figures**, `#resume-count` exists only to hold
+the session count, and there is no template, writer or data binding behind any of it. Nothing
+else was bound to it — the only two `classList.remove('hidden')` calls on the page target
+`invitation` and `cue`, and the page's sole `message` listener handles `type === 'theme'`
+only. **The whole block went**, with its `.resume` rules, and with the `resume` variable it
+would have left dangling in `seedArrivalState()` — the same null-reference trap as [[SR-155]].
+`resource.html` carried an orphan copy of the `.resume` CSS with no `.resume` element anywhere;
+inert, removed with it.
+
+**Why this generalises:** the platform has no streaks, no scores, no completion and no targets,
+because members arrive on their worst day. *"Average drop -3.2"* is a score. [[SR-085]] already
+made this call once, on the dashboard, for the same reason.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-161 · The dashboard's "Step 03 of 07" ribbon is a literal
+Raised by the sweep [[SR-160]] called for. **Reported only, not fixed, pending Andre.**
+
+`dashboard.html:885` holds `var CURRENT = 'The Anxiety Reset Protocol';` — a hardcoded literal.
+Every visitor, including one who has opened nothing, sees the Anxiety Reset card ribboned
+**"Step 03 of 07"** with a **"Continue"** action while every other card reads "Begin".
+Confirmed in rendered text rather than source: the ribbon renders **twice**, because the card
+set is doubled for the carousel loop.
+
+`dashboard.html:915` writes the string into the card template with nothing behind it. Nothing
+writes `sr.resume`, so `CURRENT` cannot be derived today — exactly what [[SR-085]] found for
+the resume card and answered with an honest empty state. The same shape of fix applies: derive
+it, or drop the ribbon and let the action read "Begin".
+
+**Everything else the sweep turned up is derived or editorial**, recorded so a later run does
+not re-raise it: `Sessions logged` / `Protocols run` / `Most run` compute from `runs.length`
+and `Store`; `07 of 08` and `87%` at `dashboard.html:2194` sit inside the [[SR-085]] comment
+describing what was removed; `index.html`'s *"No sessions logged yet"* is an honest empty
+state; `1 of 1` at `index.html:3829` is initial markup overwritten at runtime; *"Session 1 of
+7"* names a Practice Workbook item, not member progress; and the track pages' *"15-20% of
+adults"* and the SVG label *"SESSION 01"* are editorial content. `protocol.html` renders no
+metric-shaped string at all after [[SR-160]].
+
+*Status:* open - reported, awaiting Andre · *Raised:* 21 Aug 2026
+
 
 ---
 
@@ -1510,6 +1602,49 @@ class as `PRICING[t].includes`, which no `#prog-compare` surface reads. Fields t
 authoritative and drive nothing.
 
 *Status:* closed — does not reproduce · *Raised:* 20 Aug 2026 · *Closed:* 21 Aug 2026
+
+### SR-154 · The preview server cannot read the repo under this sandbox
+Environmental, not a repo defect, and it will recur in every run until the sandbox changes.
+
+`.claude/launch.json` as committed — `python3 tools/serve.py 8642` — fails to start:
+
+```
+/Library/Developer/CommandLineTools/usr/bin/python3: can't open file 'tools/serve.py':
+[Errno 1] Operation not permitted
+```
+
+An absolute path fails identically, and a scratchpad script pointed at the repo fails one step
+later:
+
+```
+PermissionError: [Errno 1] Operation not permitted:
+'/Users/arobley/Documents/GitHub/saferise/dashboard.html'
+```
+
+The preview runner has no read access to `~/Documents` at all. **`tools/serve.py` is unchanged
+and correct** — it runs normally from a shell. Do not "fix" it.
+
+**Procedure:** run the server from the scratchpad against an `rsync -a --delete` mirror of the
+working tree, with `launch.json` temporarily repointed at the scratchpad script and **restored
+before staging** (Rule 5).
+
+**The mirror needs a control, because a silently failed sync leaves you verifying a pre-edit
+copy and reporting a pass with numbers that all look plausible.** Before each verification:
+write a unique token into the file just edited, sync, confirm it appears in the mirror **and
+that it is absent from a control file**, then remove it and sync again. Rule 20 applied to the
+measurement path itself.
+
+**Two capture artifacts this environment produces, both Rule 10:**
+- `resize_window` with a **preset** leaves `innerWidth`/`innerHeight` at **0**, and every
+  measurement taken there is void — the statebar measured 231px tall at zero width and 51px at
+  1280x860. Set explicit `width`/`height` and report `viewport_usable` with each measurement.
+- The browser **serves a cached page after an edit**. The first post-[[SR-155]] measurement
+  showed the removed statebar still present, while `curl` against the same server returned a
+  file that did not contain it. Cache-bust every verification URL and treat a stale reading as
+  void.
+
+*Status:* closed — environmental, recorded for reuse · *Raised:* 21 Aug 2026
+
 
 ---
 
