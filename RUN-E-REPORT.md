@@ -579,3 +579,78 @@ inside `PRICING`. Zero in any other tracked file, either case.
 JS parse first — 11 blocks, sentinel `caught SyntaxError`. Div 2812/2812. Console clean.
 
 *Result: pass. A wrong price that survived a full release cycle, closed.*
+
+---
+
+## Phase 2B · Commit 2 — SR-136, correct the record
+
+### The €49 boundary, proved
+
+**Before the edit:** a sweep for `€49` / `€49` / `€49` / *"forty-nine euros"*
+across every tracked non-doc file returned **one hit — a historical comment** at
+`dashboard.html:1005` recording that the old TRACKPRICE said €29 and €49. **Zero live
+values.** Commit 1 fully cleared the stale track €49 before the live couples €49 entered.
+
+**After the edit:** two hits — `content/tracks.js:52` (`workshopRelationship`, the new live
+value) and the same historical comment. Exactly as intended.
+
+That ordering is deliberate and must survive any reorder or cherry-pick: **the stale €49
+leaves in Commit 1, the live €49 arrives in Commit 2.** Between them a `€49` sweep is clean,
+which is the only window where the two can be told apart mechanically.
+
+### Resolved `PRICING`
+
+| key | before | after |
+|---|---|---|
+| `t1` | €9 / month | unchanged |
+| `t2` | €29 / month | unchanged |
+| `t3` | €39 / month | unchanged |
+| `workshopPersonal` | **€59** per person | **€29** per person |
+| `workshopRelationship` | **€139** per couple | **€49** per couple |
+| `premium` | **€275 / session** | **removed** |
+| `premium1` | €129 per hour | unchanged |
+| `premium3` | €299 for three hours | unchanged |
+
+8 keys → **7**. Comments record why `premium` must not be re-added, and SR-057 is marked
+answered rather than left open.
+
+**A stranded comment fragment, caught before commit.** Replacing the first line of the
+two-line SR-057 comment left its second line orphaned mid-sentence — *"the repo renders
+either one. Left in place pending that decision. \*/"*. Repaired by replacing the whole
+block. Same class as the banner my Phase 3 hoist stranded.
+
+### The intermediate state — it does not throw, and that is the problem
+
+`dashboard.html`'s hydrator guards with `if (rec)`, so a missing key **silently skips the
+node**. The 4 `premium` spans render **empty strings** — not `undefined`, no exception,
+console clean.
+
+What a member sees on the dashboard right now:
+
+| surface | renders |
+|---|---|
+| offer price | `/ session` |
+| booking note | `per session. Reschedule free up to 72 hours before…` |
+| button | `Book this time ·` |
+| slot | `03 Sep · Premium 1:1 with Andre · Three times available · 90 min ·` |
+
+**This is the `Start — /mo` failure mode exactly** — stranded units and dangling separators
+where a price should be.
+
+**Answering the question directly: Commit 3 can stay a separate commit.** Nothing throws,
+the page functions, and the guard contains the damage. But the intermediate state ships
+visibly broken UI, so **this branch must not merge between Commit 2 and Commit 3** — the same
+constraint Run D carried between 4a and 4b.
+
+The other keys prove the hydrator still works: `workshopPersonal` renders **€29** across 6
+nodes, `workshopRelationship` **€49** across 2 — both picking up this commit's new values.
+
+### Escape invariant
+
+**9 euro escapes, all inside `PRICING` in `content/tracks.js`, zero anywhere else, either
+case.** Now checkable in one command and part of every close-out sweep.
+
+JS parse first — dashboard 1 block, passes. `tracks.js` braces 91/91, brackets 284/284,
+parens 55/55. Console clean.
+
+*Result: pass, with a reported broken intermediate state.*

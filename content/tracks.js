@@ -48,11 +48,15 @@ var PRICING = {
   /* SR-091 · there was one 'workshop' key holding €29 — Track 03's monthly
      price, never a workshop price. Workshops are priced per format, so there
      are two keys and the block reads 'from' the lower one. */
-  workshopPersonal:     { amount: '\u20AC59',  per: 'per person' },
-  workshopRelationship: { amount: '\u20AC139', per: 'per couple' },
-  premium:  { amount: '\u20AC275', per: '/ session' },
-  /* SR-057 · open: premium1 and premium3 may be retired tiers. Nothing in
-     the repo renders either one. Left in place pending that decision. */
+  workshopPersonal:     { amount: '\u20AC29',  per: 'per person' },
+  workshopRelationship: { amount: '\u20AC49',  per: 'per couple' },
+  /* SR-136 · `premium` (\u20AC275 / session) is retired. The product is no longer
+     offered, so the key was removed rather than re-priced. Do not re-add it —
+     a surface reading PRICING.premium is reading a product that does not exist. */
+  /* SR-057 · ANSWERED by SR-138. premium1 and premium3 are LIVE products and these
+     values are correct. They previously had zero consumers while index.html rendered
+     the same two figures as literals — sold from copies rather than from the record.
+     Both now derive. Keep them. */
   premium1:{ amount: '\u20AC129', per: 'per hour' },
   premium3:{ amount: '\u20AC299', per: 'for three hours' }
 };
