@@ -180,15 +180,19 @@ body .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color
 
 .sr-dash-card{flex:0 0 176px;display:flex;flex-direction:column;gap:9px}
 /* cover: kicker word and number are baked into the image — never overlay them */
-.sr-dash-cardart{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;border:1px solid var(--hair);transition:border-color .2s}
-.sr-dash-cardart img{width:100%;height:100%;object-fit:cover;display:block}
-.sr-dash-card:hover .sr-dash-cardart{border-color:rgba(212,168,67,.5)}
-.sr-dash-card.is-current .sr-dash-cardart{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+/* SR-162 · the art itself — aspect-ratio, clipping, object-fit — moved to the
+   shared .sr-pcover in saferise-system.css, which the track pages load too.
+   What stays here is the FRAME, because the two surfaces genuinely differ:
+   this card frames the cover directly, the track card frames the whole card
+   and clips the cover with it. */
+.sr-dash-card .sr-pcover{border-radius:10px;border:1px solid var(--hair);transition:border-color .2s}
+.sr-dash-card:hover .sr-pcover{border-color:rgba(212,168,67,.5)}
+.sr-dash-card.is-current .sr-pcover{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
 /* the protocol the begin panel just chose */
-.sr-dash-card.is-next .sr-dash-cardart{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset,0 0 0 5px rgba(212,168,67,.14)}
+.sr-dash-card.is-next .sr-pcover{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset,0 0 0 5px rgba(212,168,67,.14)}
 .sr-dash-card.is-next .sr-dash-cardname{color:var(--gold-lt)}
 .sr-dash-cardname{font-size:13px;color:var(--text);line-height:1.4;min-height:2.8em}
-.sr-dash-locked .sr-dash-cardart{filter:saturate(.3) brightness(.62)}
+.sr-dash-locked .sr-pcover{filter:saturate(.3) brightness(.62)}
 .sr-dash-lock{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);min-height:32px}
 .sr-dash-lock svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.4}
 /* current-step ribbon, the only overlay a cover ever carries */
@@ -196,18 +200,18 @@ body .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color
   background:linear-gradient(180deg,transparent,rgba(8,8,12,.86) 62%,rgba(8,8,12,.95))}
 
 /* tonal fallback where a cover file is absent */
-.t-1 .sr-dash-cardart{background:linear-gradient(145deg,#151526,#343044 58%,#76607b)}
-.t-1 .sr-dash-card:nth-child(2n) .sr-dash-cardart{background:linear-gradient(145deg,#241317,#4e2524 58%,#a2643d)}
-.t-1 .sr-dash-card:nth-child(3n) .sr-dash-cardart{background:linear-gradient(145deg,#121b25,#2b3040 58%,#7b6647)}
-.t-2 .sr-dash-cardart{background:linear-gradient(145deg,#1d1119,#4d2233 58%,#b4677f)}
-.t-2 .sr-dash-card:nth-child(2n) .sr-dash-cardart{background:linear-gradient(145deg,#191319,#3e2733 58%,#96606f)}
-.t-3 .sr-dash-cardart{background:linear-gradient(145deg,#0F1A1D,#26414a 58%,#5b8b93)}
-.t-3 .sr-dash-card:nth-child(2n) .sr-dash-cardart{background:linear-gradient(145deg,#101820,#23384a 58%,#52687c)}
-.t-4 .sr-dash-cardart{background:linear-gradient(145deg,#17132a,#332a58 58%,#6d5b9e)}
+.t-1 .sr-dash-card .sr-pcover{background:linear-gradient(145deg,#151526,#343044 58%,#76607b)}
+.t-1 .sr-dash-card:nth-child(2n) .sr-pcover{background:linear-gradient(145deg,#241317,#4e2524 58%,#a2643d)}
+.t-1 .sr-dash-card:nth-child(3n) .sr-pcover{background:linear-gradient(145deg,#121b25,#2b3040 58%,#7b6647)}
+.t-2 .sr-dash-card .sr-pcover{background:linear-gradient(145deg,#1d1119,#4d2233 58%,#b4677f)}
+.t-2 .sr-dash-card:nth-child(2n) .sr-pcover{background:linear-gradient(145deg,#191319,#3e2733 58%,#96606f)}
+.t-3 .sr-dash-card .sr-pcover{background:linear-gradient(145deg,#0F1A1D,#26414a 58%,#5b8b93)}
+.t-3 .sr-dash-card:nth-child(2n) .sr-pcover{background:linear-gradient(145deg,#101820,#23384a 58%,#52687c)}
+.t-4 .sr-dash-card .sr-pcover{background:linear-gradient(145deg,#17132a,#332a58 58%,#6d5b9e)}
 /* number + kicker drawn only on the fallback, never over a real cover */
-.sr-dash-fallback{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:13px}
-.sr-dash-verb{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:rgba(245,237,216,.6);font-weight:700}
-.sr-dash-no{font-family:'Cinzel',serif;font-size:30px;color:rgba(245,237,216,.3);line-height:1;text-align:right}
+/* SR-162 · .sr-dash-fallback / -verb / -no removed with the tile they styled.
+   The number and label are now permanent, from .sr-pcover-no and
+   .sr-pcover-label in the shared sheet. */
 
 .sr-dash-lockcta{display:none;align-items:center;gap:18px;flex-wrap:wrap;margin:20px 0 0;padding-top:18px;
   border-top:1px solid var(--hair)}

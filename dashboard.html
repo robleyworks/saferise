@@ -774,6 +774,9 @@
 </main>
 
 <script src="content/tracks.js"></script>
+<!-- SR-162 · the protocol cover, shared with the track pages. Must load
+     before the inline script below, which calls SafeRiseCover.art(). -->
+<script src="js/saferise-card.js"></script>
 <script>
 (function(){
   // COVER_01 is embedded for this mockup; 02–10 resolve from assets/covers/NN.jpg
@@ -945,19 +948,21 @@
       var no  = String(i+1).padStart(2,'0');
       var src = COVERDIR[n] + no + '.jpg';
       var cur = t.unlocked && it[1] === CURRENT;
-      // fallback tile carries the kicker and number; the real cover already has them
-      var fallback = '<div class="sr-dash-fallback"><span class="sr-dash-verb">'+esc(it[0])+
-                     '</span><span class="sr-dash-no">'+no+'</span></div>';
-      var img = '<img src="'+src+'" alt="" loading="lazy" '+
-                'onload="this.parentNode.querySelector(\'.sr-dash-fallback\').remove()" '+
-                'onerror="this.remove()">';
+      /* SR-162 · the cover is the shared component in js/saferise-card.js,
+         the same one the track pages render. What stood here was a
+         `.sr-dash-fallback` tile carrying the kicker and number, deleted on
+         image load by an onload handler, because the number was burned into
+         the cover art. The covers are being reshot BARE, so that tile was
+         no longer a fallback — it was the only thing that would carry the
+         number, and it removed itself the moment the picture arrived.
+         Both are permanent now, drawn from the record on every surface. */
       var ribbon = ribbonFor(cur);
       var action = t.unlocked
         ? '<a class="sr-dash-go" href="#">'+(cur?'Continue':'Begin')+' '+ARROW+'</a>'
         : '<span class="sr-dash-lock">'+LOCK+'Locked</span>';
       return '<article class="sr-dash-card'+(t.unlocked?'':' sr-dash-locked')+(cur?' is-current':'')+
         '" data-open="'+(t.unlocked?esc(it[1]):'')+'" data-no="'+no+'" data-src="'+src+'">'+
-        '<div class="sr-dash-cardart">'+fallback+img+ribbon+'</div>'+
+        SafeRiseCover.art({ src: src, no: no, label: it[0], extra: ribbon })+
         '<h3 class="sr-dash-cardname">'+esc(it[1])+'</h3>'+action+'</article>';
     }).join('');
     // Two identical sets. The flow runs forward only; when it has travelled the

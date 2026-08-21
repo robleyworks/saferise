@@ -85,13 +85,12 @@
   /* ── 01 · protocol carousel ──────────────────────────────────────── */
   function rProtocols(t) {
     var cards = t.protocols.map(function (p) {
+      /* SR-162 · the cover comes from js/saferise-card.js, the one source
+         dashboard.html shares. The number and label are the same record
+         fields they always were — p[0] and p[1] — but the component keeps
+         them over the loaded image rather than under it. */
       return '<article class="sr-tp-pcard">' +
-        '<div class="sr-tp-pimg">' +
-          '<img src="' + coverPath(t.id, p[0]) + '" alt="" loading="lazy" ' +
-            'onerror="this.style.display=\'none\'">' +
-          '<span class="sr-tp-pkick">' + p[1] + '</span>' +
-          '<span class="sr-tp-pno">' + p[0] + '</span>' +
-        '</div>' +
+        SafeRiseCover.art({ src: coverPath(t.id, p[0]), no: p[0], label: p[1] }) +
         '<div class="sr-tp-pmeta"><h3>' + esc(p[2]) + '</h3>' +
         '<p class="sr-tp-pdesc">' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
         '<p class="sr-tp-pbody">' + esc(val(p[4], 'signature:' + p[2])) + '</p>' +
@@ -108,7 +107,10 @@
         '<p class="sr-tp-lede">Each protocol is a complete guided system — tools for before, during and after, with the research shown at every step.</p>' +
       '</div>' +
       '<div class="sr-tp-carhead"><span class="sr-tp-carkick">Browse all protocols</span>' +
-        '<div class="sr-tp-carnav"><span class="sr-tp-carcount" id="carCount">1 / ' + t.protocols.length + '</span>' +
+        /* SR-163 · dots, not "1 / 10". The rail is built by initCarousel once
+           it knows how many cards fit, because the number of pages depends on
+           the viewport and cannot be written into the markup. */
+        '<div class="sr-tp-carnav"><div class="sr-tp-cardots" id="carDots"></div>' +
         '<button class="sr-tp-carbtn" id="carPrev" aria-label="Previous protocol"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg></button>' +
         '<button class="sr-tp-carbtn" id="carNext" aria-label="Next protocol"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button></div>' +
       '</div>' +
@@ -359,24 +361,81 @@
     }).join('');
   }
 
-  /* ── carousel ────────────────────────────────────────────────────── */
+  /* ── carousel · SR-163 ────────────────────────────────────────────
+     The binding was never the problem — #carViewport, #carPrev and #carNext
+     are all emitted above, go() ran and set the transform every time. Two
+     things were wrong underneath it.
+
+     One: the viewport was ALSO a native scroll container
+     (overflow-x:auto + scroll-snap-type:x mandatory) while this code moved
+     the track with a transform. Two mechanisms, one strip. scrollLeft sat at
+     56 at rest with nobody having touched it — snap had already moved it.
+     The viewport is now a plain clip and the transform is the only mover.
+
+     Two: step() added 18px of gap to the card width. The gap is 14px. Every
+     step overshot by 4px, 40px of drift across ten cards.
+
+     The counter is gone with them. "1 / 10" reported the active index while
+     five cards were on screen — a position asserted, not measured. The dot
+     rail below is built from what actually fits. */
   function initCarousel() {
     var vp = document.getElementById('carViewport');
     if (!vp) return;
     var track = vp.querySelector('.sr-tp-cartrack');
     var cards = track.querySelectorAll('.sr-tp-pcard');
     if (!cards.length) return;
+    var dots = document.getElementById('carDots');
+    var prev = document.getElementById('carPrev');
+    var next = document.getElementById('carNext');
     var i = 0;
-    function step() { return cards[0].getBoundingClientRect().width + 18; }
-    function per() { return Math.max(1, Math.round(vp.clientWidth / step())); }
-    function go(n) {
-      var max = Math.max(0, cards.length - per());
-      i = Math.min(Math.max(0, n), max);
-      track.style.transform = 'translateX(' + (-i * step()) + 'px)';
-      document.getElementById('carCount').textContent = (i + 1) + ' / ' + cards.length;
+
+    /* Read the gap rather than hardcoding it, so this cannot drift out of
+       step with the stylesheet the way the old + 18 did. */
+    function gap() {
+      var g = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap);
+      return isNaN(g) ? 14 : g;
     }
-    document.getElementById('carPrev').onclick = function () { go(i - 1); };
-    document.getElementById('carNext').onclick = function () { go(i + 1); };
+    function step() { return cards[0].getBoundingClientRect().width + gap(); }
+    function per()  { return Math.max(1, Math.floor((vp.clientWidth + gap()) / step())); }
+    function maxIndex() { return Math.max(0, cards.length - per()); }
+    function pages() { return Math.ceil(maxIndex() / per()) + 1; }
+    /* The last page is clamped, not a full stride: with ten cards and four
+       visible it starts at card 7, not card 9. The label has to say where the
+       page actually lands, or it is the counter's problem again in words. */
+    function pageStart(d) { return Math.min(d * per(), maxIndex()); }
+
+    function paintDots() {
+      if (!dots) return;
+      var n = pages(), active = 0, best = Infinity, want = [];
+      for (var a = 0; a < n; a++) {
+        var gapTo = Math.abs(pageStart(a) - i);
+        if (gapTo < best) { best = gapTo; active = a; }
+      }
+      for (var d = 0; d < n; d++) {
+        var from = pageStart(d) + 1, to = Math.min(pageStart(d) + per(), cards.length);
+        want.push('<button type="button" class="sr-tp-cardot' +
+          (d === active ? ' sr-tp-on' : '') + '" data-page="' + d +
+          '" aria-label="Protocols ' + from + ' to ' + to + '"' +
+          (d === active ? ' aria-current="true"' : '') + '></button>');
+      }
+      var markup = want.join('');
+      if (dots.innerHTML !== markup) dots.innerHTML = markup;
+    }
+
+    function go(n) {
+      i = Math.min(Math.max(0, n), maxIndex());
+      track.style.transform = 'translateX(' + (-i * step()) + 'px)';
+      if (prev) prev.disabled = i === 0;
+      if (next) next.disabled = i === maxIndex();
+      paintDots();
+    }
+
+    if (prev) prev.onclick = function () { go(i - per()); };
+    if (next) next.onclick = function () { go(i + per()); };
+    if (dots) dots.onclick = function (e) {
+      var b = e.target.closest('.sr-tp-cardot');
+      if (b) go(pageStart(+b.getAttribute('data-page')));
+    };
     track.style.transition = 'transform .45s cubic-bezier(.4,0,.2,1)';
     window.addEventListener('resize', function () { go(i); });
     go(0);

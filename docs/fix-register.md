@@ -17,10 +17,10 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-165.** Reserved block open: **SR-154 to SR-175**, ceiling
-  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-166.
+- **Highest ID issued: SR-166.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-167.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
-  lane, then allocated **SR-160**, **SR-161** and **SR-165** from findings raised mid-run, and **SR-154**
+  lane, then allocated **SR-160**, **SR-161**, **SR-165** and **SR-166** from findings raised mid-run, and **SR-154**
   for the sandbox record — so the block is now contiguous with no gap to explain.
   The previous block (SR-129–SR-150) is exhausted through SR-153; SR-150 was passed because
   the run issued beyond its ceiling and the reservation was extended rather than renumbered.
@@ -32,7 +32,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
   Run E: prices in words exist only in the record, one derived span and one comment.
 - **`€59`, `€139` and `€275` appear nowhere.** Retired by SR-136/SR-141.
-- **SR-044 to SR-165 are issued.** All are written up below except four:
+- **SR-044 to SR-166 are issued.** All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -917,6 +917,136 @@ level) and recorded each resolved URL, with a full click-through on one link per
 control (Rule 20) — landing on `relationship-healing.html` and `professional-performance.html`.
 
 *Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+
+### SR-162 · The protocol cover is now one component, shared by two surfaces
+The track pages cropped a 900x1200 portrait cover to a landscape band. `.sr-tp-pimg` carried a
+fixed `height:152px` on a 236px card — but the real cause was worse and no rule anywhere
+described it: **there was no `.sr-tp-pimg img` rule at all.** The image rendered unstyled at
+212x283 inside a 152px flex box with `align-items:flex-end`, which put it **119px above its own
+container**; the card's `overflow:hidden` clipped it to the strip that was visible. Measured
+live before the fix: container top 1178, image top 1059.
+
+**The brief said port the dashboard's card outward. The tree says the dashboard is only half
+right, and the half it is right about is not the half that was assumed.** `.sr-dash-cardart`
+had the correct image treatment — `aspect-ratio:3/4`, `object-fit:cover`, full bleed — but its
+number and label came from a `.sr-dash-fallback` tile carrying
+`onload="…querySelector('.sr-dash-fallback').remove()"`. **They deleted themselves the moment
+the cover loaded**, because the number is burned into the current art. With covers being reshot
+**bare**, that tile stops being a fallback and becomes the only thing that would carry the
+number — while still removing itself. The track card was the closer of the two here: its
+`.sr-tp-pkick` and `.sr-tp-pno` are drawn from the record (`p[1]`, `p[0]`) and persist.
+
+So neither surface was the reference. The shared component takes the dashboard's art treatment
+and the track card's record-drawn overlay, made permanent on both.
+
+**One source, not two copies** — [[SR-125]], [[SR-148]] and [[SR-153]] are all second
+inventories, and this was on its way to being a fourth. `js/saferise-card.js` owns the markup
+and is loaded by `dashboard.html` and all three track pages; the CSS lives in
+`css/saferise-system.css`, **the one stylesheet both of them already load** —
+`saferise-dashboard.css` is the dashboard's alone. What is *not* shared is deliberate: the two
+cards genuinely differ below the art, and the frame stays with each card because the dashboard
+frames the cover directly while the track card frames the whole card and clips the cover with
+it.
+
+**Named `sr-pcover`, and the check mattered.** `sr-cover-*` is taken — `.sr-cover`,
+`.sr-cover-art`, `.sr-cover-scrim`, `.sr-cover-kick`, `.sr-cover-sub` belong to the Clearing
+card and the index tiles. CLAUDE.md's `.track` warning is this exact trap. `sr-pcover` was
+confirmed at zero occurrences across every css, js and html file before a line was written.
+
+**Removed:** the 152px height, `.sr-tp-pimg:before` (104x104) and `:after` (92x145),
+**thirteen** nth-child rules — ten per-card gradients plus 2n/3n/4n pseudo-element variants, not
+the ten in the brief — `.sr-tp-pkick`, `.sr-tp-pno`, the orphan `.sr-tp-pimgnote`, and on the
+dashboard side `.sr-dash-cardart`, `.sr-dash-fallback`, `.sr-dash-verb`, `.sr-dash-no`. Six
+dashboard rules plus seven `.t-N` ground gradients were repointed at `.sr-pcover`; specificity
+keeps the per-track grounds winning over the shared default even though the shared sheet loads
+last.
+
+**`.sr-tp-pimgnote` did not reproduce as briefed.** It existed only as `display:none` in the
+stylesheet with **no markup emitting it anywhere in the repo**. Nothing was emitting an asset
+path as hidden text. Removed as an inert rule describing a defect that no longer existed, not
+as the defect.
+
+**Verified by rect equality, not by "it renders"** — the failure being fixed was an image
+sitting 119px outside its own box while still rendering perfectly well.
+
+| | track page | dashboard |
+|---|---|---|
+| image vs container | `dLeft 0, dTop 0, dW 0, dH 0` | fills the **padding box** exactly: `dW 0, dH -0.34` (sub-pixel), offset by exactly the 1px border |
+| aspect | 0.7492 | 0.7489 (3/4 = 0.7500) |
+| `object-fit` | cover | cover |
+| natural | 900x1200 | 900x1200 |
+| label after load | "Regulate", inside, visible | "Regulate", inside, visible |
+| number after load | "01", inside, **low-right** | "01", inside, **low-right** |
+| legacy classes | 0 | 0 |
+
+Checked at 420px as well: cover still fills exactly, no horizontal overflow. Locked track 2
+keeps its `saturate(.3) brightness(.62)` and its `.t-2` ground, with label and number intact.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-163 · The track carousel, and why "it does not move" was not the binding
+**The briefed cause did not reproduce.** `initCarousel()` does not return early — `#carViewport`,
+`#carPrev` and `#carNext` are all emitted by `rProtocols`. Clicking Next ran `go()`, advanced
+the counter and set `track.style.transform` to `translateX(-512px)` correctly. Two other things
+were wrong.
+
+**One — two mechanisms driving one strip.** `.sr-tp-carviewport` carried `overflow-x:auto` with
+`scroll-snap-type:x mandatory` *and* was moved by a JS transform. The tell was `scrollLeft: 56`
+**at rest, with nobody having touched it** — snap had already moved the container. The viewport
+is now a plain clip; the transform is the only mover. `scrollLeft` is **0** at rest and stays 0
+through every step. The 56px gutter moved from padding to margin so the clip happens at the
+gutter instead of inside it — otherwise a card sliding out shows through the padding.
+
+**Two — `step()` returned `card.width + 18` while the gap is `14px`.** Four pixels of overshoot
+per step, forty across ten cards. It now reads `columnGap` from the computed style, so it cannot
+drift out of step with the stylesheet again.
+
+**The counter became dots.** `1 / 10` reported the active index while four cards were on screen
+— a position asserted, not measured. One dot per page of visible cards, active dot filled, same
+pattern as the hero's `#srHeroDots` rather than a new one. **The last page is clamped, not a
+full stride**, so its label says what it actually shows: with ten cards and four visible the
+dots read *1 to 4 · 5 to 8 · **7 to 10***, not "9 onward". Getting that wrong would have been the
+counter's own defect again, in words.
+
+**Verified against a control, per Rule 20 — this measurement cannot be taken directly here.**
+CSS transitions do not advance in this preview ([[SR-149]] found the same for smooth scroll), so
+a computed transform read after a click is always the from-value. With `transition:none`
+suppressing the ease, the same code path lands immediately and the transform is measurable:
+rest `translateX(0)` first card at 107 → Next `-1008px`, first card at **-901** (a delta of
+exactly 1008 = 4 x 252, the true border-box stride) → Next `-1512px`, clamped, `next` disabled →
+dot 1 returns to `-1008px` → dot 0 to `0`. `scrollLeft` 0 at every step. **This is a
+control-based result about the transform, not a claim that the animation was observed.**
+
+At 420px `per()` falls to 1 and the rail correctly becomes ten dots, one per protocol.
+
+**Not shared, deliberately — see [[SR-166]].** The dashboard runs a continuous constant-velocity
+drift over a doubled card set; this is a stepped pager. Unifying them means choosing one model
+for both, which is a design decision, not a refactor.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-166 · The two carousels are different interaction models
+**Blocked on a design decision, not on effort.** `dashboard.html` moves its protocol row by
+continuous constant-velocity drift over two identical card sets, wrapping by exactly one set's
+width so the loop is invisible, easing to a halt on hover. The track pages step by a page of
+visible cards with prev/next and a dot rail.
+
+[[SR-162]] shared the cover because the cover is one thing rendered twice. **The carousels are
+two different answers to two different questions** — the dashboard's row is ambient and browsable
+while you decide, the track page's is an index you page through — and sharing them means picking
+one behaviour for both surfaces. That is Andre's call. Recorded so the next run does not read
+the duplication as drift and unify them by default.
+
+*Status:* blocked — needs a design decision · *Raised:* 21 Aug 2026
+
+### Premise withdrawn · there is no hover subtitle to port
+Recorded so it is not re-raised. The brief held that the dashboard card reveals a subtitle on
+hover and the track card only tints its border. **Both are border tints**, differing only in
+alpha: `.sr-dash-card:hover .sr-pcover` at `rgba(212,168,67,.5)` and `.sr-tp-pcard:hover` at
+`rgba(212,168,67,.45)`. The subtitle belongs to `.sr-cover-sub` on the Clearing card — a
+different component — and is `display:block`, always visible, never revealed. Hover left as it
+is on both.
 
 
 ---
