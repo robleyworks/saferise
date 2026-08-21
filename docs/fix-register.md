@@ -9,9 +9,19 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
-- **Highest ID issued: SR-128.** Reserved block open: **SR-129 to SR-150**, ceiling
-  **SR-150**, reserved 20 Aug 2026 by the Elevation-hide run. Allocate from SR-129.
-- **SR-044 to SR-128 are issued.** All are written up below except four:
+- **Highest ID issued: SR-153.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-154.
+  The previous block (SR-129–SR-150) is exhausted through SR-153; SR-150 was passed because
+  the run issued beyond its ceiling and the reservation was extended rather than renumbered.
+
+**Standing invariants — checkable in one command each**
+- **Euro escapes exist only inside `PRICING` in `content/tracks.js`.** Current count **9**,
+  zero elsewhere in any tracked file, in either case. Any occurrence outside that block is a
+  defect by construction. Part of every close-out sweep.
+- **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
+  Run E: prices in words exist only in the record, one derived span and one comment.
+- **`€59`, `€139` and `€275` appear nowhere.** Retired by SR-136/SR-141.
+- **SR-044 to SR-153 are issued.** All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -84,6 +94,48 @@ the rule can be checked rather than taken on trust.
     moment whatever masks it changes; it does not need re-adding. **Measure computed style,
     not rendered geometry, before concluding anything is dead.** [[SR-123]] is the worked
     example.
+15. **A workaround that looks redundant may be load-bearing at a level the diff does not
+    show.** Before removing scaffolding, prove what it was scaffolding. Module-level
+    ordering, hoisting and object identity are invisible to checks that compare rendered
+    output or resolved values. [[SR-129]]: promoting the T2/T3 literals as briefed would
+    have thrown a `TypeError` that no div-balance, brace-count or JSON-equality check could
+    have predicted.
+16. **A brief is not evidence.** Any premise sourced from outside the working tree — a
+    snapshot, a mockup, an earlier session's notes — is an unverified claim and must be
+    stated as one. **Five premises inverted on contact with the tree in Run E alone**:
+    SR-127's price contradiction, SR-130's €19, SR-132's `dispenza` key, SR-131's appendix
+    data, and SR-142's seven `href="#"`. Name the source of an asserted value so it can be
+    discounted when it conflicts. Rule 3 decides the conflict; this rule stops it being
+    invisible.
+17. **Facts spelled out in words evade every sweep aimed at symbols or identifiers.**
+    "Four programs" survived a sweep for `Elevation`; "Nineteen euros a month" survived a
+    sweep for `€19` and `€19`. Both sat in surfaces a dedicated pass had already
+    swept. Cover the numeral, the escape **and** the spelled form. Where the record holds a
+    canonical spelled value — `PRICING.words` — anything spelling it independently is a
+    defect by construction.
+18. **An assertion over rendered text only covers surfaces mounted at that moment.**
+    Conditional UI — modals, readers, paywalls, overlays — must be opened and measured in
+    its rendered state. [[SR-124]] asserted "no €49 anywhere" against
+    `document.body.innerText` and was wrong for a release cycle, because the paywall holding
+    €49 only exists once a locked resource opens. **This rule paid twice in Run E** — the
+    `openReader` paywall and [[SR-149]]. Both were invisible to every static sweep and to a
+    page at rest. Defects in conditional UI are found by *exercising* the page, and an
+    entry-point inventory is what tells you which controls to exercise.
+19. **Replace whole blocks, not first lines.** A multi-line comment or banner replaced by
+    its opening line leaves the remainder stranded mid-sentence, attached to whatever
+    follows. This happened twice in Run E — the `TRACKS` banner stranded by the SR-129
+    hoist, and the SR-057 comment in SR-136. Neither would be caught by a parse check, a
+    brace count or a JSON-equality proof, because a stranded comment is syntactically valid.
+    Anchor block edits to the block's full extent and assert the closing line as well as the
+    opening one.
+20. **When a verification cannot run in the environment, test against a known-good control
+    in the same environment and compare.** Smooth-scroll animation does not run in this
+    preview, so a scroll measurement alone proved nothing; measuring the fixed target
+    alongside two that already worked, under identical conditions, established the fix
+    behaves identically to things known correct. A control turns an unusable measurement
+    into a usable comparison, and separates an environment artifact from a page defect —
+    the failure mode Rule 10 warns about, now with a technique attached. [[SR-149]].
+
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
 has since shipped. Numbering continues from SR-044 so no ID is ever reused.*
@@ -571,6 +623,83 @@ corrected honestly.
 
 *Status:* open · *Raised:* 20 Aug 2026
 
+### SR-135 · A second paywall held a price ladder that no longer existed
+`index.html` has **two** locked-resource paywalls. [[SR-124]] converted
+`openResourceModal()` ([index.html:4664](index.html:4664)); **`openReader()`
+([:5004](index.html:5004)) was never touched** and hardcoded `€19 / €29 / €49` — a ladder
+retired in Run D.
+
+Two independent reasons it survived every sweep, and both are now rules.
+
+1. **It used a lowercase `€` escape.** Every sweep in Runs D and E targeted the glyph
+   or the uppercase escape (Rule 7).
+2. **The surface does not exist in the DOM until a locked resource is opened**, so SR-124's
+   assertion over `document.body.innerText` could not see it (Rule 18).
+
+**Resolution.** Converted to `PRICING.tN.amount + '/mo'`, mirroring the other paywall exactly.
+Verified by *opening* a locked resource per track — €9 / €29 / €39, no €49 — after first
+reproducing the blind spot: zero `.reader-page-locked` nodes and no €49 in body text before
+opening, which is precisely the state SR-124 measured.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-136 · The price record carried two wrong service figures and a duplicate key
+`workshopPersonal` €59 → **€29**, `workshopRelationship` €139 → **€49**, and the `premium`
+key (€275 / session) removed. 8 keys → 7.
+
+**The €49 ordering constraint.** The stale *track* €49 left the tree in [[SR-135]]; the live
+*couples-workshop* €49 arrived here. Between those two commits a `€49` sweep returns only a
+historical comment — **the only window in which the two unrelated values can be told apart
+mechanically.** Preserve that order if these commits are ever reordered or cherry-picked.
+
+**The intermediate state is visibly broken but does not throw**, and that is the finding:
+`dashboard.html`'s hydrator guards with `if (rec)`, so the four orphaned `premium` spans
+rendered **empty strings** — `/ session`, `Book this time ·`, a dangling `90 min ·` — with a
+**clean console**. See the guard note under [[SR-137]]. **This branch must not merge between
+SR-136 and SR-137.**
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-137 · `premium` and `premium1` were one offer under two names
+`dashboard.html` and `protocol.html` sold "Premium 1:1" at **€275 / 90 min**; `index.html`
+sold the same named product at **€129 / 60 min**. Not a retired product — a **stale second
+representation of a live one**. The brief framed it as removal; the evidence overturned that
+and it was a de-duplication and a re-pricing.
+
+All four dashboard nodes repointed to `premium1`; `protocol.html:858` corrected as a literal
+(that page has no hydrator — see [[SR-127]]). `protocol.html`'s internal contradiction
+resolved: :860 said *"A private hour"* while :862 said *"Ninety minutes"*.
+
+**The `if (rec)` guard, recorded as a finding in its own right.** A missing `PRICING` key
+renders an **empty string**, with no exception and a clean console. That is the `Start — /mo`
+failure mode as *designed behaviour*: it makes missing keys **invisible to error monitoring**.
+**Any key removal must be verified by reading rendered text, never by absence of errors.**
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-149 · A purchase CTA scrolled to an element that did not exist
+[index.html:8204](index.html:8204)'s *"Start Personal Transformation — €9/mo"* called
+`scrollIntoView` on `#personal-pricing`, which exists nowhere. The overlay opened and the call
+threw a `TypeError`, on a purchase-intent control.
+
+**Option 1 applied — the id already existed.** `#pt-start` is the section holding the price,
+the introductory label and the CTA, and **two other CTAs already anchor to it** via
+`href="#pt-start"`. Retargeted to the established convention rather than inventing an id or
+guarding the call; losing the scroll would have cost the CTA its promise.
+
+Verified by clicking that exact control — a clean load proves nothing when the error is
+conditional. Zero console errors where the TypeError fired. **Rule 20 was written from this
+item**: smooth-scroll animation does not run in the preview, so the fix was measured against
+two known-good targets under identical conditions — `#pt-start` moves 8543 → 130 exactly as
+`#corporate-pricing` moves 3764 → 130.
+
+Swept all four pages for `getElementById('literal')` with a same-line property access and a
+missing target: **0, 0, 0, 0.** This was the only one.
+
+**Found only because [[SR-145]]'s entry-point inventory said which CTAs to exercise.**
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
 ---
 
 ## MEDIUM
@@ -819,7 +948,20 @@ The hook exists and is unused: any node with `data-sr-intro` can be labelled wit
 lookup. On the track pages the natural place is the `priceNote` beneath the price, which
 already carries the cumulative-access sentence.
 
-*Status:* open — copy decision · *Raised:* 20 Aug 2026
+**Resolution of the team-programme half (21 Aug 2026) — it does not reproduce.** The clause
+*"team programmes priced separately"* was to be cut as an undated promise. **A team programme
+exists and is priced:** `prog-retreats` sells the Corporate Retreat — intake, half-day agenda,
+written debrief — at **€1,800 flat** up to 50 people and **€3,500 flat** over 50. The clause is
+**accurate**, and cutting it would have removed a true statement about a sellable product.
+Nothing was cut.
+
+The defect on that line is the **other** clause, *"Pricing to be announced"*, now stale since
+Track 03 is €39/mo — [[SR-151]]. A third occurrence at `index.html:6744` points at content
+that is not there — [[SR-150]].
+
+The two track-price halves of this entry were resolved by [[SR-124]] landing.
+
+*Status:* open — the "Pricing to be announced" clause only, see SR-151 · *Raised:* 20 Aug 2026
 
 ### SR-127 · `protocol.html` prices have no connection to the record
 `protocol.html` renders **€275**, **€59** and **€139** as hardcoded literals at :858, :875 and
@@ -863,6 +1005,110 @@ is a row or a footnote, whether "Entry price" survives — and that is authoring
 correction. The data it would need is in place.
 
 *Status:* open — copy and design decision · *Raised:* 20 Aug 2026
+
+### SR-129 · `TRACKS[2]` and `TRACKS[3]` were defined twice
+Empty skeletons in the literal, with the real objects declared 300 lines later as `var T2` /
+`var T3` and assigned over them. The resolved data was correct; the mechanism was fragile —
+anything reading `TRACKS` before the assignment got blank copy rather than an error.
+
+**The stub pattern was a workaround, not an oversight, and Rule 15 came from finding out
+why.** `TRACKS[2].change.items` **is** `CHANGE_PROPOSALS[2]` — the same object by identity —
+and `CHANGE_PROPOSALS` was declared *after* the literal. A straight promote would have
+evaluated it against a hoisted-but-undefined binding and thrown. `CHANGE_PROPOSALS` is now
+hoisted above `TRACKS` with a do-not-move note.
+
+**Equivalence proved, not assumed:** `JSON.stringify(TRACKS)` is **byte-identical** before and
+after — 30,467 bytes, hash 2778865564 — with the probe proved sensitive by a one-character
+perturbation first.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-134 · Spelled-out counts survived the Elevation removal
+[index.html:2690](index.html:2690) read *"**Four plans.**"* above a grid of **three** panels,
+and [:7359](index.html:7359) *"One methodology. **Four programs.**"* above **three** cards.
+Two stale comments said the same. All four corrected.
+
+They survived Run D's 19-surface removal because they **name a number, not the track** — no
+sweep for `Elevation` could reach them. **Rule 17 was written from this and from
+[[SR-126]]'s "Nineteen euros a month".**
+
+Each claim was **asserted against the grid it describes**, not string-replaced — that pattern
+is now standard for any count claim.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-139 · Sessions and workshops are one hour
+21 duration strings corrected across `dashboard.html` and `protocol.html` — **six more than
+the brief listed**, including a whole sessions module on `protocol.html` mirroring the
+dashboard's. Time ranges `18:00–20:00` → `18:00–19:00`, asserted **verbatim in full** with a
+single-occurrence check per line, never a bare end time.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-141 · Workshop prices are €29 per person and €49 per couple
+Five `index.html` surfaces now derive from `PRICING`, including the services sentence, which
+reads correctly at the new figures. `protocol.html`'s two corrected as literals — **that page
+loads no external scripts at all**, so there is no mechanism to derive from; reported rather
+than adding one ([[SR-127]]).
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-145 · index.html navigation routes to the standalone track pages
+**Stage one of a two-stage migration.** Navigation goes to real URLs; in-page CTAs keep
+opening overlays until the standalone pages carry what the overlays hold ([[SR-148]]).
+
+Three nav tabs converted `<button onclick>` → `<a href>`, and three footer-template links
+repointed. **The decisive reason is sequencing, not cost:** every block moved into the record
+shrinks the eventual overlay retirement, while every block copied out of the overlays creates
+another inventory to keep in step.
+
+**The brief said three links; there are 19 call sites.** Its count came from a DOM figure
+inflated by the footer template — **the second time a template multiplier has produced a wrong
+count in a brief** (Rule 11). Source 19 → DOM 48; the three footer edits alone produce 33 DOM
+instances across 11 cloned footers.
+
+**A passing check worth recording:** all three overlays have **zero euro literals** — every
+price is a `data-sr-price` node. There is no second pricing inventory. The drift concern holds
+for content, not prices.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-147 · Thirteen in-page CTAs still open overlays
+*"Begin Free — No Registration"* ×3, *"Start — €9/mo"*, *"Start Personal Transformation"*,
+*"Back to…"*, five *"Join Waitlist"*, *"Start — €29/mo"* ×2. Deliberately untouched by
+[[SR-145]]: repointing them now would delete four content blocks with no destination.
+Blocked on stage two ([[SR-148]]).
+
+*Status:* open — blocked on SR-148 · *Raised:* 21 Aug 2026
+
+### SR-148 · The standalone pages and the overlays are not a superset either way
+**Overlays have, standalone does not:** "What's Included" (hardcoded markup, ~10,934 chars per
+overlay — see [[SR-153]]), the workshops and 1:1 cards (one JS template at
+[index.html:4436](index.html:4436), ~1,411 chars, **needs nothing from the record**), and ten
+inline per-protocol detail views (generated from `PT_PROTOCOLS`, **Track 01 only**, coupled to
+Reader and identity-layer ordering — by far the largest).
+
+**Standalone has, overlays do not:** 18 FAQ items, the 9-item resource list, the introductory
+rate label. **All three already derive from the record**, and `index.html` already loads
+`content/tracks.js`, so the overlays could read the same source — a mount point and a render
+call, no new content.
+
+**Decision: reverse direction first**, for the sequencing reason above rather than the cost
+difference.
+
+*Status:* open — stage two · *Raised:* 21 Aug 2026
+
+### SR-153 · A third resource inventory
+The overlay "What's Included" is **hardcoded markup** listing **6 / 6 / 10** items whose names
+match neither each other nor `SHARED.resources`' **9**. [[SR-125]] covers the first two
+inventories; this is the third.
+
+Its copy is **genuinely track-specific** — *"both of you"*, *"each of your nervous systems"* —
+so it **cannot** be replaced by the shared list. A per-track record structure
+(`TRACKS[n].included[]`) would be needed, carrying ~22 item descriptions currently living in
+markup.
+
+*Status:* open — blocked on Andre · *Raised:* 21 Aug 2026
 
 ---
 
@@ -1089,6 +1335,173 @@ by claiming a **Proximity Guide the protocol does not have**. The honest fix dep
 whether `advisory` means one resource or two, which is the SR-125 question.
 
 *Status:* open — reproduces; blocked on [[SR-125]] · *Raised:* 20 Aug 2026
+
+### SR-133 · The `CHANGE_PROPOSALS` comment described unfinished material
+It called live member-facing copy appendix material. Rewritten to state what the object is —
+the `items` of the live `change` section on Tracks 02 and 03, referenced **by identity** and
+never copied — with a **DO NOT MOVE BELOW `var TRACKS`** note and its reason.
+
+Also repaired the `TRACKS` banner stranded by [[SR-129]]'s hoist. **Rule 19 was written from
+that and from the SR-057 comment in [[SR-136]]** — both stranded by replacing a block's first
+line, both syntactically valid, neither catchable by a parse check.
+
+**A trap recorded:** the first draft *quoted* the phrases it replaced, failing the constraint
+that no draft-status wording survive. Rewritten to describe rather than quote.
+
+Follow-up: the name `CHANGE_PROPOSALS` is now misleading; renaming touches three references
+plus `module.exports`.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-138 · The 1:1 prices derived from nothing
+`index.html` rendered €129 and €299 as literals while `premium1`/`premium3` held the same
+values with **zero consumers** — correct figures sitting in the record unrendered while copies
+of them shipped. All four converted to `data-sr-price` spans. **Closes [[SR-057]]**: not
+retired tiers, live products with no derivation.
+
+**Follow-up, not done:** [:7681](index.html:7681) renders *"≈€99.67/session"* — arithmetic
+over `premium3`, not a record value. Deriving it needs a computed-price mechanism that does
+not exist. **If `premium3` changes, that figure goes stale silently.**
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-140 · `premium3` is three sessions, not three hours
+`per: 'for three hours'` → `'for three sessions'`. One string aligned to seven that already
+agreed; with the 1:1 at one hour, a three-hour block cannot coexist with *"space sessions out
+as you need"*.
+
+**No rendered sentence changed, and that is the honest result.** `premium3.per` had **zero
+consumers** — no `data-sr-price-form="per"` node exists, and every `.per` reader operates on
+track prices. The string was **inert**.
+
+**This is the inverse of Rule 14.** Dormant *code* resumes when whatever masks it changes;
+dormant *data* is read the moment someone adds a consumer. A wrong value in the record is a
+defect by construction regardless of current readers.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-143 · index.html workshop durations
+Three strings in `prog-workshops` said 90 minutes; corrected to 60 with each hedge and idiom
+preserved. The retreat segments at :7888 and :7975 describe a **different product** and were
+asserted intact.
+
+The brief said index.html was already correct — **true of the 1:1, not of workshops.**
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-144 · The workshop agenda sums to two hours
+`dashboard.html:567` reads *"Two hours, facilitated live"* above a run-sheet of
+**15 + 40 + 45 + 20 = 120 minutes**. Both left exactly as they are, by decision: **a heading
+that disagrees with its own run-sheet is better than a run-sheet with invented numbers.** The
+four segment lengths are a facilitation decision. The only remaining "Two hours" in the tree.
+
+*Status:* open — blocked on Andre · *Raised:* 21 Aug 2026
+
+### SR-146 · Thirty-nine dead links on the member pages
+`dashboard.html` **11**, `protocol.html` **22**, `resource.html` **6**; `index.html` **0**.
+Highest-value: `protocol.html:599–600`, a five-item nav all dead on a page members read, and
+:867/:884 — *"Book a session"* and *"Reserve a place"* — dead directly beneath the prices this
+run corrected.
+
+**Not all are dead**: `dashboard.html`'s TEXTMAP delegated handler wires several by text
+content, so each must be **clicked**, not read (Rule 18). Targets that exist: `method.html`,
+the three track pages, `dashboard.html`. Terms/Privacy/Support have **no target file**.
+
+Queued and not started — the run closed first.
+
+*Status:* open · *Raised:* 21 Aug 2026
+
+### SR-150 · `protocol.html:6744`'s "billed separately, above" points at nothing
+The corporate portal line reads *"Corporate team programmes are billed separately, **above**"*,
+but nothing above it in that overlay describes team programmes — the preceding content is the
+back-link and the hero. Found during [[SR-122]].
+
+*Status:* open · *Raised:* 21 Aug 2026
+
+### SR-151 · The Professional plans card says "Pricing to be announced"
+[index.html:7385](index.html:7385) reads *"Pricing to be announced · team programmes priced
+separately"* on a card that also says *"Coming Soon"* and *"Join Waitlist"*. **Track 03 has a
+price** — €39/mo in `PRICING`, rendered correctly everywhere else after [[SR-124]]. The
+*second* clause is accurate ([[SR-122]]); the first is stale. Copy decision.
+
+*Status:* open · *Raised:* 21 Aug 2026
+
+### SR-152 · The protocol carousel clips a card at every viewport
+Measured on `personal-transformation.html`, `viewport_usable` asserted at each. Card width is
+a constant **238px**; the carousel is a real scroller (`scrollWidth` 2562) and **the counter
+reads "1 / 10" at every width**, never the number visible.
+
+| viewport | carousel | full | clipped card | clipped by |
+|---|---|---|---|---|
+| 1440×1000 | 1178 | 4 | **5th** | **68px** |
+| 1280×1000 | 1178 | 4 | **5th** | **68px** |
+| 1024×900 | 958 | 3 | **4th** | **36px** |
+| 768×900 | 702 | 2 | **3rd** | **40px** |
+| 390×844 | 300 | 1 | **2nd** | **190px** |
+
+1440 and 1280 are identical because the container caps at 1178. **No page-level horizontal
+overflow at any width** — the clipping is inside the scroller, which is the intended pattern.
+The mockup claim of *"1/10 with the fifth card clipped"* **reproduces exactly at 1440**.
+
+Whether a partially-visible card is a defect or an affordance is a design decision. At 390 the
+2nd card shows only 48px of 238, which reads as a layout error rather than a hint.
+
+*Status:* open — design decision · *Raised:* 21 Aug 2026
+
+### SR-142 · Seven dead `href="#"` on index.html — does not reproduce
+Raised as three dead track cards at `:958, :965, :971` among seven `href="#"`.
+
+**`index.html` contains zero `href="#"`.** Lines 958/965/971 are **CSS inside `<style>`
+blocks**. The three track links are `href="javascript:void(0)"` with live handlers; all three
+were clicked and all three opened their overlays. Of **113 anchors**, none has a dead href
+with no handler.
+
+**Cause, recorded because it is the fifth inversion in one run:** the brief was written from a
+standalone homepage mockup that is not in the repo and is unrelated to `index.html` — Rule 16,
+broken by its author.
+
+The real finding was different in kind: **`index.html` links to no other HTML page in the
+tree**, which became [[SR-145]]. The genuine dead links are on the member pages — [[SR-146]].
+
+*Status:* closed — does not reproduce · *Raised:* 20 Aug 2026 · *Closed:* 21 Aug 2026
+
+### SR-130 · Track 02 sold at Track 01's price — does not reproduce
+`relationship-healing.html` renders **€29** in all three surfaces — sticky bar, panel numeral,
+and the words *"Twenty-nine euros a month."* Track 03 renders €39, Track 01 €9. Observed
+incidentally during [[SR-129]] while the evidence was in front of the run; Phase 2 was
+formally held at the time and never needed to open.
+
+*Status:* closed — does not reproduce · *Raised:* 20 Aug 2026 · *Closed:* 21 Aug 2026
+
+### SR-131 · The appendix renders on the track pages — does not reproduce, and inverts
+No track page renders *"proposed"* or *"appendix"*; the string *"Six areas of change —
+proposed for Track 02"* **does not exist in the repo**. The rendered kicker is
+*"Six areas of change"*, hardcoded in the renderer with no track name.
+
+**`CHANGE_PROPOSALS[2]` and `[3]` are the `items` of the live `change` section** on Tracks 02
+and 03, wrapped in ordinary live copy. **Following the brief would have deleted the six-areas
+section from two of three track pages** — the most consequential near-miss of the run. The
+comment was the defect; corrected under [[SR-133]].
+
+*Status:* closed — does not reproduce · *Raised:* 20 Aug 2026 · *Closed:* 21 Aug 2026
+
+### SR-132 · `FRAMEWORKS` still carries Dispenza — does not reproduce
+**There is no `dispenza` key.** The fourth key is `distance` — `name: 'Distance & rehearsal'`,
+`person: 'Kross & Ayduk'`, `register: 'peer-reviewed'`, gold. Every specific in the brief
+inverts. Zero `dispenza` in any non-doc tracked file, plain or escaped, and
+`mock-05-record-audit.html` **is not in the repo**. Duplicate of [[SR-118]]; briefed from a
+pre-merge snapshot.
+
+Carried for [[SR-107]]: five `data-sr-reach` cards exist — porges, heartmath, mate, jung,
+watts — and **no `distance` card**, so its six protocols surface nowhere. Live reach across 30
+META entries: porges 16, mate 14, jung 11, heartmath 7, watts 7, distance 6.
+
+**`register` and `colour` are declared and read by nothing.** The gold/teal band split exists
+only as hardcoded CSS and prose, so changing `register` moves nothing on any page — the same
+class as `PRICING[t].includes`, which no `#prog-compare` surface reads. Fields that look
+authoritative and drive nothing.
+
+*Status:* closed — does not reproduce · *Raised:* 20 Aug 2026 · *Closed:* 21 Aug 2026
 
 ---
 

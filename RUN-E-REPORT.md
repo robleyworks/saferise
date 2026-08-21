@@ -910,3 +910,97 @@ Relationship €49 per couple"*.
 
 Console clean on fresh tabs; one more stale `ERR_CONNECTION_REFUSED` set discarded from a
 reused tab across a restart. Div 2812/2812 and 126/126, spans 1388/1388 and 96/96.
+
+---
+
+## Phase 9 — SR-122. **Does not reproduce.**
+
+The clause *"team programmes priced separately"* ([index.html:7385](index.html:7385)) was to
+be cut as an undated promise naming a product that does not exist.
+
+**A team programme exists and is priced.** `prog-retreats` sells the Corporate Retreat —
+intake, half-day agenda, written debrief — at **€1,800 flat** for groups up to 50 and
+**€3,500 flat** for over 50. The clause is **accurate**. Cutting it would have removed a true
+statement about a sellable product. **Nothing was cut.**
+
+The defect on that same line is the **other** clause — *"Pricing to be announced"* — stale
+since Track 03 is €39/mo. Logged as [[SR-151]]. A third occurrence at
+[index.html:6744](index.html:6744) says team programmes are billed *"separately, **above**"*
+while nothing above it in that overlay describes them — [[SR-150]].
+
+Two of the three clauses this entry originally covered were resolved by SR-124 landing.
+
+---
+
+## Phase 10 — SR-110, measurement only. Nothing changed.
+
+Measured on `personal-transformation.html`, fresh tab, `resize_window` called explicitly at
+each width, `viewport_usable` asserted **true** alongside every figure.
+
+| viewport | `viewport_usable` | carousel | card | fully visible | first clipped | clipped by |
+|---|---|---|---|---|---|---|
+| 1440 × 1000 | true | 1178 | 238 | 4 | **5th** | **68px** |
+| 1280 × 1000 | true | 1178 | 238 | 4 | **5th** | **68px** |
+| 1024 × 900 | true | 958 | 238 | 3 | **4th** | **36px** |
+| 768 × 900 | true | 702 | 238 | 2 | **3rd** | **40px** |
+| 390 × 844 | true | 300 | 238 | 1 | **2nd** | **190px** |
+
+**The mockup claim reproduces exactly at 1440** — "1 / 10" with the fifth card clipped.
+
+1440 and 1280 are identical because the container caps at **1178px**. Card width is a constant
+**238px** at every viewport — the carousel does not reflow, it scrolls (`scrollWidth` 2562).
+
+**The counter reads "1 / 10" at every width** — it reports the active card, never how many are
+visible. So at 1440 a visitor sees four and a fraction while being told "1 / 10".
+
+**No page-level horizontal overflow at any width**, so the clipping is inside the scroller,
+which is the intended pattern.
+
+**Not a defect I can call.** A partially-visible card is a common affordance signalling "more
+this way". At 390 it is different in kind: the second card shows **48px of 238**, which reads
+as a layout error rather than a hint. Design decision — logged as [[SR-152]], nothing changed.
+
+---
+
+## Phase 11 — close-out
+
+### Register
+
+**106 entries**, zero duplicates, zero missing a `*Status:*` line, **Rules 1–20 present.**
+
+One duplicate caught and merged: Run D had already opened **SR-122**, and this run's
+non-reproduction finding was folded into that entry rather than shipping two headings under
+one ID.
+
+**Rules 15–20 added**, each naming the item it was earned from: 15 (SR-129, load-bearing
+scaffolding), 16 (five inversions in one run), 17 (spelled-out facts evade sweeps), 18
+(conditional UI — paid twice, SR-135 and SR-149), 19 (replace whole blocks — stranded twice),
+20 (test against a known-good control).
+
+**Reservation extended: SR-154 → SR-175, ceiling SR-175.** The previous block is exhausted
+through SR-153; SR-150 was passed because the run issued beyond its ceiling, and the
+reservation was extended rather than renumbered.
+
+**Standing invariants recorded, each checkable in one command:** euro escapes exist only
+inside `PRICING`; no price is spelled out except in `PRICING.words`; €59, €139 and €275 appear
+nowhere.
+
+**Also recorded:** the `if (rec)` silent-skip guard, the €49 ordering constraint, and that
+**SR-136 and SR-137 must not be split by a merge**.
+
+### Verification sweep
+
+JS parse **first** across all eight pages — index 11, dashboard 1, protocol 2, resource 2,
+three track pages 1 each, method 2 — **all pass**, sentinel `caught SyntaxError`.
+
+Div balance 2812/2812, 175/175, 126/126, 46/46. CSS braces 663/299/1084. `tracks.js`
+91/91, 284/284, 54/54.
+
+**Invariant: 11 euro escapes, all inside `PRICING`, zero elsewhere in either case.**
+
+Retired figures — `€59`, `€139`, `€275`, `18:00–20:00`, `Ninety minutes` — appear **nowhere**.
+Three `90 min` hits remain and all three are correct: one historical comment in the SR-137
+note, and two retreat segments describing a different product.
+
+Dashboard renders `premium1` €129 ×4, `workshopPersonal` €29 ×6, `workshopRelationship` €49
+×2 — **0 empty of 12**. Console clean on fresh tabs.
