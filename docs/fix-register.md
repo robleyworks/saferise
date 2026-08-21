@@ -1049,6 +1049,51 @@ different component — and is `display:block`, always visible, never revealed. 
 is on both.
 
 
+### SR-164 · The white flash — and the fix was already in the repo, on two pages
+Seven of the nine served pages painted the browser's default canvas until the stylesheet that
+sets the background had downloaded and parsed. On a dark site that is a full-screen white flash
+on every navigation.
+
+**The premise held, but the "smallest possible change" was already written.** `protocol.html:21`
+and `resource.html:11` each carried
+
+```html
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
+```
+
+as the first two things in `<head>`. The first pass added a second, slightly different block to
+all nine pages — including those two, which would have made it a duplicate and a **second
+pattern** for one problem. Reverted, and the existing pair copied verbatim to the other seven
+instead. Rule 3: when the tree already answers the question, the tree's answer wins, and an
+answer already shipping twice is not a candidate for improvement in passing.
+
+The `color-scheme` half matters and a background alone does not do it: it also hands scrollbars,
+form controls and the UA's default text colour their dark rendering, so the pre-stylesheet paint
+is legible rather than merely dark.
+
+Ground colour is a literal, not `var(--bg)` — the token is defined by the very stylesheet this
+has to precede. `index.html` is `#080810`; the other eight are `#08080C`, each matching its own
+`--bg`. Asserted structurally on all nine: the block precedes **every** `<link rel="stylesheet">`
+and every other `<style>` in the document.
+
+**Verified against a control, because this environment cannot show the symptom (Rule 20 and
+Rule 10 together).** The preview browser's default canvas is *dark*, so a page with no ground
+colour looks correct here while being wrong everywhere else — a false pass waiting to happen.
+Two things were forced to make it measurable: a copy of a track page with its stylesheet pointed
+at a path that never resolves (infinite stylesheet latency, held still), and the browser's colour
+scheme set to **light**. Under identical conditions:
+
+| | `html` background | screenshot |
+|---|---|---|
+| control, block removed | `rgba(0, 0, 0, 0)` | **full-screen white** |
+| with the block | `rgb(8, 8, 12)` | the dark ground, text already legible |
+
+Both control pages were built in the scratchpad mirror only and never existed in the tree.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+
 ---
 
 ## MEDIUM

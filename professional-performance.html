@@ -2,6 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first, ahead of every stylesheet.
+     Without it the browser paints its default white until the sheet that sets
+     the background has downloaded and parsed — a full-screen flash on every
+     navigation of a dark site.
+     This is not a new pattern: protocol.html and resource.html already carried
+     exactly this pair, and it is copied from them rather than reinvented, down
+     to `html,body` and the color-scheme hint. color-scheme:dark stops the UA
+     painting a white canvas and hands scrollbars and form controls the dark
+     rendering, which the background alone does not do.
+     Deliberately a literal, not var(--bg): the token is defined by the very
+     stylesheet this has to precede. Keep it equal to --bg for this page. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SafeRise — Professional Performance</title>
