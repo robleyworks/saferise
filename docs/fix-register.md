@@ -9,6 +9,14 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - The number is global — it does not restart per block.
 - Items are marked complete when the branch carrying the fix merges to main, not
   when the commit is made.
+- **A run script drafted outside this lane must reserve its IDs here before it is written.**
+  Never assume the next free number: read this ceiling, extend the reservation, and write the
+  script against the numbers it reserved. **Two collisions in two runs** — Run D found
+  SR-108–SR-119 issued in commits but absent from the register, and a script queued after
+  Run E had independently allocated SR-150, SR-151 and SR-152, which this run had already
+  issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
+  reference, and the carousel-clipping decision. The register is the allocator; a script is a
+  consumer.
 - **Highest ID issued: SR-153.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-154.
   The previous block (SR-129–SR-150) is exhausted through SR-153; SR-150 was passed because
