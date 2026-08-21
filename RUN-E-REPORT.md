@@ -526,3 +526,56 @@ cumulative inclusion**, on the plans strip. So the site said it in one place and
 comparison table, which is what SR-128 closed.
 
 *Result: pass. Two rendered claims and two comments corrected; the rest verified accurate.*
+
+---
+
+## Phase 2A — the price audit that changed the run
+
+Reported in full to Andre; two findings changed later work.
+
+**A · There are two locked-resource paywalls in `index.html`, and SR-124 only converted one.**
+`openResourceModal()` at :4664–4666 reads the record. **`openReader()` at :5004–5006 never
+did** — it hardcoded a `€19 / €29 / €49` ladder that no longer exists anywhere else.
+
+**B · It used lowercase `€`.** Every sweep in Runs D and E targeted `€` or uppercase
+`€`. Case is a fourth representation.
+
+Also established: `premium1` (€129) and `premium3` (€299) hold **correct** values with **zero
+consumers**, while `index.html` renders those same figures as literals. Not retired tiers —
+live products sold from copies. Copy, FAQ, `priceNote` and `meta` fields are **clean**: no
+service price appears in prose anywhere except one sentence at `index.html:7513`.
+
+---
+
+## Phase 2B · Commit 1 — SR-135, the second paywall
+
+`openReader()`'s paywall converted to `PRICING.tN.amount + '/mo'`, mirroring
+`openResourceModal()` exactly — same expression, same mechanism, no second pattern invented.
+Anchored by line, with all three target lines asserted verbatim **including their lowercase
+escapes**, and the already-converted paywall asserted as the template.
+
+**Verified by opening a locked resource in the Reader, not by sweeping body text.**
+
+The blind spot, reproduced first: before any resource is opened, `.reader-page-locked` nodes
+in the DOM = **0**, and `document.body.innerText` contains no `€49`. **That is exactly the
+state SR-124 measured**, and why it declared "no €49 anywhere" while €49 sat in the source.
+
+Then instantiated, per track:
+
+| resource | paywall mounted | button | expected |
+|---|---|---|---|
+| `p1-guide` | yes | **Unlock — €9/mo** | €9/mo ✓ |
+| `t2-p1-guide` | yes | **Unlock — €29/mo** | €29/mo ✓ |
+| `t3-p1-guide` | yes | **Unlock — €39/mo** | €39/mo ✓ |
+
+All three non-empty, all three matching the record, **no €49 in any paywall**.
+
+**Sentinel:** forcing `PRICING.t3.amount` to `€777` moved the button to *"Unlock — €777/mo"*;
+restoring returned *"Unlock — €39/mo"* exactly.
+
+**Euro escapes now exist in exactly one place:** `content/tracks.js`, 9 occurrences, all
+inside `PRICING`. Zero in any other tracked file, either case.
+
+JS parse first — 11 blocks, sentinel `caught SyntaxError`. Div 2812/2812. Console clean.
+
+*Result: pass. A wrong price that survived a full release cycle, closed.*

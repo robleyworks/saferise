@@ -5001,9 +5001,9 @@ function openReader(protocolKey, initialKey){
     });
     let lockedHtml = '';
     if (data.locked) {
-      let plan = 'Personal Transformation', price = '\u20ac19/mo', prog = 'personal';
-      if (key.indexOf('t2-') === 0) { plan = 'Relationship'; price = '\u20ac29/mo'; prog = 'couples'; }
-      else if (key.indexOf('t3-') === 0) { plan = 'Professional'; price = '\u20ac49/mo'; prog = 'corporate'; }
+      let plan = 'Personal Transformation', price = PRICING.t1.amount + '/mo', prog = 'personal';
+      if (key.indexOf('t2-') === 0) { plan = 'Relationship'; price = PRICING.t2.amount + '/mo'; prog = 'couples'; }
+      else if (key.indexOf('t3-') === 0) { plan = 'Professional'; price = PRICING.t3.amount + '/mo'; prog = 'corporate'; }
       lockedHtml = '<div class="reader-page-locked"><p>This resource unlocks with the ' + plan + ' plan.</p>' +
         '<div class="resource-modal-unlock-btn" onclick="closeReader();showProg(\'' + prog + '\');">Unlock \u2014 ' + price + '</div></div>';
     }
