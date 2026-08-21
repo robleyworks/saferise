@@ -800,6 +800,65 @@ metric-shaped string at all after [[SR-160]].
 *Status:* open - reported, awaiting Andre · *Raised:* 21 Aug 2026
 
 
+### SR-156 · The Dashboard control answered "You are here" instead of going home
+The rail's Dashboard button opened `mRoute` reading *"This page / You are here. / /dashboard"*
+**over a protocol that stayed open behind it** — verified by clicking, with a protocol in the
+shell: `body.reading` stayed `true` and the iframe kept its src. A control that reports success
+while doing nothing.
+
+**Two premises corrected against the tree (Rule 16 / Rule 3).**
+
+1. **It is not on the protocol page.** `protocol.html` contains no `openRoute`, no `data-route`
+   and no Dashboard control — zero occurrences. The button is `dashboard.html`'s own rail, which
+   stays on screen while a protocol is open in the shell, which is what the report described.
+2. **The `|| ROUTES.dashboard` fallback was latent, not live.** Every key that can reach
+   `openRoute` was enumerated — rail `data-route` (4), `data-route-link` (3), `TEXTMAP` (11),
+   and the `#route=` hash — and the union is **exactly the fourteen keys `ROUTES` defines**. The
+   hash path is separately guarded at `:1216` by
+   `if(PAGES[key] || !(LAYERS[key] || ROUTES[key])) return;`. Nothing fell through it. It was
+   removed anyway, because the next `TEXTMAP` row or `data-route` typo would have landed on
+   "You are here" **silently**, and a fallback that turns a typo into a confident wrong answer
+   is worth removing before it fires, not after.
+
+**The fix is a view, not a destination.** `dashboard` is intercepted before the `ROUTES` lookup
+and calls `goHome()`: `closeModals()`, `closeProtocol()`, clear a `#route=` hash if one brought
+us here, put the rail back on Dashboard. No navigation, so no reload — proved by a marker on
+`window` surviving the click, with the URL unchanged. The `ROUTES.dashboard` entry was deleted
+with it: **describing the page you are already standing on is what produced that copy.**
+`method.html` and `method-porges.html` already had the right answer in their own
+`PAGES = { method:…, dashboard: 'dashboard.html' }` — only `dashboard.html` lacked it.
+
+**The distinction worth keeping, because it decided what NOT to touch.** The brief asked for
+targetless routes to fail visibly instead of claiming success. **They already do.** *"Account &
+plan · Not built yet · /account"* names the thing, names the path and states plainly that it
+does not exist. **A control that reports its own absence is not the same defect as one that
+silently claims success** — the first is honest signposting, the second is a lie. Replacing the
+twelve with dead buttons would have removed information and added nothing. [[SR-103]] reached
+this conclusion first, by clicking all six. The instruction was withdrawn; all twelve stand
+unchanged.
+
+**Nine dead nav links wired**, using the track pages' own `renderNav` map as the source of
+truth rather than inference: `protocol.html`'s `.bnavlinks` (The Journey → `method.html`, and
+the three track pages) and `resource.html`'s `.sr-topnav` (the same, plus About → `method.html`).
+
+**Two left dead and blocked, deliberately — do not tidy:** *"My Practice"* on `protocol.html`
+and *"Compare Plans"* on `resource.html`. No page answers to either. Inventing a destination
+would be worse than the dead link, and pointing them at a near-miss would be worse still. They
+resolve when a page exists.
+
+**Verified by clicking (Rule 18), not by reading `href`s.** Every rail control and route-link
+exercised: `coaching` → `mLayer`; `account`, `chosen`, `decisions` → `mRoute` with "Not built
+yet" and the right path; `method` → navigates; `dashboard` → protocol closed, layer closed,
+hash cleared, scroll lock released, rail reset, **no reload**. An unregistered key was injected
+into a live rail button and clicked: **zero modals opened** and the console carried
+`openRoute: no route registered for "sr156-nonexistent-key"`. For the nav links, a
+capture-phase probe confirmed nothing swallows the click (`defaultPrevented: false` at document
+level) and recorded each resolved URL, with a full click-through on one link per page as the
+control (Rule 20) — landing on `relationship-healing.html` and `professional-performance.html`.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+
 ---
 
 ## MEDIUM

@@ -1150,7 +1150,6 @@
 
   // ── route layer: every link resolves to something ──
   var ROUTES = {
-    dashboard:  ['This page', 'You are here.', '/dashboard'],
     method:     ['Where the method comes from', 'The six frameworks in full — what each one says, what SafeRise takes from it, which protocols rest on it, and where the evidence stops.', '/method'],
     coaching:   ['Sessions & workshops', 'The full calendar, booking, and everything you have attended.', '/sessions'],
     account:    ['Account & plan', 'Your plan and billing, preferences, privacy and data export, and closing your account.', '/account'],
@@ -1174,14 +1173,43 @@
      data-modal of its own — the rail's own listener would otherwise fire
      openRoute() alongside the modal handler and open two layers at once. */
   var LAYERS = { coaching: 'sessions' };
+  /* SR-156 · "Dashboard" is not a destination to describe, it is the view you
+     come back to. It used to open a modal reading "You are here" — over a
+     protocol that stayed open behind it — which is a control reporting success
+     while doing nothing. It now closes any open layer and the protocol frame,
+     clears a route hash if one brought us here, and puts the rail back on
+     Dashboard. All in the shell: nothing navigates, so nothing reloads.
+     ROUTES no longer carries a 'dashboard' entry — describing the page you are
+     already standing on is what produced that copy in the first place. */
+  function goHome(){
+    closeModals();
+    closeProtocol();
+    if(window.location.hash){
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+    document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(x){
+      x.classList.toggle('on', x.getAttribute('data-route') === 'dashboard');
+    });
+  }
+
   function openRoute(key){
+    if(key === 'dashboard'){ goHome(); return; }
     if(PAGES[key]){ window.location.href = PAGES[key]; return; }
     if(LAYERS[key]){ openModal(LAYERS[key]); return; }
-    var r = ROUTES[key] || ROUTES.dashboard;
+    /* SR-156 · no `|| ROUTES.dashboard` fallback. It was latent, not live —
+       all fourteen keys reaching here are defined, and the #route= path is
+       guarded below — but the next TEXTMAP row or data-route typo would have
+       landed silently on "You are here" and read as success. An unregistered
+       key now says so, in the console, and opens nothing.
+       The twelve routes with no page keep their "Not built yet" modal: a
+       control that names itself, names its path and states plainly that it does
+       not exist is honest signposting, not a false claim. SR-103 was right. */
+    var r = ROUTES[key];
+    if(!r){ console.error('openRoute: no route registered for "' + key + '"'); return; }
     document.getElementById('srRouteTitle').textContent = r[0];
     document.getElementById('srRouteBody').textContent  = r[1];
     document.getElementById('srRoutePath').textContent  = r[2];
-    document.getElementById('srRouteKick').textContent  = key === 'dashboard' ? 'You are here' : 'Not built yet';
+    document.getElementById('srRouteKick').textContent  = 'Not built yet';
     /* goes through the shared controller so focus return and scroll lock are
        handled in exactly one place */
     openModal('route');
