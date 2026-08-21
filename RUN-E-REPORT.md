@@ -654,3 +654,68 @@ JS parse first — dashboard 1 block, passes. `tracks.js` braces 91/91, brackets
 parens 55/55. Console clean.
 
 *Result: pass, with a reported broken intermediate state.*
+
+---
+
+## Phase 2B · Commit 3 — SR-137, `premium` and `premium1` were one offer under two names
+
+### Reported before editing, and the framing changed
+
+The brief called this "removal of a retired offer, not re-pricing". The evidence overturned
+it:
+
+| | `dashboard.html` + `protocol.html` | `index.html` `prog-premium1on1` |
+|---|---|---|
+| name | **Premium 1:1** | **Premium 1:1** |
+| price | €275 / session | €129 single · €299 series |
+| duration | 90 min | 60 min |
+
+Same product name, two prices, two durations. These blocks were not selling a retired
+product — they were a **stale second representation of the live one**. Andre confirmed and
+overturned the framing: repoint, do not remove.
+
+Removal would have deleted a live product from the member dashboard and stranded
+`protocol.html:852`'s comment describing "**two** offers".
+
+### Changed
+
+All four `dashboard.html` nodes repointed `premium` → `premium1` — the offer card price
+(:325), the modal footer sentence (:624) and button (:625), and the calendar slot (:643).
+`protocol.html:858`'s literal corrected €275 → €129 (that page has no hydrator; derivation is
+logged as a follow-up).
+
+**`protocol.html`'s self-contradiction resolved:** :860 said *"A private **hour** with
+Andre"* while :862 said *"**Ninety minutes**, online"*. The hour is correct; :862 now reads
+*"Sixty minutes, online"*. That also completes the `protocol.html:862` item listed under
+Commit 4 — it does not need doing twice.
+
+**A comment of my own corrected.** The SR-136 note I wrote one commit earlier said *"the key
+was removed rather than re-priced"* — which this commit proves wrong. Rewritten to record
+what actually happened: a duplicate key removed and every surface repointed, so the 1:1 now
+has one price in one place.
+
+### Verified by reading rendered text, not by absence of errors
+
+The `if (rec)` guard means a missing key renders empty with a clean console, so those are
+different tests.
+
+| surface | renders |
+|---|---|
+| offer card | **Premium 1:1 · €129 / session** |
+| modal footer | **€129 per session.** Reschedule free up to 72 hours before… |
+| modal button | **Book this time · €129** |
+| calendar slot | 03 Sep · Premium 1:1 with Andre · Three times available · 90 min · **€129** |
+| `protocol.html` | **€129 / session**, *"A private hour"*, *"Sixty minutes, online"* |
+
+**0 empty price spans of 12** on the dashboard. `premium` nodes remaining: **0**.
+`'premium' in PRICING`: **false**. `protocol.html` still renders **2** offers, no fragment.
+
+Repo-wide, the only `PRICING.premium` reference left is inside the do-not-re-add comment —
+the same comment-matches-its-own-grep pattern seen in Run D.
+
+**Still wrong, and Commit 4's job:** the dashboard says *"Ninety minutes"* and *"90 min"*, and
+`protocol.html`'s workshop block says *"Two hours"*.
+
+Div balance 175/175 and 126/126. `tracks.js` braces 91/91. Console clean.
+
+*Result: pass. One product, one price, one place.*

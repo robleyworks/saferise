@@ -50,9 +50,12 @@ var PRICING = {
      are two keys and the block reads 'from' the lower one. */
   workshopPersonal:     { amount: '\u20AC29',  per: 'per person' },
   workshopRelationship: { amount: '\u20AC49',  per: 'per couple' },
-  /* SR-136 · `premium` (\u20AC275 / session) is retired. The product is no longer
-     offered, so the key was removed rather than re-priced. Do not re-add it —
-     a surface reading PRICING.premium is reading a product that does not exist. */
+  /* SR-136/SR-137 · there is no `premium` key. It held \u20AC275 / session for the
+     1:1, which turned out to be the SAME offer as `premium1` under a second name —
+     dashboard.html and protocol.html sold "Premium 1:1" at \u20AC275 / 90 min while
+     index.html sold it at \u20AC129 / 60 min. The duplicate key was removed and every
+     surface repointed at `premium1`, so the 1:1 now has one price in one place.
+     Do not re-add `premium`. */
   /* SR-057 · ANSWERED by SR-138. premium1 and premium3 are LIVE products and these
      values are correct. They previously had zero consumers while index.html rendered
      the same two figures as literals — sold from copies rather than from the record.
