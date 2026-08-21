@@ -232,7 +232,9 @@ var TRACKS = {
       'Journal and progress tracking, private to you',
       'New protocols and resources, included as the track grows'
     ],
-    priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Relationship and Professional build on this track \u2014 Track 01 is the prerequisite, not the cheap tier.',
+    /* SR-126 · the introductory line comes first because it qualifies the number
+       directly above it. All three segments are conditions of sale. */
+    priceNote: 'Introductory rate \u2014 yours for as long as you stay subscribed<br>Cancel anytime \u00B7 keep everything you\u2019ve written<br>Relationship and Professional build on this track \u2014 Track 01 is the prerequisite, not the cheap tier.',
     stickyLine: 'Your SafeRise is ready when you are.'
   },
 

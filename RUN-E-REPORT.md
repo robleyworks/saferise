@@ -320,3 +320,81 @@ The footer `<template>` is **not** involved — it carries no price.
   cumulative-access sentence) or a new element.
 
 *Result: does not reproduce as briefed — no existing label. Held for a decision.*
+
+---
+
+## Phase 7 — SR-126, the introductory label (and a worse defect found on the way)
+
+### The premise check found no label — and a live contradiction instead
+
+There was **no introductory label anywhere**: zero rendered surfaces, 16 `data-sr-intro`
+nodes all bare, no CSS targeting the hook. The hook Run D installed was set and read by
+nothing.
+
+Checking where the label should go surfaced something worse. `#pt-start`, the primary
+conversion panel, rendered:
+
+> **The full track. Nineteen euros a month.** · **€9** / month · Get Started — **€9**/mo
+
+The heading was a hardcoded literal at [index.html:6008](index.html:6008) carrying the
+**standard** wording while every figure around it hydrated to the **charged** price. One
+panel, two prices, in words against digits.
+
+`personal-transformation.html` was never affected — it renders `t.price.words` and read
+*"Nine euros a month."* correctly. This was the last hardcoded price string on `index.html`;
+a sweep for `euros a month` across every tracked file now returns only `content/tracks.js`
+and a comment.
+
+### Changed
+
+1. **[index.html:6008](index.html:6008)** — wrapped as
+   `<span data-sr-price="t1" data-sr-price-form="words">`. Existing mechanism, no new data,
+   no new hook.
+2. **Two labels only**, at the points of commitment: the plans-strip Personal panel
+   ([:2702](index.html:2702), matching its own `11.5px / var(--text3)` supporting line) and
+   `#pt-start` ([:6013](index.html:6013), reusing `.pt-note`). The other 14 `€9` nodes stay
+   bare.
+3. **`TRACKS[1].priceNote`** — introductory line first, then cancel, then prerequisite, with
+   a comment recording why the order matters.
+
+### Verified by hydration, not by grep
+
+The `Start — /mo` failure mode was the specific risk: a wired span that never hydrates
+renders empty, which here would have left the heading reading *"The full track."* with
+nothing after it.
+
+| assertion | result |
+|---|---|
+| words span found | yes |
+| **words span non-empty** | **yes** — `"Nine euros a month."` |
+| matches `PRICING.t1.words` exactly | **yes** |
+| empty price spans anywhere on the page | **0 of 27** |
+| label instances | **exactly 2**, in `.sr-panel` plans-strip and `#pt-start` |
+
+**Sentinel:** setting `PRICING.t1.words` to `SENTINEL WORDS.` and re-hydrating moved the
+heading to that value; restoring returned `"Nine euros a month."` exactly. The span derives
+rather than holding a lucky literal.
+
+### The four surfaces now agree
+
+| surface | renders |
+|---|---|
+| heading | The full track. **Nine euros a month.** |
+| numeral | **€9** / month |
+| CTA | Get Started — **€9**/mo |
+| note | *Introductory rate — yours for as long as you stay subscribed* · Cancel anytime… · Personal **€9**/month · Relationship €29/month… |
+
+### Track page, and no leakage
+
+`personal-transformation.html` price box: heading *"The full track. Nine euros a month."*,
+numeral **€9 / month**, CTA **€9/month**, and a three-line note of **208 characters** with the
+introductory line first.
+
+**Tracks 02 and 03 untouched and correctly bare** — Track 02 reads *"Twenty-nine euros a
+month."* / **€29** with its own two-line note and **no introductory label**; `Introductory
+rate` appears exactly once in `content/tracks.js` and in neither track page's source.
+
+JS parse first: 11 inline blocks on `index.html`, all pass, sentinel `caught SyntaxError`.
+Div 2812/2812, span 1378/1378. Console clean.
+
+*Result: pass. One label, two placements, and a live price contradiction closed with it.*
