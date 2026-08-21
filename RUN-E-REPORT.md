@@ -797,3 +797,55 @@ day — a different product, and correct as they stand.
 `content/tracks.js:55` retains "90 min" inside the SR-137 comment, which is historical record.
 
 *Result: pass, with one block held and three index.html strings reported.*
+
+---
+
+## Phase 2B · Commit 5 — SR-143, index.html workshop durations
+
+Andre scoped his "index.html is already correct" to the 1:1 and confirmed the three workshop
+strings were wrong. Corrected, each hedge and idiom preserved:
+
+| line | before | after |
+|---|---|---|
+| 7741 | *"small group, **roughly 90 minutes**."* | *"small group, **roughly 60 minutes**."* |
+| 7781 | *"**Roughly 90 minutes**, one evening"* | *"**Roughly 60 minutes**, one evening"* |
+| 7835 | *"Length: **approximately 90 minutes**, live video"* | *"Length: **approximately 60 minutes**, live video"* |
+
+`:7888` and `:7975` **untouched and asserted intact** — retreat segments within a half day, a
+different product.
+
+### Verified by tree walk, per overlay
+
+**`prog-workshops`** — *"roughly 60 minutes"*, *"Roughly 60 minutes, one evening"*,
+*"Length: approximately 60 minutes"*. **`prog-premium1on1`** — *"One hour, live video"*,
+*"What Makes One Hour Enough"*, *"Length: 60 minutes"*: already correct, untouched.
+**`prog-retreats`** — *"60–90 minute segments"*, *"half day (approx. 3–4 hours)"*: intact.
+
+`90 minutes` / `Ninety minutes` anywhere in the rendered DOM: **false**. Console clean,
+11 blocks parse, div 2812/2812.
+
+### Remaining duration sweep on index.html
+
+Only `:7888` and `:7975` still mention 90 minutes, both retreat segments and both correct.
+Nothing else on the page implies a workshop or 1:1 length other than one hour.
+
+---
+
+## SR-144 — the workshop agenda, blocked on Andre
+
+`dashboard.html:567` reads *"**Two hours**, facilitated live"* and the run-sheet at
+`:572–575` is:
+
+| segment | minutes |
+|---|---|
+| Arrival and Clearing | 15 |
+| The four steps, run together | 40 |
+| Facilitated discussion | 45 |
+| Close and integration | 20 |
+| **total** | **120** |
+
+Both left exactly as they are, by decision: **a heading that disagrees with its own run-sheet
+is better than a run-sheet with invented numbers.** The four segment lengths are a
+facilitation decision. Recorded here so they can be rebalanced to 60 in one pass.
+
+This is the only remaining "Two hours" in the tree.
