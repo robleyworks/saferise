@@ -17,11 +17,18 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-166.** Reserved block open: **SR-154 to SR-175**, ceiling
-  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-167.
+- **Highest ID issued: SR-167.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-168.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
-  lane, then allocated **SR-160**, **SR-161**, **SR-165** and **SR-166** from findings raised mid-run, and **SR-154**
-  for the sandbox record — so the block is now contiguous with no gap to explain.
+  lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
+  for the sandbox record.
+  **SR-157, SR-158 and SR-159 are issued and permanently unused — this is the gap, and it is
+  deliberate.** The run script named them for the card, the carousel and the white flash. Those
+  three were re-scoped mid-run once the tree contradicted the brief, and reissued as SR-162,
+  SR-163 and SR-164 with the corrected findings attached. The originals were **not** reused for
+  the replacements, because a number already written into a script and a commit trail must not
+  come to mean something else. **Do not reach back for 157-159**: they sit inside a range every
+  later allocation has read past, which is exactly what caused the three collisions below.
   The previous block (SR-129–SR-150) is exhausted through SR-153; SR-150 was passed because
   the run issued beyond its ceiling and the reservation was extended rather than renumbered.
 
@@ -32,7 +39,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
   Run E: prices in words exist only in the record, one derived span and one comment.
 - **`€59`, `€139` and `€275` appear nowhere.** Retired by SR-136/SR-141.
-- **SR-044 to SR-166 are issued.** All are written up below except four:
+- **SR-044 to SR-167 are issued.** All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -118,6 +125,14 @@ the rule can be checked rather than taken on trust.
     data, and SR-142's seven `href="#"`. Name the source of an asserted value so it can be
     discounted when it conflicts. Rule 3 decides the conflict; this rule stops it being
     invisible.
+    **This extends to the tester's own fixtures.** A seed is a premise too: [[SR-161]]'s
+    fallback probe seeded a protocol name that exists in no track, and the correct
+    behaviour — degrade to nothing ringed — read for a moment as the fallback failing.
+    Check fixtures against the record before trusting any result taken from them.
+    **Run F inverted four more premises**: [[SR-155]]'s stub route being `dashboard.html`'s
+    own rail rather than `protocol.html`, [[SR-156]]'s `|| ROUTES.dashboard` fallback being
+    latent rather than live, [[SR-162]]'s `.pimgnote` emitting nothing anywhere, and
+    [[SR-163]]'s carousel binding correctly all along.
 17. **Facts spelled out in words evade every sweep aimed at symbols or identifiers.**
     "Four programs" survived a sweep for `Elevation`; "Nineteen euros a month" survived a
     sweep for `€19` and `€19`. Both sat in surfaces a dedicated pass had already
@@ -146,6 +161,19 @@ the rule can be checked rather than taken on trust.
     behaves identically to things known correct. A control turns an unusable measurement
     into a usable comparison, and separates an environment artifact from a page defect —
     the failure mode Rule 10 warns about, now with a technique attached. [[SR-149]].
+
+**Measurement artifacts — the standing pre-flight**
+
+Four now, every one found the same way: a plausible number that was wrong. Run these before
+trusting any measurement, and **report the check alongside the result**, not instead of it.
+
+| artifact | how it lies | countermeasure |
+|---|---|---|
+| **Collapsed viewport.** `resize_window` with a *preset* leaves `innerWidth`/`innerHeight` at **0**. | Every geometry reading taken there is void. The mockup statebar measured **231px** tall at zero width and **51px** at 1280x860. | Set explicit `width`/`height`. Assert and report **`viewport_usable`** with every measurement. |
+| **Stale scratchpad mirror.** The preview serves a copy of the tree ([[SR-154]]); a silently failed sync leaves you verifying pre-edit files. | A clean pass, with numbers that all look right, taken against the code you just changed away from. | **Sentinel every sync**: write a unique token into the file just edited, sync, confirm it appears in the mirror **and is absent from a control file**, remove it, sync again. |
+| **Browser cache serving a pre-edit page.** | The first post-[[SR-155]] reading showed the removed statebar still present, while `curl` against the same server returned a file without it. | Cache-bust every verification URL. **A busted HTML URL does not bust its subresources** — `js/`, `css/` and `content/` survived both a query change and a forced navigation, and [[SR-162]] briefly read as not rendering at all because of it. `fetch(url,{cache:'reload'})` each one, then reload. |
+| **The environment cannot reproduce the symptom.** | A false pass, or a working feature reported broken. The preview's canvas is *dark*, so an unfixed page passes the white-flash test ([[SR-164]]); CSS transitions never advance, so an applied transform reads as identity forever ([[SR-149]], [[SR-163]]). | Force the condition and compare against a known-good control — light colour scheme, a stalled stylesheet, `transition:none`. Report it **as a control-based result**, never as a direct observation. |
+
 
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
@@ -1092,6 +1120,36 @@ scheme set to **light**. Under identical conditions:
 Both control pages were built in the scratchpad mirror only and never existed in the tree.
 
 *Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-167 · The euro invariant no longer matches the record it guards
+**Found by the close-out sweep. Reported, not fixed — the invariant is not this branch's to
+rewrite.**
+
+The standing invariant at the top of this file reads: *"Euro escapes exist only inside `PRICING`
+in `content/tracks.js`. Current count **9**."* The file holds **11**, plus **14** bare `€`
+glyphs.
+
+**`content/tracks.js` is byte-identical to `main` on this branch** — verified with
+`git show main:content/tracks.js`, no diff, nothing in Run F touched it. The drift predates this
+branch entirely and the sweep is what surfaced it.
+
+Nothing is actually loose: all 11 escapes sit inside the `PRICING` object or the SR-136/137
+comment above it, and all 14 glyphs are in the explanatory comment block at the head of the
+file. The invariant's *intent* holds. **Its number does not**, and a checkable-in-one-command
+invariant whose count is wrong stops being checkable — the next run either "fixes" the file to
+match the note or stops trusting the note.
+
+The likelier cause is that the prices moved and the line did not follow: Run E's own table
+records `workshopPersonal` at €59, `workshopRelationship` at €139 and a `premium` key at €275.
+The file now says **€29 per person**, **€49 per couple**, and has **no `premium` key** — the
+SR-136/137 comment says so explicitly. The separate invariant *"€59, €139 and €275 appear
+nowhere"* was re-verified this run and **holds: zero occurrences across every tracked file.**
+
+Fixing it means recounting against the current `PRICING` and deciding whether comments count
+toward the total — a decision about the invariant's definition, not a defect in the code.
+
+*Status:* open — reported, awaiting Andre · *Raised:* 21 Aug 2026
+
 
 
 ---
