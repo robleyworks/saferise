@@ -501,13 +501,25 @@ var TRACKS = {
                the About page's protocol counts. Never hand-count again.
    ═══════════════════════════════════════════════════════════════════════ */
 
+/* SR-177 · `page` and `ordinal` live here, not in markup.
+   `page` because the key and the filename are different words — `distance` is
+   served by method-kross.html — so every consumer that authors the link
+   re-derives that mapping by hand, which is the same defect class as a price
+   typed into a page instead of read from PRICING.
+   `ordinal` because method.html and the pages disagreed about which framework
+   is 03 and which is 04 (SR-176), and two places holding the same number is how
+   that happened. It tracks `step` for 01-04; jung and watts are step 0 because
+   they carry no single step, so their ordinal is stated rather than derived.
+   `register` was already here and already carries what the framework pages'
+   section-04 headings need: peer-reviewed → "What holds", clinical practice →
+   "What this is", interpretive → "What register this is" (SR-169). */
 var FRAMEWORKS = {
-  porges:    { name: 'Polyvagal Theory',      person: 'Stephen Porges', short: 'Porges',  register: 'peer-reviewed',    step: 1, colour: 'var(--gold)' },
-  heartmath: { name: 'Cardiac coherence',     person: 'HeartMath', short: 'HeartMath',       register: 'peer-reviewed',    step: 2, colour: 'var(--gold)' },
-  distance:  { name: 'Distance & rehearsal',  person: 'Kross & Ayduk \u00B7 Best Possible Self literature', short: 'Kross & Ayduk', register: 'peer-reviewed', step: 4, colour: 'var(--gold)' },
-  mate:      { name: 'Compassionate Inquiry', person: 'Gabor Mat\u00E9', short: 'Mat\u00E9', register: 'clinical practice',step: 3, colour: 'var(--gold)' },
-  jung:      { name: 'Shadow & individuation', person: 'Carl Jung', short: 'Jung',  register: 'interpretive',     step: 0, colour: 'var(--teal)' },
-  watts:     { name: 'Non-resistance',        person: 'Alan Watts', short: 'Watts',      register: 'interpretive',     step: 0, colour: 'var(--teal)' }
+  porges:    { name: 'Polyvagal Theory',      person: 'Stephen Porges', short: 'Porges',  register: 'peer-reviewed',    step: 1, ordinal: 1, page: 'method-porges.html',    colour: 'var(--gold)' },
+  heartmath: { name: 'Cardiac coherence',     person: 'HeartMath', short: 'HeartMath',       register: 'peer-reviewed',    step: 2, ordinal: 2, page: 'method-heartmath.html', colour: 'var(--gold)' },
+  distance:  { name: 'Distance & rehearsal',  person: 'Kross & Ayduk \u00B7 Best Possible Self literature', short: 'Kross & Ayduk', register: 'peer-reviewed', step: 4, ordinal: 4, page: 'method-kross.html', colour: 'var(--gold)' },
+  mate:      { name: 'Compassionate Inquiry', person: 'Gabor Mat\u00E9', short: 'Mat\u00E9', register: 'clinical practice',step: 3, ordinal: 3, page: 'method-mate.html',      colour: 'var(--gold)' },
+  jung:      { name: 'Shadow & individuation', person: 'Carl Jung', short: 'Jung',  register: 'interpretive',     step: 0, ordinal: 5, page: 'method-jung.html',      colour: 'var(--teal)' },
+  watts:     { name: 'Non-resistance',        person: 'Alan Watts', short: 'Watts',      register: 'interpretive',     step: 0, ordinal: 6, page: 'method-watts.html',     colour: 'var(--teal)' }
 };
 
 

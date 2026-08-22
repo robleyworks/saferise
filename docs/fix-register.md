@@ -17,11 +17,12 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-167.** Reserved block open: **SR-154 to SR-175**, ceiling
-  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-168.
+- **Highest ID issued: SR-179.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-180. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
-  for the sandbox record.
+  for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to
+  SR-179 beyond the ceiling as findings arrived mid-run.
   **SR-157, SR-158 and SR-159 are issued and permanently unused — this is the gap, and it is
   deliberate.** The run script named them for the card, the carousel and the white flash. Those
   three were re-scoped mid-run once the tree contradicted the brief, and reissued as SR-162,
@@ -33,13 +34,31 @@ Canonical record of defects and design decisions. Commits reference the ID:
   the run issued beyond its ceiling and the reservation was extended rather than renumbered.
 
 **Standing invariants — checkable in one command each**
-- **Euro escapes exist only inside `PRICING` in `content/tracks.js`.** Current count **9**,
-  zero elsewhere in any tracked file, in either case. Any occurrence outside that block is a
-  defect by construction. Part of every close-out sweep.
+- **Euro escapes exist only inside `PRICING` in `content/tracks.js`. Count: 8.** Corrected from
+  9 by [[SR-168]]. **Counted inside the `PRICING` object only, with `/* */` comments stripped
+  first** — an invariant that counts commentary breaks every time someone writes a note, which
+  is what made the old number unreproducible. One command, and it prints `8`:
+
+  ```
+  python3 - <<'PY'
+  import re
+  b = open('content/tracks.js', encoding='utf-8').read().split('var PRICING = {')[1].split('\n};')[0]
+  print(len(re.findall(r'\\u20AC', re.sub(r'/\*.*?\*/', '', b, flags=re.S))))
+  PY
+  ```
+
+  The eight are `t1` €9, `t1.standard` €19, `t2` €29, `t3` €39, `workshopPersonal` €29,
+  `workshopRelationship` €49, `premium1` €129, `premium3` €299. Companion halves, both **0**
+  with comments stripped: escapes anywhere outside the `PRICING` block, and bare `€` glyphs
+  anywhere in the file. Part of every close-out sweep.
 - **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
   Run E: prices in words exist only in the record, one derived span and one comment.
-- **`€59`, `€139` and `€275` appear nowhere.** Retired by SR-136/SR-141.
-- **SR-044 to SR-167 are issued.** All are written up below except four:
+- **`€59`, `€139` and `€275` appear nowhere — in values.** Retired by SR-136/SR-141.
+  `\u20AC275` **does** appear in `content/tracks.js`, inside the SR-136/137 comment recording
+  why the `premium` key must not be re-added. That is the invariant's own worked example of why
+  comments are excluded: counted naively, a note explaining a removal reads as the removal
+  having failed.
+- **SR-044 to SR-179 are issued.** All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -55,8 +74,8 @@ Canonical record of defects and design decisions. Commits reference the ID:
 
 **Rules — method**
 
-Earned across Run C and Run D. Each cost something to learn; the worked example is named so
-the rule can be checked rather than taken on trust.
+Earned across Runs C to G. Each cost something to learn; the worked example is named so
+the rule can be checked rather than taken on trust. **Twenty-one rules.**
 
 1. **A deliberate non-fix gets a register entry** carrying the reasoning and an explicit
    do-not-tidy line. An undocumented correct refusal is indistinguishable from an oversight,
@@ -161,10 +180,28 @@ the rule can be checked rather than taken on trust.
     behaves identically to things known correct. A control turns an unusable measurement
     into a usable comparison, and separates an environment artifact from a page defect —
     the failure mode Rule 10 warns about, now with a technique attached. [[SR-149]].
+21. **Correct live assertions; annotate dated records.** A standing invariant, a count, or any
+    claim a future run will check is **live**: when it goes stale it must be rewritten, because
+    an assertion nobody can reproduce stops being checkable and the next run either "fixes" the
+    tree to match it or quietly stops trusting it. A report, a before-snapshot, or an entry
+    recording what was true when it was raised is **evidence**: rewriting it falsifies the
+    record and destroys the trail later entries depend on. Mark it superseded and point at what
+    replaced it.
+    Worked example: [[SR-168]] rewrote the euro invariant — live — and **annotated** Run E's
+    `PRICING` table rather than editing it, because [[SR-136]]'s before/after pair and the €49
+    ordering constraint both depend on those numbers standing as measured. [[SR-091]] and
+    [[SR-127]] were left alone for the same reason.
+    **The €275 finding is this rule's own worked example, and the strongest argument for it.**
+    The invariant *"€59, €139 and €275 appear nowhere"* read as violated: `\u20AC275` sits in
+    `content/tracks.js` inside the [[SR-136]]/[[SR-137]] comment recording **why the `premium`
+    key must not be re-added**. A note explaining a removal was being counted as the removal
+    having failed. An invariant that counts commentary breaks every time someone writes a note —
+    which is exactly how a live assertion goes stale for a reason that has nothing to do with
+    what it guards.
 
 **Measurement artifacts — the standing pre-flight**
 
-Four now, every one found the same way: a plausible number that was wrong. Run these before
+Five now, every one found the same way: a plausible reading that was wrong. Run these before
 trusting any measurement, and **report the check alongside the result**, not instead of it.
 
 | artifact | how it lies | countermeasure |
@@ -173,6 +210,7 @@ trusting any measurement, and **report the check alongside the result**, not ins
 | **Stale scratchpad mirror.** The preview serves a copy of the tree ([[SR-154]]); a silently failed sync leaves you verifying pre-edit files. | A clean pass, with numbers that all look right, taken against the code you just changed away from. | **Sentinel every sync**: write a unique token into the file just edited, sync, confirm it appears in the mirror **and is absent from a control file**, remove it, sync again. |
 | **Browser cache serving a pre-edit page.** | The first post-[[SR-155]] reading showed the removed statebar still present, while `curl` against the same server returned a file without it. | Cache-bust every verification URL. **A busted HTML URL does not bust its subresources** — `js/`, `css/` and `content/` survived both a query change and a forced navigation, and [[SR-162]] briefly read as not rendering at all because of it. `fetch(url,{cache:'reload'})` each one, then reload. |
 | **The environment cannot reproduce the symptom.** | A false pass, or a working feature reported broken. The preview's canvas is *dark*, so an unfixed page passes the white-flash test ([[SR-164]]); CSS transitions never advance, so an applied transform reads as identity forever ([[SR-149]], [[SR-163]]). | Force the condition and compare against a known-good control — light colour scheme, a stalled stylesheet, `transition:none`. Report it **as a control-based result**, never as a direct observation. |
+| **A console buffer that outlives the page.** | Errors persist across navigations **and across a preview-server restart**, so a stale failure reads as a live one. [[SR-169]] opened with 33 errors on a seed tab — one `openRoute` message and 32 × 404 — every one of them left over from Run F's deliberately-stalled control pages, on five files that were in fact clean. | **Read the console in a fresh tab.** A non-empty console on a reused tab proves nothing until the tab is new; a clean one in a fresh tab is the only reading worth reporting. |
 
 
 
@@ -1122,8 +1160,8 @@ Both control pages were built in the scratchpad mirror only and never existed in
 *Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
 
 ### SR-167 · The euro invariant no longer matches the record it guards
-**Found by the close-out sweep. Reported, not fixed — the invariant is not this branch's to
-rewrite.**
+**Found by Run F's close-out sweep, reported and left alone. Resolved by [[SR-168]], which
+carries Andre's decision on how the count is defined.**
 
 The standing invariant at the top of this file reads: *"Euro escapes exist only inside `PRICING`
 in `content/tracks.js`. Current count **9**."* The file holds **11**, plus **14** bare `€`
@@ -1148,7 +1186,341 @@ nowhere"* was re-verified this run and **holds: zero occurrences across every tr
 Fixing it means recounting against the current `PRICING` and deciding whether comments count
 toward the total — a decision about the invariant's definition, not a defect in the code.
 
-*Status:* open — reported, awaiting Andre · *Raised:* 21 Aug 2026
+*Status:* closed by [[SR-168]] · *Raised:* 21 Aug 2026 · *Closed:* 21 Aug 2026
+
+
+### SR-168 · The euro invariant now counts values, not commentary
+[[SR-167]] found the standing invariant claiming **9** where the file held **11** escapes and
+**14** bare glyphs. Andre's decision: **count only inside `PRICING`, exclude comments.** An
+invariant that counts commentary breaks every time someone writes a note — it becomes
+unreproducible for a reason that has nothing to do with what it guards.
+
+**The corrected number is 8**, and it is the eight `amount` values the record actually holds:
+`t1` €9, `t1.standard` €19, `t2` €29, `t3` €39, `workshopPersonal` €29, `workshopRelationship`
+€49, `premium1` €129, `premium3` €299.
+
+**The rule, exactly, so the next close-out runs it in one command** — slice the `PRICING`
+object, strip `/* */` comments, then count. It prints `8`:
+
+```
+python3 - <<'PY'
+import re
+b = open('content/tracks.js', encoding='utf-8').read().split('var PRICING = {')[1].split('\n};')[0]
+print(len(re.findall(r'\\u20AC', re.sub(r'/\*.*?\*/', '', b, flags=re.S))))
+PY
+```
+
+Two companion halves, both **0** with comments stripped: escapes anywhere outside the `PRICING`
+block, and bare `€` glyphs anywhere in the file. Together those three numbers — 8 / 0 / 0 —
+are the whole invariant.
+
+**Why excluding comments is the substantive half, not a technicality.** The neighbouring
+invariant says *"€59, €139 and €275 appear nowhere."* Counted naively it is violated:
+`\u20AC275` sits in `content/tracks.js` inside the SR-136/137 comment recording **why the
+`premium` key must not be re-added**. A note explaining a removal was reading as the removal
+having failed. Under the corrected rule it is 0, which is what the invariant was always
+asserting.
+
+**It predates this branch, and the branch is not what moved it.** `content/tracks.js` is
+byte-identical to `main` — `git diff --quiet main -- content/tracks.js` is silent, and the last
+commit to touch it is `d2ed1fe`, [[SR-140]], from Run E. The count drifted when Run E changed
+the record and the invariant line was not updated with it. Nothing in Run F or this run has
+edited the file.
+
+**What was deliberately NOT rewritten.** The invariant is a live assertion, so it was corrected.
+Three other places name the old figures and are **dated history, not errors**:
+[[SR-091]] (which set €59/€139 and is what [[SR-136]] later corrected), [[SR-127]] (recording
+`protocol.html`'s literals as they stood), and `RUN-E-REPORT.md`'s Phase 0b table. Rewriting
+those would falsify the record and destroy the before/after pair [[SR-136]] depends on —
+including the €49 ordering constraint, which explicitly says to preserve that trail. The Phase
+0b table got a forward reference instead, because the risk there is real: a reader hitting the
+table has no signal that three of its rows were superseded 550 lines later in the same document.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-169 · The five framework pages verified structurally before wiring
+Andre's claim — five pages authored against `method-porges.html`, using only classes that page
+already uses — **held on every count.** Verified against the **repo's** Porges, not the Desktop
+copy.
+
+Zero classes outside Porges's 58 on any of the five. Balance 49/49 div, li balanced, **5/5
+sections** on all five (Porges 50/50). One inline script each, **zero `<script src>`**, all six
+parse. Every live asset resolves; band art and `res-somatic.jpg` are commented out and produce
+**no 404** — confirmed against the served network log, every request 200. Nine internal hrefs
+per page, all resolving, no bare `href="#"`, and each carries two working links back to
+`method.html`. Zero hits on all seven critique terms.
+
+**Section 04 has three wordings, and they are a system, not drift.** The heading states the
+epistemic status before the reader reaches the content:
+
+| wording | register | pages |
+|---|---|---|
+| **"What holds"** | peer-reviewed | Porges, HeartMath, Kross |
+| **"What this is"** | clinical practice | Maté |
+| **"What register this is" / "Where it sits"** | interpretive | Jung, Watts |
+
+Each page documents its own choice in its head comment — Jung's reads *"there is no 'what holds'
+here because there is no empirical literature to hold… This is deliberate — do not align it
+back."* **Do not align any of the three.** The mapping is already in the record:
+`FRAMEWORKS[x].register` holds exactly these three values — `peer-reviewed`, `clinical
+practice`, `interpretive` — for exactly these pages, so the heading is derivable rather than
+authored. See the shape note in [[SR-172]].
+
+**Two pre-existing findings, neither caused by the five:** `sr-theme--bar` is inert on all six
+([[SR-175]]), and the console-buffer artifact above, which produced 33 phantom errors on the
+first read.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-175 · `sr-theme--bar` is inert on every framework page
+`method-porges.html:69` and all five new pages carry
+`<div class="sr-fw-barspacer sr-theme sr-theme--bar">`. The class is defined **once**, at
+`css/saferise-dashboard.css:603` (`margin-left:auto`) — a stylesheet **no framework page
+loads**. They load `css/saferise-method.css` only.
+
+**Inert, not dormant** (Rule 14): it matches nothing and wins nothing, so no rule is masked and
+nothing resumes if something changes. The reading-mode control simply does not get its
+`margin-left:auto` on these six pages.
+
+Pre-existing on Porges and inherited by the five from the template. Fixing it is a one-line
+addition to `saferise-method.css` — but whether the control is *supposed* to be pushed right on
+these pages is a layout decision, and the pages have shipped looking as they do. **Blocked on
+that, not on effort.**
+
+*Status:* blocked — needs a layout decision · *Raised:* 21 Aug 2026
+
+### SR-170 · Porges drops the critique apparatus for a scope statement
+Andre's editorial decision, applied to the one page that had not received it: remove criticism
+of where others disagree; where he agrees is sufficient. The five new pages already reflected
+it, so **the repo's Porges was the outlier**, not the five.
+
+**This supersedes [[SR-058]], which is still open and says in terms:** *"Section 04 and the
+sources list are not to be edited outside this item. Every citation was verified against the
+published record; changes go through the register."* This is that change, going through the
+register. SR-058's two outstanding decisions — a review date and owner, and whether HeartMath
+takes framework 01 if the dispute resolves against the theory — are **not** answered by this;
+the second is now moot on the page but the underlying exposure is unchanged, which is exactly
+why the paragraph was replaced rather than deleted.
+
+Removed: the *"and formally disputed since"* clause; the closing paragraph reporting the
+February 2026 *Clinical Neuropsychiatry* exchange; and four sources — Grossman & Taylor 2007,
+Grossman 2023, Grossman et al. 2026, and Porges's rebuttal in the same issue. **Sources 8 → 4**
+(`Primary source` ×3, `Applied`). All seven critique terms now return **0**.
+
+**Replaced, not deleted.** The page must not silently assert the theory is settled, so section
+04 closes on a scope statement in the shape all five new pages use — HeartMath's *"That is not a
+comment on their work; it is a statement of where this platform's claim ends"* is the pattern.
+Porges now states that SafeRise takes no position on the anatomical or evolutionary account,
+that nothing in the four steps depends on the answer, and that the five findings are what the
+method runs on. **This is new prose and Andre should read it.**
+
+**Deliberately NOT removed — do not tidy.** The REGION 6 comment (*"A reading list that only
+cites the advocate is a reading list nobody trusts"*) and the heading *"Read the arguments
+yourself"* are on **all six** pages, including the five Andre approved. They are shared
+template, not Porges's critique apparatus. Removing them would have made Porges an outlier again
+in the opposite direction.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-171 · The five framework pages lacked the SR-164 ground block
+Confirmed live before the fix: `htmlBg` **`rgba(0, 0, 0, 0)`** on all five. Their template
+predates [[SR-164]], so all five would have shipped with the white flash Run F removed from the
+other nine pages.
+
+The `color-scheme` meta and `html,body` pair were **lifted verbatim** from `method-porges.html`,
+which already carried them, and each of the five now matches it byte for byte. No second pattern
+was authored — that was Run F's own mistake in SR-164 and it reverted it. Asserted on all six:
+the block precedes every `<link rel="stylesheet">` and every other `<style>`.
+
+Verified against the forced-light-mode control, since this preview's canvas is dark and an
+unfixed page passes here (see the pre-flight above): a copy of `method-jung.html` with its
+stylesheet pointed at a path that never resolves paints **full-screen white** without the block
+and **`rgb(8, 8, 12)`** with it. Both control pages lived in the scratchpad mirror only.
+
+Committed with [[SR-172]], because it only ever changed these five files and they land there.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-172 · The six framework pages are one set
+`method.html` linked one framework and disabled five: cards 02–06 were
+`<div class="sr-mi-card … soon">` ending in *"Not yet published"*. Each is now an `<a>` pointing
+at its page, with the *"Read the page"* span **lifted verbatim from card 01** rather than
+authored twice. All six targets exist. Zero `soon` classes and zero *"Not yet published"*
+remain; balance holds at 53/53 div, 9/9 a, 6/6 section.
+
+**A numbering conflict this run did not resolve, because renumbering is a decision.**
+`method.html` orders **03 Kross, 04 Maté**; the pages number themselves **03 Maté, 04 Kross**.
+The record supports the pages: `FRAMEWORKS.mate.step` is 3 and `FRAMEWORKS.distance.step` is 4,
+and the framework ordinal tracks `step` exactly for 01–04. The links are unambiguous either way
+— each card points at the page naming the same author — so **only the displayed ordinal
+disagrees**. Raised, not fixed.
+
+**The `FRAMEWORKS` shape question — reported, deliberately not added.** Links are currently
+authored in markup on `method.html` and would have to be re-authored anywhere else the set
+appears. The record should carry the path, exactly as `PRICING` carries the amount:
+
+```js
+porges:    { …, page: 'method-porges.html' },
+heartmath: { …, page: 'method-heartmath.html' },
+distance:  { …, page: 'method-kross.html' },   // key and filename differ — the reason this belongs in the record
+mate:      { …, page: 'method-mate.html' },
+jung:      { …, page: 'method-jung.html' },
+watts:     { …, page: 'method-watts.html' }
+```
+
+`distance` → `method-kross.html` is the case that proves the point: the key and the filename are
+different words, so every consumer that authors the link re-derives that mapping by hand.
+An `ordinal` field would settle the conflict above in the same place. `FRAMEWORKS.register`
+already carries the three values [[SR-169]]'s section-04 mapping needs, so the heading is
+derivable too. **Shape only — nothing added.**
+
+**Deliberate non-fix, do not tidy.** `.sr-mi-card.soon` at `css/saferise-method.css:486-487` is
+now orphaned — no markup carries `soon` anywhere. It is left in place: it is the state a
+seventh, unbuilt framework would need, and removing it would mean re-authoring it the next time
+one is added before its page exists.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-176 · method.html's framework ordinals now follow the record
+`method.html` numbered Kross **03** and Maté **04**; the pages number themselves Maté 03 and
+Kross 04. The record decides, and it backs the pages: `FRAMEWORKS.mate.step` is 3,
+`FRAMEWORKS.distance.step` is 4, and the ordinal tracks `step` exactly for 01–04.
+
+**Renumbered in place, not reordered — reordering is impossible here.** The cards sit in three
+`sr-mi-band` sections grouped by register: *"The science we stand on"* (Porges, HeartMath,
+Kross), *"The practice we learned from"* (Maté), *"The thinking we take our bearings from"*
+(Jung, Watts). Maté cannot move into the science band. The bands were already right and already
+carried the true mapping — the science band declares `data-steps="01,02,04"` and the practice
+band declares `data-steps="03"`.
+
+**Consequence, stated because it is visible:** the science band now reads 01, 02, **04** and the
+practice band reads **03**, so the page sequence is 01 02 04 · 03 · 05 06. That is correct — the
+number identifies the framework, not its position — but it is a change to what a reader sees
+and it is reversible from the record alone.
+
+*Status:* complete on merge · *Raised:* 22 Aug 2026 · *Fixed:* 22 Aug 2026
+
+### SR-177 · `FRAMEWORKS` carries the page path and the ordinal
+Links and framework numbers were authored in `method.html`'s markup. The record holds both now,
+and the page derives them.
+
+**`page`** because the key and the filename are different words — **`distance` is served by
+`method-kross.html`** — so every consumer that authors the link re-derives that mapping by hand.
+Same defect class as a price typed into a page instead of read from `PRICING`.
+
+**`ordinal`** because `method.html` and the pages disagreed about 03 and 04 ([[SR-176]]), and two
+places holding the same number is exactly how that happened. It tracks `step` for 01–04; `jung`
+and `watts` are `step: 0` because they carry no single step, so their ordinal is stated rather
+than derived.
+
+`register` was already there and already carries what the pages' section-04 headings need —
+`peer-reviewed`, `clinical practice`, `interpretive`, mapped in [[SR-169]].
+
+`method.html` now loads `content/tracks.js` and keys its six cards with `data-fw`. The href and
+ordinal **stay in the markup as the served fallback** if the record fails to load, and are
+overwritten from the record on every load, so the two cannot drift apart again.
+
+**Verified by mutating the record and re-deriving**, which is the only way to tell derivation
+from a page echoing its own markup: the `distance` card followed to `09` and a sentinel href,
+then returned to `04` and `method-kross.html` when the record was restored.
+
+*Status:* complete on merge · *Raised:* 22 Aug 2026 · *Fixed:* 22 Aug 2026
+
+### SR-174 · The protocol card — cursor control, disclosure, scale
+Six items, and **the second did not reproduce.**
+
+**(b) There is no auto-drift on the track pages, and nothing was removed.**
+`js/saferise-track.js` has no `requestAnimationFrame`, no `setInterval` and no `@keyframes`
+reaching it; the strip was measured stationary at `left: 107` for **65.8 seconds with no
+input**. The drift lives on `dashboard.html`, a different surface, untouched. The complaint
+describes the dashboard or a pre-Run F deploy — PR #30 merged ~21:10 and the screenshot was
+21:17.
+
+**Cursor control, on the same transform.** Pointer drag tracks 1:1 and snaps to the nearest
+card on release; wheel and trackpad move the same transform and **accumulate across a flick** —
+the first implementation recomputed from the index on every wheel event, so a hundred events
+travelled as far as one, and a `wheeling` flag fixes it. `overflow-x:auto` and
+`scroll-snap-type` did **not** come back: measured `overflowX hidden`, `scrollSnapType none`,
+**`scrollLeft 0` through every gesture**. A vertical wheel is left alone so the page still
+scrolls, and a drag that crossed the card swallows the click behind it. The viewport takes
+`cursor:grab` — an affordance it can keep, the opposite case to [[SR-178]]'s card.
+
+**(d) Progressive disclosure.** Visible at rest: title and promise. Revealed on hover **and
+keyboard focus**: the signature line and the three chips. The reveal is absolutely positioned
+over the foot of the cover, and that is **forced rather than chosen** — the card must get
+shorter, the strip must not reflow, and `.sr-tp-carviewport` is `overflow:hidden`, so
+out-of-flow is the only way to hold the first two and upward is the only direction with room
+inside the card box. Timing is the sheet's existing reveal, `.28s var(--sr-ease)` on transform
+and opacity, the pair already at lines 463 and 1739 — not a new curve. Reduced motion is handled
+centrally and is not repeated here (CLAUDE.md). Touch and anything else without hover gets it
+always-visible under `(hover:none),(max-width:560px)`, with the transition removed there so it
+is not an entrance animation on load.
+
+**(e) Typography.** The title was **13.5px — the same size as the promise beneath it**, so
+nothing read as a title. It takes the system's own `.sr-tp h3`, **18px/1.34 Cinzel**. No new
+size invented. **The `!important` is redundant, not load-bearing**: `.sr-tp .sr-tp-pdesc` is
+defined at 12.5px and re-declared at 13.5px in the later "readability pass" block — identical
+specificity, later in the same sheet, so it already wins on order. Reported and **left alone**;
+removing it is a separate cleanup. **Do not tidy without checking that first.**
+
+**(f) 733px → 561px, 172px shorter.** Text fell from **57% of the card to 39%**. Height constant
+at 561 on focus and blur — card, strip and viewport all unchanged, so the strip cannot jump.
+
+Reveal verified against a `transition:none` control, since transitions never advance in this
+preview: opacity 0→1 and `translateY(8px)`→0 on focus, back on blur, height unchanged. Hover
+shares one declaration block with `:focus-within`, so proving the declaration applies proves
+both — CSS `:hover` cannot be driven synthetically and that is stated rather than glossed.
+
+*Status:* complete on merge · *Raised:* 22 Aug 2026 · *Fixed:* 22 Aug 2026
+
+### SR-178 · The protocol card promised an action nothing could deliver
+`.sr-tp-pcard` carried `cursor:pointer` with **no handler, no `role` and no `tabindex`**.
+
+**The destination does not exist.** `protocol.html` reads only `embed=1` and `theme=` from the
+query string; `PAGE_PROTOCOL` is hardcoded to `t1-p01`, *The Anxiety Reset Protocol*, and
+`?track=` and `?protocol=` are **ignored entirely** — the dashboard passes them and the page
+never reads them. So any of the thirty cards could only ever land on Anxiety Reset, which on
+Relationship Healing is worse than nothing.
+
+Binding only the one card that works was rejected: 29 silently inert cards beside one that
+behaves differently is a worse affordance than none. **The pointer cursor is removed and no
+handler added.** `tabindex="0"` stays so a keyboard user can open the [[SR-174]] reveal — a
+readable region, not a control, so no `role`. The cursor returns when there is something to
+open.
+
+**The real fix, blocked:** `protocol.html` must read `?track=` and `?protocol=` and become
+data-driven. That is blocked on **content existing for the other 29 protocols** — resource
+authoring, not a code task.
+
+*Status:* open — blocked on protocol content · *Raised:* 22 Aug 2026
+
+### SR-179 · The cover number and label are drawn twice
+Reported and **deliberately unchanged**, because the thing that would settle it does not exist
+yet.
+
+The current art **burns both into the image**: `assets/covers/01.jpg` carries **"REGULATE"
+top-left and a large "01" bottom-right**, and [[SR-162]]'s overlay draws the same two from the
+record in the same two corners. Both collide. `t3-01.jpg` carries the numeral only, so the art
+is not even consistent with itself.
+
+**The drawn overlay is correct and stays** — it is the whole point of [[SR-162]], and it is what
+lets the covers be reshot bare. The duplicate disappears when the new art lands.
+
+**Measured, at 1280 with the cover at 236×315:** the drawn number sits **7px from the bottom and
+12px from the right**. Andre reports the replacement covers will carry a rule and SAFERISE mark
+in that same bottom-right corner, stacked beneath the number. **7px is not enough clearance for
+any mark**, so the drawn number's position has to move up before the stack can be set.
+
+**By how much cannot be decided yet.** No cover in the repo carries such a mark — checked
+`01.jpg` and `t3-01.jpg`, both numeral-only — so there is nothing to measure "roughly the size
+of the one in the current art" against. **Blocked on a real sample.** When one exists, re-measure
+the drawn number's bottom offset against it and set the stack: drawn number above, in-image mark
+below, both bottom-right, one mark only and it comes from the image.
+
+*Status:* open — blocked on the replacement covers · *Raised:* 22 Aug 2026
+
+
+
 
 
 
@@ -2913,4 +3285,20 @@ Adding one means writing a bio, a role and an avatar for a literature rather tha
 person, which is content authoring rather than a fix, so it was deliberately not done in
 the removal pass.
 
-*Status:* open · *Raised:* 19 Aug 2026
+**Blocker recorded 22 Aug 2026, and the refusal above was re-confirmed rather than
+overruled.** The framework-pages run was briefed to add the sixth card and stopped instead.
+Two reasons, both still standing:
+
+1. **The card format cannot hold this framework.** One avatar, one name, one role, one bio.
+   The sixth is **Kross & Ayduk plus the Best Possible Self literature (Laura King)** — two
+   researchers and a third body of work. Filling it means inventing a display name, initials,
+   an avatar colour and a bio for a literature rather than a person.
+2. **It lives in `index.html`**, which that run's own scope statement excluded.
+
+**Known and accepted, pending a decision on how a multi-author literature renders in a
+one-person card:** the section heading at `index.html:8261` reads **"Six frameworks."** above
+**five** cards. `frameworkReach('distance')` already returns **6 protocols** and the render loop
+at `index.html:10489` picks up any `[data-sr-reach]`, so the data side is ready and only the
+card content is missing.
+
+*Status:* open — blocked on a card-format decision · *Raised:* 19 Aug 2026
