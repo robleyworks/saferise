@@ -83,7 +83,14 @@ var SHARED = {
     ['pin',   'Proximity Guide',      'How close to stay.',          'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.'],
     ['shield','Disclosure & Support','A script for someone close.','Words for explaining what you are doing and what you need, without over-explaining.'],
     ['mail',  'Invitation to Repair', 'Reopening it with them.',     'A structured way to open repair with another person when the pattern involves them.'],
-    ['pen',   'Your Record',          'What changed, in your words.','Prompts tied to this protocol, and the log that tracks your state before and after each session.']
+    ['pen',   'Your Record',          'What changed, in your words.','Prompts tied to this protocol, and the log that tracks your state before and after each session.'],
+    /* SR-180 · tenth resource. Universal — it carries no CONDITIONAL_RESOURCES
+       entry, so it appears on all thirty protocols and lifts the unconditional
+       floor from seven to eight. Sits after Your Record deliberately: the record
+       is the half of a state you can write, this is the half you have to ask
+       for. Do not re-add Source Insights above it — SR-077 merged that into
+       How This Works and the merge stands. */
+    ['face',  'Accountability & Empathy','What it does outside you.', 'Your own state has an exterior you have never observed. Another person\u2019s reaction is data you cannot generate on your own.']
   ],
   resourceNote: 'The Proximity Guide and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern, rather than on every protocol. The library grows \u2014 anything added to the track while you\u2019re a member is yours.',
   insight: {
@@ -569,7 +576,13 @@ var META = {
   't1-07': { extras: [], state: 'numb', frameworks: ['porges','heartmath'] },
   't1-08': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['jung','mate'] },
   't1-09': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['jung','distance'] },
-  't1-10': { extras: ['advisory'], state: 'numb', frameworks: ['porges','watts','distance'] },
+  /* SR-180 · `distance` removed. The dispenza correction was applied here as a
+     RENAME (dispenza → distance, SR-118); the authored content treated it as a
+     DROP. t1-10's own build note reads "Authored against Porges and Watts", and
+     no resource in the protocol cites the fourth-step literature, so the third
+     key was a false attribution. The authored content decided it. Do not
+     re-add — t1-09 keeps `distance` because its text does rest on it. */
+  't1-10': { extras: ['advisory'], state: 'numb', frameworks: ['porges','watts'] },
 
   /* Track 02 · Relationship Healing */
   't2-01': { extras: null, state: 'agitated',    frameworks: ['porges','heartmath'] },
