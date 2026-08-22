@@ -17,11 +17,12 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-175.** Reserved block open: **SR-154 to SR-175**, ceiling
-  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-176 — the block SR-154..SR-175 is now exhausted; reserve a new one.
+- **Highest ID issued: SR-179.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-180. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
-  for the sandbox record. The framework-pages run continues from **SR-168**.
+  for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to
+  SR-179 beyond the ceiling as findings arrived mid-run.
   **SR-157, SR-158 and SR-159 are issued and permanently unused — this is the gap, and it is
   deliberate.** The run script named them for the card, the carousel and the white flash. Those
   three were re-scoped mid-run once the tree contradicted the brief, and reissued as SR-162,
@@ -57,7 +58,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-175 are issued.** All are written up below except four:
+- **SR-044 to SR-179 are issued.** All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -1379,6 +1380,145 @@ seventh, unbuilt framework would need, and removing it would mean re-authoring i
 one is added before its page exists.
 
 *Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-176 · method.html's framework ordinals now follow the record
+`method.html` numbered Kross **03** and Maté **04**; the pages number themselves Maté 03 and
+Kross 04. The record decides, and it backs the pages: `FRAMEWORKS.mate.step` is 3,
+`FRAMEWORKS.distance.step` is 4, and the ordinal tracks `step` exactly for 01–04.
+
+**Renumbered in place, not reordered — reordering is impossible here.** The cards sit in three
+`sr-mi-band` sections grouped by register: *"The science we stand on"* (Porges, HeartMath,
+Kross), *"The practice we learned from"* (Maté), *"The thinking we take our bearings from"*
+(Jung, Watts). Maté cannot move into the science band. The bands were already right and already
+carried the true mapping — the science band declares `data-steps="01,02,04"` and the practice
+band declares `data-steps="03"`.
+
+**Consequence, stated because it is visible:** the science band now reads 01, 02, **04** and the
+practice band reads **03**, so the page sequence is 01 02 04 · 03 · 05 06. That is correct — the
+number identifies the framework, not its position — but it is a change to what a reader sees
+and it is reversible from the record alone.
+
+*Status:* complete on merge · *Raised:* 22 Aug 2026 · *Fixed:* 22 Aug 2026
+
+### SR-177 · `FRAMEWORKS` carries the page path and the ordinal
+Links and framework numbers were authored in `method.html`'s markup. The record holds both now,
+and the page derives them.
+
+**`page`** because the key and the filename are different words — **`distance` is served by
+`method-kross.html`** — so every consumer that authors the link re-derives that mapping by hand.
+Same defect class as a price typed into a page instead of read from `PRICING`.
+
+**`ordinal`** because `method.html` and the pages disagreed about 03 and 04 ([[SR-176]]), and two
+places holding the same number is exactly how that happened. It tracks `step` for 01–04; `jung`
+and `watts` are `step: 0` because they carry no single step, so their ordinal is stated rather
+than derived.
+
+`register` was already there and already carries what the pages' section-04 headings need —
+`peer-reviewed`, `clinical practice`, `interpretive`, mapped in [[SR-169]].
+
+`method.html` now loads `content/tracks.js` and keys its six cards with `data-fw`. The href and
+ordinal **stay in the markup as the served fallback** if the record fails to load, and are
+overwritten from the record on every load, so the two cannot drift apart again.
+
+**Verified by mutating the record and re-deriving**, which is the only way to tell derivation
+from a page echoing its own markup: the `distance` card followed to `09` and a sentinel href,
+then returned to `04` and `method-kross.html` when the record was restored.
+
+*Status:* complete on merge · *Raised:* 22 Aug 2026 · *Fixed:* 22 Aug 2026
+
+### SR-174 · The protocol card — cursor control, disclosure, scale
+Six items, and **the second did not reproduce.**
+
+**(b) There is no auto-drift on the track pages, and nothing was removed.**
+`js/saferise-track.js` has no `requestAnimationFrame`, no `setInterval` and no `@keyframes`
+reaching it; the strip was measured stationary at `left: 107` for **65.8 seconds with no
+input**. The drift lives on `dashboard.html`, a different surface, untouched. The complaint
+describes the dashboard or a pre-Run F deploy — PR #30 merged ~21:10 and the screenshot was
+21:17.
+
+**Cursor control, on the same transform.** Pointer drag tracks 1:1 and snaps to the nearest
+card on release; wheel and trackpad move the same transform and **accumulate across a flick** —
+the first implementation recomputed from the index on every wheel event, so a hundred events
+travelled as far as one, and a `wheeling` flag fixes it. `overflow-x:auto` and
+`scroll-snap-type` did **not** come back: measured `overflowX hidden`, `scrollSnapType none`,
+**`scrollLeft 0` through every gesture**. A vertical wheel is left alone so the page still
+scrolls, and a drag that crossed the card swallows the click behind it. The viewport takes
+`cursor:grab` — an affordance it can keep, the opposite case to [[SR-178]]'s card.
+
+**(d) Progressive disclosure.** Visible at rest: title and promise. Revealed on hover **and
+keyboard focus**: the signature line and the three chips. The reveal is absolutely positioned
+over the foot of the cover, and that is **forced rather than chosen** — the card must get
+shorter, the strip must not reflow, and `.sr-tp-carviewport` is `overflow:hidden`, so
+out-of-flow is the only way to hold the first two and upward is the only direction with room
+inside the card box. Timing is the sheet's existing reveal, `.28s var(--sr-ease)` on transform
+and opacity, the pair already at lines 463 and 1739 — not a new curve. Reduced motion is handled
+centrally and is not repeated here (CLAUDE.md). Touch and anything else without hover gets it
+always-visible under `(hover:none),(max-width:560px)`, with the transition removed there so it
+is not an entrance animation on load.
+
+**(e) Typography.** The title was **13.5px — the same size as the promise beneath it**, so
+nothing read as a title. It takes the system's own `.sr-tp h3`, **18px/1.34 Cinzel**. No new
+size invented. **The `!important` is redundant, not load-bearing**: `.sr-tp .sr-tp-pdesc` is
+defined at 12.5px and re-declared at 13.5px in the later "readability pass" block — identical
+specificity, later in the same sheet, so it already wins on order. Reported and **left alone**;
+removing it is a separate cleanup. **Do not tidy without checking that first.**
+
+**(f) 733px → 561px, 172px shorter.** Text fell from **57% of the card to 39%**. Height constant
+at 561 on focus and blur — card, strip and viewport all unchanged, so the strip cannot jump.
+
+Reveal verified against a `transition:none` control, since transitions never advance in this
+preview: opacity 0→1 and `translateY(8px)`→0 on focus, back on blur, height unchanged. Hover
+shares one declaration block with `:focus-within`, so proving the declaration applies proves
+both — CSS `:hover` cannot be driven synthetically and that is stated rather than glossed.
+
+*Status:* complete on merge · *Raised:* 22 Aug 2026 · *Fixed:* 22 Aug 2026
+
+### SR-178 · The protocol card promised an action nothing could deliver
+`.sr-tp-pcard` carried `cursor:pointer` with **no handler, no `role` and no `tabindex`**.
+
+**The destination does not exist.** `protocol.html` reads only `embed=1` and `theme=` from the
+query string; `PAGE_PROTOCOL` is hardcoded to `t1-p01`, *The Anxiety Reset Protocol*, and
+`?track=` and `?protocol=` are **ignored entirely** — the dashboard passes them and the page
+never reads them. So any of the thirty cards could only ever land on Anxiety Reset, which on
+Relationship Healing is worse than nothing.
+
+Binding only the one card that works was rejected: 29 silently inert cards beside one that
+behaves differently is a worse affordance than none. **The pointer cursor is removed and no
+handler added.** `tabindex="0"` stays so a keyboard user can open the [[SR-174]] reveal — a
+readable region, not a control, so no `role`. The cursor returns when there is something to
+open.
+
+**The real fix, blocked:** `protocol.html` must read `?track=` and `?protocol=` and become
+data-driven. That is blocked on **content existing for the other 29 protocols** — resource
+authoring, not a code task.
+
+*Status:* open — blocked on protocol content · *Raised:* 22 Aug 2026
+
+### SR-179 · The cover number and label are drawn twice
+Reported and **deliberately unchanged**, because the thing that would settle it does not exist
+yet.
+
+The current art **burns both into the image**: `assets/covers/01.jpg` carries **"REGULATE"
+top-left and a large "01" bottom-right**, and [[SR-162]]'s overlay draws the same two from the
+record in the same two corners. Both collide. `t3-01.jpg` carries the numeral only, so the art
+is not even consistent with itself.
+
+**The drawn overlay is correct and stays** — it is the whole point of [[SR-162]], and it is what
+lets the covers be reshot bare. The duplicate disappears when the new art lands.
+
+**Measured, at 1280 with the cover at 236×315:** the drawn number sits **7px from the bottom and
+12px from the right**. Andre reports the replacement covers will carry a rule and SAFERISE mark
+in that same bottom-right corner, stacked beneath the number. **7px is not enough clearance for
+any mark**, so the drawn number's position has to move up before the stack can be set.
+
+**By how much cannot be decided yet.** No cover in the repo carries such a mark — checked
+`01.jpg` and `t3-01.jpg`, both numeral-only — so there is nothing to measure "roughly the size
+of the one in the current art" against. **Blocked on a real sample.** When one exists, re-measure
+the drawn number's bottom offset against it and set the stack: drawn number above, in-image mark
+below, both bottom-right, one mark only and it comes from the image.
+
+*Status:* open — blocked on the replacement covers · *Raised:* 22 Aug 2026
+
 
 
 
@@ -3145,4 +3285,20 @@ Adding one means writing a bio, a role and an avatar for a literature rather tha
 person, which is content authoring rather than a fix, so it was deliberately not done in
 the removal pass.
 
-*Status:* open · *Raised:* 19 Aug 2026
+**Blocker recorded 22 Aug 2026, and the refusal above was re-confirmed rather than
+overruled.** The framework-pages run was briefed to add the sixth card and stopped instead.
+Two reasons, both still standing:
+
+1. **The card format cannot hold this framework.** One avatar, one name, one role, one bio.
+   The sixth is **Kross & Ayduk plus the Best Possible Self literature (Laura King)** — two
+   researchers and a third body of work. Filling it means inventing a display name, initials,
+   an avatar colour and a bio for a literature rather than a person.
+2. **It lives in `index.html`**, which that run's own scope statement excluded.
+
+**Known and accepted, pending a decision on how a multi-author literature renders in a
+one-person card:** the section heading at `index.html:8261` reads **"Six frameworks."** above
+**five** cards. `frameworkReach('distance')` already returns **6 protocols** and the render loop
+at `index.html:10489` picks up any `[data-sr-reach]`, so the data side is ready and only the
+card content is missing.
+
+*Status:* open — blocked on a card-format decision · *Raised:* 19 Aug 2026
