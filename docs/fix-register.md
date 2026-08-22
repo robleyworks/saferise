@@ -65,14 +65,31 @@ Canonical record of defects and design decisions. Commits reference the ID:
   - `manifest` — a **data key** and a set of CSS class names (`id-manifest-row`), never rendered
     as copy.
 
-  **Three exclusions any future sweep must apply, or it will keep re-raising this.**
-  Identifiers are not copy. A prohibition stated is not a prohibition broken — `method-jung.html`
-  and `method-mate.html` carry *"No streaks, no completion, no graduation anywhere on this
-  platform"*, which a naive sweep scores as three violations; that is the €275 failure mode one
-  level up, an invariant that cannot tell a rule from its breach. And an inert selector is not a
-  render. **The word list needs replacing with sense-specific patterns** — *raise your
-  frequency*, *manifest your* — or the invariant will be quietly switched off by whoever tires
-  of the noise, which is the outcome Rule 21 exists to prevent.
+  **THE INVARIANT NOW CARRIES ITS OWN EXCLUSIONS. All three are part of it, not notes beside
+  it — a sweep that does not apply them is measuring something else.**
+
+  1. **Identifiers are not copy.** Class names, ids, data attributes, object keys and CSS
+     selectors are structure. `jprog-tier-badge` is not a badge; `manifest` as a data key is not
+     a claim. The prohibition is on member-facing vocabulary, and nothing a member reads comes
+     from a selector. Confirmed twice independently — this sweep, and [[SR-192]]'s transform
+     check, which reported its own field names as authored copy until it excluded them.
+  2. **A prohibition stated is not a prohibition broken.** `method-jung.html` and
+     `method-mate.html` carry *"No streaks, no completion, no graduation anywhere on this
+     platform."* A naive sweep scores that as three violations. It is the platform **promising**
+     not to do the thing, which is the €275 failure mode one level up: an invariant that cannot
+     tell a rule from its breach breaks the moment anyone writes the rule down. Exclude a hit
+     whose immediate lead-in negates it.
+  3. **An inert selector is not a render.** Rules surviving in a stylesheet with no element to
+     match are recorded as inert by [[SR-181]] and [[SR-185]] and are not violations. Distinguish
+     inert from **dormant** (Rule 14) — [[SR-191]]'s ribbon rendered nothing only because
+     `sr.resume` has no writer, and that one *was* a violation, with a delayed fuse.
+
+  **The word list itself needs replacing with sense-specific patterns** — *raise your frequency*,
+  *manifest your* — because the register the ban is aimed at is pseudo-scientific, and three of
+  the seven words have ordinary senses the tree legitimately needs. Until that lands, an
+  unqualified word sweep produces six false positives, and **an invariant that cries wolf gets
+  switched off by whoever tires of the noise** — which is precisely the outcome Rule 21 exists to
+  prevent.
 - **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
   Run E: prices in words exist only in the record, one derived span and one comment.
 - **`€59`, `€139` and `€275` appear nowhere — in values.** Retired by SR-136/SR-141.
@@ -80,10 +97,18 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-190 are issued.** SR-180 to SR-190 were allocated by Run H (Track 01
-  content) — SR-182, SR-183 and SR-184 were issued for phases that were re-scoped mid-run
-  and their work carried out under SR-188, SR-189 and SR-190 instead. **Those three numbers
-  are spent, not free.** Do not reach back for them; see the collision note below.
+- **SR-044 to SR-193 are issued.** SR-180 to SR-193 were allocated by Run H (Track 01 content).
+
+  **SR-182 was reassigned and now carries a real entry** — protocol.html's query-string routing.
+  It was recorded mid-run as spent-not-free on the assumption its phase had been absorbed
+  elsewhere; Andre reassigned it, and the register follows the decision rather than the earlier
+  bookkeeping. **SR-183 and SR-184 remain spent, not free** — their work was carried out under
+  SR-189 and SR-190. Do not reach back for them.
+
+  A number recorded as spent is a statement about intent, not a lock. When the person allocating
+  reassigns one, the entry gets written and this note gets corrected — which is Rule 21 applied
+  to the register's own bookkeeping.
+
   All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
@@ -1833,6 +1858,155 @@ it exists, it is correct, and it is currently an orphan.
 ---
 
 
+### SR-191 · The count of a member goes; the count of a library stays
+Applies the rule settled in [[SR-187]]: **what the string counts decides it, not which page it
+sits on.**
+
+Removed, all three counting the member:
+- [resource.html:1003](resource.html:1003) — the rail numbered the open resource out of a total.
+  It now names it. Naming which resource is open is orientation; numbering it is a report card.
+- [dashboard.html:2297](dashboard.html:2297) — the resume card's position string **and the
+  percentage bar eleven lines under it**. Both, for the reason [[SR-185]] records: removing the
+  sentence and leaving the bar is the same claim, drawn instead of written.
+- [dashboard.html:941](dashboard.html:941) — the cover ribbon, reading the same position from the
+  same `sr.resume` record as the resume card.
+
+Kept, both counting the library: `dashboard.html:1781` and `:1866`, *"N of M protocols still
+unopened"*. A shelf showing what you have not read is not a report card.
+
+**Two of the three removals were on the dashboard**, which is the clearest possible
+demonstration that the page-based phrasing of the rule was wrong.
+
+⚠ **The ribbon was not in the brief's list, and the reason matters.** [[SR-187]]'s original text
+grouped it with the two library lines and described it as *"protocols still unopened"*, which it
+never said. The instruction inherited the mislabel. See that entry — the correction is written up
+there because that is where the error lives.
+
+**Dormant, not inert (Rule 14), and that is the argument for removing them now rather than
+later.** `sr.resume` has no writer ([[SR-165]]), so none of the three rendered anything today.
+They would have rendered the day resume tracking shipped — a violation that arrives silently,
+attached to a feature nobody was reviewing for copy. A dormant violation is not a smaller
+violation; it is one with a delayed fuse.
+
+`r.percent` is now unread. **Left in the record deliberately, unlike [[SR-186]]'s duration
+field**, because a percentage is not itself a prohibited unit — the prohibition is on rendering
+the member's position, not on the number existing. Reported rather than removed.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-192 · Track 01's authored content enters the record
+`content/t1-resources.js`, built to the shape [[SR-188]] recommended and Andre accepted: one file
+per track beside `tracks.js`, same `var` + `module.exports` guard, read synchronously, no loader.
+280KB, 90 resources, 1,462 body blocks.
+
+**Counts reconcile against the handover's own verification block** — 90 of 90 resources;
+per-protocol 8, 10, 9, 10, 8, 8, 8, 10, 10, 9, matching what [[SR-180]] made the record resolve
+to; 360 cues at 176 breath, 132 pause, 20 music, 20 illustration, 12 action; four cue-card lines
+on all ten.
+
+**Generated, not authored, and proved so.** Every word in every body block traces to the source
+markdown, checked per protocol. The check **failed twice before it passed, both times on the
+probe rather than the data**: first every cue's block index read as an authored word, then the
+generated structure's own field names did. Identifiers are not copy — the same distinction the
+banned-vocabulary invariant needs, arrived at independently an hour later.
+
+**The defect the check caught is the one worth recording.** The cue card's four lines are
+separated in the source by a newline, not a blank line, and the first transform collapsed them
+into a single paragraph. The handover is explicit that four lines is **the mechanism, not a
+layout preference** — *"Four lines. Always here."* A transform that silently reflows authored
+structure destroys meaning while producing valid output and a plausible word count.
+
+**Two mappings live in the file, neither side renamed**, per [[SR-177]]'s precedent: META's
+`t1-01`…`t1-10` to the Reader's `p1`…`p10`, and the conditional that is `invitation` in the data
+and `-repair` in the key.
+
+**All 360 cues kept as data and never rendered.** They are the only link between the shipped copy
+and the recording and art lanes — the same principle `CLAUDE.md` sets for the original protocol
+descriptions, which stay in the data and stay off the card. **A surface that renders `cues` is a
+defect.**
+
+⚠ **NOTHING READS THIS FILE YET, and wiring it is materially larger than installing it.** The
+Reader serves Track 01 as six keys per protocol — `p1-advisory`, `p1-founder`, `p1-guide`,
+`p1-companion`, `p1-disclosure`, `p1-crisiscard`. The authored set is eight to ten, and they do
+not line up:
+- **four resource types the tree has never seen** — `meditation`, `practice`, `record`,
+  `accountability` — none of which exist in `PT_RES_ICONS` or `PT_RES_GROUPS`, so the protocol
+  page cannot render a card for them.
+- **`founder` is served and is a cut resource.** *Why I Built This One* is one of the three the
+  handover retired; it is still in `READER_PROTOCOLS` for all ten.
+- the existing `RESOURCE_CONTENT` entries for the retired keys are **shipped member-facing copy**
+  that wiring would orphan or delete.
+
+That is a rewrite of the Reader's Track 01 resource model inside `index.html`, deleting live
+copy — not an install. **Blocked on a decision about the retired entries**, which is a content
+question, not a code one.
+
+*Status:* installed, unwired · *Raised:* 22 Aug 2026
+
+---
+
+### SR-193 · The support advisory stops being an orphan
+Ten Safe Practice resources now link to `getting-help.html`, one each, which is what [[SR-190]]
+built the page for.
+
+The link is added **in the transform, not in the source markdown**: it is markup, the markdown is
+the copy record, and the words are untouched — only wrapped. Fidelity re-checked after the change
+and every word still traces to source.
+
+⚠ **Two phrasings, not one.** The handover says *"ten references to 'a helpline in your
+country'"*. **Nine say helpline. `t1-01` says "a crisis line in your country".** A linkifier keyed
+to the exact quoted string wires nine of ten, reports success, and leaves one Safe Practice
+resource pointing at nothing — Rule 17 exactly, a spelled variant of the same fact evading a
+sweep aimed at one wording. Both forms are matched.
+
+**Still outstanding**, and the page is not fully reachable until they land: the site-footer link
+and the cue-card modal link the advisory copy also specifies. Both sit on surfaces outside this
+run's scope.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-182 · protocol.html resolves the protocol it was asked for
+Reissued. This number was recorded at the Run H close-out as spent-not-free, on the assumption
+its phase had been absorbed elsewhere. **Andre reassigned it to this work**, so it carries a real
+entry and the ceiling note is corrected. The register follows the decision, not the earlier
+bookkeeping.
+
+The page read only `embed=` and `theme=`, and hardcoded `PAGE_PROTOCOL` to `t1-p01`. The dashboard
+passed `?track=` and `?protocol=`; the page ignored both. All thirty cards could only land on
+Anxiety Reset, which is why [[SR-178]] removed the card's pointer cursor rather than wire it to a
+destination that did not exist.
+
+`PAGE_PROTOCOL` now resolves against `TRACKS`, which `protocol.html` loads for the first time.
+Protocol numbers compare numerically, so `?protocol=3` and `?protocol=03` resolve identically.
+
+**Three outcomes, and only one renders the protocol page.** Resolved: the record answered.
+Not requested: no query at all, so nothing was asked for and the page keeps its authored Track 01
+content unchanged. **Unresolved: something was asked for and the record has no such protocol — a
+visible not-found state renders and every other section is hidden.**
+
+**The fallback is never a silent default, and the reason is the Journal.** `protocolId` is the
+key the Journal view *filters* on while it *groups* on `protocol` for display. A wrong resolution
+does not just show the wrong page — it files the member's entry against a protocol they never
+ran. A silent fallback corrupts the record, not merely the view.
+
+[[SR-178]]'s affordance is restored **on that entry's own stated condition** — *"the cursor
+returns when there is something to open"*. `role="button"`, a delegated handler that survives a
+re-render, and Enter/Space with `preventDefault`. A `role="button"` without keyboard parity is a
+control that announces itself and then does nothing. The href is built from `t.id` and `p[0]`,
+the same two record values `coverPath` already derives from — never typed.
+
+**Not done, deliberately:** [[SR-179]]'s overlay move. It is a design change on a shared
+component that renders on the dashboard and the portals, and Andre has not seen it.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+
 ## MEDIUM
 
 ### SR-047 · Mobile hero: theme toggle overlaps slide kickers below ~560px
@@ -2526,7 +2700,15 @@ The brief said index.html was already correct — **true of the 1:1, not of work
 that disagrees with its own run-sheet is better than a run-sheet with invented numbers.** The
 four segment lengths are a facilitation decision. The only remaining "Two hours" in the tree.
 
-*Status:* open — blocked on Andre · *Raised:* 21 Aug 2026
+**ANSWERED, 22 Aug 2026. The agenda is 10 / 20 / 20 / 10, summing to 60.** The heading becomes
+"One hour" and the run-sheet agrees with it. Andre's decision — a facilitation call, not a code
+one, which is exactly why this sat open rather than being guessed at.
+
+**Not yet applied**: `dashboard.html:567` still carries the two-hour heading and the
+15/40/45/20 run-sheet. This entry records the answer so the numbers are not invented a second
+time. The edit is one line for the heading and four for the run-sheet.
+
+*Status:* answered — ready to apply · *Raised:* 21 Aug 2026 · *Answered:* 22 Aug 2026
 
 ### SR-146 · Thirty-nine dead links on the member pages
 `dashboard.html` **11**, `protocol.html` **22**, `resource.html` **6**; `index.html` **0**.
@@ -2690,16 +2872,36 @@ because the run was scoped to the Reader.
   Structurally identical to the readout removed from the Reader.
 - [dashboard.html:2297](dashboard.html:2297) — `'Resource ' + r.resource + ' of ' + r.resourceTotal`.
   Literally the same string.
-- [dashboard.html:941](dashboard.html:941), [:1781](dashboard.html:1781),
-  [:1866](dashboard.html:1866) — *"N of M protocols still unopened"*. Completion framing rather
-  than a position readout, and arguably the furthest from what the content forbids — or the
-  clearest case of it, depending on the answer below.
+- [dashboard.html:1781](dashboard.html:1781), [:1866](dashboard.html:1866) —
+  *"N of M protocols still unopened"*. A count of the library, not of the member.
 
-**The question is not a code question.** The authored content says no progress, no scores, no
-completion, and it says it in the resources themselves — ninety of them. What it does not say is
-whether that binds the whole platform or only the surface a member reads a resource on. The
-Reader is unambiguous. A dashboard that tells someone they have eight protocols left is a
-different argument, and it may be a legitimate one.
+⚠ **CORRECTED — this entry's original text is what caused the error it describes.** It listed
+`dashboard.html:941` alongside the two lines above and described all three as *"N of M protocols
+still unopened"*. **:941 never said that.** It rendered `Resource N of M` from the same
+`sr.resume` record as `:2297` — a member's position inside a protocol. The brief that acted on
+this entry inherited the mislabel and told the run to leave it. It was caught in the working
+tree and fixed under [[SR-191]].
+
+The lesson is Rule 16 turned inward: **a register entry is a premise too.** Rule 16 warns that a
+brief is not evidence; an entry written from a hasty sweep is the same class of claim, and it is
+worse, because the next run treats the register as the record rather than as a report. Quote the
+string an entry is about. Do not paraphrase three sites into one description.
+
+**ANSWERED, 22 Aug 2026. The test is what the string COUNTS, not which page it sits on.**
+
+> A count of the **member** — their position, their progress, their completion — is prohibited
+> on every surface without exception.
+> A count of the **library** — what exists, what has not been opened — is permitted, because it
+> describes a shelf rather than a person.
+
+The first phrasing of this answer was page-based: prohibited on the surfaces a member practises
+on, permitted on the dashboard. **That phrasing is what produced the mislabel above**, because it
+invites you to sort strings by their address instead of by their subject — and the cover ribbon
+sat on the permitted page while counting the forbidden thing. Dropped deliberately. Do not
+reintroduce it.
+
+Applied: [[SR-191]] removed the three sites that counted the member, two of them on the
+dashboard, and left the two that count the library, both on the dashboard.
 
 **Andre's call.** Once answered it is a small, mechanical change on both files, and the answer
 should be written into the content rules so the next run does not re-raise it.
@@ -3644,4 +3846,23 @@ and was rewritten rather than annotated, per Rule 21 — and the render loop
 at `index.html:10489` picks up any `[data-sr-reach]`, so the data side is ready and only the
 card content is missing.
 
-*Status:* open — blocked on a card-format decision · *Raised:* 19 Aug 2026
+**RESOLVED, 22 Aug 2026 — a FINDING card, not a person card.** Andre's decision, and it
+dissolves the format objection rather than working around it: the other five cards are people,
+this one is a body of work, and forcing it into a person shape means either picking one of three
+researchers arbitrarily or inventing a composite. Neither is honest.
+
+Same card, same dimensions, same grid, same hover. Where the five carry a portrait, this carries
+**the framework's mark in gold**. Where they carry a name: **"Distance & rehearsal"**. Where they
+carry a role: **"Kross & Ayduk · Best Possible Self literature"**. The bio becomes **the finding**,
+in the same voice as the others. The reach line is unchanged.
+
+**Re-blocked on the asset, not on the decision.** The mark does not exist. Do not build the card
+until it does — a placeholder in the one slot that distinguishes this card from the other five
+defeats the resolution.
+
+⚠ Note for whoever builds it: the heading at `index.html:8261` reads **"Six frameworks."** above
+five cards, and `frameworkReach('distance')` now returns **5 protocols**, not 6 — [[SR-180]] took
+`distance` off `t1-10` as a false attribution. The reach line must be derived, never typed.
+
+*Status:* open — resolved in design, blocked on the mark · *Raised:* 19 Aug 2026 ·
+*Resolved:* 22 Aug 2026
