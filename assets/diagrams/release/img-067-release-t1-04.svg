@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 300" role="img">
+<title>The state and Going back over it: two things running at once. The state turned up on its own. Going back over it keeps returning to its own starting point.</title>
+<style>
+  svg { --sr-ink: #1B2A4A; --sr-accent: #2E7D6B; --sr-mark: #B08D57;
+        --sr-muted: #6d6a63; --sr-rule: #e4e2dc; --sr-surface: transparent;
+        --sr-bg: transparent; }
+</style>
+<rect class="sr-bg" x="0" y="0" width="100%" height="100%" fill="var(--sr-bg, transparent)"/>
+
+<!-- LEFT · the state -->
+<rect x="38" y="112" width="204" height="86" rx="3" fill="none" stroke="var(--sr-ink, #1B2A4A)" stroke-width="1.7"/>
+<text x="140" y="150" text-anchor="middle" font-family="Georgia,serif" font-size="18" fill="var(--sr-ink, #1B2A4A)">The state</text>
+<text x="140" y="175" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" fill="var(--sr-muted, #6d6a63)">it turned up on its own</text>
+
+<path d="M140,58 L 140,100" fill="none" stroke="var(--sr-ink, #1B2A4A)" stroke-width="1.6"/>
+<polygon points="140,108 134,95 146,95" fill="var(--sr-ink, #1B2A4A)"/>
+<text x="140" y="46" text-anchor="middle" font-family="Georgia,serif" font-size="14.5" font-style="italic" fill="var(--sr-muted, #6d6a63)">once</text>
+
+<text x="140" y="232" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-style="italic" fill="var(--sr-ink, #1B2A4A)">you didn't start this</text>
+
+<!-- RIGHT · the second thing, on a closed loop -->
+<rect x="408" y="112" width="228" height="86" rx="3" fill="none" stroke="var(--sr-accent, #2E7D6B)" stroke-width="1.7"/>
+<text x="522" y="150" text-anchor="middle" font-family="Georgia,serif" font-size="18" fill="var(--sr-accent, #2E7D6B)">Going back over it</text>
+<text x="522" y="175" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" fill="var(--sr-accent, #2E7D6B)" opacity=".85">you never reach the end</text>
+
+<path d="M636,155 C 720,155 730,52 604,52 L 522,52 L 522,100"
+      fill="none" stroke="var(--sr-accent, #2E7D6B)" stroke-width="1.7" stroke-linejoin="round"/>
+<polygon points="522,108 516,95 528,95" fill="var(--sr-accent, #2E7D6B)"/>
+<text x="600" y="40" text-anchor="middle" font-family="Georgia,serif" font-size="14.5" font-style="italic" fill="var(--sr-accent, #2E7D6B)">back to the start, and again</text>
+
+<text x="522" y="232" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-style="italic" fill="var(--sr-accent, #2E7D6B)">this is the one you can put down</text>
+
+<!-- both at once -->
+<line x1="324" y1="70" x2="324" y2="240" stroke="#dcd9d2" stroke-width="1" stroke-dasharray="2 6"/>
+<text x="324" y="258" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-style="italic" fill="#9a958b">both at once</text>
+
+<!-- lockup -->
+<line x1="574" y1="278" x2="658" y2="278" stroke="var(--sr-mark, #B08D57)" stroke-width="1.3" opacity=".8"/>
+<text x="752" y="282" text-anchor="end" font-family="Cormorant Garamond, Cormorant, Georgia, serif" font-weight="300" font-size="10" letter-spacing="4.2" fill="var(--sr-mark, #B08D57)" opacity=".9">SAFERISE</text>
+</svg>

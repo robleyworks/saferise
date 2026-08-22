@@ -2829,3 +2829,82 @@ body.sr-breath .sr-player.is-next .audio-play{
    SR-174 reveal.
    ═════════════════════════════════════════════════════════════ */
 .sr-tp .sr-tp-pcard[role="button"]{cursor:pointer}
+
+/* ═════════════════════════════════════════════════════════════
+   SR-209 · DIAGRAM THEMING
+   The 31 delivered SVGs carry no hardcoded colour. Every value
+   resolves through six custom properties, each with a fallback,
+   so a diagram opened standalone still renders. This binds them
+   to the platform's own tokens wherever a diagram appears.
+
+   THIS REPLACED A RECOLOUR. SR-205 was raised to recolour the
+   diagrams for a dark ground; the delivered set inherits instead,
+   which also survives the Reader's light and sepia modes — a
+   recolour would have had to be redone for each. Closed as
+   superseded, not as done.
+
+   TWO THINGS THE SPEC FORBIDS CHANGING, AND THEY ARE NOT BUGS:
+   · Fills use the SAME token as strokes. The solid gate dot is
+     filled with --sr-ink so it inverts with everything else —
+     navy on paper, cream on midnight. Giving fills their own
+     token breaks that on the first theme that is not a straight
+     inversion.
+   · --sr-surface defaults to TRANSPARENT, not white. A white fill
+     behind box labels reads correctly on paper and appears as a
+     bright rectangle on a dark ground.
+   Do not "fix" either.
+
+   ⚠ --sr-accent is the one token with no platform equivalent. It
+   is the diagram's second structural colour — the loop, the
+   second column — and the platform's only comparable value is
+   --sr-track03, which is Track 03's identity colour and would be
+   borrowing a semantic that does not apply. The values below are
+   the diagram author's own verified pair from the theming spec.
+   REPLACE WITH A PLATFORM TOKEN when one exists.
+   ═════════════════════════════════════════════════════════════ */
+
+/* Dark ground — the platform's default, and the Reader's default mode. */
+.sr-tp,
+#reader-overlay .reader-modal{
+  --sr-ink:    var(--rd-heading, #E8E3D9);
+  --sr-accent: #6FBFA6;
+  --sr-mark:   var(--rd-accent, #D4A843);
+  --sr-muted:  var(--rd-meta, #8B8791);
+  --sr-rule:   var(--rd-hair, rgba(232,227,217,.12));
+  --sr-surface: transparent;
+  --sr-bg:      transparent;
+}
+#reader-overlay .reader-modal[data-reader-mode="sepia"]{
+  --sr-accent: #5FA98E;
+}
+/* Light mode inverts the ground, so the diagram returns to the
+   author's paper values rather than the dark pair. */
+#reader-overlay .reader-modal[data-reader-mode="light"]{
+  --sr-ink:    var(--rd-heading, #2B2620);
+  --sr-accent: #2E7D6B;
+  --sr-mark:   var(--rd-accent, #A47B22);
+  --sr-muted:  var(--rd-meta, #857A66);
+  --sr-rule:   var(--rd-hair, rgba(43,38,32,.14));
+}
+
+/* The legibility floor. A diagram compressed to a phone width is
+   unreadable, not small, so it holds its size and the container
+   scrolls instead. */
+.sr-diagram{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:28px 0;
+  max-width:100%;
+}
+.sr-diagram svg{
+  display:block;
+  min-width:600px;
+  width:100%;
+  height:auto;
+}
+.sr-diagram img{
+  display:block;
+  min-width:600px;
+  width:100%;
+  height:auto;
+}

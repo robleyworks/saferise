@@ -63,6 +63,7 @@ var T2_SHARED = {
     "<p><strong>This sits underneath all four steps here.</strong> Naming the state separates it from your version of events. The breathing settles the body that's producing the case. The third step puts the case-building down. And the fourth asks you to stand somewhere that isn't your own spot \u2014 which is the second part, used on purpose, for as long as you can hold it.</p>",
     "<p><em>This is easier once you can catch your own state while you're in it. That's what Track 01 builds, and it's why it comes first. Nothing here needs it, and nothing here is judging whether you're ready \u2014 but the second part is hard to reach for while the first one is running unwatched.</em></p>"
     ],
+    diagrams: [{"block": 7, "src": "assets/diagrams/img-090-two-parts.svg", "alt": "The same thing arriving two ways. On the top path their version is measured against yours and comes out as more proof you were right, so one version is left. On the bottom path it arrives whole and sits beside yours, so two versions are left. Both run in one person at the same time."}],
     cues: [{"block": 7, "type": "GOLD/PAUSE", "note": ""}]
   }
 };
@@ -141,7 +142,8 @@ var T2_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
     cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "BLUE/ILLUSTRATION", "note": "a closed door with light under it. Nothing behind it yet."}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": ""}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 17, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 17, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 17, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 17, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 17, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 19, "type": "GOLD/PAUSE", "note": ""}, {"block": 21, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 21, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 22, "type": "GOLD/PAUSE", "note": ""}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 28, "type": "GOLD/PAUSE", "note": "long"}, {"block": 29, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 29, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 33, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 35, "type": "GOLD/PAUSE", "note": ""}, {"block": 36, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 36, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 38, "type": "GOLD/PAUSE", "note": "long"}, {"block": 39, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 39, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 40, "type": "GOLD/PAUSE", "note": ""}, {"block": 40, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p1-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
@@ -159,7 +161,8 @@ var T2_RESOURCES = {
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You have something to say. You are allowed to say it badly.</em> Then one concrete thing: your opening sentence only. Where you'll be, what your hands are doing, the actual words. The rest of the conversation isn't yours to rehearse.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p1-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
@@ -192,7 +195,8 @@ var T2_RESOURCES = {
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What to say, whether to say it, and what any of it means about the relationship are readings that belong to you.</p>"
     ],
     cues: [{"block": 18, "type": "GOLD/PAUSE", "note": ""}],
-    sharedRefs: [{"block": 18, "ref": "twoParts"}]
+    sharedRefs: [{"block": 18, "ref": "twoParts"}],
+    diagrams: [{"block": 9, "src": "assets/diagrams/release/img-067-release-t2-01.svg", "alt": "The state and The drafting: two things running at once. The state turned up on its own. The drafting keeps returning to its own starting point."}]
   },
   "t2p1-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -206,7 +210,8 @@ var T2_RESOURCES = {
       "<p><em>Shoulders down and back before you go in. This state lifts them and it is visible.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p1-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
@@ -229,7 +234,8 @@ var T2_RESOURCES = {
       "<p>If you are with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p1-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
@@ -250,7 +256,8 @@ var T2_RESOURCES = {
       "<p><em>Tell one person before you do it. Not for advice. So that it exists outside your own head before it happens.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p1-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
@@ -266,7 +273,8 @@ var T2_RESOURCES = {
       "<p><em>If they don't take it, or not yet, you have done the part that was yours. Whether they meet it is theirs.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p1-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
@@ -277,7 +285,8 @@ var T2_RESOURCES = {
       "<p>That last-but-one prompt is the useful one on this protocol. Your record of the gap between the rehearsed version and the real one is the only evidence you have that the drafting was not preparation.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p1-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
@@ -295,7 +304,8 @@ var T2_RESOURCES = {
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. And if you are frightened of the other person, none of this applies: the Safe Practice section on this protocol is the relevant one, and your safety comes before any conversation.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p2-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
@@ -347,7 +357,8 @@ var T2_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
     cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "BLUE/ILLUSTRATION", "note": "two forms with a break between them. The break has an edge on both sides."}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 18, "type": "GOLD/PAUSE", "note": ""}, {"block": 20, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "GOLD/PAUSE", "note": ""}, {"block": 25, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "GOLD/PAUSE", "note": "long"}, {"block": 28, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 28, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 32, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 34, "type": "GOLD/PAUSE", "note": ""}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 37, "type": "GOLD/PAUSE", "note": "long"}, {"block": 38, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 38, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 40, "type": "GOLD/PAUSE", "note": "long"}, {"block": 41, "type": "GOLD/PAUSE", "note": ""}, {"block": 41, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p2-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
@@ -365,7 +376,8 @@ var T2_RESOURCES = {
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>Something broke, and you want it back.</em> Then stand where they stood \u2014 same room, same evening, seen from their side. Not agreeing. Standing there. Then one move that's yours: what you'd send or say first, and the actual opening words.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p2-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
@@ -396,7 +408,8 @@ var T2_RESOURCES = {
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What happened, who did what, whether the relationship is worth repairing, and what to do next are readings that belong entirely to you.</p>"
     ],
     cues: [{"block": 16, "type": "GOLD/PAUSE", "note": ""}],
-    sharedRefs: [{"block": 16, "ref": "twoParts"}]
+    sharedRefs: [{"block": 16, "ref": "twoParts"}],
+    diagrams: [{"block": 7, "src": "assets/diagrams/release/img-067-release-t2-02.svg", "alt": "The rupture and The accounting: two things running at once. The rupture turned up on its own. The accounting keeps returning to its own starting point."}]
   },
   "t2p2-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -410,7 +423,8 @@ var T2_RESOURCES = {
       "<p><em>Unclench the jaw when you notice it. It holds here quietly.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p2-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
@@ -432,7 +446,8 @@ var T2_RESOURCES = {
       "<p>If you are with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p2-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
@@ -454,7 +469,8 @@ var T2_RESOURCES = {
       "<p><em>Tell one person, and pick someone who won't automatically agree with you. On this protocol, the friend who takes your side is the least useful one available.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p2-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
@@ -469,7 +485,8 @@ var T2_RESOURCES = {
       "<p><em>If they don't take it, you have done the part that was yours. Whether they meet it is theirs, and always was.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p2-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
@@ -479,7 +496,8 @@ var T2_RESOURCES = {
       "<ul><li>Where did it sit in your body?</li><li>What happened? Write it as an account of events, not as a case.</li><li>What does the accounting say the ledger is? Write the total it keeps arriving at.</li><li>Standing where they stood: what didn't they know that you did?</li><li><em>What was this for</em> \u2014 what turned up, without needing to answer it?</li><li>What did you say to yourself from across the room?</li><li>What do you actually want to happen? Not what should happen. What you want.</li><li>What was the move that was yours? Did you make it?</li><li>What did you write here last time? Read it back.</li></ul>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p2-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
@@ -497,7 +515,8 @@ var T2_RESOURCES = {
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. If what happened involved violence or control, this is not the resource: your safety comes first and the Safe Practice section is the relevant one.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p3-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
@@ -548,7 +567,8 @@ var T2_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
     cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Turn at four seconds."}, {"block": 2, "type": "GOLD/PAUSE", "note": "long"}, {"block": 3, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "BLUE/ILLUSTRATION", "note": "a surface with a fracture running through it. Both halves still present, still whole."}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 10, "type": "GOLD/PAUSE", "note": ""}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 18, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "GOLD/PAUSE", "note": "long"}, {"block": 20, "type": "GOLD/PAUSE", "note": "long"}, {"block": 21, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 22, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 22, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 23, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 24, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "GOLD/PAUSE", "note": ""}, {"block": 28, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 28, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 32, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 34, "type": "GOLD/PAUSE", "note": "long"}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 37, "type": "GOLD/PAUSE", "note": "long"}, {"block": 38, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 38, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 39, "type": "GOLD/PAUSE", "note": ""}, {"block": 40, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p3-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
@@ -566,7 +586,8 @@ var T2_RESOURCES = {
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You were right about what happened, and you don't have to decide anything today.</em> Then one concrete ordinary thing today, with this unresolved. Then one thing that's still yours.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p3-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
@@ -596,7 +617,8 @@ var T2_RESOURCES = {
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What happened, what it means, and whether any of it can be rebuilt are readings that belong entirely to you.</p>"
     ],
     cues: [],
-    sharedRefs: [{"block": 15, "ref": "twoParts"}]
+    sharedRefs: [{"block": 15, "ref": "twoParts"}],
+    diagrams: [{"block": 7, "src": "assets/diagrams/release/img-067-release-t2-03.svg", "alt": "The betrayal and Re-reading the past: two things running at once. The betrayal turned up on its own. Re-reading the past keeps returning to its own starting point."}]
   },
   "t2p3-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -611,7 +633,8 @@ var T2_RESOURCES = {
       "<p><em>Sleep is likely to be the last thing to come back. That's ordinary here and it isn't a measure of how you're doing.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p3-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
@@ -632,7 +655,8 @@ var T2_RESOURCES = {
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person is worth a great deal.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p3-advisory": {
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
@@ -653,7 +677,8 @@ var T2_RESOURCES = {
       "<p>Notice the tier. Then notice whether it's the tier you'd assign if a friend described the same thing. Where it goes next is yours \u2014 this platform doesn't tell members to leave or stay, and nobody here knows what you'd be giving up.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p3-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
@@ -678,7 +703,8 @@ var T2_RESOURCES = {
       "<p><em>Tell one person, and pick one who won't require you to have decided. The pressure to have an answer is the thing most people can't carry alongside the rest of it.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p3-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
@@ -694,7 +720,8 @@ var T2_RESOURCES = {
       "<p><em>If they don't take it, you've done the part that was yours. Whether they meet it is theirs, and it always was.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p3-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
@@ -705,7 +732,8 @@ var T2_RESOURCES = {
       "<p>That last one is worth more on this protocol than most. The state produces a confident, changing account of the past, and your own record from a month ago is the only version of it that isn't being rewritten by today.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p3-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
@@ -725,7 +753,8 @@ var T2_RESOURCES = {
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. And on this protocol specifically: the person who lied to you is not a reliable narrator of your conduct.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p4-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
@@ -781,7 +810,8 @@ var T2_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
     cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Turn at four seconds."}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 3, "type": "GOLD/PAUSE", "note": "long"}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "BLUE/ILLUSTRATION", "note": "a stack of marks, evenly spaced, going back further than the frame."}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "RED/ACTION", "note": "hands and jaw. Offered, not instructed."}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 17, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "GOLD/PAUSE", "note": "long"}, {"block": 20, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 21, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 21, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 23, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 24, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "GOLD/PAUSE", "note": "long"}, {"block": 28, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 28, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 29, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 30, "type": "GOLD/PAUSE", "note": ""}, {"block": 31, "type": "GOLD/PAUSE", "note": "long"}, {"block": 32, "type": "GOLD/PAUSE", "note": "long"}, {"block": 35, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 37, "type": "GOLD/PAUSE", "note": "long"}, {"block": 37, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 37, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 39, "type": "GOLD/PAUSE", "note": ""}, {"block": 40, "type": "GOLD/PAUSE", "note": "long"}, {"block": 41, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 42, "type": "GOLD/PAUSE", "note": ""}, {"block": 43, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 43, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 44, "type": "GOLD/PAUSE", "note": ""}, {"block": 45, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p4-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
@@ -799,7 +829,8 @@ var T2_RESOURCES = {
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You kept a fair account, and it was never going to be paid.</em> Then one thing you'll say, or stop absorbing, or decline \u2014 small enough to do this week, feeling exactly as you do now.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p4-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
@@ -833,7 +864,8 @@ var T2_RESOURCES = {
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. Whether the items are fair, what they mean, and what to do about the relationship are readings that belong to you.</p>"
     ],
     cues: [],
-    sharedRefs: [{"block": 19, "ref": "twoParts"}]
+    sharedRefs: [{"block": 19, "ref": "twoParts"}],
+    diagrams: [{"block": 8, "src": "assets/diagrams/release/img-067-release-t2-04.svg", "alt": "The grievance and Keeping the tally: two things running at once. The grievance turned up on its own. Keeping the tally keeps returning to its own starting point."}]
   },
   "t2p4-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -847,7 +879,8 @@ var T2_RESOURCES = {
       "<p><em>Do one thing purely because you want to, with no one benefiting from it. Resentment accumulates fastest in people who have stopped doing that.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p4-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
@@ -870,7 +903,8 @@ var T2_RESOURCES = {
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p4-advisory": {
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
@@ -891,7 +925,8 @@ var T2_RESOURCES = {
       "<p>Notice the tier. Then notice whether it's the tier you'd assign if a friend described the same arrangement. People carrying resentment place their own one tier lower than they'd place someone else's, more reliably than on any other protocol.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p4-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
@@ -915,7 +950,8 @@ var T2_RESOURCES = {
       "<p><em>Tell one person. Resentment kept entirely private thickens, because nothing ever tests whether it's still the right size.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p4-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
@@ -930,7 +966,8 @@ var T2_RESOURCES = {
       "<p><em>If they don't take it, you've done the part that was yours. Whether they meet it is theirs.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p4-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
@@ -940,7 +977,8 @@ var T2_RESOURCES = {
       "<ul><li>Where did it sit in your body?</li><li>Write one item from the list. Just one, and write it plainly.</li><li>How old is the oldest thing on it?</li><li>What was happening that meant you couldn't say it at the time?</li><li><em>What was this for</em> \u2014 what turned up, without needing to answer it?</li><li>Was your reaction proportionate to the last instance? If not, how far off?</li><li>What did you say to yourself from across the room?</li><li>What do you actually want to be different? Not what should be different.</li><li>What did you write here last time? Read it back.</li></ul>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p4-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
@@ -958,7 +996,8 @@ var T2_RESOURCES = {
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. If the arrangement you're in genuinely depends on your silence, none of this applies and the Proximity Guide's third tier does.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p5-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
@@ -1009,7 +1048,8 @@ var T2_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
     cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, low. Turn at four seconds."}, {"block": 2, "type": "GOLD/PAUSE", "note": "long"}, {"block": 3, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "BLUE/ILLUSTRATION", "note": "two forms, near each other, not touching. The space between them even and deliberate."}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 17, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "GOLD/PAUSE", "note": "long"}, {"block": 20, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 23, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 25, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 26, "type": "GOLD/PAUSE", "note": ""}, {"block": 27, "type": "GOLD/PAUSE", "note": "long"}, {"block": 28, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 29, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 29, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 30, "type": "GOLD/PAUSE", "note": "long"}, {"block": 33, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 35, "type": "GOLD/PAUSE", "note": "long"}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 37, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 38, "type": "GOLD/PAUSE", "note": ""}, {"block": 39, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 39, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 40, "type": "GOLD/PAUSE", "note": ""}, {"block": 41, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p5-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
@@ -1027,7 +1067,8 @@ var T2_RESOURCES = {
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You're not cold. You're guarded. Those are different things.</em> Then one thing, smaller than you think \u2014 staying in the room a minute longer, answering the actual question, not making the joke.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p5-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
@@ -1061,7 +1102,8 @@ var T2_RESOURCES = {
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What the distance is about, where it came from, and whether you want it any different are readings that belong entirely to you.</p>"
     ],
     cues: [],
-    sharedRefs: [{"block": 19, "ref": "twoParts"}]
+    sharedRefs: [{"block": 19, "ref": "twoParts"}],
+    diagrams: [{"block": 8, "src": "assets/diagrams/release/img-067-release-t2-05.svg", "alt": "The distance and Managing it: two things running at once. The distance turned up on its own. Managing it keeps returning to its own starting point."}]
   },
   "t2p5-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -1075,7 +1117,8 @@ var T2_RESOURCES = {
       "<p><em>Notice the joke before you make it. Not necessarily to stop \u2014 just to see it arriving. That's the whole exercise.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p5-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
@@ -1097,7 +1140,8 @@ var T2_RESOURCES = {
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person is worth a great deal.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p5-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
@@ -1121,7 +1165,8 @@ var T2_RESOURCES = {
       "<p><em>Tell one person. This state's whole instruction is that you don't, so saying it at all is the move \u2014 regardless of what happens after.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p5-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
@@ -1136,7 +1181,8 @@ var T2_RESOURCES = {
       "<p><em>If they don't take it, you've done the part that was yours. Whether they meet it is theirs.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p5-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
@@ -1146,7 +1192,8 @@ var T2_RESOURCES = {
       "<ul><li>Where did it sit in your body?</li><li>What was the moment you moved back from? Write the actual thing that was about to happen.</li><li>What did you do instead \u2014 the joke, the task, the subject change?</li><li>How long had you been managing it before you noticed?</li><li><em>What was this for</em> \u2014 what turned up, without needing to answer it?</li><li>What did you say to yourself from across the room?</li><li>What was the small thing? Did you do it?</li><li>Do you want this different? It's a fair question and no is a real answer.</li><li>What did you write here last time? Read it back.</li></ul>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p5-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
@@ -1164,7 +1211,8 @@ var T2_RESOURCES = {
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. And if what's underneath this is something that was done to you, this isn't the resource for it. That needs a person.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p6-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
@@ -1214,7 +1262,8 @@ var T2_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
     cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Turn at four seconds."}, {"block": 2, "type": "GOLD/PAUSE", "note": "long"}, {"block": 3, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "BLUE/ILLUSTRATION", "note": "two measures side by side, marked differently."}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "RED/ACTION", "note": "jaw and shoulders. Offered, not instructed."}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 16, "type": "GOLD/PAUSE", "note": ""}, {"block": 18, "type": "GOLD/PAUSE", "note": "long"}, {"block": 19, "type": "GOLD/PAUSE", "note": ""}, {"block": 20, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "GOLD/PAUSE", "note": "long"}, {"block": 22, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 25, "type": "GOLD/PAUSE", "note": "long"}, {"block": 26, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 27, "type": "GOLD/PAUSE", "note": "long"}, {"block": 28, "type": "GOLD/PAUSE", "note": ""}, {"block": 30, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 33, "type": "GOLD/PAUSE", "note": "long"}, {"block": 34, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 34, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 35, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 36, "type": "GOLD/PAUSE", "note": "long"}, {"block": 37, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 37, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 38, "type": "GOLD/PAUSE", "note": ""}, {"block": 39, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p6-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
@@ -1232,7 +1281,8 @@ var T2_RESOURCES = {
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You're not imagining it. And you don't need a case to say it.</em> A case needs someone to lose; a sentence doesn't. Then one plain sentence \u2014 the actual words, without the eleven supporting instances behind it.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p6-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
@@ -1266,7 +1316,8 @@ var T2_RESOURCES = {
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. Whether the rule is unfair, what it means, and what to do about it are readings that belong to you.</p>"
     ],
     cues: [],
-    sharedRefs: [{"block": 19, "ref": "twoParts"}]
+    sharedRefs: [{"block": 19, "ref": "twoParts"}],
+    diagrams: [{"block": 7, "src": "assets/diagrams/release/img-067-release-t2-06.svg", "alt": "The unfairness and Keeping score: two things running at once. The unfairness turned up on its own. Keeping score keeps returning to its own starting point."}]
   },
   "t2p6-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -1280,7 +1331,8 @@ var T2_RESOURCES = {
       "<p><em>Note when the next instance happens and don't add it to anything. Just notice it, and let it be one thing.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p6-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
@@ -1303,7 +1355,8 @@ var T2_RESOURCES = {
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p6-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
@@ -1326,7 +1379,8 @@ var T2_RESOURCES = {
       "<p><em>Tell one person. Being uneven with someone privately for years costs more than the unevenness does.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p6-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
@@ -1341,7 +1395,8 @@ var T2_RESOURCES = {
       "<p><em>If they don't take it, you've done the part that was yours. Whether they meet it is theirs.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p6-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
@@ -1351,7 +1406,8 @@ var T2_RESOURCES = {
       "<ul><li>Where did it sit in your body?</li><li>What's the rule, in one line?</li><li>Write today's instance. Just today's.</li><li>Was your reaction proportionate to today's instance? If not, how far off?</li><li><em>What was this for</em> \u2014 what turned up, without needing to answer it?</li><li>What did you say to yourself from across the room?</li><li>What's the one plain sentence? Write it as you'd actually say it.</li><li>Have you ever said it? What happened?</li><li>What did you write here last time? Read it back.</li></ul>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p6-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
@@ -1369,7 +1425,8 @@ var T2_RESOURCES = {
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. If the arrangement is genuinely unequal and raising it carries real cost \u2014 your job, your standing, your safety \u2014 this isn't the resource for that, and the relevant next moves are outside this platform.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p7-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
@@ -1418,7 +1475,8 @@ var T2_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
     cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Turn at four seconds."}, {"block": 2, "type": "GOLD/PAUSE", "note": "long"}, {"block": 3, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "BLUE/ILLUSTRATION", "note": "a small mark casting a much larger shadow."}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "RED/ACTION", "note": "hands open, feet down. Offered, not instructed."}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 16, "type": "GOLD/PAUSE", "note": ""}, {"block": 18, "type": "GOLD/PAUSE", "note": "long"}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 20, "type": "GOLD/PAUSE", "note": "long"}, {"block": 22, "type": "GOLD/PAUSE", "note": "long"}, {"block": 23, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 24, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 25, "type": "GOLD/PAUSE", "note": ""}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "GOLD/PAUSE", "note": ""}, {"block": 28, "type": "GOLD/PAUSE", "note": "long"}, {"block": 30, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 33, "type": "GOLD/PAUSE", "note": "long"}, {"block": 33, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 33, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 35, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 36, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 36, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 37, "type": "GOLD/PAUSE", "note": ""}, {"block": 38, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p7-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
@@ -1436,7 +1494,8 @@ var T2_RESOURCES = {
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>Something in that was about you. That's a finding, not a fault.</em> Then one thing for next time \u2014 the pause before the certainty, asking instead of concluding, or saying <em>that landed bigger than it should have</em> out loud.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p7-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
@@ -1469,7 +1528,8 @@ var T2_RESOURCES = {
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What the surplus is about, and whether they were also out of order, are readings that belong to you.</p>"
     ],
     cues: [],
-    sharedRefs: [{"block": 18, "ref": "twoParts"}]
+    sharedRefs: [{"block": 18, "ref": "twoParts"}],
+    diagrams: [{"block": 7, "src": "assets/diagrams/release/img-067-release-t2-07.svg", "alt": "The reaction and Putting it on them: two things running at once. The reaction turned up on its own. Putting it on them keeps returning to its own starting point."}]
   },
   "t2p7-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -1483,7 +1543,8 @@ var T2_RESOURCES = {
       "<p><em>When something lands disproportionately, note the size and nothing else. No analysis. Just: that was bigger than the thing.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p7-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
@@ -1506,7 +1567,8 @@ var T2_RESOURCES = {
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p7-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
@@ -1529,7 +1591,8 @@ var T2_RESOURCES = {
       "<p><em>Tell one person, and pick someone who won't use it against you the next time you're annoyed about something real.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p7-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
@@ -1540,7 +1603,8 @@ var T2_RESOURCES = {
       "<p>That second-to-last one is the useful one here. A surplus that shows up repeatedly with different people is pointing at something. One that doesn't may simply have been a bad day.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p7-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
@@ -1558,7 +1622,8 @@ var T2_RESOURCES = {
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. And the surplus being yours doesn't mean the whole thing was. Sometimes both are true: you overreacted, and they were also out of order.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p8-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
@@ -1603,7 +1668,8 @@ var T2_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
     cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in late, light rather than low. Turn at four seconds."}, {"block": 2, "type": "GOLD/PAUSE", "note": "long"}, {"block": 3, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "RED/ACTION", "note": "small deliberate movement. Offered, never insisted on."}, {"block": 6, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 7, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 9, "type": "GOLD/PAUSE", "note": ""}, {"block": 10, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 11, "type": "BLUE/ILLUSTRATION", "note": "colour present in the frame, viewed through something. Not absent. Muted."}, {"block": 11, "type": "GOLD/PAUSE", "note": "long"}, {"block": 14, "type": "RED/ACTION", "note": "hand to sternum, or hold your own arm. Offered, not instructed."}, {"block": 14, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, slow"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, longer"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 17, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "GOLD/PAUSE", "note": "long"}, {"block": 20, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "GOLD/PAUSE", "note": "long"}, {"block": 23, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 24, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 26, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 29, "type": "GOLD/PAUSE", "note": "long"}, {"block": 29, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 29, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 30, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 31, "type": "GOLD/PAUSE", "note": "long"}, {"block": 32, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 32, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 33, "type": "GOLD/PAUSE", "note": "long"}, {"block": 34, "type": "GOLD/PAUSE", "note": ""}, {"block": 34, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p8-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
@@ -1623,7 +1689,8 @@ var T2_RESOURCES = {
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You're flat. It isn't the same as not caring.</em> Then name one specific good thing that's factually true \u2014 don't try to feel anything about it. Then one small thing you'll do about it: say it out loud to the person, send the message. Not because you feel it. Because it's true and they don't know.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p8-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
@@ -1656,7 +1723,8 @@ var T2_RESOURCES = {
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What the flatness is about, and what it means, are readings that belong to you.</p>"
     ],
     cues: [],
-    sharedRefs: [{"block": 18, "ref": "twoParts"}]
+    sharedRefs: [{"block": 18, "ref": "twoParts"}],
+    diagrams: [{"block": 10, "src": "assets/diagrams/release/img-067-release-t2-08.svg", "alt": "The flatness and Reproaching yourself: two things running at once. The flatness turned up on its own. Reproaching yourself keeps returning to its own starting point."}]
   },
   "t2p8-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -1671,7 +1739,8 @@ var T2_RESOURCES = {
       "<p><em>Warm water on the hands, held longer than necessary, is worth knowing about on the days none of the rest is available.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p8-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
@@ -1695,7 +1764,8 @@ var T2_RESOURCES = {
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p8-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
@@ -1719,7 +1789,8 @@ var T2_RESOURCES = {
       "<p><em>Tell one person. This is the state where the person who's been good to you is most likely to conclude they got it wrong, and one sentence prevents that.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p8-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
@@ -1729,7 +1800,8 @@ var T2_RESOURCES = {
       "<ul><li>Could you find where it sat, or not? Either is fine.</li><li>What good thing happened that didn't land?</li><li>What did the reproach say? Write the actual words.</li><li>Name one thing that's true whether or not you felt it.</li><li><em>What was this for</em> \u2014 anything, or nothing? Nothing is a real answer.</li><li>What did you say to yourself from across the room?</li><li>Did you say the true thing to the person? What happened?</li><li>What did you write here last time? Read it back \u2014 without comparing.</li></ul>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p8-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
@@ -1747,7 +1819,8 @@ var T2_RESOURCES = {
       "<p><strong>Where this stops</strong> \u2014 this isn't an instruction to perform enthusiasm you don't have. A flat true sentence is worth more than a warm false one, and the people who know you will take it.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p9-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
@@ -1794,7 +1867,8 @@ var T2_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
     cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Turn at four seconds."}, {"block": 2, "type": "GOLD/PAUSE", "note": "long"}, {"block": 3, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 8, "type": "BLUE/ILLUSTRATION", "note": "two forms, one leaning in, one angled out. The distance between them constant."}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "RED/ACTION", "note": "hand to sternum, feet down. Offered, not instructed."}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 17, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "GOLD/PAUSE", "note": "long"}, {"block": 20, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "GOLD/PAUSE", "note": "long"}, {"block": 22, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 28, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 31, "type": "GOLD/PAUSE", "note": "long"}, {"block": 31, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 31, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 32, "type": "GOLD/PAUSE", "note": ""}, {"block": 33, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 34, "type": "GOLD/PAUSE", "note": ""}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": ""}, {"block": 37, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p9-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
@@ -1812,7 +1886,8 @@ var T2_RESOURCES = {
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You're not the problem. And your half is the only half you've got.</em> Then one move that isn't the usual one \u2014 small enough to do feeling exactly like this. And check it isn't a lever: if you're doing it to change what they do, it's the manoeuvring in a nicer coat.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p9-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
@@ -1846,7 +1921,8 @@ var T2_RESOURCES = {
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. Who started it, whether it's worth continuing, and what any of it means are readings that belong to you.</p>"
     ],
     cues: [],
-    sharedRefs: [{"block": 19, "ref": "twoParts"}]
+    sharedRefs: [{"block": 19, "ref": "twoParts"}],
+    diagrams: [{"block": 9, "src": "assets/diagrams/release/img-067-release-t2-09.svg", "alt": "The gap between you and Manoeuvring: two things running at once. The gap between you turned up on its own. Manoeuvring keeps returning to its own starting point."}]
   },
   "t2p9-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -1860,7 +1936,8 @@ var T2_RESOURCES = {
       "<p><em>Notice which of the two you are. Most people are one in most relationships and the other in one particular relationship, and that's worth knowing.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p9-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
@@ -1883,7 +1960,8 @@ var T2_RESOURCES = {
       "<p>If you're with a therapist, doctor or counsellor \u2014 individually or together \u2014 this sits alongside that and replaces nothing.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p9-advisory": {
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
@@ -1904,7 +1982,8 @@ var T2_RESOURCES = {
       "<p>Notice the tier. Then notice whether it's the tier you'd assign if a friend described the same thing.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p9-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
@@ -1927,7 +2006,8 @@ var T2_RESOURCES = {
       "<p><em>Tell one person, and pick someone who can hold that you're both being reasonable. A friend who thinks the other person is the problem is the least useful one available on this protocol.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p9-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
@@ -1943,7 +2023,8 @@ var T2_RESOURCES = {
       "<p><em>If they don't take it, you've done the part that was yours. Whether they meet it is theirs, and always was.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p9-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
@@ -1954,7 +2035,8 @@ var T2_RESOURCES = {
       "<p>That second-to-last one earns its place. On this protocol the difference between a move and a manoeuvre is entirely in what you were expecting back, and it's easier to see in your own writing than in the moment.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p9-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
@@ -1974,7 +2056,8 @@ var T2_RESOURCES = {
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. And nothing here says both halves are equal in size. Two people can both be doing something and one of them can be doing considerably more of it.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p10-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
@@ -2026,7 +2109,8 @@ var T2_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
     cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in late, very low. No turn until the close."}, {"block": 2, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 3, "type": "GOLD/PAUSE", "note": "long"}, {"block": 5, "type": "RED/ACTION", "note": "small deliberate movement. Offered, never insisted on."}, {"block": 6, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 7, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 9, "type": "GOLD/PAUSE", "note": ""}, {"block": 10, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 11, "type": "BLUE/ILLUSTRATION", "note": "a door, open, with light on both sides of it."}, {"block": 11, "type": "GOLD/PAUSE", "note": "long"}, {"block": 14, "type": "GOLD/PAUSE", "note": "long"}, {"block": 17, "type": "RED/ACTION", "note": "hand to sternum, or hold your own arm. Offered, not instructed."}, {"block": 17, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 18, "type": "TEAL/BREATH", "note": "in, slow"}, {"block": 18, "type": "TEAL/BREATH", "note": "out, longer"}, {"block": 18, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 18, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 18, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 18, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 18, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 20, "type": "GOLD/PAUSE", "note": "long"}, {"block": 21, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 22, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 23, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 23, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 25, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 28, "type": "GOLD/PAUSE", "note": "long"}, {"block": 31, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 34, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": "long"}, {"block": 37, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 38, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 38, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 39, "type": "GOLD/PAUSE", "note": "long"}, {"block": 40, "type": "GOLD/PAUSE", "note": ""}, {"block": 41, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p10-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
@@ -2046,7 +2130,8 @@ var T2_RESOURCES = {
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>This is a lot. You're still here.</em> Then one thing later that's yours to decide, small enough to be certain of. Not a step toward moving on. Not a step toward anything.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p10-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
@@ -2081,7 +2166,8 @@ var T2_RESOURCES = {
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What happened, whose it was, whether it was right, and what any of it means are readings that belong entirely to you.</p>"
     ],
     cues: [],
-    sharedRefs: [{"block": 20, "ref": "twoParts"}]
+    sharedRefs: [{"block": 20, "ref": "twoParts"}],
+    diagrams: [{"block": 11, "src": "assets/diagrams/release/img-067-release-t2-10.svg", "alt": "The ending and Relitigating it: two things running at once. The ending turned up on its own. Relitigating it keeps returning to its own starting point."}]
   },
   "t2p10-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -2097,7 +2183,8 @@ var T2_RESOURCES = {
       "<p><em>Saying one sentence out loud, to anyone or nobody, is worth knowing about. Voice goes quiet early here.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p10-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
@@ -2122,7 +2209,8 @@ var T2_RESOURCES = {
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person matters most.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p10-advisory": {
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
@@ -2143,7 +2231,8 @@ var T2_RESOURCES = {
       "<p>Notice the tier. Then notice whether it's the tier you'd assign if a friend described the same arrangement.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p10-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
@@ -2170,7 +2259,8 @@ var T2_RESOURCES = {
       "<p><em>Tell one person. Endings isolate people at exactly the point they can least afford it, and the isolation is produced by the state rather than chosen.</em></p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p10-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
@@ -2181,7 +2271,8 @@ var T2_RESOURCES = {
       "<ul><li>What did you manage today? Anything at all.</li><li>Where did it sit, or could you not find it? Either is fine.</li><li>What did the going-back-through find today? Was any of it new?</li><li><em>What was this for</em> \u2014 anything, or nothing? Nothing is a real answer.</li><li>What did you say to yourself from across the room?</li><li>What was the one thing that was yours? Did you do it?</li><li>What's still here that this didn't take?</li><li>What did you write here last time? Read it back \u2014 without comparing today to it.</li></ul>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   },
   "t2p10-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
@@ -2199,7 +2290,8 @@ var T2_RESOURCES = {
       "<p><strong>Where this stops</strong> \u2014 this isn't an instruction to be less affected for other people's convenience, and you don't owe anyone a better performance. If today isn't the day for this resource, that's a legitimate answer \u2014 it's the one here you can leave for as long as you need to.</p>"
     ],
     cues: [],
-    sharedRefs: []
+    sharedRefs: [],
+    diagrams: []
   }
 };
 
