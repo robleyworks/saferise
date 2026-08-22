@@ -47,11 +47,19 @@ Read from the live object graph, not the source escapes.
 | `t1` | €9 | / month | Nine euros a month. | `introductory: true`; `standard` €19 / *Nineteen euros a month.*; `includes ['t1']` |
 | `t2` | €29 | / month | Twenty-nine euros a month. | `includes ['t1','t2']` |
 | `t3` | €39 | / month | Thirty-nine euros a month. | `includes ['t1','t2','t3']` |
-| `workshopPersonal` | €59 | per person | — | |
-| `workshopRelationship` | €139 | per couple | — | |
-| `premium` | €275 | / session | — | |
+| `workshopPersonal` | €59 | per person | — | **superseded — now €29, see below** |
+| `workshopRelationship` | €139 | per couple | — | **superseded — now €49, see below** |
+| `premium` | €275 | / session | — | **superseded — key removed, see below** |
 | `premium1` | €129 | per hour | — | **zero consumers** |
 | `premium3` | €299 | for three hours | — | **zero consumers** |
+
+> **Read this table as a *before* snapshot, not as current state.** SR-168 (21 Aug 2026) added
+> this note. Three of its rows were changed **later in this same run** by SR-136 — see
+> *Resolved `PRICING`* further down, which records `workshopPersonal` €59 → €29,
+> `workshopRelationship` €139 → €49, and `premium` removed, taking 8 keys to 7. The numbers
+> above were correct when measured and are **deliberately left as measured**: SR-136's
+> before/after pair depends on them, as does the €49 ordering constraint. The current record is
+> `content/tracks.js`; the standing count is 8, defined in `docs/fix-register.md`.
 
 ### The Phase 1 premise did not hold
 

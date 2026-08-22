@@ -17,11 +17,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-167.** Reserved block open: **SR-154 to SR-175**, ceiling
-  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-168.
+- **Highest ID issued: SR-168.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-169.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
-  for the sandbox record.
+  for the sandbox record. The framework-pages run continues from **SR-168**.
   **SR-157, SR-158 and SR-159 are issued and permanently unused — this is the gap, and it is
   deliberate.** The run script named them for the card, the carousel and the white flash. Those
   three were re-scoped mid-run once the tree contradicted the brief, and reissued as SR-162,
@@ -33,13 +33,31 @@ Canonical record of defects and design decisions. Commits reference the ID:
   the run issued beyond its ceiling and the reservation was extended rather than renumbered.
 
 **Standing invariants — checkable in one command each**
-- **Euro escapes exist only inside `PRICING` in `content/tracks.js`.** Current count **9**,
-  zero elsewhere in any tracked file, in either case. Any occurrence outside that block is a
-  defect by construction. Part of every close-out sweep.
+- **Euro escapes exist only inside `PRICING` in `content/tracks.js`. Count: 8.** Corrected from
+  9 by [[SR-168]]. **Counted inside the `PRICING` object only, with `/* */` comments stripped
+  first** — an invariant that counts commentary breaks every time someone writes a note, which
+  is what made the old number unreproducible. One command, and it prints `8`:
+
+  ```
+  python3 - <<'PY'
+  import re
+  b = open('content/tracks.js', encoding='utf-8').read().split('var PRICING = {')[1].split('\n};')[0]
+  print(len(re.findall(r'\\u20AC', re.sub(r'/\*.*?\*/', '', b, flags=re.S))))
+  PY
+  ```
+
+  The eight are `t1` €9, `t1.standard` €19, `t2` €29, `t3` €39, `workshopPersonal` €29,
+  `workshopRelationship` €49, `premium1` €129, `premium3` €299. Companion halves, both **0**
+  with comments stripped: escapes anywhere outside the `PRICING` block, and bare `€` glyphs
+  anywhere in the file. Part of every close-out sweep.
 - **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
   Run E: prices in words exist only in the record, one derived span and one comment.
-- **`€59`, `€139` and `€275` appear nowhere.** Retired by SR-136/SR-141.
-- **SR-044 to SR-167 are issued.** All are written up below except four:
+- **`€59`, `€139` and `€275` appear nowhere — in values.** Retired by SR-136/SR-141.
+  `\u20AC275` **does** appear in `content/tracks.js`, inside the SR-136/137 comment recording
+  why the `premium` key must not be re-added. That is the invariant's own worked example of why
+  comments are excluded: counted naively, a note explaining a removal reads as the removal
+  having failed.
+- **SR-044 to SR-168 are issued.** All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -1122,8 +1140,8 @@ Both control pages were built in the scratchpad mirror only and never existed in
 *Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
 
 ### SR-167 · The euro invariant no longer matches the record it guards
-**Found by the close-out sweep. Reported, not fixed — the invariant is not this branch's to
-rewrite.**
+**Found by Run F's close-out sweep, reported and left alone. Resolved by [[SR-168]], which
+carries Andre's decision on how the count is defined.**
 
 The standing invariant at the top of this file reads: *"Euro escapes exist only inside `PRICING`
 in `content/tracks.js`. Current count **9**."* The file holds **11**, plus **14** bare `€`
@@ -1148,7 +1166,57 @@ nowhere"* was re-verified this run and **holds: zero occurrences across every tr
 Fixing it means recounting against the current `PRICING` and deciding whether comments count
 toward the total — a decision about the invariant's definition, not a defect in the code.
 
-*Status:* open — reported, awaiting Andre · *Raised:* 21 Aug 2026
+*Status:* closed by [[SR-168]] · *Raised:* 21 Aug 2026 · *Closed:* 21 Aug 2026
+
+
+### SR-168 · The euro invariant now counts values, not commentary
+[[SR-167]] found the standing invariant claiming **9** where the file held **11** escapes and
+**14** bare glyphs. Andre's decision: **count only inside `PRICING`, exclude comments.** An
+invariant that counts commentary breaks every time someone writes a note — it becomes
+unreproducible for a reason that has nothing to do with what it guards.
+
+**The corrected number is 8**, and it is the eight `amount` values the record actually holds:
+`t1` €9, `t1.standard` €19, `t2` €29, `t3` €39, `workshopPersonal` €29, `workshopRelationship`
+€49, `premium1` €129, `premium3` €299.
+
+**The rule, exactly, so the next close-out runs it in one command** — slice the `PRICING`
+object, strip `/* */` comments, then count. It prints `8`:
+
+```
+python3 - <<'PY'
+import re
+b = open('content/tracks.js', encoding='utf-8').read().split('var PRICING = {')[1].split('\n};')[0]
+print(len(re.findall(r'\\u20AC', re.sub(r'/\*.*?\*/', '', b, flags=re.S))))
+PY
+```
+
+Two companion halves, both **0** with comments stripped: escapes anywhere outside the `PRICING`
+block, and bare `€` glyphs anywhere in the file. Together those three numbers — 8 / 0 / 0 —
+are the whole invariant.
+
+**Why excluding comments is the substantive half, not a technicality.** The neighbouring
+invariant says *"€59, €139 and €275 appear nowhere."* Counted naively it is violated:
+`\u20AC275` sits in `content/tracks.js` inside the SR-136/137 comment recording **why the
+`premium` key must not be re-added**. A note explaining a removal was reading as the removal
+having failed. Under the corrected rule it is 0, which is what the invariant was always
+asserting.
+
+**It predates this branch, and the branch is not what moved it.** `content/tracks.js` is
+byte-identical to `main` — `git diff --quiet main -- content/tracks.js` is silent, and the last
+commit to touch it is `d2ed1fe`, [[SR-140]], from Run E. The count drifted when Run E changed
+the record and the invariant line was not updated with it. Nothing in Run F or this run has
+edited the file.
+
+**What was deliberately NOT rewritten.** The invariant is a live assertion, so it was corrected.
+Three other places name the old figures and are **dated history, not errors**:
+[[SR-091]] (which set €59/€139 and is what [[SR-136]] later corrected), [[SR-127]] (recording
+`protocol.html`'s literals as they stood), and `RUN-E-REPORT.md`'s Phase 0b table. Rewriting
+those would falsify the record and destroy the before/after pair [[SR-136]] depends on —
+including the €49 ordering constraint, which explicitly says to preserve that trail. The Phase
+0b table got a forward reference instead, because the risk there is real: a reader hitting the
+table has no signal that three of its rows were superseded 550 lines later in the same document.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
 
 
 
