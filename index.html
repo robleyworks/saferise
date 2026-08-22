@@ -3813,7 +3813,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <div class="reader-sidebar-head">
           <p class="reader-eyebrow">Full Resource Library</p>
           <p class="reader-protocol-title" id="reader-protocol-title"></p>
-          <p class="reader-progress-line" id="reader-progress-line"></p>
           <div class="reader-progress-track"><div class="reader-progress-fill" id="reader-progress-fill" style="width:0%;"></div></div>
         </div>
         <p class="reader-sidebar-label">Journey Overview</p>
@@ -3829,8 +3828,6 @@ document.addEventListener('DOMContentLoaded', function(){
               <button type="button" class="reader-mode-btn" data-reader-mode-btn="sepia">Sepia</button>
               <button type="button" class="reader-mode-btn" data-reader-mode-btn="light">Light</button>
             </div>
-            <span class="topbar-divider">·</span>
-            <span id="reader-content-readtime"></span>
             <span class="topbar-divider">·</span>
             <span id="reader-content-savelabel">Save</span>
           </div>
@@ -4987,7 +4984,13 @@ function openReader(protocolKey, initialKey){
         '<p class="reader-tab-kind"><span class="reader-kind-dot" style="background:' + style.color + '"></span>' + data.kind + '</p>' +
         '<p class="reader-tab-title">' + data.title + '</p>' +
         (meta.desc ? '<p class="reader-tab-desc">' + meta.desc + '</p>' : '') +
-        '<div class="reader-tab-meta-row"><span>' + meta.readtime + ' min read</span>' + (data.locked ? '<span class="reader-tab-lock">\uD83D\uDD12</span>' : '') + '</div>' +
+        /* SR-181 \u00B7 the reading-length readout was removed here too. The row now
+           renders only when there is a lock to show \u2014 keeping it unconditionally
+           would leave an empty flex row on every unlocked resource, which is the
+           stranded fragment Rule 19 is about. This note deliberately does not
+           quote the removed string: Rule 21's worked example is a sweep counting
+           a comment about a removal as the removal having failed. */
+        (data.locked ? '<div class="reader-tab-meta-row"><span class="reader-tab-lock">\uD83D\uDD12</span></div>' : '') +
       '</div>' +
       '<div class="reader-tab-check" data-check-for="' + key + '" style="display:none;">' + READER_ICONS.check + '</div>';
     tab.addEventListener('click', function(){ selectReaderTab(protocolKey, key); });
@@ -5085,7 +5088,12 @@ function selectReaderTab(protocolKey, key){
   // Progress bar + label in sidebar head
   const pct = Math.round(((idx+1) / proto.keys.length) * 100);
   document.getElementById('reader-progress-fill').style.width = pct + '%';
-  document.getElementById('reader-progress-line').textContent = 'Resource ' + (idx+1) + ' of ' + proto.keys.length + ' \u00b7 ' + data.kind;
+  /* SR-181 \u00b7 the sidebar position readout is gone. Ninety authored Track 01
+     resources state that nothing counts a member's way through the library, so
+     no ordinal-out-of-total may render anywhere in the Reader. Its <p> went
+     with it rather than being left empty \u2014 the rule carries margin-bottom, so
+     an emptied element is a stranded 8px gap, not a no-op. Do not restore
+     either half. This note does not quote the removed string, per Rule 21. */
 
   // Right rail state
   document.getElementById('reader-rail-count').textContent = (idx+1) + ' of ' + proto.keys.length;
@@ -5103,10 +5111,14 @@ function selectReaderTab(protocolKey, key){
     }
   });
 
-  // Topbar readtime + save
-  const meta = kindMetaFor(data.kind);
-  document.getElementById('reader-content-readtime').innerHTML =
-    '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" style="width:11px;height:11px;vertical-align:-1px;margin-right:4px;"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 1.5"/></svg>' + meta.readtime + ' min read';
+  // Topbar save
+  /* SR-181 · the reading-length readout is gone, with its clock glyph, its
+     <span> and the divider that separated it from Save — an emptied span
+     between two dividers renders as a doubled separator. The authored
+     resources carry no durations of any kind and the interface must not
+     invent one. KIND_META[].readtime is now unconsumed; it was left in place
+     deliberately, see the register entry. This note does not quote the removed
+     string, per Rule 21. */
 
   // Bottom nav
   const prevBtn = document.getElementById('reader-prev-btn');
