@@ -173,6 +173,18 @@ var TRACKS = {
     price: PRICING.t1,
 
     art: {
+      /* SR-213 \u00b7 the hero banner. `scrim` is PER TRACK and lives here for the
+         same reason `src` does: a page must not carry a hardcoded gradient any
+         more than a hardcoded path. The stops were not chosen by eye \u2014 each
+         image's brightest pixel under the h1, the pull line and the body was
+         sampled and the stops set so the worst case clears 4.5:1 against
+         --text #F5EDD8. Re-measure if the image is replaced; a new photograph
+         invalidates these numbers. */
+      hero:   { src: 'assets/t1/hero.jpg',
+                ratio: '2400/1000',
+                brief: 'one person, right third \u2014 soft dark left half for type',
+                scrim: 'linear-gradient(96deg, rgba(11,11,18,.92) 0%, rgba(11,11,18,.84) 34%, rgba(11,11,18,.56) 62%, rgba(11,11,18,.22) 80%, transparent 94%)' },
+
       band:   { src: 'assets/journey/t1-band.jpg',
                 ratio: '1400/380',
                 brief: 'one person alone: listening with headphones, writing, reading' },
@@ -280,6 +292,18 @@ var TRACKS = {
     price: PRICING.t2,
 
       art: {
+      /* SR-213 \u00b7 the hero banner. `scrim` is PER TRACK and lives here for the
+         same reason `src` does: a page must not carry a hardcoded gradient any
+         more than a hardcoded path. The stops were not chosen by eye \u2014 each
+         image's brightest pixel under the h1, the pull line and the body was
+         sampled and the stops set so the worst case clears 4.5:1 against
+         --text #F5EDD8. Re-measure if the image is replaced; a new photograph
+         invalidates these numbers. */
+      hero:   { src: 'assets/t2/hero.jpg',
+                ratio: '2400/1000',
+                brief: 'two people, right third \u2014 soft dark left half for type',
+                scrim: 'linear-gradient(96deg, rgba(11,11,18,.88) 0%, rgba(11,11,18,.78) 36%, rgba(11,11,18,.48) 64%, rgba(11,11,18,.16) 82%, transparent 94%)' },
+
       band:   { src: 'assets/journey/t2-band.jpg',
                 ratio: '1400/380',
                 brief: 'two people: one listening alone, one writing, both reading together' },
@@ -406,6 +430,17 @@ var TRACKS = {
     price: PRICING.t3,
 
       art: {
+      /* SR-213 \u00b7 the hero banner. `scrim` is PER TRACK and lives here for the
+         same reason `src` does: a page must not carry a hardcoded gradient any
+         more than a hardcoded path. The stops were not chosen by eye \u2014 each
+         image's brightest pixel under the h1, the pull line and the body was
+         sampled and the stops set so the worst case clears 4.5:1 against
+         --text #F5EDD8. Re-measure if the image is replaced; a new photograph
+         invalidates these numbers. */
+      hero:   { ratio: '2400/1000',
+                brief: 'one professional, right third \u2014 soft dark left half for type',
+                scrim: 'linear-gradient(96deg, rgba(11,11,18,.92) 0%, rgba(11,11,18,.84) 34%, rgba(11,11,18,.56) 62%, rgba(11,11,18,.22) 80%, transparent 94%)' },
+
       /* SR-214 · Track 03 carries NO `src`, deliberately. Its five images are
          not produced. A path here is a claim that the asset exists, and an
          absent one costs a 404 per slot on every page load before the

@@ -104,8 +104,25 @@
   }
 
   /* ── 00 · hero ───────────────────────────────────────────────────── */
+  /* SR-213 · the hero carries its photograph and its scrim as custom properties
+     read from the record, never as a hardcoded background. With no `src` the
+     element sets neither and the CSS falls through to the abstract shape it has
+     always drawn — the fallback is never removed, so a missing file renders the
+     original panel rather than an empty one. Track 03 does this today. */
+  function heroVars(t) {
+    var h = t.art && t.art.hero;
+    if (!h || !h.src) return '';
+    return ' style="--sr-hero-img:url(' + esc(h.src) + ')' +
+           (h.scrim ? ';--sr-hero-scrim:' + h.scrim : '') + '"';
+  }
+
   function rHero(t) {
-    return '<div class="sr-tp-hero"><div class="sr-tp-heroin">' +
+    var h = t.art && t.art.hero;
+    return '<div class="sr-tp-hero' + (h && h.src ? ' sr-tp-hero--photo' : '') + '"' +
+      heroVars(t) + '>' +
+      (h && h.src ? '<img class="sr-tp-herostack" src="' + esc(h.src) +
+                    '" alt="" loading="lazy" decoding="async" onerror="this.remove()">' : '') +
+      '<div class="sr-tp-heroin">' +
       '<p class="sr-tp-eyebrow" style="margin-bottom:22px">' + t.kicker + '</p>' +
       '<h1>' + t.heroTitle + '</h1>' +
       '<div class="sr-tp-herorule"><p>' + val(t.heroRule, 'heroRule') + '</p></div>' +

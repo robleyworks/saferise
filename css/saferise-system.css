@@ -2932,3 +2932,62 @@ body.sr-breath .sr-player.is-next .audio-play{
   display:block;
   border-radius:inherit;
 }
+
+/* ═════════════════════════════════════════════════════════════
+   SR-213 · THE HERO BANNER
+   Two modes, because one does not work at both ends.
+
+   ≥1024 — full-bleed behind the copy. The photograph sits
+   BETWEEN the warm base layer and the 96deg scrim, never above
+   the scrim; get that order wrong and the scrim renders under
+   the image and does nothing. Layer order in `background` is
+   top-first, so: glow, scrim, photo, base.
+
+   <1024 — STACKED. The panel has no aspect-ratio and its height
+   is content-driven, so a 2.4:1 image in a cover fit loses 25%
+   of its width at 768 and 73% at 390 — cropping out exactly the
+   right-third figures the briefs were composed around, and
+   putting type over the photograph at the width where the scrim
+   is weakest. Below 1024 the image stops being a background and
+   becomes a real 2.4:1 band above the copy, uncropped. The crop
+   problem and the contrast problem are the same problem, and
+   stacking dissolves both.
+
+   --sr-hero-img and --sr-hero-scrim come from the record. A page
+   carries neither a path nor a gradient. With no src, neither
+   property is set and the panel keeps its original abstract.
+   ═════════════════════════════════════════════════════════════ */
+
+.sr-tp .sr-tp-hero--photo{
+  background:
+    radial-gradient(circle at 79% 36%,rgba(236,201,106,.2),transparent 15%),
+    var(--sr-hero-scrim, linear-gradient(96deg,#0B0B12 0%,#0B0B12 40%,rgba(11,11,18,.74) 56%,rgba(11,11,18,.2) 75%,transparent 90%)),
+    var(--sr-hero-img) center/cover no-repeat,
+    linear-gradient(135deg,#17131b 35%,#4a3a24 70%,#8a7148 100%);
+}
+/* the abstract retires only where a photograph actually replaced it */
+.sr-tp .sr-tp-hero--photo:after{content:none}
+
+/* the stacked image is present in the DOM at all widths and hidden
+   above the breakpoint, so the switch needs no second render pass */
+.sr-tp .sr-tp-herostack{display:none}
+
+@media(max-width:1023px){
+  .sr-tp .sr-tp-hero--photo{
+    background:
+      radial-gradient(circle at 79% 36%,rgba(236,201,106,.2),transparent 15%),
+      linear-gradient(135deg,#17131b 35%,#4a3a24 70%,#8a7148 100%);
+  }
+  .sr-tp .sr-tp-hero--photo .sr-tp-herostack{
+    display:block;
+    width:100%;
+    aspect-ratio:2400/1000;
+    object-fit:cover;
+    border-radius:16px 16px 0 0;
+  }
+  /* the copy no longer sits on the photograph, so it needs no scrim */
+  .sr-tp .sr-tp-hero--photo .sr-tp-heroin{padding-top:52px}
+}
+@media(max-width:480px){
+  .sr-tp .sr-tp-hero--photo{min-height:0;display:block}
+}
