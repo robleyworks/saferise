@@ -51,6 +51,28 @@ Canonical record of defects and design decisions. Commits reference the ID:
   `workshopRelationship` €49, `premium1` €129, `premium3` €299. Companion halves, both **0**
   with comments stripped: escapes anywhere outside the `PRICING` block, and bare `€` glyphs
   anywhere in the file. Part of every close-out sweep.
+- **The banned-vocabulary invariant is a list of words, and three of them have ordinary
+  senses the tree legitimately needs.** Recorded at the close of Run H, unfixed, because it is a
+  copy decision rather than a defect. The Track 01 content rules prohibit *quantum, frequency,
+  manifest, rewire, streak, badge, graduate* "absolutely". Swept over prose, with identifiers
+  and stated prohibitions excluded, the tree holds **six live hits and not one is the register
+  the ban is aimed at**:
+  - `frequency` ×5 in `method-heartmath.html` — the **resonance frequency**, peer-reviewed
+    physiology: *"near the frequency at which the body's own blood-pressure regulation already
+    oscillates"*. Enforcing the ban literally means rewriting the SME page's sourced claim.
+  - `frequency` ×1 in `index.html` — the Proximity Guide's *"Reduce access, frequency,
+    intensity, or dependence"*, where it plainly means **how often**.
+  - `manifest` — a **data key** and a set of CSS class names (`id-manifest-row`), never rendered
+    as copy.
+
+  **Three exclusions any future sweep must apply, or it will keep re-raising this.**
+  Identifiers are not copy. A prohibition stated is not a prohibition broken — `method-jung.html`
+  and `method-mate.html` carry *"No streaks, no completion, no graduation anywhere on this
+  platform"*, which a naive sweep scores as three violations; that is the €275 failure mode one
+  level up, an invariant that cannot tell a rule from its breach. And an inert selector is not a
+  render. **The word list needs replacing with sense-specific patterns** — *raise your
+  frequency*, *manifest your* — or the invariant will be quietly switched off by whoever tires
+  of the noise, which is the outcome Rule 21 exists to prevent.
 - **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
   Run E: prices in words exist only in the record, one derived span and one comment.
 - **`€59`, `€139` and `€275` appear nowhere — in values.** Retired by SR-136/SR-141.
@@ -58,7 +80,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-179 are issued.** All are written up below except four:
+- **SR-044 to SR-190 are issued.** SR-180 to SR-190 were allocated by Run H (Track 01
+  content) — SR-182, SR-183 and SR-184 were issued for phases that were re-scoped mid-run
+  and their work carried out under SR-188, SR-189 and SR-190 instead. **Those three numbers
+  are spent, not free.** Do not reach back for them; see the collision note below.
+  All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -201,7 +227,7 @@ the rule can be checked rather than taken on trust. **Twenty-one rules.**
 
 **Measurement artifacts — the standing pre-flight**
 
-Five now, every one found the same way: a plausible reading that was wrong. Run these before
+Six now, every one found the same way: a plausible reading that was wrong. Run these before
 trusting any measurement, and **report the check alongside the result**, not instead of it.
 
 | artifact | how it lies | countermeasure |
@@ -210,8 +236,26 @@ trusting any measurement, and **report the check alongside the result**, not ins
 | **Stale scratchpad mirror.** The preview serves a copy of the tree ([[SR-154]]); a silently failed sync leaves you verifying pre-edit files. | A clean pass, with numbers that all look right, taken against the code you just changed away from. | **Sentinel every sync**: write a unique token into the file just edited, sync, confirm it appears in the mirror **and is absent from a control file**, remove it, sync again. |
 | **Browser cache serving a pre-edit page.** | The first post-[[SR-155]] reading showed the removed statebar still present, while `curl` against the same server returned a file without it. | Cache-bust every verification URL. **A busted HTML URL does not bust its subresources** — `js/`, `css/` and `content/` survived both a query change and a forced navigation, and [[SR-162]] briefly read as not rendering at all because of it. `fetch(url,{cache:'reload'})` each one, then reload. |
 | **The environment cannot reproduce the symptom.** | A false pass, or a working feature reported broken. The preview's canvas is *dark*, so an unfixed page passes the white-flash test ([[SR-164]]); CSS transitions never advance, so an applied transform reads as identity forever ([[SR-149]], [[SR-163]]). | Force the condition and compare against a known-good control — light colour scheme, a stalled stylesheet, `transition:none`. Report it **as a control-based result**, never as a direct observation. |
+| **No JavaScript runtime at all.** Distinct from [[SR-154]]'s sandbox path problem, which was about *where* the preview could read from. Here nothing can execute JS: `node`, `deno`, `bun` and `jsc` are absent, `preview_start` is denied by the classifier on every config tried, `file://` access is declined, and `osascript -l JavaScript` is denied. | Rule 8's "measure the live object graph" is unavailable, so a static reading gets reported as though it were a runtime one. Worse, **Rule 4's parse check cannot run at all** — a bracket balance is the only substitute and it cannot see a broken brace inside a template string. | Rule 20. Re-implement the resolution, **validate the re-implementation against a known-good control in the same environment** before trusting it, sentinel it for sensitivity per Rule 9, and label the result **control-based**, never as a direct observation. Flag any count so taken for a re-take when a runtime exists. Report the bracket balance **as the weaker check it is**. |
 | **A console buffer that outlives the page.** | Errors persist across navigations **and across a preview-server restart**, so a stale failure reads as a live one. [[SR-169]] opened with 33 errors on a seed tab — one `openRoute` message and 32 × 404 — every one of them left over from Run F's deliberately-stalled control pages, on five files that were in fact clean. | **Read the console in a fresh tab.** A non-empty console on a reused tab proves nothing until the tab is new; a clean one in a fresh tab is the only reading worth reporting. |
 
+
+
+**Two notes on the sixth artifact, from the run that found it.**
+
+**The documented workaround is itself now blocked.** The procedure recorded further down this
+register — run the server from the scratchpad against a mirror of the working tree, with
+`launch.json` temporarily repointed and restored — was attempted first and **denied by the
+permission classifier**, as were `preview_start` on the repo's own config, `file://` access, and
+`osascript`. A workaround written down in the register is not a guarantee it still runs; check
+it, and record it when it stops working rather than leaving the next run to rediscover it.
+
+**A control pinned to `HEAD` goes stale the moment you commit.** Rule 16 extends to the
+tester's own fixtures, and this is the cheap version of that mistake: the SR-180 probe validated
+against `HEAD:content/tracks.js`, which was correct while the work was uncommitted and became
+wrong three commits later — the same probe then reported `FAIL` against a tree that was right.
+**Pin a control to an immutable ref**, not to a moving one. The counts never changed; only the
+fixture did.
 
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
@@ -1517,7 +1561,28 @@ of the one in the current art" against. **Blocked on a real sample.** When one e
 the drawn number's bottom offset against it and set the stack: drawn number above, in-image mark
 below, both bottom-right, one mark only and it comes from the image.
 
-*Status:* open — blocked on the replacement covers · *Raised:* 22 Aug 2026
+**UPDATE, 22 Aug 2026 — unblocked by [[SR-189]], and the predicted collision is now real.**
+The replacement covers have landed. The sample this entry was blocked on exists, so the
+measurement it asked for can finally be taken — and it comes out badly.
+
+The cover spec puts the rule and wordmark on a shared centreline at **y = 1370 of 1448**, i.e.
+**78px above the base, 5.4% of the height**. The drawn number sits at **`bottom:7px`** on a card
+measured at 236×315 — **2.2%** — at `font-size:30px`, so it occupies roughly the bottom **7px to
+37px**. The in-image wordmark's centreline lands around **17px** on that same card. **They
+overlap**, both bottom-right, exactly as this entry predicted when it said 7px was not enough
+clearance for any mark.
+
+The prediction was right and the fix is now measurable rather than blocked. `.sr-pcover-no` at
+[css/saferise-system.css:2349](css/saferise-system.css:2349) has to move up clear of the
+wordmark, drawn by [js/saferise-card.js:65](js/saferise-card.js:65). Not done here: this run was
+scoped to installing the covers, and moving the overlay is a design change on a shared component
+that renders on the dashboard and the portals as well.
+
+⚠ This entry's opening paragraphs are **evidence, not live assertions** — they record the art
+as measured when this was raised, and [[SR-189]] has since replaced those files. Left standing
+rather than rewritten, per Rule 21: the collision above only makes sense against it.
+
+*Status:* open — unblocked, ready to fix; overlay position needs moving · *Raised:* 22 Aug 2026
 
 
 
@@ -1525,6 +1590,248 @@ below, both bottom-right, one mark only and it comes from the image.
 
 
 ---
+
+### SR-180 · The record grows a tenth resource, and t1-10 loses a framework it never used
+Three data corrections were briefed from the Track 01 content handover. **Two reproduced. One
+did not**, and that non-reproduction is the more useful finding.
+
+**`SHARED.resources` 9 → 10.** Accountability & Empathy added after Your Record at
+[content/tracks.js:93](content/tracks.js:93). It carries no `CONDITIONAL_RESOURCES` entry, so it
+is universal across all thirty protocols and lifts the unconditional floor from seven to eight.
+Track 01's per-protocol counts now resolve **8, 10, 9, 10, 8, 8, 8, 10, 10, 9**.
+Its icon key is `face`, which already existed in `js/saferise-track.js`'s `ICONS` map — no new
+icon was authored. Its description is the one field the handover did not supply; it is built
+from the resource spec's own sentences and is the only line on the card that was not lifted
+whole. **Do not re-add Source Insights above it** — [[SR-077]] merged that into How This Works
+and the merge stands.
+
+**`META['t1-10'].frameworks` loses `distance`.** The dispenza correction landed in this repo as a
+**rename** (dispenza → distance, [[SR-118]]); the authored content treated it as a **drop**.
+t1-10's own build note reads *"Authored against Porges and Watts"*, and no resource in that
+protocol cites the fourth-step literature, so the third key was a false attribution — a resource
+citing a framework its text never uses. The authored content decided it.
+**t1-09 keeps `distance` deliberately**, because its text does rest on it. Do not "consistency
+fix" the pair.
+
+**`META[].extras` — briefed, does not reproduce (Rule 2).** All ten already matched the handover
+exactly. No edit was made. This was the **seventh** stale claim in that document, after six the
+author had already withdrawn, and it is why handover §3 is now treated as a **claim list, not a
+work list**: every remaining item gets reproduced against the tree before anything is acted on.
+
+**Consequence, intended, recorded so it does not read as a regression later:**
+`frameworkReach('distance')` moves **6 → 5**, and `method-kross.html` now lists one fewer Track
+01 protocol. The backlog entry asserting 6 was a live assertion and has been rewritten, per
+Rule 21.
+
+⚠ **The count is control-based and wants re-taking.** No JS runtime existed in the environment
+(see the sixth measurement artifact), so `protocolResources()` could not be executed. The
+resolution was re-implemented, validated against `HEAD` as a known-good control — which
+reproduced the pre-edit truth `[7,9,8,9,7,7,7,9,9,8]` — and sentinel-checked for sensitivity by
+emptying t1-02's `extras` and confirming the count moved. Rule 9 still applies: a sentinel proves
+a probe works *within its own method*, not that the method is right. Nothing here is
+runtime-built, which is the condition Rule 8 exists for, so the reasoning is sound — but
+**re-take this with a real evaluator when one is available.**
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-181 · The Reader counted a member's position and timed their reading
+Ninety authored Track 01 resources state that nothing counts a member's way through the library
+and that no duration appears anywhere. The Reader did both.
+
+**Removed:** the sidebar position readout (ordinal out of total, plus kind), and the
+reading-length readout in **both** the places it rendered — the tab list and the content topbar.
+
+**Rule 19 mattered three times here**, and none of the three was the string itself:
+- the position readout's `<p>` carries `margin-bottom:8px`, so emptying it leaves a stranded 8px
+  gap rather than a no-op. The element went with the write.
+- the topbar readout sat **between two `<span class="topbar-divider">·</span>`**. Removing only
+  the text renders a doubled separator. One divider went with it.
+- the tab-list row is `display:flex` and held the duration plus an optional lock. It now renders
+  **only when there is a lock to show**, instead of leaving an empty flex row on every unlocked
+  resource.
+
+**Now genuinely inert, reported rather than deleted:** `.reader-progress-line` in both the base
+and light-mode blocks. Nothing can match it — this is not "dormant" in Rule 14's sense.
+
+⚠ **Corrected at close-out.** The first version of this entry named only `index.html`'s inline
+blocks. The close-out sweep found **two more inert rules in a second file** —
+[css/saferise-system.css:1407](css/saferise-system.css:1407) and
+[:1409](css/saferise-system.css:1409) carry `#reader-overlay .reader-rail-count` and
+`#reader-overlay .reader-progress-fill`. A Reader rule living in the shared system sheet as well
+as in the page's own `<style>` is exactly what Rule 7 warns about: one file swept, the other
+missed. All of them are inert; none is deleted.
+
+⚠ **The comments in the code deliberately do not quote the removed strings.** Rule 21's own
+worked example is a sweep counting a note *about* a removal as the removal having failed, which
+is exactly what a comment containing the banned string would cause. This was caught before
+commit, on a sweep that hit the new comments.
+
+**This fix was not sufficient on its own** — see [[SR-185]].
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-185 · Removing the two strings did not make the Reader shippable
+[[SR-181]] removed what it was briefed to remove and the Reader still made the forbidden claim,
+**eleven lines from the code that had just been changed**. Found by enumerating every DOM write
+in the Reader rather than by sweeping for the strings — the surviving violations did not share a
+string with the ones removed.
+
+**A progress bar.** `reader-progress-track` / `reader-progress-fill`, driven by
+`style.width = pct + '%'`. The content rule says "no progress bars" in those words; a bar is the
+same claim drawn rather than written, and no text sweep would ever have found it.
+
+**A second position readout,** under a rail literally headed **"Your Progress"**, rendering an
+ordinal out of a total from two separate writes.
+
+Both removed, with their containers — the track carries a 3px height, so emptying it leaves a
+stranded band.
+
+**The rail itself stays.** Its step list, Bookmark/Highlight/Listen and footer quote are not
+progress claims, and removing them would be a design change rather than a removal.
+
+**The lesson worth keeping:** a prohibition stated as a string ("no *Resource 7 of 8*") gets
+verified as a string, and the drawn and re-worded forms survive. Rule 7 and Rule 17 cover
+numerals, escapes and spelled forms; this adds the **drawn** form. When a rule forbids a claim,
+enumerate the surfaces that could make it, not the strings that do.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-186 · The duration field outlived every one of its consumers
+After [[SR-181]] removed both renders, `KIND_META[].readtime` had **zero consumers** — the same
+class as `premium1`/`premium3` in Run E, where a record with no reader was the finding rather
+than the fix. Here the conclusion goes the other way, because the field is a **duration**, and
+the content rule forbids durations platform-wide. A duration sitting unread in the record is what
+a later run takes as permission to render one.
+
+Removed from all 17 `KIND_META` entries, from the `kindMetaFor` fallback, and from the entry
+added at runtime when The Decision becomes a Reader destination. 19 occurrences, one file.
+Nothing broke: `KIND_META` still holds 17 entries and the script-block profile is identical to
+`HEAD`.
+
+No duration styling was added anywhere by this run's other work either. A hook in the stylesheet
+is an invitation to render one.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-188 · Where the Track 01 content should live — decision required before anything installs
+**Report only. Nothing installed.** 43,743 words across 13 files, 231KB of markdown, ten
+protocols by up to ten resources.
+
+**How a resource body is stored today.** `RESOURCE_CONTENT[key].body` is an **array of HTML block
+strings** — each entry one rendered block, already marked up. `READER_PROTOCOLS[key].keys` holds
+the ordered manifest of resource keys for a protocol. The Reader reads both synchronously. The
+incoming content is markdown, so a **one-time markdown → HTML-block transform, checked in**, is
+required either way. Not a runtime conversion: that would put an authoring step on the member's
+device and make the copy depend on a parser.
+
+**Two key namespaces, and they do not agree.** `META` keys Track 01 as `t1-01` … `t1-10`.
+`READER_PROTOCOLS` and `RESOURCE_CONTENT` key the same ten as `p1` … `p10`, with Tracks 02 and 03
+as `t2-p1` … `t3-p10`. Anything installing content has to cross that boundary, and **the mapping
+currently exists only in whoever is writing the code at the time.**
+
+**Conditional resources are keyed `-repair`, not `-invitation`.** `META[].extras` records the
+conditional as `'invitation'`; `CONDITIONAL_RESOURCES` maps the display name *Invitation to
+Repair* → `'invitation'`; the served resource key is `p2-repair`. **This is the identical defect
+class [[SR-177]] already solved once** for `distance` → `method-kross.html`, where a key and a
+filename were different words and every consumer re-derived the mapping by hand.
+**Recommendation: record the mapping once, in the data, as SR-177 did** — do not rename anything,
+and do not let a third consumer re-derive it.
+
+**Options for the body text.**
+
+| | Where | Cost |
+|---|---|---|
+| A | Inline into `index.html`'s `RESOURCE_CONTENT` — the current pattern | `index.html` is already 10,552 lines. Adds ~231KB to a single file that every visitor loads, cannot be cached separately, and makes merge conflicts near-certain while three tracks are authored in parallel. **Not recommended.** |
+| B | One file per track, `content/t1-resources.js`, beside `tracks.js` | Matches the established pattern exactly: plain `var` + the `module.exports` guard `tracks.js` already carries. Zero loader code, the Reader's synchronous access keeps working, `index.html` grows by one `<script>` tag. ~231KB raw, roughly 60KB gzipped. **Recommended.** |
+| C | One file per protocol, `content/t1/01.js` … | Best weight — a member loads one protocol, not ten. But it needs a loader, and lazy loading means the Reader's synchronous reads become asynchronous, which touches the Reader's control flow rather than just its data. Worth doing later, on measured need, not now. |
+| D | JSON + `fetch` | Fails on `file://`, needs a server this environment could not start, and adds a build step the repo does not have. **Not viable here.** |
+
+**The illustration cues are the interesting question.** 360 markers across the ten protocols —
+176 `TEAL/BREATH`, 132 `GOLD/PAUSE`, 20 `PURPLE/MUSIC`, 20 `BLUE/ILLUSTRATION`, 12 `RED/ACTION`.
+These are **production direction for the audio and art lanes, not member-facing copy**, and must
+never render. Two choices: strip them at transform time, or carry them as a parallel `cues:[]`
+array indexed to the body blocks and simply not render them.
+**Recommendation: carry them.** Stripping severs the only link between the shipped copy and the
+recording and illustration briefs, and the ten-protocol art lane still needs them. This is the
+same principle `CLAUDE.md` already sets for the original protocol descriptions — kept in the
+data, not rendered on the card.
+
+**Blocked on Andre confirming B over C**, and on the namespace mapping decision above. Nothing
+should install until both are settled, because both change the shape of the transform.
+
+*Status:* open — report delivered, decision required · *Raised:* 22 Aug 2026
+
+---
+
+### SR-189 · The covers in the repo were the defective ones, not the ones in the folder
+The image inventory said `t3-01` … `t3-09` were undeployable — top word and numeral still burned
+in, `-master` suffix, blocked on a generative removal pass. The supplied folder held them
+plain-named with no suffix. **Both could not be true.** Inspected before installing anything, as
+briefed.
+
+**The inventory describes the repo's state, not the folder's.** The supplied covers are finished:
+`t3-01` and `t3-05` carry no top word and no numeral, only the locked rule + SAFERISE lockup.
+The defective files were the ones already committed — `assets/covers/01.jpg` carried
+**"REGULATE"** top-left and a large **"01"** lower right, and `assets/covers/t3-01.jpg` carried
+the same numeral. This is the art [[SR-179]] measured.
+
+All 30 replaced at 1086×1448. Track 01 derivatives regenerated to the spec **read off the
+existing set rather than invented**: `NN.png` at full resolution, `NN.jpg` and `NN.webp` at
+900×1200, `-640` at 640×853, `-320` at 320×427. Tracks 02 and 03 keep their one-jpg convention.
+Pillow 11.3.0 did the work; no `cwebp` or ImageMagick on the host, and none needed.
+
+**90 files, every one a modification — none added, none removed.** The incoming names already
+matched the repo's two conventions, so **no consumer moved**: the 103 cover references in
+`index.html` alone are untouched. There was no rename work to do, which was the thing the phase
+was scoped to report on.
+
+⚠ **This unblocks [[SR-179]] and simultaneously creates the collision it predicted** — see that
+entry, now updated with the measurement it was blocked on.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-190 · The support advisory page had no target
+Every Safe Practice resource points to *"a helpline in your country"* — ten references across
+Track 01 alone — and the page those resolve to did not exist. Track 01 cannot ship without it.
+
+`getting-help.html`, built from Part 1 of the supplied copy. **Nothing authored.** Verified
+mechanically in both directions: no sentence on the page absent from the source, and no source
+sentence missing from the page, after normalising markup, smart punctuation and whitespace.
+
+**That check earned its place immediately.** It caught two things I had added without noticing:
+an eyebrow label the source does not have, and a restructure that split one source sentence in
+half around a pull quote. Both were reverted to the source's shape and the two CSS rules they
+needed came out with them. **A transcription task fails silently by looking like good writing** —
+the check is what makes "authored nothing" a claim rather than an intention.
+
+**Deliberately not a directory, and do not make it one.** No helpline names, no numbers: services
+differ by country, change without notice, and a stale number is worse than none. The two
+organisations named are directories of services, not services.
+
+No script and no gate — reachable without an account, as the copy requires. Styling is in
+`css/saferise-system.css` under `.sr-adv`; nothing in the page styles itself, and `body` carries
+`.sr-tp` because the tokens are scoped to that class rather than `:root`. No duration, count,
+progress or score styling was added.
+
+**Nothing links here yet.** The Safe Practice references arrive with the Track 01 content
+([[SR-188]]), and the site-footer and cue-card-modal links the copy also specifies sit on
+surfaces outside this run's scope. **The page is not reachable by a member until those land** —
+it exists, it is correct, and it is currently an orphan.
+
+*Status:* fixed, pending inbound links · *Raised and fixed:* 22 Aug 2026
+
+---
+
 
 ## MEDIUM
 
@@ -2373,6 +2680,40 @@ measurement path itself.
 ---
 
 ## BACKLOG
+
+### SR-187 · The same prohibition is violated on two more surfaces — scope decision required
+**Recorded, not fixed.** [[SR-181]] and [[SR-185]] cleared the Reader. The same forbidden claims
+render on two other surfaces, found by the Rule 7 / Rule 17 sweep and left alone deliberately
+because the run was scoped to the Reader.
+
+- [resource.html:1003](resource.html:1003) — `padN(current+1)+' of '+padN(v.length)+' · '+r.title`.
+  Structurally identical to the readout removed from the Reader.
+- [dashboard.html:2297](dashboard.html:2297) — `'Resource ' + r.resource + ' of ' + r.resourceTotal`.
+  Literally the same string.
+- [dashboard.html:941](dashboard.html:941), [:1781](dashboard.html:1781),
+  [:1866](dashboard.html:1866) — *"N of M protocols still unopened"*. Completion framing rather
+  than a position readout, and arguably the furthest from what the content forbids — or the
+  clearest case of it, depending on the answer below.
+
+**The question is not a code question.** The authored content says no progress, no scores, no
+completion, and it says it in the resources themselves — ninety of them. What it does not say is
+whether that binds the whole platform or only the surface a member reads a resource on. The
+Reader is unambiguous. A dashboard that tells someone they have eight protocols left is a
+different argument, and it may be a legitimate one.
+
+**Andre's call.** Once answered it is a small, mechanical change on both files, and the answer
+should be written into the content rules so the next run does not re-raise it.
+
+⚠ Note for whoever picks this up: `dashboard.html`'s single `min read` hit is inside a comment
+guarding [[SR-080]] and is **not** a violation — counting it as one is the Rule 21 failure mode.
+`resource.html`'s `read:` fields are empty strings but for one `'7 options'`, which is a count of
+options, not a duration. The ten `N min` hits in `index.html` are the 60-minute 1:1 and workshop
+product specs. None of those three is in scope here.
+
+*Status:* open — blocked on a scope decision · *Raised:* 22 Aug 2026
+
+---
+
 
 ### SR-053 · Frameworks fold promoted to a /method rail destination
 "Where the method comes from" is removed from the dashboard and becomes a rail
@@ -3297,7 +3638,9 @@ Two reasons, both still standing:
 
 **Known and accepted, pending a decision on how a multi-author literature renders in a
 one-person card:** the section heading at `index.html:8261` reads **"Six frameworks."** above
-**five** cards. `frameworkReach('distance')` already returns **6 protocols** and the render loop
+**five** cards. `frameworkReach('distance')` returns **5 protocols** — corrected from 6 by
+[[SR-180]], which took `distance` off `t1-10` as a false attribution; this is a live assertion
+and was rewritten rather than annotated, per Rule 21 — and the render loop
 at `index.html:10489` picks up any `[data-sr-reach]`, so the data side is ready and only the
 card content is missing.
 
