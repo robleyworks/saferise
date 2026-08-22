@@ -173,9 +173,9 @@ var TRACKS = {
     price: PRICING.t1,
 
     art: {
-      /* SR-213 \u00b7 the hero banner. `scrim` is PER TRACK and lives here for the
+      /* SR-213 · the hero banner. `scrim` is PER TRACK and lives here for the
          same reason `src` does: a page must not carry a hardcoded gradient any
-         more than a hardcoded path. The stops were not chosen by eye \u2014 each
+         more than a hardcoded path. The stops were not chosen by eye — each
          image's brightest pixel under the h1, the pull line and the body was
          sampled and the stops set so the worst case clears 4.5:1 against
          --text #F5EDD8. Re-measure if the image is replaced; a new photograph
@@ -437,23 +437,30 @@ var TRACKS = {
          sampled and the stops set so the worst case clears 4.5:1 against
          --text #F5EDD8. Re-measure if the image is replaced; a new photograph
          invalidates these numbers. */
-      hero:   { ratio: '2400/1000',
+      hero:   { src: 'assets/t3/hero.jpg',
+                ratio: '2400/1000',
                 brief: 'one professional, right third \u2014 soft dark left half for type',
-                scrim: 'linear-gradient(96deg, rgba(11,11,18,.92) 0%, rgba(11,11,18,.84) 34%, rgba(11,11,18,.56) 62%, rgba(11,11,18,.22) 80%, transparent 94%)' },
+                scrim: 'linear-gradient(96deg, rgba(11,11,18,.90) 0%, rgba(11,11,18,.84) 38%, rgba(11,11,18,.58) 66%, rgba(11,11,18,.22) 84%, transparent 94%)' },
 
-      /* SR-214 · Track 03 carries NO `src`, deliberately. Its five images are
-         not produced. A path here is a claim that the asset exists, and an
-         absent one costs a 404 per slot on every page load before the
-         onerror degrade can fire. With no src the slot renders its labelled
-         placeholder and issues no request at all — which is the same visible
-         result for nothing. Add `src` when the files land. */
+      /* SR-214 -> SR-224 · four of Track 03's five images have landed and now
+         carry `src`. Only `band` still does not, for the ratio reason below.
+         Rule 24 stands and is why the band has none: a path here is a claim the
+         asset exists, and an absent one costs a 404 per slot on every page load
+         to reach the same visible result as making no request. */
+      /* SR-224 · band still has NO src. The delivered t3-band.jpg measures
+         1400×583 (2.401:1) against t1 and t2 at 1400×380 (3.684:1) and a slot
+         declaring '1400/380'. Installing it would letterbox or crop it against
+         its two siblings. Reported, not resolved — SR-224. */
       band:   { ratio: '1400/380',
                 brief: 'corridor moments before the room, desk log, reading at day\u2019s end' },
-      cost:   { ratio: '16/7',
+      cost:   { src: 'assets/t3/cost.jpg',
+                ratio: '16/7',
                 brief: 'one person at work \u2014 early, midday, still there late' },
-      range:  { ratio: '16/6',
+      range:  { src: 'assets/t3/range.jpg',
+                ratio: '16/6',
                 brief: 'the same professional before a meeting \u2014 braced, settled, absent' },
-      change: { ratio: '16/7',
+      change: { src: 'assets/t3/change.jpg',
+                ratio: '16/7',
                 brief: 'someone leaving work at a reasonable hour, unhurried' }
       },
 
