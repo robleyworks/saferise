@@ -97,7 +97,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-223 are issued.** SR-215 was folded into SR-222; SR-223's finding is recorded there too. SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
+- **SR-044 to SR-227 are issued.** SR-215 was folded into SR-222; SR-223's finding is recorded there too. SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
   SR-202 by Run I (Tracks 02/03 specification), which also issued **SR-197** for a missing
   source document. **SR-194 to SR-196 and SR-200 were never issued and are free** — SR-200's
   phase was resource authoring, which Run I was barred from.
@@ -2622,7 +2622,84 @@ been seen by this run.
 
 ---
 
-### SR-222 · Three of eleven delivered frames read as lifestyle stock, not the briefed register
+### SR-224 · Track 03's images, minus the band — and the replacement that does not exist
+Four of five installed: hero, cost, range, change, each measuring **exactly** its stated size.
+Track 03's art entries gain `src`, and [[SR-214]]'s note is corrected — it claimed all five were
+unproduced, which is now false for four.
+
+⚠ **The band is not installed, and the ratio conflict is real.** `t3-band.jpg` measures
+**1400×583 (2.401:1)** against t1 and t2 at **1400×380 (3.684:1)**, with `saferise-track.js`
+declaring `'1400/380'`. Installing it would letterbox or crop it against its two siblings. Nothing
+cropped, nothing regenerated, layout untouched; the slot keeps no `src`, so it renders its
+placeholder and issues no request (Rule 24). **A third candidate exists** — `t3/band.jpg` at
+1907×825 (2.312:1) — in no slot list and matching neither sibling.
+
+⚠ **The t2 range replacement does not exist.** No 2048-wide image is present anywhere on the
+Desktop or in Downloads. **And the defect it was meant to resolve is on `t1/range.jpg`, not t2:**
+t1's corners measure L≈0.92, t2's 0.008–0.034. [[SR-222]] named t1; the instruction named t2.
+Both facts reported; nothing installed for that slot.
+
+**Source located after checking both places**, per the standing instruction — **three identical
+copies** exist: `~/Desktop/assets`, `~/Desktop/assets 2` and `~/Downloads/assets`.
+
+**Hero scrim, measured against its own pixels.** Track 03's is much the brightest of the three —
+h1 mean **0.314** against t1's 0.097 and t2's 0.046, which is the bright detailed left half
+originally attributed to t1.
+
+| | h1 | pull | body |
+|---|---|---|---|
+| before | 1.11:1 | 1.49:1 | 1.44:1 |
+| after | **5.76:1** | 12.34:1 | 11.31:1 |
+
+Two candidates tested; the lighter taken, matching the t1/t2 band rather than over-darkening.
+
+**Frames opened.** `cost` and `range` are dark and on-brief. `change` and `hero` are not — both are
+recorded in [[SR-222]], and `hero`'s text and logo are a prohibition breach rather than a taste
+question. `t3/range.jpg` is also a **healthcare worker in scrubs** where the rest of Track 03 is
+corporate — a family-coherence note, not a defect.
+
+*Status:* fixed for four slots; band and t2 replacement open · *Raised:* 22 Aug 2026
+
+---
+
+### SR-226 · t3-06's track row still carries Ambition Recovery's copy
+[[SR-216]] renamed t3-06 to **The Belonging Gap** and moved its label, state, frameworks and
+extras. The TRACKS row's **promise, signature and three quotes did not move**, because the bundle
+supplies no replacement and writing one would be authoring member-facing copy.
+
+The row now reads *The Belonging Gap Protocol* above *"Find what you actually want, under what you
+were taught to want"* and quotes including *"I hit the goal and felt nothing"*. **A protocol titled
+The Belonging Gap describing an achievement problem is a visible contradiction on a live page**,
+not an internal inconsistency.
+
+Blocked on the content lane. Four strings: promise, signature, and three quotes.
+
+*Status:* open — blocked on content · *Raised:* 22 Aug 2026
+
+---
+
+### SR-227 · CLAUDE.md forbids renaming protocols, and SR-216 renamed one
+Recorded so the rule and its exception are both on the record.
+
+`CLAUDE.md` states, under a CRITICAL heading: *"PRESERVE every ORIGINAL protocol title exactly as
+it currently exists… DO NOT rename protocols."* [[SR-216]] renamed t3-06 from *The Ambition
+Recovery Protocol* to *The Belonging Gap Protocol*.
+
+**This is an owner decision, not drift.** It is stated in the master handover, repeated in the
+instruction, and corroborated by the delivered content file's own header. The patch records that
+Ambition Recovery is **withdrawn from Track 03 and re-scoped for the Elevation Series**, so the
+title did not change — the protocol did.
+
+**The rule's purpose is intact.** It exists to stop a build inventing, shortening or substituting
+titles from a reference image. An owner replacing a protocol is a different act. The rule should
+probably say so, since as written it forbids this and a future run reading it literally would
+revert a deliberate decision.
+
+*Status:* open — recorded; CLAUDE.md may want an explicit exception clause · *Raised:* 22 Aug 2026
+
+---
+
+### SR-222 · Six of fifteen delivered frames read as lifestyle stock, not the briefed register
 **Grouped deliberately.** These arrived as three separate observations and are recorded as one,
 because the question is not whether three files are wrong. It is **whether the image lane has the
 register the briefs specify.** Three separate notes invite three separate re-shoots; one note asks
@@ -2648,7 +2725,32 @@ terrace with cocktails; and a set of three states became a light-surface composi
 drift the same way — toward aspirational lifestyle and away from the ordinary domestic register
 the briefs are explicit about. **That is a lane question, not three file questions.**
 
-All three are installed. None was modified. [[SR-215]] is folded into this entry.
+**4 · `assets/t2/range.jpg`** ([[SR-225]]). Brief: *the same pair three times — one pressing,
+both settled, one gone, with the other's absence felt.* Delivered shows the pair in panels one and
+two and only the man alone in the third. Installed unmodified.
+
+**5 · `assets/t3/change.jpg`.** Brief: *"someone leaving work at a reasonable hour, unhurried."*
+Delivered is a man in a suit on a clifftop terrace beside an **infinity pool** overlooking the sea.
+It reads as luxury real-estate advertising, and it is the furthest from its brief of any frame so
+far. Its top-right corner also measures **L=0.554** — a bright sky against a page at 0.004.
+
+**6 · `assets/t3/hero.jpg` breaks two absolute rules, not just the register.** The briefs say *"No
+text, numerals, wordmarks or logos in any frame."* This frame carries **a whiteboard covered in
+handwriting and sticky notes, monitors displaying code, and a laptop bearing a manufacturer's
+logo.** It also inverts the hero composition rule: the figure stands **centre**, and the left half
+— which the brief requires *"soft, dark and uncluttered"* for type — is the **busiest, brightest
+part of the frame**. That is why its scrim needed 0.58 alpha out to 66% where Track 02 needed 0.48.
+
+**Six of fifteen delivered frames now drift the same way** — toward aspirational lifestyle, and
+away from the ordinary register the briefs are explicit about. An ordinary day at home became a
+luxury car; leaving work on time became an infinity pool; a quiet domestic moment became cocktails
+on a terrace. **This is not a per-file problem and re-shooting six files will not fix it.** The
+question is whether the image lane has the brief's register at all.
+
+⚠ **One frame is a build blocker rather than a taste question.** `t3/hero.jpg`'s text and logo are
+prohibited outright, and no scrim removes them. It is installed and rendering.
+
+All are installed. None was modified. [[SR-215]] and [[SR-225]] are folded into this entry.
 
 *Status:* open — one content decision, not three · *Raised:* 22 Aug 2026
 
