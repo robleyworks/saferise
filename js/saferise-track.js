@@ -89,13 +89,24 @@
          dashboard.html shares. The number and label are the same record
          fields they always were — p[0] and p[1] — but the component keeps
          them over the loaded image rather than under it. */
-      return '<article class="sr-tp-pcard" tabindex="0">' +
+      /* SR-182 · the card opens the protocol again. SR-178 stripped the
+         affordance because `protocol.html` ignored ?track= and ?protocol= and
+         every one of the thirty cards could only land on Anxiety Reset — 29
+         silently wrong destinations. The page now resolves both against the
+         record and shows a not-found state rather than a wrong protocol, so
+         there is something to open and role="button" is honest. SR-178's own
+         condition was "the cursor returns when there is something to open".
+
+         The href is built from the record, never typed: t.id and p[0] are the
+         same two values the cover path already derives from. */
+      return '<article class="sr-tp-pcard" tabindex="0" role="button"' +
+        ' data-sr-open="protocol.html?track=' + esc(String(t.id)) +
+        '&amp;protocol=' + esc(String(p[0])) + '">' +
         SafeRiseCover.art({ src: coverPath(t.id, p[0]), no: p[0], label: p[1] }) +
         /* SR-174 · title and promise stay; signature and chips move into
            .sr-tp-preveal, which is out of flow and revealed on hover or focus.
            tabindex makes the card reachable so a keyboard user can open the
-           reveal — it is a readable region, not a control, so it takes no role
-           and no handler (SR-178). */
+           reveal, and now also operate it. */
         '<div class="sr-tp-pmeta"><h3>' + esc(p[2]) + '</h3>' +
         '<p class="sr-tp-pdesc">' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
         '<div class="sr-tp-preveal">' +
@@ -391,6 +402,27 @@
     var track = vp.querySelector('.sr-tp-cartrack');
     var cards = track.querySelectorAll('.sr-tp-pcard');
     if (!cards.length) return;
+
+    /* SR-182 · the card is operable again. Delegated on the track rather than
+       bound per card, so it survives a re-render. Keyboard parity is required,
+       not optional: role="button" without Enter and Space is a control that
+       announces itself and then does nothing. Space is preventDefault'ed or the
+       page scrolls under the member. */
+    function openCard(el) {
+      var href = el && el.getAttribute('data-sr-open');
+      if (href) window.location.href = href;
+    }
+    track.addEventListener('click', function (e) {
+      var card = e.target.closest && e.target.closest('.sr-tp-pcard');
+      if (card) openCard(card);
+    });
+    track.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+      var card = e.target.closest && e.target.closest('.sr-tp-pcard');
+      if (!card) return;
+      e.preventDefault();
+      openCard(card);
+    });
     var dots = document.getElementById('carDots');
     var prev = document.getElementById('carPrev');
     var next = document.getElementById('carNext');

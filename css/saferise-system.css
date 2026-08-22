@@ -2795,3 +2795,37 @@ body.sr-breath .sr-player.is-next .audio-play{
   .sr-tp .sr-adv-hd{padding-top:48px}
   .sr-tp .sr-adv h2{margin-top:40px}
 }
+
+/* ═════════════════════════════════════════════════════════════
+   SR-182 · PROTOCOL NOT FOUND
+   Shown when protocol.html was asked for a protocol the record
+   does not hold. Deliberately plain: this is an error state, not
+   a destination, and it should not look like somewhere to stay.
+   Not scoped to .sr-tp — protocol.html carries its own tokens,
+   so these are literals matched to that page's ground.
+   ═════════════════════════════════════════════════════════════ */
+.sr-notfound{display:flex;align-items:center;justify-content:center;
+  min-height:70vh;padding:48px 24px;background:#08080C}
+.sr-notfound-in{max-width:520px;text-align:center}
+.sr-notfound-in h1{margin:0 0 18px;
+  font:400 clamp(24px,3vw,34px)/1.2 'Cinzel',Georgia,serif;color:#F5EDD8}
+.sr-notfound-in p{margin:0 0 14px;
+  font:400 15px/1.75 'DM Sans',system-ui,sans-serif;color:#9C9AA4}
+.sr-notfound-in a{color:#ECC96A}
+.sr-notfound-req{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12.5px;color:#6A6874}
+
+/* ═════════════════════════════════════════════════════════════
+   SR-182 · THE CARD AFFORDANCE RETURNS
+   SR-178 removed `cursor:pointer` from .sr-tp-pcard because the
+   destination did not exist — every one of the thirty cards could
+   only land on Anxiety Reset. protocol.html now resolves ?track=
+   and ?protocol= against the record, so there is something to
+   open and the affordance is honest again.
+
+   SR-178's own words: "The cursor returns when there is something
+   to open." This is that. The card takes role="button" and a
+   handler alongside it; tabindex was already there for the
+   SR-174 reveal.
+   ═════════════════════════════════════════════════════════════ */
+.sr-tp .sr-tp-pcard[role="button"]{cursor:pointer}

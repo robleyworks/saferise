@@ -560,6 +560,27 @@ body,.sr-book,.sr-book-offer,.sr-book-dates{transition:background-color 1.4s eas
 </head>
 <body>
 
+<!-- SR-182 · the record loads before every inline script on this page, because
+     PAGE_PROTOCOL resolves ?track= and ?protocol= against TRACKS at parse time.
+     Placed here rather than in <head> to match the other pages that read it. -->
+<script src="content/tracks.js"></script>
+
+<!-- SR-182 · shown only when a protocol was ASKED FOR and could not be found.
+     A member who follows a card to a protocol that does not resolve gets told
+     so. The alternative — quietly rendering Anxiety Reset under whatever title
+     furniture the page already had — is how a journal entry ends up filed
+     against a protocol the member never ran. Hidden by default; the script
+     below reveals it and hides the rest of the page. -->
+<section id="sr-notfound" class="sr-notfound" hidden>
+  <div class="sr-notfound-in">
+    <h1>That protocol could not be found.</h1>
+    <p>The link asked for a protocol that is not in the library. Nothing has been
+       opened and nothing has been recorded.</p>
+    <p id="sr-notfound-req" class="sr-notfound-req"></p>
+    <p><a href="dashboard.html">Back to your dashboard</a></p>
+  </div>
+</section>
+
 <!-- ============ BANNER (nav inside) ============ -->
 <section class="banner">
   <div class="bannerimg" role="img" aria-label="Anxiety Reset protocol cover"></div>
@@ -1054,12 +1075,87 @@ var Store = (function(){
 
 var K_ENTRIES = 'sr.journal.entries';
 
-/* This page is Track 01, protocol 01. protocolId is the join key the Journal
-   view filters on — it groups on `protocol` for display but filters on this,
-   and getting the two the wrong way round gives a journal that looks right
-   and filters wrong. The id follows the track/protocol key already used for
-   cover paths (track id + protocol number). */
-var PAGE_PROTOCOL = { protocolId: 't1-p01', protocol: 'The Anxiety Reset Protocol', trackId: 1 };
+/* protocolId is the join key the Journal view filters on — it groups on
+   `protocol` for display but filters on this, and getting the two the wrong way
+   round gives a journal that looks right and filters wrong. The id follows the
+   track/protocol key already used for cover paths (track id + protocol number).
+
+   SR-182 · this was hardcoded to t1-p01, The Anxiety Reset Protocol, while the
+   dashboard passed ?track= and ?protocol= that the page never read. Every one of
+   the thirty cards could only ever land on Anxiety Reset, and on Relationship
+   Healing that is worse than nothing — which is why SR-178 removed the card's
+   pointer cursor rather than wire it to a destination that did not exist.
+
+   It now resolves against the record. THE FALLBACK IS A VISIBLE NOT-FOUND
+   STATE, NEVER A SILENT DEFAULT: landing a member on a protocol they did not
+   ask for, wearing the right title furniture, is the failure mode this replaces
+   — they would journal against the wrong protocolId and the entry would be
+   filed under a protocol they never ran. */
+var PAGE_PROTOCOL = (function () {
+  var FALLBACK = { protocolId: 't1-p01', protocol: 'The Anxiety Reset Protocol',
+                   trackId: 1, resolved: false, requested: null };
+  function param(name) {
+    var m = new RegExp('[?&]' + name + '=([^&]+)').exec(location.search);
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  var t = param('track'), p = param('protocol');
+  if (!t && !p) return FALLBACK;                    /* no request, no failure */
+
+  var requested = 't' + t + '-p' + p;
+  if (typeof TRACKS === 'undefined') {
+    return { protocolId: null, protocol: null, trackId: null,
+             resolved: false, requested: requested };
+  }
+  var track = TRACKS[parseInt(t, 10)];
+  var rows = track && track.protocols;
+  var row = null, i;
+  if (rows) {
+    for (i = 0; i < rows.length; i++) {
+      /* p[0] is the two-digit protocol number as authored. Compare as numbers
+         so ?protocol=3 and ?protocol=03 resolve identically. */
+      if (parseInt(rows[i][0], 10) === parseInt(p, 10)) { row = rows[i]; break; }
+    }
+  }
+  if (!row) {
+    return { protocolId: null, protocol: null, trackId: null,
+             resolved: false, requested: requested };
+  }
+  return { protocolId: 't' + track.id + '-p' + row[0], protocol: row[2],
+           trackId: track.id, label: row[1], resolved: true,
+           requested: requested };
+})();
+
+/* SR-182 · apply the resolution. Three outcomes, and only one of them renders
+   the protocol page:
+     resolved      — the record answered; title furniture follows it.
+     not requested — no ?track=/?protocol= at all, so nothing was asked for and
+                     the page keeps its authored Track 01 content.
+     unresolved    — something WAS asked for and the record has no such
+                     protocol. The page does not render; the not-found state
+                     does. This is the case that used to land on Anxiety Reset. */
+(function () {
+  var nf = document.getElementById('sr-notfound');
+  if (PAGE_PROTOCOL.resolved === false && PAGE_PROTOCOL.requested) {
+    if (nf) {
+      nf.hidden = false;
+      var req = document.getElementById('sr-notfound-req');
+      if (req) req.textContent = 'Requested: ' + PAGE_PROTOCOL.requested;
+    }
+    /* hide every sibling section rather than unloading the page, so nothing
+       below runs against a protocol that does not exist */
+    var kids = document.body.children, i;
+    for (i = 0; i < kids.length; i++) {
+      if (kids[i] !== nf && kids[i].tagName !== 'SCRIPT') kids[i].hidden = true;
+    }
+    document.title = 'SafeRise \u2014 Protocol not found';
+    return;
+  }
+  if (!PAGE_PROTOCOL.resolved) return;   /* nothing requested: leave the page */
+
+  document.title = 'SafeRise \u2014 ' + PAGE_PROTOCOL.protocol;
+  var t = document.querySelector('.bannerimg');
+  if (t) t.setAttribute('aria-label', PAGE_PROTOCOL.protocol + ' cover');
+})();
 
 function todayISO(){
   var d = new Date(), p = function(n){ return (n<10?'0':'') + n; };
