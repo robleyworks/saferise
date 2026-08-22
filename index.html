@@ -4865,27 +4865,27 @@ const READER_PROTOCOLS = {
   't3-p10': { title: 'The Creative Flow Unlock Protocol', keys: ['t3-p10-guide','t3-p10-companion'] }
 };
 const KIND_META = {
-  'Protocol Guide':      { category:'START HERE', icon:'book', readtime:4, desc:'The complete step-by-step walkthrough' },
-  'Session Guide':       { category:'START HERE', icon:'book', readtime:4, desc:'The complete step-by-step walkthrough' },
-  'Meditation Script':   { category:'START HERE', icon:'book', readtime:10, desc:'Guided practice for this pattern' },
-  'Attention Advisory':  { category:'RESOURCE', icon:'shield', readtime:5, desc:'Where to direct your attention and how close to stay' },
-  'Safety Score':        { category:'UNDERSTAND', icon:'brain', readtime:5, desc:'Where things stand between you' },
-  'Somatic Release':   { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Practical ways to help your body settle and release tension' },
-  'Sensory Companion':   { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for narrowing the field' },
-  'Relational Companion':{ category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for relational safety' },
-  'Creative Companion':  { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for reclaiming hidden parts' },
-  'Ritual Companion':    { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for letting it move through' },
-  'Behavioral Companion':{ category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for steady footing' },
-  'Evidence Companion':  { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for an internal floor of worth' },
-  'Somatic Release Activities':      { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for this pattern' },
-  'Disclosure & Support':{ category:'RESOURCE', icon:'book', readtime:4, desc:'A ready-to-use script for saying what you need' },
-  'Invitation to Repair':{ category:'RESOURCE', icon:'brain', readtime:5, desc:'A clear invitation when repair is genuinely possible' },
-  'Cue Card':         { category:'EMERGENCY', icon:'shield', readtime:2, desc:'The 4-line version for moments that overwhelm' },
-  'Support Resources':   { category:'EMERGENCY', icon:'shield', readtime:2, desc:'Where to turn right now' },
+  'Protocol Guide':      { category:'START HERE', icon:'book', desc:'The complete step-by-step walkthrough' },
+  'Session Guide':       { category:'START HERE', icon:'book', desc:'The complete step-by-step walkthrough' },
+  'Meditation Script':   { category:'START HERE', icon:'book', desc:'Guided practice for this pattern' },
+  'Attention Advisory':  { category:'RESOURCE', icon:'shield', desc:'Where to direct your attention and how close to stay' },
+  'Safety Score':        { category:'UNDERSTAND', icon:'brain', desc:'Where things stand between you' },
+  'Somatic Release':   { category:'PRACTISE', icon:'leaf', desc:'Practical ways to help your body settle and release tension' },
+  'Sensory Companion':   { category:'PRACTISE', icon:'leaf', desc:'Daily practices for narrowing the field' },
+  'Relational Companion':{ category:'PRACTISE', icon:'leaf', desc:'Daily practices for relational safety' },
+  'Creative Companion':  { category:'PRACTISE', icon:'leaf', desc:'Daily practices for reclaiming hidden parts' },
+  'Ritual Companion':    { category:'PRACTISE', icon:'leaf', desc:'Daily practices for letting it move through' },
+  'Behavioral Companion':{ category:'PRACTISE', icon:'leaf', desc:'Daily practices for steady footing' },
+  'Evidence Companion':  { category:'PRACTISE', icon:'leaf', desc:'Daily practices for an internal floor of worth' },
+  'Somatic Release Activities':      { category:'PRACTISE', icon:'leaf', desc:'Daily practices for this pattern' },
+  'Disclosure & Support':{ category:'RESOURCE', icon:'book', desc:'A ready-to-use script for saying what you need' },
+  'Invitation to Repair':{ category:'RESOURCE', icon:'brain', desc:'A clear invitation when repair is genuinely possible' },
+  'Cue Card':         { category:'EMERGENCY', icon:'shield', desc:'The 4-line version for moments that overwhelm' },
+  'Support Resources':   { category:'EMERGENCY', icon:'shield', desc:'Where to turn right now' },
 };
 function kindMetaFor(kind){
   for (const k in KIND_META) { if (kind.indexOf(k) === 0 || kind === k) return KIND_META[k]; }
-  return { category:'RESOURCE', icon:'book', readtime:5, desc:'' };
+  return { category:'RESOURCE', icon:'book', desc:'' };
 }
 const READER_ICONS = {
   book:  '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5a1 1 0 011-1h5v13H4a1 1 0 01-1-1v-11zM17 4.5a1 1 0 00-1-1h-5v13h5a1 1 0 001-1v-11z"/></svg>',
@@ -5117,9 +5117,11 @@ function selectReaderTab(protocolKey, key){
      <span> and the divider that separated it from Save — an emptied span
      between two dividers renders as a doubled separator. The authored
      resources carry no durations of any kind and the interface must not
-     invent one. KIND_META[].readtime is now unconsumed; it was left in place
-     deliberately, see the register entry. This note does not quote the removed
-     string, per Rule 21. */
+     invent one. The duration field that fed it was removed from every
+     KIND_META entry, from the fallback and from the runtime-added entry by
+     SR-186 — a duration sitting unread in the record is what a later run takes
+     as permission to render one. Do not re-add it. This note does not quote
+     the removed string, per Rule 21. */
 
   // Bottom nav
   const prevBtn = document.getElementById('reader-prev-btn');
@@ -9495,7 +9497,7 @@ window.addEventListener('load', function(){
     });
 
     if(typeof KIND_META!=='undefined'){
-      KIND_META['The Decision']={category:'INTEGRATE',icon:'identity',readtime:7,desc:'Choose who handles this pattern next'};
+      KIND_META['The Decision']={category:'INTEGRATE',icon:'identity',desc:'Choose who handles this pattern next'};
     }
     if(typeof RM_KIND_STYLE!=='undefined'){
       RM_KIND_STYLE['The Decision']={color:'#D4A843',tag:'DECISION'};
