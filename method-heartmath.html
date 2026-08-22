@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — FRAMEWORK 02 · CARDIAC COHERENCE
+  Built on the Porges template. Shared layer in css/saferise-method.css.
+
+  Design system lifted verbatim from saferise-dashboard-v41.html: token block,
+  type stack, 74px icon rail, Midnight/Sunrise theme, --pad gutter.
+  Two alignment lines preserved: enclosures at 111 and text at 141 (measured
+  at 1440 = 74 rail + 13 shell margin + 24 shell pad + 30 --pad).
+
+  Integrated. The shared layer now lives in css/saferise-method.css; nothing
+  in this file styles itself. Image slots are marked NEEDS ART with exact
+  dimensions and their <img> tags stay commented until the asset exists — SR-059.
+
+  ⚠ SR-060 · DURATION-FREE COPY. This page states no session length, in any
+  form, anywhere — not in copy, not on a player. Lengths vary by protocol and by
+  track and are not known until the recording sprint is complete. This is an
+  accuracy rule, not a style preference. Do not add one.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first, ahead of every stylesheet.
+     Without it the browser paints its default white until the sheet that sets
+     the background has downloaded and parsed — a full-screen flash on every
+     navigation of a dark site.
+     This is not a new pattern: protocol.html and resource.html already carried
+     exactly this pair, and it is copied from them rather than reinvented, down
+     to `html,body` and the color-scheme hint. color-scheme:dark stops the UA
+     painting a white canvas and hands scrollbars and form controls the dark
+     rendering, which the background alone does not do.
+     Deliberately a literal, not var(--bg): the token is defined by the very
+     stylesheet this has to precede. Keep it equal to --bg for this page. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Cardiac coherence, HeartMath</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ═══ ICON RAIL — verbatim from the dashboard. /method is the active route.
+     SR-075 · library, journal, record and laboratory were removed from the
+     dashboard by SR-068 and SR-069; this copy kept linking to all four. ═══ -->
+<nav class="sr-dash-navrail" aria-label="Sections">
+  <span class="sr-dash-navrailmark">◈</span>
+  <button class="sr-dash-navrailbtn" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
+  <button class="sr-dash-navrailbtn on" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
+  <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
+  <div class="sr-dash-navrailfoot">
+    <button class="sr-dash-navrailbtn" data-route="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.2H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/></svg><span>Account &amp; plan</span></button>
+  </div>
+</nav>
+
+<main id="main" class="shell">
+
+<!-- ╔══ TEMPLATE REGION 0 · BACK BAR ═══════════════════════════════════════╗
+     Identical on all six pages. Register chip changes; nothing else does. -->
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="method.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Where the method comes from
+  </a>
+  <span class="sr-fw-reg sr-fw-reg--peer">Peer-reviewed · load-bearing</span>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<!-- ╔══ TEMPLATE REGION 1 · MASTHEAD ══════════════════════════════════════╗
+     Eyebrow → name → attribution → stance line. Symbol tile at 200×200.
+     No likenesses of living people anywhere in this system. -->
+<header class="sr-fw-mast">
+  <div class="sr-fw-masthead-copy">
+    <span class="eyebrow">Framework 02 of 06</span>
+    <h1>Cardiac<br>coherence</h1>
+    <p class="sr-fw-attrib">HeartMath Institute · research programme running since 1991 · the
+      breathing rate is well replicated; the wider interpretation built around it is not, and
+      this page separates the two.</p>
+
+    <!-- the stance sits directly under the copy it qualifies, at every width -->
+    <p class="sr-fw-stance">Breathing at roughly six breaths a minute produces a measurable,
+      repeatable change in heart rhythm. Step 02 is that finding and nothing more.</p>
+  </div>
+
+  <!-- NEEDS ART · 200×200 · abstract gold line motif, no likeness. -->
+  <div class="sr-fw-tile" aria-hidden="true">
+    <div class="sr-fw-tileart"><b>Needs art</b>200 × 200<br>gold symbol tile</div>
+  </div>
+</header>
+
+
+<!-- ╔══ TEMPLATE REGION 2 · WHAT IT SAYS ══════════════════════════════════╗
+     Plain language. No jargon that is not immediately unpacked. Headers state
+     a mechanism, never "About polyvagal theory". Eyebrow + h2, no third line. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">01</span>What the research says</span>
+    <h2>The heart does not beat like a metronome</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-measure">
+      <p>A healthy heart never beats at a fixed interval. The gap between beats lengthens and
+        shortens continuously, and the size of that variation is called
+        <span class="sr-fw-term" title="Beat-to-beat variation in heart rate, measured in milliseconds">heart-rate
+        variability</span>. More variation generally indicates a system that can adapt. Less
+        indicates one that is braced.</p>
+
+      <p>Breathing changes that pattern directly. You do not have to intend it and you cannot
+        argue your way into it. Inhale and the interval shortens; exhale and it lengthens. At
+        most breathing rates the resulting pattern is irregular. <strong>At roughly six breaths
+        a minute it becomes a smooth, repeating wave</strong> — heart rhythm and breath moving
+        together in a single oscillation. HeartMath calls this state coherence.</p>
+
+      <p>The rate is not arbitrary. Six breaths a minute sits near the frequency at which the
+        body's own blood-pressure regulation already oscillates, so breathing there
+        <strong>meets a rhythm the system is running anyway</strong> rather than imposing one.
+        This is the least contested finding on this page, and it is the one the method uses.</p>
+
+      <p>What follows from it is contested. HeartMath's wider programme attaches broader claims
+        to the coherent state — about emotion, cognition and interpersonal effects. SafeRise
+        <strong>does not carry those claims</strong>. Section 04 says exactly where the line is.</p>
+    </div>
+
+      <!-- the wave, drawn. one breath cycle, ten seconds, turning at four. -->
+      <svg class="sr-fw-diagram" viewBox="0 0 620 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="wv" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#D4A843" stop-opacity=".18"/>
+            <stop offset="50%" stop-color="#D4A843" stop-opacity=".85"/>
+            <stop offset="100%" stop-color="#D4A843" stop-opacity=".18"/>
+          </linearGradient>
+        </defs>
+        <path d="M20 105 H600" stroke="#6A6874" stroke-width="1" opacity=".3" stroke-dasharray="3 5"/>
+        <path d="M20 105 C 78 105 78 42 136 42 C 208 42 208 168 280 168 C 338 168 338 42 396 42 C 468 42 468 168 540 168 C 576 168 588 136 600 105"
+              fill="none" stroke="url(#wv)" stroke-width="2.4"/>
+        <path d="M136 42 v-16 M280 168 v16 M396 42 v-16 M540 168 v16" stroke="#6A6874" stroke-width="1" opacity=".4"/>
+        <text x="136" y="18" fill="#9C9AA4" font-size="10" font-family="DM Sans" text-anchor="middle" letter-spacing="1.4">IN · 4</text>
+        <text x="280" y="198" fill="#9C9AA4" font-size="10" font-family="DM Sans" text-anchor="middle" letter-spacing="1.4">OUT · 6</text>
+        <text x="396" y="18" fill="#9C9AA4" font-size="10" font-family="DM Sans" text-anchor="middle" letter-spacing="1.4">IN · 4</text>
+        <text x="540" y="198" fill="#9C9AA4" font-size="10" font-family="DM Sans" text-anchor="middle" letter-spacing="1.4">OUT · 6</text>
+      </svg>
+
+      <div class="sr-fw-statelist">
+        <div class="sr-fw-state" style="--s:#D4A843">
+          <em>The finding</em><b>Roughly six breaths a minute</b>
+          <span>Ten seconds a cycle. At this rate heart rhythm and breath lock into a single
+            smooth wave. Replicated widely across independent laboratories.</span>
+        </div>
+        <div class="sr-fw-state" style="--s:#4E9AA6">
+          <em>The reason</em><b>It meets an existing rhythm</b>
+          <span>The body's blood-pressure regulation already oscillates near this frequency.
+            You are joining something, not imposing something.</span>
+        </div>
+        <div class="sr-fw-state" style="--s:#6A6874">
+          <em>The limit</em><b>A measurement, not a meaning</b>
+          <span>What the coherent state signifies about emotion or cognition is a separate and
+            much weaker set of claims. SafeRise does not carry them.</span>
+        </div>
+        <p class="note">The count is uneven on purpose. The exhale is where the interval between
+          beats lengthens, so six out matters more than four in — and if the numbers are
+          uncomfortable, keep the ratio and shorten both.</p>
+      </div>
+    </div>
+
+    <!-- ART SLOT B · SECTION BAND · NEEDS ART · 1340×360 (2680×720 @2x)
+         Abstract and tonal. No faces, no figures in focus, no clinical imagery.
+         For HeartMath: a slow single wave, even and repeating. No hearts, no medical imagery.
+         One per framework page — six in total. -->
+    <figure class="sr-fw-band">
+      <!-- <img class="sr-fw-bandart" src="assets/method/heartmath-band.jpg" alt=""> -->
+      <div class="sr-fw-bandscrim"></div>
+      <span class="sr-fw-needsart"><b>Needs art</b>1340 × 360 · slot B</span>
+      <figcaption class="sr-fw-bandin">
+        <p>Nothing here is a flaw in you. Every one of these states kept somebody alive,
+          and yours is running the same programme.</p>
+        <span>Why the method does not begin by fixing anything</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 3 · WHAT SAFERISE TAKES ═══════════════════════════╗
+     Mapped to the four steps. Steps this framework does NOT support are shown
+     dimmed and labelled — a framework that appears to justify everything
+     justifies nothing. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">02</span>What SafeRise takes</span>
+    <h2>One rate, and the reason it is that rate</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-measure">
+      <p>Porges explains why breath reaches the system at all. HeartMath supplies the
+        specific number. Step 02 asks for <strong>four counts in and six counts out</strong>,
+        which lands close to six breaths a minute — and the longer exhale is doing the work,
+        because that is the half of the cycle where the interval lengthens.</p>
+    </div>
+
+    <div class="sr-fw-steps">
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 01</span>
+        <h3>Identify &amp; Name</h3>
+        <p>Not this framework. Naming a state comes from polyvagal theory and from
+          Compassionate Inquiry. Cardiac coherence has nothing to say about what you call
+          what is happening.</p>
+      </div>
+      <div class="sr-fw-step">
+        <span class="sr-fw-stepno">Step 02</span>
+        <h3>Redirect to Heart</h3>
+        <p>Load-bearing, and the only step this framework carries. Four in, six out. The
+          attention on the chest is a focusing device, not a claim about the organ — what
+          changes is the breathing rate, and the rhythm follows it.</p>
+      </div>
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 03</span>
+        <h3>Accept &amp; Release</h3>
+        <p>Not this framework. Coherence is a physiological state, not a stance toward
+          your own experience. Step 03 comes from Compassionate Inquiry and from
+          non-resistance.</p>
+      </div>
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 04</span>
+        <h3>Gratitude &amp; Expansion</h3>
+        <p>Not this framework. Rehearsing a future self comes from the distance and
+          rehearsal literature. Nothing here licenses a claim about what a coherent state
+          makes possible afterwards.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 4 · WHERE IT LOADS ════════════════════════════════╗
+     Concrete and named. No "informs our approach to wellbeing". -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">03</span>Where it loads in the product</span>
+    <h2>Seven protocols, one instruction</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-loads">
+      <a class="sr-fw-card" href="protocol.html"><div class="sr-fw-cardart"><img src="assets/covers/01.jpg" alt=""><span class="sr-fw-cardslug"><b>Art</b> cover 01 · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Every protocol · Step 02</span>
+        <h3>Four in, six out</h3>
+        <p>The same instruction in all thirty protocols, in the same place. It is the one
+          number on this platform taken directly from a replicated finding.</p>
+        <span class="sr-fw-cardgo">Open a protocol <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="dashboard.html"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Your record</span>
+        <h3>No coherence score, deliberately</h3>
+        <p>HeartMath sells sensors that score you on this. SafeRise does not measure it,
+          display it or grade it. A number to chase would work against the thing itself.</p>
+        <span class="sr-fw-cardgo">See your record <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="resource.html"><div class="sr-fw-cardart"><!-- <img src="assets/method/res-somatic.jpg" alt=""> --><span class="sr-fw-cardslug"><b>Art</b> resource art · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Resource · guided session</span>
+        <h3>The music beds</h3>
+        <p>Ninety beats a minute in three-four, phrased in five bars — one ten-second breath
+          cycle per phrase, turning at four seconds. The music carries the rate so you do not
+          have to count.</p>
+        <span class="sr-fw-cardgo">Read the resource <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="protocol.html"><div class="sr-fw-cardart"><img src="assets/covers/01.jpg" alt=""><span class="sr-fw-cardslug"><b>Art</b> cover 01 · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Track 01 · Protocol</span>
+        <h3>The Anxiety Reset Protocol</h3>
+        <p>The free protocol, and the one where the breathing does most of the work. Seven
+          protocols across the three tracks rest on this framework; this is where to meet it.</p>
+        <span class="sr-fw-cardgo">Open the protocol <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="resource.html"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Resource · scope boundary</span>
+        <h3>Safe Practice</h3>
+        <p>Slow breathing is not for everyone in every state. Where it can make things worse
+          — and what to do instead — is stated there rather than buried here.</p>
+        <span class="sr-fw-cardgo">Read the advisory <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <div class="sr-fw-card"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Sessions &amp; workshops</span>
+        <h3>Breathing together</h3>
+        <p>In a room everyone lands on the rate at once, and the pace becomes audible rather
+          than counted. Nothing is measured there either.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 5 · WHAT WE REST ON ═══════════════════════╝
+     THE PATTERN — every framework page uses this shape, no exceptions.
+
+     Four to six findings, each stated positively, each naming the thing in
+     the product it produced. The list is the argument: it shows the reader
+     that the source is load-bearing rather than decorative.
+
+     NO COUNTERPART LIST. There is no "what we do not claim" column, and no
+     bulleted negatives anywhere on the page. The limit is carried by one
+     closing paragraph that defines the SCOPE of the debate and then states
+     that the findings above survive it. Never more than one paragraph.
+
+     REGISTER VARIANTS — the shape holds, the label changes:
+       peer-reviewed      "Five findings the method is actually built on"
+       clinical practice  "Five things decades in the room taught this method"
+       interpretive       "Five things this way of seeing gives the method"
+     Interpretive pages have no findings to list. They list contributions,
+     and they say so in the label rather than in a disclaimer.
+
+     TONE — no apology, no guardrail voice. State what holds. The honesty is
+     in what is claimed, not in announcing restraint. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">04</span>What we rest on</span>
+    <h2>One claim, and where it stops</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-limit">
+      <span class="eyebrow">What holds</span>
+      <h3>Three findings hold. The rest of the programme is not ours.</h3>
+      <div class="sr-fw-measure">
+        <p>This is the narrowest framework on the platform and the one where the gap between
+          the replicated finding and the surrounding programme is widest. SafeRise takes the
+          finding. <strong>It does not take the programme.</strong></p>
+      </div>
+
+      <ul class="sr-fw-rests">
+        <li>
+          <b>Slow breathing changes heart rhythm, reliably</b>
+          <span>Around six breaths a minute the beat-to-beat pattern becomes a smooth
+            oscillation. This replicates across independent laboratories. Step 02 is built
+            on it.</span>
+        </li>
+        <li>
+          <b>The rate meets a rhythm the body already runs</b>
+          <span>Six breaths a minute sits near the frequency of the body's own blood-pressure
+            regulation, which is why that number and not another. Four in and six out is the
+            practical form of it.</span>
+        </li>
+        <li>
+          <b>The exhale is the half that does the work</b>
+          <span>Lengthening the out-breath is what extends the interval between beats. This is
+            why every protocol asks for an uneven count rather than an even one.</span>
+        </li>
+      </ul>
+
+      <div class="sr-fw-measure" style="margin-top:26px">
+        <p>Beyond those three, HeartMath's programme makes considerably larger claims — about
+          emotional states, cognitive performance, and effects between people.
+          <strong>SafeRise makes none of them.</strong> Step 02 asks you to breathe at a rate
+          and says nothing about what the rhythm signifies. That is not a comment on their work;
+          it is a statement of where this platform's claim ends.</p>
+      </div>
+    </div>
+
+    <!-- STANDING DISCLAIMER · identical on all six framework pages -->
+    <div class="sr-fw-disc">
+      <span class="sr-fw-discmark">◈</span>
+      <div>
+        <p>SafeRise has not been through a clinical trial. It is a structured practice built on
+          established frameworks, not a treatment with proven outcomes of its own.
+          <b>Dr Keny F. Bastien MD</b> is engaged as clinical collaborator on scope and safety.</p>
+        <p class="note">If you are in crisis, or under the care of a clinician, the Attention
+          Advisory is the page to read before this one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 6 · SOURCES ═══════════════════════════════════════╗
+     Includes the critical literature. A reading list that only cites the
+     advocate is a reading list nobody trusts. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">05</span>Read it yourself</span>
+    <h2>Read the arguments yourself</h2>
+  </div>
+  <div class="sr-fw-body">
+    <ul class="sr-fw-src">
+      <li>
+        <span class="sr-fw-srcname">Lehrer, P. M. &amp; Gevirtz, R. (2014). "Heart rate variability
+          biofeedback: how and why does it work?" <em>Frontiers in Psychology</em>, 5, 756.
+          <span>The clearest account of the resonance frequency and why roughly six breaths a minute
+            produces the effect. The best starting point. doi:10.3389/fpsyg.2014.00756</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Vaschillo, E., Lehrer, P., Rishe, N. &amp; Konstantinov, M. (2002).
+          "Heart rate variability biofeedback as a method for assessing baroreflex function."
+          <em>Applied Psychophysiology and Biofeedback</em>, 27(1), 1–27.
+          <span>Where the resonance frequency was characterised. The origin of the number.
+            doi:10.1023/a:1014587304314</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">McCraty, R. &amp; Zayas, M. A. (2014). "Cardiac coherence,
+          self-regulation, autonomic stability, and psychosocial well-being."
+          <em>Frontiers in Psychology</em>, 5, 1090.
+          <span>HeartMath's own statement of the wider programme, so you can see exactly which
+            part Step 02 uses. doi:10.3389/fpsyg.2014.01090</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Lehrer, P. M. et al. (2020). "Heart rate variability biofeedback
+          improves emotional and physical health and performance: a systematic review and meta
+          analysis." <em>Applied Psychophysiology and Biofeedback</em>, 45(3), 109–129.
+          <span>What the pooled evidence supports, and how large the effects actually are.
+            doi:10.1007/s10484-020-09466-z</span></span>
+        <span class="sr-fw-srctag">Review</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Grossman, P. &amp; Taylor, E. W. (2007). "Toward understanding
+          respiratory sinus arrhythmia." <em>Biological Psychology</em>, 74(2), 263–285.
+          <span>On why a heart-rate measure should not be read as a direct index of one pathway.
+            The reason this page claims a breathing rate and nothing further.
+            doi:10.1016/j.biopsycho.2005.11.014</span></span>
+        <span class="sr-fw-srctag">Where the claim stops</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Laborde, S., Mosley, E. &amp; Thayer, J. F. (2017). "Heart rate
+          variability and cardiac vagal tone in psychophysiological research."
+          <em>Frontiers in Psychology</em>, 8, 213.
+          <span>Methodological guidance, and on how easily these measures are over-interpreted.
+            doi:10.3389/fpsyg.2017.00213</span></span>
+        <span class="sr-fw-srctag">Method</span>
+      </li>
+    </ul>
+    <p class="note" style="padding:16px var(--pad) 0">Citations verified against the published record,
+      August 2026. If you find an error here, that is a defect and we want to hear about it.</p>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 7 · PAGER ═════════════════════════════════════════╗ -->
+<div class="sr-fw-body">
+  <nav class="sr-fw-pager" aria-label="Other frameworks">
+    <a href="method.html">
+      <span class="sr-fw-pagertile" aria-hidden="true">All<br>six</span>
+      <div>
+      <span class="sr-fw-pagerkick">Back to</span>
+      <h3>All six frameworks</h3>
+      <p class="note">What the method rests on, and where each source stops.</p>
+      </div>
+    </a>
+  </nav>
+
+  <footer class="sr-fw-foot">
+    <p>SafeRise Protocol is an independent practice created by Andre Robley.
+      Contact <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferiseprotocol.com</a>. Clinical collaborator Dr Keny F. Bastien MD. This page describes the reasoning behind a structured practice.
+      It is not medical advice and does not diagnose, treat or replace care from a clinician.</p>
+  </footer>
+</div>
+
+</main>
+
+<script>
+(function(){
+  // ── reading mode, shared with the dashboard and reader (body.rd-soft) ──
+  var THEME_KEY = 'sr-theme';
+  function setTheme(mode){
+    document.body.classList.toggle('rd-soft', mode === 'sunrise');
+    document.querySelectorAll('[data-theme]').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-theme') === mode);
+    });
+    try{ sessionStorage.setItem(THEME_KEY, mode); }catch(e){}
+  }
+  document.querySelectorAll('[data-theme]').forEach(function(b){
+    b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme')); });
+  });
+  var saved = 'midnight';
+  try{ saved = sessionStorage.getItem(THEME_KEY) || 'midnight'; }catch(e){}
+  setTheme(saved);
+
+  // ── rail routes ──
+  // The dashboard resolves every rail route through openRoute(), which opens a
+  // route modal that only exists in dashboard.html. These pages carry no such
+  // modal, so the rail leaves for the dashboard and lets it answer. /method is
+  // the page you are already on.
+  //
+  // SR-104 · leaving is not arriving. 'coaching' and 'account' matched nothing
+  // in PAGES and fell through to a bare `dashboard.html`, so the member landed
+  // on the dashboard with neither the Sessions view nor Account open — the
+  // control named a destination it did not reach. The route now travels in the
+  // hash and dashboard.html runs openRoute() with it on arrival.
+  var PAGES = { method: 'method.html', dashboard: 'dashboard.html' };
+  document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var key = b.getAttribute('data-route');
+      if(key === 'method') return;                 // already here
+      if(PAGES[key]){ window.location.href = PAGES[key]; return; }
+      window.location.href = 'dashboard.html#route=' + encodeURIComponent(key);
+    });
+  });
+})();
+</script>
+</body>
+</html>

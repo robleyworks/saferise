@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — FRAMEWORK 03 · COMPASSIONATE INQUIRY
+  Built on the Porges template. Shared layer in css/saferise-method.css.
+  Register is CLINICAL PRACTICE, not peer-reviewed. Section 04 states that plainly.
+
+  Design system lifted verbatim from saferise-dashboard-v41.html: token block,
+  type stack, 74px icon rail, Midnight/Sunrise theme, --pad gutter.
+  Two alignment lines preserved: enclosures at 111 and text at 141 (measured
+  at 1440 = 74 rail + 13 shell margin + 24 shell pad + 30 --pad).
+
+  Integrated. The shared layer now lives in css/saferise-method.css; nothing
+  in this file styles itself. Image slots are marked NEEDS ART with exact
+  dimensions and their <img> tags stay commented until the asset exists — SR-059.
+
+  ⚠ SR-060 · DURATION-FREE COPY. This page states no session length, in any
+  form, anywhere — not in copy, not on a player. Lengths vary by protocol and by
+  track and are not known until the recording sprint is complete. This is an
+  accuracy rule, not a style preference. Do not add one.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first, ahead of every stylesheet.
+     Without it the browser paints its default white until the sheet that sets
+     the background has downloaded and parsed — a full-screen flash on every
+     navigation of a dark site.
+     This is not a new pattern: protocol.html and resource.html already carried
+     exactly this pair, and it is copied from them rather than reinvented, down
+     to `html,body` and the color-scheme hint. color-scheme:dark stops the UA
+     painting a white canvas and hands scrollbars and form controls the dark
+     rendering, which the background alone does not do.
+     Deliberately a literal, not var(--bg): the token is defined by the very
+     stylesheet this has to precede. Keep it equal to --bg for this page. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Compassionate Inquiry, Gabor Maté</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ═══ ICON RAIL — verbatim from the dashboard. /method is the active route.
+     SR-075 · library, journal, record and laboratory were removed from the
+     dashboard by SR-068 and SR-069; this copy kept linking to all four. ═══ -->
+<nav class="sr-dash-navrail" aria-label="Sections">
+  <span class="sr-dash-navrailmark">◈</span>
+  <button class="sr-dash-navrailbtn" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
+  <button class="sr-dash-navrailbtn on" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
+  <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
+  <div class="sr-dash-navrailfoot">
+    <button class="sr-dash-navrailbtn" data-route="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.2H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/></svg><span>Account &amp; plan</span></button>
+  </div>
+</nav>
+
+<main id="main" class="shell">
+
+<!-- ╔══ TEMPLATE REGION 0 · BACK BAR ═══════════════════════════════════════╗
+     Identical on all six pages. Register chip changes; nothing else does. -->
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="method.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Where the method comes from
+  </a>
+  <span class="sr-fw-reg sr-fw-reg--peer">Peer-reviewed · load-bearing</span>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<!-- ╔══ TEMPLATE REGION 1 · MASTHEAD ══════════════════════════════════════╗
+     Eyebrow → name → attribution → stance line. Symbol tile at 200×200.
+     No likenesses of living people anywhere in this system. -->
+<header class="sr-fw-mast">
+  <div class="sr-fw-masthead-copy">
+    <span class="eyebrow">Framework 03 of 06</span>
+    <h1>Compassionate<br>Inquiry</h1>
+    <p class="sr-fw-attrib">Gabor Maté · developed across four decades of clinical work and
+      formalised as a training method from 2019 · a way of asking, taught to practitioners and
+      widely used. Not a theory with an experimental literature behind it.</p>
+
+    <!-- the stance sits directly under the copy it qualifies, at every width -->
+    <p class="sr-fw-stance">The question is not what is wrong with you. It is what happened, and
+      what the response was for. Step 03 asks in that register or it does not work.</p>
+  </div>
+
+  <!-- NEEDS ART · 200×200 · abstract gold line motif, no likeness. -->
+  <div class="sr-fw-tile" aria-hidden="true">
+    <div class="sr-fw-tileart"><b>Needs art</b>200 × 200<br>gold symbol tile</div>
+  </div>
+</header>
+
+
+<!-- ╔══ TEMPLATE REGION 2 · WHAT IT SAYS ══════════════════════════════════╗
+     Plain language. No jargon that is not immediately unpacked. Headers state
+     a mechanism, never "About polyvagal theory". Eyebrow + h2, no third line. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">01</span>What the method says</span>
+    <h2>The response made sense when it started</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-measure">
+      <p>Compassionate Inquiry is not a theory about the nervous system. It is
+        <strong>a way of asking a question</strong>, and the claim underneath it is that the
+        register you ask in decides what you are able to find.</p>
+
+      <p>Maté's central move is to treat a symptom as an <strong>adaptation rather than a
+        defect</strong>. The numbing, the vigilance, the compulsive achieving, the inability
+        to be still — each of these did something useful once, usually early, usually in a
+        situation the person did not choose. Asking why someone is like this produces a
+        verdict. Asking what the behaviour was <em>for</em> produces information.</p>
+
+      <p>The second move is about self-address. Most people investigate themselves in a voice
+        they would never use on anyone else. Maté's position is that
+        <strong>this voice is not neutral</strong> — that a hostile interrogation reliably
+        produces defensiveness or shutdown, in yourself exactly as it would in someone else,
+        and that what is actually there stays hidden while you are still arguing with it.</p>
+
+      <p>The third move is the boundary. Compassion here is not agreement and not approval.
+        You can see clearly why something started <strong>and still decide it is finished</strong>.
+        Understanding the origin is what makes putting it down possible; it is not a licence
+        to keep it.</p>
+    </div>
+
+      <div class="sr-fw-statelist">
+        <div class="sr-fw-state" style="--s:#B0413E">
+          <em>The verdict</em><b>What is wrong with me?</b>
+          <span>Produces a judgement and nothing else. It assumes a defect, so the only
+            available answers are about your character. Nothing here can be worked with.</span>
+        </div>
+        <div class="sr-fw-state" style="--s:#D4A843">
+          <em>The inquiry</em><b>What was this for?</b>
+          <span>Produces information. It assumes a function, so the answers are about a
+            situation and a response — both of which are specific, and one of which has
+            changed.</span>
+        </div>
+        <div class="sr-fw-state" style="--s:#4E9AA6">
+          <em>The boundary</em><b>And is it still needed?</b>
+          <span>Understanding is not endorsement. Seeing why something began is what makes
+            it possible to decide it is over.</span>
+        </div>
+        <p class="note">The order matters. The third question is unanswerable while you are
+          still in the first — you cannot retire a defence you have not understood, and you
+          cannot understand one you are busy prosecuting.</p>
+      </div>
+    </div>
+
+
+    <!-- ART SLOT B · SECTION BAND · NEEDS ART · 1340×360 (2680×720 @2x)
+         Abstract and tonal. No faces, no figures in focus, no clinical imagery.
+         For Mate: something that reads as an opening rather than a search — no faces, no consulting rooms.
+         One per framework page — six in total. -->
+    <figure class="sr-fw-band">
+      <!-- <img class="sr-fw-bandart" src="assets/method/mate-band.jpg" alt=""> -->
+      <div class="sr-fw-bandscrim"></div>
+      <span class="sr-fw-needsart"><b>Needs art</b>1340 × 360 · slot B</span>
+      <figcaption class="sr-fw-bandin">
+        <p>Nothing here is a flaw in you. Every one of these states kept somebody alive,
+          and yours is running the same programme.</p>
+        <span>Why the method does not begin by fixing anything</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 3 · WHAT SAFERISE TAKES ═══════════════════════════╗
+     Mapped to the four steps. Steps this framework does NOT support are shown
+     dimmed and labelled — a framework that appears to justify everything
+     justifies nothing. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">02</span>What SafeRise takes</span>
+    <h2>Acceptance is a decision, not a feeling</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-measure">
+      <p>Step 03 is the one people misread. It does not ask you to feel accepting, or to be
+        at peace with anything. It asks you to <strong>stop spending force on the fact that
+        this is happening</strong>, because the resistance is a second problem sitting on top
+        of the first. That is a decision you can make while still disliking the thing entirely.</p>
+    </div>
+
+    <div class="sr-fw-steps">
+      <div class="sr-fw-step">
+        <span class="sr-fw-stepno">Step 01</span>
+        <h3>Identify &amp; Name</h3>
+        <p>Shared with polyvagal theory. Porges supplies the vocabulary of states; this
+          framework supplies the <em>register</em> — naming without a verdict attached. Both
+          are needed or the step becomes self-assessment.</p>
+      </div>
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 02</span>
+        <h3>Redirect to Heart</h3>
+        <p>Not this framework. Breathing rate is physiology and comes from the cardiac
+          coherence work. Nothing here says anything about how to breathe.</p>
+      </div>
+      <div class="sr-fw-step">
+        <span class="sr-fw-stepno">Step 03</span>
+        <h3>Accept &amp; Release</h3>
+        <p>Load-bearing, and the whole reason this framework is on the platform. Ask what the
+          response was for, in a register that does not prosecute — then decide separately
+          whether it is still needed. Shared at the edge with non-resistance.</p>
+      </div>
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 04</span>
+        <h3>Gratitude &amp; Expansion</h3>
+        <p>Not this framework. What comes after release is a separate practice. This one
+          ends where the understanding lands; it makes no claim about what you build next.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 4 · WHERE IT LOADS ════════════════════════════════╗
+     Concrete and named. No "informs our approach to wellbeing". -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">03</span>Where it loads in the product</span>
+    <h2>Fourteen protocols ask in this register</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-loads">
+      <a class="sr-fw-card" href="protocol.html"><div class="sr-fw-cardart"><img src="assets/covers/01.jpg" alt=""><span class="sr-fw-cardslug"><b>Art</b> cover 01 · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Every protocol · Step 03</span>
+        <h3>What was this for?</h3>
+        <p>The question at the centre of the third step, in all thirty protocols. The wording
+          is deliberate and it is never "why do I do this".</p>
+        <span class="sr-fw-cardgo">Open a protocol <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="dashboard.html"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Your record</span>
+        <h3>Why nothing here is graded</h3>
+        <p>No streaks, no scores, no targets anywhere on the platform. A practice that ranks
+          you reintroduces the exact voice this framework exists to remove.</p>
+        <span class="sr-fw-cardgo">See your record <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="resource.html"><div class="sr-fw-cardart"><!-- <img src="assets/method/res-somatic.jpg" alt=""> --><span class="sr-fw-cardslug"><b>Art</b> resource art · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Resource · Track 01</span>
+        <h3>The Shame Dissolution Protocol</h3>
+        <p>The clearest case. Shame answers a hostile question with more shame; the protocol
+          works by changing the question rather than by arguing with the answer.</p>
+        <span class="sr-fw-cardgo">Read the resource <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="protocol.html"><div class="sr-fw-cardart"><img src="assets/covers/05.jpg" alt=""><span class="sr-fw-cardslug"><b>Art</b> cover 05 · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Track 02 · Protocol</span>
+        <h3>The Abandonment Wound Protocol</h3>
+        <p>An early adaptation still running in present relationships. Fourteen protocols rest
+          on this framework — more than any other except polyvagal theory.</p>
+        <span class="sr-fw-cardgo">Open the protocol <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="resource.html"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Resource · scope boundary</span>
+        <h3>Safe Practice</h3>
+        <p>Inquiry into early material can open more than a self-guided session can hold.
+          Where that line is, and what to do instead, is stated there.</p>
+        <span class="sr-fw-cardgo">Read the advisory <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <div class="sr-fw-card"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Resource · conditional</span>
+        <h3>Invitation to Repair</h3>
+        <p>Where a pattern involves someone else, the resource is written in the same
+          register — no prosecution of them either, which is what makes it usable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 5 · WHAT WE REST ON ═══════════════════════╝
+     THE PATTERN — every framework page uses this shape, no exceptions.
+
+     Four to six findings, each stated positively, each naming the thing in
+     the product it produced. The list is the argument: it shows the reader
+     that the source is load-bearing rather than decorative.
+
+     NO COUNTERPART LIST. There is no "what we do not claim" column, and no
+     bulleted negatives anywhere on the page. The limit is carried by one
+     closing paragraph that defines the SCOPE of the debate and then states
+     that the findings above survive it. Never more than one paragraph.
+
+     REGISTER VARIANTS — the shape holds, the label changes:
+       peer-reviewed      "Five findings the method is actually built on"
+       clinical practice  "Five things decades in the room taught this method"
+       interpretive       "Five things this way of seeing gives the method"
+     Interpretive pages have no findings to list. They list contributions,
+     and they say so in the label rather than in a disclaimer.
+
+     TONE — no apology, no guardrail voice. State what holds. The honesty is
+     in what is claimed, not in announcing restraint. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">04</span>What we rest on</span>
+    <h2>A practice, not a finding</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-limit">
+      <span class="eyebrow">What this is</span>
+      <h3>Three things this framework gives the method — and one it does not.</h3>
+      <div class="sr-fw-measure">
+        <p>This page sits in a different band from the two before it. Polyvagal theory and
+          cardiac coherence are research programmes with experimental literatures, contested
+          or otherwise. <strong>Compassionate Inquiry is a clinical practice</strong> — a
+          method of asking, taught to practitioners, refined by use rather than by trial. It
+          has no controlled evidence base of its own, and this page does not pretend
+          otherwise.</p>
+      </div>
+
+      <ul class="sr-fw-rests">
+        <li>
+          <b>A symptom is treated as an adaptation</b>
+          <span>The response did something once. That reading is what makes Step 03 possible
+            at all, because you cannot release something you are still trying to convict.</span>
+        </li>
+        <li>
+          <b>The register of the question decides the answer</b>
+          <span>"What is wrong with me" and "what was this for" reach different material. Every
+            prompt on this platform is written in the second register, and that is a direct
+            inheritance.</span>
+        </li>
+        <li>
+          <b>Understanding is not endorsement</b>
+          <span>Seeing why a pattern began is separable from deciding to keep it. This is the
+            boundary that stops acceptance collapsing into resignation.</span>
+        </li>
+        <li>
+          <b>What it does not give us: a claim about outcomes</b>
+          <span>Nothing here licenses a statement about what this practice will do for you, how
+            long it takes, or what it treats. Where the platform makes no promises, this is
+            partly why.</span>
+        </li>
+      </ul>
+
+      <div class="sr-fw-measure" style="margin-top:26px">
+        <p>One boundary worth stating plainly. Maté's wider work reaches into questions of
+          cause — what early experience does to later health. <strong>SafeRise makes no
+          aetiological claim of any kind.</strong> The platform never tells you what caused
+          anything, because that is not something a protocol can know and not something it
+          needs to know in order to be useful.</p>
+        <p>The second is about scope. Compassionate Inquiry as Maté teaches it happens
+          <em>with a practitioner in the room</em>, who can see what is surfacing and slow it
+          down. A self-guided protocol has no such person. What SafeRise takes is the register
+          and the shape of the question — not the depth of the clinical process, which is why
+          Safe Practice exists and why the advisory sits on the protocols that reach earliest.</p>
+      </div>
+    </div>
+
+    <!-- STANDING DISCLAIMER · identical on all six framework pages -->
+    <div class="sr-fw-disc">
+      <span class="sr-fw-discmark">◈</span>
+      <div>
+        <p>SafeRise has not been through a clinical trial. It is a structured practice built on
+          established frameworks, not a treatment with proven outcomes of its own.
+          <b>Dr Keny F. Bastien MD</b> is engaged as clinical collaborator on scope and safety.</p>
+        <p class="note">If you are in crisis, or under the care of a clinician, the Attention
+          Advisory is the page to read before this one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 6 · SOURCES ═══════════════════════════════════════╗
+     Includes the critical literature. A reading list that only cites the
+     advocate is a reading list nobody trusts. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">05</span>Read it yourself</span>
+    <h2>Read the arguments yourself</h2>
+  </div>
+  <div class="sr-fw-body">
+    <ul class="sr-fw-src">
+      <li>
+        <span class="sr-fw-srcname">Maté, G. (2003). <em>When the Body Says No: The Cost of Hidden
+          Stress</em>. Knopf Canada.
+          <span>Where the adaptation reading is set out at length.</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Maté, G. (2008). <em>In the Realm of Hungry Ghosts: Close
+          Encounters with Addiction</em>. Knopf Canada.
+          <span>The clearest statement of asking what a behaviour was for rather than what is
+            wrong with the person doing it.</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Maté, G. &amp; Maté, D. (2022). <em>The Myth of Normal</em>.
+          Avery.
+          <span>The most recent and the most expansive statement of the whole position.</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Compassionate Inquiry (2019–). Professional training programme.
+          <span>The method as taught, including its scope and its supervision requirements. Useful
+            for seeing what a self-guided practice cannot include.</span></span>
+        <span class="sr-fw-srctag">Applied</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Felitti, V. J. et al. (1998). "Relationship of childhood abuse
+          and household dysfunction to many of the leading causes of death in adults."
+          <em>American Journal of Preventive Medicine</em>, 14(4), 245–258.
+          <span>The ACE study, which much of this work rests on. It reports associations between
+            early adversity and later health. doi:10.1016/s0749-3797(98)00017-8</span></span>
+        <span class="sr-fw-srctag">Evidence base</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Anda, R. F., Porter, L. E. &amp; Brown, D. W. (2020). "Inferred
+          Adverse Childhood Experience Scores: A Poor Basis for Population Screening."
+          <em>American Journal of Preventive Medicine</em>, 59(2), 293–295.
+          <span>The ACE study's own author on how far its findings reach. The clearest statement
+            of why this platform makes no claim about cause.
+            doi:10.1016/j.amepre.2020.01.009</span></span>
+        <span class="sr-fw-srctag">Where the claim stops</span>
+      </li>
+      
+    </ul>
+    <p class="note" style="padding:16px var(--pad) 0">Citations verified against the published record,
+      August 2026. If you find an error here, that is a defect and we want to hear about it.</p>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 7 · PAGER ═════════════════════════════════════════╗ -->
+<div class="sr-fw-body">
+  <nav class="sr-fw-pager" aria-label="Other frameworks">
+    <a href="method.html">
+      <span class="sr-fw-pagertile" aria-hidden="true">All<br>six</span>
+      <div>
+      <span class="sr-fw-pagerkick">Back to</span>
+      <h3>All six frameworks</h3>
+      <p class="note">What the method rests on, and where each source stops.</p>
+      </div>
+    </a>
+  </nav>
+
+  <footer class="sr-fw-foot">
+    <p>SafeRise Protocol is an independent practice created by Andre Robley.
+      Contact <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferiseprotocol.com</a>. Clinical collaborator Dr Keny F. Bastien MD. This page describes the reasoning behind a structured practice.
+      It is not medical advice and does not diagnose, treat or replace care from a clinician.</p>
+  </footer>
+</div>
+
+</main>
+
+<script>
+(function(){
+  // ── reading mode, shared with the dashboard and reader (body.rd-soft) ──
+  var THEME_KEY = 'sr-theme';
+  function setTheme(mode){
+    document.body.classList.toggle('rd-soft', mode === 'sunrise');
+    document.querySelectorAll('[data-theme]').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-theme') === mode);
+    });
+    try{ sessionStorage.setItem(THEME_KEY, mode); }catch(e){}
+  }
+  document.querySelectorAll('[data-theme]').forEach(function(b){
+    b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme')); });
+  });
+  var saved = 'midnight';
+  try{ saved = sessionStorage.getItem(THEME_KEY) || 'midnight'; }catch(e){}
+  setTheme(saved);
+
+  // ── rail routes ──
+  // The dashboard resolves every rail route through openRoute(), which opens a
+  // route modal that only exists in dashboard.html. These pages carry no such
+  // modal, so the rail leaves for the dashboard and lets it answer. /method is
+  // the page you are already on.
+  //
+  // SR-104 · leaving is not arriving. 'coaching' and 'account' matched nothing
+  // in PAGES and fell through to a bare `dashboard.html`, so the member landed
+  // on the dashboard with neither the Sessions view nor Account open — the
+  // control named a destination it did not reach. The route now travels in the
+  // hash and dashboard.html runs openRoute() with it on arrival.
+  var PAGES = { method: 'method.html', dashboard: 'dashboard.html' };
+  document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var key = b.getAttribute('data-route');
+      if(key === 'method') return;                 // already here
+      if(PAGES[key]){ window.location.href = PAGES[key]; return; }
+      window.location.href = 'dashboard.html#route=' + encodeURIComponent(key);
+    });
+  });
+})();
+</script>
+</body>
+</html>

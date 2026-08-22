@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — FRAMEWORK 06 · NON-RESISTANCE
+  Built on the Porges template. Shared layer in css/saferise-method.css.
+  INTERPRETIVE BAND. Region 04 retitled, as on Jung. Watts was an interpreter of
+  older traditions, not an originator; the attribution says so plainly.
+
+  Design system lifted verbatim from saferise-dashboard-v41.html: token block,
+  type stack, 74px icon rail, Midnight/Sunrise theme, --pad gutter.
+  Two alignment lines preserved: enclosures at 111 and text at 141 (measured
+  at 1440 = 74 rail + 13 shell margin + 24 shell pad + 30 --pad).
+
+  Integrated. The shared layer now lives in css/saferise-method.css; nothing
+  in this file styles itself. Image slots are marked NEEDS ART with exact
+  dimensions and their <img> tags stay commented until the asset exists — SR-059.
+
+  ⚠ SR-060 · DURATION-FREE COPY. This page states no session length, in any
+  form, anywhere — not in copy, not on a player. Lengths vary by protocol and by
+  track and are not known until the recording sprint is complete. This is an
+  accuracy rule, not a style preference. Do not add one.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first, ahead of every stylesheet.
+     Without it the browser paints its default white until the sheet that sets
+     the background has downloaded and parsed — a full-screen flash on every
+     navigation of a dark site.
+     This is not a new pattern: protocol.html and resource.html already carried
+     exactly this pair, and it is copied from them rather than reinvented, down
+     to `html,body` and the color-scheme hint. color-scheme:dark stops the UA
+     painting a white canvas and hands scrollbars and form controls the dark
+     rendering, which the background alone does not do.
+     Deliberately a literal, not var(--bg): the token is defined by the very
+     stylesheet this has to precede. Keep it equal to --bg for this page. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Non-resistance, Alan Watts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ═══ ICON RAIL — verbatim from the dashboard. /method is the active route.
+     SR-075 · library, journal, record and laboratory were removed from the
+     dashboard by SR-068 and SR-069; this copy kept linking to all four. ═══ -->
+<nav class="sr-dash-navrail" aria-label="Sections">
+  <span class="sr-dash-navrailmark">◈</span>
+  <button class="sr-dash-navrailbtn" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
+  <button class="sr-dash-navrailbtn on" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
+  <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
+  <div class="sr-dash-navrailfoot">
+    <button class="sr-dash-navrailbtn" data-route="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.2H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/></svg><span>Account &amp; plan</span></button>
+  </div>
+</nav>
+
+<main id="main" class="shell">
+
+<!-- ╔══ TEMPLATE REGION 0 · BACK BAR ═══════════════════════════════════════╗
+     Identical on all six pages. Register chip changes; nothing else does. -->
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="method.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Where the method comes from
+  </a>
+  <span class="sr-fw-reg sr-fw-reg--peer">Peer-reviewed · load-bearing</span>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<!-- ╔══ TEMPLATE REGION 1 · MASTHEAD ══════════════════════════════════════╗
+     Eyebrow → name → attribution → stance line. Symbol tile at 200×200.
+     No likenesses of living people anywhere in this system. -->
+<header class="sr-fw-mast">
+  <div class="sr-fw-masthead-copy">
+    <span class="eyebrow">Framework 06 of 06 · A way of thinking</span>
+    <h1>Non-<br>resistance</h1>
+    <p class="sr-fw-attrib">Alan Watts · lectures and books from the 1950s to 1973 · an
+      interpreter rather than an originator, putting Daoist and Zen ideas into English that a
+      Western reader could use. The ideas are far older than he is.</p>
+
+    <!-- the stance sits directly under the copy it qualifies, at every width -->
+    <p class="sr-fw-stance">Struggling against a state is what keeps it in the room. Step 03
+      asks you to stop paying for the fight, not to stop minding.</p>
+  </div>
+
+  <!-- NEEDS ART · 200×200 · abstract gold line motif, no likeness. -->
+  <div class="sr-fw-tile" aria-hidden="true">
+    <div class="sr-fw-tileart"><b>Needs art</b>200 × 200<br>gold symbol tile</div>
+  </div>
+</header>
+
+
+<!-- ╔══ TEMPLATE REGION 2 · WHAT IT SAYS ══════════════════════════════════╗
+     Plain language. No jargon that is not immediately unpacked. Headers state
+     a mechanism, never "About polyvagal theory". Eyebrow + h2, no third line. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">01</span>What the idea says</span>
+    <h2>The struggle is the second problem</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-measure">
+      <p>Watts's recurring point is that a great deal of suffering is
+        <strong>not the difficulty itself but the effort spent objecting to it</strong>. There
+        is the feeling, and then there is the fight with the feeling — and the second is
+        usually the larger expense and the one entirely within your gift.</p>
+
+      <p>His image for it is trying to stand still in moving water, or the
+        <span class="sr-fw-term" title="Watts's phrase for the self-defeating effort to force a state that only arrives when unforced">backwards
+        law</span>: the harder you pursue certain states, the more reliably you drive them off.
+        Insisting on sleep produces wakefulness. Demanding calm produces agitation about not
+        being calm. Some things <strong>only arrive when you stop reaching for them</strong>,
+        and effort is the wrong instrument.</p>
+
+      <p>He is careful about what this is not. Non-resistance is not passivity, not approval,
+        and not indifference. You can act, decisively, and still not be at war with the fact
+        that the situation exists. <strong>The distinction is between doing something about a
+        thing and refusing to admit it is happening</strong> — and only the second is what he
+        means by resistance.</p>
+
+      <p>None of this is a scientific claim and Watts made no pretence that it was. He was a
+        popular interpreter of Daoist and Buddhist material, and a contested one. What SafeRise
+        takes is <strong>one observation about effort</strong>, which a person can check against
+        their own experience in about a minute.</p>
+    </div>
+
+      <div class="sr-fw-statelist">
+        <div class="sr-fw-state" style="--s:#C97A5A">
+          <em>The first problem</em><b>The state itself</b>
+          <span>Whatever has arrived. Often not chosen, often not immediately changeable, and
+            frequently smaller than what gets built on top of it.</span>
+        </div>
+        <div class="sr-fw-state" style="--s:#B0413E">
+          <em>The second problem</em><b>The fight with it</b>
+          <span>Objecting, arguing, insisting it should not be here. This is where most of the
+            energy goes, and it is the half you are actually paying for.</span>
+        </div>
+        <div class="sr-fw-state" style="--s:#D4A843">
+          <em>What is left</em><b>The thing, without the fight</b>
+          <span>Still unwelcome. Considerably lighter, and now something you can act on rather
+            than something you are braced against.</span>
+        </div>
+        <p class="note">Dropping the second does not require liking the first. That is the whole
+          move, and it is why Step 03 says accept rather than approve.</p>
+      </div>
+    </div>
+
+
+    <!-- ART SLOT B · SECTION BAND · NEEDS ART · 1340×360 (2680×720 @2x)
+         Abstract and tonal. No faces, no figures in focus, no clinical imagery.
+         For Watts: moving water around a fixed form. No figures, no calligraphy, no Eastern iconography.
+         One per framework page — six in total. -->
+    <figure class="sr-fw-band">
+      <!-- <img class="sr-fw-bandart" src="assets/method/watts-band.jpg" alt=""> -->
+      <div class="sr-fw-bandscrim"></div>
+      <span class="sr-fw-needsart"><b>Needs art</b>1340 × 360 · slot B</span>
+      <figcaption class="sr-fw-bandin">
+        <p>Nothing here is a flaw in you. Every one of these states kept somebody alive,
+          and yours is running the same programme.</p>
+        <span>Why the method does not begin by fixing anything</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 3 · WHAT SAFERISE TAKES ═══════════════════════════╗
+     Mapped to the four steps. Steps this framework does NOT support are shown
+     dimmed and labelled — a framework that appears to justify everything
+     justifies nothing. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">02</span>What SafeRise takes</span>
+    <h2>Accept is not approve</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-measure">
+      <p>Step 03 carries the word <em>accept</em>, and this framework is why it survives every
+        review. The alternative words are worse: <em>allow</em> sounds permissive,
+        <em>surrender</em> sounds like defeat, <em>let go</em> sounds like a thing you can do on
+        request. <strong>Accept is the one that means stop spending force on the fact of it</strong>,
+        which is the actual instruction.</p>
+    </div>
+
+    <div class="sr-fw-steps">
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 01</span>
+        <h3>Identify &amp; Name</h3>
+        <p>Not this framework, though it sets up the conditions. Naming without arguing is
+          already a small non-resistance, but the step itself comes from polyvagal theory and
+          Compassionate Inquiry.</p>
+      </div>
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 02</span>
+        <h3>Redirect to Heart</h3>
+        <p>Not this framework — with one exception worth naming. The instruction to let the
+          breath be easy rather than forced is this idea applied to breathing. Chasing the
+          rate defeats it.</p>
+      </div>
+      <div class="sr-fw-step">
+        <span class="sr-fw-stepno">Step 03</span>
+        <h3>Accept &amp; Release</h3>
+        <p>Load-bearing, shared with Compassionate Inquiry. Maté supplies the register the
+          question is asked in; this supplies what you do with the answer — stop paying for
+          the fight, and act on what is left.</p>
+      </div>
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 04</span>
+        <h3>Gratitude &amp; Expansion</h3>
+        <p>Not this framework, and slightly in tension with it. Rehearsing forward is a form
+          of reaching, and this idea is sceptical of reaching. The tension is real and the
+          method holds both rather than resolving it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 4 · WHERE IT LOADS ════════════════════════════════╗
+     Concrete and named. No "informs our approach to wellbeing". -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">03</span>Where it loads in the product</span>
+    <h2>Seven protocols, and one word that survives review</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-loads">
+      <a class="sr-fw-card" href="protocol.html"><div class="sr-fw-cardart"><img src="assets/covers/01.jpg" alt=""><span class="sr-fw-cardslug"><b>Art</b> cover 01 · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Every protocol · Step 03</span>
+        <h3>Stop bracing against it</h3>
+        <p>The instruction at the centre of the third step, in all thirty protocols. Acceptance
+          as a decision, not a feeling you have to produce on demand.</p>
+        <span class="sr-fw-cardgo">Open a protocol <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="dashboard.html"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Your record</span>
+        <h3>No state you are supposed to reach</h3>
+        <p>The arc has no good end. Marking one would make calm a target, and a target is
+          exactly the reaching this idea says defeats itself.</p>
+        <span class="sr-fw-cardgo">See your record <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="resource.html"><div class="sr-fw-cardart"><!-- <img src="assets/method/res-somatic.jpg" alt=""> --><span class="sr-fw-cardslug"><b>Art</b> resource art · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Track 01 · Protocol</span>
+        <h3>The Powerlessness &amp; Despair Protocol</h3>
+        <p>Where the distinction matters most. Accepting a situation you cannot change is not
+          agreeing with it, and the protocol is built on holding that line.</p>
+        <span class="sr-fw-cardgo">Read the resource <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="protocol.html"><div class="sr-fw-cardart"><img src="assets/covers/10.jpg" alt=""><span class="sr-fw-cardslug"><b>Art</b> cover 10 · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Track 02 · Protocol</span>
+        <h3>The Resentment Release Protocol</h3>
+        <p>A score kept for years is sustained effort. Seven protocols across the three tracks
+          draw on this reading of what that effort costs.</p>
+        <span class="sr-fw-cardgo">Open the protocol <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="resource.html"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Resource · scope boundary</span>
+        <h3>Safe Practice</h3>
+        <p>Acceptance is the wrong instruction for a situation that needs action — harm,
+          danger, or anything requiring a person in the room. That boundary is stated there.</p>
+        <span class="sr-fw-cardgo">Read the advisory <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <div class="sr-fw-card"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Language rule</span>
+        <h3>Why the sessions are unhurried</h3>
+        <p>Nothing is timed, counted or paced against a target. A practice that pushed you
+          toward a result would be running against its own third step.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 5 · WHAT WE REST ON ═══════════════════════╝
+     THE PATTERN — every framework page uses this shape, no exceptions.
+
+     Four to six findings, each stated positively, each naming the thing in
+     the product it produced. The list is the argument: it shows the reader
+     that the source is load-bearing rather than decorative.
+
+     NO COUNTERPART LIST. There is no "what we do not claim" column, and no
+     bulleted negatives anywhere on the page. The limit is carried by one
+     closing paragraph that defines the SCOPE of the debate and then states
+     that the findings above survive it. Never more than one paragraph.
+
+     REGISTER VARIANTS — the shape holds, the label changes:
+       peer-reviewed      "Five findings the method is actually built on"
+       clinical practice  "Five things decades in the room taught this method"
+       interpretive       "Five things this way of seeing gives the method"
+     Interpretive pages have no findings to list. They list contributions,
+     and they say so in the label rather than in a disclaimer.
+
+     TONE — no apology, no guardrail voice. State what holds. The honesty is
+     in what is claimed, not in announcing restraint. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">04</span>What register this is</span>
+    <h2>One observation, and an interpreter</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-limit">
+      <span class="eyebrow">Where it sits</span>
+      <h3>Three things this gives the method — and what it is not.</h3>
+      <div class="sr-fw-measure">
+        <p>Interpretive band, like Jung. There is no experimental literature here and none is
+          implied. What there is instead is <strong>an observation you can test on yourself
+          immediately</strong> — which is a different kind of warrant, and worth less than
+          evidence, and still worth something.</p>
+      </div>
+
+      <ul class="sr-fw-rests">
+        <li>
+          <b>Resistance is a separable, and payable, cost</b>
+          <span>The state and the fight with the state are two things. Separating them is the
+            entire content of Step 03, and the part a person can actually act on.</span>
+        </li>
+        <li>
+          <b>Some states are defeated by reaching for them</b>
+          <span>Calm, sleep, ease. This is why nothing here is timed against a target and why
+            no protocol promises you will feel better by the end.</span>
+        </li>
+        <li>
+          <b>Acceptance and action are compatible</b>
+          <span>You can stop objecting to a fact and still change it. Holding that line is what
+            keeps the third step from reading as resignation.</span>
+        </li>
+        <li>
+          <b>What it is not: a claim about anything</b>
+          <span>No mechanism, no evidence base, no outcome. If the observation does not match
+            your experience, nothing on this platform requires you to accept it.</span>
+        </li>
+      </ul>
+
+      <div class="sr-fw-measure" style="margin-top:26px">
+        <p>Watts described himself as an entertainer and a populariser rather than a scholar or
+          a practitioner, and that is the right way to read him. His gift was phrasing — putting
+          something very old into English a Western reader could actually use.</p>
+        <p>The idea is not his, and the page says so because the credit belongs elsewhere.
+          Non-resistance runs through Daoist and Zen material by many centuries.
+          <strong>The attribution here is to the interpreter, not to the origin</strong>, and
+          the older sources are in the reading list because they are the deeper ones.</p>
+      </div>
+    </div>
+
+    <!-- STANDING DISCLAIMER · identical on all six framework pages -->
+    <div class="sr-fw-disc">
+      <span class="sr-fw-discmark">◈</span>
+      <div>
+        <p>SafeRise has not been through a clinical trial. It is a structured practice built on
+          established frameworks, not a treatment with proven outcomes of its own.
+          <b>Dr Keny F. Bastien MD</b> is engaged as clinical collaborator on scope and safety.</p>
+        <p class="note">If you are in crisis, or under the care of a clinician, the Attention
+          Advisory is the page to read before this one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 6 · SOURCES ═══════════════════════════════════════╗
+     Includes the critical literature. A reading list that only cites the
+     advocate is a reading list nobody trusts. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">05</span>Read it yourself</span>
+    <h2>Read the arguments yourself</h2>
+  </div>
+  <div class="sr-fw-body">
+    <ul class="sr-fw-src">
+      <li>
+        <span class="sr-fw-srcname">Watts, A. (1951). <em>The Wisdom of Insecurity</em>. Pantheon.
+          <span>The clearest statement of the argument, and the shortest. Start here.</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Watts, A. (1957). <em>The Way of Zen</em>. Pantheon.
+          <span>The fuller treatment, and where he sets out the tradition at length.</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Watts, A. (1975). <em>Tao: The Watercourse Way</em>. Pantheon.
+          <span>Completed after his death. Where the water image is developed most fully.</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Laozi (c. 4th century BCE). <em>Tao Te Ching</em>.
+          <span>The origin of <em>wu wei</em> — effortless action. The idea Watts is interpreting,
+            roughly two and a half millennia earlier.</span></span>
+        <span class="sr-fw-srctag">Origin</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Suzuki, S. (1970). <em>Zen Mind, Beginner's Mind</em>. Weatherhill.
+          <span>A practitioner rather than an interpreter, on the same territory. The deeper
+            source, if the idea holds your interest.</span></span>
+        <span class="sr-fw-srctag">Origin</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Hayes, S. C., Strosahl, K. &amp; Wilson, K. G. (2011).
+          <em>Acceptance and Commitment Therapy</em>, 2nd ed. Guilford Press.
+          <span>Where the same distinction — accepting a state while still acting — was given an
+            experimental treatment. The evidence for this idea, if you want it, is here.</span></span>
+        <span class="sr-fw-srctag">Evidence base</span>
+      </li>
+      
+    </ul>
+    <p class="note" style="padding:16px var(--pad) 0">Citations verified against the published record,
+      August 2026. If you find an error here, that is a defect and we want to hear about it.</p>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 7 · PAGER ═════════════════════════════════════════╗ -->
+<div class="sr-fw-body">
+  <nav class="sr-fw-pager" aria-label="Other frameworks">
+    <a href="method.html">
+      <span class="sr-fw-pagertile" aria-hidden="true">All<br>six</span>
+      <div>
+      <span class="sr-fw-pagerkick">Back to</span>
+      <h3>All six frameworks</h3>
+      <p class="note">What the method rests on, and where each source stops.</p>
+      </div>
+    </a>
+  </nav>
+
+  <footer class="sr-fw-foot">
+    <p>SafeRise Protocol is an independent practice created by Andre Robley.
+      Contact <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferiseprotocol.com</a>. Clinical collaborator Dr Keny F. Bastien MD. This page describes the reasoning behind a structured practice.
+      It is not medical advice and does not diagnose, treat or replace care from a clinician.</p>
+  </footer>
+</div>
+
+</main>
+
+<script>
+(function(){
+  // ── reading mode, shared with the dashboard and reader (body.rd-soft) ──
+  var THEME_KEY = 'sr-theme';
+  function setTheme(mode){
+    document.body.classList.toggle('rd-soft', mode === 'sunrise');
+    document.querySelectorAll('[data-theme]').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-theme') === mode);
+    });
+    try{ sessionStorage.setItem(THEME_KEY, mode); }catch(e){}
+  }
+  document.querySelectorAll('[data-theme]').forEach(function(b){
+    b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme')); });
+  });
+  var saved = 'midnight';
+  try{ saved = sessionStorage.getItem(THEME_KEY) || 'midnight'; }catch(e){}
+  setTheme(saved);
+
+  // ── rail routes ──
+  // The dashboard resolves every rail route through openRoute(), which opens a
+  // route modal that only exists in dashboard.html. These pages carry no such
+  // modal, so the rail leaves for the dashboard and lets it answer. /method is
+  // the page you are already on.
+  //
+  // SR-104 · leaving is not arriving. 'coaching' and 'account' matched nothing
+  // in PAGES and fell through to a bare `dashboard.html`, so the member landed
+  // on the dashboard with neither the Sessions view nor Account open — the
+  // control named a destination it did not reach. The route now travels in the
+  // hash and dashboard.html runs openRoute() with it on arrival.
+  var PAGES = { method: 'method.html', dashboard: 'dashboard.html' };
+  document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var key = b.getAttribute('data-route');
+      if(key === 'method') return;                 // already here
+      if(PAGES[key]){ window.location.href = PAGES[key]; return; }
+      window.location.href = 'dashboard.html#route=' + encodeURIComponent(key);
+    });
+  });
+})();
+</script>
+</body>
+</html>

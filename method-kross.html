@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — FRAMEWORK 04 · DISTANCE & REHEARSAL
+  Built on the Porges template. Shared layer in css/saferise-method.css.
+  Peer-reviewed band. This framework replaced an earlier interpretive one; the
+  step is the same, the justification is not. Nothing here rests on that source.
+
+  Design system lifted verbatim from saferise-dashboard-v41.html: token block,
+  type stack, 74px icon rail, Midnight/Sunrise theme, --pad gutter.
+  Two alignment lines preserved: enclosures at 111 and text at 141 (measured
+  at 1440 = 74 rail + 13 shell margin + 24 shell pad + 30 --pad).
+
+  Integrated. The shared layer now lives in css/saferise-method.css; nothing
+  in this file styles itself. Image slots are marked NEEDS ART with exact
+  dimensions and their <img> tags stay commented until the asset exists — SR-059.
+
+  ⚠ SR-060 · DURATION-FREE COPY. This page states no session length, in any
+  form, anywhere — not in copy, not on a player. Lengths vary by protocol and by
+  track and are not known until the recording sprint is complete. This is an
+  accuracy rule, not a style preference. Do not add one.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first, ahead of every stylesheet.
+     Without it the browser paints its default white until the sheet that sets
+     the background has downloaded and parsed — a full-screen flash on every
+     navigation of a dark site.
+     This is not a new pattern: protocol.html and resource.html already carried
+     exactly this pair, and it is copied from them rather than reinvented, down
+     to `html,body` and the color-scheme hint. color-scheme:dark stops the UA
+     painting a white canvas and hands scrollbars and form controls the dark
+     rendering, which the background alone does not do.
+     Deliberately a literal, not var(--bg): the token is defined by the very
+     stylesheet this has to precede. Keep it equal to --bg for this page. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Distance &amp; rehearsal, Kross &amp; Ayduk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ═══ ICON RAIL — verbatim from the dashboard. /method is the active route.
+     SR-075 · library, journal, record and laboratory were removed from the
+     dashboard by SR-068 and SR-069; this copy kept linking to all four. ═══ -->
+<nav class="sr-dash-navrail" aria-label="Sections">
+  <span class="sr-dash-navrailmark">◈</span>
+  <button class="sr-dash-navrailbtn" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
+  <button class="sr-dash-navrailbtn on" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
+  <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
+  <div class="sr-dash-navrailfoot">
+    <button class="sr-dash-navrailbtn" data-route="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.2H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/></svg><span>Account &amp; plan</span></button>
+  </div>
+</nav>
+
+<main id="main" class="shell">
+
+<!-- ╔══ TEMPLATE REGION 0 · BACK BAR ═══════════════════════════════════════╗
+     Identical on all six pages. Register chip changes; nothing else does. -->
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="method.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Where the method comes from
+  </a>
+  <span class="sr-fw-reg sr-fw-reg--peer">Peer-reviewed · load-bearing</span>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<!-- ╔══ TEMPLATE REGION 1 · MASTHEAD ══════════════════════════════════════╗
+     Eyebrow → name → attribution → stance line. Symbol tile at 200×200.
+     No likenesses of living people anywhere in this system. -->
+<header class="sr-fw-mast">
+  <div class="sr-fw-masthead-copy">
+    <span class="eyebrow">Framework 04 of 06</span>
+    <h1>Distance &amp;<br>rehearsal</h1>
+    <p class="sr-fw-attrib">Ethan Kross and Özlem Ayduk · self-distancing research from 2005
+      onward · with the Best Possible Self literature, first tested by Laura King in 2001 ·
+      two separate bodies of work, both replicated, joined here because Step 04 uses both.</p>
+
+    <!-- the stance sits directly under the copy it qualifies, at every width -->
+    <p class="sr-fw-stance">Watching a state from outside it settles you more durably than
+      distraction does. Step 04 is that finding, applied forward.</p>
+  </div>
+
+  <!-- NEEDS ART · 200×200 · abstract gold line motif, no likeness. -->
+  <div class="sr-fw-tile" aria-hidden="true">
+    <div class="sr-fw-tileart"><b>Needs art</b>200 × 200<br>gold symbol tile</div>
+  </div>
+</header>
+
+
+<!-- ╔══ TEMPLATE REGION 2 · WHAT IT SAYS ══════════════════════════════════╗
+     Plain language. No jargon that is not immediately unpacked. Headers state
+     a mechanism, never "About polyvagal theory". Eyebrow + h2, no third line. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">01</span>What the research says</span>
+    <h2>Step back and the same thought behaves differently</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-measure">
+      <p>Ask someone to relive a difficult experience and they tend to get more upset. Ask them
+        to <em>distract themselves</em> from it and they feel better briefly, then worse again.
+        Kross and Ayduk tested a third option: revisit the experience, but
+        <strong>from the position of an observer rather than from inside your own eyes</strong>.</p>
+
+      <p>That shift is called <span class="sr-fw-term" title="Reflecting on an experience from an observer's vantage point rather than from inside it">self-distancing</span>,
+        and it produces a specific result. People asked to watch the scene from a distance
+        reported <strong>less distress at the time, less reactivity when reminded later, and a
+        different kind of account</strong> — describing why something happened rather than
+        recounting how badly it felt. The effect has replicated across a substantial number of
+        experiments and appears in ordinary speech: people who refer to themselves by name or
+        as <em>you</em> under stress perform better and recover faster than people who stay in
+        the first person.</p>
+
+      <p>The second body of work runs in the other direction, forward rather than back. Laura
+        King asked participants to write in detail about a future in which things had gone as
+        well as they realistically could — the <strong>Best Possible Self</strong> exercise.
+        The finding is that specific, concrete imagining of a plausible future
+        <strong>reliably lifts mood and outlook</strong>, and that vague positive thinking does
+        not. Detail is the active ingredient, and it has to be a future you could actually
+        arrive at.</p>
+
+      <p>SafeRise joins them because Step 04 does both at once: you look at what has just moved,
+        from outside it, and you rehearse forward from where you now stand. Neither half is a
+        claim about attracting an outcome. <strong>Both are about where attention is placed and
+        what that does to the person placing it.</strong></p>
+    </div>
+
+      <div class="sr-fw-statelist">
+        <div class="sr-fw-state" style="--s:#B0413E">
+          <em>Immersed</em><b>Inside your own eyes</b>
+          <span>Reliving it as it happened, in the first person. Distress goes up, and the
+            account you produce is about how bad it was.</span>
+        </div>
+        <div class="sr-fw-state" style="--s:#5A6B84">
+          <em>Avoided</em><b>Looking away</b>
+          <span>Distraction. Feels better immediately and does not hold — the material returns
+            unchanged because nothing was processed.</span>
+        </div>
+        <div class="sr-fw-state" style="--s:#D4A843">
+          <em>Distanced</em><b>Watching from outside</b>
+          <span>Same material, different vantage. Lower distress, less reactivity when
+            reminded later, and an account about causes rather than intensity.</span>
+        </div>
+        <p class="note">The middle option is the one most people default to, and it is the one
+          that fails. Distancing is not avoidance — you still go and look. You go and look
+          from somewhere else.</p>
+      </div>
+    </div>
+
+
+    <!-- ART SLOT B · SECTION BAND · NEEDS ART · 1340×360 (2680×720 @2x)
+         Abstract and tonal. No faces, no figures in focus, no clinical imagery.
+         For Kross: distance and vantage. A far horizon, or the same form seen twice at different scales.
+         One per framework page — six in total. -->
+    <figure class="sr-fw-band">
+      <!-- <img class="sr-fw-bandart" src="assets/method/kross-band.jpg" alt=""> -->
+      <div class="sr-fw-bandscrim"></div>
+      <span class="sr-fw-needsart"><b>Needs art</b>1340 × 360 · slot B</span>
+      <figcaption class="sr-fw-bandin">
+        <p>Nothing here is a flaw in you. Every one of these states kept somebody alive,
+          and yours is running the same programme.</p>
+        <span>Why the method does not begin by fixing anything</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 3 · WHAT SAFERISE TAKES ═══════════════════════════╗
+     Mapped to the four steps. Steps this framework does NOT support are shown
+     dimmed and labelled — a framework that appears to justify everything
+     justifies nothing. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">02</span>What SafeRise takes</span>
+    <h2>Look at it from outside, then look forward</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-measure">
+      <p>Step 04 comes last for a reason. Distancing works on material that has already
+        moved — you cannot observe a state you are still drowning in, which is why the first
+        three steps exist. <strong>By the time you reach here there is something to look at
+        rather than something to survive</strong>, and the rehearsal has somewhere real to
+        start from.</p>
+    </div>
+
+    <div class="sr-fw-steps">
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 01</span>
+        <h3>Identify &amp; Name</h3>
+        <p>Not this framework. Naming comes from polyvagal theory and Compassionate Inquiry.
+          There is an echo here — naming is already a small step outside — but the step is
+          not built on this work.</p>
+      </div>
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 02</span>
+        <h3>Redirect to Heart</h3>
+        <p>Not this framework. Breathing rate is physiology. Nothing in the self-distancing
+          literature says anything about how to breathe.</p>
+      </div>
+      <div class="sr-fw-step sr-fw-step--off">
+        <span class="sr-fw-stepno">Step 03</span>
+        <h3>Accept &amp; Release</h3>
+        <p>Not this framework. Acceptance as a decision rather than a feeling comes from
+          Compassionate Inquiry. Polyvagal theory describes the state; it does not tell you
+          what to do about your relationship to it.</p>
+      </div>
+      <div class="sr-fw-step">
+        <span class="sr-fw-stepno">Step 04</span>
+        <h3>Gratitude &amp; Expansion</h3>
+        <p>Load-bearing, and the only step this framework carries. Look back at what moved from
+          outside it, then rehearse forward in concrete detail. The specificity is the active
+          part — a vague better future does nothing measurable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 4 · WHERE IT LOADS ════════════════════════════════╗
+     Concrete and named. No "informs our approach to wellbeing". -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">03</span>Where it loads in the product</span>
+    <h2>Six protocols, and the shape of the fourth step</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-loads">
+      <a class="sr-fw-card" href="protocol.html"><div class="sr-fw-cardart"><img src="assets/covers/01.jpg" alt=""><span class="sr-fw-cardslug"><b>Art</b> cover 01 · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Every protocol · Step 04</span>
+        <h3>The observer position</h3>
+        <p>The final step asks you to look at what just happened from outside it, not to
+          relive it. The wording of every Step 04 prompt is built on that distinction.</p>
+        <span class="sr-fw-cardgo">Open a protocol <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="dashboard.html"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Your record</span>
+        <h3>Reading your own entries later</h3>
+        <p>Coming back to something you wrote weeks ago is self-distancing by default — the
+          same material, from outside. That is most of why the journal exists.</p>
+        <span class="sr-fw-cardgo">See your record <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="resource.html"><div class="sr-fw-cardart"><!-- <img src="assets/method/res-somatic.jpg" alt=""> --><span class="sr-fw-cardslug"><b>Art</b> resource art · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Resource · in every protocol</span>
+        <h3>Cue Card</h3>
+        <p>Written in the second person on purpose. Addressing yourself as <em>you</em> rather
+          than <em>I</em> is the smallest available form of this finding.</p>
+        <span class="sr-fw-cardgo">Read the resource <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="protocol.html"><div class="sr-fw-cardart"><img src="assets/covers/09.jpg" alt=""><span class="sr-fw-cardslug"><b>Art</b> cover 09 · 16:9</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Track 01 · Protocol</span>
+        <h3>The Insecurity Anchor Protocol</h3>
+        <p>Rehearsal applied where the story about yourself is the problem. Six protocols across
+          the three tracks rest on this framework.</p>
+        <span class="sr-fw-cardgo">Open the protocol <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <a class="sr-fw-card" href="resource.html"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Track 03 · Protocol</span>
+        <h3>The Creative Flow Protocol</h3>
+        <p>The clearest case of rehearsal used forward rather than back — and the reason the
+          fourth step is not simply a gratitude exercise.</p>
+        <span class="sr-fw-cardgo">Read the advisory <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
+      </div></a>
+      <div class="sr-fw-card"><div class="sr-fw-cardart"><span class="sr-fw-cardslug"><b>Tonal fallback</b> no cover exists</span></div><div class="sr-fw-cardbody">
+        <span class="sr-fw-cardkick">Language rule</span>
+        <h3>Why nobody here says manifest</h3>
+        <p>The finding is about attention and its effect on the person paying it. It licenses
+          no claim about the world responding, so the platform makes none.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 5 · WHAT WE REST ON ═══════════════════════╝
+     THE PATTERN — every framework page uses this shape, no exceptions.
+
+     Four to six findings, each stated positively, each naming the thing in
+     the product it produced. The list is the argument: it shows the reader
+     that the source is load-bearing rather than decorative.
+
+     NO COUNTERPART LIST. There is no "what we do not claim" column, and no
+     bulleted negatives anywhere on the page. The limit is carried by one
+     closing paragraph that defines the SCOPE of the debate and then states
+     that the findings above survive it. Never more than one paragraph.
+
+     REGISTER VARIANTS — the shape holds, the label changes:
+       peer-reviewed      "Five findings the method is actually built on"
+       clinical practice  "Five things decades in the room taught this method"
+       interpretive       "Five things this way of seeing gives the method"
+     Interpretive pages have no findings to list. They list contributions,
+     and they say so in the label rather than in a disclaimer.
+
+     TONE — no apology, no guardrail voice. State what holds. The honesty is
+     in what is claimed, not in announcing restraint. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">04</span>What we rest on</span>
+    <h2>What the research gives us</h2>
+  </div>
+
+  <div class="sr-fw-body">
+    <div class="sr-fw-limit">
+      <span class="eyebrow">What holds</span>
+      <h3>Four findings, and one boundary the method does not cross.</h3>
+      <div class="sr-fw-measure">
+        <p>Both literatures here are experimental and both have replicated. What they support
+          is <strong>an effect on the person doing the exercise</strong> — their distress, their
+          reactivity, their outlook. That is the whole claim, and the fourth step is built to
+          stay inside it.</p>
+      </div>
+
+      <ul class="sr-fw-rests">
+        <li>
+          <b>Observing beats reliving, and it beats avoiding</b>
+          <span>Revisiting difficult material from an observer's vantage lowers distress at the
+            time and reduces reactivity later. Distraction does neither — it defers.</span>
+        </li>
+        <li>
+          <b>The gain holds up over time</b>
+          <span>Follow-ups find lower reactivity when the same material is raised again, which
+            is the part distraction cannot produce. This is why Step 04 exists rather than a
+            wind-down.</span>
+        </li>
+        <li>
+          <b>Second-person address is enough to trigger it</b>
+          <span>Referring to yourself by name or as <em>you</em> shifts the vantage without any
+            further instruction. Every Cue Card is written that way for this reason.</span>
+        </li>
+        <li>
+          <b>Concrete future rehearsal lifts outlook; vague optimism does not</b>
+          <span>The Best Possible Self effect depends on specificity and plausibility. This is
+            why Step 04 asks for detail and refuses anything that sounds like a wish.</span>
+        </li>
+        <li>
+          <b>The boundary: this is about attention, not about the world</b>
+          <span>Nothing here supports a claim that rehearsing a future causes it to arrive.
+            The effect is on the person rehearsing. That distinction is why the words
+            <em>manifest</em> and <em>attract</em> appear nowhere on this platform.</span>
+        </li>
+      </ul>
+
+      <div class="sr-fw-measure" style="margin-top:26px">
+        <p>Two things worth being precise about. The self-distancing effects are consistent and
+          <strong>modest in size</strong> — real, repeatable, and not dramatic. And the Best
+          Possible Self exercise is <strong>a mood and outlook intervention</strong>: it changes
+          how the person doing it feels and what they expect, which is the whole of what this
+          page claims for it.</p>
+      </div>
+    </div>
+
+    <!-- STANDING DISCLAIMER · identical on all six framework pages -->
+    <div class="sr-fw-disc">
+      <span class="sr-fw-discmark">◈</span>
+      <div>
+        <p>SafeRise has not been through a clinical trial. It is a structured practice built on
+          established frameworks, not a treatment with proven outcomes of its own.
+          <b>Dr Keny F. Bastien MD</b> is engaged as clinical collaborator on scope and safety.</p>
+        <p class="note">If you are in crisis, or under the care of a clinician, the Attention
+          Advisory is the page to read before this one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 6 · SOURCES ═══════════════════════════════════════╗
+     Includes the critical literature. A reading list that only cites the
+     advocate is a reading list nobody trusts. -->
+<section class="sr-fw-sec">
+  <div class="sr-fw-sechead">
+    <span class="eyebrow"><span class="sr-fw-num">05</span>Read it yourself</span>
+    <h2>Read the arguments yourself</h2>
+  </div>
+  <div class="sr-fw-body">
+    <ul class="sr-fw-src">
+      <li>
+        <span class="sr-fw-srcname">Kross, E. &amp; Ayduk, Ö. (2005). "Making meaning out of negative
+          experiences by self-distancing." <em>Journal of Personality and Social Psychology</em>,
+          89(5), 709–724.
+          <span>The original demonstration. Immersed versus distanced analysis of the same event.
+            doi:10.1037/0022-3514.90.5.709</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Kross, E. &amp; Ayduk, Ö. (2017). "Self-Distancing: Theory,
+          Research, and Current Directions." <em>Advances in Experimental Social Psychology</em>,
+          55, 81–136.
+          <span>The best single overview, twelve years on. doi:10.1016/bs.aesp.2016.10.002</span></span>
+        <span class="sr-fw-srctag">Review</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Kross, E. et al. (2014). "Self-talk as a regulatory mechanism:
+          how you do it matters." <em>Journal of Personality and Social Psychology</em>, 106(2),
+          304–324.
+          <span>Where second-person and name-based self-address were tested. The basis for how the
+            Cue Cards are written. doi:10.1037/a0035173</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">King, L. A. (2001). "The health benefits of writing about life
+          goals." <em>Personality and Social Psychology Bulletin</em>, 27(7), 798–807.
+          <span>The original Best Possible Self study. doi:10.1177/0146167201277003</span></span>
+        <span class="sr-fw-srctag">Primary source</span>
+      </li>
+      <li>
+        <span class="sr-fw-srcname">Carrillo, A. et al. (2019). "Effects of the Best Possible Self
+          intervention: A systematic review and meta-analysis." <em>PLOS ONE</em>, 14(9), e0222386.
+          <span>What the pooled evidence supports and how large the effect is. The reason this
+            page describes a modest, reliable shift rather than a transformation.
+            doi:10.1371/journal.pone.0222386</span></span>
+        <span class="sr-fw-srctag">Where the claim stops</span>
+      </li>
+      
+    </ul>
+    <p class="note" style="padding:16px var(--pad) 0">Citations verified against the published record,
+      August 2026. If you find an error here, that is a defect and we want to hear about it.</p>
+  </div>
+</section>
+
+
+<!-- ╔══ TEMPLATE REGION 7 · PAGER ═════════════════════════════════════════╗ -->
+<div class="sr-fw-body">
+  <nav class="sr-fw-pager" aria-label="Other frameworks">
+    <a href="method.html">
+      <span class="sr-fw-pagertile" aria-hidden="true">All<br>six</span>
+      <div>
+      <span class="sr-fw-pagerkick">Back to</span>
+      <h3>All six frameworks</h3>
+      <p class="note">What the method rests on, and where each source stops.</p>
+      </div>
+    </a>
+  </nav>
+
+  <footer class="sr-fw-foot">
+    <p>SafeRise Protocol is an independent practice created by Andre Robley.
+      Contact <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferiseprotocol.com</a>. Clinical collaborator Dr Keny F. Bastien MD. This page describes the reasoning behind a structured practice.
+      It is not medical advice and does not diagnose, treat or replace care from a clinician.</p>
+  </footer>
+</div>
+
+</main>
+
+<script>
+(function(){
+  // ── reading mode, shared with the dashboard and reader (body.rd-soft) ──
+  var THEME_KEY = 'sr-theme';
+  function setTheme(mode){
+    document.body.classList.toggle('rd-soft', mode === 'sunrise');
+    document.querySelectorAll('[data-theme]').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-theme') === mode);
+    });
+    try{ sessionStorage.setItem(THEME_KEY, mode); }catch(e){}
+  }
+  document.querySelectorAll('[data-theme]').forEach(function(b){
+    b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme')); });
+  });
+  var saved = 'midnight';
+  try{ saved = sessionStorage.getItem(THEME_KEY) || 'midnight'; }catch(e){}
+  setTheme(saved);
+
+  // ── rail routes ──
+  // The dashboard resolves every rail route through openRoute(), which opens a
+  // route modal that only exists in dashboard.html. These pages carry no such
+  // modal, so the rail leaves for the dashboard and lets it answer. /method is
+  // the page you are already on.
+  //
+  // SR-104 · leaving is not arriving. 'coaching' and 'account' matched nothing
+  // in PAGES and fell through to a bare `dashboard.html`, so the member landed
+  // on the dashboard with neither the Sessions view nor Account open — the
+  // control named a destination it did not reach. The route now travels in the
+  // hash and dashboard.html runs openRoute() with it on arrival.
+  var PAGES = { method: 'method.html', dashboard: 'dashboard.html' };
+  document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var key = b.getAttribute('data-route');
+      if(key === 'method') return;                 // already here
+      if(PAGES[key]){ window.location.href = PAGES[key]; return; }
+      window.location.href = 'dashboard.html#route=' + encodeURIComponent(key);
+    });
+  });
+})();
+</script>
+</body>
+</html>
