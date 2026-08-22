@@ -97,7 +97,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-202 are issued.** SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
+- **SR-044 to SR-203 are issued.** SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
   SR-202 by Run I (Tracks 02/03 specification), which also issued **SR-197** for a missing
   source document. **SR-194 to SR-196 and SR-200 were never issued and are free** — SR-200's
   phase was resource authoring, which Run I was barred from.
@@ -2009,6 +2009,60 @@ component that renders on the dashboard and the portals, and Andre has not seen 
 
 ---
 
+
+### SR-203 · The shipped copy is the canonical Track 02 shared block
+[[SR-202]] found the block in three versions and did not guess which was canonical. **Andre
+ruled: the shipped copy is authoritative, the standalone handover file is stale.**
+
+**Re-verified at the point of extraction**, not carried over from SR-202's earlier measurement:
+the block is **byte-identical** in t2-01 and t2-02 — same sha256, 2,950 bytes, 540 words.
+
+**Extracted to `content/t2-resources.js` → `T2_SHARED.twoParts`**, verbatim from t2-01. Fidelity
+checked both ways: no word in the output absent from the source, no source word missing from the
+output. 18 body blocks, 536 rendered words, one cue.
+
+**The reasoning, recorded because it decides future cases of the same kind.** Three grounds, and
+the first is the general one:
+1. **The file breaks its own stated rule.** Its `Vocabulary decisions` section — still live —
+   says an invented label like *the first instrument* is worse than the word it replaces, and
+   that describing the part beats naming it. The prose then uses *instrument* eight times, as a
+   name. **The shipped copy does what the file only argues for.** Where a specification and its
+   own worked example disagree, the example is the tell.
+2. **Wrong register.** The shipped copy is second person and plain; the file is expository, which
+   the platform does not use for member-facing copy.
+3. **The shipped copy carries a `GOLD/PAUSE` production marker**, so it has been through the
+   recording pass. The file has not. **A production marker is evidence of a pipeline stage the
+   text has passed**, and it survived the extraction as a cue rather than as rendered copy.
+
+**The closing element is the Track 01 recommendation, set italic — part of the block, not a
+separate element.** This is why the file's `Related: where Track 01 comes in` section is
+superseded along with the prose: the paragraph it quotes is an **earlier wording of that same
+closing line**, and leaving it live would reintroduce the drift from the other end.
+
+**The file is preserved, not deleted, because most of it is live.** It is now at
+`docs/reference/SHARED-t2-two-instruments.md` with the superseded range marked in place and the
+prose left standing beneath the marker — Rule 21, annotate the dated record rather than rewrite
+it. Everything from `Vocabulary decisions` onward is untouched and byte-verified against the
+original: the vocabulary rulings, the *energy* ruling, the no-aetiology line, and the safety
+floor with the mutual-disclosure gate. **None of that was ever member-facing copy.**
+
+⚠ **A standing constraint was honoured over a direct instruction, and this is the record of it.**
+The instruction was to mark the block superseded in `SHARED-t2-two-instruments.md`. That file
+lives under `~/Desktop`, which this project's standing rule puts permanently off-limits — *copy,
+never move, never edit in place, never write to `~` or `~/Desktop`*. **The Desktop original is
+untouched and verified so.** The file was brought into the repo and marked there, which serves
+the instruction's purpose without breaching the constraint — and the spec sections belong under
+version control regardless.
+
+**Placement note.** The precedent cited was `SHARED.resources` and `CHANGE_PROPOSALS`, both in
+`tracks.js`. The **pattern** was followed — one record, referenced by identity, never copied —
+but the **file** is `content/t2-resources.js`, matching [[SR-192]]'s per-track shape. `tracks.js`
+loads on every page including the marketing index, and 540 words of resource prose there is a
+page-weight regression. Track 02's remaining resources land in the same file as they are authored.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
 
 ### SR-197 · `CONTENT-STATUS-CORRECTION.md` does not exist
 **Recorded because it was the stated precondition for the whole Run I amendment**, not because
