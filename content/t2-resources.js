@@ -67,7 +67,6 @@ var T2_SHARED = {
   }
 };
 
-
 /* ── Track 02's authored resources · SR-207 ──────────────────────────────
    91 of 91. Generated from the Track 02 complete handover, not authored.
 
@@ -183,24 +182,6 @@ var T2_RESOURCES = {
       "<p>Running the whole conversation in your head means rehearsing something you only control half of \u2014 and the half you don't control is the half you're worried about. Your body doesn't buy it.</p>",
       "<p>The opening sentence is entirely yours. It's the one part that doesn't depend on them. It's specific enough to actually stick. And it's the bit most people find they can't come up with on the spot.</p>",
       "<p>The instruction that you are allowed to say it badly is doing structural work rather than being kind. Waiting to be able to say it well is the most common reason a conversation never happens.</p>",
-      "<h4>The part that's on your side, and the part that can hear them</h4>",
-      "<p>Almost everyone in a conflict is doing the same thing: building the case for their own version. It doesn't feel like building a case. It feels like thinking clearly, or finally being honest with yourself about what happened.</p>",
-      "<p>What's worth knowing is which part of you is doing the building.</p>",
-      "<p><strong>One part of you is entirely on your side.</strong> It's the part that keeps you safe, and you need it \u2014 nothing here is telling you to get rid of it. But it works to a few fixed rules, and the rules aren't about fairness. They're about keeping you standing.</p>",
-      "<p>You come first. Not out of selfishness \u2014 that's just the job.</p>",
-      "<p>Nobody else's version can simply be as true as yours. It has to be measured against yours first.</p>",
-      "<p>And it decides what's real. Whether something is fair, or reasonable, or true gets settled by whether it fits what this part already believes.</p>",
-      "<p>Run an argument through a part of you with those rules and you win. Every time. Not because you're lying \u2014 because that's what it's for.</p>",
-      "<p>Which is the most useful thing to know about your own case: you'd already won it before you started going over the evidence.</p>",
-      "<p><strong>There's another part, and it works differently.</strong> It can hear someone else's version as a whole thing in its own right, rather than as a wrong version of yours. It doesn't mean agreeing. It isn't the same as being nice. It's a way of taking in something the first part isn't built to accept.</p>",
-      "<p>You need both. The first one stops you being flattened in an argument. The second one is the only one that can end it.</p>",
-      "<p><strong>One rule, and it matters more than the rest of this.</strong></p>",
-      "<p>You can look at your own. You can't look at theirs.</p>",
-      "<p>You can hold that they've got the same two parts, and that theirs is doing the same job for them. That's what puts you level, rather than one of you above the other.</p>",
-      "<p>What you can't do is tell them what their side is up to. You can't see it from where you're standing, and saying it out loud is just the first part again, wearing better clothes. <em>That's just your ego talking</em> dismisses their whole version while sounding wise.</p>",
-      "<p>If you're explaining someone else's psychology to them in the middle of an argument, that's not insight. That's the case, still being built.</p>",
-      "<p><strong>This sits underneath all four steps here.</strong> Naming the state separates it from your version of events. The breathing settles the body that's producing the case. The third step puts the case-building down. And the fourth asks you to stand somewhere that isn't your own spot \u2014 which is the second part, used on purpose, for as long as you can hold it.</p>",
-      "<p><em>This is easier once you can catch your own state while you're in it. That's what Track 01 builds, and it's why it comes first. Nothing here needs it, and nothing here is judging whether you're ready \u2014 but the second part is hard to reach for while the first one is running unwatched.</em></p>",
       "<h4>What we rest on</h4>",
       "<p><strong>Polyvagal Theory \u2014 Stephen Porges</strong> \u00b7 <em>peer-reviewed</em> \u00b7 supplies Recognition and the three state labels</p>",
       "<p>Threat detection runs ahead of thought. The body reads a situation and moves before your thinking catches up, which is what makes the response fast and also what makes it non-negotiable in the moment. Porges describes three broad conditions: settled and socially available, mobilised for action, and shut down. Agitated, Unsteady and Numb are the member-facing names for those three. <em>Here it accounts for why an anticipated conversation produces the same state as a present one, and why the settled state is the one that can hold a difficult exchange.</em></p>",
@@ -210,8 +191,8 @@ var T2_RESOURCES = {
       "<p><em>The finding is used here; the wider programme is not. There is no measurement of coherence anywhere on this platform and no score attached to any breath.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What to say, whether to say it, and what any of it means about the relationship are readings that belong to you.</p>"
     ],
-    cues: [{"block": 25, "type": "GOLD/PAUSE", "note": ""}],
-    sharedRefs: []
+    cues: [{"block": 18, "type": "GOLD/PAUSE", "note": ""}],
+    sharedRefs: [{"block": 18, "ref": "twoParts"}]
   },
   "t2p1-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -405,24 +386,6 @@ var T2_RESOURCES = {
       "<p>On most protocols the fourth step is distance from your own experience. Here there is a second position: standing where the other person stood.</p>",
       "<p>That's the same move, turned outward. Stepping outside your own spot settles you. Stepping into theirs gives you something you can't get from inside your own version. It isn't agreeing with them and it isn't deciding they were right. It's standing somewhere else for a minute.</p>",
       "<p>The forward move is then deliberately one-sided. Rehearsing the resolution is rehearsing an event you control half of. The move that is yours \u2014 what you send, what you say first \u2014 is available regardless of what they do.</p>",
-      "<h4>The part that's on your side, and the part that can hear them</h4>",
-      "<p>Almost everyone in a conflict is doing the same thing: building the case for their own version. It doesn't feel like building a case. It feels like thinking clearly, or finally being honest with yourself about what happened.</p>",
-      "<p>What's worth knowing is which part of you is doing the building.</p>",
-      "<p><strong>One part of you is entirely on your side.</strong> It's the part that keeps you safe, and you need it \u2014 nothing here is telling you to get rid of it. But it works to a few fixed rules, and the rules aren't about fairness. They're about keeping you standing.</p>",
-      "<p>You come first. Not out of selfishness \u2014 that's just the job.</p>",
-      "<p>Nobody else's version can simply be as true as yours. It has to be measured against yours first.</p>",
-      "<p>And it decides what's real. Whether something is fair, or reasonable, or true gets settled by whether it fits what this part already believes.</p>",
-      "<p>Run an argument through a part of you with those rules and you win. Every time. Not because you're lying \u2014 because that's what it's for.</p>",
-      "<p>Which is the most useful thing to know about your own case: you'd already won it before you started going over the evidence.</p>",
-      "<p><strong>There's another part, and it works differently.</strong> It can hear someone else's version as a whole thing in its own right, rather than as a wrong version of yours. It doesn't mean agreeing. It isn't the same as being nice. It's a way of taking in something the first part isn't built to accept.</p>",
-      "<p>You need both. The first one stops you being flattened in an argument. The second one is the only one that can end it.</p>",
-      "<p><strong>One rule, and it matters more than the rest of this.</strong></p>",
-      "<p>You can look at your own. You can't look at theirs.</p>",
-      "<p>You can hold that they've got the same two parts, and that theirs is doing the same job for them. That's what puts you level, rather than one of you above the other.</p>",
-      "<p>What you can't do is tell them what their side is up to. You can't see it from where you're standing, and saying it out loud is just the first part again, wearing better clothes. <em>That's just your ego talking</em> dismisses their whole version while sounding wise.</p>",
-      "<p>If you're explaining someone else's psychology to them in the middle of an argument, that's not insight. That's the case, still being built.</p>",
-      "<p><strong>This sits underneath all four steps here.</strong> Naming the state separates it from your version of events. The breathing settles the body that's producing the case. The third step puts the case-building down. And the fourth asks you to stand somewhere that isn't your own spot \u2014 which is the second part, used on purpose, for as long as you can hold it.</p>",
-      "<p><em>This is easier once you can catch your own state while you're in it. That's what Track 01 builds, and it's why it comes first. Nothing here needs it, and nothing here is judging whether you're ready \u2014 but the second part is hard to reach for while the first one is running unwatched.</em></p>",
       "<h4>What we rest on</h4>",
       "<p><strong>Polyvagal Theory \u2014 Stephen Porges</strong> \u00b7 <em>peer-reviewed</em> \u00b7 supplies Recognition and the three state labels</p>",
       "<p>Threat detection runs ahead of thought. The body reads a situation and moves before your thinking catches up. Porges describes three broad conditions: settled and socially available, mobilised for action, and shut down. Agitated, Unsteady and Numb are the member-facing names for those three. <em>Here it accounts for why a rupture with someone close produces the same machinery as physical threat, and why the settled state is the only one that can hold a repair conversation.</em></p>",
@@ -432,8 +395,8 @@ var T2_RESOURCES = {
       "<p><em>A clinical practice, not a controlled research programme. Used here for the way the question is asked, and nothing wider.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What happened, who did what, whether the relationship is worth repairing, and what to do next are readings that belong entirely to you.</p>"
     ],
-    cues: [{"block": 23, "type": "GOLD/PAUSE", "note": ""}],
-    sharedRefs: []
+    cues: [{"block": 16, "type": "GOLD/PAUSE", "note": ""}],
+    sharedRefs: [{"block": 16, "ref": "twoParts"}]
   },
   "t2p2-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
