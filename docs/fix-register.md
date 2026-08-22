@@ -73,8 +73,8 @@ Canonical record of defects and design decisions. Commits reference the ID:
 
 **Rules — method**
 
-Earned across Run C and Run D. Each cost something to learn; the worked example is named so
-the rule can be checked rather than taken on trust.
+Earned across Runs C to G. Each cost something to learn; the worked example is named so
+the rule can be checked rather than taken on trust. **Twenty-one rules.**
 
 1. **A deliberate non-fix gets a register entry** carrying the reasoning and an explicit
    do-not-tidy line. An undocumented correct refusal is indistinguishable from an oversight,
@@ -179,6 +179,24 @@ the rule can be checked rather than taken on trust.
     behaves identically to things known correct. A control turns an unusable measurement
     into a usable comparison, and separates an environment artifact from a page defect —
     the failure mode Rule 10 warns about, now with a technique attached. [[SR-149]].
+21. **Correct live assertions; annotate dated records.** A standing invariant, a count, or any
+    claim a future run will check is **live**: when it goes stale it must be rewritten, because
+    an assertion nobody can reproduce stops being checkable and the next run either "fixes" the
+    tree to match it or quietly stops trusting it. A report, a before-snapshot, or an entry
+    recording what was true when it was raised is **evidence**: rewriting it falsifies the
+    record and destroys the trail later entries depend on. Mark it superseded and point at what
+    replaced it.
+    Worked example: [[SR-168]] rewrote the euro invariant — live — and **annotated** Run E's
+    `PRICING` table rather than editing it, because [[SR-136]]'s before/after pair and the €49
+    ordering constraint both depend on those numbers standing as measured. [[SR-091]] and
+    [[SR-127]] were left alone for the same reason.
+    **The €275 finding is this rule's own worked example, and the strongest argument for it.**
+    The invariant *"€59, €139 and €275 appear nowhere"* read as violated: `\u20AC275` sits in
+    `content/tracks.js` inside the [[SR-136]]/[[SR-137]] comment recording **why the `premium`
+    key must not be re-added**. A note explaining a removal was being counted as the removal
+    having failed. An invariant that counts commentary breaks every time someone writes a note —
+    which is exactly how a live assertion goes stale for a reason that has nothing to do with
+    what it guards.
 
 **Measurement artifacts — the standing pre-flight**
 
