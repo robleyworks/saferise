@@ -478,7 +478,11 @@ var TRACKS = {
        'Keep access to what you know while people are watching you use it.',
        'You did the work, and it leaves you the moment people look.',
        ['I know it until people are watching','My mind goes blank on cue','I dread the thing I am good at']],
-      ['06','Recover', 'The Ambition Recovery Protocol',
+      /* SR-216 · renamed. The promise, signature and quotes BELOW still describe
+         Ambition Recovery and are deliberately unchanged: the bundle supplies no
+         replacement for them, and writing new ones would be authoring member-facing
+         copy. Reported, not invented. */
+      ['06','Stand',   'The Belonging Gap Protocol',
        'Find what you actually want, under what you were taught to want.',
        'Arriving and feeling nothing. The next target set before the last one landed.',
        ['I hit the goal and felt nothing','I do not know if I want this','I am chasing something I never chose']],
@@ -675,7 +679,12 @@ var META = {
   't3-03': { extras: [], state: 'unsteady',    frameworks: ['jung','distance'] },
   't3-04': { extras: [], state: 'agitated',    frameworks: ['jung','mate'] },
   't3-05': { extras: [], state: 'agitated',    frameworks: ['heartmath','porges'] },
-  't3-06': { extras: [], state: 'numb', frameworks: ['jung','watts'] },
+  /* SR-216 · t3-06 became The Belonging Gap. Label, state, frameworks and
+     extras all move together, from the master handover and the delivered
+     content file's own header. The state change numb -> unsteady means
+     TRACK 03 HAS TWO NUMB PROTOCOLS, NOT THREE — t3-08 and t3-09. Any count
+     assuming three is now wrong. */
+  't3-06': { extras: ['advisory'], state: 'unsteady', frameworks: ['porges','jung'] },
   't3-07': { extras: [], state: 'unsteady',    frameworks: ['jung','watts'] },
   /* SR-199 · `heartmath` replaces `distance`. The dispenza correction landed
      here as a RENAME (SR-118), leaving `distance`; the build sheet specifies

@@ -97,7 +97,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-215 are issued.** SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
+- **SR-044 to SR-223 are issued.** SR-215 was folded into SR-222; SR-223's finding is recorded there too. SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
   SR-202 by Run I (Tracks 02/03 specification), which also issued **SR-197** for a missing
   source document. **SR-194 to SR-196 and SR-200 were never issued and are free** — SR-200's
   phase was resource authoring, which Run I was barred from.
@@ -129,7 +129,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 **Rules — method**
 
 Earned across Runs C to G. Each cost something to learn; the worked example is named so
-the rule can be checked rather than taken on trust. **Twenty-three rules.**
+the rule can be checked rather than taken on trust. **Twenty-four rules.**
 
 1. **A deliberate non-fix gets a register entry** carrying the reasoning and an explicit
    do-not-tidy line. An undocumented correct refusal is indistinguishable from an oversight,
@@ -286,6 +286,18 @@ the rule can be checked rather than taken on trust. **Twenty-three rules.**
     one-off `crisis-p10` that fits no pattern. Reconciling a list in that state means choosing,
     per row, which of two wrong records to believe. **Derive it from the source the counts
     already use** — `SHARED.resources` plus `extras` — and the drift has nowhere to live.
+
+24. **A PATH IN THE RECORD IS A CLAIM THE ASSET EXISTS.** Where a file is absent the record
+    carries the brief and the ratio but **no `src`**, and the slot renders its placeholder having
+    made **no request at all**. [[SR-214]] is the worked example: Track 03's four section slots
+    were first given paths for unproduced files, which would have cost a 404 per slot on every
+    page load to reach the same visible result as making no request.
+    **An `onerror` fallback is a repair, not a design.** It exists for the file that vanishes
+    after the record was written; it is not the mechanism for a file you already know is missing.
+    The request should never be made.
+    Corollary: the same applies to any record field a surface trusts. A `scrim`, a `ratio` or a
+    duration in the record is a claim about something real, and a consumer is entitled to act on
+    it without checking.
 
 **Measurement artifacts — the standing pre-flight**
 
@@ -2546,6 +2558,38 @@ disclosure.
 
 ---
 
+
+### SR-222 · Three of eleven delivered frames read as lifestyle stock, not the briefed register
+**Grouped deliberately.** These arrived as three separate observations and are recorded as one,
+because the question is not whether three files are wrong. It is **whether the image lane has the
+register the briefs specify.** Three separate notes invite three separate re-shoots; one note asks
+the question that actually decides it.
+
+**1 · `assets/t1/range.jpg` is built for a light surface.** Three tilted photo cards composited on
+white. Corners measure **L≈0.92** against a page ground of **L=0.004**. It will render as a
+glaring rectangle. **Not a crop or a ratio fault** — no build-side change fixes it, and a recolour
+or a knockout is image work. Installed as delivered, unmodified.
+
+**2 · `assets/t1/change.jpg` is not its brief.** Brief: *"one person moving easily through an
+ordinary day at home."* Delivered: a man leaning on a **luxury car** outside an architectural
+villa at golden hour. Reads as automotive advertising.
+
+**3 · `assets/t2/hero.jpg` is not its brief** (previously [[SR-215]]). Brief: *"a warm domestic
+interior … Seated"*, with a casting note requiring *"a genuinely different home environment"*.
+Delivered: an outdoor coastal terrace, both standing, holding cocktails. Its **composition** is
+correct — pair in the right third, dark foliage left — so it is the setting and the register that
+differ, not the layout.
+
+**The pattern:** an ordinary day at home became a luxury car; a quiet domestic moment became a
+terrace with cocktails; and a set of three states became a light-surface composite. All three
+drift the same way — toward aspirational lifestyle and away from the ordinary domestic register
+the briefs are explicit about. **That is a lane question, not three file questions.**
+
+All three are installed. None was modified. [[SR-215]] is folded into this entry.
+
+*Status:* open — one content decision, not three · *Raised:* 22 Aug 2026
+
+---
 
 ### SR-213 · The image slots read their path from the record
 The slots were **never wired on any track**. `TRACKS[].art` held prose briefs only,
