@@ -2752,3 +2752,46 @@ body.sr-breath .sr-player.is-next .audio-play{
    otherwise the carousel, several screens into the document. */
 .sr-tp .sr-tp-skiplink{position:fixed;left:16px;top:-90px;z-index:60;background:var(--gold);color:#08080C;font-size:12.5px;font-weight:700;padding:10px 16px;border-radius:8px;text-decoration:none}
 .sr-tp .sr-tp-skiplink:focus{top:16px}
+
+/* ═════════════════════════════════════════════════════════════
+   SR-190 · SUPPORT ADVISORY  (getting-help.html)
+   Ten Safe Practice resources across Track 01 resolve "a helpline
+   in your country" to this page, so it has to exist before Track
+   01 ships and be reachable without an account.
+
+   Scoped under .sr-tp like everything else in this file — the
+   tokens live on that class, not :root, deliberately (see the
+   token-ownership note above). The page is prose, so this is a
+   measure and a rhythm, not a component set.
+
+   Deliberately NO duration, count, progress or score styling
+   here: the authored content forbids all four platform-wide, and
+   a hook in the stylesheet is an invitation to render one.
+   ═════════════════════════════════════════════════════════════ */
+
+.sr-tp .sr-adv{max-width:720px;margin:0 auto;padding:0 24px}
+.sr-tp .sr-adv-hd{padding:72px 0 8px}
+.sr-tp .sr-adv-hd h1{margin:0 0 18px;font:400 clamp(30px,4vw,46px)/1.14 'Cinzel',serif;color:var(--text)}
+
+/* The immediate-danger block leads the page and must read as the
+   most urgent thing on it without shouting. Left rule, not a
+   filled alert box — a red panel on a page someone opens in a bad
+   state is the wrong register. */
+.sr-tp .sr-adv-urgent{margin:0 0 44px;padding:18px 22px;border-left:2px solid var(--gold);
+  background:rgba(212,168,67,.06);border-radius:0 var(--sr-r-sm) var(--sr-r-sm) 0}
+.sr-tp .sr-adv-urgent p{margin:0;font:400 16px/1.7 'DM Sans',sans-serif;color:var(--text)}
+.sr-tp .sr-adv-urgent b{font-weight:700;color:var(--text)}
+
+.sr-tp .sr-adv h2{margin:52px 0 18px;font:400 clamp(22px,2.4vw,28px)/1.25 'Cinzel',serif;color:var(--text)}
+.sr-tp .sr-adv h3{margin:38px 0 14px;font:700 11px/1.4 'DM Sans',sans-serif;
+  letter-spacing:2.6px;text-transform:uppercase;color:var(--gold)}
+.sr-tp .sr-adv p{margin:0 0 18px;font:400 15.5px/1.8 'DM Sans',sans-serif;color:var(--text2);max-width:62ch}
+.sr-tp .sr-adv p b{color:var(--text);font-weight:700}
+.sr-tp .sr-adv p i, .sr-tp .sr-adv p em{color:var(--text);font-style:italic}
+.sr-tp .sr-adv a{color:var(--gold-lt)}
+
+.sr-tp .sr-adv-close{margin:56px 0 0;padding-top:28px;border-top:1px solid var(--hair)}
+@media(max-width:760px){
+  .sr-tp .sr-adv-hd{padding-top:48px}
+  .sr-tp .sr-adv h2{margin-top:40px}
+}
