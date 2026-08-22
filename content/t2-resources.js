@@ -1,43 +1,19 @@
 /* ════════════════════════════════════════════════════════════════════════
    SafeRise — content/t2-resources.js
-   Track 02's shared material. SR-203.
+   Track 02's authored resources. SR-217.
 
-   Same shape as content/t1-resources.js (SR-192): one file per track beside
-   tracks.js, plain `var` plus the module.exports guard, read synchronously.
-   Track 02's ten protocols land here as they are authored; today it holds the
-   one block that is required on all ten.
+   GENERATED FROM THE MASTER BUNDLE, NOT AUTHORED. Regenerated rather than
+   extended: BUILD-HANDOVER.md supersedes every previous handover, so one source
+   produces all three files and none carries text from a superseded bundle.
 
-   ── WHY THIS BLOCK IS HERE AT ALL ──
+   THE RESOURCE SET IS ELEVEN. Eight are unconditional on Tracks 01 and 02;
+   Track 03 has NINE because it adds `Raising It`. Two more are conditional on
+   META[].extras — Proximity Guide on 'advisory', Invitation to Repair on
+   'invitation'. Counts therefore run 8 to 11 and are DERIVED, never typed.
 
-   It appears in How This Works on every Track 02 protocol, immediately before
-   *What we rest on*, and must be identical on all ten. It had already drifted
-   before install: two protocols were authored carrying it inline and a third
-   version sat in the handover as a standalone file. Referenced by identity from
-   here, never copied, drift becomes structurally impossible — the same reason
-   CHANGE_PROPOSALS is referenced rather than duplicated across two tracks.
-
-   ── WHICH VERSION THIS IS, AND WHY ──
-
-   The SHIPPED copy, lifted verbatim from t2-01, byte-identical to t2-02.
-   SR-203 ruled the standalone handover file stale on three grounds: it breaks
-   its own stated vocabulary rule by naming the part "the instrument" eight
-   times after arguing that describing beats naming; it is written expository
-   where the platform is second person and plain; and the shipped copy carries a
-   GOLD/PAUSE production marker, so it has been through the recording pass and
-   the file has not.
-
-   The handover file is NOT wholly stale and was not discarded — everything
-   after this block is live specification. It is preserved at
-   docs/reference/SHARED-t2-two-instruments.md with the superseded section
-   marked in place.
-
-   ── THE CLOSING LINE IS PART OF THE BLOCK ──
-
-   The Track 01 recommendation, set italic, is the block's closing element and
-   not a separate one. Do not lift it out, and do not render it as a footnote.
-
-   GENERATED, NOT AUTHORED. Every word is the shipped word. Cues are data and
-   must never render — see t1-resources.js for the rule.
+   `cues` are production markers and must never render. `sharedRefs` carries a
+   shared block by reference, never by copy. `diagrams` place by anchor text
+   rather than block index, because an index moves when a paragraph is added.
    ════════════════════════════════════════════════════════════════════════ */
 
 var T2_SHARED = {
@@ -67,18 +43,6 @@ var T2_SHARED = {
     cues: [{"block": 7, "type": "GOLD/PAUSE", "note": ""}]
   }
 };
-
-/* ── Track 02's authored resources · SR-207 ──────────────────────────────
-   91 of 91. Generated from the Track 02 complete handover, not authored.
-
-   `sharedRefs` carries the two-parts block by REFERENCE, never by copy: an
-   entry {block: N, ref: 'twoParts'} means T2_SHARED.twoParts belongs at index N
-   of `body`, and the body does not contain it. Ten protocols, one record.
-   That is what makes the `ego` constraint structural rather than checked —
-   there is one copy of the quoted phrase in the codebase.
-
-   Counts derive from META[].extras and range 8 to 10. Never hardcode one.
-   Cues are data and must never render. */
 
 var T2_PROTOCOL_KEYS = {
   "t2-01": { reader: "t2p1", keys: ["t2p1-meditation", "t2p1-crisiscard", "t2p1-guide", "t2p1-companion", "t2p1-practice", "t2p1-disclosure", "t2p1-repair", "t2p1-record", "t2p1-accountability"] },
@@ -554,7 +518,7 @@ var T2_RESOURCES = {
       "<p>Step outside it.</p>",
       "<p>Someone across the room, breathing four and six, holding something heavy and holding it steadily.</p>",
       "<p>Speak to them as <em>you</em>.</p>",
-      "<p><em>You were right about what happened. And you don't have to decide anything today.</em></p>",
+      "<p><em>You were right about what happened. And nothing has to be settled today unless it does.</em></p>",
       "<p>Both halves. The second one is the one people skip.</p>",
       "<p>Now forward, and small. Not the conversation where it's resolved \u2014 you don't control that half, and it may not be available at all.</p>",
       "<p>Today. Somewhere specific, doing something ordinary, with this unresolved. What's in your hands. What's around you.</p>",
@@ -578,7 +542,7 @@ var T2_RESOURCES = {
       "<p class=\"sr-cue-line\"><strong>Name it</strong> \u2014 <em>You are agitated.</em> The state, not the account.</p>",
       "<p class=\"sr-cue-line\"><strong>Breathe it</strong> \u2014 Four in, six out. Hand to your chest.</p>",
       "<p class=\"sr-cue-line\"><strong>Stop re-reading the past</strong> \u2014 It has no last page.</p>",
-      "<p class=\"sr-cue-line\"><strong>Step out</strong> \u2014 <em>You were right about what happened. You don't have to decide today.</em></p>",
+      "<p class=\"sr-cue-line\"><strong>Step out</strong> \u2014 <em>You were right about what happened. Nothing has to be settled in the next hour.</em></p>",
       "<h4>Back</h4>",
       "<p><strong>Recognition</strong> \u2014 Find it in your body: chest and stomach together, something hot and something dropping. Name the state in one word. Leave out what they did and when \u2014 not because any of it is in question, but because the account is finished and the state isn't. One of the two is reachable.</p>",
       "<p><strong>Regulation</strong> \u2014 Four in, six out. Attention in the centre of your chest, hand there if it helps. Sleep has probably gone; this state doesn't stand down at night because it has decided nights are when things get past you.</p>",
@@ -2296,6 +2260,5 @@ var T2_RESOURCES = {
 };
 
 if (typeof module !== 'undefined') {
-  module.exports = { T2_SHARED: T2_SHARED, T2_RESOURCES: T2_RESOURCES,
-                     T2_PROTOCOL_KEYS: T2_PROTOCOL_KEYS };
+  module.exports = { T2_SHARED: T2_SHARED, T2_RESOURCES: T2_RESOURCES, T2_PROTOCOL_KEYS: T2_PROTOCOL_KEYS };
 }

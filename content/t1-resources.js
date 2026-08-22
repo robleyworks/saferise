@@ -1,123 +1,87 @@
 /* ════════════════════════════════════════════════════════════════════════
    SafeRise — content/t1-resources.js
-   Track 01's authored resources. SR-192.
+   Track 01's authored resources. SR-217.
 
-   One file per track, beside tracks.js, same `var` + module.exports shape, read
-   synchronously. Chosen over inlining into index.html (which is already 10,552
-   lines and cannot cache separately) and over per-protocol lazy files (which
-   would make the Reader's synchronous reads asynchronous). SR-188 carries the
-   comparison.
+   GENERATED FROM THE MASTER BUNDLE, NOT AUTHORED. Regenerated rather than
+   extended: BUILD-HANDOVER.md supersedes every previous handover, so one source
+   produces all three files and none carries text from a superseded bundle.
 
-   GENERATED, NOT AUTHORED. Every string here is transformed from the Track 01
-   content handover markdown. Correct the source and re-run the transform —
-   editing this file by hand puts it out of agreement with the record.
+   THE RESOURCE SET IS ELEVEN. Eight are unconditional on Tracks 01 and 02;
+   Track 03 has NINE because it adds `Raising It`. Two more are conditional on
+   META[].extras — Proximity Guide on 'advisory', Invitation to Repair on
+   'invitation'. Counts therefore run 8 to 11 and are DERIVED, never typed.
 
-   ── TWO MAPPINGS LIVE HERE, AND NEITHER SIDE GETS RENAMED ──
-
-   1. THE KEY NAMESPACES DISAGREE, DELIBERATELY. META in tracks.js keys Track 01
-      as `t1-01`…`t1-10`. The Reader keys the same ten as `p1`…`p10`. Both are
-      load-bearing and neither is wrong. T1_PROTOCOL_KEYS below is the single
-      place that mapping is written down. Same defect class SR-177 solved for
-      `distance` → method-kross.html: where a key and its counterpart are
-      different words, every consumer that re-derives the mapping by hand is a
-      place it can go wrong.
-
-   2. THE CONDITIONAL IS `invitation` IN THE DATA AND `-repair` IN THE KEY.
-      META[].extras records `'invitation'`; CONDITIONAL_RESOURCES maps the
-      display name *Invitation to Repair* → `'invitation'`; the served key is
-      `p2-repair`. T1_RESOURCE_SUFFIX below records it. Do not rename either.
-
-   ── CUES ARE DATA AND MUST NEVER RENDER ──
-
-   Every resource carries `cues[]`: the illustration, music, pause, breath and
-   action markers from the authored scripts, each anchored to the body block it
-   preceded. These are production direction for the recording and art lanes, not
-   member-facing copy. They are kept rather than stripped because they are the
-   only link between the shipped copy and those lanes — the same principle
-   CLAUDE.md sets for the original protocol descriptions, which stay in the data
-   and stay off the card. A surface that renders `cues` is a defect.
-
-   NO DURATIONS, NO COUNTS, NO POSITION. Nothing in this file carries a length,
-   an ordinal out of a total, or a progress value, and nothing added to it may.
+   `cues` are production markers and must never render. `sharedRefs` carries a
+   shared block by reference, never by copy. `diagrams` place by anchor text
+   rather than block index, because an index moves when a paragraph is added.
    ════════════════════════════════════════════════════════════════════════ */
 
-/* Display name → key suffix. Recorded, never derived. */
-var T1_RESOURCE_SUFFIX = {
-    "Guided Meditation": "meditation",
-    "Cue Card": "crisiscard",
-    "How This Works": "guide",
-    "Somatic Release Activities": "companion",
-    "Safe Practice": "practice",
-    "Proximity Guide": "advisory",
-    "Disclosure & Support": "disclosure",
-    "Invitation to Repair": "repair",
-    "Your Record": "record",
-    "Accountability & Empathy": "accountability"
-  };
-
-/* META key → Reader key, and the Reader key's ordered resource manifest.
-   `keys` is the served order; a protocol carrying neither conditional simply
-   has a shorter list. Never hardcode its length. */
 var T1_PROTOCOL_KEYS = {
-  "t1-01": { reader: "p1", keys: ["p1-meditation", "p1-crisiscard", "p1-guide", "p1-companion", "p1-practice", "p1-disclosure", "p1-record", "p1-accountability"] },
-  "t1-02": { reader: "p2", keys: ["p2-meditation", "p2-crisiscard", "p2-guide", "p2-companion", "p2-practice", "p2-advisory", "p2-disclosure", "p2-repair", "p2-record", "p2-accountability"] },
-  "t1-03": { reader: "p3", keys: ["p3-meditation", "p3-crisiscard", "p3-guide", "p3-companion", "p3-practice", "p3-advisory", "p3-disclosure", "p3-record", "p3-accountability"] },
-  "t1-04": { reader: "p4", keys: ["p4-meditation", "p4-crisiscard", "p4-guide", "p4-companion", "p4-practice", "p4-advisory", "p4-disclosure", "p4-repair", "p4-record", "p4-accountability"] },
-  "t1-05": { reader: "p5", keys: ["p5-meditation", "p5-crisiscard", "p5-guide", "p5-companion", "p5-practice", "p5-disclosure", "p5-record", "p5-accountability"] },
-  "t1-06": { reader: "p6", keys: ["p6-meditation", "p6-crisiscard", "p6-guide", "p6-companion", "p6-practice", "p6-disclosure", "p6-record", "p6-accountability"] },
-  "t1-07": { reader: "p7", keys: ["p7-meditation", "p7-crisiscard", "p7-guide", "p7-companion", "p7-practice", "p7-disclosure", "p7-record", "p7-accountability"] },
-  "t1-08": { reader: "p8", keys: ["p8-meditation", "p8-crisiscard", "p8-guide", "p8-companion", "p8-practice", "p8-advisory", "p8-disclosure", "p8-repair", "p8-record", "p8-accountability"] },
-  "t1-09": { reader: "p9", keys: ["p9-meditation", "p9-crisiscard", "p9-guide", "p9-companion", "p9-practice", "p9-advisory", "p9-disclosure", "p9-repair", "p9-record", "p9-accountability"] },
-  "t1-10": { reader: "p10", keys: ["p10-meditation", "p10-crisiscard", "p10-guide", "p10-companion", "p10-practice", "p10-advisory", "p10-disclosure", "p10-record", "p10-accountability"] }
+  "t1-01": { reader: "t1p1", keys: ["t1p1-meditation", "t1p1-crisiscard", "t1p1-guide", "t1p1-companion", "t1p1-practice", "t1p1-disclosure", "t1p1-record", "t1p1-accountability"] },
+  "t1-02": { reader: "t1p2", keys: ["t1p2-meditation", "t1p2-crisiscard", "t1p2-guide", "t1p2-companion", "t1p2-practice", "t1p2-advisory", "t1p2-disclosure", "t1p2-repair", "t1p2-record", "t1p2-accountability"] },
+  "t1-03": { reader: "t1p3", keys: ["t1p3-meditation", "t1p3-crisiscard", "t1p3-guide", "t1p3-companion", "t1p3-practice", "t1p3-advisory", "t1p3-disclosure", "t1p3-record", "t1p3-accountability"] },
+  "t1-04": { reader: "t1p4", keys: ["t1p4-meditation", "t1p4-crisiscard", "t1p4-guide", "t1p4-companion", "t1p4-practice", "t1p4-advisory", "t1p4-disclosure", "t1p4-repair", "t1p4-record", "t1p4-accountability"] },
+  "t1-05": { reader: "t1p5", keys: ["t1p5-meditation", "t1p5-crisiscard", "t1p5-guide", "t1p5-companion", "t1p5-practice", "t1p5-disclosure", "t1p5-record", "t1p5-accountability"] },
+  "t1-06": { reader: "t1p6", keys: ["t1p6-meditation", "t1p6-crisiscard", "t1p6-guide", "t1p6-companion", "t1p6-practice", "t1p6-disclosure", "t1p6-record", "t1p6-accountability"] },
+  "t1-07": { reader: "t1p7", keys: ["t1p7-meditation", "t1p7-crisiscard", "t1p7-guide", "t1p7-companion", "t1p7-practice", "t1p7-disclosure", "t1p7-record", "t1p7-accountability"] },
+  "t1-08": { reader: "t1p8", keys: ["t1p8-meditation", "t1p8-crisiscard", "t1p8-guide", "t1p8-companion", "t1p8-practice", "t1p8-advisory", "t1p8-disclosure", "t1p8-repair", "t1p8-record", "t1p8-accountability"] },
+  "t1-09": { reader: "t1p9", keys: ["t1p9-meditation", "t1p9-crisiscard", "t1p9-guide", "t1p9-companion", "t1p9-practice", "t1p9-advisory", "t1p9-disclosure", "t1p9-repair", "t1p9-record", "t1p9-accountability"] },
+  "t1-10": { reader: "t1p10", keys: ["t1p10-meditation", "t1p10-crisiscard", "t1p10-guide", "t1p10-companion", "t1p10-practice", "t1p10-advisory", "t1p10-disclosure", "t1p10-record", "t1p10-accountability"] }
 };
 
 var T1_RESOURCES = {
-  "p1-meditation": {
+  "t1p1-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
     body: [
-      "<p>Settle where you are. You don't need to sit any particular way. If your eyes want to close, let them. If they don't, find one spot on the floor and leave them there.</p>",
-      "<p>Something is running fast. We're going at it in four moves. You don't have to remember them \u2014 I'll take you through.</p>",
+      "<blockquote><strong>VOICE</strong> \u2014 steady, unhurried, unbothered. Someone who has seen this many times and is not alarmed by it. Not soothing.</blockquote>",
+      "<p>There's something running fast, and it got here before you did.</p>",
+      "<p>That's the order it happens in. Body first, explanation afterwards \u2014 and the explanation is usually catching up rather than leading.</p>",
+      "<p>Four moves. You don't have to hold on to them. I'll take you through.</p>",
       "<h4>Recognition</h4>",
-      "<p>Somewhere in your body there's a signal. Find where it's loudest.</p>",
-      "<p>Chest. Throat. Stomach. Jaw. Behind the eyes. There's no correct location.</p>",
-      "<p>Now say what it is, in one word. Not a story about it. One word for the state.</p>",
-      "<p><strong>Agitated.</strong> Your body has moved into a fast state. That's all the word has to carry.</p>",
-      "<p>Notice you just did something. You were inside it, and for a second you were also looking at it. Both at once.</p>",
-      "<p>That second is the thing everything else here is built on.</p>",
+      "<p>Somewhere in you there's a signal. Where's it loudest?</p>",
+      "<p>Chest. Throat. Stomach. Behind the eyes. Somewhere else entirely. There's no correct answer and you're not being marked.</p>",
+      "<p>Now one word for it. Not the story \u2014 the state.</p>",
+      "<p><strong>Agitated.</strong></p>",
+      "<p>And notice what just happened there. You were inside it. And for a second you were also the one looking at it.</p>",
+      "<p>Both at once. That second is the whole thing this is built on.</p>",
       "<h4>Regulation</h4>",
-      "<p>Now the breath. The count matters more than the size.</p>",
-      "<p>Four counts in.</p>",
-      "<p>Six counts out. Longer out than in. Every time.</p>",
-      "<p>Don't pull for a big breath. A big breath asks for effort, and effort is the wrong direction. Small is fine. Long is what matters.</p>",
-      "<p>Attention into the middle of your chest. Not the count \u2014 that keeps going on its own.</p>",
-      "<p>If a hand there helps, put one there.</p>",
-      "<p>Nothing to do but this.</p>",
+      "<p>Now the breath, and the count matters more than the size.</p>",
+      "<p>Four in.</p>",
+      "<p>Six out. Longer out than in, every time.</p>",
+      "<p>Don't pull for a big one. A big breath asks for effort and effort is pointing the wrong way. Small is fine. Long is what matters.</p>",
+      "<p>Attention into the middle of your chest. The count keeps going on its own now.</p>",
+      "<p>If a hand there helps, there's no reason not to.</p>",
+      "<p>Stay here a while. This is the part that does the most and it's the part people cut short.</p>",
       "<h4>Release</h4>",
-      "<p>Something in you is fighting the fact that this is happening. Not the situation \u2014 the state itself. It sounds like <em>not now</em>, or <em>not again</em>, or <em>what is wrong with me</em>.</p>",
-      "<p>That second thing costs more than the first.</p>",
-      "<p>The state is here. It arrived. You're not being asked to want it, or approve of it. Only to stop spending force on the fact that it came.</p>",
-      "<p>Try a different question. Instead of <em>what is wrong with me</em> \u2014</p>",
+      "<p>Now \u2014 there's a second thing going on, underneath.</p>",
+      "<p>Not the state. The argument with the state. It sounds like <em>not now.</em> Or <em>not again.</em> Or <em>what is wrong with me.</em></p>",
+      "<p>That one costs more than the first, and it's the only one of the two you can put down.</p>",
+      "<p>The state turned up. You're not being asked to want it, or approve of it, or find it interesting. Only to stop spending yourself on the fact that it arrived.</p>",
+      "<p>And swap the question. Instead of <em>what's wrong with me</em> \u2014</p>",
       "<p><strong>What was this for?</strong></p>",
-      "<p>Your body has a fast state because a fast state is useful. It runs ahead of thought, which is the point of it. It doesn't check with you first.</p>",
-      "<p>Don't answer now. Let it sit there in place of the other one.</p>",
-      "<p>What you decide to do about any of it is separate, and it comes easier from here.</p>",
+      "<p>Your body runs a fast state because a fast state is useful. It goes ahead of thought. That's the point of it, and it's why it doesn't check with you first.</p>",
+      "<p>Leave the question open. Nothing needs answering.</p>",
       "<h4>Rise</h4>",
       "<p>Step outside it.</p>",
-      "<p>Picture yourself from a little way off. Across the room. Not close up.</p>",
-      "<p>There's a person there, breathing four and six. Talk to them the way you'd talk to someone else. Use <em>you</em>.</p>",
-      "<p><em>You are having a fast day. You've had these before.</em></p>",
-      "<p>Stay out there a moment. The distance does its own work.</p>",
-      "<p>Now forward. Not a wish \u2014 one concrete thing. Later today, somewhere specific, doing something specific, in this steadier state.</p>",
+      "<p>Picture yourself from across the room. Not close up \u2014 across.</p>",
+      "<p>There's a person over there, breathing four and six. Talk to them the way you'd talk to anyone else. Use <em>you</em>.</p>",
+      "<p><em>You're having a fast day. You've had these before.</em></p>",
+      "<p>Stay out there. The distance is doing its own work and it doesn't need help.</p>",
+      "<p>Now \u2014 once you can see where your attention is, you can put it somewhere on purpose. That's what all of this is actually for.</p>",
+      "<p>So: later today. Somewhere specific, doing something specific, in this steadier state.</p>",
       "<p>Where are you. What's in your hands. Who's there, or nobody. What's the first thing you say.</p>",
-      "<p>Detail is what makes this work. A general hope does nothing.</p>",
-      "<p>And one thing already true, before you come back. Small is better than large. The chair. The light. That you stopped and did this.</p>",
+      "<p>Detail. A general hope does nothing at all \u2014 it has to be a scene.</p>",
+      "<p>And one thing already here before you come back. Small beats large. The chair. The light. That you stopped and did this.</p>",
       "<p>Come back when you're ready. Feet on the floor.</p>",
-      "<p>You may feel different. You may not. Either is ordinary and neither is a verdict.</p>",
-      "<p>The four are yours now. Recognition. Regulation. Release. Rise. You can run them without me, anywhere, with your eyes open.</p>"
+      "<p>You may feel different. You may not. Both are ordinary and neither is a verdict on anything.</p>",
+      "<p>Now put it down \u2014 the state, the question, all of it. You don't have to carry any of it out of here.</p>",
+      "<p>The four are yours. Recognition. Regulation. Release. Rise. They work with your eyes open, anywhere, without me.</p>"
     ],
-    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 4, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "BLUE/ILLUSTRATION", "note": "a single word settling onto a still surface. No ripple."}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "RED/ACTION", "note": "hand to centre of chest, flat, light. Offered, not instructed."}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 17, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 19, "type": "GOLD/PAUSE", "note": ""}, {"block": 21, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 21, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 23, "type": "GOLD/PAUSE", "note": "long"}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 29, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 31, "type": "GOLD/PAUSE", "note": ""}, {"block": 32, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 32, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 34, "type": "GOLD/PAUSE", "note": "long"}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": ""}, {"block": 36, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}]
+    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 3, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "BLUE/ILLUSTRATION", "note": "a single word settling onto a still surface. No ripple."}, {"block": 9, "type": "GOLD/PAUSE", "note": ""}, {"block": 10, "type": "GOLD/PAUSE", "note": "long"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 17, "type": "RED/ACTION", "note": "hand to centre of chest, flat, light. Offered, not instructed."}, {"block": 18, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 18, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 18, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 18, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 19, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 21, "type": "GOLD/PAUSE", "note": ""}, {"block": 22, "type": "GOLD/PAUSE", "note": "long"}, {"block": 23, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 23, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 27, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 31, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 33, "type": "GOLD/PAUSE", "note": ""}, {"block": 34, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 34, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 35, "type": "GOLD/PAUSE", "note": ""}, {"block": 37, "type": "GOLD/PAUSE", "note": "long"}, {"block": 38, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 38, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 39, "type": "GOLD/PAUSE", "note": ""}, {"block": 39, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p1-crisiscard": {
+  "t1p1-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
     body: [
       "<blockquote>Second person throughout \u2014 deliberate, not stylistic.</blockquote>",
@@ -132,9 +96,11 @@ var T1_RESOURCES = {
       "<p><strong>Release</strong> \u2014 The state is one thing. Fighting the state is a second thing, and it costs more. Let the fact of it stand. Change the question to <em>what was this for</em> and leave it unanswered. What you do about it is separate, and comes later.</p>",
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. Address yourself as <em>you</em>. Then one concrete scene, later today: where, what's in your hands, first thing you say. Detail, not hope. Then one thing already here.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p1-guide": {
+  "t1p1-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the fast state is*",
     body: [
       "<p>Before you have a thought about a situation, your body has already read it. That reading happens below awareness and runs faster than deliberation \u2014 it had to, because it evolved for situations where waiting to think was expensive.</p>",
@@ -160,9 +126,11 @@ var T1_RESOURCES = {
       "<p><em>The finding is used here; the wider programme is not. There is no measurement of coherence anywhere on this platform and no score attached to any breath.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What any of it means about you, your history or your life is a reading that belongs to you.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: [{"block": 8, "src": "assets/diagrams/release/img-067-release-t1-01.svg", "alt": "The fast state and Fighting it: two things running at once. The fast state turned up on its own. Fighting it keeps returning to its own starting point."}]
   },
-  "p1-companion": {
+  "t1p1-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
       "<p><strong>Long exhale, no ceremony.</strong> Four in, six out, three or four cycles. Eyes open, mid-conversation. Nobody can see you doing it.</p>",
@@ -173,9 +141,11 @@ var T1_RESOURCES = {
       "<p><strong>Name three things in the room.</strong> Something you can see, something you can hear, something you can feel against your skin. Recognition, applied outward.</p>",
       "<p><em>Cool water on the wrists at a sink also works. Comfortable, not shocking.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p1-practice": {
+  "t1p1-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
     body: [
       "<p>Works with a fast state while it's happening, using breath, attention and observation. You run it on your own, at the moment you need it, without booking anything or telling anyone.</p>",
@@ -187,13 +157,15 @@ var T1_RESOURCES = {
       "<p>If the breathing itself makes you feel worse \u2014 lightheaded, more panicked \u2014 stop counting and let your breath do whatever it does. Focusing on the breath increases alarm in some people rather than settling it. Use Recognition and Rise on their own and leave the count out. The protocol still works with three moves.</p>",
       "<p>If Release opens something much larger than the day's state \u2014 a memory, a grief you weren't looking for \u2014 you can stop there. Surfacing isn't an instruction to follow it.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
-      "<p>Some states need another human being, and no self-guided practice substitutes for one. Contact someone today \u2014 a doctor, <a href=\"getting-help.html\">a crisis line in your country</a>, or a person you trust \u2014 if you're having thoughts of harming yourself, if the fast state doesn't let up over days rather than hours, if you're avoiding leaving the house, or if you're using something to get through it.</p>",
+      "<p>Some states need another human being, and no self-guided practice substitutes for one. Contact someone today \u2014 a doctor, a crisis line in your country, or a person you trust \u2014 if you're having thoughts of harming yourself, if the fast state doesn't let up over days rather than hours, if you're avoiding leaving the house, or if you're using something to get through it.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're already working with a therapist, doctor or counsellor, this sits alongside that. It replaces nothing and competes with nothing. Tell them you're using it \u2014 most will want to know, and some will have views about the breathing worth hearing.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p1-disclosure": {
+  "t1p1-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>Take these exactly, or change every word.</p>",
@@ -216,18 +188,22 @@ var T1_RESOURCES = {
       "<blockquote>\"There's more than the session. A card with the four steps for when there's no time to think, a few physical things for in between, and something I write in afterwards.\"</blockquote>",
       "<p><em>Tell one person. It doesn't have to be the closest person, and it can be a professional rather than a friend. States like this get heavier in proportion to how privately they're carried.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p1-record": {
+  "t1p1-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before.</p>",
       "<p>Any of these, or none.</p>",
-      "<p>- Where in your body was it loudest? - What word did you use? The accurate one, or the nearest to hand? - What was happening in the hour before it started? - At Release, what did the resistance actually sound like? Write the sentence it used. - <em>What was this for</em> \u2014 what turned up, without needing to answer it? - What did you say to yourself from across the room? - What was the concrete scene? Has any of it happened since? - What did you write here last time? Read it back.</p>"
+      "<ul><li>Where in your body was it loudest?</li><li>What word did you use? The accurate one, or the nearest to hand?</li><li>What was happening in the hour before it started?</li><li>At Release, what did the resistance actually sound like? Write the sentence it used.</li><li><em>What was this for</em> \u2014 what turned up, without needing to answer it?</li><li>What did you say to yourself from across the room?</li><li>What was the concrete scene? Has any of it happened since?</li><li>What did you write here last time? Read it back.</li></ul>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p1-accountability": {
+  "t1p1-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 into a room, a tone, a silence, something you did or didn't do \u2014 and lands somewhere you can't see from where you're standing.</p>",
@@ -240,54 +216,73 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 anxiety repairs by saying the true short thing at the time rather than explaining later. <em>\"I'm not going to make it, and it isn't about you\"</em> sent on the day is worth more than a full account a week on.</p>",
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state. It isn't a verdict on you, and someone else's account of you isn't automatically more accurate than your own. What you find when you look is yours to read.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p2-meditation": {
+  "t1p2-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
     body: [
-      "<p>Sit or stand, whichever your body wants. Anger often doesn't want to sit. If standing is what's available, stand.</p>",
-      "<p>This works on the anger while it's here, and it leaves your position exactly where you're holding it. You're not being asked to let it go, be bigger than it, or see the other side.</p>",
+      "<p>Something got crossed.</p>",
+      "<p>That's what this is. Not a mood, not a bad day \u2014 a line, and something went over it.</p>",
+      "<p>This one doesn't begin with settling. Anger doesn't settle on request, and asking it to is how these things fail in the first ten seconds. Keep moving if you're moving. Stay still if you're still.</p>",
+      "<p>Here's what we're doing. Your position stays exactly where you're holding it. Nobody is going to talk you round.</p>",
       "<h4>Recognition</h4>",
-      "<p>Find it in your body, before any of the words about it.</p>",
-      "<p>Jaw. Hands. Back of the neck. Heat across the chest or the face. Find where it's loudest.</p>",
-      "<p>Now name the state. One word. <strong>Agitated.</strong></p>",
-      "<p>Notice what that word leaves out. It leaves out who. What they did. Whether you're right.</p>",
-      "<p>You're probably right. That isn't what this step is for. It separates the state from the case, because right now they're welded together.</p>",
-      "<p>The case can wait. It'll still be there, intact, with all its evidence.</p>",
+      "<p>Your body registered that before you'd finished deciding what you thought about it.</p>",
+      "<p>So \u2014 where is it. Jaw. Hands. The back of the neck. Heat across the face.</p>",
+      "<p>Find it, and then say one word to yourself.</p>",
+      "<p><strong>Agitated.</strong></p>",
+      "<p>Now notice what that word left out. It left out them. Their name, their face, what they said, and the whole argument you've got assembled and ready.</p>",
+      "<p>That isn't because the argument is wrong. You may be completely right, and it will be just as right afterwards, with all of it intact.</p>",
+      "<p>It's because there are two things in you right now and only one of them can be worked on. The case is going nowhere. The state is here, in your hands and your jaw, and that one moves.</p>",
       "<h4>Regulation</h4>",
       "<p>Four counts in.</p>",
-      "<p>Six counts out. Longer out than in.</p>",
-      "<p>Anger wants a sharp breath. Short in, hard out. Don't follow it.</p>",
-      "<p>Attention into the centre of your chest. Not the jaw. Not the hands.</p>",
-      "<p>If your hands are closed, open them.</p>",
-      "<p>It may come up before it comes down. Keep counting.</p>",
+      "<p>Six out. Longer out than in.</p>",
+      "<p>Your breath wants to go short and sharp. Let it want that. Go the other way anyway.</p>",
+      "<p>Your hands are closed. Open them. Fingers wide, then loose.</p>",
+      "<p>Attention into the middle of your chest. Not the jaw \u2014 the jaw will hold on to it. The chest.</p>",
+      "<p>It'll come up before it goes down. That's normal here and it's not a sign this isn't working.</p>",
       "<h4>Release</h4>",
-      "<p>Here's the part that costs the most, and it isn't the anger.</p>",
-      "<p>It's the rehearsal. The conversation you're having with them in your head, where you say the thing and they answer and you answer better. You've run it several times. Each time lands the body back where it started.</p>",
-      "<p>The anger arrived on its own. The rerun you're doing, without deciding to.</p>",
-      "<p>Let the anger stand. It's here, it's yours, nobody's taking it off you.</p>",
-      "<p>Set down the rerun. Only the rerun. Not the position.</p>",
-      "<p>And the question. Not <em>what's wrong with me for being this angry.</em> That returns nothing you can use.</p>",
+      "<p>Now. The conversation in your head.</p>",
+      "<p>You know the one. You say the thing, they answer, you answer better. And you've run it \u2014 what, four times? Five?</p>",
+      "<p>Notice something about it. You win it. Every single time.</p>",
+      "<p>That's not you being unfair. The part of you writing that conversation is on your side \u2014 that's its entire job \u2014 so of course it hands you the better lines. It was never going to do anything else.</p>",
+      "<p>And every run puts your body back where it started. You've been re-lighting yourself all afternoon.</p>",
+      "<p>So: the anger stays. It's yours, it's earned, nobody's taking it.</p>",
+      "<p>Put down the rerun. Only the rerun.</p>",
+      "<p>And one different question, in place of the one you've been asking.</p>",
+      "<p>Not <em>what's wrong with me.</em></p>",
       "<p><strong>What was this for?</strong></p>",
-      "<p>Anger moves toward. It shows up where something is being crossed, and it mobilises you to meet it. On its own terms it's competent.</p>",
-      "<p>Understanding what it was doing doesn't excuse anyone. It doesn't drop the charge.</p>",
+      "<p>Anger goes toward things. That's what makes it different from fear \u2014 fear backs away, this walks at it. It turns up where something's being crossed and it gets you upright to meet it.</p>",
+      "<p>On its own terms, it did its job.</p>",
+      "<p>Understanding that doesn't let anybody off. It doesn't drop a single thing you're holding.</p>",
+      "<p>One more, and it's the harder one to admit.</p>",
+      "<p>You might not want to put this down.</p>",
+      "<p>Fair enough. It works. It's the thing that stops you being walked over, and some part of you knows exactly what happens on the days you haven't got it.</p>",
+      "<p>So here's the smaller true thing. It was built with what you had then. What you had then and what you've got now aren't the same \u2014 you can see a state while you're standing in it, and you did that a moment ago, at the top of this.</p>",
+      "<p>That part of you doesn't know. Nobody told it. It's working off old information.</p>",
+      "<p>Nobody's asking you to stand it down. You'd be right to refuse. Only to notice that the person it's guarding isn't the one it started guarding.</p>",
       "<h4>Rise</h4>",
-      "<p>Step outside it.</p>",
-      "<p>See yourself from across the room. Someone standing there, jaw set, running a conversation for the fifth time.</p>",
-      "<p>Speak to them as <em>you</em>.</p>",
-      "<p><em>You are angry, and you have a reason.</em></p>",
-      "<p>Both halves. Neither cancels the other.</p>",
-      "<p>Now forward. Not the confrontation where you win. The version where you're steady and it still matters to you.</p>",
-      "<p>Where are you. What's your voice doing. What's the first sentence \u2014 the actual words. What do your hands do while you say it.</p>",
-      "<p>Detail. A general intention to handle it well does nothing.</p>",
-      "<p>And one thing already true, before you come back. Small. Not gratitude for the situation \u2014 nobody's asking that.</p>",
-      "<p>Come back. Feet on the floor. Hands open.</p>",
-      "<p>The anger may still be here. If it is, that's the right result \u2014 it was never the target. What you have now is a decision to make about it, from somewhere steadier than where you were standing.</p>",
-      "<p>Recognition. Regulation. Release. Rise. Yours.</p>"
+      "<p>Now step back from it.</p>",
+      "<p>Somebody across the room. Standing, jaw set, running a conversation for the sixth time.</p>",
+      "<p>Say it to them as <em>you</em>.</p>",
+      "<p><em>You are angry. You have a reason.</em></p>",
+      "<p>Both halves stay. Neither one takes anything off the other.</p>",
+      "<p>Now something later today. Not the confrontation where you win \u2014 you've already had that one, five times, and it cost you the afternoon.</p>",
+      "<p>The one where you're steady and it still matters to you just as much.</p>",
+      "<p>Where are you standing. What's your voice doing. What are the actual first words \u2014 not the gist of them, the words.</p>",
+      "<p>And what do your hands do while you say it.</p>",
+      "<p>One more thing before you come back. Something already true, and small, and nothing to do with any of this. Not gratitude about the situation \u2014 that would be a stupid thing to ask of you.</p>",
+      "<p>Feet on the floor. Hands open.</p>",
+      "<p>The anger may well still be here. If it is, that's right \u2014 it was never what we were going after.</p>",
+      "<p>What's different is that you've got a decision to make now, instead of a loop to run. And you'll make it from here rather than from where you were standing.</p>",
+      "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
-    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 4, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "BLUE/ILLUSTRATION", "note": "heat rendered as light, contained, not spreading."}, {"block": 6, "type": "GOLD/PAUSE", "note": ""}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 11, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 11, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "RED/ACTION", "note": "hands unclench. Offered, not instructed."}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 18, "type": "GOLD/PAUSE", "note": ""}, {"block": 20, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 22, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 26, "type": "GOLD/PAUSE", "note": ""}, {"block": 29, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 31, "type": "GOLD/PAUSE", "note": ""}, {"block": 32, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 32, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 34, "type": "GOLD/PAUSE", "note": "long"}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": ""}, {"block": 36, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}]
+    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in late, under the third line. 90 BPM, 3/4. Sits low throughout."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 3, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "BLUE/ILLUSTRATION", "note": "a line, drawn firm. Something has passed over it."}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 11, "type": "GOLD/PAUSE", "note": ""}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "RED/ACTION", "note": "hands unclench. Offered, not instructed."}, {"block": 17, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 17, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 18, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 18, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 19, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 21, "type": "GOLD/PAUSE", "note": ""}, {"block": 22, "type": "GOLD/PAUSE", "note": "long"}, {"block": 23, "type": "GOLD/PAUSE", "note": ""}, {"block": 24, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 24, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 25, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "GOLD/PAUSE", "note": "long"}, {"block": 30, "type": "GOLD/PAUSE", "note": "long"}, {"block": 31, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 31, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 33, "type": "GOLD/PAUSE", "note": "long"}, {"block": 34, "type": "GOLD/PAUSE", "note": ""}, {"block": 35, "type": "GOLD/PAUSE", "note": "long"}, {"block": 36, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 36, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 37, "type": "GOLD/PAUSE", "note": "long"}, {"block": 38, "type": "GOLD/PAUSE", "note": ""}, {"block": 39, "type": "GOLD/PAUSE", "note": ""}, {"block": 42, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 44, "type": "GOLD/PAUSE", "note": "long"}, {"block": 45, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 45, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 47, "type": "GOLD/PAUSE", "note": ""}, {"block": 48, "type": "GOLD/PAUSE", "note": "long"}, {"block": 49, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 49, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 50, "type": "GOLD/PAUSE", "note": ""}, {"block": 50, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p2-crisiscard": {
+  "t1p2-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
     body: [
       "<blockquote>Second person throughout \u2014 deliberate, not stylistic.</blockquote>",
@@ -302,9 +297,11 @@ var T1_RESOURCES = {
       "<p><strong>Release</strong> \u2014 Two things are running. The anger, which arrived on its own. And the rerun, where you get the line right. The rerun is the expensive one and the one you have a say in. Set down the rerun. Keep the anger. Keep the position. Ask <em>what was this for</em> and leave it open.</p>",
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You are angry, and you have a reason.</em> Both. Then one concrete scene: your actual words, your voice, your hands. Not the version where you win.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p2-guide": {
+  "t1p2-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
     body: [
       "<p>Anger is a mobilised state with a feature that distinguishes it from fear: it moves toward rather than away. Fear pulls you back from the thing. Anger sends you at it.</p>",
@@ -323,14 +320,16 @@ var T1_RESOURCES = {
       "<p><strong>Polyvagal Theory \u2014 Stephen Porges</strong> \u00b7 <em>peer-reviewed</em> \u00b7 supplies Recognition and the three state labels</p>",
       "<p>Threat detection runs ahead of thought. The body reads a situation and moves before deliberation catches up, which is what makes the response fast and also what makes it non-negotiable in the moment. Porges describes three broad conditions: settled and socially available, mobilised for action, and shut down. Agitated, Unsteady and Numb are the member-facing names for those three. <em>Here it distinguishes anger from fear \u2014 both are mobilised, but anger moves toward rather than away.</em></p>",
       "<p><em>The anatomical premises are contested: a 2026 evaluation in</em> Clinical Neuropsychiatry <em>challenged them, with Porges replying in the same issue. The state distinctions are what this platform uses, and they hold independently of that dispute.</em></p>",
-      "<p><strong>Compassionate Inquiry \u2014 Gabor Mat\u00e9</strong> \u00b7 <em>clinical practice</em> \u00b7 supplies Release and its register</p>",
-      "<p>A response is treated as an adaptation rather than a defect \u2014 something that was doing a job, whether or not it is still the right job. The register of the question decides the answer: <em>what is wrong with me</em> asks about defect and returns answers about defect; <em>what was this for</em> asks about function and returns something workable. Understanding is not endorsement, of the response or of anyone's behaviour. <em>Here it is what lets you understand what the anger was protecting without dropping the charge.</em></p>",
-      "<p><em>A clinical practice, not a controlled research programme. Used here for the register of the question and nothing wider.</em></p>",
+      "<p><strong>Compassionate Inquiry \u2014 Gabor Mat\u00e9</strong> \u00b7 <em>clinical practice</em> \u00b7 supplies Release and the way the question is asked</p>",
+      "<p>A response is treated as an adaptation rather than a defect \u2014 something that was doing a job, whether or not it is still the right job. The kind of question you ask decides the kind of answer you get. <em>What is wrong with me</em> asks what is broken, and comes back with a list of what is broken. <em>What was this for</em> asks what it was doing, and comes back with something you can use. Understanding is not endorsement, of the response or of anyone's behaviour. <em>Here it is what lets you understand what the anger was protecting without dropping the charge.</em></p>",
+      "<p><em>A clinical practice, not a controlled research programme. Used here for the way the question is asked, and nothing wider.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What your anger means, and what to do about it, is a reading that belongs to you.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: [{"block": 7, "src": "assets/diagrams/release/img-067-release-t1-02.svg", "alt": "The anger and The rerun: two things running at once. The anger turned up on its own. The rerun keeps returning to its own starting point."}]
   },
-  "p2-companion": {
+  "t1p2-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
       "<p><strong>Open the hands.</strong> Spread the fingers wide, hold, let them go soft. Anger closes the grip constantly, which gives you constant chances.</p>",
@@ -341,9 +340,11 @@ var T1_RESOURCES = {
       "<p><strong>Say it out loud, once, alone.</strong> The actual thing you want to say. Once is discharge. Twice is rehearsal, which is what the protocol asks you to set down.</p>",
       "<p><em>Four in, six out is always available \u2014 eyes open, in the room, nobody watching.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p2-practice": {
+  "t1p2-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
     body: [
       "<p>Works with anger while it is present, using breath, attention and observation. Leaves your position, your grievance and your judgement of what happened intact.</p>",
@@ -358,13 +359,15 @@ var T1_RESOURCES = {
       "<p>If your anger has become violent \u2014 if you have hurt someone, damaged things, or you are worried you might \u2014 that needs a person rather than a protocol, and it needs one now. Speak to a doctor, or to a helpline for people concerned about their own behaviour. Most countries have one and it exists for exactly this call. Making it is not an admission of anything and it is the single most effective move available.</p>",
       "<p>If someone is being violent toward you, this protocol is a way to steady yourself in it. It is not a way to manage them, and it is not a substitute for getting out of range. Your safety is a separate question from your regulation and it comes first.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
-      "<p>Contact someone today \u2014 a doctor, <a href=\"getting-help.html\">a helpline in your country</a>, or a person you trust \u2014 if you are frightening yourself with the intensity of it, if anger is arriving with no identifiable trigger and staying for days, if you are using something to manage it, or if you are having thoughts of harming yourself.</p>",
+      "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you are frightening yourself with the intensity of it, if anger is arriving with no identifiable trigger and staying for days, if you are using something to manage it, or if you are having thoughts of harming yourself.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you are with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. Tell them you are using it.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p2-advisory": {
+  "t1p2-advisory": {
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
     body: [
       "<p>Some anger has a live external source that keeps supplying it. Where that is the case, how much contact you have is a real variable \u2014 and one you have more say over than you have over the state.</p>",
@@ -382,9 +385,11 @@ var T1_RESOURCES = {
       "<p><strong>Using this</strong></p>",
       "<p>Notice the tier. Then notice whether it is the tier you would assign if a friend described the same thing. That is the exercise. Where it goes next is yours \u2014 nobody here knows what you would be giving up.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p2-disclosure": {
+  "t1p2-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>Take these exactly, or change every word.</p>",
@@ -415,9 +420,11 @@ var T1_RESOURCES = {
       "<p>Then do that, today.</p>",
       "<p><em>Tell one person. It can be a professional rather than a friend. Anger kept entirely private finds its own exits, and the exits it finds are worse than the telling.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p2-repair": {
+  "t1p2-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
     body: [
       "<p>Send it from the far side of the protocol, not the middle. An invitation written from inside the state reads as an opening move in a case, and gets answered as one.</p>",
@@ -428,19 +435,23 @@ var T1_RESOURCES = {
       "<p><strong>Before sending</strong> \u2014 read it back for a case in disguise. <em>Always, never, actually, to be fair, I've realised.</em> Cut them. Then check what you are expecting back: if a slow reply would anger you, it is early. An invitation with a required answer is not one.</p>",
       "<p><em>If they don't take it, you have done the part that was yours. Whether they meet it is theirs, and always was.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p2-record": {
+  "t1p2-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it is never measured against anything you wrote before.</p>",
       "<p>Reading your own words back is the most direct version of the distance the fourth step trains.</p>",
       "<p>Any of these, or none.</p>",
-      "<p>- Where did it sit in your body? - What was the rerun? Write the line you kept getting right. - How many times had you run it before you noticed you were running it? - What was actually crossed? Not who \u2014 what. - <em>What was this for</em> \u2014 what came up, without needing to answer it? - What did you say to yourself from across the room? - Is this the same anger as last time, or a different one wearing the same clothes? - What did you write here last time? Read it back.</p>"
+      "<ul><li>Where did it sit in your body?</li><li>What was the rerun? Write the line you kept getting right.</li><li>How many times had you run it before you noticed you were running it?</li><li>What was actually crossed? Not who \u2014 what.</li><li><em>What was this for</em> \u2014 what came up, without needing to answer it?</li><li>What did you say to yourself from across the room?</li><li>Is this the same anger as last time, or a different one wearing the same clothes?</li><li>What did you write here last time? Read it back.</li></ul>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p2-accountability": {
+  "t1p2-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 into a room, a tone, a silence, something you did or didn't do \u2014 and lands somewhere you can't see from where you're standing.</p>",
@@ -454,15 +465,17 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 anger repairs by leaving earlier, not by leaving better. <em>\"I'm going to go outside when it starts, before it gets loud\"</em> is small, specific and something they can watch for. <em>\"I'll never do that again\"</em> isn't.</p>",
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. Someone else's account of you isn't automatically more accurate than your own. And if someone is being violent or controlling toward you, this isn't the resource for that situation \u2014 the Proximity Guide's third tier is, and your safety is a separate question from your regulation.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p3-meditation": {
+  "t1p3-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
     body: [
       "<p>Before anything else \u2014 is there too much coming in right now? Noise, light, screens, people talking.</p>",
       "<p>If there is, deal with that first. Go somewhere quieter. Turn something off. Put headphones on. That isn't skipping the practice \u2014 when too much is coming in, turning the input down <em>is</em> the practice, and everything after this works better once you have.</p>",
       "<p>You don't have time for this. That's the state talking, and it says the same thing every time.</p>",
-      "<p>Sit anyway. Nothing to arrange. Eyes closed if they'll close, or one spot on the floor if they won't.</p>",
+      "<p>Nothing needs arranging. Stay where you are and we'll be quick.</p>",
       "<p>This works on the state, which is the part that's actually reachable right now. Your list stays your list \u2014 sorting it is a separate job, and it goes better from the far side of this one.</p>",
       "<h4>Recognition</h4>",
       "<p>Find where it is in your body, before any of the words about it.</p>",
@@ -513,9 +526,11 @@ var T1_RESOURCES = {
       "<p>Recognition. Regulation. Release. Rise.</p>",
       "<p>Go and do the next thing.</p>"
     ],
-    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 8, "type": "BLUE/ILLUSTRATION", "note": "many fine lines converging on one point, none resolving."}, {"block": 9, "type": "GOLD/PAUSE", "note": ""}, {"block": 11, "type": "GOLD/PAUSE", "note": ""}, {"block": 15, "type": "GOLD/PAUSE", "note": ""}, {"block": 16, "type": "GOLD/PAUSE", "note": ""}, {"block": 17, "type": "GOLD/PAUSE", "note": ""}, {"block": 20, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 21, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 22, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 22, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 23, "type": "GOLD/PAUSE", "note": ""}, {"block": 24, "type": "RED/ACTION", "note": "feet pressed into the floor, steady, not straining."}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 26, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 28, "type": "GOLD/PAUSE", "note": ""}, {"block": 30, "type": "GOLD/PAUSE", "note": ""}, {"block": 33, "type": "GOLD/PAUSE", "note": ""}, {"block": 34, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 34, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": "long"}, {"block": 38, "type": "GOLD/PAUSE", "note": "long"}, {"block": 39, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 39, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 43, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, converging lines now behind them rather than around them."}, {"block": 45, "type": "GOLD/PAUSE", "note": ""}, {"block": 45, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 45, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 47, "type": "GOLD/PAUSE", "note": "long"}, {"block": 48, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 48, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 49, "type": "GOLD/PAUSE", "note": ""}, {"block": 49, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}]
+    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 8, "type": "BLUE/ILLUSTRATION", "note": "many fine lines converging on one point, none resolving."}, {"block": 9, "type": "GOLD/PAUSE", "note": ""}, {"block": 11, "type": "GOLD/PAUSE", "note": ""}, {"block": 15, "type": "GOLD/PAUSE", "note": ""}, {"block": 16, "type": "GOLD/PAUSE", "note": ""}, {"block": 17, "type": "GOLD/PAUSE", "note": ""}, {"block": 20, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 21, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 22, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 22, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 23, "type": "GOLD/PAUSE", "note": ""}, {"block": 24, "type": "RED/ACTION", "note": "feet pressed into the floor, steady, not straining."}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 26, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 28, "type": "GOLD/PAUSE", "note": ""}, {"block": 30, "type": "GOLD/PAUSE", "note": ""}, {"block": 33, "type": "GOLD/PAUSE", "note": ""}, {"block": 34, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 34, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": "long"}, {"block": 38, "type": "GOLD/PAUSE", "note": "long"}, {"block": 39, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 39, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 43, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, converging lines now behind them rather than around them."}, {"block": 45, "type": "GOLD/PAUSE", "note": ""}, {"block": 45, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 45, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 47, "type": "GOLD/PAUSE", "note": "long"}, {"block": 48, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 48, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 49, "type": "GOLD/PAUSE", "note": ""}, {"block": 49, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p3-crisiscard": {
+  "t1p3-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
     body: [
       "<blockquote>Second person throughout \u2014 deliberate, not stylistic.</blockquote>",
@@ -531,9 +546,11 @@ var T1_RESOURCES = {
       "<p><strong>Release</strong> \u2014 There's the amount, which is real. And there's the thing you're doing on top of it. Too much to do: going round the list. Too much coming in: pushing through as if it weren't landing. Too much at once: trying to work out which feeling comes first. Whichever it is, it's the expensive one, it doesn't finish, and it's the one you can put down. Keep the load. Ask <em>what was this for</em> and leave it open.</p>",
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You have a lot on. It is a lot.</em> Then one concrete scene: the next thing, not the biggest thing. Where you are, what's in front of you, the first movement. Then one thing already handled.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p3-guide": {
+  "t1p3-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
     body: [
       "<p>Overwhelm is a mobilised state with a particular signature: mobilisation with no single target.</p>",
@@ -569,9 +586,11 @@ var T1_RESOURCES = {
       "<p><em>The finding is used here; the wider programme is not. There is no measurement of coherence anywhere on this platform and no score attached to any breath.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains what the body does under load. Whether your load is reasonable, and what it says about your work or the choices in front of you, is a reading that belongs to you.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: [{"block": 16, "src": "assets/diagrams/release/img-067-release-t1-03.svg", "alt": "The load and Going round the list: two things running at once. The load turned up on its own. Going round the list keeps returning to its own starting point."}]
   },
-  "p3-companion": {
+  "t1p3-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
       "<p><strong>Turn something off.</strong> One source of input, removed. The radio, a screen, the overhead light, the notifications. The most effective thing on this list and the one people skip, because it feels too simple to count.</p>",
@@ -585,9 +604,11 @@ var T1_RESOURCES = {
       "<p><strong>Write the list down and turn the paper over.</strong> Not to organise it \u2014 to get it out of working memory and onto a surface. It's still there. It doesn't need watching.</p>",
       "<p><em>Walking to a door and back also works. The point is that it finishes.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p3-practice": {
+  "t1p3-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
     body: [
       "<p>Works with the state that arrives under load, using breath, attention and observation. It doesn't organise your workload and doesn't claim to reduce it. It changes which state you meet it from, which matters more than it sounds \u2014 a narrowed, scanning system performs worse at exactly the work the load requires.</p>",
@@ -604,15 +625,17 @@ var T1_RESOURCES = {
       "<p>If the breathing itself makes things worse \u2014 lightheaded, more alarmed \u2014 stop counting and let your breath do what it does. Focusing on the breath increases alarm in some people rather than settling it. Run the protocol on Recognition and Rise alone. Three steps still works.</p>",
       "<p>If sitting still is genuinely unbearable today, use the somatic activities and come back to the session later. That's a legitimate use of the protocol, not a lesser one.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
-      "<p>Contact someone today \u2014 a doctor, <a href=\"getting-help.html\">a helpline in your country</a>, or a person you trust \u2014 if the state isn't letting up over days rather than hours, if you've stopped sleeping, if you're unable to start anything at all rather than merely behind, if you're using something to get through the day, or if you're having thoughts of harming yourself.</p>",
+      "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if the state isn't letting up over days rather than hours, if you've stopped sleeping, if you're unable to start anything at all rather than merely behind, if you're using something to get through the day, or if you're having thoughts of harming yourself.</p>",
       "<p><strong>When the load itself is the thing to address</strong></p>",
       "<p>A regulation practice helps you think clearly inside an unreasonable situation. It won't make the situation reasonable and wasn't built to. If the volume is beyond what one person can carry, the useful next moves are outside this platform \u2014 a conversation with a manager, a doctor, a union, or whoever holds the authority to change the input. The Proximity Guide goes further into that.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. Tell them you're using it.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p3-advisory": {
+  "t1p3-advisory": {
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
     body: [
       "<p>Overwhelm usually has an external source that keeps supplying it \u2014 a job, a caring responsibility, a household, a set of people who route things to you. How much of it you're in contact with is a real variable, and often more available than it feels from inside the state.</p>",
@@ -630,9 +653,11 @@ var T1_RESOURCES = {
       "<p><strong>Using this</strong></p>",
       "<p>Notice the tier. Then notice whether it's the tier you'd assign if a friend described the same situation. Most people place their own load one tier lower than they'd place someone else's. Where it goes next is yours \u2014 nobody here knows what you'd be putting down.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p3-disclosure": {
+  "t1p3-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>Take these exactly, or change every word.</p>",
@@ -656,18 +681,22 @@ var T1_RESOURCES = {
       "<p>That last sentence is the one that changes the conversation. It moves the decision to the person who owns it.</p>",
       "<p><em>Tell one person. It can be a doctor rather than a friend. Overwhelm carried entirely privately tends to get quietly worse, because nobody adjusts anything for a load they can't see.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p3-record": {
+  "t1p3-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before.</p>",
       "<p>Any of these, or none.</p>",
-      "<p>- Where did it sit in your body? - Which kind was it \u2014 too much to do, too much coming in, or too much at once inside you? - What was on the list at the moment it peaked? Write it as it was, unsorted. - If it was input: what was in the room? Would turning one thing off have changed it? - When did the second thing start? Is there a point before it you can find? - Is the volume the thing, or is it one specific item wearing the whole pile's clothes? - <em>What was this for</em> \u2014 what turned up, without answering it? - What did you say to yourself from across the room? - What was the next thing you built? Did you do it? - What's on this list because it's yours, and what's on it because you were the one who'd take it? - What did you write here last time? Read it back.</p>"
+      "<ul><li>Where did it sit in your body?</li><li>Which kind was it \u2014 too much to do, too much coming in, or too much at once inside you?</li><li>What was on the list at the moment it peaked? Write it as it was, unsorted.</li><li>If it was input: what was in the room? Would turning one thing off have changed it?</li><li>When did the second thing start? Is there a point before it you can find?</li><li>Is the volume the thing, or is it one specific item wearing the whole pile's clothes?</li><li><em>What was this for</em> \u2014 what turned up, without answering it?</li><li>What did you say to yourself from across the room?</li><li>What was the next thing you built? Did you do it?</li><li>What's on this list because it's yours, and what's on it because you were the one who'd take it?</li><li>What did you write here last time? Read it back.</li></ul>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p3-accountability": {
+  "t1p3-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 into a room, a tone, a silence \u2014 and lands somewhere you can't see from where you're standing.</p>",
@@ -681,54 +710,68 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 overwhelm repairs by saying the true thing at the time rather than absorbing and going quiet. <em>\"I've got nothing left today, it isn't you\"</em> said on the day is worth more than an explanation a month later.</p>",
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state. It isn't a verdict on you, and someone else's account of you isn't automatically more accurate than your own. What you find when you look is yours to read.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p4-meditation": {
+  "t1p4-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
     body: [
-      "<p>Sit somewhere you can stay for a while. Eyes closed if they'll close, or one spot on the floor.</p>",
-      "<p>This works on the state that's arrived while you don't know. Whether the thing you're afraid of is happening stays an open question \u2014 it's a real one, and it isn't the one we're working on.</p>",
+      "<blockquote><strong>VOICE</strong> \u2014 warm and close. Stays present throughout. The tone is doing something the words are not.</blockquote>",
+      "<p>There's a message you haven't had an answer to. Or a room that went quiet. Or something in how they said goodbye.</p>",
+      "<p>And you've been carrying it around all day like it's already been decided.</p>",
+      "<p>Nothing here is going to tell you whether you're being left. That question is real and it stays open. We're working on the state that arrived while you don't know.</p>",
       "<h4>Recognition</h4>",
-      "<p>Find where it is in your body first, before any of the words.</p>",
-      "<p>Usually low. A drop through the stomach. Sometimes a pull in the chest, or a tightness in the throat. Sometimes a hum through the whole of you that won't sit still.</p>",
-      "<p>Now name the state. One word. <strong>Agitated.</strong></p>",
-      "<p>Notice what that word leaves out. It leaves out them. It leaves out the unanswered message, the tone of the last thing they said, what it probably means.</p>",
-      "<p>The state is here. Whether the thing you're afraid of is happening is a separate question, and it's still open.</p>",
-      "<p>You have been treating an unanswered question as an answer. That's what the body does with silence \u2014 it fills it, fast, so it isn't standing in an unknown.</p>",
+      "<p>Where is it sitting?</p>",
+      "<p>Usually low. A drop through the stomach. Sometimes a pull across the chest, or the throat closing. Sometimes a hum through all of you that won't hold still.</p>",
+      "<p>One word for it. <strong>Agitated.</strong></p>",
+      "<p>Now notice something. You just described a state \u2014 and something in you did the describing.</p>",
+      "<p>Those aren't the same. The state is here in the room. You're the one who noticed it was here. You're already standing somewhere slightly outside it.</p>",
+      "<p>And notice what the word left out. It left out them. The message, the tone, what it probably means.</p>",
+      "<p>Because here's what's happened. There's a question with no answer yet, and your body has gone ahead and answered it. That's what it does with silence \u2014 it fills it, fast, so it isn't standing in an unknown.</p>",
       "<h4>Regulation</h4>",
       "<p>Four counts in.</p>",
-      "<p>Six counts out. Longer out than in.</p>",
-      "<p>Attention into the centre of your chest.</p>",
-      "<p>If a hand there helps, put one there. The contact is doing something on its own.</p>",
-      "<p>This state pulls hard toward the phone. Toward checking. Toward saying something now that will settle it.</p>",
-      "<p>Not yet. The count first.</p>",
+      "<p>Six counts out.</p>",
+      "<p>Attention into the middle of your chest.</p>",
+      "<p>A hand there, if you want one. Warmth at that spot does something on its own that nothing you think will match.</p>",
+      "<p>You'll feel the pull toward the phone. Toward checking. Toward saying the thing that would settle it right now.</p>",
+      "<p>It'll still be there in a few minutes. The count first.</p>",
       "<h4>Release</h4>",
-      "<p>Two things are running.</p>",
-      "<p>There's the state. And there's the search \u2014 going back through it, looking for the moment it changed, rereading the message, finding the sentence where the tone shifted.</p>",
-      "<p>The search feels like getting to the bottom of it. What it actually does is keep producing the state, because every pass through finds something, and everything found is ambiguous.</p>",
-      "<p>Let the state stand. It's here and it isn't being argued with.</p>",
-      "<p>Set down the search. Only the search.</p>",
-      "<p>And the question. Not <em>what's wrong with me that I'm like this about people</em> \u2014 that returns nothing you can use, and it's the question you've already asked a hundred times.</p>",
+      "<p>There's the state. And there's the searching.</p>",
+      "<p>Going back through it. Rereading the message. Replaying the conversation, hunting for the exact moment the tone changed.</p>",
+      "<p>Does it ever finish?</p>",
+      "<p>It doesn't. Every pass finds something, and everything it finds could mean two things, so you go round again. That's not investigation. That's a circuit.</p>",
+      "<p>Let the state stay. It's here and nobody's arguing with it.</p>",
+      "<p>Put down the searching. Just that.</p>",
+      "<p>And the question. Not <em>what's wrong with me that I'm like this about people</em> \u2014 you've asked that one a hundred times and it has never once given you anything.</p>",
       "<p><strong>What was this for?</strong></p>",
-      "<p>Something in you moves very fast when connection looks like it might be going. It moves before you've thought about it. Fast, early, and hard to argue with \u2014 which is what a protective response looks like from the inside.</p>",
-      "<p>It was doing a job. Understanding that doesn't tell you whether it's the right job now, and it doesn't tell you what's happening with this person today.</p>",
-      "<p>Don't answer it. Let it sit there in place of the other one.</p>",
+      "<p>Something in you moves very fast when connection looks like it might be going. Early, hard to argue with, ahead of any thinking.</p>",
+      "<p>That's what protection looks like from the inside.</p>",
+      "<p>Where it learned to do that \u2014 that's not today's work, and it isn't mine to tell you.</p>",
+      "<p>One thing, though, before we move.</p>",
+      "<p>If any of that landed, there's usually a second thing right behind it. <em>How did I not see this. Look how long I've been doing it.</em></p>",
+      "<p>Put that down too. It's the same thing wearing a different coat. You couldn't have seen it \u2014 it was there before you had a say, and things like that don't announce themselves.</p>",
+      "<p>You're not late. You're here.</p>",
       "<h4>Rise</h4>",
       "<p>Step outside it.</p>",
-      "<p>See yourself from across the room. Someone sitting with a phone face-down, breathing four and six.</p>",
+      "<p>Someone across the room, phone face down, breathing four and six.</p>",
       "<p>Speak to them as <em>you</em>.</p>",
-      "<p><em>You don't know yet. And you are steady enough to not know for a while.</em></p>",
-      "<p>That's the whole sentence. Not that it's fine. That you can stand in the not-knowing without the state deciding it for you.</p>",
-      "<p>Now forward, and concrete. Later today, and not the scene where they reply. That one isn't yours to build.</p>",
-      "<p>You, somewhere specific, doing something specific, with this still unresolved. What's in your hands. What's around you. What are you doing that isn't waiting.</p>",
-      "<p>And one thing already here. Something that hasn't gone anywhere. Small.</p>",
+      "<p><em>You don't know yet. And you're steady enough to not know for a while.</em></p>",
+      "<p>That's the whole sentence. Not that it's fine. That you can stand in the not-knowing without the state deciding it on your behalf.</p>",
+      "<p>Now forward. Not the scene where they reply \u2014 that one isn't yours to build and rehearsing it is what we just put down.</p>",
+      "<p>You, somewhere specific, later today, with this still unresolved. What's in your hands. What's around you. What are you doing that isn't waiting.</p>",
+      "<p>And one thing that hasn't gone anywhere. Something still here. Small.</p>",
       "<p>Come back. Feet on the floor.</p>",
-      "<p>You still don't know. Nothing here was going to change that. What's changed is that the state isn't answering the question for you.</p>",
+      "<p>You still don't know, and that was never going to change in here.</p>",
+      "<p>What's changed is that the state isn't answering the question for you any more.</p>",
+      "<p>Now put it down. All of it. You don't have to carry it out of here.</p>",
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
-    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 4, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "BLUE/ILLUSTRATION", "note": "a held breath rendered as a suspended shape, not falling."}, {"block": 6, "type": "GOLD/PAUSE", "note": ""}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 11, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 11, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 18, "type": "GOLD/PAUSE", "note": ""}, {"block": 20, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 22, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 30, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 32, "type": "GOLD/PAUSE", "note": ""}, {"block": 33, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 33, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 35, "type": "GOLD/PAUSE", "note": "long"}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": ""}, {"block": 36, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}]
+    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 2, "type": "GOLD/PAUSE", "note": "long"}, {"block": 3, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "BLUE/ILLUSTRATION", "note": "a held breath rendered as a suspended shape, not falling."}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 10, "type": "GOLD/PAUSE", "note": ""}, {"block": 11, "type": "GOLD/PAUSE", "note": "long"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 17, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 17, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 18, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 19, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 21, "type": "GOLD/PAUSE", "note": ""}, {"block": 22, "type": "GOLD/PAUSE", "note": "long"}, {"block": 23, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 24, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 28, "type": "GOLD/PAUSE", "note": "long"}, {"block": 29, "type": "GOLD/PAUSE", "note": ""}, {"block": 30, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 30, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 31, "type": "GOLD/PAUSE", "note": "long"}, {"block": 33, "type": "GOLD/PAUSE", "note": ""}, {"block": 34, "type": "GOLD/PAUSE", "note": "long"}, {"block": 38, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 40, "type": "GOLD/PAUSE", "note": "long"}, {"block": 41, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 41, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 43, "type": "GOLD/PAUSE", "note": "long"}, {"block": 43, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 43, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 44, "type": "GOLD/PAUSE", "note": ""}, {"block": 44, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p4-crisiscard": {
+  "t1p4-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
     body: [
       "<blockquote>Second person throughout \u2014 deliberate, not stylistic.</blockquote>",
@@ -743,9 +786,11 @@ var T1_RESOURCES = {
       "<p><strong>Release</strong> \u2014 Two things are running. The state, which arrived on its own. And the search \u2014 rereading, going back through, finding the sentence where the tone changed. Every pass finds something and everything found is ambiguous, so the search keeps producing the state. Set down the search. Keep the question. Ask <em>what was this for</em> and leave it open.</p>",
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You don't know yet, and you are steady enough to not know for a while.</em> Then one concrete scene later today with this still unresolved \u2014 not the scene where they reply. Then one thing that hasn't gone anywhere.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p4-guide": {
+  "t1p4-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
     body: [
       "<p>This is a mobilised state triggered by a signal about connection rather than about physical danger. The machinery is the same: the reading happens below awareness and moves before deliberation catches up.</p>",
@@ -768,14 +813,16 @@ var T1_RESOURCES = {
       "<p><strong>Polyvagal Theory \u2014 Stephen Porges</strong> \u00b7 <em>peer-reviewed</em> \u00b7 supplies Recognition and the three state labels</p>",
       "<p>Threat detection runs ahead of thought. The body reads a situation and moves before deliberation catches up. Porges describes three broad conditions: settled and socially available, mobilised for action, and shut down. Agitated, Unsteady and Numb are the member-facing names for those three. <em>Here it accounts for why a signal about connection produces the same machinery as a signal about danger.</em></p>",
       "<p><em>The anatomical premises are contested: a 2026 evaluation in</em> Clinical Neuropsychiatry <em>challenged them, with Porges replying in the same issue. The state distinctions are what this platform uses, and they hold independently of that dispute.</em></p>",
-      "<p><strong>Compassionate Inquiry \u2014 Gabor Mat\u00e9</strong> \u00b7 <em>clinical practice</em> \u00b7 supplies Release and its register</p>",
-      "<p>A response is treated as an adaptation rather than a defect \u2014 something that was doing a job, whether or not it's still the right job. The register of the question decides the answer: <em>what is wrong with me</em> asks about defect and returns answers about defect; <em>what was this for</em> asks about function and returns something workable. <em>Here it is what stops the protocol becoming another round of self-interrogation.</em></p>",
-      "<p><em>A clinical practice, not a controlled research programme. Used here for the register of the question and nothing wider. It makes no claim about where any pattern came from, and neither does this platform.</em></p>",
+      "<p><strong>Compassionate Inquiry \u2014 Gabor Mat\u00e9</strong> \u00b7 <em>clinical practice</em> \u00b7 supplies Release and the way the question is asked</p>",
+      "<p>A response is treated as an adaptation rather than a defect \u2014 something that was doing a job, whether or not it's still the right job. The kind of question you ask decides the kind of answer you get. <em>What is wrong with me</em> asks what is broken, and comes back with a list of what is broken. <em>What was this for</em> asks what it was doing, and comes back with something you can use. <em>Here it is what stops the protocol becoming another round of self-interrogation.</em></p>",
+      "<p><em>A clinical practice, not a controlled research programme. Used here for the way the question is asked, and nothing wider. It makes no claim about where any pattern came from, and neither does this platform.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What your response means, where it came from, and what to do about this relationship are readings that belong to you.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: [{"block": 8, "src": "assets/diagrams/release/img-067-release-t1-04.svg", "alt": "The state and Going back over it: two things running at once. The state turned up on its own. Going back over it keeps returning to its own starting point."}]
   },
-  "p4-companion": {
+  "t1p4-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
       "<p><strong>Long exhale, no ceremony.</strong> Four in, six out, three or four cycles. Available anywhere, eyes open.</p>",
@@ -786,9 +833,11 @@ var T1_RESOURCES = {
       "<p><strong>Walk with someone, or near someone.</strong> A shop, a busy street, a room with other people in it. This state worsens in isolation faster than most, and undirected proximity to people helps without requiring anything of you.</p>",
       "<p><em>Unclenching the jaw and dropping the shoulders is always available and always creeping back.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p4-practice": {
+  "t1p4-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
     body: [
       "<p>Works with the state that arrives when connection looks uncertain, using breath, attention and observation. It doesn't tell you what's happening in your relationship, and it doesn't tell you whether your read is right.</p>",
@@ -801,14 +850,16 @@ var T1_RESOURCES = {
       "<p>If Release opens something much larger than today \u2014 an older loss, something from a long way back \u2014 you can stop there and come back to the breath. Surfacing isn't an instruction to follow it, and this protocol will surface things more often than most.</p>",
       "<p>If the state doesn't settle at all across several attempts, that's information rather than failure, and it points toward a person rather than a practice.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
-      "<p>Contact someone today \u2014 a doctor, <a href=\"getting-help.html\">a helpline in your country</a>, or a person you trust \u2014 if you're having thoughts of harming yourself, if you can't eat or sleep across days rather than one night, if you're using something to get through it, or if the state is now attached to almost everyone rather than one person.</p>",
+      "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself, if you can't eat or sleep across days rather than one night, if you're using something to get through it, or if the state is now attached to almost everyone rather than one person.</p>",
       "<p>Grief and abandonment overlap, and a real loss is not a pattern to be worked on. If someone has died or has genuinely gone, that needs a different kind of support and probably a person.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person is worth a great deal, and the practice doesn't substitute for it.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p4-advisory": {
+  "t1p4-advisory": {
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
     body: [
       "<p>This state usually has a live external source \u2014 a specific person whose availability is the variable. How much contact you have is real, and it's the one part of the situation you have any say over.</p>",
@@ -826,9 +877,11 @@ var T1_RESOURCES = {
       "<p><strong>Using this</strong></p>",
       "<p>Notice the tier. Then notice whether it's the tier you'd assign if a friend described the same thing. Where it goes next is yours \u2014 this platform doesn't tell members to leave or stay, and nobody here knows what you'd be giving up.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p4-disclosure": {
+  "t1p4-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>Take these exactly, or change every word.</p>",
@@ -850,9 +903,11 @@ var T1_RESOURCES = {
       "<blockquote>\"It doesn't tell me whether I'm right. It stops my body deciding for me.\"</blockquote>",
       "<p><em>Tell one person. It can be a professional rather than a friend. This state gets worse in isolation faster than most, and the isolation is often the thing the state itself produces.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p4-repair": {
+  "t1p4-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
     body: [
       "<p>Send it from the far side of the protocol, not the middle. Sent from inside the state, it asks them to fix how you feel \u2014 and it will be read that way and answered defensively, however carefully it's worded.</p>",
@@ -864,19 +919,23 @@ var T1_RESOURCES = {
       "<p>Also read it back for the case in disguise: <em>always, never, actually, you never.</em> Cut them.</p>",
       "<p><em>If they don't take it, you've done the part that was yours. Whether they meet it is theirs, and always was.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p4-record": {
+  "t1p4-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before.</p>",
       "<p>Any of these, or none.</p>",
-      "<p>- Where did it sit in your body? - What was the signal? Write the actual thing that happened, plainly, without the reading attached. - What did your body fill the silence in with? - How long between the signal and the certainty? - What did the search find? Was any of it unambiguous? - <em>What was this for</em> \u2014 what turned up, without answering it? - What did you say to yourself from across the room? - Is this the same state as last time, with a different person in it? - What did you write here last time? Read it back. How did that one turn out?</p>",
+      "<ul><li>Where did it sit in your body?</li><li>What was the signal? Write the actual thing that happened, plainly, without the reading attached.</li><li>What did your body fill the silence in with?</li><li>How long between the signal and the certainty?</li><li>What did the search find? Was any of it unambiguous?</li><li><em>What was this for</em> \u2014 what turned up, without answering it?</li><li>What did you say to yourself from across the room?</li><li>Is this the same state as last time, with a different person in it?</li><li>What did you write here last time? Read it back. How did that one turn out?</li></ul>",
       "<p>That last one matters more here than anywhere. This state produces confident predictions, and your own record of how the previous ones landed is the only evidence you have that isn't generated by the state itself.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p4-accountability": {
+  "t1p4-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 into messages, into a tone, into what you did while you were certain \u2014 and lands on someone who has no view of what produced it.</p>",
@@ -890,12 +949,15 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 this repairs by saying it once, plainly, and then not raising it again that day. <em>\"I'm going to tell you when I'm in it, and then leave it with you\"</em> is small, specific and observable.</p>",
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. Someone else's account of you isn't automatically more accurate than your own \u2014 and on this protocol especially, a person who benefits from your uncertainty is not a reliable narrator of your conduct. What you find when you look is yours to read.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p5-meditation": {
+  "t1p5-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
     body: [
-      "<p>Sit somewhere you won't be interrupted. Eyes closed if they'll close.</p>",
+      "<p>This one doesn't want to be looked at. That isn't incidental \u2014 it's most of what it is.</p>",
+      "<p>So we'll go slowly, and nothing here asks you to say anything out loud, to anyone, ever.</p>",
       "<p>This state doesn't want to be looked at. That's not incidental \u2014 it's most of what it is. So we'll go slowly, and nothing here is going to ask you to say anything out loud, to anyone, ever.</p>",
       "<h4>Recognition</h4>",
       "<p>Find where it sits in your body, before any of the words.</p>",
@@ -919,7 +981,32 @@ var T1_RESOURCES = {
       "<p>And the question. You already know the other one. <em>What is wrong with me</em> \u2014 you've asked it many times and it has never once returned anything you could use. It only ever returns more of itself.</p>",
       "<p><strong>What was this for?</strong></p>",
       "<p>Something in you learned to go small and quiet and hidden. That's not a defect. It's a manoeuvre, and it's aimed at something \u2014 usually at not being cast out.</p>",
-      "<p>We're not going to work out what it was aimed at right now. Just notice that it's aimed at something. Things that are aimed at something were built.</p>",
+      "<p>Things that are aimed at something were built. Which means somewhere, at some point, they got put there.</p>",
+      "<p>There's one more question, and it's a bigger one than the rest of this. You don't have to take it today.</p>",
+      "<p>If today is a day for getting steady and stopping there, stop there. Come back to the count and finish.</p>",
+      "<p>Still here?</p>",
+      "<p>Underneath the feeling there's usually something older. Not a memory, necessarily. More like a rule. Something you know without having been told recently.</p>",
+      "<p>So \u2014 why does this one carry the weight it carries?</p>",
+      "<p>Something in you decided what this means about you. And it decided a long time ago, probably before you had any say in it.</p>",
+      "<p>Whose voice is it in.</p>",
+      "<p>I'm not answering that one. I don't know, and anyone who says they do is selling you something.</p>",
+      "<p>If something surfaced, it's yours. Don't do anything with it yet.</p>",
+      "<p>If nothing came, that's a real answer too. Some of these take years. Some never arrive.</p>",
+      "<p>If it opened something bigger than today, come back to the count now and end here. Going further on your own isn't the brave version. It's just the unaccompanied one.</p>",
+      "<p>One more thing before we move, and this one is about you rather than about where any of it came from.</p>",
+      "<p>When something like that surfaces, a second thing usually arrives right behind it. A quiet <em>how did I not see that.</em> All those years, carrying it, and not noticing.</p>",
+      "<p>Put that down too. It's the same thing wearing different clothes.</p>",
+      "<p>You couldn't have seen it. It was put there before you had a say in it, and the entire nature of a thing like that is that it doesn't announce itself. You carried it the way you carry your own weight \u2014 without any sense there was something to notice.</p>",
+      "<p>You're not late. You're here.</p>",
+      "<p>And there's a second one, harder to admit than the first.</p>",
+      "<p>You might not want to put it down.</p>",
+      "<p>That isn't a failing and it isn't stubbornness. That thing worked. It got you through something, and whatever it has cost you since, some part of you knows exactly what would have happened without it.</p>",
+      "<p>So of course there's a reluctance. You're being asked to set down the thing that kept you standing.</p>",
+      "<p>Here's what's actually true, and it's smaller than <em>let it go</em>.</p>",
+      "<p>It was built with what you had at the time. What you had then and what you have now aren't the same thing. You've got more room than you did, and more steadiness, and you can see a state while you're inside it \u2014 you did that a few minutes ago, at the start of this.</p>",
+      "<p>That part of you doesn't know any of that. Nobody told it. It's still working off the last information it got, and that information is old.</p>",
+      "<p>You don't have to make it stand down. You're not being asked to, and you'd be right to refuse.</p>",
+      "<p>You're only being asked to notice that the person it's guarding isn't the one it started guarding.</p>",
       "<h4>Rise</h4>",
       "<p>Step outside it.</p>",
       "<p>See yourself from across the room. Someone sitting there, shoulders forward, breathing four and six.</p>",
@@ -930,14 +1017,34 @@ var T1_RESOURCES = {
       "<p>Now forward, and concrete. Later today, somewhere specific, doing something ordinary. Not a scene where you've resolved anything about yourself.</p>",
       "<p>Where are you. What's in your hands. Who can see you.</p>",
       "<p>Ordinary is the point. This state says you should be hidden. The scene where you're just out, doing a normal thing, in view, is the one that contradicts it \u2014 without arguing with it.</p>",
-      "<p>And one thing already true. Not about your worth \u2014 nothing about your worth. Something outside you. The chair. The light. That you stayed for this.</p>",
+      "<p>Now the last part, and it's what the rest of it was for.</p>",
+      "<p>You've seen that this came from somewhere. Maybe you saw where. Maybe you only saw that it did. Either way \u2014 it wasn't chosen. Something put it there and you've been carrying it since, and nobody asked you first.</p>",
+      "<p>So here's what's actually available.</p>",
+      "<p>Not getting rid of it. That isn't on the table, and anyone offering it is lying to you.</p>",
+      "<p>But you can put something beside it that you did choose.</p>",
+      "<p>Not something to believe about yourself. Those don't hold \u2014 you've tried, and this state takes them apart on the spot.</p>",
+      "<p>Something you'll do.</p>",
+      "<p>Small enough that you'll genuinely do it today. Feeling exactly as you do now, not on a better day.</p>",
+      "<p>Got it? Say it to yourself once, plainly.</p>",
+      "<p>The old one was put in. This one you picked.</p>",
+      "<p>It won't feel like much, and you'll have to pick it again tomorrow. That's what picking something means.</p>",
+      "<p>And one last thing before you come back.</p>",
+      "<p>Something in you brought you here today. Not the part that was hurting \u2014 the part that noticed the hurting and sat down with it anyway.</p>",
+      "<p>That was there the whole time, underneath all of it. It's what let you find the state, and name it, and stay while it was uncomfortable, and go one question deeper than was comfortable.</p>",
+      "<p>Nobody taught you that. It's yours, and it was yours before today.</p>",
+      "<p>So just acknowledge it. Not gratitude for what happened to you \u2014 nobody is asking you for that, and anyone who does is wrong.</p>",
+      "<p>Gratitude for the thing in you that kept looking anyway.</p>",
+      "<p>Now put all of it down. The state. The question. The decision.</p>",
+      "<p>You don't have to carry any of it out of here. It happened, and it stays happened, whether or not you keep hold of it.</p>",
       "<p>Come back. Feet on the floor. Shoulders where they are.</p>",
       "<p>The verdict may still be here. It doesn't get overturned by a session, and nothing here was pretending it would be. What's changed is that there's a bit of space between you and it, and space is the thing it's never had.</p>",
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
-    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 4, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "BLUE/ILLUSTRATION", "note": "a form turning inward, not crushed. Contained, not diminished."}, {"block": 6, "type": "GOLD/PAUSE", "note": ""}, {"block": 8, "type": "GOLD/PAUSE", "note": "long"}, {"block": 11, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 11, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 17, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "GOLD/PAUSE", "note": "long"}, {"block": 23, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 24, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 28, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 30, "type": "GOLD/PAUSE", "note": ""}, {"block": 32, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 32, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 34, "type": "GOLD/PAUSE", "note": "long"}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": ""}, {"block": 36, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}]
+    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "BLUE/ILLUSTRATION", "note": "a form turning inward, not crushed. Contained, not diminished."}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 18, "type": "GOLD/PAUSE", "note": ""}, {"block": 20, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 22, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "GOLD/PAUSE", "note": ""}, {"block": 28, "type": "GOLD/PAUSE", "note": "long"}, {"block": 29, "type": "GOLD/PAUSE", "note": ""}, {"block": 30, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 30, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 31, "type": "GOLD/PAUSE", "note": "long"}, {"block": 32, "type": "GOLD/PAUSE", "note": "long"}, {"block": 33, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 33, "type": "BLUE/ILLUSTRATION", "note": "a still surface. Something rising toward it, not yet broken through."}, {"block": 34, "type": "GOLD/PAUSE", "note": ""}, {"block": 35, "type": "GOLD/PAUSE", "note": "long"}, {"block": 36, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 36, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 37, "type": "GOLD/PAUSE", "note": "long"}, {"block": 38, "type": "GOLD/PAUSE", "note": ""}, {"block": 39, "type": "GOLD/PAUSE", "note": "long"}, {"block": 40, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 40, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 41, "type": "GOLD/PAUSE", "note": "long"}, {"block": 42, "type": "GOLD/PAUSE", "note": "long"}, {"block": 43, "type": "GOLD/PAUSE", "note": ""}, {"block": 44, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 45, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 45, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 46, "type": "GOLD/PAUSE", "note": "long"}, {"block": 47, "type": "GOLD/PAUSE", "note": ""}, {"block": 48, "type": "GOLD/PAUSE", "note": "long"}, {"block": 49, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 49, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 50, "type": "GOLD/PAUSE", "note": "long"}, {"block": 54, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 56, "type": "GOLD/PAUSE", "note": ""}, {"block": 58, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 58, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 60, "type": "GOLD/PAUSE", "note": "long"}, {"block": 61, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 61, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 62, "type": "GOLD/PAUSE", "note": ""}, {"block": 63, "type": "GOLD/PAUSE", "note": "long"}, {"block": 65, "type": "GOLD/PAUSE", "note": ""}, {"block": 66, "type": "GOLD/PAUSE", "note": "long"}, {"block": 68, "type": "GOLD/PAUSE", "note": ""}, {"block": 69, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 69, "type": "BLUE/ILLUSTRATION", "note": "two marks side by side. One older and faded. One clear, newly made."}, {"block": 70, "type": "GOLD/PAUSE", "note": "long"}, {"block": 71, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 71, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 72, "type": "GOLD/PAUSE", "note": "long"}, {"block": 73, "type": "GOLD/PAUSE", "note": ""}, {"block": 74, "type": "GOLD/PAUSE", "note": "long"}, {"block": 75, "type": "GOLD/PAUSE", "note": ""}, {"block": 76, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 76, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 77, "type": "GOLD/PAUSE", "note": ""}, {"block": 78, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 78, "type": "BLUE/ILLUSTRATION", "note": "an open hand. Nothing held in it, nothing taken from it."}, {"block": 79, "type": "GOLD/PAUSE", "note": ""}, {"block": 80, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 80, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 80, "type": "GOLD/PAUSE", "note": ""}, {"block": 80, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p5-crisiscard": {
+  "t1p5-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
     body: [
       "<blockquote>Second person throughout \u2014 deliberate, not stylistic. On this protocol it does more than anywhere: <em>you</em> is the word that puts space between the person and the verdict.</blockquote>",
@@ -952,9 +1059,11 @@ var T1_RESOURCES = {
       "<p><strong>Release</strong> \u2014 Two things are running. The state, and the case being built against you, gathering old evidence, including things that weren't yours. The case isn't investigating \u2014 it's confirming. Set down the case. Keep whatever real thing is underneath; you can look at that later from somewhere steadier. Ask <em>what was this for</em>. You already know what the other question returns.</p>",
       "<p><strong>Rise</strong> \u2014 See yourself from across the room. <em>You are having a bad hour with yourself.</em> Notice that from out here, the person and the state are two objects. From inside they were one. Then a concrete ordinary scene later today, in view of people. Ordinary is the point.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p5-guide": {
+  "t1p5-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
     body: [
       "<p>This is a state that pulls inward and downward rather than mobilising. In the body: heat in the face and neck, a sinking through the chest, the shoulders drawing forward, reduced eye contact, a lowered voice. The physical wish to be smaller is a real motor pattern, not a metaphor.</p>",
@@ -976,17 +1085,19 @@ var T1_RESOURCES = {
       "<p>Distance breaks the fusion mechanically. From outside, there's a person and there's a state, and they're two objects. From inside they were one. That separation is what the fourth step is for here, more than the future scene.</p>",
       "<p>The scene itself is deliberately unremarkable. This state instructs you to be hidden; a scene of being ordinarily in view contradicts the instruction without arguing with the verdict. Rehearsing having resolved something about your worth would be rehearsing a scene you have no route to.</p>",
       "<h4>What we rest on</h4>",
-      "<p><strong>Compassionate Inquiry \u2014 Gabor Mat\u00e9</strong> \u00b7 <em>clinical practice</em> \u00b7 supplies Release and its register</p>",
-      "<p>A response is treated as an adaptation rather than a defect \u2014 something that was doing a job, whether or not it's still the right job. The register of the question decides the answer: <em>what is wrong with me</em> asks about defect and returns answers about defect; <em>what was this for</em> asks about function and returns something workable. Understanding is not endorsement. <em>Here it is the entire mechanism of the third step, because this state's native question is the defect one.</em></p>",
-      "<p><em>A clinical practice, not a controlled research programme. Used here for the register of the question and nothing wider. It makes no claim about where any pattern came from, and neither does this platform.</em></p>",
+      "<p><strong>Compassionate Inquiry \u2014 Gabor Mat\u00e9</strong> \u00b7 <em>clinical practice</em> \u00b7 supplies Release and the way the question is asked</p>",
+      "<p>A response is treated as an adaptation rather than a defect \u2014 something that was doing a job, whether or not it's still the right job. The kind of question you ask decides the kind of answer you get. <em>What is wrong with me</em> asks what is broken, and comes back with a list of what is broken. <em>What was this for</em> asks what it was doing, and comes back with something you can use. Understanding is not endorsement. <em>Here it is the entire mechanism of the third step, because this state's native question is the defect one.</em></p>",
+      "<p><em>A clinical practice, not a controlled research programme. Used here for the way the question is asked, and nothing wider. It makes no claim about where any pattern came from, and neither does this platform.</em></p>",
       "<p><strong>Shadow &amp; individuation \u2014 C. G. Jung</strong> \u00b7 <em>interpretive</em> \u00b7 informs Release</p>",
       "<p>What you decline to look at keeps running unattended. The usable test is proportion: when a reaction outruns the event that occasioned it, the surplus is carrying information about something other than the event. There's no finish line and nothing to complete. <em>Here it accounts for why this state attaches to small occasions \u2014 the size of the reaction is rarely about the size of the event.</em></p>",
       "<p><em>Offered as a lens rather than a finding, with no controlled evidence behind it. What it shows you, if anything, is yours to read \u2014 this platform will not tell you what your surplus means.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What the verdict is about, where it came from, and whether any part of it is warranted are readings that belong to you.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: [{"block": 9, "src": "assets/diagrams/release/img-067-release-t1-05.svg", "alt": "The state and The case against you: two things running at once. The state turned up on its own. The case against you keeps returning to its own starting point."}]
   },
-  "p5-companion": {
+  "t1p5-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
       "<p><strong>Long exhale, no ceremony.</strong> Four in, six out, three or four cycles. Available anywhere.</p>",
@@ -997,9 +1108,11 @@ var T1_RESOURCES = {
       "<p><strong>Warm water on the hands.</strong> Slow, at a sink, longer than necessary. Warmth rather than cold on this protocol \u2014 the cold version belongs on the agitated states.</p>",
       "<p><em>Unclench the jaw when you notice it. It holds here as much as in anger, more quietly.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p5-practice": {
+  "t1p5-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
     body: [
       "<p>Works with a state that arrives with a verdict attached, using breath, attention and observation. It doesn't dispute the verdict and it doesn't confirm it. It puts space between you and it, which is the thing the state has never had.</p>",
@@ -1012,14 +1125,16 @@ var T1_RESOURCES = {
       "<p>If the fourth step turns into an inventory of everything you've done wrong, stop. That's the case restarting inside the step designed to interrupt it. Come back to the breath and end there. You can run three steps.</p>",
       "<p>If Release opens something much larger \u2014 something old, something you weren't looking for \u2014 you can stop and come back to the breath. Surfacing isn't an instruction to follow it, and on this protocol it will surface things more often than most.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
-      "<p>Some of what this state attaches to needs another person, and no self-guided practice substitutes for that. Contact someone today \u2014 a doctor, <a href=\"getting-help.html\">a helpline in your country</a>, or a person you trust \u2014 if you're having thoughts of harming yourself or punishing yourself in any way, if you can't be around people at all, if you're using something to get through it, or if the verdict is now constant rather than episodic.</p>",
+      "<p>Some of what this state attaches to needs another person, and no self-guided practice substitutes for that. Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or punishing yourself in any way, if you can't be around people at all, if you're using something to get through it, or if the verdict is now constant rather than episodic.</p>",
       "<p>If what this attaches to is something that was done to you, that is not a pattern to be managed alone. It needs a person, and it isn't a failure of this practice that it needs one.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person is worth a great deal.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p5-disclosure": {
+  "t1p5-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>This is the hardest state to disclose, because disclosure is the exact thing it's built to prevent. You don't have to say much. Saying anything is the move.</p>",
@@ -1040,19 +1155,23 @@ var T1_RESOURCES = {
       "<blockquote>\"I run a method when it comes. Four steps. First I name it as a state, which sounds small but it's the whole thing \u2014 this one arrives disguised as a fact about me, and calling it a state puts it in a category. Then breathing, four in and six out, with a hand on my chest. Then I stop the case I'm building against myself, which is a separate thing from whatever's actually true. Then I look at myself from across the room, and from out there the person and the verdict are two things instead of one.\"</blockquote>",
       "<p><em>Tell one person. It can be a professional rather than a friend. This state's central instruction is to stay hidden, and telling anyone at all is the move that contradicts it.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p5-record": {
+  "t1p5-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before.</p>",
       "<p>Any of these, or none. Skipping them entirely is a legitimate use of this resource, and on this protocol it's sometimes the right one.</p>",
-      "<p>- Where did it sit in your body? - What was the occasion? Write the actual event, plainly, without the verdict attached. - What did the case bring in? How old was the oldest thing on the list? - Was any of it something that wasn't yours? - <em>What was this for</em> \u2014 what turned up, without needing to answer it? - What did you say to yourself from across the room? Was it something you'd say to somebody else? - What was the ordinary scene? Did you go and be in view? - What did you write here last time? Read it back \u2014 as if someone else wrote it.</p>",
+      "<ul><li>Where did it sit in your body?</li><li>What was the occasion? Write the actual event, plainly, without the verdict attached.</li><li>What did the case bring in? How old was the oldest thing on the list?</li><li>Was any of it something that wasn't yours?</li><li><em>What was this for</em> \u2014 what turned up, without needing to answer it?</li><li>What did you say to yourself from across the room? Was it something you'd say to somebody else?</li><li>What was the ordinary scene? Did you go and be in view?</li><li>What did you write here last time? Read it back \u2014 as if someone else wrote it.</li></ul>",
       "<p>That last instruction is deliberate. Reading your own account as though it were someone else's is the same distancing move as the fourth step, and it's usually where people first notice how they're speaking to themselves.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p5-accountability": {
+  "t1p5-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and this one exits in a way almost nobody recognises as exiting at all.</p>",
@@ -1067,54 +1186,70 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 this repairs by showing up rather than by explaining. <em>\"I'm going to come to the thing even when I don't want to, and I'll tell you if I need to leave early\"</em> is small, specific and observable.</p>",
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. On this protocol especially: this state will take any external information and feed it straight into the case. If that's what's happening, you're not doing this resource \u2014 you're doing the thing the third step asked you to set down. Come back to it another day.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p6-meditation": {
+  "t1p6-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
     body: [
-      "<p>Sit somewhere you can stay. Eyes closed if they'll close, or one spot on the floor.</p>",
-      "<p>What we're doing here is small and useful: making the carrying cost less. There's no stage you're behind on, and no version of this where it's finished.</p>",
+      "<blockquote><strong>VOICE</strong> \u2014 slow, sparse, unafraid of silence. Says less than it wants to. Sits alongside rather than comforts. More pauses than any other protocol.</blockquote>",
+      "<p>Some days it's a long way off.</p>",
+      "<p>Today it isn't.</p>",
+      "<p>There's no hurry in any of this. If you need to stop partway, stop partway.</p>",
+      "<p>And one thing before we start, because plenty of things pretend to be this. Nothing here is going to move you through anything. What we're doing is smaller. We're going to make the carrying cost less.</p>",
       "<h4>Recognition</h4>",
-      "<p>Find where it is in your body, before any of the words.</p>",
-      "<p>Chest, often. A weight, or a hollow, and sometimes both at once. The throat. Behind the eyes. Sometimes a tiredness that has nothing to do with sleep.</p>",
-      "<p>Now name the state. One word. <strong>Unsteady.</strong></p>",
-      "<p>Grief doesn't hold still. It comes in and goes out with no schedule, and the arriving is not a setback. There's nothing here you're doing wrong by being in it today.</p>",
-      "<p>Naming it doesn't reduce it. It just means that for a second you were the one looking rather than only the one inside.</p>",
+      "<p>Where is it today?</p>",
+      "<p>Chest, probably. A weight, or a hollow. Some days both together, which makes no sense and is still what happens.</p>",
+      "<p>Throat. Behind the eyes. Or a tiredness with nothing to do with sleep.</p>",
+      "<p>One word. <strong>Unsteady.</strong></p>",
+      "<p>That's the accurate one. This doesn't hold still. Gone for a week, then back in a supermarket aisle over nothing.</p>",
+      "<p>It's here today. There's no backwards for it to be.</p>",
       "<h4>Regulation</h4>",
       "<p>Four counts in.</p>",
-      "<p>Six counts out. Longer out than in.</p>",
-      "<p>If the breath catches, let it catch. Don't smooth it out. Come back to the count when you can.</p>",
-      "<p>Attention into the centre of your chest \u2014 including the part of it that hurts. We're not going around that.</p>",
-      "<p>If a hand there helps, put one there.</p>",
-      "<p>If crying arrives, that's the session working, not interrupting it.</p>",
+      "<p>Six out.</p>",
+      "<p>If it catches, let it catch. Don't smooth it out for me.</p>",
+      "<p>A hand on your chest, if you'd like one there.</p>",
+      "<p>Attention into the middle of your chest. Including the part that hurts.</p>",
+      "<p>If crying arrives, it's arriving into the right room.</p>",
       "<h4>Release</h4>",
-      "<p>Two things are running, and only one of them is the grief.</p>",
-      "<p>The first is the loss, which is not going to be argued with, reduced, or set down. It stays.</p>",
-      "<p>The second is the fight with it. Bracing before it arrives. Trying to have it at convenient times. The part of you monitoring whether this is too much grief, or too long, or the wrong kind. And underneath that, often, a low quarrel with the fact of it \u2014 <em>this shouldn't have happened</em>, run again and again against something that already did.</p>",
-      "<p>That second thing is the larger expense, and it's the only one you have any say over.</p>",
-      "<p>Set down the fight. Only the fight. Not the grief, not the love it's made of, not the person or the thing.</p>",
-      "<p>This isn't being at peace with it. Nobody is asking you to accept that it happened in the sense of finding it acceptable. It isn't acceptable. It happened.</p>",
-      "<p>And the question. Not <em>what's wrong with me that I'm still like this</em> \u2014 there's a schedule implied in that question and no such schedule exists.</p>",
+      "<p>Two things here, and only one of them is the grief.</p>",
+      "<p>The first is the loss. That stays. It isn't going to be reframed or argued down or set anywhere.</p>",
+      "<p>The second one is quieter, and it's been running a long time.</p>",
+      "<p>Bracing before it comes. Trying to have it at convenient hours. Checking whether this is too much of it, or too long, or the wrong shape.</p>",
+      "<p>And underneath, usually \u2014 <em>this shouldn't have happened.</em> Said again, and again, to something that already did.</p>",
+      "<p>Which of those two is costing you more today?</p>",
+      "<p>So \u2014 put down the fight. Only that.</p>",
+      "<p>Not the grief. Not the love it's made of. Not them.</p>",
+      "<p>Nobody's asking you to be at peace with it. It isn't acceptable. It just already happened.</p>",
+      "<p>There's a question, and you don't have to take it.</p>",
       "<p><strong>What was this for?</strong></p>",
-      "<p>Grief is the shape love takes when the thing it's pointed at isn't there. It isn't a malfunction. It's the cost of having been attached to something, and it's proportionate to that.</p>",
-      "<p>Don't answer it. Let it sit there.</p>",
+      "<p>Grief is the shape love takes when what it was pointed at isn't there.</p>",
+      "<p>Not a malfunction. It's the size it is because that's the size it was.</p>",
       "<h4>Rise</h4>",
-      "<p>Step outside it.</p>",
-      "<p>See yourself from across the room. Someone sitting there, carrying something, breathing four and six.</p>",
-      "<p>Speak to them as <em>you</em>.</p>",
-      "<p><em>You are carrying something heavy. Of course you are.</em></p>",
-      "<p>No correction in that sentence. Nothing to fix.</p>",
-      "<p>Now forward, and concrete. Not the day this is over \u2014 that day isn't available and building it would be a lie.</p>",
-      "<p>Later today, somewhere specific, doing something ordinary, carrying this. Where are you. What's in your hands. What's around you.</p>",
-      "<p>Both things at once. That's the whole of what this step is asking. Not instead of the grief. Alongside it.</p>",
-      "<p>And one thing that remains. Not something to be grateful for about the loss \u2014 nobody is asking that of you, and anyone who does is wrong. Something that is still here. Something the loss didn't take.</p>",
-      "<p>Come back when you're ready. Feet on the floor.</p>",
-      "<p>You'll be in this again, probably soon. That isn't a failure of the practice and it isn't a sign of anything. This is a thing you carry, and the practice is about the carrying.</p>",
+      "<p>Step back a moment.</p>",
+      "<p>Someone sitting there, carrying something, breathing four and six.</p>",
+      "<p>Say it to them as <em>you</em>.</p>",
+      "<p><em>You're carrying something heavy. Of course you are.</em></p>",
+      "<p>Nothing to fix in that. No second half where it gets better.</p>",
+      "<p>Now \u2014 later today. Not the day this is finished. That day isn't available and I won't pretend it is.</p>",
+      "<p>An ordinary hour, carried out while carrying this.</p>",
+      "<p>Where are you. What's in your hands. What's around you.</p>",
+      "<p>Both things at once. Not instead of it. Alongside.</p>",
+      "<p>And one last thing, and listen to how it's put.</p>",
+      "<p>Not something to be grateful for about the loss. Nobody's asking you for that.</p>",
+      "<p>Something that's still here. Something it didn't take.</p>",
+      "<p>Now put the rest of it down. You don't have to carry any of this out of the room.</p>",
+      "<p>Come back when you're ready. No rush on that either.</p>",
+      "<p>You'll be in this again. Probably soon.</p>",
+      "<p>This is a thing you carry. All of it was about the carrying.</p>",
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
-    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 4, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "BLUE/ILLUSTRATION", "note": "a shape with a space in it. The space is part of the form, not damage to it."}, {"block": 6, "type": "GOLD/PAUSE", "note": ""}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 10, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 10, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 11, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 11, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 17, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "GOLD/PAUSE", "note": "long"}, {"block": 22, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 22, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 29, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 31, "type": "GOLD/PAUSE", "note": ""}, {"block": 32, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 32, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 34, "type": "GOLD/PAUSE", "note": "long"}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": ""}, {"block": 36, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}]
+    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in from the first word. Very low. No turn until the close."}, {"block": 2, "type": "GOLD/PAUSE", "note": "long"}, {"block": 3, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 4, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 8, "type": "GOLD/PAUSE", "note": "long"}, {"block": 9, "type": "BLUE/ILLUSTRATION", "note": "a shape with a space in it. The space is part of the form, not damage to it."}, {"block": 9, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 10, "type": "GOLD/PAUSE", "note": "long"}, {"block": 11, "type": "GOLD/PAUSE", "note": "long"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 16, "type": "GOLD/PAUSE", "note": "long"}, {"block": 16, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 17, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 18, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 18, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 18, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 18, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 19, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 21, "type": "GOLD/PAUSE", "note": "long"}, {"block": 22, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 25, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 25, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 26, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 28, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 29, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 29, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 29, "type": "GOLD/PAUSE", "note": "long"}, {"block": 31, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 32, "type": "GOLD/PAUSE", "note": "long"}, {"block": 36, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 38, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 39, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 39, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 41, "type": "GOLD/PAUSE", "note": "long"}, {"block": 42, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 43, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 43, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 44, "type": "GOLD/PAUSE", "note": ""}, {"block": 45, "type": "GOLD/PAUSE", "note": "long"}, {"block": 46, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 47, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}, {"block": 48, "type": "GOLD/PAUSE", "note": ""}, {"block": 49, "type": "GOLD/PAUSE", "note": ""}],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p6-crisiscard": {
+  "t1p6-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
     body: [
       "<blockquote>Second person throughout \u2014 deliberate, not stylistic.</blockquote>",
@@ -1129,9 +1264,11 @@ var T1_RESOURCES = {
       "<p><strong>Release</strong> \u2014 Two things are running. The loss, which stays. And the fight with it \u2014 bracing, trying to have it at convenient times, monitoring whether it's too much or too long, and the quarrel with the fact of it. The fight is the larger expense and the only one you have a say over. Set down the fight, not the grief. This isn't peace with it and it isn't calling it acceptable.</p>",
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You are carrying something heavy. Of course you are.</em> Then one concrete ordinary scene later today, carrying this \u2014 not the day it's over. Both things at once. Then one thing that remains.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p6-guide": {
+  "t1p6-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
     body: [
       "<p>Grief isn't a single state and doesn't behave like one. It moves \u2014 heaviness, agitation, numbness, ordinary functioning, and back \u2014 sometimes within an hour. Unsteady is the accurate label because instability is the characteristic, not any one of the states it passes through.</p>",
@@ -1151,17 +1288,19 @@ var T1_RESOURCES = {
       "<p>Rehearsing the day it's over is rehearsing a scene you have no route to. Rehearsing an ordinary hour, carried out while carrying this, is a scene that's actually available \u2014 and it's the one that transfers.</p>",
       "<p>The final move asks for something that remains, not for gratitude about the loss. Gratitude for a loss is not a thing this platform will ask anyone for.</p>",
       "<h4>What we rest on</h4>",
-      "<p><strong>Compassionate Inquiry \u2014 Gabor Mat\u00e9</strong> \u00b7 <em>clinical practice</em> \u00b7 supplies Release and its register</p>",
-      "<p>A response is treated as an adaptation rather than a defect \u2014 something that was doing a job. The register of the question decides the answer: <em>what is wrong with me</em> asks about defect and returns answers about defect; <em>what was this for</em> asks about function and returns something workable. <em>Here it removes the implied timetable from the question people ask themselves about grief.</em></p>",
-      "<p><em>A clinical practice, not a controlled research programme. Used here for the register of the question and nothing wider.</em></p>",
+      "<p><strong>Compassionate Inquiry \u2014 Gabor Mat\u00e9</strong> \u00b7 <em>clinical practice</em> \u00b7 supplies Release and the way the question is asked</p>",
+      "<p>A response is treated as an adaptation rather than a defect \u2014 something that was doing a job. The kind of question you ask decides the kind of answer you get. <em>What is wrong with me</em> asks what is broken, and comes back with a list of what is broken. <em>What was this for</em> asks what it was doing, and comes back with something you can use. <em>Here it removes the implied timetable from the question people ask themselves about grief.</em></p>",
+      "<p><em>A clinical practice, not a controlled research programme. Used here for the way the question is asked, and nothing wider.</em></p>",
       "<p><strong>Non-resistance \u2014 Alan Watts</strong> \u00b7 <em>interpretive</em> \u00b7 informs why the third step says <em>accept</em></p>",
       "<p>The state is one thing. The fight with the state is a second thing. The fight usually costs more, and it's the only one of the two you can put down. Setting the fight down isn't passivity, isn't approval, and isn't agreement that the situation is acceptable. <em>Here it is the distinction the whole protocol turns on \u2014 the loss stays, the quarrel with the fact of it doesn't have to.</em></p>",
       "<p><em>Watts is an interpreter rather than an originator; the older sources are Laozi and, for the framing used here, D. T. Suzuki. Offered as a lens rather than a finding.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What your grief means, what the relationship was, and what you carry forward from it are readings that belong entirely to you.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: [{"block": 8, "src": "assets/diagrams/release/img-067-release-t1-06.svg", "alt": "The loss and Fighting it: two things running at once. The loss turned up on its own. Fighting it keeps returning to its own starting point."}]
   },
-  "p6-companion": {
+  "t1p6-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
       "<p><strong>Long exhale, no ceremony.</strong> Four in, six out. If it catches, let it catch.</p>",
@@ -1172,9 +1311,11 @@ var T1_RESOURCES = {
       "<p><strong>Be near people without talking to them.</strong> A caf\u00e9, a park, a shop. Undirected proximity, nothing required of you. This state isolates, and the isolation compounds it.</p>",
       "<p><em>If you need to lie on the floor, lie on the floor. Getting lower is a real option and it isn't giving up.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p6-practice": {
+  "t1p6-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
     body: [
       "<p>Works with a state that moves and doesn't resolve, using breath, attention and observation. It doesn't reduce grief, doesn't shorten it, and doesn't move you through anything. It makes the carrying less expensive.</p>",
@@ -1188,14 +1329,16 @@ var T1_RESOURCES = {
       "<p>Anniversaries, birthdays and the ordinary dates are heavier and arrive with less warning than people expect. Using the protocol before one rather than during it is worth knowing about.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Grief is not a condition and doesn't need treating. But it isn't meant to be carried alone, and a self-guided practice is not company.</p>",
-      "<p>Contact someone \u2014 a doctor, a bereavement service, <a href=\"getting-help.html\">a helpline in your country</a>, or a person you trust \u2014 if you're having thoughts of harming yourself or of not being here, if you can't eat or sleep across an extended period, if you're using something to get through the days, if you can't function at all rather than functioning badly, or if the loss was sudden, violent, or a death by suicide. That last one specifically: it carries things ordinary bereavement support isn't built for, and there are services specifically for it in most countries.</p>",
+      "<p>Contact someone \u2014 a doctor, a bereavement service, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or of not being here, if you can't eat or sleep across an extended period, if you're using something to get through the days, if you can't function at all rather than functioning badly, or if the loss was sudden, violent, or a death by suicide. That last one specifically: it carries things ordinary bereavement support isn't built for, and there are services specifically for it in most countries.</p>",
       "<p>If the loss is recent \u2014 days or a few weeks \u2014 a practice is not the priority. People are. Come back to this when you want it.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor, counsellor or bereavement service, this sits alongside that and replaces nothing.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p6-disclosure": {
+  "t1p6-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>People want to help and have no idea what to do, so they either avoid the subject or produce something clumsy. Telling them what actually helps spares everyone.</p>",
@@ -1216,19 +1359,23 @@ var T1_RESOURCES = {
       "<p><strong>If you need to say the hard version</strong> &gt; \"I don't want to be talked out of this. I want someone to sit near me while I'm in it. That's the whole ask.\"</p>",
       "<p><em>Tell someone. This is the state that most reliably isolates the person in it, and the isolation is produced by the grief rather than chosen.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p6-record": {
+  "t1p6-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before.</p>",
       "<p>There's no arc here and nothing accumulating toward a good end. Some entries will be much worse than earlier ones and that means nothing about how you're doing.</p>",
       "<p>Any of these, or none.</p>",
-      "<p>- Where did it sit in your body today? - What brought it in? Sometimes there's nothing. Write that if there's nothing. - What was the fight today \u2014 bracing, timing it, monitoring it, or arguing with the fact of it? - What did you say to yourself from across the room? - What was the ordinary thing you did while carrying it? - What remains? Something the loss didn't take. - Is there anything you'd want to say to them, that you can write here instead? - What did you write here last time? Read it back, without comparing.</p>"
+      "<ul><li>Where did it sit in your body today?</li><li>What brought it in? Sometimes there's nothing. Write that if there's nothing.</li><li>What was the fight today \u2014 bracing, timing it, monitoring it, or arguing with the fact of it?</li><li>What did you say to yourself from across the room?</li><li>What was the ordinary thing you did while carrying it?</li><li>What remains? Something the loss didn't take.</li><li>Is there anything you'd want to say to them, that you can write here instead?</li><li>What did you write here last time? Read it back, without comparing.</li></ul>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p6-accountability": {
+  "t1p6-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and grief's exterior is one of the least discussed, because nobody wants to be the person raising it with someone bereaved.</p>",
@@ -1242,61 +1389,68 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 grief repairs by flagging rather than by improving. <em>\"I'm going to tell you when it's a bad day instead of just going quiet\"</em> is small, specific, observable, and doesn't require you to be different.</p>",
       "<p><strong>Where this stops</strong> \u2014 this resource is not an instruction to be less grieving for other people's comfort, and it isn't a suggestion that you owe anyone a better performance. It's the missing half of the information about your own state. A reaction is data about the exterior, not a verdict on you. And if you're not up to this today, that's a legitimate answer \u2014 this is the one resource on this protocol you can leave for a long time.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p7-meditation": {
+  "t1p7-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
     body: [
-      "<p>You're here. That's the hard part done, and it's more than it looks like from where you're sitting.</p>",
-      "<p>This one starts differently. Sit or lie down, whichever is nearer. Eyes open or closed, either.</p>",
-      "<p>You may not feel much of this. That's expected, and it isn't a sign it isn't working.</p>",
-      "<h4>Before we start \u2014 move something</h4>",
-      "<p>Wiggle your toes. That's all.</p>",
-      "<p>Now your fingers. One hand is enough.</p>",
-      "<p>Press your feet into whatever's under them. Not hard. Just enough to notice the floor is there.</p>",
-      "<p>That's the first step done. We're not going to do anything larger than that for a while.</p>",
+      "<blockquote><strong>VOICE</strong> \u2014 low, few words, generous pauses. Offers rather than instructs. Nothing at stake in getting it right.</blockquote>",
+      "<p>You got here.</p>",
+      "<p>That took more than it looks like from where you are.</p>",
+      "<p>This one starts differently and it asks for very little. If you only do the first part, that's a complete use of it.</p>",
+      "<p>You may not feel much of any of this. That's expected here.</p>",
+      "<h4>Before we start</h4>",
+      "<p>Would your toes move?</p>",
+      "<p>And your fingers. One hand is plenty.</p>",
+      "<p>If your feet can press into whatever's under them, let them. Not hard. Just enough to notice the floor is there.</p>",
+      "<p>That's the first step done. Nothing bigger than that for a while.</p>",
       "<h4>Recognition</h4>",
-      "<p>One word. We're not going hunting for it.</p>",
+      "<p>One word, and we're not going hunting.</p>",
       "<p><strong>Numb.</strong></p>",
-      "<p>That's the whole step. You don't have to find where it sits in your body \u2014 in this state that's often hard, and not finding it is part of the state rather than a failure to look.</p>",
-      "<p>Numb isn't nothing. It's a state your body has moved into, and it moved there for a reason. It's doing something.</p>",
-      "<p>You noticed you're in it. That's the part that matters, and you've done it.</p>",
+      "<p>That's the whole step. There's no need to find where it sits \u2014 in this state that's often hard, and not finding it belongs to the state rather than to any failure of yours.</p>",
+      "<p>Numb isn't nothing, though. It's somewhere your body has moved to, and it moved there for a reason. Something is happening. Just at a level you don't have a window onto.</p>",
+      "<p>You noticed you were in it. That's the part that counted, and it's already done.</p>",
       "<h4>Regulation</h4>",
-      "<p>Now some contact, before any counting.</p>",
-      "<p>Put a hand on your chest, or hold your own arm. Whichever is easier to arrange.</p>",
-      "<p>Let it stay there. Warmth and pressure is the input this state takes when it won't take much else.</p>",
-      "<p>Now the breath, gently, and it doesn't have to be four and six today.</p>",
+      "<p>Contact, before any counting.</p>",
+      "<p>A hand on your chest. Or hold your own arm \u2014 whichever is nearer.</p>",
+      "<p>Let it stay. Warmth and weight is what gets through when finer things don't.</p>",
+      "<p>Now the breath, and it doesn't have to be four and six today.</p>",
       "<p>Longer out than in. That's the only part that matters.</p>",
-      "<p>If you want the count, it's four in and six out. If counting is too much right now, don't count. Just longer out than in.</p>",
+      "<p>The count is four and six if you want it. If counting is too much, leave it out.</p>",
       "<p>Nothing to achieve here.</p>",
       "<h4>Release</h4>",
-      "<p>Two things are running, and this is the one that surprises people.</p>",
-      "<p>There's the shutdown. And there's what you're doing about the shutdown \u2014 the low steady contempt for being like this. <em>Pathetic. Lazy. Everyone else manages.</em></p>",
-      "<p>That runs underneath, quietly, all day. It isn't gentler than the loud states. It's just quieter.</p>",
-      "<p>Let the state be here. It arrived. It isn't being argued with and it isn't being ranked against how you were last month.</p>",
-      "<p>Put down the contempt. Only that.</p>",
-      "<p>And the question. Not <em>what's wrong with me that I can't function</em> \u2014 you've been asking that all week and it's returned nothing.</p>",
+      "<p>There's the shutdown. And there's something quieter running underneath it.</p>",
+      "<p>You know the one. <em>Pathetic. Lazy. Everyone else manages.</em></p>",
+      "<p>Running all day, low, at a volume you've stopped hearing.</p>",
+      "<p>It isn't gentler for being quiet. It's the same thing the loud states do, in a lower voice.</p>",
+      "<p>The state can stay. It arrived and it's not being argued with, and it isn't being ranked against how you were last month.</p>",
+      "<p>Put down the other one.</p>",
+      "<p>And the question. Not <em>what's wrong with me that I can't function</em> \u2014 you've been asking that all week and it's given you nothing.</p>",
       "<p><strong>What was this for?</strong></p>",
-      "<p>Shutting down is something a body does when what's arriving is more than it can meet, and mobilising isn't working or isn't available. It's protective. It's expensive, but it's protective.</p>",
-      "<p>This isn't nothing happening. It's something happening, at a level you don't have direct access to.</p>",
-      "<p>Leave the question there. No answer needed today.</p>",
+      "<p>Shutting down is what a body does when what's arriving is more than it can meet and pushing back isn't available. It's protection. Expensive, and protection.</p>",
+      "<p>Nothing needs answering today.</p>",
       "<h4>Rise</h4>",
-      "<p>Step outside it, and gently.</p>",
-      "<p>See yourself from across the room. Someone sitting or lying there, hand on their chest.</p>",
-      "<p>Speak to them as <em>you</em>.</p>",
-      "<p><em>You are shut down today. You did this anyway.</em></p>",
-      "<p>Both halves of that.</p>",
-      "<p>Now forward, and make it very small. Not the day you're back to yourself \u2014 that scene isn't available and building it would be a lie.</p>",
-      "<p>One thing. Standing up. A glass of water. Opening a window. Where are you, and what's the first movement.</p>",
-      "<p>Small is not a lower version of this step. On a day like today, small is the whole of it.</p>",
-      "<p>And one thing that's still here. Not something you're grateful for. Something that exists. The floor. The light. That you got this far.</p>",
-      "<p>Come back when you're ready, and slowly. This state doesn't like being stood up quickly.</p>",
-      "<p>You may feel nothing different. That's an ordinary result here, more than anywhere else on this platform, and it doesn't mean nothing happened.</p>",
+      "<p>Step back a little. Gently.</p>",
+      "<p>Someone sitting or lying there, hand on their chest.</p>",
+      "<p>Say it to them as <em>you</em>.</p>",
+      "<p><em>You're shut down today. And you did this anyway.</em></p>",
+      "<p>Both halves.</p>",
+      "<p>Now something very small. Not the day you're back to yourself \u2014 that scene isn't available and I'm not going to build it for you.</p>",
+      "<p>One thing. Standing up. A glass of water. Opening a window.</p>",
+      "<p>Small isn't a reduced version of this step. Today it's the whole of it.</p>",
+      "<p>And before you come back \u2014 you did this. On a day like this one. That's the whole of it and it doesn't need anything added.</p>",
+      "<p>Now put it down. All of it.</p>",
+      "<p>Come back slowly. This state doesn't like being stood up quickly.</p>",
+      "<p>You may feel nothing different. That's an ordinary result here, more than anywhere else, and it doesn't mean nothing happened.</p>",
       "<p>Recognition. Regulation. Release. Rise. You did all four.</p>"
     ],
-    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds. Enters later than on other protocols and sits lower."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 4, "type": "RED/ACTION", "note": "small deliberate movement. Offered, never insisted on."}, {"block": 5, "type": "GOLD/PAUSE", "note": "long"}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "GOLD/PAUSE", "note": "long"}, {"block": 10, "type": "GOLD/PAUSE", "note": ""}, {"block": 11, "type": "GOLD/PAUSE", "note": "long"}, {"block": 12, "type": "BLUE/ILLUSTRATION", "note": "a still surface with movement beneath it. The surface is not the whole of it."}, {"block": 12, "type": "GOLD/PAUSE", "note": ""}, {"block": 13, "type": "GOLD/PAUSE", "note": ""}, {"block": 16, "type": "RED/ACTION", "note": "hand to sternum or to the opposite arm. Offered, not instructed."}, {"block": 17, "type": "GOLD/PAUSE", "note": "long"}, {"block": 18, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "TEAL/BREATH", "note": "in, slow"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, longer"}, {"block": 20, "type": "TEAL/BREATH", "note": "in, slow"}, {"block": 20, "type": "TEAL/BREATH", "note": "out, longer"}, {"block": 21, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 21, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 21, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 24, "type": "GOLD/PAUSE", "note": ""}, {"block": 26, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 26, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 28, "type": "GOLD/PAUSE", "note": "long"}, {"block": 30, "type": "GOLD/PAUSE", "note": "long"}, {"block": 31, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 31, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 38, "type": "GOLD/PAUSE", "note": ""}, {"block": 39, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 39, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 41, "type": "GOLD/PAUSE", "note": "long"}, {"block": 42, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 42, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 43, "type": "GOLD/PAUSE", "note": ""}, {"block": 43, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}]
+    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in late, sits low throughout."}, {"block": 2, "type": "GOLD/PAUSE", "note": "long"}, {"block": 3, "type": "GOLD/PAUSE", "note": "long"}, {"block": 4, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "RED/ACTION", "note": "small deliberate movement. Offered, never insisted on."}, {"block": 7, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 8, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 9, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 12, "type": "GOLD/PAUSE", "note": ""}, {"block": 13, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 14, "type": "BLUE/ILLUSTRATION", "note": "a still surface with movement beneath it. The surface is not the whole of it."}, {"block": 14, "type": "GOLD/PAUSE", "note": "long"}, {"block": 15, "type": "GOLD/PAUSE", "note": ""}, {"block": 18, "type": "RED/ACTION", "note": "hand to sternum, or hold the opposite arm. Offered, not instructed."}, {"block": 19, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 20, "type": "GOLD/PAUSE", "note": "long"}, {"block": 21, "type": "TEAL/BREATH", "note": "in, slow"}, {"block": 21, "type": "TEAL/BREATH", "note": "out, longer"}, {"block": 22, "type": "TEAL/BREATH", "note": "in, slow"}, {"block": 22, "type": "TEAL/BREATH", "note": "out, longer"}, {"block": 23, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 23, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 23, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 23, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 23, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 28, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 28, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 29, "type": "GOLD/PAUSE", "note": "long"}, {"block": 31, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 33, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 34, "type": "GOLD/PAUSE", "note": "long"}, {"block": 38, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 40, "type": "GOLD/PAUSE", "note": "long"}, {"block": 41, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 41, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 43, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 44, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 44, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 45, "type": "GOLD/PAUSE", "note": "long"}, {"block": 46, "type": "GOLD/PAUSE", "note": ""}, {"block": 46, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p7-crisiscard": {
+  "t1p7-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
     body: [
       "<blockquote>Second person throughout \u2014 deliberate, not stylistic.</blockquote>",
@@ -1313,9 +1467,11 @@ var T1_RESOURCES = {
       "<p><strong>Release</strong> \u2014 Two things are running. The shutdown, and the contempt for being in it \u2014 <em>pathetic, lazy, everyone else manages</em>. That runs underneath all day and it isn't gentler for being quiet. Put down the contempt. Keep the state. Ask <em>what was this for</em> and leave it open.</p>",
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You are shut down today. You did this anyway.</em> Then one very small thing: standing up, a glass of water, opening a window. Small isn't a lesser version of this step. Today it's the whole of it.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p7-guide": {
+  "t1p7-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
     body: [
       "<p>Shutdown is the third of the three broad conditions the body moves between \u2014 not settled, not mobilised, but reduced. It's what a system does when what's arriving is more than it can meet and mobilising either isn't working or isn't available.</p>",
@@ -1346,9 +1502,11 @@ var T1_RESOURCES = {
       "<p><em>The finding is used here; the wider programme is not. There is no measurement of coherence anywhere on this platform and no score attached to any breath.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What brought this on, what it means, and what to do next are readings that belong to you.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: [{"block": 12, "src": "assets/diagrams/release/img-067-release-t1-07.svg", "alt": "The shutdown and The contempt: two things running at once. The shutdown turned up on its own. The contempt keeps returning to its own starting point."}]
   },
-  "p7-companion": {
+  "t1p7-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
       "<p>Smaller than on any other protocol, deliberately. Any one of these on its own is a complete use.</p>",
@@ -1361,9 +1519,11 @@ var T1_RESOURCES = {
       "<p><strong>Say one sentence out loud.</strong> To anyone, or to nobody. Voice is one of the things that goes quiet first, and using it is a direct contradiction of the state.</p>",
       "<p><em>Warm water on the hands, held longer than necessary, is worth knowing about on the days none of the rest is available.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p7-practice": {
+  "t1p7-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
     body: [
       "<p>Works with a reduced state, using movement, contact, breath and observation. It doesn't ask you to be more active than you are, and it treats getting through it as a complete use.</p>",
@@ -1376,16 +1536,18 @@ var T1_RESOURCES = {
       "<p>If emotion arrives hard as the state lifts and you're on your own with it, stop and let it be there, and consider whether there's someone you could be near.</p>",
       "<p><strong>When this needs a person rather than a practice</strong></p>",
       "<p>Reduced states are the ones people most often carry alone and longest, because the state itself removes the impulse to reach for anyone.</p>",
-      "<p>Contact someone today \u2014 a doctor, <a href=\"getting-help.html\">a helpline in your country</a>, or a person you trust \u2014 if you're having thoughts of harming yourself or of not being here, if you haven't been able to eat, wash or leave the house for days, if you can't remember when this started, if you're using something to get through it, or if this has been going on for weeks rather than days.</p>",
+      "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or of not being here, if you haven't been able to eat, wash or leave the house for days, if you can't remember when this started, if you're using something to get through it, or if this has been going on for weeks rather than days.</p>",
       "<p>That last one particularly. A day like this is ordinary. A month like this is a reason to see a doctor, and going is not an admission of anything.</p>",
       "<p><strong>If you're not sure you can make the call</strong></p>",
       "<p>Ask someone else to make it, or send a message rather than speaking. <em>\"I need to see someone and I can't do the phone today\"</em> sent to one person is enough, and it's a legitimate way to do it.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person matters most.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p7-disclosure": {
+  "t1p7-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>This state removes the impulse to tell anyone, which is what makes it the one most worth having a script for. You can send any of these as a message rather than saying them.</p>",
@@ -1407,18 +1569,22 @@ var T1_RESOURCES = {
       "<p><strong>If you need someone to act</strong> &gt; \"I need to see a doctor and I can't face arranging it. Could you help me do that this week?\"</p>",
       "<p><em>Tell one person. This is the state that most reliably keeps people silent, and the silence is produced by the state rather than chosen.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p7-record": {
+  "t1p7-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before.</p>",
       "<p>One line is a complete entry. On this protocol especially, writing nothing is a legitimate use.</p>",
-      "<p>- What did you manage today? Anything at all. - Could you find where it sat in your body, or not? Either answer is fine. - What did the commentary say? Write the actual words it used. - <em>What was this for</em> \u2014 anything, or nothing? Nothing is a real answer. - What did you say to yourself from across the room? - What was the small thing? Did you do it? - Is anything different from yesterday? Including no. - What did you write here last time? Read it back \u2014 without comparing today to it.</p>"
+      "<ul><li>What did you manage today? Anything at all.</li><li>Could you find where it sat in your body, or not? Either answer is fine.</li><li>What did the commentary say? Write the actual words it used.</li><li><em>What was this for</em> \u2014 anything, or nothing? Nothing is a real answer.</li><li>What did you say to yourself from across the room?</li><li>What was the small thing? Did you do it?</li><li>Is anything different from yesterday? Including no.</li><li>What did you write here last time? Read it back \u2014 without comparing today to it.</li></ul>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p7-accountability": {
+  "t1p7-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and this one exits as absence, which is the hardest kind to see from inside because from inside it feels like nothing happening at all.</p>",
@@ -1432,54 +1598,66 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 this repairs by sending something rather than by improving. <em>\"When I go under, I'll send you one line saying so, even if that's all I can manage\"</em> is small, specific, observable, and doesn't require you to be different.</p>",
       "<p><strong>Where this stops</strong> \u2014 this resource is not an instruction to be less shut down for other people's convenience, and you don't owe anyone a better performance. If today isn't the day for this one, that's a legitimate answer \u2014 it's the resource on this protocol you can leave for as long as you need to.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p8-meditation": {
+  "t1p8-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
     body: [
-      "<p>Sit somewhere you can stay a while. Eyes closed if they'll close, or one spot on the floor.</p>",
-      "<p>This works on the state, and it leaves your read of the situation exactly where it is. Whatever you think is happening might be happening \u2014 that question stays open.</p>",
+      "<blockquote><strong>VOICE</strong> \u2014 frank, unembarrassed, faintly wry. Treating this as ordinary is the intervention. No gentleness, no pity.</blockquote>",
+      "<p>Right. This is the one nobody wants to say out loud.</p>",
+      "<p>People will admit to almost anything before they'll admit to this one. So let's just have it in the room, plainly, and get on.</p>",
+      "<p>Nothing here is going to tell you whether you're right about what's happening. You might be. That stays open and we're not touching it.</p>",
       "<h4>Recognition</h4>",
-      "<p>Find where it is in your body, before any of the words.</p>",
-      "<p>Stomach, usually. A turning-over. Sometimes heat up through the chest and into the face. Sometimes a coldness instead, which surprises people. A restlessness in the hands.</p>",
-      "<p>Now name the state. One word. <strong>Unsteady.</strong></p>",
-      "<p>Notice what that word leaves out. It leaves out them. It leaves out the other person, what they have, what they did, what you saw.</p>",
-      "<p>This state comes with a lot of content attached \u2014 a whole scene, usually, with people in it. Underneath the scene there's a state, running in a body. That's what we've got hold of.</p>",
-      "<p>The scene can wait.</p>",
+      "<p>Where is it?</p>",
+      "<p>Stomach, usually. That turning over. Sometimes heat up through the chest and into the face \u2014 sometimes a coldness instead, which catches people out.</p>",
+      "<p>One word. <strong>Unsteady.</strong></p>",
+      "<p>Now \u2014 notice how much came attached to that. A whole scene. People in it, a history, and a fairly persuasive case.</p>",
+      "<p>That's what makes this one feel like information rather than a state.</p>",
+      "<p>Underneath all of it there's just a body doing something. That's the bit we can work on. The scene will keep.</p>",
       "<h4>Regulation</h4>",
-      "<p>Four counts in.</p>",
-      "<p>Six counts out. Longer out than in.</p>",
-      "<p>Attention into the centre of your chest.</p>",
-      "<p>If a hand there helps, put one there.</p>",
-      "<p>This state pulls hard toward looking. Checking a phone, a profile, a room. Not now. The count first.</p>",
+      "<p>Four in.</p>",
+      "<p>Six out.</p>",
+      "<p>Attention to the middle of your chest.</p>",
+      "<p>This one pulls hard toward looking. A phone, a profile, a room.</p>",
+      "<p>Not yet. Look afterwards if you still want to \u2014 you probably won't, and that's information in itself.</p>",
       "<h4>Release</h4>",
-      "<p>Two things are running.</p>",
-      "<p>There's the state. And there's the comparing \u2014 running yourself against them, over and over, in a contest nobody called and nobody is judging.</p>",
-      "<p>Each round produces the same result, and each round puts your body straight back where it started.</p>",
-      "<p>Let the state stand. It's here, it's uncomfortable, it isn't being argued with.</p>",
-      "<p>Set down the comparing. Only the comparing.</p>",
-      "<p>And the question. Not <em>what's wrong with me that I'm this person</em> \u2014 you've asked that already and it gave you nothing.</p>",
+      "<p>Now the comparing.</p>",
+      "<p>You against them. Over and over, in a contest nobody entered and nobody is judging.</p>",
+      "<p>And it gives you the same answer every round. It was always going to \u2014 you're running it, and you know exactly which way it goes.</p>",
+      "<p>The state can stay. Put down the measuring.</p>",
+      "<p>And the question \u2014 not <em>what's wrong with me that I'm this person.</em> You've asked. It gave you nothing.</p>",
       "<p><strong>What was this for?</strong></p>",
-      "<p>Here's what tends to turn up. Jealousy points at something. Not always at the person \u2014 often past them, at something you want and haven't said out loud, sometimes not even to yourself.</p>",
-      "<p>The size of it is worth noticing too. When a reaction is much bigger than the thing that caused it, the extra is about something. Not necessarily about them.</p>",
-      "<p>Don't work it out now. Just let the question sit there instead of the other one.</p>",
+      "<p>Here's what usually turns up, and it's more useful than it sounds.</p>",
+      "<p>Jealousy points at something. Often not at the person \u2014 past them, at something you want and haven't said out loud. Sometimes haven't said to yourself.</p>",
+      "<p>And the size of it is worth noticing. When the reaction is much bigger than whatever set it off, the extra is about something.</p>",
+      "<p>So \u2014 what's underneath it? What did you decide this meant about you, and when?</p>",
+      "<p>I'm not going to answer that. I don't know, and anyone who claims to is selling you something.</p>",
+      "<p>If something surfaced, it's yours. If nothing did, that's a real answer too \u2014 plenty of people never get one and manage perfectly well.</p>",
       "<h4>Rise</h4>",
-      "<p>Step outside it.</p>",
-      "<p>See yourself from across the room. Someone sitting there with their phone face-down, breathing four and six.</p>",
-      "<p>Speak to them as <em>you</em>.</p>",
+      "<p>Step back.</p>",
+      "<p>Someone over there with their phone face down, breathing four and six.</p>",
+      "<p>Say it to them as <em>you</em>.</p>",
       "<p><em>You want something. That's all this is so far.</em></p>",
-      "<p>No verdict in that. Nothing about whether you deserve it, or whether they do.</p>",
-      "<p>Now forward, and concrete. Not the scene where they lose something. That one costs you and changes nothing.</p>",
-      "<p>You, later, doing something that's actually yours. Where are you. What's in your hands. What are you making, or asking for, or starting.</p>",
-      "<p>Specific. A general resolve to be less jealous does nothing. The particular thing you'd be doing does.</p>",
+      "<p>No verdict in that. Nothing about whether you should want it, or whether they deserve theirs.</p>",
+      "<p>Now \u2014 you can see where your attention has been sitting. On them, mostly. Which has never once produced anything.</p>",
+      "<p>So put it somewhere on purpose.</p>",
+      "<p>Not the scene where they lose something. That costs you an afternoon and changes nothing.</p>",
+      "<p>You, later, doing the thing that's actually yours. Where are you. What's in your hands. What are you making, or asking for, or starting.</p>",
+      "<p>And one small thing you'll actually do about it. Today, feeling exactly like this \u2014 not on a better day.</p>",
+      "<p>That's the difference between the two things now in there. The comparison arrived on its own. This one you picked.</p>",
       "<p>And one thing already yours. Not compared to anyone. Just yours, and here.</p>",
-      "<p>Come back. Feet on the floor. Phone still face-down.</p>",
-      "<p>The state may still be here. It doesn't clear in one go. What's changed is that it's pointing somewhere now instead of just running.</p>",
+      "<p>Come back. Phone still face down.</p>",
+      "<p>The state may well still be here \u2014 it doesn't clear in one go. What's different is that it's pointing somewhere now instead of just running.</p>",
+      "<p>Put the rest of it down. You don't have to carry it out.</p>",
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
-    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 4, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "BLUE/ILLUSTRATION", "note": "two shapes, one lit and one in shadow, the shadow slightly larger."}, {"block": 6, "type": "GOLD/PAUSE", "note": ""}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 11, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 11, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "RED/ACTION", "note": "hand to sternum, flat, light. Offered, not instructed."}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 15, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 17, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "GOLD/PAUSE", "note": "long"}, {"block": 23, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 24, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 25, "type": "GOLD/PAUSE", "note": ""}, {"block": 29, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 31, "type": "GOLD/PAUSE", "note": ""}, {"block": 32, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 32, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 34, "type": "GOLD/PAUSE", "note": "long"}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": ""}, {"block": 36, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}]
+    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 3, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "BLUE/ILLUSTRATION", "note": "two shapes, one lit and one in shadow, the shadow slightly larger."}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 10, "type": "GOLD/PAUSE", "note": ""}, {"block": 13, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 13, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "RED/ACTION", "note": "hand to sternum, or phone face-down. Offered, not instructed."}, {"block": 16, "type": "GOLD/PAUSE", "note": ""}, {"block": 17, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 17, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 17, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 17, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 17, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 19, "type": "GOLD/PAUSE", "note": ""}, {"block": 20, "type": "GOLD/PAUSE", "note": "long"}, {"block": 21, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 21, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 22, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "GOLD/PAUSE", "note": "long"}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 27, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 28, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 30, "type": "GOLD/PAUSE", "note": "long"}, {"block": 33, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 35, "type": "GOLD/PAUSE", "note": ""}, {"block": 36, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 36, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 37, "type": "GOLD/PAUSE", "note": ""}, {"block": 39, "type": "GOLD/PAUSE", "note": "long"}, {"block": 40, "type": "GOLD/PAUSE", "note": "long"}, {"block": 41, "type": "GOLD/PAUSE", "note": ""}, {"block": 42, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 42, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 43, "type": "GOLD/PAUSE", "note": ""}, {"block": 43, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p8-crisiscard": {
+  "t1p8-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
     body: [
       "<blockquote>Second person throughout \u2014 deliberate, not stylistic.</blockquote>",
@@ -1494,9 +1672,11 @@ var T1_RESOURCES = {
       "<p><strong>Release</strong> \u2014 Two things are running. The state, which turned up on its own. And the comparing \u2014 running yourself against them, again and again, in a contest nobody called. Every round gives the same result and puts you back at the start. Set down the comparing. Keep the state. Ask <em>what was this for</em> and leave it open.</p>",
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>You want something. That's all this is so far.</em> Then one concrete scene, later, doing something that's actually yours \u2014 not the scene where they lose. Then one thing already yours, uncompared.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p8-guide": {
+  "t1p8-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
     body: [
       "<p>This is an unsettled state rather than a fully mobilised one. In the body: the stomach turning over, heat rising through the chest and face, sometimes a coldness instead, restlessness in the hands, and attention that locks onto one person and won't move off.</p>",
@@ -1520,14 +1700,16 @@ var T1_RESOURCES = {
       "<p><strong>Shadow &amp; individuation \u2014 C. G. Jung</strong> \u00b7 <em>interpretive</em> \u00b7 informs Release</p>",
       "<p>What you decline to look at keeps running unattended, and you tend to meet it as other people's faults. The usable test is proportion: when a reaction outruns the event that occasioned it, the surplus is carrying information about something other than the event. There's no finish line and nothing to complete. <em>Here it is the reason the size of the reaction is treated as data rather than as something to be ashamed of.</em></p>",
       "<p><em>Offered as a lens rather than a finding, with no controlled evidence behind it. What it shows you, if anything, is yours to read \u2014 this platform will not tell you what your surplus means.</em></p>",
-      "<p><strong>Compassionate Inquiry \u2014 Gabor Mat\u00e9</strong> \u00b7 <em>clinical practice</em> \u00b7 supplies Release and its register</p>",
-      "<p>A response is treated as an adaptation rather than a defect. The register of the question decides the answer: <em>what is wrong with me</em> asks about defect and returns answers about defect; <em>what was this for</em> asks about function and returns something workable. Understanding is not endorsement. <em>Here it turns a state most people are ashamed of into one they can look at directly.</em></p>",
-      "<p><em>A clinical practice, not a controlled research programme. Used here for the register of the question and nothing wider.</em></p>",
+      "<p><strong>Compassionate Inquiry \u2014 Gabor Mat\u00e9</strong> \u00b7 <em>clinical practice</em> \u00b7 supplies Release and the way the question is asked</p>",
+      "<p>A response is treated as an adaptation rather than a defect. The kind of question you ask decides the kind of answer you get. <em>What is wrong with me</em> asks what is broken, and comes back with a list of what is broken. <em>What was this for</em> asks what it was doing, and comes back with something you can use. Understanding is not endorsement. <em>Here it turns a state most people are ashamed of into one they can look at directly.</em></p>",
+      "<p><em>A clinical practice, not a controlled research programme. Used here for the way the question is asked, and nothing wider.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What your jealousy is pointing at, whether your read of the situation is right, and what to do about it are readings that belong to you.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: [{"block": 7, "src": "assets/diagrams/release/img-067-release-t1-08.svg", "alt": "The state and The comparing: two things running at once. The state turned up on its own. The comparing keeps returning to its own starting point."}]
   },
-  "p8-companion": {
+  "t1p8-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
       "<p><strong>Phone face-down, out of reach.</strong> Not away forever \u2014 further than an arm. The looking is a physical loop and putting distance into it interrupts the loop rather than the wanting.</p>",
@@ -1538,9 +1720,11 @@ var T1_RESOURCES = {
       "<p><strong>Walk somewhere with people in it.</strong> A shop, a street. This state feeds on isolation and on screens, and undirected proximity to actual people interrupts both.</p>",
       "<p><em>Cool water on the wrists helps when the heat is the main thing.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p8-practice": {
+  "t1p8-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
     body: [
       "<p>Works with the state, using breath, attention and observation. It doesn't tell you whether what you suspect is happening, and it doesn't tell you what your jealousy means. It gets you steady enough to look at the situation with a system that isn't narrowed.</p>",
@@ -1554,16 +1738,18 @@ var T1_RESOURCES = {
       "<p>If Release opens something much larger than today's situation, you can stop there and come back to the breath.</p>",
       "<p>If the comparing continues right through the session and won't drop at all, end it and use the somatic activities instead. Repeating the protocol while the loop is running teaches your body that the protocol is part of the loop.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
-      "<p>Contact someone \u2014 a doctor, <a href=\"getting-help.html\">a helpline in your country</a>, or a person you trust \u2014 if you're checking or monitoring someone in ways you'd be uncomfortable describing out loud, if you can't be around a specific person at all, if you're using something to manage it, or if you're having thoughts of harming yourself.</p>",
+      "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're checking or monitoring someone in ways you'd be uncomfortable describing out loud, if you can't be around a specific person at all, if you're using something to manage it, or if you're having thoughts of harming yourself.</p>",
       "<p><strong>Where this affects someone else</strong></p>",
       "<p>If the state has turned into monitoring another person \u2014 their phone, their movements, their messages, who they're with \u2014 that has crossed from a state you're managing into conduct affecting somebody else, and it's worth telling a professional rather than working on privately. That's a straightforward observation, not a judgement.</p>",
       "<p>If someone is monitoring <em>you</em>, this protocol will help you stay steady and is not a way to manage them. Your safety and your privacy are separate questions from your regulation and they come first.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p8-advisory": {
+  "t1p8-advisory": {
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
     body: [
       "<p>This state usually has a live external source \u2014 a person, a rivalry, a feed. How much contact you have is real, and it's often the part you have most say over.</p>",
@@ -1581,9 +1767,11 @@ var T1_RESOURCES = {
       "<p><strong>Using this</strong></p>",
       "<p>Notice the tier. Then notice whether it's the tier you'd assign if a friend described the same thing. Where it goes next is yours \u2014 this platform doesn't tell members to leave or stay, and nobody here knows what you'd be giving up.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p8-disclosure": {
+  "t1p8-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>This is a hard one to say out loud, because the word itself carries a verdict. Most people would rather admit to almost anything else. Saying it plainly is most of the work.</p>",
@@ -1604,9 +1792,11 @@ var T1_RESOURCES = {
       "<blockquote>\"There's a method I run. Four steps. First I name it as a state rather than as the whole scene it comes with. Then breathing, four in and six out, with my phone face-down. Then I stop the comparing, which is the loop that keeps it going. Then I look at it from a distance \u2014 and the useful bit is that it's usually pointing at something I want and haven't said.\"</blockquote>",
       "<p><em>Tell one person. It can be a professional. This is the state people most reliably keep entirely private, and privacy is what lets it grow.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p8-repair": {
+  "t1p8-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
     body: [
       "<p>Send it from the far side of the protocol, not the middle. From inside the state, an invitation reads as an accusation with a question mark on the end, and gets answered as one.</p>",
@@ -1618,18 +1808,22 @@ var T1_RESOURCES = {
       "<p><strong>Before sending</strong> \u2014 read it back for a request in disguise. If the message would only be successful if they changed something, it isn't an invitation. Also look for the case: <em>always, never, you clearly, obviously.</em> Cut them.</p>",
       "<p><em>If they don't take it, you've done the part that was yours. Whether they meet it is theirs, and always was.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p8-record": {
+  "t1p8-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before.</p>",
       "<p>Any of these, or none.</p>",
-      "<p>- Where did it sit in your body? - What was the actual event? Write it plainly, without the reading attached. - What was the comparison? On what dimension, exactly? - Was the size of the reaction proportionate to the event? If not, how far off? - <em>What was this for</em> \u2014 what turned up, without needing to answer it? - What is it you want? Write it even if it seems unreasonable, even if it isn't about them at all. - What did you say to yourself from across the room? - Is this the same jealousy as last time, with different people in it? - What did you write here last time? Read it back.</p>"
+      "<ul><li>Where did it sit in your body?</li><li>What was the actual event? Write it plainly, without the reading attached.</li><li>What was the comparison? On what dimension, exactly?</li><li>Was the size of the reaction proportionate to the event? If not, how far off?</li><li><em>What was this for</em> \u2014 what turned up, without needing to answer it?</li><li>What is it you want? Write it even if it seems unreasonable, even if it isn't about them at all.</li><li>What did you say to yourself from across the room?</li><li>Is this the same jealousy as last time, with different people in it?</li><li>What did you write here last time? Read it back.</li></ul>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p8-accountability": {
+  "t1p8-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and this one exits in ways that are unusually hard to see, because most of it is done privately.</p>",
@@ -1644,12 +1838,15 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 this repairs by saying the good thing out loud, promptly, and by not qualifying it. <em>\"I'm going to congratulate you properly when things go well for you\"</em> is small, specific and immediately observable.</p>",
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. If someone is deliberately provoking this state, their account of your conduct isn't a reliable one. And if the checking has become monitoring, that needs a professional rather than a repair conversation.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p9-meditation": {
+  "t1p9-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
     body: [
-      "<p>Sit somewhere you can stay. Eyes closed if they'll close, or one spot on the floor.</p>",
+      "<p>It's already running, isn't it. The checking. How you're sitting, whether you're doing this properly, whether it's working yet.</p>",
+      "<p>That's the thing we're here about. So we'll take it off the table now \u2014 there's nothing here to get right, and nobody marking it.</p>",
       "<p>This works on the state and puts some ground under you. It leaves the opinion where it is \u2014 reassurance is something you'd have argued with anyway, so we're doing something else.</p>",
       "<h4>Recognition</h4>",
       "<p>Find where it is in your body, before any of the words.</p>",
@@ -1657,7 +1854,11 @@ var T1_RESOURCES = {
       "<p>Now name the state. One word. <strong>Unsteady.</strong></p>",
       "<p>That word is doing something precise. It describes how you're standing, not what you're worth.</p>",
       "<p>Because this state has an opinion attached, and the opinion presents itself as a fact you've finally noticed. <em>Not enough. Not really. Found out eventually.</em></p>",
-      "<p>We're not going to argue with it. Arguing gives it something to answer. We're going to notice that it's a state, and states have a shape and a location and a name.</p>",
+      "<p>We're not going to argue with it. Arguing gives it something to answer.</p>",
+      "<p>Instead, notice what just happened. You described a state \u2014 and something in you did the describing.</p>",
+      "<p>Those aren't the same thing.</p>",
+      "<p>The opinion is in the room. You're the one who noticed it was in the room. That's a different position, and you're already standing in it.</p>",
+      "<p>That's the whole of this step. Not believing something better about yourself. Just being the one who's looking, for a second, rather than only the thing being looked at.</p>",
       "<h4>Regulation</h4>",
       "<p>Four counts in.</p>",
       "<p>Six counts out. Longer out than in.</p>",
@@ -1681,17 +1882,26 @@ var T1_RESOURCES = {
       "<p>Speak to them as <em>you</em>, not <em>I</em>.</p>",
       "<p><em>You are unsteady today. That's a state, and it's a state you've been in before.</em></p>",
       "<p>Notice something about being out here. From this distance there's a person, and there's an opinion about the person, and they're two things. From inside, they were one thing.</p>",
-      "<p>Now forward, and concrete. Not the scene where you feel confident \u2014 that one isn't available on demand and building it would be a lie.</p>",
-      "<p>The scene where you do the thing anyway, unsteady. Where are you. What are you about to say. What are your hands doing. What's the first sentence.</p>",
-      "<p>Unsteady and doing it. Both. That's the scene, and it's the one that's actually available.</p>",
+      "<p>Now \u2014 here's what being able to see it is actually good for.</p>",
+      "<p>Not making it stop. You've watched it not stop on request. It's that once you can see where your attention is sitting, you can put it somewhere else on purpose.</p>",
+      "<p>And look at where it's been sitting. A room you were in last week. One you haven't walked into yet. Neither of those has anything in it you can use.</p>",
+      "<p>Everything you actually have is here.</p>",
+      "<p>So put it somewhere by choice.</p>",
+      "<p>Not on the version of you who feels confident \u2014 that one isn't available on demand and building him would be a lie.</p>",
+      "<p>Not on the version who's already got the thing, either. That one does nothing for you.</p>",
+      "<p>On the one who does the work today. Unsteady, and doing it.</p>",
+      "<p>Where are they. What are they about to say. What are their hands doing. What's the first sentence out of their mouth.</p>",
+      "<p>That's not a reward waiting at the end of something. That person is the thing being built. Every time you're the one who does it anyway, that's who gets made.</p>",
       "<p>And one thing already true. Something you did, not something you are. Small and factual.</p>",
       "<p>Come back. Feet on the floor.</p>",
       "<p>The opinion may still be here. It doesn't get overturned in one go and nothing here pretended it would. What's changed is that there's a bit of ground under you, and some space between you and it.</p>",
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
-    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 4, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "BLUE/ILLUSTRATION", "note": "a form on an uneven base. Upright. Not falling."}, {"block": 6, "type": "GOLD/PAUSE", "note": ""}, {"block": 8, "type": "GOLD/PAUSE", "note": "long"}, {"block": 11, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 11, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 12, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 12, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 13, "type": "RED/ACTION", "note": "feet flat, pressed into the floor. Offered, not instructed."}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 14, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 14, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 15, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 17, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 21, "type": "GOLD/PAUSE", "note": "long"}, {"block": 23, "type": "GOLD/PAUSE", "note": "long"}, {"block": 24, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 24, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 29, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 31, "type": "GOLD/PAUSE", "note": ""}, {"block": 32, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 32, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 34, "type": "GOLD/PAUSE", "note": "long"}, {"block": 35, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 35, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 36, "type": "GOLD/PAUSE", "note": ""}, {"block": 36, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}]
+    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 5, "type": "GOLD/PAUSE", "note": ""}, {"block": 6, "type": "BLUE/ILLUSTRATION", "note": "a form on an uneven base. Upright. Not falling."}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 9, "type": "GOLD/PAUSE", "note": "long"}, {"block": 10, "type": "GOLD/PAUSE", "note": ""}, {"block": 11, "type": "GOLD/PAUSE", "note": "long"}, {"block": 13, "type": "GOLD/PAUSE", "note": ""}, {"block": 16, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 16, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 17, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 17, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 18, "type": "RED/ACTION", "note": "feet flat, pressed into the floor. Offered, not instructed."}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 20, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 22, "type": "GOLD/PAUSE", "note": ""}, {"block": 24, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 24, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 28, "type": "GOLD/PAUSE", "note": "long"}, {"block": 29, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 29, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 34, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 36, "type": "GOLD/PAUSE", "note": ""}, {"block": 37, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 37, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 38, "type": "GOLD/PAUSE", "note": ""}, {"block": 39, "type": "GOLD/PAUSE", "note": "long"}, {"block": 41, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 41, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 42, "type": "GOLD/PAUSE", "note": ""}, {"block": 44, "type": "GOLD/PAUSE", "note": "long"}, {"block": 46, "type": "GOLD/PAUSE", "note": "long"}, {"block": 47, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 47, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 48, "type": "GOLD/PAUSE", "note": ""}, {"block": 48, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p9-crisiscard": {
+  "t1p9-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
     body: [
       "<blockquote>Second person throughout \u2014 deliberate, not stylistic. On this protocol it carries most of the work: <em>you</em> is what puts space between the person and the opinion.</blockquote>",
@@ -1706,9 +1916,11 @@ var T1_RESOURCES = {
       "<p><strong>Release</strong> \u2014 Two things are running. The state, and the auditing \u2014 checking yourself against the room, replaying what you said, working out what it revealed. It feels like being careful. It runs constantly and it never clears you. Set down the auditing. Ask <em>what was this for</em> and leave it open.</p>",
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. From out there, the person and the opinion about the person are two things; from inside they were one. Then one concrete scene: doing the thing anyway, unsteady. Not the scene where you feel confident. Then one thing you did \u2014 not something you are.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p9-guide": {
+  "t1p9-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
     body: [
       "<p>This is an unsettled state rather than a fully mobilised one. In the body: an unsteadiness through the chest, something turning in the stomach, tightness in the throat immediately before speaking, restlessness in the hands, and a raised sensitivity to how a room is responding.</p>",
@@ -1738,9 +1950,11 @@ var T1_RESOURCES = {
       "<p><em>The effect is on the person rehearsing. It acts on your own steadiness and makes no claim to act on anyone else, or on how anything turns out.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What the opinion is about, where it was learned, and whether any part of it is warranted are readings that belong to you.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: [{"block": 9, "src": "assets/diagrams/release/img-067-release-t1-09.svg", "alt": "The state and The auditing: two things running at once. The state turned up on its own. The auditing keeps returning to its own starting point."}]
   },
-  "p9-companion": {
+  "t1p9-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
       "<p><strong>Feet into the floor.</strong> Press both down steadily, feel the floor push back, hold for a slow five. The most direct thing available for a state whose whole signature is unsteadiness. Works sitting, standing, in a meeting.</p>",
@@ -1751,9 +1965,11 @@ var T1_RESOURCES = {
       "<p><strong>One horizon.</strong> Look at the furthest thing you can see. This state pulls focus to the faces nearest you.</p>",
       "<p><em>Unclench the jaw when you notice it. It holds here quietly.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p9-practice": {
+  "t1p9-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
     body: [
       "<p>Works with a state that arrives with an opinion attached, using breath, attention and observation. It doesn't dispute the opinion and it doesn't confirm it. It puts ground underneath you and space between you and it.</p>",
@@ -1768,13 +1984,15 @@ var T1_RESOURCES = {
       "<p>If the fourth step turns into an inventory of everything you've got wrong, stop. That's the auditing restarting inside the step built to interrupt it. Come back to the breath and end there. Three steps is a complete use.</p>",
       "<p>If Release opens something much larger \u2014 something old, something you weren't looking for \u2014 you can stop and come back to the breath. Surfacing isn't an instruction to follow it.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
-      "<p>Contact someone today \u2014 a doctor, <a href=\"getting-help.html\">a helpline in your country</a>, or a person you trust \u2014 if you're having thoughts of harming yourself or punishing yourself, if you've stopped going to things entirely, if you're using something to get through occasions, or if the opinion is now constant rather than episodic.</p>",
+      "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or punishing yourself, if you've stopped going to things entirely, if you're using something to get through occasions, or if the opinion is now constant rather than episodic.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person is worth a great deal.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p9-advisory": {
+  "t1p9-advisory": {
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
     body: [
       "<p>This state often has a live external source \u2014 a person, a group, a workplace, a feed \u2014 where contact reliably produces it. How much contact you have is a real variable.</p>",
@@ -1792,9 +2010,11 @@ var T1_RESOURCES = {
       "<p><strong>Using this</strong></p>",
       "<p>Notice the tier. Then notice whether it's the tier you'd assign if a friend described the same thing. People in this state place their own situation lower than they'd place someone else's, more reliably than on any other protocol. Where it goes next is yours.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p9-disclosure": {
+  "t1p9-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>The obvious response to this one is reassurance, which doesn't work and which everyone offers. Telling someone what does work spares you both.</p>",
@@ -1816,9 +2036,11 @@ var T1_RESOURCES = {
       "<blockquote>\"It doesn't make me confident. It gets me into the room anyway.\"</blockquote>",
       "<p><em>Tell one person. It can be a professional rather than a friend. This state's instruction is to keep the doubt hidden in case anyone agrees with it, and telling someone contradicts that directly.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p9-repair": {
+  "t1p9-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
     body: [
       "<p>Send it from the far side of the protocol, not the middle. From inside the state, an invitation becomes a request to be reassured, and it will be answered with reassurance rather than with anything true.</p>",
@@ -1830,19 +2052,23 @@ var T1_RESOURCES = {
       "<p><strong>Before sending</strong> \u2014 read it back and ask what answer would make it a success. If the only successful answer is <em>you're fine</em>, it's fishing. Rewrite it so that no reply at all would still leave it worth having sent.</p>",
       "<p><em>If they don't take it, you've done the part that was yours. Whether they meet it is theirs, and always was.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p9-record": {
+  "t1p9-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before.</p>",
       "<p>Any of these, or none.</p>",
-      "<p>- Where did it sit in your body? - What was the occasion? Write what actually happened, without the reading attached. - What did the auditing find? Write the sentence it used. - Had anything actually gone wrong, or only possibly gone wrong? - <em>What was this for</em> \u2014 what turned up, without needing to answer it? - What did you say to yourself from across the room? Would you say it to someone else? - What was the scene where you did it anyway? Did you do it? - What did you write here last time? Read it back \u2014 as if someone else wrote it.</p>",
+      "<ul><li>Where did it sit in your body?</li><li>What was the occasion? Write what actually happened, without the reading attached.</li><li>What did the auditing find? Write the sentence it used.</li><li>Had anything actually gone wrong, or only possibly gone wrong?</li><li><em>What was this for</em> \u2014 what turned up, without needing to answer it?</li><li>What did you say to yourself from across the room? Would you say it to someone else?</li><li>What was the scene where you did it anyway? Did you do it?</li><li>What did you write here last time? Read it back \u2014 as if someone else wrote it.</li></ul>",
       "<p>That last instruction is deliberate. Reading your own account as though it were someone else's is the same distancing move as the fourth step, and it's usually where people first hear how they talk to themselves.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p9-accountability": {
+  "t1p9-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and this one exits in ways that look like modesty from inside and like something else entirely from outside.</p>",
@@ -1858,61 +2084,70 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 this repairs by saying one thing early rather than by becoming confident. <em>\"I'm going to say something in the first few minutes of things, even when I don't want to\"</em> is small, specific and observable.</p>",
       "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. This state will take anything external and feed it straight into the auditing; if that's what's happening, you're not doing this resource, you're doing the thing the third step asked you to put down. Come back another day. And if someone has been belittling you, their account of your conduct isn't a reliable one.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p10-meditation": {
+  "t1p10-meditation": {
     kind: "Guided Meditation", title: "Guided Meditation", sub: "Do it with me.",
     body: [
-      "<p>You're here. Given how things are, that's not a small thing.</p>",
-      "<p>Sit or lie down, whichever is nearer. Eyes open or closed.</p>",
-      "<p>This works on the state, and it leaves the situation exactly as it is. Whatever you can't change is still there afterwards. That's not what we're touching.</p>",
-      "<h4>Before we start \u2014 move something</h4>",
-      "<p>Move your fingers. One hand.</p>",
-      "<p>Now your feet. Press them into whatever's underneath.</p>",
+      "<blockquote><strong>VOICE</strong> \u2014 honest, level, no brightness whatsoever. The respect is in refusing to pretend. Long pauses. Asks little.</blockquote>",
+      "<p>Nothing about your situation is going to be different when we finish.</p>",
+      "<p>I'd rather say that at the start than have you find it out at the end.</p>",
+      "<p>What we can do is smaller, and it's not nothing. There are two things weighing on you, and only one of them is the situation.</p>",
+      "<h4>Before we start</h4>",
+      "<p>Move your fingers. One hand. That's all this asks.</p>",
+      "<p>And your feet, if they'll go. Press them into whatever's underneath.</p>",
       "<p>That happened because you decided it would. Small, and real, and yours.</p>",
-      "<p>We'll come back to that later.</p>",
+      "<p>We'll come back to it.</p>",
       "<h4>Recognition</h4>",
-      "<p>One word. We're not going hunting for it.</p>",
+      "<p>One word. We're not going looking for it.</p>",
       "<p><strong>Numb.</strong></p>",
-      "<p>You don't have to find where it sits. In this state that's often hard, and not finding it is part of the state rather than a failure to look.</p>",
-      "<p>There are two things stacked here and they get treated as one. There's what you can't change. And there's the state you're in about it.</p>",
-      "<p>They're not the same. The second one is reachable.</p>",
+      "<p>You don't have to find where it sits. In this state that's often hard, and not finding it is part of what this is rather than a failure to look properly.</p>",
+      "<p>Two things are stacked here and they get treated as one thing.</p>",
+      "<p>There's what can't be changed.</p>",
+      "<p>And there's the state you're in about it.</p>",
+      "<p>Different things. Only one of them is within reach.</p>",
       "<h4>Regulation</h4>",
-      "<p>Contact first, before any counting.</p>",
-      "<p>Put a hand on your chest, or hold your own arm.</p>",
-      "<p>Let it stay. Warmth and pressure is what this state accepts when it accepts very little.</p>",
-      "<p>Now the breath. Longer out than in. Count it if you can, don't if you can't.</p>",
-      "<p>Nothing to get right.</p>",
+      "<p>Contact first. The counting can wait.</p>",
+      "<p>A hand on your chest, or hold your own arm. Whichever is easier to arrange.</p>",
+      "<p>Let it stay there. Warmth and pressure is what this state will take when it won't take much else.</p>",
+      "<p>Now breathe, and longer out than in. Count it if you can. Don't if you can't.</p>",
+      "<p>Nothing here to get right.</p>",
       "<h4>Release</h4>",
-      "<p>Two things are running.</p>",
-      "<p>There's the situation, and whatever part of it genuinely can't be moved. That's real. Nobody here is going to tell you it isn't, or that you haven't tried, or that there's an angle you've missed.</p>",
-      "<p>And there's the arguing with it. Going back over how it should have gone. Running the version where it was different. The low steady quarrel with a fact.</p>",
-      "<p>The quarrel is the second thing, and it's the expensive one, and it's the only one of the two you can put down.</p>",
-      "<p>This isn't accepting the situation in the sense of finding it acceptable. It probably isn't acceptable. It's stopping the argument with something that already happened.</p>",
-      "<p>That's a different move, and it's much smaller than being at peace with anything.</p>",
-      "<p>And the question. Not <em>what's wrong with me that I can't cope with this</em> \u2014 the situation may be genuinely unbearable, and that question puts the fault in the wrong place.</p>",
+      "<p>The situation is real. Whatever part of it genuinely can't be moved \u2014 that's real, and nobody's going to tell you otherwise, or that you haven't tried, or that there's an angle you've missed.</p>",
+      "<p>And then there's the other thing. The going back over how it should have gone. The version where it was different, run again.</p>",
+      "<p>A quarrel with something that already happened.</p>",
+      "<p>That's the expensive one. And it's the only one of the two you can put down.</p>",
+      "<p>Which isn't the same as calling it acceptable. It probably isn't acceptable. It just happened, and it stays happened, and arguing with that is the costliest thing there is to do with a day.</p>",
+      "<p>The question. Not <em>what's wrong with me that I can't cope</em> \u2014 the situation may be genuinely unbearable, and that question puts the fault in entirely the wrong place.</p>",
       "<p><strong>What was this for?</strong></p>",
       "<p>Reducing is what a body does when what's arriving is more than it can meet and there's nothing to push against. It's protective. It costs a great deal, and it's protective.</p>",
-      "<p>Leave the question there. Nothing needs answering today.</p>",
+      "<p>Nothing needs answering today.</p>",
       "<h4>Rise</h4>",
-      "<p>Step outside it.</p>",
-      "<p>See yourself from across the room. Someone sitting there with a hand on their chest, in the middle of something hard.</p>",
-      "<p>Speak to them as <em>you</em>.</p>",
-      "<p><em>This is a lot, and it isn't your fault, and you're still here.</em></p>",
+      "<p>Step back a little, if you can.</p>",
+      "<p>Someone sitting there with a hand on their chest, in the middle of something hard.</p>",
+      "<p>Say it to them as <em>you</em>.</p>",
+      "<p><em>This is a lot. It isn't your fault. And you're still here.</em></p>",
       "<p>No correction in that. Nothing being fixed.</p>",
-      "<p>Now \u2014 remember your fingers moving, at the start. That happened because you chose it.</p>",
+      "<p>Now \u2014 remember your fingers moving, at the start.</p>",
+      "<p>That happened because you chose it.</p>",
       "<p>Almost everything might be outside your reach right now. That was inside it.</p>",
-      "<p>So: one thing, later, that's yours to decide. It should be small enough to be certain of. Standing up. A glass of water. A window. Where are you, and what's the first movement.</p>",
+      "<p>So \u2014 one thing later that's yours to decide. Small enough that you're certain of it. Standing up. A glass of water. A window.</p>",
       "<p>Not a step toward fixing anything. Just something that's yours.</p>",
-      "<p>And one thing that's still here. Not something to be grateful for about any of this \u2014 nobody's asking that. Something that exists. The floor. The light. That you got this far today.</p>",
+      "<p>And before you come back \u2014 something in you got you here today. Not the part that's hurting. The part that noticed and sat down with it anyway.</p>",
+      "<p>Nobody taught you that.</p>",
+      "<p>Now put it all down. You don't have to carry any of this out of here.</p>",
       "<p>Come back slowly.</p>",
-      "<p>Nothing about the situation has changed. That was never the offer, and you'd have known if I'd pretended otherwise.</p>",
+      "<p>Nothing about the situation has changed. You knew that going in.</p>",
       "<p>What you've got is a bit of ground, and one thing that's yours.</p>",
       "<p>Recognition. Regulation. Release. Rise.</p>"
     ],
-    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in, 90 BPM, 3/4. Five-bar phrase. Turn at four seconds. Enters late, sits low."}, {"block": 1, "type": "GOLD/PAUSE", "note": ""}, {"block": 2, "type": "GOLD/PAUSE", "note": ""}, {"block": 4, "type": "RED/ACTION", "note": "small deliberate movement. Offered, never insisted on."}, {"block": 5, "type": "GOLD/PAUSE", "note": "long"}, {"block": 6, "type": "GOLD/PAUSE", "note": "long"}, {"block": 7, "type": "GOLD/PAUSE", "note": ""}, {"block": 10, "type": "GOLD/PAUSE", "note": ""}, {"block": 11, "type": "GOLD/PAUSE", "note": "long"}, {"block": 12, "type": "BLUE/ILLUSTRATION", "note": "a wide flat horizon, one small fixed point on it. The point is not moving."}, {"block": 12, "type": "GOLD/PAUSE", "note": ""}, {"block": 16, "type": "RED/ACTION", "note": "hand to sternum or to the opposite arm. Offered, not instructed."}, {"block": 17, "type": "GOLD/PAUSE", "note": "long"}, {"block": 18, "type": "GOLD/PAUSE", "note": ""}, {"block": 19, "type": "TEAL/BREATH", "note": "in, slow"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, longer"}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 19, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 19, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 19, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 22, "type": "GOLD/PAUSE", "note": ""}, {"block": 24, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 24, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 25, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 27, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 29, "type": "GOLD/PAUSE", "note": "long"}, {"block": 30, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 30, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 34, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 36, "type": "GOLD/PAUSE", "note": ""}, {"block": 37, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 37, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 38, "type": "GOLD/PAUSE", "note": ""}, {"block": 39, "type": "GOLD/PAUSE", "note": "long"}, {"block": 40, "type": "GOLD/PAUSE", "note": "long"}, {"block": 41, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 41, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 42, "type": "GOLD/PAUSE", "note": ""}, {"block": 42, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}]
+    cues: [{"block": 0, "type": "PURPLE/MUSIC", "note": "bed in late, very low. No turn until the close."}, {"block": 2, "type": "GOLD/PAUSE", "note": "long"}, {"block": 3, "type": "GOLD/PAUSE", "note": "long"}, {"block": 5, "type": "RED/ACTION", "note": "small deliberate movement. Offered, never insisted on."}, {"block": 6, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 7, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 8, "type": "GOLD/PAUSE", "note": ""}, {"block": 11, "type": "GOLD/PAUSE", "note": ""}, {"block": 12, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 13, "type": "BLUE/ILLUSTRATION", "note": "a wide flat horizon, one small fixed point on it. The point is not moving."}, {"block": 13, "type": "GOLD/PAUSE", "note": "long"}, {"block": 16, "type": "GOLD/PAUSE", "note": "long"}, {"block": 19, "type": "RED/ACTION", "note": "hand to sternum, or hold the opposite arm. Offered, not instructed."}, {"block": 20, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 21, "type": "GOLD/PAUSE", "note": "long"}, {"block": 22, "type": "TEAL/BREATH", "note": "in, slow"}, {"block": 22, "type": "TEAL/BREATH", "note": "out, longer"}, {"block": 22, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 22, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 22, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 22, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 23, "type": "GOLD/PAUSE", "note": "extended"}, {"block": 25, "type": "GOLD/PAUSE", "note": "long"}, {"block": 26, "type": "GOLD/PAUSE", "note": "long"}, {"block": 27, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 27, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 28, "type": "GOLD/PAUSE", "note": "long"}, {"block": 29, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 29, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 29, "type": "GOLD/PAUSE", "note": "long"}, {"block": 31, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 32, "type": "GOLD/PAUSE", "note": ""}, {"block": 36, "type": "BLUE/ILLUSTRATION", "note": "figure at middle distance, room around it, unhurried."}, {"block": 38, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 39, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 39, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 40, "type": "GOLD/PAUSE", "note": ""}, {"block": 41, "type": "GOLD/PAUSE", "note": "long"}, {"block": 42, "type": "GOLD/PAUSE", "note": "very long"}, {"block": 43, "type": "GOLD/PAUSE", "note": "long"}, {"block": 44, "type": "TEAL/BREATH", "note": "in, four"}, {"block": 44, "type": "TEAL/BREATH", "note": "out, six"}, {"block": 45, "type": "GOLD/PAUSE", "note": "long"}, {"block": 46, "type": "GOLD/PAUSE", "note": ""}, {"block": 47, "type": "GOLD/PAUSE", "note": ""}, {"block": 47, "type": "PURPLE/MUSIC", "note": "bed lifts, resolves on the turn."}],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p10-crisiscard": {
+  "t1p10-crisiscard": {
     kind: "Cue Card", title: "Cue Card", sub: "Do it yourself.",
     body: [
       "<blockquote>Second person throughout \u2014 deliberate, not stylistic.</blockquote>",
@@ -1929,9 +2164,11 @@ var T1_RESOURCES = {
       "<p><strong>Release</strong> \u2014 There's what genuinely can't be moved, which is real. And there's arguing with it \u2014 going back over how it should have gone, running the version where it was different. The quarrel is the expensive one and the only one you can put down. This isn't calling the situation acceptable. It's stopping an argument with something that already happened.</p>",
       "<p><strong>Rise</strong> \u2014 See yourself from a distance. <em>This is a lot, it isn't your fault, and you're still here.</em> Then one thing that's yours to decide, small enough to be certain of. Not a step toward fixing anything. Then one thing that's still here.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p10-guide": {
+  "t1p10-guide": {
     kind: "How This Works", title: "How This Works", sub: "*What the state is doing*",
     body: [
       "<p>This is a reduced state \u2014 the third of the three broad conditions, alongside settled and mobilised. It's what a system does when what's arriving exceeds what it can meet and there's nothing available to push against.</p>",
@@ -1962,9 +2199,11 @@ var T1_RESOURCES = {
       "<p><em>Watts is an interpreter rather than an originator; the older sources are Laozi and, for the framing used here, D. T. Suzuki. Offered as a lens rather than a finding.</em></p>",
       "<p><strong>Where the reading is yours</strong> \u2014 this explains the machinery. What your situation means, what can and can't be changed in it, and what to do next are readings that belong entirely to you.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: [{"block": 11, "src": "assets/diagrams/release/img-067-release-t1-10.svg", "alt": "What can&#x27;t be moved and The quarrel with it: two things running at once. What can&#x27;t be moved turned up on its own. The quarrel with it keeps returning to its own starting point."}]
   },
-  "p10-companion": {
+  "t1p10-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
       "<p>Small, deliberately. Any one of these on its own is a complete use.</p>",
@@ -1977,9 +2216,11 @@ var T1_RESOURCES = {
       "<p><strong>Go outside the door and come back.</strong> Air and light on skin. Nothing further required.</p>",
       "<p><em>Saying one sentence out loud, to anyone or nobody, is worth knowing about. Voice goes quiet early in this state.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p10-practice": {
+  "t1p10-practice": {
     kind: "Safe Practice", title: "Safe Practice", sub: "*What this practice does*",
     body: [
       "<p>Works with a reduced state, using movement, contact, breath and observation. It makes no claim about your situation, doesn't suggest the situation is smaller than it is, and treats getting through this as a complete use.</p>",
@@ -1994,15 +2235,17 @@ var T1_RESOURCES = {
       "<p>A regulation practice helps you meet an unbearable situation with a system that isn't reduced. It doesn't change the situation and was never built to. Where something can be moved \u2014 money, housing, legal, medical, work \u2014 the useful next steps are outside this platform and they involve other people. The Proximity Guide goes further into that.</p>",
       "<p><strong>When this needs a person rather than a practice</strong></p>",
       "<p>Reduced states are the ones people carry alone and longest, because the state removes the impulse to reach for anyone.</p>",
-      "<p>Contact someone today \u2014 a doctor, <a href=\"getting-help.html\">a helpline in your country</a>, or a person you trust \u2014 if you're having thoughts of harming yourself or of not being here, if you feel there's no point continuing, if you haven't been able to eat, wash or leave the house for days, if you're using something to get through it, or if this has been going on for weeks rather than days.</p>",
+      "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or of not being here, if you feel there's no point continuing, if you haven't been able to eat, wash or leave the house for days, if you're using something to get through it, or if this has been going on for weeks rather than days.</p>",
       "<p><strong>If you can't face making the call</strong></p>",
       "<p>Ask someone else to make it, or send a message rather than speaking. <em>\"I need to see someone and I can't do the phone today\"</em> sent to one person is enough, and it's a legitimate way to do it.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person matters most, and the practice is not a substitute for one.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p10-advisory": {
+  "t1p10-advisory": {
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
     body: [
       "<p>This state usually has a genuine external source \u2014 a situation, a system, a person, a set of circumstances. Contact with it is often the one variable available, and often more available than it feels from inside.</p>",
@@ -2020,9 +2263,11 @@ var T1_RESOURCES = {
       "<p><strong>Using this</strong></p>",
       "<p>Notice the tier. Then notice whether it's the tier you'd assign if a friend described the same thing. People in this state place their own situation lower than they'd place someone else's, more reliably than anywhere else. Where it goes next is yours.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p10-disclosure": {
+  "t1p10-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>This state removes the impulse to tell anyone. Any of these can be sent as a message rather than said.</p>",
@@ -2046,18 +2291,22 @@ var T1_RESOURCES = {
       "<p><strong>If you need someone to act</strong> &gt; \"I need to see a doctor and I can't face arranging it. Could you help me do that this week?\"</p>",
       "<p><em>Tell one person. This is the state that most reliably keeps people silent, and the silence is produced by the state rather than chosen.</em></p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p10-record": {
+  "t1p10-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before.</p>",
       "<p>One line is a complete entry. Writing nothing is a legitimate use.</p>",
-      "<p>- What did you manage today? Anything at all. - What's the part that genuinely can't be moved? Write it plainly. - Is there any part of it that could move, even slightly? Including no. - What did the quarrel sound like today? Write the sentence it used. - <em>What was this for</em> \u2014 anything, or nothing? Nothing is a real answer. - What did you say to yourself from across the room? - What was the one thing that was yours? Did you do it? - What did you write here last time? Read it back \u2014 without comparing today to it.</p>"
+      "<ul><li>What did you manage today? Anything at all.</li><li>What's the part that genuinely can't be moved? Write it plainly.</li><li>Is there any part of it that could move, even slightly? Including no.</li><li>What did the quarrel sound like today? Write the sentence it used.</li><li><em>What was this for</em> \u2014 anything, or nothing? Nothing is a real answer.</li><li>What did you say to yourself from across the room?</li><li>What was the one thing that was yours? Did you do it?</li><li>What did you write here last time? Read it back \u2014 without comparing today to it.</li></ul>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   },
-  "p10-accountability": {
+  "t1p10-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits as absence, which is the hardest kind to see from inside because from inside it feels like nothing happening at all.</p>",
@@ -2072,12 +2321,12 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 this repairs by sending something rather than by improving. <em>\"When I'm under, I'll send you one line saying so, even if that's all I can manage\"</em> is small, specific, observable, and doesn't ask you to be different.</p>",
       "<p><strong>Where this stops</strong> \u2014 this is not an instruction to be less flattened for other people's convenience, and you don't owe anyone a better performance while you're in the middle of something hard. If today isn't the day for this one, that's a legitimate answer \u2014 it's the resource here you can leave for as long as you need to.</p>"
     ],
-    cues: []
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
   }
 };
 
 if (typeof module !== 'undefined') {
-  module.exports = { T1_RESOURCES: T1_RESOURCES,
-                     T1_PROTOCOL_KEYS: T1_PROTOCOL_KEYS,
-                     T1_RESOURCE_SUFFIX: T1_RESOURCE_SUFFIX };
+  module.exports = { T1_RESOURCES: T1_RESOURCES, T1_PROTOCOL_KEYS: T1_PROTOCOL_KEYS };
 }
