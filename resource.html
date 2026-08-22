@@ -1000,9 +1000,10 @@ function renderMain(){
   document.getElementById('rmeta').innerHTML=r.meta;
   document.getElementById('rread').textContent=r.read;
   document.getElementById('rbody').innerHTML=r.body;
-  /* SR-191 · the rail names the resource, it no longer counts it. This is a
-     surface a member practises on, where position, progress, completion and
-     duration are all prohibited absolutely. The title stays — naming which
+  /* SR-191 · the rail names the resource, it no longer counts it. The test is
+     what the string counts: a count of the member's position or progress is
+     prohibited on every surface; a count of the library is not. The title stays
+     — naming which
      resource is open is orientation; numbering it out of a total is a report
      card. The toggle's own "Resource" and "Index" labels are unchanged. */
   document.getElementById('railsum').innerHTML=r.title;
