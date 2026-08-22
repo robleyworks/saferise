@@ -97,7 +97,10 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-193 are issued.** SR-180 to SR-193 were allocated by Run H (Track 01 content).
+- **SR-044 to SR-202 are issued.** SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
+  SR-202 by Run I (Tracks 02/03 specification), which also issued **SR-197** for a missing
+  source document. **SR-194 to SR-196 and SR-200 were never issued and are free** — SR-200's
+  phase was resource authoring, which Run I was barred from.
 
   **SR-182 was reassigned and now carries a real entry** — protocol.html's query-string routing.
   It was recorded mid-run as spent-not-free on the assumption its phase had been absorbed
@@ -2003,6 +2006,179 @@ the same two record values `coverPath` already derives from — never typed.
 component that renders on the dashboard and the portals, and Andre has not seen it.
 
 *Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+
+### SR-197 · `CONTENT-STATUS-CORRECTION.md` does not exist
+**Recorded because it was the stated precondition for the whole Run I amendment**, not because
+anything was blocked by it.
+
+The instruction was to read `CONTENT-STATUS-CORRECTION.md` in the brief folder **before acting on
+the brief**, on the grounds that a correction document supersedes the brief's status line. **The
+file is not in the folder and does not exist anywhere on the Desktop** — searched by name and by
+the substrings *correction* and *status*. The folder holds seven markdown files and 31 SVGs; that
+is not one of them.
+
+**Proceeded anyway, and the reason is the one Rule 3 gives.** The correction's substance was
+supplied directly in the instruction — 42 of 175 resources, four protocols complete (t2-01,
+t2-02, t3-01, t3-05), eight meditation-only, eight empty — and **the tree corroborates it
+exactly**: the folder contains four protocol content files, and they are those four. The brief's
+own status line (18 of 91, 16 of 84) is the figure that disagrees with the tree.
+
+So the document is missing but its content is verified by something better than the document:
+the files themselves. **A missing source whose claims independently reproduce is a reporting
+matter, not a blocker** — and none of SR-198, SR-199, SR-201 or SR-202 depended on it, because
+all four read the build sheets, which are present.
+
+**If a correction document does exist somewhere, it has not been seen by this run**, and anything
+in it beyond the four facts above has not been applied.
+
+*Status:* reported — source absent, substance verified against the tree · *Raised:* 22 Aug 2026
+
+---
+
+### SR-198 · The twenty unverified `extras` are resolved
+`META[].extras` was `null` on all twenty Track 02 and 03 protocols. `null` means **unverified,
+not none** — a distinction [[SR-117]] records as a deliberate double-record. Written in from the
+Tracks 02/03 build sheets.
+
+Per-protocol counts now resolve to the sheets' **Res** column exactly, and the track totals
+reconcile independently: **91** for Track 02 and **84** for Track 03, which are the figures the
+brief states. **No `null` remains in `META`.**
+
+**The honest-floor fallback in `protocolResources()` is kept even though no real data can now
+reach it.** Both `null` and `[]` still yield the unconditional set. That branch is what a **new**
+protocol added without a verified mapping falls back to, and removing it as dead code would let
+the next unverified row silently claim a full library instead of the floor. A do-not-tidy line
+sits on it (Rule 1).
+
+Control-based, no JS runtime (see the sixth measurement artifact): the control is the pre-run tip,
+where all twenty were `null` and every one resolved to the unconditional floor; the sentinel
+returns t2-03 to `null` and confirms the count moves 10 → 8.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-199 · Three of the four framework mappings were already correct
+Checked before editing, as briefed. **Only t3-08 reproduced.**
+
+| | in the record | the build sheet | |
+|---|---|---|---|
+| t2-08 | `['heartmath','distance']` | heartmath + kross | already correct |
+| t3-03 | `['jung','distance']` | jung + kross | already correct |
+| t3-10 | `['distance','watts']` | kross + watts | already correct |
+| t3-08 | `['porges','distance']` | porges + **heartmath** | **fixed** |
+
+**`kross` in the brief is `distance` in the record.** [[SR-177]] records why the key and the file
+differ — `distance` is served by `method-kross.html`. Translated, never renamed, as instructed.
+
+⚠ **t3-10 was flagged as the one that mattered, on the concern that removing `dispenza` would
+leave Creative Flow resting on Watts alone — one interpretive framework with no peer-reviewed
+support. That does not reproduce, and never could have.** The dispenza correction landed in this
+repo as a **rename** ([[SR-118]]), not a deletion, so Kross has been the primary key on t3-10
+since that fix. The credibility hole the brief was worried about was closed before the brief was
+written.
+
+**t3-08 is the same rename-versus-replacement split [[SR-180]] resolved on t1-10, and it resolves
+the other way.** On t1-10 the authored content decided it — the text rested on Porges and Watts
+and cited nothing else, so the third key was a false attribution. **t3-08 has no authored
+resources at all**, so there is no text to arbitrate and the build sheet is the specification.
+Decision Fatigue is a Numb protocol and cardiac coherence is the step-2 framework the sheet puts
+under it. **Re-check this against the copy when t3-08 is written** — if the text does not rest on
+HeartMath, this becomes the same false attribution in the other direction.
+
+`frameworkReach`: `distance` 4, `heartmath` 8.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-201 · Twenty labels and twenty states — nothing to do
+Briefed as a data fix. **Does not reproduce (Rule 2).** All twenty labels and all twenty states
+already match the build sheets exactly, checked before touching anything.
+
+Recorded rather than skipped quietly, because a silent no-op is indistinguishable from an
+oversight and the next run will re-raise it. This is the **eighth** briefed item this sequence
+that turned out to be already done — see [[SR-180]] for the seventh and the point that a handover
+§3 is a claim list, not a work list.
+
+*Status:* no change required · *Raised:* 22 Aug 2026
+
+---
+
+### SR-202 · Where the shared blocks and the delivered diagrams live — report only
+**Nothing installed.** Three questions, three answers.
+
+#### 1 · The two shared blocks — and one has already drifted
+
+**Track 03's *What this track works on* is present in both delivered protocols** and is the
+straightforward case.
+
+**Track 02's two-instruments block exists in three versions, and they are not the same.**
+Measured on the section body, normalised:
+
+| | words | |
+|---|---|---|
+| `SHARED-t2-two-instruments.md` | 459 | the standalone file |
+| inside t2-01 | 525 | |
+| inside t2-02 | 525 | |
+
+**t2-01 and t2-02 are byte-identical to each other.** The standalone file matches neither —
+similarity **0.43**, diverging by the second sentence (*"assembling"* against *"building"*). The
+brief describes the block as *"identical everywhere"* and *"roughly 450 words"*; the shipped
+copy is 525 words and the 450-word figure describes the standalone file only.
+
+**So the standalone file is either a rewrite that never reached the protocols, or the protocols
+are the newer text and the file is stale. That is a content decision and I have not guessed it.**
+What is certain: two of the ten exist, they agree with each other, and a third version is sitting
+in the same folder. **The drift the brief warns about has already happened, at n=2.**
+
+**Recommendation: extract to shared data, and do it before the remaining eight are authored.**
+- **Extract** — one record, referenced by all ten, exactly as `SHARED.resources` and
+  `CHANGE_PROPOSALS` already work in `tracks.js`. Cost: one field, and the eight unwritten
+  protocols must be authored to reference it rather than repeat it. Drift becomes structurally
+  impossible.
+- **Inline** — cost is ten copies of a 525-word block, 5,250 words of duplicated copy, and a
+  correction that has to land in ten places. At n=2 it has already failed once.
+
+The decision that must come first is **which of the two versions is canonical.**
+
+#### 2 · The breath cycle exists. Do not build a duplicate.
+
+Confirmed, and it was confirmed once already earlier in this run. **`method-heartmath.html:133`**
+carries an inline `<svg class="sr-fw-diagram">`, commented *"the wave, drawn. one breath cycle,
+ten seconds, turning at four."* Vector, authored in code, which is what the asset rules require
+of it. The brief's *"Unverified — assumed to exist on method pages"* resolves to **it exists**.
+
+#### 3 · The thirty release diagrams and the two-parts diagram
+
+**Delivered and well-formed.** 30 release SVGs at `viewBox="0 0 780 300"`, plus
+`img-090-two-parts.svg` at 780×450. Each carries `role="img"` and a `<title>` — accessible
+without extra work — and the SAFERISE lockup the brief specifies.
+
+**Nothing in the repo renders them, and the repo currently contains no `.svg` files at all.**
+Zero consumers for `img-067`, `img-090`, or any release diagram.
+
+⚠ **They are light-ground artwork and this platform is dark.** Colours across all thirty are
+`#1B2A4A` navy (150 uses), `#2E7D6B` green (210), `#B08D57` bronze (60) and light greys
+`#dcd9d2` / `#9a958b`. **There is no background rect.** Dropped onto the site's `#08080C` ground,
+the navy structure and grey captions go nearly invisible. This needs either a light panel behind
+each diagram or a recolour — **a design decision, not a code one, and it should be settled before
+they are placed.**
+
+⚠ **The brief's §5 says the release diagrams are delivered "SVG + PNG". Only SVG is present.**
+Not a blocker — SVG is the better format here and the brief separately forbids raster for
+code-authored diagrams — but the asset table and the folder disagree.
+
+**Where they should live:** `assets/diagrams/`, as files rather than inlined. They are per-protocol
+(30 variants of one shape), so inlining them would put ~30 copies of near-identical markup into a
+page bundle; as files they cache individually and the protocol page references one by key. The
+brief's own `min-width: 600px` inside a horizontally scrolling container is a stylesheet rule for
+whatever renders them, and belongs in `saferise-system.css` under an `sr-` class when that lands.
+
+*Status:* open — report delivered, two decisions required · *Raised:* 22 Aug 2026
 
 ---
 
