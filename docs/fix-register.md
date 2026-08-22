@@ -17,8 +17,18 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-153.** Reserved block open: **SR-154 to SR-175**, ceiling
-  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-154.
+- **Highest ID issued: SR-167.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-168.
+  The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
+  lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
+  for the sandbox record.
+  **SR-157, SR-158 and SR-159 are issued and permanently unused — this is the gap, and it is
+  deliberate.** The run script named them for the card, the carousel and the white flash. Those
+  three were re-scoped mid-run once the tree contradicted the brief, and reissued as SR-162,
+  SR-163 and SR-164 with the corrected findings attached. The originals were **not** reused for
+  the replacements, because a number already written into a script and a commit trail must not
+  come to mean something else. **Do not reach back for 157-159**: they sit inside a range every
+  later allocation has read past, which is exactly what caused the three collisions below.
   The previous block (SR-129–SR-150) is exhausted through SR-153; SR-150 was passed because
   the run issued beyond its ceiling and the reservation was extended rather than renumbered.
 
@@ -29,7 +39,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 - **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
   Run E: prices in words exist only in the record, one derived span and one comment.
 - **`€59`, `€139` and `€275` appear nowhere.** Retired by SR-136/SR-141.
-- **SR-044 to SR-153 are issued.** All are written up below except four:
+- **SR-044 to SR-167 are issued.** All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -115,6 +125,14 @@ the rule can be checked rather than taken on trust.
     data, and SR-142's seven `href="#"`. Name the source of an asserted value so it can be
     discounted when it conflicts. Rule 3 decides the conflict; this rule stops it being
     invisible.
+    **This extends to the tester's own fixtures.** A seed is a premise too: [[SR-161]]'s
+    fallback probe seeded a protocol name that exists in no track, and the correct
+    behaviour — degrade to nothing ringed — read for a moment as the fallback failing.
+    Check fixtures against the record before trusting any result taken from them.
+    **Run F inverted four more premises**: [[SR-155]]'s stub route being `dashboard.html`'s
+    own rail rather than `protocol.html`, [[SR-156]]'s `|| ROUTES.dashboard` fallback being
+    latent rather than live, [[SR-162]]'s `.pimgnote` emitting nothing anywhere, and
+    [[SR-163]]'s carousel binding correctly all along.
 17. **Facts spelled out in words evade every sweep aimed at symbols or identifiers.**
     "Four programs" survived a sweep for `Elevation`; "Nineteen euros a month" survived a
     sweep for `€19` and `€19`. Both sat in surfaces a dedicated pass had already
@@ -143,6 +161,19 @@ the rule can be checked rather than taken on trust.
     behaves identically to things known correct. A control turns an unusable measurement
     into a usable comparison, and separates an environment artifact from a page defect —
     the failure mode Rule 10 warns about, now with a technique attached. [[SR-149]].
+
+**Measurement artifacts — the standing pre-flight**
+
+Four now, every one found the same way: a plausible number that was wrong. Run these before
+trusting any measurement, and **report the check alongside the result**, not instead of it.
+
+| artifact | how it lies | countermeasure |
+|---|---|---|
+| **Collapsed viewport.** `resize_window` with a *preset* leaves `innerWidth`/`innerHeight` at **0**. | Every geometry reading taken there is void. The mockup statebar measured **231px** tall at zero width and **51px** at 1280x860. | Set explicit `width`/`height`. Assert and report **`viewport_usable`** with every measurement. |
+| **Stale scratchpad mirror.** The preview serves a copy of the tree ([[SR-154]]); a silently failed sync leaves you verifying pre-edit files. | A clean pass, with numbers that all look right, taken against the code you just changed away from. | **Sentinel every sync**: write a unique token into the file just edited, sync, confirm it appears in the mirror **and is absent from a control file**, remove it, sync again. |
+| **Browser cache serving a pre-edit page.** | The first post-[[SR-155]] reading showed the removed statebar still present, while `curl` against the same server returned a file without it. | Cache-bust every verification URL. **A busted HTML URL does not bust its subresources** — `js/`, `css/` and `content/` survived both a query change and a forced navigation, and [[SR-162]] briefly read as not rendering at all because of it. `fetch(url,{cache:'reload'})` each one, then reload. |
+| **The environment cannot reproduce the symptom.** | A false pass, or a working feature reported broken. The preview's canvas is *dark*, so an unfixed page passes the white-flash test ([[SR-164]]); CSS transitions never advance, so an applied transform reads as identity forever ([[SR-149]], [[SR-163]]). | Force the condition and compare against a known-good control — light colour scheme, a stalled stylesheet, `transition:none`. Report it **as a control-based result**, never as a direct observation. |
+
 
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
@@ -707,6 +738,419 @@ missing target: **0, 0, 0, 0.** This was the only one.
 **Found only because [[SR-145]]'s entry-point inventory said which CTAs to exercise.**
 
 *Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-155 · Mockup scaffolding was live on the served domain
+A persona switcher labelled **"Mockup control — not part of the build"** rendered at the top
+of `protocol.html` — 51px tall, the first thing above the banner — reading *PREVIEW AS · FIRST
+TIME · RETURNING · ANXIOUS · ESTABLISHED · 6 SESSIONS*. The brief named one. **There were
+two**: `resource.html` carried the same component with different buttons — *"Open decisions ·
+Proximity guide: off (p1 has none)"*, labelled *"Mockup only — not in the repo"*, which is
+false twice over: it is in the repo and it is served.
+
+**The "renders then disappears" report was a load-order artifact, and it is measurable.** The
+embed bridge that hides this chrome under `?embed=1` sits at the very end of each file. On
+`protocol.html` the statebar starts at byte **2,417,128** and the `<style>` that hides it is
+injected at byte **4,802,722** — **2,385,594 bytes of markup in between**, on the exact path
+the dashboard uses (`#srProtoFrame` loads `protocol.html?embed=1`). The same gap on
+`resource.html` is 89,585 bytes. Removing the elements removes the flash; nothing else could.
+
+**Rule 15 paid again.** `setState('new')` at the foot of `protocol.html` was not a mockup
+call: it seeds the empty log and journal states, opens the journey details and closes the
+journal. Its first line was
+`['new','ret','est'].forEach(function(k){document.getElementById('btn-'+k).classList.toggle(...)})`.
+Deleting the three buttons while leaving that line and its load-time call would have thrown a
+`TypeError` on `null` and taken every script below it down, while still looking clean in a
+diff. The seeding was kept as `seedArrivalState()`; only the persona branches went.
+
+**Deliberately kept — do not tidy.** `advisoryOn` in `resource.html` is **dormant, not dead**
+(Rule 14): `visible()` splices the `PROXIMITY` resource into the reader rail when it is true,
+so the flag controls rail composition. Only the removed switcher ever set it. The variable and
+the branch stay, with a comment naming what they control. Rail composition proved unchanged:
+`RESOURCES` holds exactly 6 keys and 6 rail items render.
+
+**Reported and not removed:** `protocol.html`'s `.bnavlinks` (5 links, all `href="#"`) and
+`resource.html`'s `.sr-topnav` (6 links, all `href="#"`). Both are scaffold navs, but each is
+its page's *only* navigation and four of five targets exist. Routing them is [[SR-156]], not
+deletion work.
+
+Verified on all nine served pages loaded fresh, and inside the dashboard shell with a protocol
+open in the iframe: zero rendered hits for *mockup*, *preview as*, *not part of the build*,
+*not in the repo*, *open decisions*, *you are here*, or any persona label. The remaining
+source hits are this run's own explanatory comments, which do not render.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-160 · Invented member figures in a hidden block on protocol.html
+`#resume` on `protocol.html` read **"Welcome back. Last practised 3 days ago · 4 sessions
+logged · average drop -3.2"**. It carried `.hidden`, and **the only thing that ever revealed
+it was the persona switcher [[SR-155]] removes** — so it was one CSS change from visible, which
+is deferred, not safe.
+
+Container and contents were separated before acting, as briefed. The container is not a real
+surface with fake copy: **its entire text is the figures**, `#resume-count` exists only to hold
+the session count, and there is no template, writer or data binding behind any of it. Nothing
+else was bound to it — the only two `classList.remove('hidden')` calls on the page target
+`invitation` and `cue`, and the page's sole `message` listener handles `type === 'theme'`
+only. **The whole block went**, with its `.resume` rules, and with the `resume` variable it
+would have left dangling in `seedArrivalState()` — the same null-reference trap as [[SR-155]].
+`resource.html` carried an orphan copy of the `.resume` CSS with no `.resume` element anywhere;
+inert, removed with it.
+
+**Why this generalises:** the platform has no streaks, no scores, no completion and no targets,
+because members arrive on their worst day. *"Average drop -3.2"* is a score. [[SR-085]] already
+made this call once, on the dashboard, for the same reason.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-161 · The dashboard's "Step 03 of 07" ribbon is a literal
+Raised by the sweep [[SR-160]] called for, and fixed in the same run.
+
+`dashboard.html:885` holds `var CURRENT = 'The Anxiety Reset Protocol';` — a hardcoded literal.
+Every visitor, including one who has opened nothing, sees the Anxiety Reset card ribboned
+**"Step 03 of 07"** with a **"Continue"** action while every other card reads "Begin".
+Confirmed in rendered text rather than source: the ribbon renders **twice**, because the card
+set is doubled for the carousel loop.
+
+`dashboard.html:915` writes the string into the card template with nothing behind it. Nothing
+writes `sr.resume`, so `CURRENT` cannot be derived today — exactly what [[SR-085]] found for
+the resume card and answered with an honest empty state. The same shape of fix applies: derive
+it, or drop the ribbon and let the action read "Begin".
+
+**Everything else the sweep turned up is derived or editorial**, recorded so a later run does
+not re-raise it: `Sessions logged` / `Protocols run` / `Most run` compute from `runs.length`
+and `Store`; `07 of 08` and `87%` at `dashboard.html:2194` sit inside the [[SR-085]] comment
+describing what was removed; `index.html`'s *"No sessions logged yet"* is an honest empty
+state; `1 of 1` at `index.html:3829` is initial markup overwritten at runtime; *"Session 1 of
+7"* names a Practice Workbook item, not member progress; and the track pages' *"15-20% of
+adults"* and the SVG label *"SESSION 01"* are editorial content. `protocol.html` renders no
+metric-shaped string at all after [[SR-160]].
+
+**The fix, in three parts.**
+
+`CURRENT` is now **derived at render time**, not declared: `sr.resume`'s `protocol` first, then
+the most recent `sr.journal.entries` protocol — the only `sr.*` key anything writes. Both empty
+returns `''`, which matches no item, so every card reads **Begin** and none is ringed. It is
+read inside `render()` rather than at the top of the IIFE because `Store` is assigned further
+down the same closure.
+
+**"Step 03 of 07" was deleted, not derived, and the reason generalises: where no writer exists
+for a measurement, the nearest available number is a DIFFERENT measurement, and substituting it
+is worse than showing nothing.** Nothing in the record holds a step position. The nearest
+number is `resource N of total`, which is what `sr.resume` defines and what the resume card
+reads — a different thing counted differently. [[SR-081]] refused exactly this substitution when
+it declined to map a 0-10 activation reading onto a named nervous-system state, and wrote
+`before`/`after` as null instead. The ribbon now emits **only** when `sr.resume` supplies both
+`resource` and `resourceTotal`, phrased as the resume card phrases it, and emits nothing
+otherwise. Today that is nothing.
+
+`Continue` and the `is-current` accent stay: both derive cleanly from "which protocol you were
+last in" and both vanish with no state.
+
+**The template needed no guard — it already degraded correctly.** `cur === false` was live on 18
+of 20 cards before the fix, and on all 20 of a locked track, so the empty path was already
+proven in the page.
+
+**Verified on both sides, because an empty path cannot otherwise be told from a broken one
+(Rule 20).** Seeded `sr.resume` → **2 ribbons reading "Resource 07 of 08", 2 ringed, both named
+"The Overwhelm Threshold Protocol"** — the protocol the record names, not the one that used to be
+hardcoded — and 18 Begin. Entries only, no `sr.resume` → **2 ringed on "The Grief Integration
+Protocol", 2 Continue, 0 ribbons**: the fallback fires and refuses to invent a position.
+`localStorage` cleared → **20 cards, 0 ribbons, 0 ringed, 0 Continue, 20 Begin**, and no
+`step N of M` string anywhere in the rendered page. Counter `1 / 10` throughout — `updateCount()`
+already halves the doubled set, so the duplication was never the defect; it only doubled the
+exposure of one. Zero new console errors.
+
+**One test failure worth recording, because it was mine and not the page's.** The first fallback
+probe seeded `"The Self-Worth Restoration Protocol"`, a name that exists in no track. Nothing
+ringed, and for a moment that read as the fallback failing. It was the code behaving correctly:
+an unknown or stale name degrades to *no card ringed* rather than throwing or ringing the wrong
+one. Rule 16 applies to the tester's own fixtures as much as to a brief.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-165 · Nothing writes `sr.resume` — the platform has no progress writer
+**Blocked, deliberately, and not on effort.** [[SR-161]] derives the current protocol from
+`sr.resume` and falls back to journal entries. `sr.resume` has a reader (`buildResume`), a known
+shape — `{protocol, no, track, resource, resourceTotal, resourceName, percent}` — and **no
+writer anywhere in the repo**. The same is true of `sr.record.runs` and `sr.sessions.booked`.
+The single `sr.*` write in the entire tree is `protocol.html:1089`,
+`Store.set('sr.journal.entries', …)`.
+
+Having `openProtocol()` write `sr.resume` is the obvious next move and **would give the platform
+its first progress writer** — the thing [[SR-085]], [[SR-160]] and [[SR-161]] have each worked
+around rather than solved.
+
+**It belongs with the auth work, not here.** `Store` writes to `localStorage` only, with no
+account behind it, so a progress writer would record progress **for whoever last used the
+browser** — a shared machine hands one person's practice history to the next. That is a worse
+defect than the empty state it would replace.
+
+*Status:* blocked — needs accounts · *Raised:* 21 Aug 2026
+
+
+### SR-156 · The Dashboard control answered "You are here" instead of going home
+The rail's Dashboard button opened `mRoute` reading *"This page / You are here. / /dashboard"*
+**over a protocol that stayed open behind it** — verified by clicking, with a protocol in the
+shell: `body.reading` stayed `true` and the iframe kept its src. A control that reports success
+while doing nothing.
+
+**Two premises corrected against the tree (Rule 16 / Rule 3).**
+
+1. **It is not on the protocol page.** `protocol.html` contains no `openRoute`, no `data-route`
+   and no Dashboard control — zero occurrences. The button is `dashboard.html`'s own rail, which
+   stays on screen while a protocol is open in the shell, which is what the report described.
+2. **The `|| ROUTES.dashboard` fallback was latent, not live.** Every key that can reach
+   `openRoute` was enumerated — rail `data-route` (4), `data-route-link` (3), `TEXTMAP` (11),
+   and the `#route=` hash — and the union is **exactly the fourteen keys `ROUTES` defines**. The
+   hash path is separately guarded at `:1216` by
+   `if(PAGES[key] || !(LAYERS[key] || ROUTES[key])) return;`. Nothing fell through it. It was
+   removed anyway, because the next `TEXTMAP` row or `data-route` typo would have landed on
+   "You are here" **silently**, and a fallback that turns a typo into a confident wrong answer
+   is worth removing before it fires, not after.
+
+**The fix is a view, not a destination.** `dashboard` is intercepted before the `ROUTES` lookup
+and calls `goHome()`: `closeModals()`, `closeProtocol()`, clear a `#route=` hash if one brought
+us here, put the rail back on Dashboard. No navigation, so no reload — proved by a marker on
+`window` surviving the click, with the URL unchanged. The `ROUTES.dashboard` entry was deleted
+with it: **describing the page you are already standing on is what produced that copy.**
+`method.html` and `method-porges.html` already had the right answer in their own
+`PAGES = { method:…, dashboard: 'dashboard.html' }` — only `dashboard.html` lacked it.
+
+**The distinction worth keeping, because it decided what NOT to touch.** The brief asked for
+targetless routes to fail visibly instead of claiming success. **They already do.** *"Account &
+plan · Not built yet · /account"* names the thing, names the path and states plainly that it
+does not exist. **A control that reports its own absence is not the same defect as one that
+silently claims success** — the first is honest signposting, the second is a lie. Replacing the
+twelve with dead buttons would have removed information and added nothing. [[SR-103]] reached
+this conclusion first, by clicking all six. The instruction was withdrawn; all twelve stand
+unchanged.
+
+**Nine dead nav links wired**, using the track pages' own `renderNav` map as the source of
+truth rather than inference: `protocol.html`'s `.bnavlinks` (The Journey → `method.html`, and
+the three track pages) and `resource.html`'s `.sr-topnav` (the same, plus About → `method.html`).
+
+**Two left dead and blocked, deliberately — do not tidy:** *"My Practice"* on `protocol.html`
+and *"Compare Plans"* on `resource.html`. No page answers to either. Inventing a destination
+would be worse than the dead link, and pointing them at a near-miss would be worse still. They
+resolve when a page exists.
+
+**Verified by clicking (Rule 18), not by reading `href`s.** Every rail control and route-link
+exercised: `coaching` → `mLayer`; `account`, `chosen`, `decisions` → `mRoute` with "Not built
+yet" and the right path; `method` → navigates; `dashboard` → protocol closed, layer closed,
+hash cleared, scroll lock released, rail reset, **no reload**. An unregistered key was injected
+into a live rail button and clicked: **zero modals opened** and the console carried
+`openRoute: no route registered for "sr156-nonexistent-key"`. For the nav links, a
+capture-phase probe confirmed nothing swallows the click (`defaultPrevented: false` at document
+level) and recorded each resolved URL, with a full click-through on one link per page as the
+control (Rule 20) — landing on `relationship-healing.html` and `professional-performance.html`.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+
+### SR-162 · The protocol cover is now one component, shared by two surfaces
+The track pages cropped a 900x1200 portrait cover to a landscape band. `.sr-tp-pimg` carried a
+fixed `height:152px` on a 236px card — but the real cause was worse and no rule anywhere
+described it: **there was no `.sr-tp-pimg img` rule at all.** The image rendered unstyled at
+212x283 inside a 152px flex box with `align-items:flex-end`, which put it **119px above its own
+container**; the card's `overflow:hidden` clipped it to the strip that was visible. Measured
+live before the fix: container top 1178, image top 1059.
+
+**The brief said port the dashboard's card outward. The tree says the dashboard is only half
+right, and the half it is right about is not the half that was assumed.** `.sr-dash-cardart`
+had the correct image treatment — `aspect-ratio:3/4`, `object-fit:cover`, full bleed — but its
+number and label came from a `.sr-dash-fallback` tile carrying
+`onload="…querySelector('.sr-dash-fallback').remove()"`. **They deleted themselves the moment
+the cover loaded**, because the number is burned into the current art. With covers being reshot
+**bare**, that tile stops being a fallback and becomes the only thing that would carry the
+number — while still removing itself. The track card was the closer of the two here: its
+`.sr-tp-pkick` and `.sr-tp-pno` are drawn from the record (`p[1]`, `p[0]`) and persist.
+
+So neither surface was the reference. The shared component takes the dashboard's art treatment
+and the track card's record-drawn overlay, made permanent on both.
+
+**One source, not two copies** — [[SR-125]], [[SR-148]] and [[SR-153]] are all second
+inventories, and this was on its way to being a fourth. `js/saferise-card.js` owns the markup
+and is loaded by `dashboard.html` and all three track pages; the CSS lives in
+`css/saferise-system.css`, **the one stylesheet both of them already load** —
+`saferise-dashboard.css` is the dashboard's alone. What is *not* shared is deliberate: the two
+cards genuinely differ below the art, and the frame stays with each card because the dashboard
+frames the cover directly while the track card frames the whole card and clips the cover with
+it.
+
+**Named `sr-pcover`, and the check mattered.** `sr-cover-*` is taken — `.sr-cover`,
+`.sr-cover-art`, `.sr-cover-scrim`, `.sr-cover-kick`, `.sr-cover-sub` belong to the Clearing
+card and the index tiles. CLAUDE.md's `.track` warning is this exact trap. `sr-pcover` was
+confirmed at zero occurrences across every css, js and html file before a line was written.
+
+**Removed:** the 152px height, `.sr-tp-pimg:before` (104x104) and `:after` (92x145),
+**thirteen** nth-child rules — ten per-card gradients plus 2n/3n/4n pseudo-element variants, not
+the ten in the brief — `.sr-tp-pkick`, `.sr-tp-pno`, the orphan `.sr-tp-pimgnote`, and on the
+dashboard side `.sr-dash-cardart`, `.sr-dash-fallback`, `.sr-dash-verb`, `.sr-dash-no`. Six
+dashboard rules plus seven `.t-N` ground gradients were repointed at `.sr-pcover`; specificity
+keeps the per-track grounds winning over the shared default even though the shared sheet loads
+last.
+
+**`.sr-tp-pimgnote` did not reproduce as briefed.** It existed only as `display:none` in the
+stylesheet with **no markup emitting it anywhere in the repo**. Nothing was emitting an asset
+path as hidden text. Removed as an inert rule describing a defect that no longer existed, not
+as the defect.
+
+**Verified by rect equality, not by "it renders"** — the failure being fixed was an image
+sitting 119px outside its own box while still rendering perfectly well.
+
+| | track page | dashboard |
+|---|---|---|
+| image vs container | `dLeft 0, dTop 0, dW 0, dH 0` | fills the **padding box** exactly: `dW 0, dH -0.34` (sub-pixel), offset by exactly the 1px border |
+| aspect | 0.7492 | 0.7489 (3/4 = 0.7500) |
+| `object-fit` | cover | cover |
+| natural | 900x1200 | 900x1200 |
+| label after load | "Regulate", inside, visible | "Regulate", inside, visible |
+| number after load | "01", inside, **low-right** | "01", inside, **low-right** |
+| legacy classes | 0 | 0 |
+
+Checked at 420px as well: cover still fills exactly, no horizontal overflow. Locked track 2
+keeps its `saturate(.3) brightness(.62)` and its `.t-2` ground, with label and number intact.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-163 · The track carousel, and why "it does not move" was not the binding
+**The briefed cause did not reproduce.** `initCarousel()` does not return early — `#carViewport`,
+`#carPrev` and `#carNext` are all emitted by `rProtocols`. Clicking Next ran `go()`, advanced
+the counter and set `track.style.transform` to `translateX(-512px)` correctly. Two other things
+were wrong.
+
+**One — two mechanisms driving one strip.** `.sr-tp-carviewport` carried `overflow-x:auto` with
+`scroll-snap-type:x mandatory` *and* was moved by a JS transform. The tell was `scrollLeft: 56`
+**at rest, with nobody having touched it** — snap had already moved the container. The viewport
+is now a plain clip; the transform is the only mover. `scrollLeft` is **0** at rest and stays 0
+through every step. The 56px gutter moved from padding to margin so the clip happens at the
+gutter instead of inside it — otherwise a card sliding out shows through the padding.
+
+**Two — `step()` returned `card.width + 18` while the gap is `14px`.** Four pixels of overshoot
+per step, forty across ten cards. It now reads `columnGap` from the computed style, so it cannot
+drift out of step with the stylesheet again.
+
+**The counter became dots.** `1 / 10` reported the active index while four cards were on screen
+— a position asserted, not measured. One dot per page of visible cards, active dot filled, same
+pattern as the hero's `#srHeroDots` rather than a new one. **The last page is clamped, not a
+full stride**, so its label says what it actually shows: with ten cards and four visible the
+dots read *1 to 4 · 5 to 8 · **7 to 10***, not "9 onward". Getting that wrong would have been the
+counter's own defect again, in words.
+
+**Verified against a control, per Rule 20 — this measurement cannot be taken directly here.**
+CSS transitions do not advance in this preview ([[SR-149]] found the same for smooth scroll), so
+a computed transform read after a click is always the from-value. With `transition:none`
+suppressing the ease, the same code path lands immediately and the transform is measurable:
+rest `translateX(0)` first card at 107 → Next `-1008px`, first card at **-901** (a delta of
+exactly 1008 = 4 x 252, the true border-box stride) → Next `-1512px`, clamped, `next` disabled →
+dot 1 returns to `-1008px` → dot 0 to `0`. `scrollLeft` 0 at every step. **This is a
+control-based result about the transform, not a claim that the animation was observed.**
+
+At 420px `per()` falls to 1 and the rail correctly becomes ten dots, one per protocol.
+
+**Not shared, deliberately — see [[SR-166]].** The dashboard runs a continuous constant-velocity
+drift over a doubled card set; this is a stepped pager. Unifying them means choosing one model
+for both, which is a design decision, not a refactor.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-166 · The two carousels are different interaction models
+**Blocked on a design decision, not on effort.** `dashboard.html` moves its protocol row by
+continuous constant-velocity drift over two identical card sets, wrapping by exactly one set's
+width so the loop is invisible, easing to a halt on hover. The track pages step by a page of
+visible cards with prev/next and a dot rail.
+
+[[SR-162]] shared the cover because the cover is one thing rendered twice. **The carousels are
+two different answers to two different questions** — the dashboard's row is ambient and browsable
+while you decide, the track page's is an index you page through — and sharing them means picking
+one behaviour for both surfaces. That is Andre's call. Recorded so the next run does not read
+the duplication as drift and unify them by default.
+
+*Status:* blocked — needs a design decision · *Raised:* 21 Aug 2026
+
+### Premise withdrawn · there is no hover subtitle to port
+Recorded so it is not re-raised. The brief held that the dashboard card reveals a subtitle on
+hover and the track card only tints its border. **Both are border tints**, differing only in
+alpha: `.sr-dash-card:hover .sr-pcover` at `rgba(212,168,67,.5)` and `.sr-tp-pcard:hover` at
+`rgba(212,168,67,.45)`. The subtitle belongs to `.sr-cover-sub` on the Clearing card — a
+different component — and is `display:block`, always visible, never revealed. Hover left as it
+is on both.
+
+
+### SR-164 · The white flash — and the fix was already in the repo, on two pages
+Seven of the nine served pages painted the browser's default canvas until the stylesheet that
+sets the background had downloaded and parsed. On a dark site that is a full-screen white flash
+on every navigation.
+
+**The premise held, but the "smallest possible change" was already written.** `protocol.html:21`
+and `resource.html:11` each carried
+
+```html
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
+```
+
+as the first two things in `<head>`. The first pass added a second, slightly different block to
+all nine pages — including those two, which would have made it a duplicate and a **second
+pattern** for one problem. Reverted, and the existing pair copied verbatim to the other seven
+instead. Rule 3: when the tree already answers the question, the tree's answer wins, and an
+answer already shipping twice is not a candidate for improvement in passing.
+
+The `color-scheme` half matters and a background alone does not do it: it also hands scrollbars,
+form controls and the UA's default text colour their dark rendering, so the pre-stylesheet paint
+is legible rather than merely dark.
+
+Ground colour is a literal, not `var(--bg)` — the token is defined by the very stylesheet this
+has to precede. `index.html` is `#080810`; the other eight are `#08080C`, each matching its own
+`--bg`. Asserted structurally on all nine: the block precedes **every** `<link rel="stylesheet">`
+and every other `<style>` in the document.
+
+**Verified against a control, because this environment cannot show the symptom (Rule 20 and
+Rule 10 together).** The preview browser's default canvas is *dark*, so a page with no ground
+colour looks correct here while being wrong everywhere else — a false pass waiting to happen.
+Two things were forced to make it measurable: a copy of a track page with its stylesheet pointed
+at a path that never resolves (infinite stylesheet latency, held still), and the browser's colour
+scheme set to **light**. Under identical conditions:
+
+| | `html` background | screenshot |
+|---|---|---|
+| control, block removed | `rgba(0, 0, 0, 0)` | **full-screen white** |
+| with the block | `rgb(8, 8, 12)` | the dark ground, text already legible |
+
+Both control pages were built in the scratchpad mirror only and never existed in the tree.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-167 · The euro invariant no longer matches the record it guards
+**Found by the close-out sweep. Reported, not fixed — the invariant is not this branch's to
+rewrite.**
+
+The standing invariant at the top of this file reads: *"Euro escapes exist only inside `PRICING`
+in `content/tracks.js`. Current count **9**."* The file holds **11**, plus **14** bare `€`
+glyphs.
+
+**`content/tracks.js` is byte-identical to `main` on this branch** — verified with
+`git show main:content/tracks.js`, no diff, nothing in Run F touched it. The drift predates this
+branch entirely and the sweep is what surfaced it.
+
+Nothing is actually loose: all 11 escapes sit inside the `PRICING` object or the SR-136/137
+comment above it, and all 14 glyphs are in the explanatory comment block at the head of the
+file. The invariant's *intent* holds. **Its number does not**, and a checkable-in-one-command
+invariant whose count is wrong stops being checkable — the next run either "fixes" the file to
+match the note or stops trusting the note.
+
+The likelier cause is that the prices moved and the line did not follow: Run E's own table
+records `workshopPersonal` at €59, `workshopRelationship` at €139 and a `premium` key at €275.
+The file now says **€29 per person**, **€49 per couple**, and has **no `premium` key** — the
+SR-136/137 comment says so explicitly. The separate invariant *"€59, €139 and €275 appear
+nowhere"* was re-verified this run and **holds: zero occurrences across every tracked file.**
+
+Fixing it means recounting against the current `PRICING` and deciding whether comments count
+toward the total — a decision about the invariant's definition, not a defect in the code.
+
+*Status:* open — reported, awaiting Andre · *Raised:* 21 Aug 2026
+
+
 
 ---
 
@@ -1510,6 +1954,49 @@ class as `PRICING[t].includes`, which no `#prog-compare` surface reads. Fields t
 authoritative and drive nothing.
 
 *Status:* closed — does not reproduce · *Raised:* 20 Aug 2026 · *Closed:* 21 Aug 2026
+
+### SR-154 · The preview server cannot read the repo under this sandbox
+Environmental, not a repo defect, and it will recur in every run until the sandbox changes.
+
+`.claude/launch.json` as committed — `python3 tools/serve.py 8642` — fails to start:
+
+```
+/Library/Developer/CommandLineTools/usr/bin/python3: can't open file 'tools/serve.py':
+[Errno 1] Operation not permitted
+```
+
+An absolute path fails identically, and a scratchpad script pointed at the repo fails one step
+later:
+
+```
+PermissionError: [Errno 1] Operation not permitted:
+'/Users/arobley/Documents/GitHub/saferise/dashboard.html'
+```
+
+The preview runner has no read access to `~/Documents` at all. **`tools/serve.py` is unchanged
+and correct** — it runs normally from a shell. Do not "fix" it.
+
+**Procedure:** run the server from the scratchpad against an `rsync -a --delete` mirror of the
+working tree, with `launch.json` temporarily repointed at the scratchpad script and **restored
+before staging** (Rule 5).
+
+**The mirror needs a control, because a silently failed sync leaves you verifying a pre-edit
+copy and reporting a pass with numbers that all look plausible.** Before each verification:
+write a unique token into the file just edited, sync, confirm it appears in the mirror **and
+that it is absent from a control file**, then remove it and sync again. Rule 20 applied to the
+measurement path itself.
+
+**Two capture artifacts this environment produces, both Rule 10:**
+- `resize_window` with a **preset** leaves `innerWidth`/`innerHeight` at **0**, and every
+  measurement taken there is void — the statebar measured 231px tall at zero width and 51px at
+  1280x860. Set explicit `width`/`height` and report `viewport_usable` with each measurement.
+- The browser **serves a cached page after an edit**. The first post-[[SR-155]] measurement
+  showed the removed statebar still present, while `curl` against the same server returned a
+  file that did not contain it. Cache-bust every verification URL and treat a stale reading as
+  void.
+
+*Status:* closed — environmental, recorded for reuse · *Raised:* 21 Aug 2026
+
 
 ---
 

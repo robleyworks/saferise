@@ -27,6 +27,19 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first, ahead of every stylesheet.
+     Without it the browser paints its default white until the sheet that sets
+     the background has downloaded and parsed — a full-screen flash on every
+     navigation of a dark site.
+     This is not a new pattern: protocol.html and resource.html already carried
+     exactly this pair, and it is copied from them rather than reinvented, down
+     to `html,body` and the color-scheme hint. color-scheme:dark stops the UA
+     painting a white canvas and hands scrollbars and form controls the dark
+     rendering, which the background alone does not do.
+     Deliberately a literal, not var(--bg): the token is defined by the very
+     stylesheet this has to precede. Keep it equal to --bg for this page. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SafeRise — Dashboard</title>
@@ -774,6 +787,9 @@
 </main>
 
 <script src="content/tracks.js"></script>
+<!-- SR-162 · the protocol cover, shared with the track pages. Must load
+     before the inline script below, which calls SafeRiseCover.art(). -->
+<script src="js/saferise-card.js"></script>
 <script>
 (function(){
   // COVER_01 is embedded for this mockup; 02–10 resolve from assets/covers/NN.jpg
@@ -882,11 +898,48 @@
   var rail = document.querySelectorAll('.sr-dash-railbtn');
   var prev = document.querySelector('.sr-dash-carprev');
   var next = document.querySelector('.sr-dash-carnext');
-  var CURRENT = 'The Anxiety Reset Protocol';
   var ARROW = '<svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg>';
   var LOCK  = '<svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>';
 
   function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+  /* SR-161 · the protocol you were last in, derived — never a literal. This
+     used to be `var CURRENT = 'The Anxiety Reset Protocol'`, which ringed one
+     card, labelled it "Continue" and ribboned it "Step 03 of 07" for every
+     visitor, including one who had opened nothing.
+     Read at render time, not here: Store is assigned further down this same
+     IIFE. `sr.resume` is the intended source and has no writer yet (SR-165);
+     `sr.journal.entries` is the only sr.* key anything actually writes, and a
+     member who has written a reflection has demonstrably been in that
+     protocol. Both empty returns '', which matches no item, so every card
+     reads Begin and none is ringed. That is the honest state. */
+  function currentProtocol(){
+    var r = Store.get('sr.resume', null);
+    if(r && r.protocol) return r.protocol;
+    var entries = Store.get('sr.journal.entries', []);
+    for(var i = entries.length - 1; i >= 0; i--){
+      if(entries[i] && entries[i].protocol) return entries[i].protocol;
+    }
+    return '';
+  }
+
+  /* SR-161 · the ribbon carries a real position or nothing at all. "Step 03 of
+     07" was not a stale number, it was an invented measurement: nothing in the
+     record holds a step position and no writer could create one.
+     Where no writer exists for a measurement, the nearest available number is
+     a DIFFERENT measurement, and substituting it is worse than showing
+     nothing. SR-081 refused exactly this when it declined to map a 0-10
+     activation reading onto a named nervous-system state. `sr.resume` defines
+     resource/resourceTotal, which is what the resume card already reads
+     (SR-085), so that is the only phrasing this ribbon will ever carry.
+     With no writer, it emits nothing. */
+  function ribbonFor(isCurrent){
+    if(!isCurrent) return '';
+    var r = Store.get('sr.resume', null);
+    if(!r || !r.resource || !r.resourceTotal) return '';
+    return '<span class="sr-dash-ribbon">Resource ' + esc(String(r.resource)) +
+           ' of ' + esc(String(r.resourceTotal)) + '</span>';
+  }
 
   var CURRENT_TRACK = 1;
   function render(n){
@@ -902,23 +955,27 @@
        If a future track ever ships with no protocols, restore a guard here with
        that track's own copy, not the retired one's. */
 
+    var CURRENT = currentProtocol();
+
     var CARDS = t.items.map(function(it,i){
       var no  = String(i+1).padStart(2,'0');
       var src = COVERDIR[n] + no + '.jpg';
       var cur = t.unlocked && it[1] === CURRENT;
-      // fallback tile carries the kicker and number; the real cover already has them
-      var fallback = '<div class="sr-dash-fallback"><span class="sr-dash-verb">'+esc(it[0])+
-                     '</span><span class="sr-dash-no">'+no+'</span></div>';
-      var img = '<img src="'+src+'" alt="" loading="lazy" '+
-                'onload="this.parentNode.querySelector(\'.sr-dash-fallback\').remove()" '+
-                'onerror="this.remove()">';
-      var ribbon = cur ? '<span class="sr-dash-ribbon">Step 03 of 07</span>' : '';
+      /* SR-162 · the cover is the shared component in js/saferise-card.js,
+         the same one the track pages render. What stood here was a
+         `.sr-dash-fallback` tile carrying the kicker and number, deleted on
+         image load by an onload handler, because the number was burned into
+         the cover art. The covers are being reshot BARE, so that tile was
+         no longer a fallback — it was the only thing that would carry the
+         number, and it removed itself the moment the picture arrived.
+         Both are permanent now, drawn from the record on every surface. */
+      var ribbon = ribbonFor(cur);
       var action = t.unlocked
         ? '<a class="sr-dash-go" href="#">'+(cur?'Continue':'Begin')+' '+ARROW+'</a>'
         : '<span class="sr-dash-lock">'+LOCK+'Locked</span>';
       return '<article class="sr-dash-card'+(t.unlocked?'':' sr-dash-locked')+(cur?' is-current':'')+
         '" data-open="'+(t.unlocked?esc(it[1]):'')+'" data-no="'+no+'" data-src="'+src+'">'+
-        '<div class="sr-dash-cardart">'+fallback+img+ribbon+'</div>'+
+        SafeRiseCover.art({ src: src, no: no, label: it[0], extra: ribbon })+
         '<h3 class="sr-dash-cardname">'+esc(it[1])+'</h3>'+action+'</article>';
     }).join('');
     // Two identical sets. The flow runs forward only; when it has travelled the
@@ -1150,7 +1207,6 @@
 
   // ── route layer: every link resolves to something ──
   var ROUTES = {
-    dashboard:  ['This page', 'You are here.', '/dashboard'],
     method:     ['Where the method comes from', 'The six frameworks in full — what each one says, what SafeRise takes from it, which protocols rest on it, and where the evidence stops.', '/method'],
     coaching:   ['Sessions & workshops', 'The full calendar, booking, and everything you have attended.', '/sessions'],
     account:    ['Account & plan', 'Your plan and billing, preferences, privacy and data export, and closing your account.', '/account'],
@@ -1174,14 +1230,43 @@
      data-modal of its own — the rail's own listener would otherwise fire
      openRoute() alongside the modal handler and open two layers at once. */
   var LAYERS = { coaching: 'sessions' };
+  /* SR-156 · "Dashboard" is not a destination to describe, it is the view you
+     come back to. It used to open a modal reading "You are here" — over a
+     protocol that stayed open behind it — which is a control reporting success
+     while doing nothing. It now closes any open layer and the protocol frame,
+     clears a route hash if one brought us here, and puts the rail back on
+     Dashboard. All in the shell: nothing navigates, so nothing reloads.
+     ROUTES no longer carries a 'dashboard' entry — describing the page you are
+     already standing on is what produced that copy in the first place. */
+  function goHome(){
+    closeModals();
+    closeProtocol();
+    if(window.location.hash){
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+    document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(x){
+      x.classList.toggle('on', x.getAttribute('data-route') === 'dashboard');
+    });
+  }
+
   function openRoute(key){
+    if(key === 'dashboard'){ goHome(); return; }
     if(PAGES[key]){ window.location.href = PAGES[key]; return; }
     if(LAYERS[key]){ openModal(LAYERS[key]); return; }
-    var r = ROUTES[key] || ROUTES.dashboard;
+    /* SR-156 · no `|| ROUTES.dashboard` fallback. It was latent, not live —
+       all fourteen keys reaching here are defined, and the #route= path is
+       guarded below — but the next TEXTMAP row or data-route typo would have
+       landed silently on "You are here" and read as success. An unregistered
+       key now says so, in the console, and opens nothing.
+       The twelve routes with no page keep their "Not built yet" modal: a
+       control that names itself, names its path and states plainly that it does
+       not exist is honest signposting, not a false claim. SR-103 was right. */
+    var r = ROUTES[key];
+    if(!r){ console.error('openRoute: no route registered for "' + key + '"'); return; }
     document.getElementById('srRouteTitle').textContent = r[0];
     document.getElementById('srRouteBody').textContent  = r[1];
     document.getElementById('srRoutePath').textContent  = r[2];
-    document.getElementById('srRouteKick').textContent  = key === 'dashboard' ? 'You are here' : 'Not built yet';
+    document.getElementById('srRouteKick').textContent  = 'Not built yet';
     /* goes through the shared controller so focus return and scroll lock are
        handled in exactly one place */
     openModal('route');
@@ -1426,9 +1511,10 @@
          which captures a 0-10 activation reading, not a named nervous-system
          state — and mapping one onto the other would be invention, not data.
          The two are different measurements. Nothing else on protocol.html
-         holds an arrival state either: its "Preview as" statebar is a mockup
-         control, and the dashboard's arrival field is free text on another
-         page that is never stored per session.
+         holds an arrival state either: what used to sit there was a mockup
+         "Preview as" persona switcher and a "Welcome back" strip of invented
+         figures, both removed by SR-155/SR-160, and the dashboard's arrival
+         field is free text on another page that is never stored per session.
 
          So before/after stay null and the row is gone until something
          actually populates it. The Record view keeps its shift row, which
