@@ -17,8 +17,8 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-168.** Reserved block open: **SR-154 to SR-175**, ceiling
-  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-169.
+- **Highest ID issued: SR-175.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-176 — the block SR-154..SR-175 is now exhausted; reserve a new one.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run continues from **SR-168**.
@@ -57,7 +57,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-168 are issued.** All are written up below except four:
+- **SR-044 to SR-175 are issued.** All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -200,7 +200,7 @@ the rule can be checked rather than taken on trust. **Twenty-one rules.**
 
 **Measurement artifacts — the standing pre-flight**
 
-Four now, every one found the same way: a plausible number that was wrong. Run these before
+Five now, every one found the same way: a plausible reading that was wrong. Run these before
 trusting any measurement, and **report the check alongside the result**, not instead of it.
 
 | artifact | how it lies | countermeasure |
@@ -209,6 +209,7 @@ trusting any measurement, and **report the check alongside the result**, not ins
 | **Stale scratchpad mirror.** The preview serves a copy of the tree ([[SR-154]]); a silently failed sync leaves you verifying pre-edit files. | A clean pass, with numbers that all look right, taken against the code you just changed away from. | **Sentinel every sync**: write a unique token into the file just edited, sync, confirm it appears in the mirror **and is absent from a control file**, remove it, sync again. |
 | **Browser cache serving a pre-edit page.** | The first post-[[SR-155]] reading showed the removed statebar still present, while `curl` against the same server returned a file without it. | Cache-bust every verification URL. **A busted HTML URL does not bust its subresources** — `js/`, `css/` and `content/` survived both a query change and a forced navigation, and [[SR-162]] briefly read as not rendering at all because of it. `fetch(url,{cache:'reload'})` each one, then reload. |
 | **The environment cannot reproduce the symptom.** | A false pass, or a working feature reported broken. The preview's canvas is *dark*, so an unfixed page passes the white-flash test ([[SR-164]]); CSS transitions never advance, so an applied transform reads as identity forever ([[SR-149]], [[SR-163]]). | Force the condition and compare against a known-good control — light colour scheme, a stalled stylesheet, `transition:none`. Report it **as a control-based result**, never as a direct observation. |
+| **A console buffer that outlives the page.** | Errors persist across navigations **and across a preview-server restart**, so a stale failure reads as a live one. [[SR-169]] opened with 33 errors on a seed tab — one `openRoute` message and 32 × 404 — every one of them left over from Run F's deliberately-stalled control pages, on five files that were in fact clean. | **Read the console in a fresh tab.** A non-empty console on a reused tab proves nothing until the tab is new; a clean one in a fresh tab is the only reading worth reporting. |
 
 
 
@@ -1235,6 +1236,151 @@ including the €49 ordering constraint, which explicitly says to preserve that 
 table has no signal that three of its rows were superseded 550 lines later in the same document.
 
 *Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-169 · The five framework pages verified structurally before wiring
+Andre's claim — five pages authored against `method-porges.html`, using only classes that page
+already uses — **held on every count.** Verified against the **repo's** Porges, not the Desktop
+copy.
+
+Zero classes outside Porges's 58 on any of the five. Balance 49/49 div, li balanced, **5/5
+sections** on all five (Porges 50/50). One inline script each, **zero `<script src>`**, all six
+parse. Every live asset resolves; band art and `res-somatic.jpg` are commented out and produce
+**no 404** — confirmed against the served network log, every request 200. Nine internal hrefs
+per page, all resolving, no bare `href="#"`, and each carries two working links back to
+`method.html`. Zero hits on all seven critique terms.
+
+**Section 04 has three wordings, and they are a system, not drift.** The heading states the
+epistemic status before the reader reaches the content:
+
+| wording | register | pages |
+|---|---|---|
+| **"What holds"** | peer-reviewed | Porges, HeartMath, Kross |
+| **"What this is"** | clinical practice | Maté |
+| **"What register this is" / "Where it sits"** | interpretive | Jung, Watts |
+
+Each page documents its own choice in its head comment — Jung's reads *"there is no 'what holds'
+here because there is no empirical literature to hold… This is deliberate — do not align it
+back."* **Do not align any of the three.** The mapping is already in the record:
+`FRAMEWORKS[x].register` holds exactly these three values — `peer-reviewed`, `clinical
+practice`, `interpretive` — for exactly these pages, so the heading is derivable rather than
+authored. See the shape note in [[SR-172]].
+
+**Two pre-existing findings, neither caused by the five:** `sr-theme--bar` is inert on all six
+([[SR-175]]), and the console-buffer artifact above, which produced 33 phantom errors on the
+first read.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-175 · `sr-theme--bar` is inert on every framework page
+`method-porges.html:69` and all five new pages carry
+`<div class="sr-fw-barspacer sr-theme sr-theme--bar">`. The class is defined **once**, at
+`css/saferise-dashboard.css:603` (`margin-left:auto`) — a stylesheet **no framework page
+loads**. They load `css/saferise-method.css` only.
+
+**Inert, not dormant** (Rule 14): it matches nothing and wins nothing, so no rule is masked and
+nothing resumes if something changes. The reading-mode control simply does not get its
+`margin-left:auto` on these six pages.
+
+Pre-existing on Porges and inherited by the five from the template. Fixing it is a one-line
+addition to `saferise-method.css` — but whether the control is *supposed* to be pushed right on
+these pages is a layout decision, and the pages have shipped looking as they do. **Blocked on
+that, not on effort.**
+
+*Status:* blocked — needs a layout decision · *Raised:* 21 Aug 2026
+
+### SR-170 · Porges drops the critique apparatus for a scope statement
+Andre's editorial decision, applied to the one page that had not received it: remove criticism
+of where others disagree; where he agrees is sufficient. The five new pages already reflected
+it, so **the repo's Porges was the outlier**, not the five.
+
+**This supersedes [[SR-058]], which is still open and says in terms:** *"Section 04 and the
+sources list are not to be edited outside this item. Every citation was verified against the
+published record; changes go through the register."* This is that change, going through the
+register. SR-058's two outstanding decisions — a review date and owner, and whether HeartMath
+takes framework 01 if the dispute resolves against the theory — are **not** answered by this;
+the second is now moot on the page but the underlying exposure is unchanged, which is exactly
+why the paragraph was replaced rather than deleted.
+
+Removed: the *"and formally disputed since"* clause; the closing paragraph reporting the
+February 2026 *Clinical Neuropsychiatry* exchange; and four sources — Grossman & Taylor 2007,
+Grossman 2023, Grossman et al. 2026, and Porges's rebuttal in the same issue. **Sources 8 → 4**
+(`Primary source` ×3, `Applied`). All seven critique terms now return **0**.
+
+**Replaced, not deleted.** The page must not silently assert the theory is settled, so section
+04 closes on a scope statement in the shape all five new pages use — HeartMath's *"That is not a
+comment on their work; it is a statement of where this platform's claim ends"* is the pattern.
+Porges now states that SafeRise takes no position on the anatomical or evolutionary account,
+that nothing in the four steps depends on the answer, and that the five findings are what the
+method runs on. **This is new prose and Andre should read it.**
+
+**Deliberately NOT removed — do not tidy.** The REGION 6 comment (*"A reading list that only
+cites the advocate is a reading list nobody trusts"*) and the heading *"Read the arguments
+yourself"* are on **all six** pages, including the five Andre approved. They are shared
+template, not Porges's critique apparatus. Removing them would have made Porges an outlier again
+in the opposite direction.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-171 · The five framework pages lacked the SR-164 ground block
+Confirmed live before the fix: `htmlBg` **`rgba(0, 0, 0, 0)`** on all five. Their template
+predates [[SR-164]], so all five would have shipped with the white flash Run F removed from the
+other nine pages.
+
+The `color-scheme` meta and `html,body` pair were **lifted verbatim** from `method-porges.html`,
+which already carried them, and each of the five now matches it byte for byte. No second pattern
+was authored — that was Run F's own mistake in SR-164 and it reverted it. Asserted on all six:
+the block precedes every `<link rel="stylesheet">` and every other `<style>`.
+
+Verified against the forced-light-mode control, since this preview's canvas is dark and an
+unfixed page passes here (see the pre-flight above): a copy of `method-jung.html` with its
+stylesheet pointed at a path that never resolves paints **full-screen white** without the block
+and **`rgb(8, 8, 12)`** with it. Both control pages lived in the scratchpad mirror only.
+
+Committed with [[SR-172]], because it only ever changed these five files and they land there.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+### SR-172 · The six framework pages are one set
+`method.html` linked one framework and disabled five: cards 02–06 were
+`<div class="sr-mi-card … soon">` ending in *"Not yet published"*. Each is now an `<a>` pointing
+at its page, with the *"Read the page"* span **lifted verbatim from card 01** rather than
+authored twice. All six targets exist. Zero `soon` classes and zero *"Not yet published"*
+remain; balance holds at 53/53 div, 9/9 a, 6/6 section.
+
+**A numbering conflict this run did not resolve, because renumbering is a decision.**
+`method.html` orders **03 Kross, 04 Maté**; the pages number themselves **03 Maté, 04 Kross**.
+The record supports the pages: `FRAMEWORKS.mate.step` is 3 and `FRAMEWORKS.distance.step` is 4,
+and the framework ordinal tracks `step` exactly for 01–04. The links are unambiguous either way
+— each card points at the page naming the same author — so **only the displayed ordinal
+disagrees**. Raised, not fixed.
+
+**The `FRAMEWORKS` shape question — reported, deliberately not added.** Links are currently
+authored in markup on `method.html` and would have to be re-authored anywhere else the set
+appears. The record should carry the path, exactly as `PRICING` carries the amount:
+
+```js
+porges:    { …, page: 'method-porges.html' },
+heartmath: { …, page: 'method-heartmath.html' },
+distance:  { …, page: 'method-kross.html' },   // key and filename differ — the reason this belongs in the record
+mate:      { …, page: 'method-mate.html' },
+jung:      { …, page: 'method-jung.html' },
+watts:     { …, page: 'method-watts.html' }
+```
+
+`distance` → `method-kross.html` is the case that proves the point: the key and the filename are
+different words, so every consumer that authors the link re-derives that mapping by hand.
+An `ordinal` field would settle the conflict above in the same place. `FRAMEWORKS.register`
+already carries the three values [[SR-169]]'s section-04 mapping needs, so the heading is
+derivable too. **Shape only — nothing added.**
+
+**Deliberate non-fix, do not tidy.** `.sr-mi-card.soon` at `css/saferise-method.css:486-487` is
+now orphaned — no markup carries `soon` anywhere. It is left in place: it is the state a
+seventh, unbuilt framework would need, and removing it would mean re-authoring it the next time
+one is added before its page exists.
+
+*Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
+
+
 
 
 
