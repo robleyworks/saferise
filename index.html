@@ -3813,7 +3813,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <div class="reader-sidebar-head">
           <p class="reader-eyebrow">Full Resource Library</p>
           <p class="reader-protocol-title" id="reader-protocol-title"></p>
-          <div class="reader-progress-track"><div class="reader-progress-fill" id="reader-progress-fill" style="width:0%;"></div></div>
         </div>
         <p class="reader-sidebar-label">Journey Overview</p>
         <div id="reader-tabs"></div>
@@ -3835,8 +3834,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <div id="reader-content" style="flex:1;overflow-y:auto;"></div>
       </div>
       <div class="reader-rail">
-        <p class="reader-rail-label">Your Progress</p>
-        <p class="reader-rail-count" id="reader-rail-count">1 of 1</p>
         <div id="reader-steps"></div>
         <div class="reader-rail-actions">
           <div class="reader-rail-action"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 2h8v12l-4-3-4 3V2z"/></svg><span>Bookmark</span></div>
@@ -4966,7 +4963,12 @@ function openReader(protocolKey, initialKey){
   tabsEl.innerHTML = '';
   contentEl.innerHTML = '';
   stepsEl.innerHTML = '';
-  document.getElementById('reader-rail-count').textContent = '1 of ' + proto.keys.length;
+  /* SR-185 · the rail's heading and its count are gone. It was headed "Your
+     Progress" and read an ordinal out of a total — the same forbidden claim as
+     the sidebar readout, eleven lines away, which is why removing only the
+     first one did not make the Reader shippable. The rail itself stays: the
+     step list, Bookmark/Highlight/Listen and the footer quote are not progress
+     claims and removing them would be a design change, not a removal. */
 
   proto.keys.forEach(function(key, idx){
     const data = RESOURCE_CONTENT[key];
@@ -5085,18 +5087,17 @@ function selectReaderTab(protocolKey, key){
   });
   document.getElementById('reader-content').scrollTop = 0;
 
-  // Progress bar + label in sidebar head
-  const pct = Math.round(((idx+1) / proto.keys.length) * 100);
-  document.getElementById('reader-progress-fill').style.width = pct + '%';
-  /* SR-181 \u00b7 the sidebar position readout is gone. Ninety authored Track 01
-     resources state that nothing counts a member's way through the library, so
-     no ordinal-out-of-total may render anywhere in the Reader. Its <p> went
-     with it rather than being left empty \u2014 the rule carries margin-bottom, so
-     an emptied element is a stranded 8px gap, not a no-op. Do not restore
-     either half. This note does not quote the removed string, per Rule 21. */
+  /* SR-181 / SR-185 \u00b7 the sidebar head no longer reports where a member is.
+     The position readout went first (SR-181), then the bar beneath it and the
+     percentage that drove it (SR-185). Ninety authored Track 01 resources state
+     that nothing counts a member's way through the library, and a bar is the
+     same claim drawn rather than written. Both containers went with their
+     writes: the <p> carried margin-bottom and the track carried a 3px height,
+     so emptying either leaves a stranded band rather than a no-op. Do not
+     restore any of it. These notes do not quote the removed strings, per
+     Rule 21. */
 
   // Right rail state
-  document.getElementById('reader-rail-count').textContent = (idx+1) + ' of ' + proto.keys.length;
   document.querySelectorAll('.reader-step-node').forEach(function(node){
     const nodeKey = node.dataset.stepKey;
     const label = document.querySelector('.reader-step-label[data-step-label-key="' + nodeKey + '"]');
