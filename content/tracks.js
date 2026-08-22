@@ -541,7 +541,13 @@ var STATES = {
 
 /* extras — the two conditional resources. null means UNVERIFIED, not none.
    T1 mapping is taken from SafeRise_PersonalTransformation_ProductionChecklist.
-   T2 and T3 need the same confirmation before the protocol page can be honest. */
+
+   SR-198 · ALL THIRTY ARE NOW RESOLVED. Tracks 02 and 03 were null on all
+   twenty — unverified, not none — and are written in from the Tracks 02/03
+   build sheets. No `null` remains in META, so the honest-floor fallback below
+   is now unreachable for real data. Keep it: it is what a NEW protocol added
+   without a verified mapping falls back to, and removing it would make the
+   next unverified row silently claim a full library. */
 /* SR-078 · a protocol's library size is derived, never typed.
    SHARED.resources holds every resource. Two of them are conditional: the
    Proximity Guide and the Invitation to Repair only appear where an ongoing
@@ -585,28 +591,36 @@ var META = {
   't1-10': { extras: ['advisory'], state: 'numb', frameworks: ['porges','watts'] },
 
   /* Track 02 · Relationship Healing */
-  't2-01': { extras: null, state: 'agitated',    frameworks: ['porges','heartmath'] },
-  't2-02': { extras: null, state: 'unsteady',    frameworks: ['porges','mate'] },
-  't2-03': { extras: null, state: 'agitated',    frameworks: ['porges','mate'] },
-  't2-04': { extras: null, state: 'unsteady',    frameworks: ['mate','jung'] },
-  't2-05': { extras: null, state: 'unsteady',    frameworks: ['porges','jung'] },
-  't2-06': { extras: null, state: 'unsteady',    frameworks: ['jung','mate'] },
-  't2-07': { extras: null, state: 'agitated',    frameworks: ['jung','mate'] },
-  't2-08': { extras: null, state: 'numb', frameworks: ['heartmath','distance'] },
-  't2-09': { extras: null, state: 'unsteady',    frameworks: ['porges','mate'] },
-  't2-10': { extras: null, state: 'numb', frameworks: ['mate','watts'] },
+  't2-01': { extras: ['invitation'], state: 'agitated',    frameworks: ['porges','heartmath'] },
+  't2-02': { extras: ['invitation'], state: 'unsteady',    frameworks: ['porges','mate'] },
+  't2-03': { extras: ['advisory', 'invitation'], state: 'agitated',    frameworks: ['porges','mate'] },
+  't2-04': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['mate','jung'] },
+  't2-05': { extras: ['invitation'], state: 'unsteady',    frameworks: ['porges','jung'] },
+  't2-06': { extras: ['invitation'], state: 'unsteady',    frameworks: ['jung','mate'] },
+  't2-07': { extras: [], state: 'agitated',    frameworks: ['jung','mate'] },
+  't2-08': { extras: [], state: 'numb', frameworks: ['heartmath','distance'] },
+  't2-09': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['porges','mate'] },
+  't2-10': { extras: ['advisory'], state: 'numb', frameworks: ['mate','watts'] },
 
   /* Track 03 · Professional Performance */
-  't3-01': { extras: null, state: 'agitated',    frameworks: ['porges','heartmath'] },
-  't3-02': { extras: null, state: 'agitated',    frameworks: ['porges','mate'] },
-  't3-03': { extras: null, state: 'unsteady',    frameworks: ['jung','distance'] },
-  't3-04': { extras: null, state: 'agitated',    frameworks: ['jung','mate'] },
-  't3-05': { extras: null, state: 'agitated',    frameworks: ['heartmath','porges'] },
-  't3-06': { extras: null, state: 'numb', frameworks: ['jung','watts'] },
-  't3-07': { extras: null, state: 'unsteady',    frameworks: ['jung','watts'] },
-  't3-08': { extras: null, state: 'numb', frameworks: ['porges','distance'] },
-  't3-09': { extras: null, state: 'numb', frameworks: ['porges','watts'] },
-  't3-10': { extras: null, state: 'unsteady',    frameworks: ['distance','watts'] }
+  't3-01': { extras: [], state: 'agitated',    frameworks: ['porges','heartmath'] },
+  't3-02': { extras: ['advisory', 'invitation'], state: 'agitated',    frameworks: ['porges','mate'] },
+  't3-03': { extras: [], state: 'unsteady',    frameworks: ['jung','distance'] },
+  't3-04': { extras: [], state: 'agitated',    frameworks: ['jung','mate'] },
+  't3-05': { extras: [], state: 'agitated',    frameworks: ['heartmath','porges'] },
+  't3-06': { extras: [], state: 'numb', frameworks: ['jung','watts'] },
+  't3-07': { extras: [], state: 'unsteady',    frameworks: ['jung','watts'] },
+  /* SR-199 · `heartmath` replaces `distance`. The dispenza correction landed
+     here as a RENAME (SR-118), leaving `distance`; the build sheet specifies
+     `heartmath`. Same rename-versus-replacement split SR-180 resolved on
+     t1-10 — but there the authored content decided it, and t3-08 has no
+     authored resources yet, so the build sheet is the specification and it
+     wins. Decision Fatigue is a Numb protocol; cardiac coherence is the
+     step-2 framework the sheet puts under it. Re-check against the copy
+     when t3-08 is written. */
+  't3-08': { extras: ['advisory'], state: 'numb', frameworks: ['porges','heartmath'] },
+  't3-09': { extras: ['advisory'], state: 'numb', frameworks: ['porges','watts'] },
+  't3-10': { extras: [], state: 'unsteady',    frameworks: ['distance','watts'] }
 };
 
 /* Derived — never hand-counted. Used by the About page and the framework pages. */
