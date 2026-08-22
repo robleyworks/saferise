@@ -2908,3 +2908,27 @@ body.sr-breath .sr-player.is-next .audio-play{
   width:100%;
   height:auto;
 }
+
+/* ═════════════════════════════════════════════════════════════
+   SR-213 · IMAGE SLOTS
+   The slot keeps its placeholder styling and gains an image
+   layer. The placeholder is not an error state — it is what a
+   slot with no asset renders, carrying the brief so the image
+   lane can still read what the slot wants. Track 03 renders this
+   on all four of its slots today.
+
+   The img sits ABOVE the label and covers it. If the file 404s,
+   the inline onerror removes the img and the label is revealed
+   underneath — the same degrade as having no src at all, rather
+   than a broken-image glyph over a label nobody can read.
+   ═════════════════════════════════════════════════════════════ */
+.sr-tp .sr-tp-ph{position:relative;overflow:hidden}
+.sr-tp .sr-tp-slotimg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  border-radius:inherit;
+}
