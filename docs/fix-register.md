@@ -97,7 +97,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-203 are issued.** SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
+- **SR-044 to SR-211 are issued.** SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
   SR-202 by Run I (Tracks 02/03 specification), which also issued **SR-197** for a missing
   source document. **SR-194 to SR-196 and SR-200 were never issued and are free** — SR-200's
   phase was resource authoring, which Run I was barred from.
@@ -129,7 +129,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 **Rules — method**
 
 Earned across Runs C to G. Each cost something to learn; the worked example is named so
-the rule can be checked rather than taken on trust. **Twenty-one rules.**
+the rule can be checked rather than taken on trust. **Twenty-three rules.**
 
 1. **A deliberate non-fix gets a register entry** carrying the reasoning and an explicit
    do-not-tidy line. An undocumented correct refusal is indistinguishable from an oversight,
@@ -252,6 +252,30 @@ the rule can be checked rather than taken on trust. **Twenty-one rules.**
     having failed. An invariant that counts commentary breaks every time someone writes a note —
     which is exactly how a live assertion goes stale for a reason that has nothing to do with
     what it guards.
+
+22. **Where two inventories share a key namespace, matching names are evidence of COLLISION
+    RISK, not of correspondence. Verify by content, never by key.** [[SR-206]] is the worked
+    example and it is the most dangerous shape found so far, because every structural check
+    passes while the wrong resource is served. The Reader's Track 01 keys and the authored set
+    share six type names — `guide`, `advisory`, `companion`, `disclosure`, `crisiscard`,
+    `repair` — and **two of the six name different resources**: old `guide` is *Protocol Guide*,
+    a walkthrough, while new `guide` is *How This Works*, the mechanism; old `advisory` is
+    *Attention Advisory*, new is *Proximity Guide*. A key-by-key migration produces a page that
+    renders, validates, balances and serves the wrong text.
+    **Corollary, from the same entry: key on TYPE, never on POSITION.** A resource's ordinal
+    shifts with the conditionals — Disclosure & Support is 06 on a protocol without an advisory
+    and 07 on one with it — so an implementation indexing by number is correct on the first
+    protocol anyone tests and wrong on every conditional-bearing one.
+    **Second corollary, [[SR-209]]:** the same applies to placement. Anchor to text, not to a
+    block index, because an index moves when a paragraph is added.
+
+23. **A second inventory that disagrees with ITSELF is past reconciliation — replace it, do not
+    sync it.** [[SR-206]]: the Reader's hardcoded key list drifted three separate ways from its
+    own data. `p1` is served `advisory` while `META['t1-01'].extras` is `[]`; `p2-crisiscard`
+    exists as data with no key slot, documented as dead at `index.html:4212`; and `p10` carries a
+    one-off `crisis-p10` that fits no pattern. Reconciling a list in that state means choosing,
+    per row, which of two wrong records to believe. **Derive it from the source the counts
+    already use** — `SHARED.resources` plus `extras` — and the drift has nowhere to live.
 
 **Measurement artifacts — the standing pre-flight**
 
@@ -1795,7 +1819,7 @@ data, not rendered on the card.
 **Blocked on Andre confirming B over C**, and on the namespace mapping decision above. Nothing
 should install until both are settled, because both change the shape of the transform.
 
-*Status:* open — report delivered, decision required · *Raised:* 22 Aug 2026
+
 
 ---
 
@@ -2088,7 +2112,22 @@ all four read the build sheets, which are present.
 **If a correction document does exist somewhere, it has not been seen by this run**, and anything
 in it beyond the four facts above has not been applied.
 
-*Status:* reported — source absent, substance verified against the tree · *Raised:* 22 Aug 2026
+**UPDATE, 22 Aug 2026 — the file exists after all, in a later bundle.**
+`CONTENT-STATUS-CORRECTION.md` ships inside `SafeRise-Track02-Complete/specs/`. It was genuinely
+absent from the Tracks 02/03 brief folder where the instruction placed it, and absent from the
+Desktop entirely at the time — that observation stands as evidence and is not rewritten. It
+arrived with the Track 02 complete bundle.
+
+**Nothing this entry concluded changes.** The four facts were verified against the tree rather
+than taken from the document, which is why its absence blocked nothing. Its Track 02 lines are now
+superseded in turn by `TRACK-02-COMPLETE-HANDOVER.md`, which took Track 02 from 18 of 91 to 91 of
+91. Track 03 remains as both describe it, 16 of 84.
+
+**The lesson is about sequencing, not about the document.** A file named in an instruction may
+exist in a bundle that has not arrived yet. Absence at the moment of checking is a fact about the
+moment, not about the file — report it as such, verify the claims independently, and proceed.
+
+*Status:* closed — source arrived in a later bundle, conclusions unchanged · *Raised:* 22 Aug 2026
 
 ---
 
@@ -2233,6 +2272,267 @@ brief's own `min-width: 600px` inside a horizontally scrolling container is a st
 whatever renders them, and belongs in `saferise-system.css` under an `sr-` class when that lands.
 
 *Status:* open — report delivered, two decisions required · *Raised:* 22 Aug 2026
+
+---
+
+
+### SR-205 · Recolouring the diagrams — closed as SUPERSEDED, not as done
+[[SR-202]] found the delivered diagrams were light-ground artwork with no background rect,
+navy and grey on a `#08080C` platform, and reported that they needed a panel or a recolour.
+**Neither happened, and the reason is better than either.**
+
+The redelivered set carries **no hardcoded colour at all**. Every value resolves through six
+custom properties, each with a fallback. Nothing was recoloured; the diagrams inherit.
+
+**Why that beats the fix this entry asked for.** A recolour produces one dark variant. The
+Reader has **three** modes — dark, sepia, light — so a recolour would have had to be redone per
+mode, per diagram, thirty-one times over, and redone again the next time a mode was added. The
+token approach survives the theme switch because the diagram never holds a colour to begin with.
+
+**The general form, worth keeping:** where a fix would produce one variant per theme, the fix is
+usually in the wrong place. Move the decision to the consumer.
+
+Placement and binding are [[SR-209]].
+
+*Status:* closed — superseded by the redelivered set · *Raised:* 22 Aug 2026
+
+---
+
+### SR-206 · Wiring the Reader — seven consumers, three of which mutate at runtime
+**Reported and NOT started.** The gate was whether the Reader is the only consumer of
+`RESOURCE_CONTENT`. It is not, and it is not close.
+
+**Seven consumers, all in `index.html`.** The Reader is one. The others are the protocol page's
+resource cards ([[SR-030]], and **unguarded** — it calls `data.title` with no null check), the
+card-title re-sync, `openResourceModal` (a separate surface), a v12 pass that **mutates**
+`p2-guide` and `p2-disclosure`, a somatic pass that **mutates** `kind`/`title`/`meta` across a key
+set, The Decision, which **creates** entries *and mutates* `READER_PROTOCOLS[pk].keys`, and
+`classifyReaderPages`. Plus the founder generator, which creates ten entries at load.
+
+This is Rule 8's warned case: the object is assembled and rewritten across five separate IIFEs at
+different points in load order. **Superseding it is not a data swap.**
+
+**The finding that matters most is the name collision — now Rule 22.** Six type names are shared
+between the Reader's keys and the authored set, and **two of the six name different resources**.
+A key-by-key migration serves the wrong text while every structural check passes.
+
+**The second is that the hardcoded list has already drifted from itself — now Rule 23.** `p1` is
+served `advisory` while `META['t1-01'].extras` is `[]`; `p2-crisiscard` exists as data with no key
+slot; `p10` carries a one-off `crisis-p10`.
+
+**Also displaced, and no home in the record:** `founder` — *Why I Built This One*, retired
+alongside Source Insights and Reference Case, currently served on all ten.
+
+**SCOPED AT FOUR COMMITS, 22 Aug 2026. Andre's answers, and the sequence.**
+
+**The Decision keeps its Reader slot**, and stops mutating a keys array that will not exist.
+*What it would take to register as a conditional:* `CONDITIONAL_RESOURCES` maps a display name to
+an `extras` flag, and `protocolResources()` filters on it — so registering The Decision means
+adding one map entry and one `extras` value per protocol that carries it. **That is small.** What
+is not small is that The Decision is not in `SHARED.resources` at all, so it would have to be
+added there, which changes every derived count on every surface that reads that array — the
+dashboard fold title, the track-page list, the protocol page. **Recommendation: it stays as-is
+and the derived set accommodates it** — the derivation appends any protocol-specific Reader entry
+after the derived ten rather than requiring it to be in the shared library. One-line
+accommodation against a count change that reaches five surfaces.
+
+**The modal and the cards move WITH the Reader.** [[SR-030]]'s intent — cards and Reader read one
+object so they can never disagree — survives; only the object changes.
+
+**The sequence, and no intermediate state leaves a surface reading a half-migrated object:**
+
+| | commit | why it is safe to stop here |
+|---|---|---|
+| 1 | **Additive only.** Add the four new icons to `PT_RES_ICONS`/`PT_RES_GROUPS`, guard `ptResFromContent`, and add the derivation helper — reading `SHARED.resources` + `extras` — without wiring it to anything. | Nothing consumes the helper yet. Every surface still reads the old object, whole. |
+| 2 | **Cut over the three read surfaces together** — Reader, modal, cards — to the derived key set and `T1_RESOURCES`. | The only commit where the object changes, and all three consumers change in it. There is no point at which one reads new and another reads old. |
+| 3 | **Retire what is displaced.** Remove `founder` and its generator, annotate the 50 superseded literal entries as superseded rather than deleting silently, and remove the `crisis-p10` one-off. | Nothing reads them after 2. |
+| 4 | **Re-point the three mutation passes** — the v12 copy pass, the somatic pass, The Decision's registration — at the new keys. | Each is currently a silent no-op against the new set, not a crash, so the page works between 3 and 4; it just does not yet apply those rewrites. |
+
+**The ordering constraint that decides it:** the three mutation passes run *after* the object is
+built, so they must be fixed after the object changes, not before — fixing them first points them
+at keys that do not exist yet. And the cut-over must be one commit, not three, because the cards
+and the Reader are specified to agree.
+
+⚠ **`ptResFromContent` gets its guard in commit 1, ahead of everything.** It calls `data.title`
+with no null check, so the protocol page throws on the first missing key rather than degrading.
+An unguarded lookup is how a content change takes a page down, and it should be guarded before
+any content change is made — not in the same commit as one.
+
+**The six Companion variants displaced by the collapse to one *Somatic Release Activities*,
+quoted in full so what is lost is visible:**
+
+- **Sensory Companion** (p3, Overwhelm Threshold) — *"Decluttering one small space, phone-free
+  walks, noise-cancelling headphones — daily companions for narrowing the field"*
+- **Relational Companion** (p4, Abandonment Wound) — *"A recurring class with the same group,
+  volunteering, a consistency journal — daily companions for relational safety"*
+- **Creative Companion** (p5, Shame Dissolution) — *"Unshared creative expression, a sharing
+  circle, a private story journal — daily companions for reclaiming hidden parts"*
+- **Ritual Companion** (p6, Grief Integration) — *"Visiting a meaningful place, a memory box,
+  gentle rhythmic movement — daily companions for letting loss move through"*
+- **Behavioral Companion** (p8, Jealousy Release) — *"A social-media boundary day, a skills-based
+  class, a 'good for them' practice — daily companions for steady footing"*
+- **Evidence Companion** (p9, Insecurity Anchor) — *"A wins log, a values card deck, one
+  meaningful self-made object — daily companions for an internal floor of worth"*
+
+Each is protocol-specific and none survives the collapse. The consolidation is deliberate in the
+authored set; this is the record of what it costs.
+
+*Status:* open — scoped at four commits, not started · *Raised:* 22 Aug 2026
+
+---
+
+### SR-207 · Track 02's authored content enters the record
+91 of 91 into `content/t2-resources.js`, extending the file [[SR-203]] created. Counts
+9, 9, 10, 10, 9, 9, 8, 8, 10, 9 — the build sheet exactly, totalling 91. 1,471 body blocks,
+397 cues.
+
+**Shape asserted independently of content**, which is the [[SR-192]] lesson: four cue-card line
+blocks on all ten, and the *Before you start* suggestion line on exactly t2-08 and t2-10, the two
+Numb protocols, and nowhere else. Fidelity checked per protocol — zero words in the output absent
+from the source.
+
+**`sharedRefs` is a new structure, deliberately not a body string.** `{block: N, ref: 'twoParts'}`
+says `T2_SHARED.twoParts` belongs at index N and the body does not contain it. Ten protocols, one
+record.
+
+⚠ **The handover's §1 calls `SHARED-t2-two-instruments.md` the "canonical source". It is not**, and
+this was re-checked against the new bundle rather than assumed from [[SR-203]]: the file is still
+the stale expository version, 472 words against the shipped 538, similarity **0.44**. The shipped
+block is unchanged between bundles — the new t2-01 and t2-02 inline copies are byte-identical to
+each other and match SR-203's extraction once the cue marker and trailing separator are accounted
+for. **SR-203's ruling stands; the handover's label is wrong.**
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-208 · All ten protocols reference the shared block, and the constraint becomes structural
+t2-01 and t2-02 held the block inline; the other eight carried the marker. All ten now reference.
+
+**The measurable result is the `ego` constraint.** Before: **3** occurrences across Track 02 data —
+one in `T2_SHARED`, one in each inline copy. After: **1**, inside `T2_SHARED`, zero anywhere else.
+
+**This is the argument for extraction, and it is stronger than the maintenance argument.** The
+maintenance case is that ten copies drift and one record does not. The real case is that a
+constraint enforced by structure is not a constraint anyone has to remember. There is one copy of
+*"that's just your ego talking"* in the codebase, so it **cannot** appear in a heading, in
+navigation, in metadata or in a second resource — not because a check would catch it, but because
+there is nothing to copy from. A rule that cannot be broken needs no reviewer.
+
+Body blocks 1,507 → 1,471; the 36 removed are the two 18-block inline copies, and nothing is lost.
+
+⚠ **The transform was not idempotent and doubled the file on its second run.** The splice took
+everything up to `if (typeof module` as the shared prefix, which swept in the previous run's
+`T2_RESOURCES`. The boundary is now the declaration's own terminator and idempotence is asserted —
+two consecutive runs produce identical byte counts. **A generator that is not idempotent corrupts
+the moment anyone re-runs it**, and it will look like a content explosion rather than a tooling
+bug.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-209 · The diagrams are placed and inherit the platform's tokens
+31 SVGs into `assets/diagrams/`, as files. Files rather than inline because they are thirty
+per-protocol variants of one shape; inlining puts thirty near-identical copies in a page bundle.
+
+**Placement is by ANCHOR TEXT, never by block index.** An index is a position, and positions move
+the moment a paragraph is added — the same defect class as keying a resource by its number
+([[SR-206]]). Ten Release anchors found, ten placed; the two-parts diagram resolves inside the
+shared block. All 11 referenced files verified present on disk.
+
+**`alt` is the SVG's own `<title>`, transcribed.** Alt text is authored copy and this run wrote
+none; reusing the title the diagram already carries is transcription, and it is what a screen
+reader would receive from the SVG regardless.
+
+**Verified by resolving the token chain, not by rendering** — no browser is available (see the
+sixth measurement artifact), so this is a static resolution check and is labelled as one. Every
+token the 31 SVGs use is bound on the dark scope; the light mode restates all five inverting
+tokens; sepia overrides the one it needs; every `var()` carries a fallback, so a diagram opened
+standalone still renders.
+
+**Both invariants the spec forbids touching are asserted rather than assumed.** Fills use
+`--sr-ink`, the same token as strokes — ten uses on the two-parts diagram — so the gate dot
+inverts with everything else. `--sr-surface` and the `--sr-bg` enclosure rect both default to
+transparent.
+
+⚠ **`--sr-accent` is the one token with no platform equivalent.** It is the diagram's second
+structural colour. The platform's only comparable value is `--sr-track03`, which is Track 03's
+identity colour — using it would borrow a semantic that does not apply. The values set are the
+diagram author's own verified pair from the theming spec, flagged in the CSS for replacement.
+
+Cormorant Garamond confirmed loaded on every page that renders a diagram, so the lockup does not
+fall back to Georgia and stop reading as a mark.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-210 · The awareness-moves placement spec — report only
+**Nothing implemented.** `SHARED-awareness-moves.md` is a placement specification for additions to
+the **meditation scripts**, which is resource content this run is barred from writing.
+
+**Its own title is stale.** It reads *"The two awareness moves"* and defines **five** lettered
+moves — A through E — with E splitting into E1, E1b and E2. Counting placements rather than
+letters gives the six the brief refers to.
+
+| | where it goes | what it does |
+|---|---|---|
+| A · out of the grip | Recognition, **after** the naming | separates the person from the state while still inside it |
+| B · attention by choice | Rise, replacing or preceding the forward scene | names what awareness is for |
+| C · the question underneath | Release, **after** *what was this for* | past what the state did, toward what it was built on |
+| D · the decision | — | four rules, exclusions listed |
+| E1 · forgiveness | closes Release | **travels with C — a protocol carrying C without E1 is unfinished** |
+| E2 · gratitude and release | closes Rise | near-universal, reworded per protocol |
+
+**What honouring it would take is not a rendering change.** The moves are script text placed at
+named points inside the four steps, per protocol, with a table of eleven placements and **three
+refusals**. The refusals carry more weight than the placements and are the reason this cannot be
+applied mechanically:
+
+- **Grief** — there is no forward version of the person to move attention toward, and offering one
+  says the loss should be got past.
+- **Shutdown** — the faculty being asked for is the one that has reduced.
+- **Powerlessness** — telling someone whose situation genuinely cannot be moved that attention is
+  a choice is the cruellest available version of the idea.
+
+It also carries hard vocabulary exclusions in two registers: *higher self, true self, witness,
+observer consciousness, ego death* on Move A, and *attract, draw in, create your reality, call it
+in, align with, abundance, deserve it, the universe* on Move B — with the stated line that
+rehearsing **doing the work** is supported and rehearsing **having the thing** is not, because
+crossing it is manifestation with the vocabulary changed.
+
+**Assessment: this is authoring work, not build work.** The build's only obligation is that
+nothing in the data model prevents a meditation script carrying extra blocks at named points —
+and nothing does; `body` is an ordered array and `cues` already anchor to indices.
+
+*Status:* open — report delivered, content lane owns it · *Raised:* 22 Aug 2026
+
+---
+
+### SR-211 · t2-09's safety gates — four, not three, and never identical
+Asserted, and **two premises corrected**.
+
+**There are four gate-bearing resources, not three.** The handover names Safe Practice, the
+Proximity Guide and Resource 10. **Invitation to Repair carries one too.** All four verified
+present.
+
+**They are not identical passages, and could not have been deduplicated.** The concern was that a
+transform might collapse three repeated passages into one. Pairwise similarity across the four is
+**0.05 to 0.09** — they are written fresh per resource, exactly as the earlier brief specified for
+this gate. The risk being guarded against was not available to occur.
+
+**The assertion was rewritten because the first one was wrong.** It searched for a single quoted
+string from the handover's §6 and found it once, in the Proximity Guide only — which would have
+read as two missing gates. The gates share a **concept**, not a wording, so the assertion now
+tests for the safety markers each passage must carry (*being controlled, monitored, made afraid,
+not the resource for that*) rather than for a shared sentence. **An assertion keyed to a wording
+fails on content that was specified to vary.**
+
+All four are inline: no `<details>` or `<summary>` wrapper on any of them, so none sits behind a
+disclosure.
+
+*Status:* verified · *Raised:* 22 Aug 2026
 
 ---
 
