@@ -89,14 +89,21 @@
          dashboard.html shares. The number and label are the same record
          fields they always were — p[0] and p[1] — but the component keeps
          them over the loaded image rather than under it. */
-      return '<article class="sr-tp-pcard">' +
+      return '<article class="sr-tp-pcard" tabindex="0">' +
         SafeRiseCover.art({ src: coverPath(t.id, p[0]), no: p[0], label: p[1] }) +
+        /* SR-174 · title and promise stay; signature and chips move into
+           .sr-tp-preveal, which is out of flow and revealed on hover or focus.
+           tabindex makes the card reachable so a keyboard user can open the
+           reveal — it is a readable region, not a control, so it takes no role
+           and no handler (SR-178). */
         '<div class="sr-tp-pmeta"><h3>' + esc(p[2]) + '</h3>' +
         '<p class="sr-tp-pdesc">' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
-        '<p class="sr-tp-pbody">' + esc(val(p[4], 'signature:' + p[2])) + '</p>' +
-        '<p class="sr-tp-struggle">' + (has(p[5])
-            ? p[5].map(function (s) { return '<span>“' + esc(s) + '”</span>'; }).join('')
-            : '') + '</p>' +
+        '<div class="sr-tp-preveal">' +
+          '<p class="sr-tp-pbody">' + esc(val(p[4], 'signature:' + p[2])) + '</p>' +
+          '<p class="sr-tp-struggle">' + (has(p[5])
+              ? p[5].map(function (s) { return '<span>“' + esc(s) + '”</span>'; }).join('')
+              : '') + '</p>' +
+        '</div>' +
         '</div></article>';
     }).join('');
 
@@ -424,7 +431,9 @@
 
     function go(n) {
       i = Math.min(Math.max(0, n), maxIndex());
-      track.style.transform = 'translateX(' + (-i * step()) + 'px)';
+      /* through place() so a press that lands mid-drag or mid-wheel gets the
+         eased transition back rather than inheriting transition:none */
+      place(-i * step(), true);
       if (prev) prev.disabled = i === 0;
       if (next) next.disabled = i === maxIndex();
       paintDots();
@@ -437,6 +446,85 @@
       if (b) go(pageStart(+b.getAttribute('data-page')));
     };
     track.style.transition = 'transform .45s cubic-bezier(.4,0,.2,1)';
+
+    /* ── SR-174b · cursor control, on the same transform ─────────────────
+       SR-163 removed overflow-x:auto and scroll-snap-type because native
+       scroll and the JS transform were two mechanisms driving one strip.
+       They are NOT coming back. Pointer drag and wheel move the same
+       transform this file already owns, so there is still exactly one mover
+       and the dot rail keeps reporting the truth.
+
+       There is no auto-drift here to remove: this file has no
+       requestAnimationFrame, no setInterval and no animation, and the strip
+       was measured stationary for 65 seconds with no input. The drift lives
+       on the dashboard, which is a different surface and stays as it is. */
+    var freeX = 0, dragging = false, startX = 0, startFree = 0, moved = 0;
+
+    function clampFree(x) {
+      return Math.min(0, Math.max(-maxIndex() * step(), x));
+    }
+    function place(x, animate) {
+      track.style.transition = animate ? 'transform .45s cubic-bezier(.4,0,.2,1)' : 'none';
+      track.style.transform = 'translateX(' + x + 'px)';
+    }
+    /* After a free gesture the index has to agree with where the strip
+       actually is, or the next arrow press jumps. Snap the index to the
+       nearest card and let go() take the transform back over. */
+    function settle() {
+      var idx = Math.round(-freeX / step());
+      i = Math.min(Math.max(0, idx), maxIndex());
+      freeX = -i * step();
+      place(freeX, true);
+      if (prev) prev.disabled = i === 0;
+      if (next) next.disabled = i === maxIndex();
+      paintDots();
+    }
+
+    vp.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      dragging = true; moved = 0;
+      startX = e.clientX; startFree = freeX = -i * step();
+      vp.setPointerCapture(e.pointerId);
+      vp.style.cursor = 'grabbing';
+    });
+    vp.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - startX;
+      moved = Math.max(moved, Math.abs(dx));
+      freeX = clampFree(startFree + dx);
+      place(freeX, false);
+    });
+    function endDrag(e) {
+      if (!dragging) return;
+      dragging = false;
+      vp.style.cursor = '';
+      try { vp.releasePointerCapture(e.pointerId); } catch (err) {}
+      settle();
+    }
+    vp.addEventListener('pointerup', endDrag);
+    vp.addEventListener('pointercancel', endDrag);
+    /* A drag that crossed the card is not a click on whatever sat under it. */
+    vp.addEventListener('click', function (e) {
+      if (moved > 6) { e.preventDefault(); e.stopPropagation(); }
+    }, true);
+
+    /* Wheel and trackpad. Horizontal intent only — a vertical wheel over the
+       strip must still scroll the page, or the carousel becomes a trap. */
+    var wheelTimer = null, wheeling = false;
+    vp.addEventListener('wheel', function (e) {
+      var dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : 0;
+      if (!dx) return;
+      e.preventDefault();
+      /* `wheeling` is what makes a flick accumulate. Without it every event in
+         the burst recomputes from the index, which has not moved yet, so a
+         hundred events travel exactly as far as one. */
+      if (!wheeling && !dragging) { wheeling = true; freeX = -i * step(); }
+      freeX = clampFree(freeX - dx);
+      place(freeX, false);
+      clearTimeout(wheelTimer);
+      wheelTimer = setTimeout(function () { wheeling = false; settle(); }, 110);
+    }, { passive: false });
+
     window.addEventListener('resize', function () { go(i); });
     go(0);
   }

@@ -2470,9 +2470,18 @@ body.sr-breath .sr-player.is-next .audio-play{
    The 56px gutter moved from padding to margin so the clip happens at the
    gutter rather than inside it; a card sliding out now disappears at the
    edge instead of showing through the padding. */
-.sr-tp .sr-tp-carviewport{overflow:hidden;padding:4px 0 8px;margin:0 56px}
+/* SR-174b · grab, because dragging genuinely works now. This is the opposite
+   case to SR-178's card: an affordance the surface can actually keep.
+   touch-action:pan-y lets the browser keep vertical page scrolling while
+   the horizontal gesture is ours. */
+.sr-tp .sr-tp-carviewport{overflow:hidden;padding:4px 0 8px;margin:0 56px;cursor:grab;touch-action:pan-y}
 .sr-tp .sr-tp-cartrack{display:flex;gap:14px}
-.sr-tp .sr-tp-pcard{flex:0 0 236px;border-radius:12px;overflow:hidden;border:1px solid var(--hair);background:var(--card);cursor:pointer;transition:border-color .2s;display:flex;flex-direction:column}
+/* SR-178 · no cursor:pointer. Nothing is bound to this card and nothing can be:
+   protocol.html hardcodes PAGE_PROTOCOL to t1-p01 and ignores ?track= and
+   ?protocol= entirely, so any of the thirty cards could only ever land on
+   Anxiety Reset. A pointer cursor on a card that does not open is a promise
+   the page cannot keep. It returns when there is something to open. */
+.sr-tp .sr-tp-pcard{position:relative;flex:0 0 236px;border-radius:12px;overflow:hidden;border:1px solid var(--hair);background:var(--card);transition:border-color .2s;display:flex;flex-direction:column}
 .sr-tp .sr-tp-pcard:hover{border-color:rgba(212,168,67,.45)}
 /* SR-162 · the cover is now the shared .sr-pcover component (PART B2).
    What stood here went with it, all of it:
@@ -2493,8 +2502,56 @@ body.sr-breath .sr-player.is-next .audio-play{
    The card keeps its own frame — border, 12px radius, overflow:hidden —
    which clips the cover's corners, so the cover needs no radius of its own. */
 .sr-tp .sr-tp-pmeta{padding:16px 16px 20px;text-align:left;display:flex;flex-direction:column;gap:8px}
-.sr-tp .sr-tp-pmeta h3{font-size:13.5px;line-height:1.38}
+/* SR-174 · the title was 13.5px — the same size as the promise line beneath it,
+   so nothing read as a title. It now takes `.sr-tp h3` from the system scale
+   (18px/1.34 Cinzel, line 2390) instead of overriding it down to body size.
+   No new size was invented: this is the scale's own h3. */
+.sr-tp .sr-tp-pmeta h3{font-size:18px;line-height:1.34}
 .sr-tp .sr-tp-pdesc{font-size:12.5px;color:var(--text2);line-height:1.62}
+
+/* ══ SR-174 · progressive disclosure on the protocol card ══
+   Permanently visible: the title and the promise line. Revealed: the signature
+   line and the struggle chips. 57% of a 733px card was text nobody had asked
+   for yet.
+
+   The reveal is absolutely positioned over the foot of the cover, and that is
+   forced rather than chosen. Three constraints have to hold at once: the card
+   must get shorter, the strip must not reflow when one card opens, and
+   .sr-tp-carviewport is overflow:hidden so anything extending below the card is
+   clipped. Out-of-flow is the only way to satisfy the first two, and upward
+   over the cover is the only direction with room inside the card box.
+
+   Timing is the sheet's existing reveal — .28s var(--sr-ease) on transform and
+   opacity, the same pair used at lines 463 and 1739 — not a new curve.
+   Reduced motion is handled centrally and is not repeated here (CLAUDE.md). */
+.sr-tp .sr-tp-preveal{
+  position:absolute;left:0;right:0;bottom:100%;
+  padding:14px 16px 16px;
+  display:flex;flex-direction:column;gap:8px;
+  opacity:0;transform:translateY(8px);pointer-events:none;
+  background:linear-gradient(180deg,rgba(8,8,12,0),rgba(8,8,12,.82) 22%,rgba(8,8,12,.94));
+  transition:transform .28s var(--sr-ease),opacity .28s}
+.sr-tp .sr-tp-pmeta{position:relative}
+.sr-tp .sr-tp-pcard:hover .sr-tp-preveal,
+.sr-tp .sr-tp-pcard:focus-within .sr-tp-preveal{opacity:1;transform:translateY(0)}
+
+/* Keyboard: the chips are the only focusable things in the reveal, so the card
+   has to be reachable itself for a keyboard user to open it. tabindex="0" with
+   no role and no handler — it is a readable region, not a control (SR-178). */
+.sr-tp .sr-tp-pcard:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* Touch, and anything else with no hover: the reveal is not a reveal at all.
+   Hover-only content does not exist on a phone, and per SR-178 there is no tap
+   target competing with it. Both conditions are covered — the pointer query
+   catches tablets that are wide, the width query catches a narrow mouse window. */
+@media (hover:none),(max-width:560px){
+  .sr-tp .sr-tp-preveal{
+    position:static;opacity:1;transform:none;pointer-events:auto;
+    /* no transition here: there is nothing to reveal, so a 0→1 fade would be an
+       entrance animation on page load that nobody asked for */
+    transition:none;
+    background:none;padding:0;margin-top:2px}
+}
 .sr-tp .sr-tp-pbody{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:12.5px;color:var(--text3);line-height:1.55;padding-top:8px;border-top:1px solid var(--hair)}
 .sr-tp /* cost of the state */
 .sr-tp-costimg{position:relative;border-radius:14px;overflow:hidden;line-height:0;margin-top:6px;aspect-ratio:2172/545}
