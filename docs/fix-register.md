@@ -2559,6 +2559,69 @@ disclosure.
 ---
 
 
+### SR-216 · The SR-098 patch — one live change out of six claims
+Checked against the tree first, as instructed. **The patch's central premise is false here.**
+
+It is written as a **register-band correction**: `dispenza` occupying the `kross` slot as
+*interpretive* with `var(--teal)`, and `kross` absent. The registry actually holds **`distance`** —
+register **peer-reviewed**, `var(--gold)`, step 4, page `method-kross.html`. **The band correction
+the patch calls its main substance was done under [[SR-118]]/[[SR-119]]/[[SR-132]].** Only the key
+NAME differs, and [[SR-177]] records that divergence deliberately.
+
+All six framework mappings **already hold** once `kross` reads as `distance`. Both traps check
+out: t3-10 never lost kross, because this repo renamed rather than dropped; and the protocol count
+citing it is **4**, matching the patch's own *"verification count is five, not six"*. The twenty
+extras landed under [[SR-198]]; t1-04's label was already `Repair`.
+
+**The build notes do not reproduce.** They sit above the first resource heading, so the transform
+never collected them — zero `dispenza` in either generated content file.
+
+**The one live change: t3-06 → The Belonging Gap.** Title, label `Stand`, state `unsteady`,
+frameworks `['porges','jung']`, extras `['advisory']` — from the handover and corroborated by the
+delivered content file's own header.
+
+⚠ **The TRACKS row's promise, signature and three quotes still describe Ambition Recovery** —
+*"I hit the goal and felt nothing"*. The bundle supplies no replacement and writing one would be
+authoring member-facing copy. Unchanged, flagged in place.
+
+⚠ **`CLAUDE.md` forbids renaming protocols.** This is an owner decision stated in the master
+handover, not drift — but the conflict is real and recorded rather than glossed.
+
+**Track 03 now has TWO Numb protocols, not three** — t3-08 and t3-09. Any count assuming three is
+wrong.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-221 · The t3-06 rename is incomplete, and one residue may not transfer
+**Report only, nothing edited.** `content/shared/SHARED-awareness-moves.md` is **partially**
+updated: a newer table at **:382** already reads *"t3-06 Belonging Gap"*, while two older ones
+still read *"t3-06 Ambition Recovery"*.
+
+**:132 and :194 are placement-table rows.** The tables key by **ID first, name second** —
+`t1-01 Anxiety`, `t3-03 Imposter` — so the ID is the key and the name is a human label. **The
+label is safe to update.** Whether the *decision* transfers is the open question: the placement
+was reasoned about Ambition Recovery's content, and t3-06 is now a different protocol wearing the
+same ID.
+
+**:82 is different and probably does NOT transfer.** It is a productivity-framing warning: Move B
+*"is one step from productivity framing. On t3-10 Creative Flow and t3-06 Ambition Recovery it
+must stay on the person doing the work and never touch what the work produces."* That risk is
+about **achievement and output**. The Belonging Gap is about **whether to stay in the room** — a
+social question, not an achievement one. The warning was written for a protocol that no longer
+exists at this ID. **Deleting it and re-deciding is the honest move; carrying it forward silently
+is not.**
+
+⚠ **`t3-06-SWAP-SPEC.md` is cited by the patch and is NOT in the bundle.** Confirmed absent. The
+patch's §112 carries some of it inline — the new name, the label, and that Ambition Recovery is
+**withdrawn from Track 03 and re-scoped for the Elevation Series** — but the spec itself has not
+been seen by this run.
+
+*Status:* open — three residues, one needing a content decision · *Raised:* 22 Aug 2026
+
+---
+
 ### SR-222 · Three of eleven delivered frames read as lifestyle stock, not the briefed register
 **Grouped deliberately.** These arrived as three separate observations and are recorded as one,
 because the question is not whether three files are wrong. It is **whether the image lane has the
