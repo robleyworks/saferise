@@ -97,7 +97,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-211 are issued.** SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
+- **SR-044 to SR-215 are issued.** SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
   SR-202 by Run I (Tracks 02/03 specification), which also issued **SR-197** for a missing
   source document. **SR-194 to SR-196 and SR-200 were never issued and are free** — SR-200's
   phase was resource authoring, which Run I was barred from.
@@ -202,6 +202,16 @@ the rule can be checked rather than taken on trust. **Twenty-three rules.**
     fallback probe seeded a protocol name that exists in no track, and the correct
     behaviour — degrade to nothing ringed — read for a moment as the fallback failing.
     Check fixtures against the record before trusting any result taken from them.
+    **Run K inverted a fourth premise of Andre's, and the CAUSE is the reusable part.**
+    [[SR-213]] was briefed as "Track 01's four were wired under SR-193 — a file drop". Nothing was
+    wired on any track, `SR-193` is the support advisory, and the slots were rendering
+    placeholders with the path typed into a JS string. **The stated cause: the ID was read from a
+    summary rather than from the register.** A register entry is the record; a summary of it is a
+    copy, and Rule 16 applies to the copy exactly as it applies to a brief. **Check the ID against
+    the register before building on what it claims** — the same run had already found a register
+    entry propagating its own error into an instruction ([[SR-187]]).
+    A second premise inverted in the same phase: Track 01's hero was described as having a bright
+    left half; measured L=0.015, **darker** than Track 02's.
     **Run F inverted four more premises**: [[SR-155]]'s stub route being `dashboard.html`'s
     own rail rather than `protocol.html`, [[SR-156]]'s `|| ROUTES.dashboard` fallback being
     latent rather than live, [[SR-162]]'s `.pimgnote` emitting nothing anywhere, and
@@ -2533,6 +2543,86 @@ All four are inline: no `<details>` or `<summary>` wrapper on any of them, so no
 disclosure.
 
 *Status:* verified · *Raised:* 22 Aug 2026
+
+---
+
+
+### SR-213 · The image slots read their path from the record
+The slots were **never wired on any track**. `TRACKS[].art` held prose briefs only,
+`content/tracks.js` contained **zero** `assets/` paths, and `js/saferise-track.js` built each path
+as a string — `'assets/t' + t.id + '/cost.jpg · 1600×700 · ' + brief(t,'cost')` — so the path, the
+pixel dimensions and the aspect ratio were all authored in the renderer. **That is the
+hardcoded-path-in-markup pattern this project forbids**, and it is the reason a file drop was
+never going to be enough.
+
+Each art entry is now `{src, ratio, brief}`. `ph()` is replaced by `slot()`, which **receives** a
+record entry rather than constructing one. `SHARED.art.fourSteps` holds the one asset that serves
+all three pages, because a shared image does not belong in `TRACKS`.
+
+Nine files installed. **The degrade is the normal state, not an error state:** no `src` renders
+the labelled placeholder carrying the brief, and a `src` that 404s has its `img` removed by
+`onerror`, revealing the same placeholder rather than a broken-image glyph.
+
+**`alt` is empty by intent.** These illustrate copy that already says the thing, which makes them
+decorative. The `brief` is art direction, not a description of what a sighted user sees, and
+writing descriptive alt would be authoring member-facing copy.
+
+**Three findings from opening every frame, none of which anything downstream would have caught:**
+
+1. ⚠ **`assets/t1/range.jpg` has a white background.** Corners measure L≈0.92 against the
+   platform's `#0B0B12` ground at L=0.004. It is three tilted photo cards composited on white, and
+   it will render as a glaring rectangle in a dark page. **Not a crop or a ratio problem — the
+   file is built for a light surface.**
+2. ⚠ **`assets/t1/change.jpg` does not match its brief.** The brief reads *"one person moving
+   easily through an ordinary day at home"*. Delivered is a man leaning on a **luxury car** outside
+   an architectural villa at golden hour. It reads as automotive advertising.
+3. No text, numerals, wordmarks or logos in any of the eleven frames.
+
+**Verified control-based; no browser is available (sixth measurement artifact).** `esc()` and
+`SHARED` are both in scope at `slot()`; `tracks.js` loads before `saferise-track.js` on all three
+pages; script-block balance identical to `HEAD`; and the emitted markup was simulated against the
+real record for all thirteen slots. **Rule 18's rendered-state check and [[SR-162]]'s
+rect-against-container assertion are UNMET and are not claimed.**
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-214 · Track 03's five landing images do not exist
+No `assets/t3/` in the source folder, no `t3-band.jpg`, no `t3/hero.jpg`. Eleven files were
+delivered; **five are missing and all five are Track 03.**
+
+**Track 03's art entries carry `ratio` and `brief` but deliberately no `src`.** A path in the
+record is a claim the asset exists. Left in, each absent file costs a **404 per slot on every page
+load** before `onerror` could degrade it — four failed requests to reach the same visible result
+as making no request at all. With no `src`, the slot renders its labelled placeholder silently.
+
+**Add `src` when the files land.** Nothing else changes: the wiring, the ratios and the briefs are
+already in place, so Track 03 becomes a genuine file drop even though Tracks 01 and 02 could not.
+
+*Status:* open — blocked on production · *Raised:* 22 Aug 2026
+
+---
+
+### SR-215 · `assets/t2/hero.jpg` does not match its brief
+Recorded for Andre, not blocked, and not judged further.
+
+The Track 02 hero brief specifies *"Two people sharing a quiet moment in a **warm domestic
+interior** at golden hour. **Seated**, turned partly toward each other"*, and the casting note
+requires *"a genuinely different **home** environment in each image"*.
+
+Delivered is an **outdoor coastal terrace** overlooking a Mediterranean town, both figures
+**standing**, each **holding a cocktail**.
+
+The composition brief is met — the pair sit in the right third, and the left third is dark olive
+foliage, which is the soft dark left the type needs. It is the setting and the register that
+differ, and the drinks are not in the brief at all.
+
+Paired with [[SR-213]]'s finding that `t1/change.jpg` is a car advertisement, **two of the eleven
+delivered frames read as lifestyle stock rather than as the brief's domestic register.** That is a
+pattern worth a decision rather than two separate notes.
+
+*Status:* open — recorded for a content decision · *Raised:* 22 Aug 2026
 
 ---
 
