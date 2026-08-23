@@ -2560,7 +2560,11 @@ crossing it is manifestation with the vocabulary changed.
 nothing in the data model prevents a meditation script carrying extra blocks at named points —
 and nothing does; `body` is an ordered array and `cues` already anchor to indices.
 
-*Status:* open — report delivered, content lane owns it · *Raised:* 22 Aug 2026
+*Status:* **blocked on a DECISION, not on a file** — `SHARED-awareness-moves.md` was located
+at `~/Desktop/SafeRise-Track02-Complete/content/`, so [[SR-245]]'s "cannot install what I do not
+have" no longer applies. Not installed: the reasoning stands that a `.md` nothing loads changes
+no rendered pixel, and one of SR-221's three relabels still needs a content decision.
+· *Raised:* 22 Aug 2026 · *Re-scoped:* 23 Aug 2026
 
 ---
 
@@ -2709,6 +2713,76 @@ Blocked on the content lane. Four strings: promise, signature, and three quotes.
 *Status:* open — blocked on content · *Raised:* 22 Aug 2026
 
 ---
+
+---
+
+### SR-259 · Three `assets 3` replacements installed — recommendation overridden, and recorded
+Installed in place, same paths and filenames, no suffixes and no `-old` copies:
+`assets/shared/four-steps.jpg` (1600×500), `assets/t1/cost.jpg` and `assets/t1/change.jpg`
+(1600×700). `assets 3/journey/t1-band.jpg` **remains excluded** at 1400×583 against a correct
+1400×380 sibling (Rule 27).
+
+**Andre's call, made with the assessment in front of him. The recommendation is set aside, not
+overruled, and is kept so it survives:**
+- **four-steps** — near-identical frame; only a less blown-out window. Marginal alone.
+- **cost** — nails *"three in the morning"* literally (a clock reading 3:17) and adds a
+  relational note, but drifts **further** from the brief's *"same room"* by introducing a train.
+- **change** — neither file matches *"one person moving easily through an ordinary day at home"*.
+  Installed was a man with a luxury car; the replacement is a man with a motorcycle at golden
+  hour — **more** aspirational-lifestyle, not less. Recommendation was to install neither and
+  re-brief.
+
+Verified at render: all four slots 200, each rendering at **exactly** its natural ratio
+(2.2857 / 2.6667 / 2.2857 / 3.2000) so nothing is distorted, each inside its container.
+four-steps' improvement is real at render, canvas-sampled from the decoded image: brightest
+corner **0.458 → 0.2456**.
+
+**`t1/change.jpg` joins [[SR-222]]'s grouping — seven of fifteen frames now drift the same way,
+plus one replacement that drifted further.** That ratio is the finding. It is a **lane-level
+question about register**, not a list of bad images: the briefs ask for ordinary domestic
+specificity and the lane keeps returning aspirational lifestyle stock. Re-briefing one file will
+not change the next one.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-260 · The missing scrim — DOES NOT REPRODUCE, and the error was mine
+**Briefed premise: the six-area text sits directly on `change.jpg` for the top 464px with nothing
+between. Measured: it does not.** The section is **stacked, not overlaid**.
+
+| | |
+|---|---|
+| photo block | y 0 → 466 |
+| text column | y 466 → 1286 |
+| **vertical overlap** | **0px** |
+| first text element | starts at y 513 |
+| elements over the photograph | **0 of 7** |
+
+**The error was in my own earlier report and I am correcting it, not the tree.** I claimed
+`innerOverlapsImage: true` from a test that compared only `left`/`right` — horizontal overlap on
+two stacked blocks is trivially true and says nothing. **An overlap test must check both axes.**
+
+**`.sr-tp-sixbg` and `.sr-tp-sixscrim` are INERT, not missing** (Rule 14). They were written for
+an overlaid design — full-bleed background image, scrim, 70% text column over it — that the
+renderer never built: `slot()` emits a `.sr-tp-ph` block with `aspect-ratio`, which stacks. Adding
+the scrim as briefed would darken a photograph that has **no text on it**, achieving nothing.
+
+**The overlay layout and the scrim are ONE piece of work, not two.** Handoff 04's "six areas
+inside the image, 80–85% left overlay" is precisely the design those inert rules were written
+for. Build the overlay and measure the scrim in the same pass; a scrim added first has nothing to
+protect.
+
+⚠ **A REAL CONTRAST FAILURE WAS FOUND, on plain background, unrelated to any photograph.**
+`.sr-tp-sixfrom` — the italic *"from loops, fog & paralysis"* line — is `var(--text3)`
+`rgb(106,104,116)` on `rgb(14,14,26)`: **3.51:1, against 4.5:1 required.** At 15px (12.5px below
+760px) it does not qualify for the large-text exemption. Every other role passes: label 8.65,
+area titles 5.85–8.65, body 12.95.
+
+**`--text3` has 50 uses in the system stylesheet**, so this is a token-level question, not one
+element. Reported, not fixed — changing a token that 50 rules consume is its own pass.
+
+*Status:* premise withdrawn; one real defect raised · *Raised:* 23 Aug 2026
 
 ---
 
