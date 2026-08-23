@@ -73,24 +73,28 @@ var SHARED = {
     { name: 'Rise',        body: 'You finish as the person on the other side of it, and leave carrying the state rather than the memory of it.', cite: 'Mental rehearsal \u00B7 Observer stance' }
   ],
   resources: [
-    ['play',  'Guided Meditation',    'Do it with me.',              'The full session, voiced and paced \u2014 audio, or follow-along video. Headphones, nothing to read.'],
-    ['warn',  'Cue Card',             'Do it yourself.',             'Printable, two sides: the four-line version for when it is happening, and the full step sequence for when you have longer.'],
+    ['play',  'Guided Meditation',    'Do it with me.',              'The full session, voiced and paced \u2014 audio, or follow-along video. Headphones, nothing to read.', 'meditation'],
+    ['warn',  'Cue Card',             'Do it yourself.',             'Printable, two sides: the four-line version for when it is happening, and the full step sequence for when you have longer.', 'crisiscard'],
     /* SR-077 · Source Insights merged in here. Its subtitle stays 'Why it works.';
        the framework attribution it carried now sits in this description. */
-    ['gear',  'How This Works',       'Why it works.',               'What is happening in your body during this state, why the four steps land in that order, and which framework each step rests on \u2014 in plain language.'],
-    ['heart', 'Somatic Release Activities', 'Between sessions.',     'Small physical practices that hold the work on the days you will not sit down.'],
-    ['comp',  'Safe Practice',        'When and how to proceed.',    'Pacing, what to expect, when to slow down, and when this is not the right tool today.'],
-    ['pin',   'Proximity Guide',      'How close to stay.',          'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.'],
-    ['shield','Disclosure & Support','A script for someone close.','Words for explaining what you are doing and what you need, without over-explaining.'],
-    ['mail',  'Invitation to Repair', 'Reopening it with them.',     'A structured way to open repair with another person when the pattern involves them.'],
-    ['pen',   'Your Record',          'What changed, in your words.','Prompts tied to this protocol, and the log that tracks your state before and after each session.'],
+    ['gear',  'How This Works',       'Why it works.',               'What is happening in your body during this state, why the four steps land in that order, and which framework each step rests on \u2014 in plain language.', 'guide'],
+    ['heart', 'Somatic Release Activities', 'Between sessions.',     'Small physical practices that hold the work on the days you will not sit down.', 'companion'],
+    ['comp',  'Safe Practice',        'When and how to proceed.',    'Pacing, what to expect, when to slow down, and when this is not the right tool today.', 'practice'],
+    ['pin',   'Proximity Guide',      'How close to stay.',          'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.', 'advisory'],
+    ['shield','Disclosure & Support','A script for someone close.','Words for explaining what you are doing and what you need, without over-explaining.', 'disclosure'],
+    /* SR-253 · Track 03 only. Subtitle is the authored `sub`, identical on all
+       ten Track 03 protocols. DESCRIPTION IS EMPTY AND NEEDS THE CONTENT LANE —
+       one string. The card renders without it rather than with a placeholder. */
+    ['case',  'Raising It',           'Who to tell, how much, and what to ask for.', '', 'raising'],
+    ['mail',  'Invitation to Repair', 'Reopening it with them.',     'A structured way to open repair with another person when the pattern involves them.', 'repair'],
+    ['pen',   'Your Record',          'What changed, in your words.','Prompts tied to this protocol, and the log that tracks your state before and after each session.', 'record'],
     /* SR-180 · tenth resource. Universal — it carries no CONDITIONAL_RESOURCES
        entry, so it appears on all thirty protocols and lifts the unconditional
        floor from seven to eight. Sits after Your Record deliberately: the record
        is the half of a state you can write, this is the half you have to ask
        for. Do not re-add Source Insights above it — SR-077 merged that into
        How This Works and the merge stands. */
-    ['face',  'Accountability & Empathy','What it does outside you.', 'Your own state has an exterior you have never observed. Another person\u2019s reaction is data you cannot generate on your own.']
+    ['face',  'Accountability & Empathy','What it does outside you.', 'Your own state has an exterior you have never observed. Another person\u2019s reaction is data you cannot generate on your own.', 'accountability']
   ],
   resourceNote: 'The Proximity Guide and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern, rather than on every protocol. The library grows \u2014 anything added to the track while you\u2019re a member is yours.',
   insight: {
@@ -638,7 +642,44 @@ var STATES = {
    shows seven, and a hardcoded number would be wrong on every one of them. */
 var CONDITIONAL_RESOURCES = { 'Proximity Guide': 'advisory', 'Invitation to Repair': 'invitation' };
 
+/* SR-253 · THE SET COMES FROM THE INVENTORY, THE LOOK COMES FROM THE TABLE.
+   SHARED.resources was both, and being both is how `raising` went missing from
+   three shipping surfaces while Track 03 shipped it on all ten protocols.
+   content/inventory.js is generated from the authored files by
+   tools/build-inventory.py; a type present there and absent here renders
+   nothing and is visible, where the old shape under-reported in silence. */
+function resourceByType(t) {
+  for (var i = 0; i < SHARED.resources.length; i++) {
+    if (SHARED.resources[i][4] === t) return SHARED.resources[i];
+  }
+  return null;
+}
+/* Every resource type a track has, in canonical order, as presentation rows. */
+function trackResources(trackId) {
+  var inv = (typeof RESOURCE_INVENTORY !== 'undefined') && RESOURCE_INVENTORY[trackId];
+  if (!inv) return SHARED.resources;          /* inventory absent: old behaviour */
+  var out = [];
+  for (var i = 0; i < inv.length; i++) {
+    var row = resourceByType(inv[i]);
+    if (row) out.push(row);
+  }
+  return out;
+}
+function trackResourceCount(trackId) { return trackResources(trackId).length; }
+
 function protocolResources(key) {
+  /* SR-253 · the authored list is the record and already has the conditionals
+     resolved, so it is preferred. The extras filter below is the fallback for a
+     protocol the authored content does not yet cover. */
+  var authored = (typeof PROTOCOL_RESOURCE_TYPES !== 'undefined') && PROTOCOL_RESOURCE_TYPES[key];
+  if (authored) {
+    var out = [];
+    for (var i = 0; i < authored.length; i++) {
+      var row = resourceByType(authored[i]);
+      if (row) out.push(row);
+    }
+    return out;
+  }
   var extras = (META[key] || {}).extras;
   return SHARED.resources.filter(function (r) {
     var needs = CONDITIONAL_RESOURCES[r[1]];
@@ -909,6 +950,9 @@ if (typeof module !== 'undefined') {
   module.exports = { PRICING:PRICING, SHARED:SHARED, TRACKS:TRACKS, STATES:STATES,
                      FRAMEWORKS:FRAMEWORKS, META:META, frameworkReach:frameworkReach,
                      CONDITIONAL_RESOURCES:CONDITIONAL_RESOURCES,
+                     trackResources:trackResources,
+                     trackResourceCount:trackResourceCount,
+                     resourceByType:resourceByType,
                      protocolResources:protocolResources,
                      protocolResourceCount:protocolResourceCount,
                      CHANGE_PROPOSALS:CHANGE_PROPOSALS };

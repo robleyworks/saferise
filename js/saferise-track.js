@@ -228,13 +228,20 @@
   /* SR-078 · also matches the spaced form. "twelve-resource library" was
      rewritten here already; "each with twelve resources" was not, and went
      stale on its own. Both shapes are covered now. */
+  /* SR-253 · the numeral is the CURRENT TRACK's library size, not a global one.
+     There is no single number across the three: Track 03 has eleven types,
+     Tracks 01 and 02 have ten. */
+  function libSize() {
+    return (typeof trackResourceCount === 'function' && CURRENT_TRACK)
+      ? trackResourceCount(CURRENT_TRACK) : SHARED.resources.length;
+  }
   function resourceCount(s) {
     var WORDS = 'zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty';
     return String(s)
       .replace(new RegExp('\\b(?:' + WORDS + ')(-resource\\b)', 'gi'),
-        function (_, tail) { return countWord(SHARED.resources.length) + tail; })
+        function (_, tail) { return countWord(libSize()) + tail; })
       .replace(new RegExp('\\b(?:' + WORDS + ')(\\s+resources\\b)', 'gi'),
-        function (_, tail) { return countWord(SHARED.resources.length) + tail; });
+        function (_, tail) { return countWord(libSize()) + tail; });
   }
 
   /* ── 02 · cost ───────────────────────────────────────────────────── */
@@ -336,15 +343,22 @@
   }
 
   /* ── 07 · the resource library (shared) ──────────────────────────── */
-  function rResources() {
+  function rResources(t) {
     return '<div class="sr-tp-band sr-tp-band--alt"><div class="sr-tp-wide">' +
       sechead('What you get to work with',
               'Everything that<br><span class="gold">comes with it.</span>',
               'The full resource library — everything you need to understand, release, and move beyond specific patterns. This is what the subscription opens.') +
-      '<div class="sr-tp-inc">' + SHARED.resources.map(function (r) {
+      /* SR-253 · the SET comes from the inventory, per track — Track 03 has
+         eleven types and Tracks 01/02 have ten, so a flat list was wrong for
+         one of the three. The row still supplies the look. A row with no
+         description renders without the paragraph rather than with an empty
+         one: `raising` is awaiting its marketing string from the content lane
+         and a placeholder would be worse than an omission. */
+      '<div class="sr-tp-inc">' + trackResources(t.id).map(function (r) {
         return '<div class="sr-tp-incitem"><div class="sr-tp-icon"><svg viewBox="0 0 24 24" aria-hidden="true">' +
           (ICONS[r[0]] || '') + '</svg></div>' +
-          '<div><h3>' + esc(r[1]) + '</h3><p class="sr-tp-inctag">' + esc(r[2]) + '</p><p>' + esc(r[3]) + '</p></div></div>';
+          '<div><h3>' + esc(r[1]) + '</h3><p class="sr-tp-inctag">' + esc(r[2]) + '</p>' +
+          (r[3] ? '<p>' + esc(r[3]) + '</p>' : '') + '</div></div>';
       }).join('') + '</div>' +
       '<p class="sr-tp-note sr-tp-footnote">' + resourceCount(SHARED.resourceNote) + '</p>' +
     '</div></div>';
@@ -620,13 +634,15 @@
   }
 
   /* ── assemble ────────────────────────────────────────────────────── */
+  var CURRENT_TRACK = null;
   function renderTrack(id) {
     MISSING = [];
+    CURRENT_TRACK = id;
     var t = TRACKS[id];
     if (!t || !t.visible) return;
     document.getElementById('page').innerHTML =
       rHero(t) + rProtocols(t) + rCost(t) + rRange(t) + rInsight() +
-      rFourSteps() + rChange(t) + rResources() + rProgress() + rPrice(t) +
+      rFourSteps() + rChange(t) + rResources(t) + rProgress() + rPrice(t) +
       rFaq(t) + rScope();
 
     var sp = document.getElementById('stickyprice');
