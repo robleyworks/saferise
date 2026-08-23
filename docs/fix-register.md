@@ -2681,6 +2681,98 @@ Blocked on the content lane. Four strings: promise, signature, and three quotes.
 
 ---
 
+### SR-253 · The inventory derives; `SHARED.resources` becomes presentation only
+`SHARED.resources` was **both** the inventory and the presentation table, and being both is how
+`raising` went missing from three shipping surfaces while Track 03 shipped it on all ten
+protocols. **Track 03 has ELEVEN resource types; Tracks 01 and 02 have ten. There is no single
+library size across the three** — any surface stating one must resolve per track.
+
+`content/inventory.js` is **generated** from the authored files by `tools/build-inventory.py`.
+Checked in rather than derived at runtime: the authored files total ~913 KB of resource bodies
+and no page should load them to learn a type list. **The generator refuses an unknown type**
+rather than accepting it silently, so `RESOURCE_ORDER` is extended deliberately.
+
+**Standing invariant — one command, prints PASS or exits 1:**
+
+```
+python3 tools/build-inventory.py --check
+```
+
+Expected: `inventory OK — tracks {1: 10, 2: 10, 3: 11}, library 276 pages`. Re-run it whenever
+the authored files are regenerated. **Drift is now loud**: a type in the inventory with no
+presentation row renders nothing and is visible, where the old shape under-reported in silence.
+
+**No track-agnostic surface states a library size.** Checked: `index.html`, `method.html` and
+`getting-help.html` carry no such numeral, and the dashboard rail always has a selection
+(track 1 by default). The question of what to say with no track selected **does not arise on any
+existing surface** — record this before inventing a phrasing for it.
+
+⚠ **`raising`'s DESCRIPTION IS EMPTY and needs one string from the content lane.** Its subtitle
+is the authored `sub`, identical on all ten Track 03 protocols and matching the pattern six other
+types follow verbatim, so nothing was authored here. The card renders without the paragraph
+rather than with a placeholder.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-256 · The t3-05 Release diagram places — 30 of 30, and one alt was describing the wrong picture
+**The asset existed and was already correct.** `img-067-release-t3-05.svg` carries *"The nerves /
+they turned up on their own"* against *"Monitoring yourself / it splits your attention"* — t3-05's
+own split, not the generic situation-versus-loop shape. **All thirty are per-protocol variants.**
+[[SR-244]]'s conclusion stands on its own terms — there is no equivalent *anchor text* — but the
+missing thing was the block index, not the diagram.
+
+**Placed at block 5, not block 6, and the convention was measured rather than assumed.** All 29
+existing placements land on the **`Why Release…` HEADING block, 29 of 29 with no exception.**
+t3-05's equivalent heading is block 5, *"Why the split is the actual problem"*; block 6 is the
+paragraph naming the split and block 7 develops the cost. **A stored index that is not a heading
+is a defect** — that is the check to run after any block edit.
+
+⚠ **Found by the regression sweep, unbriefed: t3-06's stored `alt` described a different
+diagram.** It read *"The room and The editing"* while the SVG shows *"The flatness and
+Reproaching yourself"* — the file was regenerated when t3-06 became The Belonging Gap and the alt
+was not. **A screen reader was being given a description of a picture that is not on the page.**
+Corrected by transcribing the SVG title, which is mechanical application of [[SR-209]]'s existing
+rule, not authoring.
+
+**The surrounding guide text still belongs to the old protocol**: t3-06's heading still reads
+*"Why Release goes after the editing"* while its diagram now shows flatness and reproaching.
+[[SR-226]]'s content-lane work, untouched.
+
+Two checks worth keeping, both one command: every placement lands on a heading, and every `alt`
+equals its SVG's `<title>` exactly. Both now pass 30 of 30.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-254 · The replacement Track 03 band is the same file at a new size — BLOCKED, unchanged
+**Measured first, installed nothing.** Four candidates found across Desktop and Downloads, and
+**not one is 1400×380**:
+
+| source | pixels | ratio | format |
+|---|---|---|---|
+| `Downloads/saferise-t3-sections_1.zip` (newest) | **1400×583** | 2.4014 | JPEG |
+| `Downloads/saferise-t3-sections.zip` | **1400×583** | 2.4014 | JPEG |
+| `Desktop/saferise-t3-sections.zip` | **1400×583** | 2.4014 | JPEG |
+| `Desktop/band.jpeg` | 1941×810 | 2.3963 | **PNG** |
+| `Desktop/T3 landing images/band.jpg` | 1907×825 | 2.3115 | **PNG** |
+
+The slot declares `1400/380` = 3.6842 and both installed siblings are 1400×380. **All three zips
+are the previously blocked dimensions exactly.** The two loose Desktop files are the same ratio
+class re-rendered larger, and **both are PNG data behind a `.jpg`/`.jpeg` extension** at ~1.7 MB
+against siblings at 174–192 KB.
+
+**Stop condition met. Not cropped, slot not changed, nothing installed.** [[SR-243]]'s
+recommendation is unchanged: reissue the Track 03 band at **1400×380**. Vertical crop is the
+safer axis — the brief is *"corridor moments before the room, desk log, reading at day's end"*,
+three moments across the width.
+
+*Status:* blocked — awaiting a 1400×380 render · *Raised:* 23 Aug 2026
+
+---
+
 ### SR-247 · The resource guidance audio — installed, recorded, wired
 Ten mastered mp3s in `assets/audio/guidance/`, served static. `master-guidance.sh` is the
 mastering chain and is **not** a repo file; it is not installed. Source was
