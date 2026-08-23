@@ -1134,7 +1134,7 @@ var T3_RESOURCES = {
     ],
     cues: [],
     sharedRefs: [{"block": 15, "ref": "whatThisTrackWorksOn"}],
-    diagrams: []
+    diagrams: [{"block": 5, "src": "assets/diagrams/release/img-067-release-t3-05.svg", "alt": "The nerves and Monitoring yourself: two things running at once. The nerves turned up on its own. Monitoring yourself keeps returning to its own starting point."}]
   },
   "t3p5-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
@@ -1382,7 +1382,7 @@ var T3_RESOURCES = {
     ],
     cues: [],
     sharedRefs: [{"block": 22, "ref": "whatThisTrackWorksOn"}],
-    diagrams: [{"block": 13, "src": "assets/diagrams/release/img-067-release-t3-06.svg", "alt": "The room and The editing: two things running at once. The room may well be real. The editing keeps returning to its own starting point."}]
+    diagrams: [{"block": 13, "src": "assets/diagrams/release/img-067-release-t3-06.svg", "alt": "The flatness and Reproaching yourself: two things running at once. The flatness turned up on its own. Reproaching yourself keeps returning to its own starting point."}]
   },
   "t3p6-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",

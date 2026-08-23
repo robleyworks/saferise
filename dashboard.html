@@ -786,6 +786,7 @@
 
 </main>
 
+<script src="content/inventory.js"></script>
 <script src="content/tracks.js"></script>
 <!-- SR-162 · the protocol cover, shared with the track pages. Must load
      before the inline script below, which calls SafeRiseCover.art(). -->
@@ -1032,6 +1033,7 @@
       document.getElementById('srJourney').style.setProperty('--accent', DASHTRACKS[n].accent);
       render(n);
       renderJourney(n);
+      paintFoldTitle(n);          /* SR-253 · the library size follows the track */
     });
   });
 
@@ -1354,16 +1356,23 @@
      This line used to read "Twelve resources". The number now comes from
      SHARED.resources.length so a cut can never leave it stale again — and it
      is never typed as a word anywhere in the markup. */
-  (function(){
+  /* SR-253 · THE LINE IS PER TRACK. It read "Ten resources, one for each kind
+     of moment" on every track, and Track 03 has eleven — the sentence assumed a
+     uniform library that no longer exists. The rail always has a selection
+     (track 1 by default), so this surface never has to answer for "no track":
+     it resolves against whichever track is showing and re-resolves on switch. */
+  function paintFoldTitle(trackId){
     var el = document.getElementById('srFoldTitle');
-    if(!el || typeof SHARED === 'undefined' || !SHARED.resources) return;
+    if(!el || typeof trackResourceCount !== 'function') return;
     var W = ['zero','one','two','three','four','five','six','seven','eight','nine',
              'ten','eleven','twelve','thirteen','fourteen','fifteen'];
-    var n = SHARED.resources.length;
+    var n = trackResourceCount(trackId);
+    if(!n) return;
     var word = (W[n] || String(n));
     el.textContent = word.charAt(0).toUpperCase() + word.slice(1) +
                      ' resources, one for each kind of moment.';
-  })();
+  }
+  paintFoldTitle(1);
 
   /* ══════════ SR-070 · STORAGE ══════════
      Device storage with an in-memory fallback. Ported from the mockup as-is,

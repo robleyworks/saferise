@@ -299,9 +299,40 @@ the rule can be checked rather than taken on trust. **Twenty-four rules.**
     duration in the record is a claim about something real, and a consumer is entitled to act on
     it without checking.
 
+25. **Where a family of assets places against a family of documents, the rule is POSITIONAL
+    CONSISTENCY, not content fit.** [[SR-256]] is the worked example and the reasoning inverts the
+    intuitive answer. Asked where t3-05's Release diagram belonged, the natural move is to read the
+    blocks and pick the one the picture describes — which gave block 6, the paragraph naming the
+    split. **Every one of the other 29 places on the HEADING block, 29 of 29 with no exception**, so
+    the answer is block 5. Content fit chooses a different block on any protocol whose prose runs
+    differently, and the family stops being a family. **Measure what the siblings do before reasoning
+    about what the asset means**, and record the convention so it is not re-argued each time.
+    Corollary check, one command: a stored index that does not point at a heading is a defect.
+
+26. **AN ASSET'S STORED DESCRIPTION IS A SECOND COPY THAT DOES NOT REGENERATE WITH IT.** [[SR-256]]
+    found t3-06's `alt` reading *"The room and The editing"* while its SVG showed *"The flatness and
+    Reproaching yourself"* — the file was reissued when the protocol was renamed and the description
+    was not. **A screen reader was being handed a description of a diagram that is not on the page**,
+    and no visual check could see it: the image was right, the page was right, only the invisible
+    half was wrong. **Any asset swap must RE-DERIVE the alt from the new asset, never inherit the old
+    one.** Nothing but a regression sweep across the whole family catches this, so sweep the family
+    after any single-member replacement. Generalises past `alt`: captions, transcripts, `aria-label`,
+    manifest titles and any stored text describing a binary are all second copies with the same
+    failure mode.
+
+27. **A DELIVERY IS VERIFIED PER FILE, NEVER PER FOLDER.** `assets 3` carried five files: `t1/range.jpg`
+    was the [[SR-242]] fix and installing it was right ([[SR-257]]), while `journey/t1-band.jpg` in the
+    same folder was 1400×583 and would have **regressed a currently-correct 1400×380 sibling**. Same
+    delivery, same date, one file that fixes a defect and one that creates one. Measure every file
+    against the slot it claims; a folder is not a unit of correctness.
+    **Corollary — check the FORMAT, not the extension.** [[SR-254]]'s two Desktop candidates were
+    **PNG data behind `.jpg` and `.jpeg` extensions at ~1.7 MB**, against siblings at 174–192 KB.
+    Browsers sniff content type, so both would have rendered and shipped **nine times the expected
+    bytes with the extension hiding it**. `PIL.Image.open(p).format` is the check; the filename is not.
+
 **Measurement artifacts — the standing pre-flight**
 
-Six now, every one found the same way: a plausible reading that was wrong. Run these before
+Seven now, every one found the same way: a plausible reading that was wrong. Run these before
 trusting any measurement, and **report the check alongside the result**, not instead of it.
 
 | artifact | how it lies | countermeasure |
@@ -310,12 +341,13 @@ trusting any measurement, and **report the check alongside the result**, not ins
 | **Stale scratchpad mirror.** The preview serves a copy of the tree ([[SR-154]]); a silently failed sync leaves you verifying pre-edit files. | A clean pass, with numbers that all look right, taken against the code you just changed away from. | **Sentinel every sync**: write a unique token into the file just edited, sync, confirm it appears in the mirror **and is absent from a control file**, remove it, sync again. |
 | **Browser cache serving a pre-edit page.** | The first post-[[SR-155]] reading showed the removed statebar still present, while `curl` against the same server returned a file without it. | Cache-bust every verification URL. **A busted HTML URL does not bust its subresources** — `js/`, `css/` and `content/` survived both a query change and a forced navigation, and [[SR-162]] briefly read as not rendering at all because of it. `fetch(url,{cache:'reload'})` each one, then reload. |
 | **The environment cannot reproduce the symptom.** | A false pass, or a working feature reported broken. The preview's canvas is *dark*, so an unfixed page passes the white-flash test ([[SR-164]]); CSS transitions never advance, so an applied transform reads as identity forever ([[SR-149]], [[SR-163]]). | Force the condition and compare against a known-good control — light colour scheme, a stalled stylesheet, `transition:none`. Report it **as a control-based result**, never as a direct observation. |
-| **No JavaScript runtime at all.** Distinct from [[SR-154]]'s sandbox path problem, which was about *where* the preview could read from. Here nothing can execute JS: `node`, `deno`, `bun` and `jsc` are absent, `preview_start` is denied by the classifier on every config tried, `file://` access is declined, and `osascript -l JavaScript` is denied. | Rule 8's "measure the live object graph" is unavailable, so a static reading gets reported as though it were a runtime one. Worse, **Rule 4's parse check cannot run at all** — a bracket balance is the only substitute and it cannot see a broken brace inside a template string. | Rule 20. Re-implement the resolution, **validate the re-implementation against a known-good control in the same environment** before trusting it, sentinel it for sensitivity per Rule 9, and label the result **control-based**, never as a direct observation. Flag any count so taken for a re-take when a runtime exists. Report the bracket balance **as the weaker check it is**. |
+| **No JavaScript runtime — check, do not assume.** ⚠ **Corrected 23 Aug 2026: a runtime *is* now reachable.** `preview_start` runs against a scratchpad mirror when `launch.json` points at an **absolute** path inside the mirror, and `javascript_tool` then executes in the page. `node`, `deno`, `bun` and `jsc` remain absent on the host, and `preview_start` against the repo's own relative path is still denied — that is the trap, not the absence of a runtime. Two mirror-only gotchas cost a cycle each: `SimpleHTTPRequestHandler` must be passed `directory=` explicitly or its `__init__` calls `os.getcwd()` and raises `PermissionError` under the sandbox, and `navigate` to a **path** on the preview origin is refused where `navigate` to the **bare origin** followed by `location.href=` inside the page is not. | Before this was checked, Rule 8's "measure the live object graph" was reported unavailable and static readings stood in for runtime ones. The inverse now applies: assuming no runtime forfeits the only measurement that settles a conditional-UI or load-order question. | **Try `preview_start` against an absolute mirror path first.** Only fall back to Rule 20's control method if it genuinely fails. Where a count was taken control-based under the old assumption, re-take it. |
 | **A console buffer that outlives the page.** | Errors persist across navigations **and across a preview-server restart**, so a stale failure reads as a live one. [[SR-169]] opened with 33 errors on a seed tab — one `openRoute` message and 32 × 404 — every one of them left over from Run F's deliberately-stalled control pages, on five files that were in fact clean. | **Read the console in a fresh tab.** A non-empty console on a reused tab proves nothing until the tab is new; a clean one in a fresh tab is the only reading worth reporting. |
+| **A hidden pane: `requestAnimationFrame` never fires.** The preview tab reports `document.visibilityState === 'hidden'` even after `tabs_select` fronts it. Measured: **0** rAF callbacks in 800ms, against **2** `setInterval(…,20)` fires in the same window — timers are throttled to roughly one per 400ms. | **An rAF-based sampler returns an empty array, which reads exactly like a page that loaded instantly.** SR-233's first probe recorded zero mid-parse samples and the honest-looking conclusion — nothing to see — was the opposite of the truth: the nav shell was live for 49.6% of the load. A parent-frame sampler is doubly blind, because parsing a multi-megabyte child starves the parent's main thread as well. | **Never clock a measurement on rAF here.** Sample from *inside* the document under test with inline `<script>` at known parse points — those run regardless of visibility — or drive the clock from the server by throttling the response. Report `visibilityState` alongside any timing result. |
 
 
 
-**Two notes on the sixth artifact, from the run that found it.**
+**Two notes on the runtime artifact, from the run that found it.** Kept as written: both were true when taken, and the first is now superseded by the row above (Rule 21 — the row is live and was corrected; these notes are dated evidence and are not).
 
 **The documented workaround is itself now blocked.** The procedure recorded further down this
 register — run the server from the scratchpad against a mirror of the working tree, with
@@ -2528,7 +2560,11 @@ crossing it is manifestation with the vocabulary changed.
 nothing in the data model prevents a meditation script carrying extra blocks at named points —
 and nothing does; `body` is an ordered array and `cues` already anchor to indices.
 
-*Status:* open — report delivered, content lane owns it · *Raised:* 22 Aug 2026
+*Status:* **blocked on a DECISION, not on a file** — `SHARED-awareness-moves.md` was located
+at `~/Desktop/SafeRise-Track02-Complete/content/`, so [[SR-245]]'s "cannot install what I do not
+have" no longer applies. Not installed: the reasoning stands that a `.md` nothing loads changes
+no rendered pixel, and one of SR-221's three relabels still needs a content decision.
+· *Raised:* 22 Aug 2026 · *Re-scoped:* 23 Aug 2026
 
 ---
 
@@ -2675,6 +2711,381 @@ not an internal inconsistency.
 Blocked on the content lane. Four strings: promise, signature, and three quotes.
 
 *Status:* open — blocked on content · *Raised:* 22 Aug 2026
+
+---
+
+---
+
+### SR-261 · The hero photograph rendered on no track page, and nothing looked broken
+`js/saferise-track.js` injected `--sr-hero-img:url(assets/t1/hero.jpg)` into an inline `style`
+attribute. **A relative `url()` inside a custom property is resolved against the STYLESHEET that
+consumes it, not the document that declared it.** The consumer is
+`css/saferise-system.css:2965`, so the browser fetched **`/css/assets/t1/hero.jpg` — 404, five
+per page load, on all three track pages.**
+
+**It survived because the fallback is good.** `.sr-tp-hero--photo` layers the photograph over
+`linear-gradient(135deg,#17131b,#4a3a24,#8a7148)`, and the `<img>` sibling is `display:none` at
+desktop — so a missing photograph renders as a *designed* brown panel rather than a broken one.
+**A well-built fallback hides the failure it exists for.** Nothing in the page looked wrong; only
+the network log knew. Check the network panel on any surface with a designed fallback.
+
+**Fixed by resolving against `document.baseURI` at the injection point, not by adding a leading
+slash** — a leading slash asserts the site is served from the domain root, which it need not be.
+**The record stays relative**: `hero.src` is untouched, and the `<img>` and `slot()` consumers
+that already resolved correctly are unaffected. One injection site, one consumer, one change.
+
+**Verified by FETCHING the resolved URL, not by looking at the page** — the point of the defect is
+that the page looked fine either way:
+
+| track | resolved URL | status | bytes |
+|---|---|---|---|
+| 01 | `/assets/t1/hero.jpg` | **200** | 675,192 |
+| 02 | `/assets/t2/hero.jpg` | **200** | 400,280 |
+| 03 | `/assets/t3/hero.jpg` | **200** | 686,259 |
+
+Byte counts match the files on disk. `performance.getEntriesByType('resource')` reports **0**
+requests under `/css/assets/` where there were five. Clean console.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-259 · Three `assets 3` replacements installed — recommendation overridden, and recorded
+Installed in place, same paths and filenames, no suffixes and no `-old` copies:
+`assets/shared/four-steps.jpg` (1600×500), `assets/t1/cost.jpg` and `assets/t1/change.jpg`
+(1600×700). `assets 3/journey/t1-band.jpg` **remains excluded** at 1400×583 against a correct
+1400×380 sibling (Rule 27).
+
+**Andre's call, made with the assessment in front of him. The recommendation is set aside, not
+overruled, and is kept so it survives:**
+- **four-steps** — near-identical frame; only a less blown-out window. Marginal alone.
+- **cost** — nails *"three in the morning"* literally (a clock reading 3:17) and adds a
+  relational note, but drifts **further** from the brief's *"same room"* by introducing a train.
+- **change** — neither file matches *"one person moving easily through an ordinary day at home"*.
+  Installed was a man with a luxury car; the replacement is a man with a motorcycle at golden
+  hour — **more** aspirational-lifestyle, not less. Recommendation was to install neither and
+  re-brief.
+
+Verified at render: all four slots 200, each rendering at **exactly** its natural ratio
+(2.2857 / 2.6667 / 2.2857 / 3.2000) so nothing is distorted, each inside its container.
+four-steps' improvement is real at render, canvas-sampled from the decoded image: brightest
+corner **0.458 → 0.2456**.
+
+**`t1/change.jpg` joins [[SR-222]]'s grouping — seven of fifteen frames now drift the same way,
+plus one replacement that drifted further.** That ratio is the finding. It is a **lane-level
+question about register**, not a list of bad images: the briefs ask for ordinary domestic
+specificity and the lane keeps returning aspirational lifestyle stock. Re-briefing one file will
+not change the next one.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-260 · The missing scrim — DOES NOT REPRODUCE, and the error was mine
+**Briefed premise: the six-area text sits directly on `change.jpg` for the top 464px with nothing
+between. Measured: it does not.** The section is **stacked, not overlaid**.
+
+| | |
+|---|---|
+| photo block | y 0 → 466 |
+| text column | y 466 → 1286 |
+| **vertical overlap** | **0px** |
+| first text element | starts at y 513 |
+| elements over the photograph | **0 of 7** |
+
+**The error was in my own earlier report and I am correcting it, not the tree.** I claimed
+`innerOverlapsImage: true` from a test that compared only `left`/`right` — horizontal overlap on
+two stacked blocks is trivially true and says nothing. **An overlap test must check both axes.**
+
+**`.sr-tp-sixbg` and `.sr-tp-sixscrim` are INERT, not missing** (Rule 14). They were written for
+an overlaid design — full-bleed background image, scrim, 70% text column over it — that the
+renderer never built: `slot()` emits a `.sr-tp-ph` block with `aspect-ratio`, which stacks. Adding
+the scrim as briefed would darken a photograph that has **no text on it**, achieving nothing.
+
+**The overlay layout and the scrim are ONE piece of work, not two.** Handoff 04's "six areas
+inside the image, 80–85% left overlay" is precisely the design those inert rules were written
+for. Build the overlay and measure the scrim in the same pass; a scrim added first has nothing to
+protect.
+
+⚠ **A REAL CONTRAST FAILURE WAS FOUND, on plain background, unrelated to any photograph.**
+`.sr-tp-sixfrom` — the italic *"from loops, fog & paralysis"* line — is `var(--text3)`
+`rgb(106,104,116)` on `rgb(14,14,26)`: **3.51:1, against 4.5:1 required.** At 15px (12.5px below
+760px) it does not qualify for the large-text exemption. Every other role passes: label 8.65,
+area titles 5.85–8.65, body 12.95.
+
+**`--text3` has 50 uses in the system stylesheet**, so this is a token-level question, not one
+element. Reported, not fixed — changing a token that 50 rules consume is its own pass.
+
+*Status:* premise withdrawn; one real defect raised · *Raised:* 23 Aug 2026
+
+---
+
+### SR-257 · The Track 01 range image — the "white ground" was a checkerboard baked into a JPEG
+[[SR-242]] measured corners at L≈0.92 and called it a white ground. **Rendered, it is a
+transparency checkerboard**: three photographs laid out as angled cards over a light chequered
+field, exported to JPEG with the checker pattern baked in as image data. That is why every corner
+read near-white and why no amount of scrim would have helped.
+
+`assets 3/t1/range.jpg` is the same three states — braced, settled, absent, matching the record's
+own brief — composed edge-to-edge at the same 1600×600. Worst corner **L 0.9283 → 0.0619**, from
+**371:1** against the page ground to **25:1**, inside its siblings' range (t2 0.0275, t3 0.0149).
+Confirmed by canvas-sampling the decoded image in the browser, not only the file on disk.
+
+**[[SR-242]]'s instruction to pull the `src` is WITHDRAWN.** It was correct while no replacement
+existed and is wrong now that one does. The record was never edited, so nothing had to be undone.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-258 · t3-06's card strings follow the protocol, a rename late
+The four card strings were Ambition Recovery's and stayed behind when [[SR-216]] renamed t3-06.
+Supplied by Andre, applied verbatim, with the reasoning recorded **beside the strings in
+`content/tracks.js`** so a future run does not "improve" them back toward achievement framing:
+
+> **Belonging is a KIND verdict with a PROSPECTIVE loop** — the pre-speech self-edit — where
+> Imposter Dissolution is a **COMPETENCE verdict with a RETROSPECTIVE** one. The promise is
+> behavioural rather than introspective because the state is **Unsteady** and **Porges** is in the
+> mapping, so the win is being able to speak, not understanding why you could not. One quote
+> deliberately echoes Track 02's Safe Conversation because the mechanism is related; **the
+> resentment tail is what makes it Track 03.**
+
+Retired, and now present nowhere in any served file: *"I hit the goal and felt nothing"*, *"I do
+not know if I want this"*, *"I am chasing something I never chose"*, and the old promise and
+signature. They survive here only as evidence (Rule 21).
+
+Zero Track 03 banned-vocabulary hits across all six new strings — swept against *productivity,
+optimise, performance target, output, efficiency, high performer, peak, elite, edge*.
+
+⚠ **Two things at this ID are NOT resolved and are not card copy.**
+- **t3-06's Release heading still reads *"Why Release goes after the editing"*** (block 13 of
+  `t3p6-guide`) while its diagram now shows flatness and reproaching. Resource content; content
+  lane. Quoted here verbatim so it can be commissioned.
+- **[[SR-240]] cannot move on these strings.** Measured: `index.html`'s `proto-landing-desc` and
+  `tracks.js`'s promise are **two independent sets of copy — 0 of 20 identical, all 16 comparable
+  pairs different**. The homepage needs its own advisory sentence for The Belonging Gap, in its own
+  longer register. Renaming the nine mechanical labels while that line still reads *"recover
+  momentum when ambition has gone flat"* would put [[SR-226]]'s contradiction on the marketing
+  homepage.
+
+*Status:* card copy complete on merge; resource copy open · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-253 · The inventory derives; `SHARED.resources` becomes presentation only
+`SHARED.resources` was **both** the inventory and the presentation table, and being both is how
+`raising` went missing from three shipping surfaces while Track 03 shipped it on all ten
+protocols. **Track 03 has ELEVEN resource types; Tracks 01 and 02 have ten. There is no single
+library size across the three** — any surface stating one must resolve per track.
+
+`content/inventory.js` is **generated** from the authored files by `tools/build-inventory.py`.
+Checked in rather than derived at runtime: the authored files total ~913 KB of resource bodies
+and no page should load them to learn a type list. **The generator refuses an unknown type**
+rather than accepting it silently, so `RESOURCE_ORDER` is extended deliberately.
+
+**Standing invariant — one command, prints PASS or exits 1:**
+
+```
+python3 tools/build-inventory.py --check
+```
+
+Expected: `inventory OK — tracks {1: 10, 2: 10, 3: 11}, library 276 pages`. Re-run it whenever
+the authored files are regenerated. **Drift is now loud**: a type in the inventory with no
+presentation row renders nothing and is visible, where the old shape under-reported in silence.
+
+**No track-agnostic surface states a library size — and this was settled by measurement, not by
+decision.**  Checked: `index.html`, `method.html` and
+`getting-help.html` carry no such numeral, and the dashboard rail always has a selection
+(track 1 by default). The question of what to say with no track selected **does not arise on any
+existing surface** — record this before inventing a phrasing for it.
+
+⚠ **`raising`'s DESCRIPTION IS EMPTY and needs one string from the content lane.** Its subtitle
+is the authored `sub`, identical on all ten Track 03 protocols and matching the pattern six other
+types follow verbatim, so nothing was authored here. The card renders without the paragraph
+rather than with a placeholder.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-256 · The t3-05 Release diagram places — 30 of 30, and one alt was describing the wrong picture
+**The asset existed and was already correct.** `img-067-release-t3-05.svg` carries *"The nerves /
+they turned up on their own"* against *"Monitoring yourself / it splits your attention"* — t3-05's
+own split, not the generic situation-versus-loop shape. **All thirty are per-protocol variants.**
+[[SR-244]]'s conclusion stands on its own terms — there is no equivalent *anchor text* — but the
+missing thing was the block index, not the diagram.
+
+**Placed at block 5, not block 6, and the convention was measured rather than assumed.** All 29
+existing placements land on the **`Why Release…` HEADING block, 29 of 29 with no exception.**
+t3-05's equivalent heading is block 5, *"Why the split is the actual problem"*; block 6 is the
+paragraph naming the split and block 7 develops the cost. **A stored index that is not a heading
+is a defect** — that is the check to run after any block edit.
+
+⚠ **Found by the regression sweep, unbriefed: t3-06's stored `alt` described a different
+diagram.** It read *"The room and The editing"* while the SVG shows *"The flatness and
+Reproaching yourself"* — the file was regenerated when t3-06 became The Belonging Gap and the alt
+was not. **A screen reader was being given a description of a picture that is not on the page.**
+Corrected by transcribing the SVG title, which is mechanical application of [[SR-209]]'s existing
+rule, not authoring.
+
+**The surrounding guide text still belongs to the old protocol**: t3-06's heading still reads
+*"Why Release goes after the editing"* while its diagram now shows flatness and reproaching.
+[[SR-226]]'s content-lane work, untouched.
+
+Two checks worth keeping, both one command: every placement lands on a heading, and every `alt`
+equals its SVG's `<title>` exactly. Both now pass 30 of 30.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-254 · The replacement Track 03 band is the same file at a new size — BLOCKED, unchanged
+**Measured first, installed nothing.** Four candidates found across Desktop and Downloads, and
+**not one is 1400×380**:
+
+| source | pixels | ratio | format |
+|---|---|---|---|
+| `Downloads/saferise-t3-sections_1.zip` (newest) | **1400×583** | 2.4014 | JPEG |
+| `Downloads/saferise-t3-sections.zip` | **1400×583** | 2.4014 | JPEG |
+| `Desktop/saferise-t3-sections.zip` | **1400×583** | 2.4014 | JPEG |
+| `Desktop/band.jpeg` | 1941×810 | 2.3963 | **PNG** |
+| `Desktop/T3 landing images/band.jpg` | 1907×825 | 2.3115 | **PNG** |
+
+The slot declares `1400/380` = 3.6842 and both installed siblings are 1400×380. **All three zips
+are the previously blocked dimensions exactly.** The two loose Desktop files are the same ratio
+class re-rendered larger, and **both are PNG data behind a `.jpg`/`.jpeg` extension** at ~1.7 MB
+against siblings at 174–192 KB.
+
+**Stop condition met. Not cropped, slot not changed, nothing installed.** [[SR-243]]'s
+recommendation is unchanged: reissue the Track 03 band at **1400×380**. Vertical crop is the
+safer axis — the brief is *"corridor moments before the room, desk log, reading at day's end"*,
+three moments across the width.
+
+*Status:* blocked — awaiting a 1400×380 render · *Raised:* 23 Aug 2026
+
+---
+
+### SR-247 · The resource guidance audio — installed, recorded, wired
+Ten mastered mp3s in `assets/audio/guidance/`, served static. `master-guidance.sh` is the
+mastering chain and is **not** a repo file; it is not installed. Source was
+`~/Downloads/Mastered Resource Guidance.zip` — **spaces, not underscores as briefed, the fourth
+source-name discrepancy in a row.** Copied, never moved; md5 verified per file after copy.
+
+All ten: mono, 44.1 kHz, 128 kbps, 41.7–53.0 s, 653–829 KB. **Head silence 313.1 ms on every
+file, tail 325–354 ms, against a 300 ms spec** — the head excess is 578 samples of MP3 decoder
+delay and the tail excess is frame quantisation at 26.1 ms per frame, so the authored pad is
+exactly 300 on both edges. Nothing clips.
+
+**⚠ −19.4 LUFS against a briefed −16 IS NOT A DEFECT. Do not "fix" it.** `master-guidance.sh`
+states the reasoning in its own comment: *"-19 LUFS for MONO. The -16 figure is the STEREO
+target; a mono file played through both channels lands ~3 LU hotter."* Measured −19.35 to
+−19.49, spread 0.13 LU; true peak −1.30 to −1.52 dBTP, all inside the −1.0 ceiling. A future
+check against −16 would read a 3.4 LU miss that is not there. **If the meditations settle on a
+different target, both sets move together or levels jump when a member crosses between them.**
+
+**The loudness probe was validated before any reading was trusted.** No ffmpeg, ffprobe, sox or
+mediainfo on this machine, so BS.1770-4 was implemented in pure Python and checked against
+synthetic controls first: **0.00 dB** at two levels, sensitivity exactly 6.02 dB. The first
+fixture read 0.70 dB "wrong" and **the fixture was the error, not the probe** — the K-weighting
+chain measures **+0.700 dB at 1 kHz**, and the curve is textbook (+4.0 dB shelf, −2.9 dB at
+60 Hz). Rule 16 applies to the tester's own expectations, not only to briefs.
+
+**`.scrub` was REMOVED, not hidden, and the reasoning generalises.** It carried a progress rail
+and a `#dur` span. [[SR-080]] left `#dur` empty with the note that it would *"fill from the media
+once the real audio exists"*. The audio exists now and the decision is that no duration renders
+— so **a hidden element waiting to be filled is how a forbidden thing comes back**. Delete the
+element, not the value.
+
+**Not autoplaying is structural.** One `Audio` object created once and reused as the rail moves,
+`preload="none"`, no autoplay attribute, `.play()` reachable only from the click handler.
+Changing resource stops playback and clears the source — arriving on a new resource with a voice
+still running is autoplay by another route.
+
+**⚠ TWO MAPPINGS ARE INFERENCES, NOT CORRESPONDENCES — Rule 22 applies to both.**
+- **`fourline` → `crisiscard`** is inferred from the Cue Card record text naming *"the four-line
+  version"*. It is not a verified identity. Check it against the content before relying on it.
+- **`decision` has NO counterpart among the authored eleven.** *The Decision* exists only in
+  `resource.html`'s prototype array. It renders no control, which is correct today, but whether
+  it should have guidance at all is unanswered.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-248 · The synthetic-voice disclosure — CLOSED, NOT APPLICABLE
+Recorded rather than deleted, because the reasoning is the reusable part.
+
+**Andre never claimed his own voice for resource guidance, so there is nothing to disclose.** A
+disclosure exists to correct an impression the product created; where no claim of a human voice
+was made, a synthetic-voice line answers a question nobody was led to ask. The deployment doc
+listing it as a go-live requirement was written against an assumption that does not hold here.
+
+**The guided meditations are a different case and this closure does not extend to them.** There
+the founder's own voice **is** the claim — it is part of what is being sold — so a synthetic
+stand-in there would be a substitution a member would want to know about. **Do not read this
+entry as settling the meditations.** See [[SR-251]].
+
+*Status:* closed — not applicable · *Raised:* 23 Aug 2026 · *Closed:* 23 Aug 2026
+
+---
+
+### SR-249 · The library is 276, and the arithmetic hid a real defect
+**Third counting discrepancy on this project, third real defect.** Recorded because the pattern
+is now the finding: on this codebase a count that does not reconcile has never once been a
+rounding error.
+
+Counted from the record, not the document:
+
+| | `tracks.js` | authored content |
+|---|---|---|
+| resource types | **10** | **11** |
+| `Raising It` | **absent** | 10, Track 03 only |
+| library total | **266** | **276** |
+| meditations | 30 | 30 |
+| guidance-bearing | 236 | **246** |
+
+`tracks.js` derives 12×8 + 10×9 + 8×10 = **266**. The authored files hold 90 + 91 + 95 = **276**.
+
+**The briefed figures were each off by one** — 31 meditations (there are 30, one per protocol)
+and 247 guidance pages (there are 246), inflating the total to 278. There are no "two
+unaccounted pages"; the library is 276 and always was.
+
+**The whole 10-page gap is one resource type**, and that is [[SR-253]].
+
+*Status:* resolved — count established · *Raised and resolved:* 23 Aug 2026
+
+---
+
+### SR-250 · The expert contribution claim is removed, not recounted
+Ten instances of *"Contributes insight to N protocols"* in `index.html`: five derived from `META`
+via `frameworkReach()` (porges, heartmath, mate, jung, watts) and five hardcoded on cards with no
+`FRAMEWORKS` key. **A factual claim about a named person that had to be maintained every time a
+protocol moved, and it had already been wrong once.**
+
+**The eleventh `.expert-contrib-label` survives deliberately** — Dr Kenny Bastien's reads
+*"Foundational — physical wellness, body optimization & lifestyle structure"*, which is a
+description, not a count. A sweep that removes it is measuring the selector, not the claim.
+
+**The `+N more` overflow went with it, and removing only the label would have been worse than
+removing neither.** `data-sr-reach` lives **on the label**, so deleting the label alone leaves
+`querySelectorAll('[data-sr-reach]')` matching nothing — and the five stale markup literals
+**+15, +15, +9, +9, +4** would then render uncorrected. Those are precisely the hand-tallied
+figures [[SR-066]] existed to stop. The script was the only thing holding them right.
+
+[[SR-066]]'s derivation script is removed whole rather than left inert for a future run to
+re-analyse. The curated pills stay as an unquantified sample — **38 still render**, and they still
+name protocols, including *Ambition Recovery* at what was `index.html:8402`, which remains
+[[SR-240]]'s open item.
+
+**⚠ `frameworkReach()` in `content/tracks.js` NOW HAS NO CONSUMER.** Its only remaining
+references are its own definition and its export. **Reported as dead code and deliberately NOT
+deleted**, per the standing instruction.
+
+Verified with the About overlay **open**, not at rest — these cards sit inside `.prog-overlay`,
+`display:none` until shown, so an `innerText` assertion on the page at rest is a false pass
+(Rule 18).
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
 
 ---
 

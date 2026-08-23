@@ -10,6 +10,49 @@
 <head>
 <meta name="color-scheme" content="dark">
 <style>html,body{background:#08080C}</style>
+<!-- ══════════ SR-233 · EMBED CHROME, HIDDEN AT PARSE TIME ══════════
+     This page's own nav shell is markup at ~50% of the file; the embed bridge
+     that hides it is at ~99.9%. Everything the browser painted in between showed
+     a second nav bar inside the dashboard frame, then a reflow when the rule
+     finally arrived — measured at 49.6% of the page load, at any bandwidth.
+
+     The order is the bug, so the order is what changes: the class and the rules
+     are installed here, in <head>, before the parser can reach the shell.
+
+     Only the paint-critical half moved. The rest of the bridge — height
+     reporting, theme sync, resource-click routing — stays at the foot because it
+     touches document.body, which does not exist yet at this point in the parse.
+     Moving all of it up throws
+       TypeError: Failed to execute 'observe' on 'MutationObserver'
+     on the MutationObserver line and silently skips every statement after it.
+
+     Inline rather than in the system stylesheet for the same reason the ground
+     colour above is inline: an external sheet is a request, and anything that can
+     arrive late can paint late. These two blocks are one pattern, not two. -->
+<script>if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add('sr-embedded');</script>
+<style>
+/* Hide only the page's own chrome. Nothing else is touched: background,
+   atmospheric layers and spacing render exactly as designed. */
+.sr-embedded .bnav,.sr-embedded .sr-topnav,.sr-embedded .backlink,
+.sr-embedded .resource-back,.sr-embedded footer,
+.sr-embedded .footer-shell{display:none!important}
+/* Container: the real constraint is .inner (protocol) / .shell (reader), not
+   .sec. Widening them to the frame with a 30px gutter puts this page's text on
+   the same line as the dashboard's, so the carousel above and the page below
+   share one measure. Both selectors are (0,2,0) against the page's own (0,1,0)
+   .shell/.inner rules, so they win on specificity from up here — they no longer
+   depend on being appended last. */
+.sr-embedded .shell{max-width:none;padding-left:30px;padding-right:30px}
+.sr-embedded .inner{max-width:none;width:100%}
+/* The shell's --pad drops to 20px at 640px. The gutter has to follow it or the
+   embedded text sits 10px inside the dashboard's line on mobile, which is the
+   same misalignment this block exists to remove (SR-054). */
+@media(max-width:640px){.sr-embedded .shell{padding-left:20px;padding-right:20px}}
+/* theme changes ease at the same rate as the shell */
+.sr-embedded body,.sr-embedded .sec,.sr-embedded .sr-reader,
+.sr-embedded .sr-book,.sr-embedded .sr-book-offer,.sr-embedded .sr-book-dates{
+transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
+</style>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -846,7 +889,11 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
           </button>
           <div class="wave" id="wave"></div>
         </div>
-        <div class="scrub"><span class="scrub-now"></span><span class="scrubline"></span><span id="dur"></span></div>
+        <!-- SR-247 · no scrub row. It carried a progress rail and a #dur
+             span; the platform forbids durations and this brief forbids a
+             progress bar. SR-080 kept #dur empty "until the real audio
+             exists" — it exists now, and the decision is that no duration
+             renders, so the element goes rather than waiting to be filled. -->
         <p class="lt" id="ltitle">Using The Decision</p>
         <p class="ld">Tips on how to get the most out of this resource.</p>
       </div>
@@ -876,6 +923,9 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
 </div>
 </main>
 
+<!-- SR-247 · the guidance record. The src comes from here, never from
+     markup — Rule 24, a path is a claim the asset exists and is usable. -->
+<script src="content/guidance.js"></script>
 <script>
 var RESOURCES=[
  {key:'guided',eyebrow:'Practise',title:'The guided protocol',
@@ -886,19 +936,19 @@ var RESOURCES=[
 
  /* SR-077 · was the Source Insights record. Merged into How This Works: the
     framework attribution it carried is the body of this resource now. */
- {key:'how',eyebrow:'Understand',title:'How this works',
+ {key:'how',gtype:'guide',eyebrow:'Understand',title:'How this works',
   sub:'Why it works.',
   meta:'Mechanism &amp; sources',read:'',type:'evidence',glyph:'◑',
   audio:true,dur:'',pdf:true,railTitle:'How This Works',railMeta:'',
   body:'<p>Porges gives the clearest account of why a body braced for threat cannot simply be reasoned into calm, and why breath and attention reach it when argument does not. HeartMath supplies the measurable part: a slow, even breath rhythm produces a more ordered heart rhythm, and that pattern is well documented.</p><p>Watching a state from outside it is the third measured part: self-distanced reflection settles a reaction more durably than distraction does, and mentally rehearsing the self who has already come through lifts mood and outlook by a margin the studies can see. Jung sits further out, as a way of thinking about the parts of a pattern you did not choose. Useful as framing. Not the evidence base, and this guide does not present it as such.</p><p>Maté on what the response was protecting. Watts on what happens when you stop fighting the sensation. Six views of one pattern — take what is useful.</p>'},
 
- {key:'somatic',eyebrow:'Release',title:'Between sessions',
+ {key:'somatic',gtype:'companion',eyebrow:'Release',title:'Between sessions',
   sub:'Small physical practices that hold the work between sittings.',
   meta:'Somatic Release Guide',read:'7 options',type:'relational',glyph:'⊘',
   audio:true,dur:'',pdf:true,railTitle:'Somatic Release',railMeta:'7 options',
   body:'<p>Rhythmic walking. Weight across the chest. A stone in the pocket you can find without looking. Cold water on the wrists.</p><p>None of these replace the protocol. They give the body somewhere to put the charge on a day you cannot sit down for a full session.</p>'},
 
- {key:'disclosure',eyebrow:'Tell',title:'Telling someone what this is',
+ {key:'disclosure',gtype:'disclosure',eyebrow:'Tell',title:'Telling someone what this is',
   sub:'A script for a partner, a friend, or family.',
   meta:'Disclosure &amp; Support Guide',read:'',type:'relational',glyph:'⚿',
   audio:true,dur:'',pdf:true,railTitle:'Disclosure &amp; Support',railMeta:'',
@@ -924,14 +974,14 @@ var RESOURCES=[
    +'<div class="integration" style="margin-top:22px"><p class="q">“Who am I choosing to become?”</p>'
    +'<p class="ip" style="margin-bottom:0">Write the answer somewhere you will see it before the next session. The decision is made once and practised many times.</p></div></div>'},
 
- {key:'fourline',eyebrow:'Carry',title:'Anxiety Reset — the four-line version',
+ {key:'fourline',gtype:'crisiscard',eyebrow:'Carry',title:'Anxiety Reset — the four-line version',
   sub:'The whole protocol, short enough to use standing up.',
   meta:'Portable version',read:'',type:'meta',glyph:'◇',
   audio:true,dur:'',pdf:true,railTitle:'Anxiety Reset — 4-Line Version',railMeta:'',
   body:'<p class="sr-tight">Name it. “This is fear, and it is here now.”</p><p class="sr-tight">Drop attention to the centre of the chest and lengthen the breath.</p><p class="sr-tight">Let the sensation be there without arguing with it.</p><p>Find one thing that is genuinely fine right now, and stay with it for three breaths.</p>'}
 ];
 
-var PROXIMITY={key:'proximity',eyebrow:'Locate',title:'Where to direct your attention',
+var PROXIMITY={key:'proximity',gtype:'advisory',eyebrow:'Locate',title:'Where to direct your attention',
   sub:'How close to stay to the sources of the distress — and who is safe to have near you while you work.',
   meta:'Proximity Guide · Three tiers',read:'',type:'relational',glyph:'!',advisory:true,
   audio:true,dur:'',pdf:true,railTitle:'Where to Direct Your Attention',railMeta:'',
@@ -1008,10 +1058,10 @@ function renderMain(){
      card. The toggle's own "Resource" and "Index" labels are unchanged. */
   document.getElementById('railsum').innerHTML=r.title;
 
-  document.getElementById('guide').classList.toggle('hidden',!r.audio);
-  /* SR-080 · no placeholder length. The element stays and fills from the
-     media once the real audio exists. */
-  document.getElementById('dur').textContent=r.dur||'';
+  /* SR-247 · the control renders where the RECORD has a file and nowhere
+     else. `r.audio` was a hand-set flag that said true on all seven,
+     including Guided Meditation, which has no guidance by design. */
+  mountGuidance(r);
   document.getElementById('ltitle').textContent=r.railTitle;
   document.getElementById('download').classList.toggle('hidden',!r.pdf);
 
@@ -1080,7 +1130,58 @@ function light(el){
 (function(){var w=document.getElementById('wave'),h='';
   for(var i=0;i<44;i++){h+='<i style="height:'+(5+Math.round(Math.abs(Math.sin(i*0.7))*20))+'px"></i>';}
   w.innerHTML=h;})();
-document.getElementById('play').addEventListener('click',function(){this.classList.toggle('playing');});
+/* ── SR-247 · resource guidance ────────────────────────────────────────
+   ONE <audio>, created once and reused as the rail moves between resources.
+   Never one per resource: seven elements would each hold a decoded buffer and
+   each be capable of playing at the same time.
+
+   IT MUST NOT AUTOPLAY. No autoplay attribute, preload="none", and .play() is
+   reachable only from the click handler below. Someone opening Safe Practice
+   at 2am with a person asleep beside them must not have a voice start unbidden.
+   Changing resource STOPS playback and clears the source — arriving on a new
+   resource with audio still running is autoplay by another route. */
+var guideAudio = new Audio();
+guideAudio.preload = 'none';
+var playBtn = document.getElementById('play');
+
+function guidanceSrcFor(r){
+  if (typeof guidanceFor !== 'function' || !r || !r.gtype) return null;
+  return guidanceFor(r.gtype);
+}
+function stopGuidance(){
+  try { guideAudio.pause(); } catch(e){}
+  guideAudio.removeAttribute('src');
+  playBtn.classList.remove('playing');
+  playBtn.setAttribute('aria-label', 'Play the resource guide');
+  playBtn.setAttribute('aria-pressed', 'false');
+}
+function mountGuidance(r){
+  var g = guidanceSrcFor(r);
+  stopGuidance();
+  document.getElementById('guide').classList.toggle('hidden', !g);
+  if (g) guideAudio.src = g.src;      // set, not played
+}
+playBtn.addEventListener('click', function(){
+  if (!guideAudio.getAttribute('src')) return;
+  if (guideAudio.paused) {
+    guideAudio.play().then(function(){
+      playBtn.classList.add('playing');
+      playBtn.setAttribute('aria-label', 'Pause the resource guide');
+      playBtn.setAttribute('aria-pressed', 'true');
+    }).catch(function(){ playBtn.classList.remove('playing'); });
+  } else {
+    guideAudio.pause();
+    playBtn.classList.remove('playing');
+    playBtn.setAttribute('aria-label', 'Play the resource guide');
+    playBtn.setAttribute('aria-pressed', 'false');
+  }
+});
+guideAudio.addEventListener('ended', function(){
+  /* no autoplay-next: the run ends here and the control returns to rest */
+  playBtn.classList.remove('playing');
+  playBtn.setAttribute('aria-label', 'Play the resource guide');
+  playBtn.setAttribute('aria-pressed', 'false');
+});
 
 /* cover inherits the protocol cover, same treatment as the section header */
 document.getElementById('cover').style.backgroundImage=
@@ -1103,33 +1204,10 @@ renderRail();renderMain();
 (function(){
   var EMBED = /[?&]embed=1/.test(location.search);
   if(!EMBED) return;
-  document.documentElement.classList.add('sr-embedded');
-
-  // Hide only the page's own chrome. Nothing else is touched: background,
-  // container width, atmospheric layers and spacing render exactly as designed.
-  var css = document.createElement('style');
-  css.textContent =
-    '.sr-embedded .bnav,' +
-    '.sr-embedded .sr-topnav,' +
-    '.sr-embedded .backlink,' +
-    '.sr-embedded .resource-back,' +
-    '.sr-embedded footer,' +
-    '.sr-embedded .footer-shell{display:none!important}' +
-    /* Container: the real constraint is .inner (protocol) / .shell (reader), not
-       .sec. Widening them to the frame with a 30px gutter puts this page's text
-       on the same line as the dashboard's, so the carousel above and the page
-       below share one measure. */
-    '.sr-embedded .shell{max-width:none;padding-left:30px;padding-right:30px}' +
-    '.sr-embedded .inner{max-width:none;width:100%}' +
-    /* The shell's --pad drops to 20px at 640px. The gutter has to follow it or
-       the embedded text sits 10px inside the dashboard's line on mobile, which
-       is the same misalignment this block exists to remove (SR-054). */
-    '@media(max-width:640px){.sr-embedded .shell{padding-left:20px;padding-right:20px}}' +
-    /* theme changes ease at the same rate as the shell */
-    '.sr-embedded body,.sr-embedded .sec,.sr-embedded .sr-reader,' +
-    '.sr-embedded .sr-book,.sr-embedded .sr-book-offer,.sr-embedded .sr-book-dates{' +
-    'transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}';
-  document.head.appendChild(css);
+  // SR-233 · the class and the chrome rules are installed in <head>, at parse
+  // time, not here. They used to be injected from this point — ~2.4MB after the
+  // nav shell's own markup — so the shell painted for half the load. What stays
+  // below is the half that genuinely needs the parsed document.
 
   function post(type, data){
     parent.postMessage(Object.assign({sr:true, type:type}, data || {}), '*');
