@@ -2716,6 +2716,40 @@ Blocked on the content lane. Four strings: promise, signature, and three quotes.
 
 ---
 
+### SR-261 · The hero photograph rendered on no track page, and nothing looked broken
+`js/saferise-track.js` injected `--sr-hero-img:url(assets/t1/hero.jpg)` into an inline `style`
+attribute. **A relative `url()` inside a custom property is resolved against the STYLESHEET that
+consumes it, not the document that declared it.** The consumer is
+`css/saferise-system.css:2965`, so the browser fetched **`/css/assets/t1/hero.jpg` — 404, five
+per page load, on all three track pages.**
+
+**It survived because the fallback is good.** `.sr-tp-hero--photo` layers the photograph over
+`linear-gradient(135deg,#17131b,#4a3a24,#8a7148)`, and the `<img>` sibling is `display:none` at
+desktop — so a missing photograph renders as a *designed* brown panel rather than a broken one.
+**A well-built fallback hides the failure it exists for.** Nothing in the page looked wrong; only
+the network log knew. Check the network panel on any surface with a designed fallback.
+
+**Fixed by resolving against `document.baseURI` at the injection point, not by adding a leading
+slash** — a leading slash asserts the site is served from the domain root, which it need not be.
+**The record stays relative**: `hero.src` is untouched, and the `<img>` and `slot()` consumers
+that already resolved correctly are unaffected. One injection site, one consumer, one change.
+
+**Verified by FETCHING the resolved URL, not by looking at the page** — the point of the defect is
+that the page looked fine either way:
+
+| track | resolved URL | status | bytes |
+|---|---|---|---|
+| 01 | `/assets/t1/hero.jpg` | **200** | 675,192 |
+| 02 | `/assets/t2/hero.jpg` | **200** | 400,280 |
+| 03 | `/assets/t3/hero.jpg` | **200** | 686,259 |
+
+Byte counts match the files on disk. `performance.getEntriesByType('resource')` reports **0**
+requests under `/css/assets/` where there were five. Clean console.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
 ### SR-259 · Three `assets 3` replacements installed — recommendation overridden, and recorded
 Installed in place, same paths and filenames, no suffixes and no `-old` copies:
 `assets/shared/four-steps.jpg` (1600×500), `assets/t1/cost.jpg` and `assets/t1/change.jpg`

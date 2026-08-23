@@ -109,10 +109,26 @@
      element sets neither and the CSS falls through to the abstract shape it has
      always drawn — the fallback is never removed, so a missing file renders the
      original panel rather than an empty one. Track 03 does this today. */
+  /* SR-261 · THE URL IS ABSOLUTISED HERE, AND ONLY HERE.
+     A relative url() inside a custom property is resolved against the
+     STYLESHEET that consumes it, not the document that declared it. This value
+     is declared in an inline style attribute and consumed by
+     css/saferise-system.css, so `url(assets/t1/hero.jpg)` was fetched as
+     /css/assets/t1/hero.jpg — a 404 on every track page, five per load, with
+     the hero photograph silently replaced by the fallback gradient beneath it.
+     Nothing looked broken, which is why it survived: the fallback is a
+     deliberate design, so a missing photograph renders as a designed panel.
+
+     Resolved against location.href rather than given a leading slash, because a
+     leading slash assumes the site is served from the domain root and this one
+     need not be. THE RECORD STAYS RELATIVE — `hero.src` is untouched, and the
+     <img> and slot() consumers that already resolve correctly are unaffected. */
   function heroVars(t) {
     var h = t.art && t.art.hero;
     if (!h || !h.src) return '';
-    return ' style="--sr-hero-img:url(' + esc(h.src) + ')' +
+    var abs = h.src;
+    try { abs = new URL(h.src, document.baseURI).href; } catch (e) {}
+    return ' style="--sr-hero-img:url(' + esc(abs) + ')' +
            (h.scrim ? ';--sr-hero-scrim:' + h.scrim : '') + '"';
   }
 
