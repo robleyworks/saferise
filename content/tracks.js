@@ -83,7 +83,14 @@ var SHARED = {
     ['pin',   'Proximity Guide',      'How close to stay.',          'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.'],
     ['shield','Disclosure & Support','A script for someone close.','Words for explaining what you are doing and what you need, without over-explaining.'],
     ['mail',  'Invitation to Repair', 'Reopening it with them.',     'A structured way to open repair with another person when the pattern involves them.'],
-    ['pen',   'Your Record',          'What changed, in your words.','Prompts tied to this protocol, and the log that tracks your state before and after each session.']
+    ['pen',   'Your Record',          'What changed, in your words.','Prompts tied to this protocol, and the log that tracks your state before and after each session.'],
+    /* SR-180 · tenth resource. Universal — it carries no CONDITIONAL_RESOURCES
+       entry, so it appears on all thirty protocols and lifts the unconditional
+       floor from seven to eight. Sits after Your Record deliberately: the record
+       is the half of a state you can write, this is the half you have to ask
+       for. Do not re-add Source Insights above it — SR-077 merged that into
+       How This Works and the merge stands. */
+    ['face',  'Accountability & Empathy','What it does outside you.', 'Your own state has an exterior you have never observed. Another person\u2019s reaction is data you cannot generate on your own.']
   ],
   resourceNote: 'The Proximity Guide and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern, rather than on every protocol. The library grows \u2014 anything added to the track while you\u2019re a member is yours.',
   insight: {
@@ -106,6 +113,12 @@ var SHARED = {
       ['The route shortens',    'What took the full session starts arriving sooner. The body has learned the sequence.']
     ]
   },
+  /* SR-213 · the one image slot that is not per-track. Four moments in
+     sequence with no track cues, rendered identically on all three pages,
+     so it is held once here rather than three times in TRACKS. */
+  art: { fourSteps: { src: 'assets/shared/four-steps.jpg',
+                      ratio: '16/5',
+                      brief: 'shared \u2014 four moments, no track cues' } },
   scope: 'SafeRise is a self-guided nervous-system tool, not a replacement for therapy or crisis care \u2014 many members use both together. It is a practical nervous-system tool you can use in daily life, alongside any other support you are receiving.'
 };
 
@@ -160,10 +173,30 @@ var TRACKS = {
     price: PRICING.t1,
 
     art: {
-      band:   'one person alone: listening with headphones, writing, reading',
-      cost:   'one person, same room \u2014 evening, three in the morning, next morning',
-      range:  'the same person three times \u2014 braced, settled, absent',
-      change: 'one person moving easily through an ordinary day at home'
+      /* SR-213 · the hero banner. `scrim` is PER TRACK and lives here for the
+         same reason `src` does: a page must not carry a hardcoded gradient any
+         more than a hardcoded path. The stops were not chosen by eye — each
+         image's brightest pixel under the h1, the pull line and the body was
+         sampled and the stops set so the worst case clears 4.5:1 against
+         --text #F5EDD8. Re-measure if the image is replaced; a new photograph
+         invalidates these numbers. */
+      hero:   { src: 'assets/t1/hero.jpg',
+                ratio: '2400/1000',
+                brief: 'one person, right third \u2014 soft dark left half for type',
+                scrim: 'linear-gradient(96deg, rgba(11,11,18,.92) 0%, rgba(11,11,18,.84) 34%, rgba(11,11,18,.56) 62%, rgba(11,11,18,.22) 80%, transparent 94%)' },
+
+      band:   { src: 'assets/journey/t1-band.jpg',
+                ratio: '1400/380',
+                brief: 'one person alone: listening with headphones, writing, reading' },
+      cost:   { src: 'assets/t1/cost.jpg',
+                ratio: '16/7',
+                brief: 'one person, same room \u2014 evening, three in the morning, next morning' },
+      range:  { src: 'assets/t1/range.jpg',
+                ratio: '16/6',
+                brief: 'the same person three times \u2014 braced, settled, absent' },
+      change: { src: 'assets/t1/change.jpg',
+                ratio: '16/7',
+                brief: 'one person moving easily through an ordinary day at home' }
     },
 
     protocols: [
@@ -259,10 +292,30 @@ var TRACKS = {
     price: PRICING.t2,
 
       art: {
-        band:   'two people: one listening alone, one writing, both reading together',
-        cost:   'two people in one room not looking at each other \u2014 evening, night, morning',
-        range:  'the same pair three times \u2014 one pressing, both settled, one gone',
-        change: 'two people at ease in a shared space, facing each other'
+      /* SR-213 \u00b7 the hero banner. `scrim` is PER TRACK and lives here for the
+         same reason `src` does: a page must not carry a hardcoded gradient any
+         more than a hardcoded path. The stops were not chosen by eye \u2014 each
+         image's brightest pixel under the h1, the pull line and the body was
+         sampled and the stops set so the worst case clears 4.5:1 against
+         --text #F5EDD8. Re-measure if the image is replaced; a new photograph
+         invalidates these numbers. */
+      hero:   { src: 'assets/t2/hero.jpg',
+                ratio: '2400/1000',
+                brief: 'two people, right third \u2014 soft dark left half for type',
+                scrim: 'linear-gradient(96deg, rgba(11,11,18,.88) 0%, rgba(11,11,18,.78) 36%, rgba(11,11,18,.48) 64%, rgba(11,11,18,.16) 82%, transparent 94%)' },
+
+      band:   { src: 'assets/journey/t2-band.jpg',
+                ratio: '1400/380',
+                brief: 'two people: one listening alone, one writing, both reading together' },
+      cost:   { src: 'assets/t2/cost.jpg',
+                ratio: '16/7',
+                brief: 'two people in one room not looking at each other \u2014 evening, night, morning' },
+      range:  { src: 'assets/t2/range.jpg',
+                ratio: '16/6',
+                brief: 'the same pair three times \u2014 one pressing, both settled, one gone' },
+      change: { src: 'assets/t2/change.jpg',
+                ratio: '16/7',
+                brief: 'two people at ease in a shared space, facing each other' }
       },
 
     protocols: [
@@ -377,10 +430,38 @@ var TRACKS = {
     price: PRICING.t3,
 
       art: {
-        band:   'corridor moments before the room, desk log, reading at day\u2019s end',
-        cost:   'one person at work \u2014 early, midday, still there late',
-        range:  'the same professional before a meeting \u2014 braced, settled, absent',
-        change: 'someone leaving work at a reasonable hour, unhurried'
+      /* SR-213 \u00b7 the hero banner. `scrim` is PER TRACK and lives here for the
+         same reason `src` does: a page must not carry a hardcoded gradient any
+         more than a hardcoded path. The stops were not chosen by eye \u2014 each
+         image's brightest pixel under the h1, the pull line and the body was
+         sampled and the stops set so the worst case clears 4.5:1 against
+         --text #F5EDD8. Re-measure if the image is replaced; a new photograph
+         invalidates these numbers. */
+      hero:   { src: 'assets/t3/hero.jpg',
+                ratio: '2400/1000',
+                brief: 'one professional, right third \u2014 soft dark left half for type',
+                scrim: 'linear-gradient(96deg, rgba(11,11,18,.90) 0%, rgba(11,11,18,.84) 38%, rgba(11,11,18,.58) 66%, rgba(11,11,18,.22) 84%, transparent 94%)' },
+
+      /* SR-214 -> SR-224 · four of Track 03's five images have landed and now
+         carry `src`. Only `band` still does not, for the ratio reason below.
+         Rule 24 stands and is why the band has none: a path here is a claim the
+         asset exists, and an absent one costs a 404 per slot on every page load
+         to reach the same visible result as making no request. */
+      /* SR-224 · band still has NO src. The delivered t3-band.jpg measures
+         1400×583 (2.401:1) against t1 and t2 at 1400×380 (3.684:1) and a slot
+         declaring '1400/380'. Installing it would letterbox or crop it against
+         its two siblings. Reported, not resolved — SR-224. */
+      band:   { ratio: '1400/380',
+                brief: 'corridor moments before the room, desk log, reading at day\u2019s end' },
+      cost:   { src: 'assets/t3/cost.jpg',
+                ratio: '16/7',
+                brief: 'one person at work \u2014 early, midday, still there late' },
+      range:  { src: 'assets/t3/range.jpg',
+                ratio: '16/6',
+                brief: 'the same professional before a meeting \u2014 braced, settled, absent' },
+      change: { src: 'assets/t3/change.jpg',
+                ratio: '16/7',
+                brief: 'someone leaving work at a reasonable hour, unhurried' }
       },
 
     protocols: [
@@ -404,7 +485,11 @@ var TRACKS = {
        'Keep access to what you know while people are watching you use it.',
        'You did the work, and it leaves you the moment people look.',
        ['I know it until people are watching','My mind goes blank on cue','I dread the thing I am good at']],
-      ['06','Recover', 'The Ambition Recovery Protocol',
+      /* SR-216 · renamed. The promise, signature and quotes BELOW still describe
+         Ambition Recovery and are deliberately unchanged: the bundle supplies no
+         replacement for them, and writing new ones would be authoring member-facing
+         copy. Reported, not invented. */
+      ['06','Stand',   'The Belonging Gap Protocol',
        'Find what you actually want, under what you were taught to want.',
        'Arriving and feeling nothing. The next target set before the last one landed.',
        ['I hit the goal and felt nothing','I do not know if I want this','I am chasing something I never chose']],
@@ -534,7 +619,13 @@ var STATES = {
 
 /* extras — the two conditional resources. null means UNVERIFIED, not none.
    T1 mapping is taken from SafeRise_PersonalTransformation_ProductionChecklist.
-   T2 and T3 need the same confirmation before the protocol page can be honest. */
+
+   SR-198 · ALL THIRTY ARE NOW RESOLVED. Tracks 02 and 03 were null on all
+   twenty — unverified, not none — and are written in from the Tracks 02/03
+   build sheets. No `null` remains in META, so the honest-floor fallback below
+   is now unreachable for real data. Keep it: it is what a NEW protocol added
+   without a verified mapping falls back to, and removing it would make the
+   next unverified row silently claim a full library. */
 /* SR-078 · a protocol's library size is derived, never typed.
    SHARED.resources holds every resource. Two of them are conditional: the
    Proximity Guide and the Invitation to Repair only appear where an ongoing
@@ -569,31 +660,50 @@ var META = {
   't1-07': { extras: [], state: 'numb', frameworks: ['porges','heartmath'] },
   't1-08': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['jung','mate'] },
   't1-09': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['jung','distance'] },
-  't1-10': { extras: ['advisory'], state: 'numb', frameworks: ['porges','watts','distance'] },
+  /* SR-180 · `distance` removed. The dispenza correction was applied here as a
+     RENAME (dispenza → distance, SR-118); the authored content treated it as a
+     DROP. t1-10's own build note reads "Authored against Porges and Watts", and
+     no resource in the protocol cites the fourth-step literature, so the third
+     key was a false attribution. The authored content decided it. Do not
+     re-add — t1-09 keeps `distance` because its text does rest on it. */
+  't1-10': { extras: ['advisory'], state: 'numb', frameworks: ['porges','watts'] },
 
   /* Track 02 · Relationship Healing */
-  't2-01': { extras: null, state: 'agitated',    frameworks: ['porges','heartmath'] },
-  't2-02': { extras: null, state: 'unsteady',    frameworks: ['porges','mate'] },
-  't2-03': { extras: null, state: 'agitated',    frameworks: ['porges','mate'] },
-  't2-04': { extras: null, state: 'unsteady',    frameworks: ['mate','jung'] },
-  't2-05': { extras: null, state: 'unsteady',    frameworks: ['porges','jung'] },
-  't2-06': { extras: null, state: 'unsteady',    frameworks: ['jung','mate'] },
-  't2-07': { extras: null, state: 'agitated',    frameworks: ['jung','mate'] },
-  't2-08': { extras: null, state: 'numb', frameworks: ['heartmath','distance'] },
-  't2-09': { extras: null, state: 'unsteady',    frameworks: ['porges','mate'] },
-  't2-10': { extras: null, state: 'numb', frameworks: ['mate','watts'] },
+  't2-01': { extras: ['invitation'], state: 'agitated',    frameworks: ['porges','heartmath'] },
+  't2-02': { extras: ['invitation'], state: 'unsteady',    frameworks: ['porges','mate'] },
+  't2-03': { extras: ['advisory', 'invitation'], state: 'agitated',    frameworks: ['porges','mate'] },
+  't2-04': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['mate','jung'] },
+  't2-05': { extras: ['invitation'], state: 'unsteady',    frameworks: ['porges','jung'] },
+  't2-06': { extras: ['invitation'], state: 'unsteady',    frameworks: ['jung','mate'] },
+  't2-07': { extras: [], state: 'agitated',    frameworks: ['jung','mate'] },
+  't2-08': { extras: [], state: 'numb', frameworks: ['heartmath','distance'] },
+  't2-09': { extras: ['advisory', 'invitation'], state: 'unsteady',    frameworks: ['porges','mate'] },
+  't2-10': { extras: ['advisory'], state: 'numb', frameworks: ['mate','watts'] },
 
   /* Track 03 · Professional Performance */
-  't3-01': { extras: null, state: 'agitated',    frameworks: ['porges','heartmath'] },
-  't3-02': { extras: null, state: 'agitated',    frameworks: ['porges','mate'] },
-  't3-03': { extras: null, state: 'unsteady',    frameworks: ['jung','distance'] },
-  't3-04': { extras: null, state: 'agitated',    frameworks: ['jung','mate'] },
-  't3-05': { extras: null, state: 'agitated',    frameworks: ['heartmath','porges'] },
-  't3-06': { extras: null, state: 'numb', frameworks: ['jung','watts'] },
-  't3-07': { extras: null, state: 'unsteady',    frameworks: ['jung','watts'] },
-  't3-08': { extras: null, state: 'numb', frameworks: ['porges','distance'] },
-  't3-09': { extras: null, state: 'numb', frameworks: ['porges','watts'] },
-  't3-10': { extras: null, state: 'unsteady',    frameworks: ['distance','watts'] }
+  't3-01': { extras: [], state: 'agitated',    frameworks: ['porges','heartmath'] },
+  't3-02': { extras: ['advisory', 'invitation'], state: 'agitated',    frameworks: ['porges','mate'] },
+  't3-03': { extras: [], state: 'unsteady',    frameworks: ['jung','distance'] },
+  't3-04': { extras: [], state: 'agitated',    frameworks: ['jung','mate'] },
+  't3-05': { extras: [], state: 'agitated',    frameworks: ['heartmath','porges'] },
+  /* SR-216 · t3-06 became The Belonging Gap. Label, state, frameworks and
+     extras all move together, from the master handover and the delivered
+     content file's own header. The state change numb -> unsteady means
+     TRACK 03 HAS TWO NUMB PROTOCOLS, NOT THREE — t3-08 and t3-09. Any count
+     assuming three is now wrong. */
+  't3-06': { extras: ['advisory'], state: 'unsteady', frameworks: ['porges','jung'] },
+  't3-07': { extras: [], state: 'unsteady',    frameworks: ['jung','watts'] },
+  /* SR-199 · `heartmath` replaces `distance`. The dispenza correction landed
+     here as a RENAME (SR-118), leaving `distance`; the build sheet specifies
+     `heartmath`. Same rename-versus-replacement split SR-180 resolved on
+     t1-10 — but there the authored content decided it, and t3-08 has no
+     authored resources yet, so the build sheet is the specification and it
+     wins. Decision Fatigue is a Numb protocol; cardiac coherence is the
+     step-2 framework the sheet puts under it. Re-check against the copy
+     when t3-08 is written. */
+  't3-08': { extras: ['advisory'], state: 'numb', frameworks: ['porges','heartmath'] },
+  't3-09': { extras: ['advisory'], state: 'numb', frameworks: ['porges','watts'] },
+  't3-10': { extras: [], state: 'unsteady',    frameworks: ['distance','watts'] }
 };
 
 /* Derived — never hand-counted. Used by the About page and the framework pages. */

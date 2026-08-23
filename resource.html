@@ -1000,7 +1000,13 @@ function renderMain(){
   document.getElementById('rmeta').innerHTML=r.meta;
   document.getElementById('rread').textContent=r.read;
   document.getElementById('rbody').innerHTML=r.body;
-  document.getElementById('railsum').innerHTML=padN(current+1)+' of '+padN(v.length)+' · '+r.title;
+  /* SR-191 · the rail names the resource, it no longer counts it. The test is
+     what the string counts: a count of the member's position or progress is
+     prohibited on every surface; a count of the library is not. The title stays
+     — naming which
+     resource is open is orientation; numbering it out of a total is a report
+     card. The toggle's own "Resource" and "Index" labels are unchanged. */
+  document.getElementById('railsum').innerHTML=r.title;
 
   document.getElementById('guide').classList.toggle('hidden',!r.audio);
   /* SR-080 · no placeholder length. The element stays and fills from the

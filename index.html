@@ -3813,8 +3813,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <div class="reader-sidebar-head">
           <p class="reader-eyebrow">Full Resource Library</p>
           <p class="reader-protocol-title" id="reader-protocol-title"></p>
-          <p class="reader-progress-line" id="reader-progress-line"></p>
-          <div class="reader-progress-track"><div class="reader-progress-fill" id="reader-progress-fill" style="width:0%;"></div></div>
         </div>
         <p class="reader-sidebar-label">Journey Overview</p>
         <div id="reader-tabs"></div>
@@ -3830,16 +3828,12 @@ document.addEventListener('DOMContentLoaded', function(){
               <button type="button" class="reader-mode-btn" data-reader-mode-btn="light">Light</button>
             </div>
             <span class="topbar-divider">·</span>
-            <span id="reader-content-readtime"></span>
-            <span class="topbar-divider">·</span>
             <span id="reader-content-savelabel">Save</span>
           </div>
         </div>
         <div id="reader-content" style="flex:1;overflow-y:auto;"></div>
       </div>
       <div class="reader-rail">
-        <p class="reader-rail-label">Your Progress</p>
-        <p class="reader-rail-count" id="reader-rail-count">1 of 1</p>
         <div id="reader-steps"></div>
         <div class="reader-rail-actions">
           <div class="reader-rail-action"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 2h8v12l-4-3-4 3V2z"/></svg><span>Bookmark</span></div>
@@ -4871,27 +4865,27 @@ const READER_PROTOCOLS = {
   't3-p10': { title: 'The Creative Flow Unlock Protocol', keys: ['t3-p10-guide','t3-p10-companion'] }
 };
 const KIND_META = {
-  'Protocol Guide':      { category:'START HERE', icon:'book', readtime:4, desc:'The complete step-by-step walkthrough' },
-  'Session Guide':       { category:'START HERE', icon:'book', readtime:4, desc:'The complete step-by-step walkthrough' },
-  'Meditation Script':   { category:'START HERE', icon:'book', readtime:10, desc:'Guided practice for this pattern' },
-  'Attention Advisory':  { category:'RESOURCE', icon:'shield', readtime:5, desc:'Where to direct your attention and how close to stay' },
-  'Safety Score':        { category:'UNDERSTAND', icon:'brain', readtime:5, desc:'Where things stand between you' },
-  'Somatic Release':   { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Practical ways to help your body settle and release tension' },
-  'Sensory Companion':   { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for narrowing the field' },
-  'Relational Companion':{ category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for relational safety' },
-  'Creative Companion':  { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for reclaiming hidden parts' },
-  'Ritual Companion':    { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for letting it move through' },
-  'Behavioral Companion':{ category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for steady footing' },
-  'Evidence Companion':  { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for an internal floor of worth' },
-  'Somatic Release Activities':      { category:'PRACTISE', icon:'leaf', readtime:6, desc:'Daily practices for this pattern' },
-  'Disclosure & Support':{ category:'RESOURCE', icon:'book', readtime:4, desc:'A ready-to-use script for saying what you need' },
-  'Invitation to Repair':{ category:'RESOURCE', icon:'brain', readtime:5, desc:'A clear invitation when repair is genuinely possible' },
-  'Cue Card':         { category:'EMERGENCY', icon:'shield', readtime:2, desc:'The 4-line version for moments that overwhelm' },
-  'Support Resources':   { category:'EMERGENCY', icon:'shield', readtime:2, desc:'Where to turn right now' },
+  'Protocol Guide':      { category:'START HERE', icon:'book', desc:'The complete step-by-step walkthrough' },
+  'Session Guide':       { category:'START HERE', icon:'book', desc:'The complete step-by-step walkthrough' },
+  'Meditation Script':   { category:'START HERE', icon:'book', desc:'Guided practice for this pattern' },
+  'Attention Advisory':  { category:'RESOURCE', icon:'shield', desc:'Where to direct your attention and how close to stay' },
+  'Safety Score':        { category:'UNDERSTAND', icon:'brain', desc:'Where things stand between you' },
+  'Somatic Release':   { category:'PRACTISE', icon:'leaf', desc:'Practical ways to help your body settle and release tension' },
+  'Sensory Companion':   { category:'PRACTISE', icon:'leaf', desc:'Daily practices for narrowing the field' },
+  'Relational Companion':{ category:'PRACTISE', icon:'leaf', desc:'Daily practices for relational safety' },
+  'Creative Companion':  { category:'PRACTISE', icon:'leaf', desc:'Daily practices for reclaiming hidden parts' },
+  'Ritual Companion':    { category:'PRACTISE', icon:'leaf', desc:'Daily practices for letting it move through' },
+  'Behavioral Companion':{ category:'PRACTISE', icon:'leaf', desc:'Daily practices for steady footing' },
+  'Evidence Companion':  { category:'PRACTISE', icon:'leaf', desc:'Daily practices for an internal floor of worth' },
+  'Somatic Release Activities':      { category:'PRACTISE', icon:'leaf', desc:'Daily practices for this pattern' },
+  'Disclosure & Support':{ category:'RESOURCE', icon:'book', desc:'A ready-to-use script for saying what you need' },
+  'Invitation to Repair':{ category:'RESOURCE', icon:'brain', desc:'A clear invitation when repair is genuinely possible' },
+  'Cue Card':         { category:'EMERGENCY', icon:'shield', desc:'The 4-line version for moments that overwhelm' },
+  'Support Resources':   { category:'EMERGENCY', icon:'shield', desc:'Where to turn right now' },
 };
 function kindMetaFor(kind){
   for (const k in KIND_META) { if (kind.indexOf(k) === 0 || kind === k) return KIND_META[k]; }
-  return { category:'RESOURCE', icon:'book', readtime:5, desc:'' };
+  return { category:'RESOURCE', icon:'book', desc:'' };
 }
 const READER_ICONS = {
   book:  '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5a1 1 0 011-1h5v13H4a1 1 0 01-1-1v-11zM17 4.5a1 1 0 00-1-1h-5v13h5a1 1 0 001-1v-11z"/></svg>',
@@ -4969,7 +4963,12 @@ function openReader(protocolKey, initialKey){
   tabsEl.innerHTML = '';
   contentEl.innerHTML = '';
   stepsEl.innerHTML = '';
-  document.getElementById('reader-rail-count').textContent = '1 of ' + proto.keys.length;
+  /* SR-185 · the rail's heading and its count are gone. It was headed "Your
+     Progress" and read an ordinal out of a total — the same forbidden claim as
+     the sidebar readout, eleven lines away, which is why removing only the
+     first one did not make the Reader shippable. The rail itself stays: the
+     step list, Bookmark/Highlight/Listen and the footer quote are not progress
+     claims and removing them would be a design change, not a removal. */
 
   proto.keys.forEach(function(key, idx){
     const data = RESOURCE_CONTENT[key];
@@ -4987,7 +4986,13 @@ function openReader(protocolKey, initialKey){
         '<p class="reader-tab-kind"><span class="reader-kind-dot" style="background:' + style.color + '"></span>' + data.kind + '</p>' +
         '<p class="reader-tab-title">' + data.title + '</p>' +
         (meta.desc ? '<p class="reader-tab-desc">' + meta.desc + '</p>' : '') +
-        '<div class="reader-tab-meta-row"><span>' + meta.readtime + ' min read</span>' + (data.locked ? '<span class="reader-tab-lock">\uD83D\uDD12</span>' : '') + '</div>' +
+        /* SR-181 \u00B7 the reading-length readout was removed here too. The row now
+           renders only when there is a lock to show \u2014 keeping it unconditionally
+           would leave an empty flex row on every unlocked resource, which is the
+           stranded fragment Rule 19 is about. This note deliberately does not
+           quote the removed string: Rule 21's worked example is a sweep counting
+           a comment about a removal as the removal having failed. */
+        (data.locked ? '<div class="reader-tab-meta-row"><span class="reader-tab-lock">\uD83D\uDD12</span></div>' : '') +
       '</div>' +
       '<div class="reader-tab-check" data-check-for="' + key + '" style="display:none;">' + READER_ICONS.check + '</div>';
     tab.addEventListener('click', function(){ selectReaderTab(protocolKey, key); });
@@ -5082,13 +5087,17 @@ function selectReaderTab(protocolKey, key){
   });
   document.getElementById('reader-content').scrollTop = 0;
 
-  // Progress bar + label in sidebar head
-  const pct = Math.round(((idx+1) / proto.keys.length) * 100);
-  document.getElementById('reader-progress-fill').style.width = pct + '%';
-  document.getElementById('reader-progress-line').textContent = 'Resource ' + (idx+1) + ' of ' + proto.keys.length + ' \u00b7 ' + data.kind;
+  /* SR-181 / SR-185 \u00b7 the sidebar head no longer reports where a member is.
+     The position readout went first (SR-181), then the bar beneath it and the
+     percentage that drove it (SR-185). Ninety authored Track 01 resources state
+     that nothing counts a member's way through the library, and a bar is the
+     same claim drawn rather than written. Both containers went with their
+     writes: the <p> carried margin-bottom and the track carried a 3px height,
+     so emptying either leaves a stranded band rather than a no-op. Do not
+     restore any of it. These notes do not quote the removed strings, per
+     Rule 21. */
 
   // Right rail state
-  document.getElementById('reader-rail-count').textContent = (idx+1) + ' of ' + proto.keys.length;
   document.querySelectorAll('.reader-step-node').forEach(function(node){
     const nodeKey = node.dataset.stepKey;
     const label = document.querySelector('.reader-step-label[data-step-label-key="' + nodeKey + '"]');
@@ -5103,10 +5112,16 @@ function selectReaderTab(protocolKey, key){
     }
   });
 
-  // Topbar readtime + save
-  const meta = kindMetaFor(data.kind);
-  document.getElementById('reader-content-readtime').innerHTML =
-    '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" style="width:11px;height:11px;vertical-align:-1px;margin-right:4px;"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 1.5"/></svg>' + meta.readtime + ' min read';
+  // Topbar save
+  /* SR-181 · the reading-length readout is gone, with its clock glyph, its
+     <span> and the divider that separated it from Save — an emptied span
+     between two dividers renders as a doubled separator. The authored
+     resources carry no durations of any kind and the interface must not
+     invent one. The duration field that fed it was removed from every
+     KIND_META entry, from the fallback and from the runtime-added entry by
+     SR-186 — a duration sitting unread in the record is what a later run takes
+     as permission to render one. Do not re-add it. This note does not quote
+     the removed string, per Rule 21. */
 
   // Bottom nav
   const prevBtn = document.getElementById('reader-prev-btn');
@@ -9482,7 +9497,7 @@ window.addEventListener('load', function(){
     });
 
     if(typeof KIND_META!=='undefined'){
-      KIND_META['The Decision']={category:'INTEGRATE',icon:'identity',readtime:7,desc:'Choose who handles this pattern next'};
+      KIND_META['The Decision']={category:'INTEGRATE',icon:'identity',desc:'Choose who handles this pattern next'};
     }
     if(typeof RM_KIND_STYLE!=='undefined'){
       RM_KIND_STYLE['The Decision']={color:'#D4A843',tag:'DECISION'};

@@ -51,6 +51,45 @@ Canonical record of defects and design decisions. Commits reference the ID:
   `workshopRelationship` €49, `premium1` €129, `premium3` €299. Companion halves, both **0**
   with comments stripped: escapes anywhere outside the `PRICING` block, and bare `€` glyphs
   anywhere in the file. Part of every close-out sweep.
+- **The banned-vocabulary invariant is a list of words, and three of them have ordinary
+  senses the tree legitimately needs.** Recorded at the close of Run H, unfixed, because it is a
+  copy decision rather than a defect. The Track 01 content rules prohibit *quantum, frequency,
+  manifest, rewire, streak, badge, graduate* "absolutely". Swept over prose, with identifiers
+  and stated prohibitions excluded, the tree holds **six live hits and not one is the register
+  the ban is aimed at**:
+  - `frequency` ×5 in `method-heartmath.html` — the **resonance frequency**, peer-reviewed
+    physiology: *"near the frequency at which the body's own blood-pressure regulation already
+    oscillates"*. Enforcing the ban literally means rewriting the SME page's sourced claim.
+  - `frequency` ×1 in `index.html` — the Proximity Guide's *"Reduce access, frequency,
+    intensity, or dependence"*, where it plainly means **how often**.
+  - `manifest` — a **data key** and a set of CSS class names (`id-manifest-row`), never rendered
+    as copy.
+
+  **THE INVARIANT NOW CARRIES ITS OWN EXCLUSIONS. All three are part of it, not notes beside
+  it — a sweep that does not apply them is measuring something else.**
+
+  1. **Identifiers are not copy.** Class names, ids, data attributes, object keys and CSS
+     selectors are structure. `jprog-tier-badge` is not a badge; `manifest` as a data key is not
+     a claim. The prohibition is on member-facing vocabulary, and nothing a member reads comes
+     from a selector. Confirmed twice independently — this sweep, and [[SR-192]]'s transform
+     check, which reported its own field names as authored copy until it excluded them.
+  2. **A prohibition stated is not a prohibition broken.** `method-jung.html` and
+     `method-mate.html` carry *"No streaks, no completion, no graduation anywhere on this
+     platform."* A naive sweep scores that as three violations. It is the platform **promising**
+     not to do the thing, which is the €275 failure mode one level up: an invariant that cannot
+     tell a rule from its breach breaks the moment anyone writes the rule down. Exclude a hit
+     whose immediate lead-in negates it.
+  3. **An inert selector is not a render.** Rules surviving in a stylesheet with no element to
+     match are recorded as inert by [[SR-181]] and [[SR-185]] and are not violations. Distinguish
+     inert from **dormant** (Rule 14) — [[SR-191]]'s ribbon rendered nothing only because
+     `sr.resume` has no writer, and that one *was* a violation, with a delayed fuse.
+
+  **The word list itself needs replacing with sense-specific patterns** — *raise your frequency*,
+  *manifest your* — because the register the ban is aimed at is pseudo-scientific, and three of
+  the seven words have ordinary senses the tree legitimately needs. Until that lands, an
+  unqualified word sweep produces six false positives, and **an invariant that cries wolf gets
+  switched off by whoever tires of the noise** — which is precisely the outcome Rule 21 exists to
+  prevent.
 - **No price is spelled out except in `PRICING.words`.** Verified clean at the close of
   Run E: prices in words exist only in the record, one derived span and one comment.
 - **`€59`, `€139` and `€275` appear nowhere — in values.** Retired by SR-136/SR-141.
@@ -58,7 +97,22 @@ Canonical record of defects and design decisions. Commits reference the ID:
   why the `premium` key must not be re-added. That is the invariant's own worked example of why
   comments are excluded: counted naively, a note explaining a removal reads as the removal
   having failed.
-- **SR-044 to SR-179 are issued.** All are written up below except four:
+- **SR-044 to SR-227 are issued.** SR-215 was folded into SR-222; SR-223's finding is recorded there too. SR-180 to SR-193 by Run H (Track 01 content); SR-198 to
+  SR-202 by Run I (Tracks 02/03 specification), which also issued **SR-197** for a missing
+  source document. **SR-194 to SR-196 and SR-200 were never issued and are free** — SR-200's
+  phase was resource authoring, which Run I was barred from.
+
+  **SR-182 was reassigned and now carries a real entry** — protocol.html's query-string routing.
+  It was recorded mid-run as spent-not-free on the assumption its phase had been absorbed
+  elsewhere; Andre reassigned it, and the register follows the decision rather than the earlier
+  bookkeeping. **SR-183 and SR-184 remain spent, not free** — their work was carried out under
+  SR-189 and SR-190. Do not reach back for them.
+
+  A number recorded as spent is a statement about intent, not a lock. When the person allocating
+  reassigns one, the entry gets written and this note gets corrected — which is Rule 21 applied
+  to the register's own bookkeeping.
+
+  All are written up below except four:
   - **SR-064** — issued and referenced in `dashboard.html:1005` and `:1007`, but never
     written up here. It is the derived-price work `docs/SR-061-065-run-report.md` covers.
     Not free.
@@ -75,7 +129,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 **Rules — method**
 
 Earned across Runs C to G. Each cost something to learn; the worked example is named so
-the rule can be checked rather than taken on trust. **Twenty-one rules.**
+the rule can be checked rather than taken on trust. **Twenty-four rules.**
 
 1. **A deliberate non-fix gets a register entry** carrying the reasoning and an explicit
    do-not-tidy line. An undocumented correct refusal is indistinguishable from an oversight,
@@ -148,6 +202,16 @@ the rule can be checked rather than taken on trust. **Twenty-one rules.**
     fallback probe seeded a protocol name that exists in no track, and the correct
     behaviour — degrade to nothing ringed — read for a moment as the fallback failing.
     Check fixtures against the record before trusting any result taken from them.
+    **Run K inverted a fourth premise of Andre's, and the CAUSE is the reusable part.**
+    [[SR-213]] was briefed as "Track 01's four were wired under SR-193 — a file drop". Nothing was
+    wired on any track, `SR-193` is the support advisory, and the slots were rendering
+    placeholders with the path typed into a JS string. **The stated cause: the ID was read from a
+    summary rather than from the register.** A register entry is the record; a summary of it is a
+    copy, and Rule 16 applies to the copy exactly as it applies to a brief. **Check the ID against
+    the register before building on what it claims** — the same run had already found a register
+    entry propagating its own error into an instruction ([[SR-187]]).
+    A second premise inverted in the same phase: Track 01's hero was described as having a bright
+    left half; measured L=0.015, **darker** than Track 02's.
     **Run F inverted four more premises**: [[SR-155]]'s stub route being `dashboard.html`'s
     own rail rather than `protocol.html`, [[SR-156]]'s `|| ROUTES.dashboard` fallback being
     latent rather than live, [[SR-162]]'s `.pimgnote` emitting nothing anywhere, and
@@ -199,9 +263,45 @@ the rule can be checked rather than taken on trust. **Twenty-one rules.**
     which is exactly how a live assertion goes stale for a reason that has nothing to do with
     what it guards.
 
+22. **Where two inventories share a key namespace, matching names are evidence of COLLISION
+    RISK, not of correspondence. Verify by content, never by key.** [[SR-206]] is the worked
+    example and it is the most dangerous shape found so far, because every structural check
+    passes while the wrong resource is served. The Reader's Track 01 keys and the authored set
+    share six type names — `guide`, `advisory`, `companion`, `disclosure`, `crisiscard`,
+    `repair` — and **two of the six name different resources**: old `guide` is *Protocol Guide*,
+    a walkthrough, while new `guide` is *How This Works*, the mechanism; old `advisory` is
+    *Attention Advisory*, new is *Proximity Guide*. A key-by-key migration produces a page that
+    renders, validates, balances and serves the wrong text.
+    **Corollary, from the same entry: key on TYPE, never on POSITION.** A resource's ordinal
+    shifts with the conditionals — Disclosure & Support is 06 on a protocol without an advisory
+    and 07 on one with it — so an implementation indexing by number is correct on the first
+    protocol anyone tests and wrong on every conditional-bearing one.
+    **Second corollary, [[SR-209]]:** the same applies to placement. Anchor to text, not to a
+    block index, because an index moves when a paragraph is added.
+
+23. **A second inventory that disagrees with ITSELF is past reconciliation — replace it, do not
+    sync it.** [[SR-206]]: the Reader's hardcoded key list drifted three separate ways from its
+    own data. `p1` is served `advisory` while `META['t1-01'].extras` is `[]`; `p2-crisiscard`
+    exists as data with no key slot, documented as dead at `index.html:4212`; and `p10` carries a
+    one-off `crisis-p10` that fits no pattern. Reconciling a list in that state means choosing,
+    per row, which of two wrong records to believe. **Derive it from the source the counts
+    already use** — `SHARED.resources` plus `extras` — and the drift has nowhere to live.
+
+24. **A PATH IN THE RECORD IS A CLAIM THE ASSET EXISTS.** Where a file is absent the record
+    carries the brief and the ratio but **no `src`**, and the slot renders its placeholder having
+    made **no request at all**. [[SR-214]] is the worked example: Track 03's four section slots
+    were first given paths for unproduced files, which would have cost a 404 per slot on every
+    page load to reach the same visible result as making no request.
+    **An `onerror` fallback is a repair, not a design.** It exists for the file that vanishes
+    after the record was written; it is not the mechanism for a file you already know is missing.
+    The request should never be made.
+    Corollary: the same applies to any record field a surface trusts. A `scrim`, a `ratio` or a
+    duration in the record is a claim about something real, and a consumer is entitled to act on
+    it without checking.
+
 **Measurement artifacts — the standing pre-flight**
 
-Five now, every one found the same way: a plausible reading that was wrong. Run these before
+Six now, every one found the same way: a plausible reading that was wrong. Run these before
 trusting any measurement, and **report the check alongside the result**, not instead of it.
 
 | artifact | how it lies | countermeasure |
@@ -210,8 +310,26 @@ trusting any measurement, and **report the check alongside the result**, not ins
 | **Stale scratchpad mirror.** The preview serves a copy of the tree ([[SR-154]]); a silently failed sync leaves you verifying pre-edit files. | A clean pass, with numbers that all look right, taken against the code you just changed away from. | **Sentinel every sync**: write a unique token into the file just edited, sync, confirm it appears in the mirror **and is absent from a control file**, remove it, sync again. |
 | **Browser cache serving a pre-edit page.** | The first post-[[SR-155]] reading showed the removed statebar still present, while `curl` against the same server returned a file without it. | Cache-bust every verification URL. **A busted HTML URL does not bust its subresources** — `js/`, `css/` and `content/` survived both a query change and a forced navigation, and [[SR-162]] briefly read as not rendering at all because of it. `fetch(url,{cache:'reload'})` each one, then reload. |
 | **The environment cannot reproduce the symptom.** | A false pass, or a working feature reported broken. The preview's canvas is *dark*, so an unfixed page passes the white-flash test ([[SR-164]]); CSS transitions never advance, so an applied transform reads as identity forever ([[SR-149]], [[SR-163]]). | Force the condition and compare against a known-good control — light colour scheme, a stalled stylesheet, `transition:none`. Report it **as a control-based result**, never as a direct observation. |
+| **No JavaScript runtime at all.** Distinct from [[SR-154]]'s sandbox path problem, which was about *where* the preview could read from. Here nothing can execute JS: `node`, `deno`, `bun` and `jsc` are absent, `preview_start` is denied by the classifier on every config tried, `file://` access is declined, and `osascript -l JavaScript` is denied. | Rule 8's "measure the live object graph" is unavailable, so a static reading gets reported as though it were a runtime one. Worse, **Rule 4's parse check cannot run at all** — a bracket balance is the only substitute and it cannot see a broken brace inside a template string. | Rule 20. Re-implement the resolution, **validate the re-implementation against a known-good control in the same environment** before trusting it, sentinel it for sensitivity per Rule 9, and label the result **control-based**, never as a direct observation. Flag any count so taken for a re-take when a runtime exists. Report the bracket balance **as the weaker check it is**. |
 | **A console buffer that outlives the page.** | Errors persist across navigations **and across a preview-server restart**, so a stale failure reads as a live one. [[SR-169]] opened with 33 errors on a seed tab — one `openRoute` message and 32 × 404 — every one of them left over from Run F's deliberately-stalled control pages, on five files that were in fact clean. | **Read the console in a fresh tab.** A non-empty console on a reused tab proves nothing until the tab is new; a clean one in a fresh tab is the only reading worth reporting. |
 
+
+
+**Two notes on the sixth artifact, from the run that found it.**
+
+**The documented workaround is itself now blocked.** The procedure recorded further down this
+register — run the server from the scratchpad against a mirror of the working tree, with
+`launch.json` temporarily repointed and restored — was attempted first and **denied by the
+permission classifier**, as were `preview_start` on the repo's own config, `file://` access, and
+`osascript`. A workaround written down in the register is not a guarantee it still runs; check
+it, and record it when it stops working rather than leaving the next run to rediscover it.
+
+**A control pinned to `HEAD` goes stale the moment you commit.** Rule 16 extends to the
+tester's own fixtures, and this is the cheap version of that mistake: the SR-180 probe validated
+against `HEAD:content/tracks.js`, which was correct while the work was uncommitted and became
+wrong three commits later — the same probe then reported `FAIL` against a tree that was right.
+**Pin a control to an immutable ref**, not to a moving one. The counts never changed; only the
+fixture did.
 
 
 *Note: IDs SR-001 to SR-043 were tracked in an earlier artifact and covered work that
@@ -1517,7 +1635,28 @@ of the one in the current art" against. **Blocked on a real sample.** When one e
 the drawn number's bottom offset against it and set the stack: drawn number above, in-image mark
 below, both bottom-right, one mark only and it comes from the image.
 
-*Status:* open — blocked on the replacement covers · *Raised:* 22 Aug 2026
+**UPDATE, 22 Aug 2026 — unblocked by [[SR-189]], and the predicted collision is now real.**
+The replacement covers have landed. The sample this entry was blocked on exists, so the
+measurement it asked for can finally be taken — and it comes out badly.
+
+The cover spec puts the rule and wordmark on a shared centreline at **y = 1370 of 1448**, i.e.
+**78px above the base, 5.4% of the height**. The drawn number sits at **`bottom:7px`** on a card
+measured at 236×315 — **2.2%** — at `font-size:30px`, so it occupies roughly the bottom **7px to
+37px**. The in-image wordmark's centreline lands around **17px** on that same card. **They
+overlap**, both bottom-right, exactly as this entry predicted when it said 7px was not enough
+clearance for any mark.
+
+The prediction was right and the fix is now measurable rather than blocked. `.sr-pcover-no` at
+[css/saferise-system.css:2349](css/saferise-system.css:2349) has to move up clear of the
+wordmark, drawn by [js/saferise-card.js:65](js/saferise-card.js:65). Not done here: this run was
+scoped to installing the covers, and moving the overlay is a design change on a shared component
+that renders on the dashboard and the portals as well.
+
+⚠ This entry's opening paragraphs are **evidence, not live assertions** — they record the art
+as measured when this was raised, and [[SR-189]] has since replaced those files. Left standing
+rather than rewritten, per Rule 21: the collision above only makes sense against it.
+
+*Status:* open — unblocked, ready to fix; overlay position needs moving · *Raised:* 22 Aug 2026
 
 
 
@@ -1525,6 +1664,1177 @@ below, both bottom-right, one mark only and it comes from the image.
 
 
 ---
+
+### SR-180 · The record grows a tenth resource, and t1-10 loses a framework it never used
+Three data corrections were briefed from the Track 01 content handover. **Two reproduced. One
+did not**, and that non-reproduction is the more useful finding.
+
+**`SHARED.resources` 9 → 10.** Accountability & Empathy added after Your Record at
+[content/tracks.js:93](content/tracks.js:93). It carries no `CONDITIONAL_RESOURCES` entry, so it
+is universal across all thirty protocols and lifts the unconditional floor from seven to eight.
+Track 01's per-protocol counts now resolve **8, 10, 9, 10, 8, 8, 8, 10, 10, 9**.
+Its icon key is `face`, which already existed in `js/saferise-track.js`'s `ICONS` map — no new
+icon was authored. Its description is the one field the handover did not supply; it is built
+from the resource spec's own sentences and is the only line on the card that was not lifted
+whole. **Do not re-add Source Insights above it** — [[SR-077]] merged that into How This Works
+and the merge stands.
+
+**`META['t1-10'].frameworks` loses `distance`.** The dispenza correction landed in this repo as a
+**rename** (dispenza → distance, [[SR-118]]); the authored content treated it as a **drop**.
+t1-10's own build note reads *"Authored against Porges and Watts"*, and no resource in that
+protocol cites the fourth-step literature, so the third key was a false attribution — a resource
+citing a framework its text never uses. The authored content decided it.
+**t1-09 keeps `distance` deliberately**, because its text does rest on it. Do not "consistency
+fix" the pair.
+
+**`META[].extras` — briefed, does not reproduce (Rule 2).** All ten already matched the handover
+exactly. No edit was made. This was the **seventh** stale claim in that document, after six the
+author had already withdrawn, and it is why handover §3 is now treated as a **claim list, not a
+work list**: every remaining item gets reproduced against the tree before anything is acted on.
+
+**Consequence, intended, recorded so it does not read as a regression later:**
+`frameworkReach('distance')` moves **6 → 5**, and `method-kross.html` now lists one fewer Track
+01 protocol. The backlog entry asserting 6 was a live assertion and has been rewritten, per
+Rule 21.
+
+⚠ **The count is control-based and wants re-taking.** No JS runtime existed in the environment
+(see the sixth measurement artifact), so `protocolResources()` could not be executed. The
+resolution was re-implemented, validated against `HEAD` as a known-good control — which
+reproduced the pre-edit truth `[7,9,8,9,7,7,7,9,9,8]` — and sentinel-checked for sensitivity by
+emptying t1-02's `extras` and confirming the count moved. Rule 9 still applies: a sentinel proves
+a probe works *within its own method*, not that the method is right. Nothing here is
+runtime-built, which is the condition Rule 8 exists for, so the reasoning is sound — but
+**re-take this with a real evaluator when one is available.**
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-181 · The Reader counted a member's position and timed their reading
+Ninety authored Track 01 resources state that nothing counts a member's way through the library
+and that no duration appears anywhere. The Reader did both.
+
+**Removed:** the sidebar position readout (ordinal out of total, plus kind), and the
+reading-length readout in **both** the places it rendered — the tab list and the content topbar.
+
+**Rule 19 mattered three times here**, and none of the three was the string itself:
+- the position readout's `<p>` carries `margin-bottom:8px`, so emptying it leaves a stranded 8px
+  gap rather than a no-op. The element went with the write.
+- the topbar readout sat **between two `<span class="topbar-divider">·</span>`**. Removing only
+  the text renders a doubled separator. One divider went with it.
+- the tab-list row is `display:flex` and held the duration plus an optional lock. It now renders
+  **only when there is a lock to show**, instead of leaving an empty flex row on every unlocked
+  resource.
+
+**Now genuinely inert, reported rather than deleted:** `.reader-progress-line` in both the base
+and light-mode blocks. Nothing can match it — this is not "dormant" in Rule 14's sense.
+
+⚠ **Corrected at close-out.** The first version of this entry named only `index.html`'s inline
+blocks. The close-out sweep found **two more inert rules in a second file** —
+[css/saferise-system.css:1407](css/saferise-system.css:1407) and
+[:1409](css/saferise-system.css:1409) carry `#reader-overlay .reader-rail-count` and
+`#reader-overlay .reader-progress-fill`. A Reader rule living in the shared system sheet as well
+as in the page's own `<style>` is exactly what Rule 7 warns about: one file swept, the other
+missed. All of them are inert; none is deleted.
+
+⚠ **The comments in the code deliberately do not quote the removed strings.** Rule 21's own
+worked example is a sweep counting a note *about* a removal as the removal having failed, which
+is exactly what a comment containing the banned string would cause. This was caught before
+commit, on a sweep that hit the new comments.
+
+**This fix was not sufficient on its own** — see [[SR-185]].
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-185 · Removing the two strings did not make the Reader shippable
+[[SR-181]] removed what it was briefed to remove and the Reader still made the forbidden claim,
+**eleven lines from the code that had just been changed**. Found by enumerating every DOM write
+in the Reader rather than by sweeping for the strings — the surviving violations did not share a
+string with the ones removed.
+
+**A progress bar.** `reader-progress-track` / `reader-progress-fill`, driven by
+`style.width = pct + '%'`. The content rule says "no progress bars" in those words; a bar is the
+same claim drawn rather than written, and no text sweep would ever have found it.
+
+**A second position readout,** under a rail literally headed **"Your Progress"**, rendering an
+ordinal out of a total from two separate writes.
+
+Both removed, with their containers — the track carries a 3px height, so emptying it leaves a
+stranded band.
+
+**The rail itself stays.** Its step list, Bookmark/Highlight/Listen and footer quote are not
+progress claims, and removing them would be a design change rather than a removal.
+
+**The lesson worth keeping:** a prohibition stated as a string ("no *Resource 7 of 8*") gets
+verified as a string, and the drawn and re-worded forms survive. Rule 7 and Rule 17 cover
+numerals, escapes and spelled forms; this adds the **drawn** form. When a rule forbids a claim,
+enumerate the surfaces that could make it, not the strings that do.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-186 · The duration field outlived every one of its consumers
+After [[SR-181]] removed both renders, `KIND_META[].readtime` had **zero consumers** — the same
+class as `premium1`/`premium3` in Run E, where a record with no reader was the finding rather
+than the fix. Here the conclusion goes the other way, because the field is a **duration**, and
+the content rule forbids durations platform-wide. A duration sitting unread in the record is what
+a later run takes as permission to render one.
+
+Removed from all 17 `KIND_META` entries, from the `kindMetaFor` fallback, and from the entry
+added at runtime when The Decision becomes a Reader destination. 19 occurrences, one file.
+Nothing broke: `KIND_META` still holds 17 entries and the script-block profile is identical to
+`HEAD`.
+
+No duration styling was added anywhere by this run's other work either. A hook in the stylesheet
+is an invitation to render one.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-188 · Where the Track 01 content should live — decision required before anything installs
+**Report only. Nothing installed.** 43,743 words across 13 files, 231KB of markdown, ten
+protocols by up to ten resources.
+
+**How a resource body is stored today.** `RESOURCE_CONTENT[key].body` is an **array of HTML block
+strings** — each entry one rendered block, already marked up. `READER_PROTOCOLS[key].keys` holds
+the ordered manifest of resource keys for a protocol. The Reader reads both synchronously. The
+incoming content is markdown, so a **one-time markdown → HTML-block transform, checked in**, is
+required either way. Not a runtime conversion: that would put an authoring step on the member's
+device and make the copy depend on a parser.
+
+**Two key namespaces, and they do not agree.** `META` keys Track 01 as `t1-01` … `t1-10`.
+`READER_PROTOCOLS` and `RESOURCE_CONTENT` key the same ten as `p1` … `p10`, with Tracks 02 and 03
+as `t2-p1` … `t3-p10`. Anything installing content has to cross that boundary, and **the mapping
+currently exists only in whoever is writing the code at the time.**
+
+**Conditional resources are keyed `-repair`, not `-invitation`.** `META[].extras` records the
+conditional as `'invitation'`; `CONDITIONAL_RESOURCES` maps the display name *Invitation to
+Repair* → `'invitation'`; the served resource key is `p2-repair`. **This is the identical defect
+class [[SR-177]] already solved once** for `distance` → `method-kross.html`, where a key and a
+filename were different words and every consumer re-derived the mapping by hand.
+**Recommendation: record the mapping once, in the data, as SR-177 did** — do not rename anything,
+and do not let a third consumer re-derive it.
+
+**Options for the body text.**
+
+| | Where | Cost |
+|---|---|---|
+| A | Inline into `index.html`'s `RESOURCE_CONTENT` — the current pattern | `index.html` is already 10,552 lines. Adds ~231KB to a single file that every visitor loads, cannot be cached separately, and makes merge conflicts near-certain while three tracks are authored in parallel. **Not recommended.** |
+| B | One file per track, `content/t1-resources.js`, beside `tracks.js` | Matches the established pattern exactly: plain `var` + the `module.exports` guard `tracks.js` already carries. Zero loader code, the Reader's synchronous access keeps working, `index.html` grows by one `<script>` tag. ~231KB raw, roughly 60KB gzipped. **Recommended.** |
+| C | One file per protocol, `content/t1/01.js` … | Best weight — a member loads one protocol, not ten. But it needs a loader, and lazy loading means the Reader's synchronous reads become asynchronous, which touches the Reader's control flow rather than just its data. Worth doing later, on measured need, not now. |
+| D | JSON + `fetch` | Fails on `file://`, needs a server this environment could not start, and adds a build step the repo does not have. **Not viable here.** |
+
+**The illustration cues are the interesting question.** 360 markers across the ten protocols —
+176 `TEAL/BREATH`, 132 `GOLD/PAUSE`, 20 `PURPLE/MUSIC`, 20 `BLUE/ILLUSTRATION`, 12 `RED/ACTION`.
+These are **production direction for the audio and art lanes, not member-facing copy**, and must
+never render. Two choices: strip them at transform time, or carry them as a parallel `cues:[]`
+array indexed to the body blocks and simply not render them.
+**Recommendation: carry them.** Stripping severs the only link between the shipped copy and the
+recording and illustration briefs, and the ten-protocol art lane still needs them. This is the
+same principle `CLAUDE.md` already sets for the original protocol descriptions — kept in the
+data, not rendered on the card.
+
+**Blocked on Andre confirming B over C**, and on the namespace mapping decision above. Nothing
+should install until both are settled, because both change the shape of the transform.
+
+
+
+---
+
+### SR-189 · The covers in the repo were the defective ones, not the ones in the folder
+The image inventory said `t3-01` … `t3-09` were undeployable — top word and numeral still burned
+in, `-master` suffix, blocked on a generative removal pass. The supplied folder held them
+plain-named with no suffix. **Both could not be true.** Inspected before installing anything, as
+briefed.
+
+**The inventory describes the repo's state, not the folder's.** The supplied covers are finished:
+`t3-01` and `t3-05` carry no top word and no numeral, only the locked rule + SAFERISE lockup.
+The defective files were the ones already committed — `assets/covers/01.jpg` carried
+**"REGULATE"** top-left and a large **"01"** lower right, and `assets/covers/t3-01.jpg` carried
+the same numeral. This is the art [[SR-179]] measured.
+
+All 30 replaced at 1086×1448. Track 01 derivatives regenerated to the spec **read off the
+existing set rather than invented**: `NN.png` at full resolution, `NN.jpg` and `NN.webp` at
+900×1200, `-640` at 640×853, `-320` at 320×427. Tracks 02 and 03 keep their one-jpg convention.
+Pillow 11.3.0 did the work; no `cwebp` or ImageMagick on the host, and none needed.
+
+**90 files, every one a modification — none added, none removed.** The incoming names already
+matched the repo's two conventions, so **no consumer moved**: the 103 cover references in
+`index.html` alone are untouched. There was no rename work to do, which was the thing the phase
+was scoped to report on.
+
+⚠ **This unblocks [[SR-179]] and simultaneously creates the collision it predicted** — see that
+entry, now updated with the measurement it was blocked on.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-190 · The support advisory page had no target
+Every Safe Practice resource points to *"a helpline in your country"* — ten references across
+Track 01 alone — and the page those resolve to did not exist. Track 01 cannot ship without it.
+
+`getting-help.html`, built from Part 1 of the supplied copy. **Nothing authored.** Verified
+mechanically in both directions: no sentence on the page absent from the source, and no source
+sentence missing from the page, after normalising markup, smart punctuation and whitespace.
+
+**That check earned its place immediately.** It caught two things I had added without noticing:
+an eyebrow label the source does not have, and a restructure that split one source sentence in
+half around a pull quote. Both were reverted to the source's shape and the two CSS rules they
+needed came out with them. **A transcription task fails silently by looking like good writing** —
+the check is what makes "authored nothing" a claim rather than an intention.
+
+**Deliberately not a directory, and do not make it one.** No helpline names, no numbers: services
+differ by country, change without notice, and a stale number is worse than none. The two
+organisations named are directories of services, not services.
+
+No script and no gate — reachable without an account, as the copy requires. Styling is in
+`css/saferise-system.css` under `.sr-adv`; nothing in the page styles itself, and `body` carries
+`.sr-tp` because the tokens are scoped to that class rather than `:root`. No duration, count,
+progress or score styling was added.
+
+**Nothing links here yet.** The Safe Practice references arrive with the Track 01 content
+([[SR-188]]), and the site-footer and cue-card-modal links the copy also specifies sit on
+surfaces outside this run's scope. **The page is not reachable by a member until those land** —
+it exists, it is correct, and it is currently an orphan.
+
+*Status:* fixed, pending inbound links · *Raised and fixed:* 22 Aug 2026
+
+---
+
+
+### SR-191 · The count of a member goes; the count of a library stays
+Applies the rule settled in [[SR-187]]: **what the string counts decides it, not which page it
+sits on.**
+
+Removed, all three counting the member:
+- [resource.html:1003](resource.html:1003) — the rail numbered the open resource out of a total.
+  It now names it. Naming which resource is open is orientation; numbering it is a report card.
+- [dashboard.html:2297](dashboard.html:2297) — the resume card's position string **and the
+  percentage bar eleven lines under it**. Both, for the reason [[SR-185]] records: removing the
+  sentence and leaving the bar is the same claim, drawn instead of written.
+- [dashboard.html:941](dashboard.html:941) — the cover ribbon, reading the same position from the
+  same `sr.resume` record as the resume card.
+
+Kept, both counting the library: `dashboard.html:1781` and `:1866`, *"N of M protocols still
+unopened"*. A shelf showing what you have not read is not a report card.
+
+**Two of the three removals were on the dashboard**, which is the clearest possible
+demonstration that the page-based phrasing of the rule was wrong.
+
+⚠ **The ribbon was not in the brief's list, and the reason matters.** [[SR-187]]'s original text
+grouped it with the two library lines and described it as *"protocols still unopened"*, which it
+never said. The instruction inherited the mislabel. See that entry — the correction is written up
+there because that is where the error lives.
+
+**Dormant, not inert (Rule 14), and that is the argument for removing them now rather than
+later.** `sr.resume` has no writer ([[SR-165]]), so none of the three rendered anything today.
+They would have rendered the day resume tracking shipped — a violation that arrives silently,
+attached to a feature nobody was reviewing for copy. A dormant violation is not a smaller
+violation; it is one with a delayed fuse.
+
+`r.percent` is now unread. **Left in the record deliberately, unlike [[SR-186]]'s duration
+field**, because a percentage is not itself a prohibited unit — the prohibition is on rendering
+the member's position, not on the number existing. Reported rather than removed.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-192 · Track 01's authored content enters the record
+`content/t1-resources.js`, built to the shape [[SR-188]] recommended and Andre accepted: one file
+per track beside `tracks.js`, same `var` + `module.exports` guard, read synchronously, no loader.
+280KB, 90 resources, 1,462 body blocks.
+
+**Counts reconcile against the handover's own verification block** — 90 of 90 resources;
+per-protocol 8, 10, 9, 10, 8, 8, 8, 10, 10, 9, matching what [[SR-180]] made the record resolve
+to; 360 cues at 176 breath, 132 pause, 20 music, 20 illustration, 12 action; four cue-card lines
+on all ten.
+
+**Generated, not authored, and proved so.** Every word in every body block traces to the source
+markdown, checked per protocol. The check **failed twice before it passed, both times on the
+probe rather than the data**: first every cue's block index read as an authored word, then the
+generated structure's own field names did. Identifiers are not copy — the same distinction the
+banned-vocabulary invariant needs, arrived at independently an hour later.
+
+**The defect the check caught is the one worth recording.** The cue card's four lines are
+separated in the source by a newline, not a blank line, and the first transform collapsed them
+into a single paragraph. The handover is explicit that four lines is **the mechanism, not a
+layout preference** — *"Four lines. Always here."* A transform that silently reflows authored
+structure destroys meaning while producing valid output and a plausible word count.
+
+**Two mappings live in the file, neither side renamed**, per [[SR-177]]'s precedent: META's
+`t1-01`…`t1-10` to the Reader's `p1`…`p10`, and the conditional that is `invitation` in the data
+and `-repair` in the key.
+
+**All 360 cues kept as data and never rendered.** They are the only link between the shipped copy
+and the recording and art lanes — the same principle `CLAUDE.md` sets for the original protocol
+descriptions, which stay in the data and stay off the card. **A surface that renders `cues` is a
+defect.**
+
+⚠ **NOTHING READS THIS FILE YET, and wiring it is materially larger than installing it.** The
+Reader serves Track 01 as six keys per protocol — `p1-advisory`, `p1-founder`, `p1-guide`,
+`p1-companion`, `p1-disclosure`, `p1-crisiscard`. The authored set is eight to ten, and they do
+not line up:
+- **four resource types the tree has never seen** — `meditation`, `practice`, `record`,
+  `accountability` — none of which exist in `PT_RES_ICONS` or `PT_RES_GROUPS`, so the protocol
+  page cannot render a card for them.
+- **`founder` is served and is a cut resource.** *Why I Built This One* is one of the three the
+  handover retired; it is still in `READER_PROTOCOLS` for all ten.
+- the existing `RESOURCE_CONTENT` entries for the retired keys are **shipped member-facing copy**
+  that wiring would orphan or delete.
+
+That is a rewrite of the Reader's Track 01 resource model inside `index.html`, deleting live
+copy — not an install. **Blocked on a decision about the retired entries**, which is a content
+question, not a code one.
+
+*Status:* installed, unwired · *Raised:* 22 Aug 2026
+
+---
+
+### SR-193 · The support advisory stops being an orphan
+Ten Safe Practice resources now link to `getting-help.html`, one each, which is what [[SR-190]]
+built the page for.
+
+The link is added **in the transform, not in the source markdown**: it is markup, the markdown is
+the copy record, and the words are untouched — only wrapped. Fidelity re-checked after the change
+and every word still traces to source.
+
+⚠ **Two phrasings, not one.** The handover says *"ten references to 'a helpline in your
+country'"*. **Nine say helpline. `t1-01` says "a crisis line in your country".** A linkifier keyed
+to the exact quoted string wires nine of ten, reports success, and leaves one Safe Practice
+resource pointing at nothing — Rule 17 exactly, a spelled variant of the same fact evading a
+sweep aimed at one wording. Both forms are matched.
+
+**Still outstanding**, and the page is not fully reachable until they land: the site-footer link
+and the cue-card modal link the advisory copy also specifies. Both sit on surfaces outside this
+run's scope.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-182 · protocol.html resolves the protocol it was asked for
+Reissued. This number was recorded at the Run H close-out as spent-not-free, on the assumption
+its phase had been absorbed elsewhere. **Andre reassigned it to this work**, so it carries a real
+entry and the ceiling note is corrected. The register follows the decision, not the earlier
+bookkeeping.
+
+The page read only `embed=` and `theme=`, and hardcoded `PAGE_PROTOCOL` to `t1-p01`. The dashboard
+passed `?track=` and `?protocol=`; the page ignored both. All thirty cards could only land on
+Anxiety Reset, which is why [[SR-178]] removed the card's pointer cursor rather than wire it to a
+destination that did not exist.
+
+`PAGE_PROTOCOL` now resolves against `TRACKS`, which `protocol.html` loads for the first time.
+Protocol numbers compare numerically, so `?protocol=3` and `?protocol=03` resolve identically.
+
+**Three outcomes, and only one renders the protocol page.** Resolved: the record answered.
+Not requested: no query at all, so nothing was asked for and the page keeps its authored Track 01
+content unchanged. **Unresolved: something was asked for and the record has no such protocol — a
+visible not-found state renders and every other section is hidden.**
+
+**The fallback is never a silent default, and the reason is the Journal.** `protocolId` is the
+key the Journal view *filters* on while it *groups* on `protocol` for display. A wrong resolution
+does not just show the wrong page — it files the member's entry against a protocol they never
+ran. A silent fallback corrupts the record, not merely the view.
+
+[[SR-178]]'s affordance is restored **on that entry's own stated condition** — *"the cursor
+returns when there is something to open"*. `role="button"`, a delegated handler that survives a
+re-render, and Enter/Space with `preventDefault`. A `role="button"` without keyboard parity is a
+control that announces itself and then does nothing. The href is built from `t.id` and `p[0]`,
+the same two record values `coverPath` already derives from — never typed.
+
+**Not done, deliberately:** [[SR-179]]'s overlay move. It is a design change on a shared
+component that renders on the dashboard and the portals, and Andre has not seen it.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+
+### SR-203 · The shipped copy is the canonical Track 02 shared block
+[[SR-202]] found the block in three versions and did not guess which was canonical. **Andre
+ruled: the shipped copy is authoritative, the standalone handover file is stale.**
+
+**Re-verified at the point of extraction**, not carried over from SR-202's earlier measurement:
+the block is **byte-identical** in t2-01 and t2-02 — same sha256, 2,950 bytes, 540 words.
+
+**Extracted to `content/t2-resources.js` → `T2_SHARED.twoParts`**, verbatim from t2-01. Fidelity
+checked both ways: no word in the output absent from the source, no source word missing from the
+output. 18 body blocks, 536 rendered words, one cue.
+
+**The reasoning, recorded because it decides future cases of the same kind.** Three grounds, and
+the first is the general one:
+1. **The file breaks its own stated rule.** Its `Vocabulary decisions` section — still live —
+   says an invented label like *the first instrument* is worse than the word it replaces, and
+   that describing the part beats naming it. The prose then uses *instrument* eight times, as a
+   name. **The shipped copy does what the file only argues for.** Where a specification and its
+   own worked example disagree, the example is the tell.
+2. **Wrong register.** The shipped copy is second person and plain; the file is expository, which
+   the platform does not use for member-facing copy.
+3. **The shipped copy carries a `GOLD/PAUSE` production marker**, so it has been through the
+   recording pass. The file has not. **A production marker is evidence of a pipeline stage the
+   text has passed**, and it survived the extraction as a cue rather than as rendered copy.
+
+**The closing element is the Track 01 recommendation, set italic — part of the block, not a
+separate element.** This is why the file's `Related: where Track 01 comes in` section is
+superseded along with the prose: the paragraph it quotes is an **earlier wording of that same
+closing line**, and leaving it live would reintroduce the drift from the other end.
+
+**The file is preserved, not deleted, because most of it is live.** It is now at
+`docs/reference/SHARED-t2-two-instruments.md` with the superseded range marked in place and the
+prose left standing beneath the marker — Rule 21, annotate the dated record rather than rewrite
+it. Everything from `Vocabulary decisions` onward is untouched and byte-verified against the
+original: the vocabulary rulings, the *energy* ruling, the no-aetiology line, and the safety
+floor with the mutual-disclosure gate. **None of that was ever member-facing copy.**
+
+⚠ **A standing constraint was honoured over a direct instruction, and this is the record of it.**
+The instruction was to mark the block superseded in `SHARED-t2-two-instruments.md`. That file
+lives under `~/Desktop`, which this project's standing rule puts permanently off-limits — *copy,
+never move, never edit in place, never write to `~` or `~/Desktop`*. **The Desktop original is
+untouched and verified so.** The file was brought into the repo and marked there, which serves
+the instruction's purpose without breaching the constraint — and the spec sections belong under
+version control regardless.
+
+**Placement note.** The precedent cited was `SHARED.resources` and `CHANGE_PROPOSALS`, both in
+`tracks.js`. The **pattern** was followed — one record, referenced by identity, never copied —
+but the **file** is `content/t2-resources.js`, matching [[SR-192]]'s per-track shape. `tracks.js`
+loads on every page including the marketing index, and 540 words of resource prose there is a
+page-weight regression. Track 02's remaining resources land in the same file as they are authored.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-197 · `CONTENT-STATUS-CORRECTION.md` does not exist
+**Recorded because it was the stated precondition for the whole Run I amendment**, not because
+anything was blocked by it.
+
+The instruction was to read `CONTENT-STATUS-CORRECTION.md` in the brief folder **before acting on
+the brief**, on the grounds that a correction document supersedes the brief's status line. **The
+file is not in the folder and does not exist anywhere on the Desktop** — searched by name and by
+the substrings *correction* and *status*. The folder holds seven markdown files and 31 SVGs; that
+is not one of them.
+
+**Proceeded anyway, and the reason is the one Rule 3 gives.** The correction's substance was
+supplied directly in the instruction — 42 of 175 resources, four protocols complete (t2-01,
+t2-02, t3-01, t3-05), eight meditation-only, eight empty — and **the tree corroborates it
+exactly**: the folder contains four protocol content files, and they are those four. The brief's
+own status line (18 of 91, 16 of 84) is the figure that disagrees with the tree.
+
+So the document is missing but its content is verified by something better than the document:
+the files themselves. **A missing source whose claims independently reproduce is a reporting
+matter, not a blocker** — and none of SR-198, SR-199, SR-201 or SR-202 depended on it, because
+all four read the build sheets, which are present.
+
+**If a correction document does exist somewhere, it has not been seen by this run**, and anything
+in it beyond the four facts above has not been applied.
+
+**UPDATE, 22 Aug 2026 — the file exists after all, in a later bundle.**
+`CONTENT-STATUS-CORRECTION.md` ships inside `SafeRise-Track02-Complete/specs/`. It was genuinely
+absent from the Tracks 02/03 brief folder where the instruction placed it, and absent from the
+Desktop entirely at the time — that observation stands as evidence and is not rewritten. It
+arrived with the Track 02 complete bundle.
+
+**Nothing this entry concluded changes.** The four facts were verified against the tree rather
+than taken from the document, which is why its absence blocked nothing. Its Track 02 lines are now
+superseded in turn by `TRACK-02-COMPLETE-HANDOVER.md`, which took Track 02 from 18 of 91 to 91 of
+91. Track 03 remains as both describe it, 16 of 84.
+
+**The lesson is about sequencing, not about the document.** A file named in an instruction may
+exist in a bundle that has not arrived yet. Absence at the moment of checking is a fact about the
+moment, not about the file — report it as such, verify the claims independently, and proceed.
+
+*Status:* closed — source arrived in a later bundle, conclusions unchanged · *Raised:* 22 Aug 2026
+
+---
+
+### SR-198 · The twenty unverified `extras` are resolved
+`META[].extras` was `null` on all twenty Track 02 and 03 protocols. `null` means **unverified,
+not none** — a distinction [[SR-117]] records as a deliberate double-record. Written in from the
+Tracks 02/03 build sheets.
+
+Per-protocol counts now resolve to the sheets' **Res** column exactly, and the track totals
+reconcile independently: **91** for Track 02 and **84** for Track 03, which are the figures the
+brief states. **No `null` remains in `META`.**
+
+**The honest-floor fallback in `protocolResources()` is kept even though no real data can now
+reach it.** Both `null` and `[]` still yield the unconditional set. That branch is what a **new**
+protocol added without a verified mapping falls back to, and removing it as dead code would let
+the next unverified row silently claim a full library instead of the floor. A do-not-tidy line
+sits on it (Rule 1).
+
+Control-based, no JS runtime (see the sixth measurement artifact): the control is the pre-run tip,
+where all twenty were `null` and every one resolved to the unconditional floor; the sentinel
+returns t2-03 to `null` and confirms the count moves 10 → 8.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-199 · Three of the four framework mappings were already correct
+Checked before editing, as briefed. **Only t3-08 reproduced.**
+
+| | in the record | the build sheet | |
+|---|---|---|---|
+| t2-08 | `['heartmath','distance']` | heartmath + kross | already correct |
+| t3-03 | `['jung','distance']` | jung + kross | already correct |
+| t3-10 | `['distance','watts']` | kross + watts | already correct |
+| t3-08 | `['porges','distance']` | porges + **heartmath** | **fixed** |
+
+**`kross` in the brief is `distance` in the record.** [[SR-177]] records why the key and the file
+differ — `distance` is served by `method-kross.html`. Translated, never renamed, as instructed.
+
+⚠ **t3-10 was flagged as the one that mattered, on the concern that removing `dispenza` would
+leave Creative Flow resting on Watts alone — one interpretive framework with no peer-reviewed
+support. That does not reproduce, and never could have.** The dispenza correction landed in this
+repo as a **rename** ([[SR-118]]), not a deletion, so Kross has been the primary key on t3-10
+since that fix. The credibility hole the brief was worried about was closed before the brief was
+written.
+
+**t3-08 is the same rename-versus-replacement split [[SR-180]] resolved on t1-10, and it resolves
+the other way.** On t1-10 the authored content decided it — the text rested on Porges and Watts
+and cited nothing else, so the third key was a false attribution. **t3-08 has no authored
+resources at all**, so there is no text to arbitrate and the build sheet is the specification.
+Decision Fatigue is a Numb protocol and cardiac coherence is the step-2 framework the sheet puts
+under it. **Re-check this against the copy when t3-08 is written** — if the text does not rest on
+HeartMath, this becomes the same false attribution in the other direction.
+
+`frameworkReach`: `distance` 4, `heartmath` 8.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-201 · Twenty labels and twenty states — nothing to do
+Briefed as a data fix. **Does not reproduce (Rule 2).** All twenty labels and all twenty states
+already match the build sheets exactly, checked before touching anything.
+
+Recorded rather than skipped quietly, because a silent no-op is indistinguishable from an
+oversight and the next run will re-raise it. This is the **eighth** briefed item this sequence
+that turned out to be already done — see [[SR-180]] for the seventh and the point that a handover
+§3 is a claim list, not a work list.
+
+*Status:* no change required · *Raised:* 22 Aug 2026
+
+---
+
+### SR-202 · Where the shared blocks and the delivered diagrams live — report only
+**Nothing installed.** Three questions, three answers.
+
+#### 1 · The two shared blocks — and one has already drifted
+
+**Track 03's *What this track works on* is present in both delivered protocols** and is the
+straightforward case.
+
+**Track 02's two-instruments block exists in three versions, and they are not the same.**
+Measured on the section body, normalised:
+
+| | words | |
+|---|---|---|
+| `SHARED-t2-two-instruments.md` | 459 | the standalone file |
+| inside t2-01 | 525 | |
+| inside t2-02 | 525 | |
+
+**t2-01 and t2-02 are byte-identical to each other.** The standalone file matches neither —
+similarity **0.43**, diverging by the second sentence (*"assembling"* against *"building"*). The
+brief describes the block as *"identical everywhere"* and *"roughly 450 words"*; the shipped
+copy is 525 words and the 450-word figure describes the standalone file only.
+
+**So the standalone file is either a rewrite that never reached the protocols, or the protocols
+are the newer text and the file is stale. That is a content decision and I have not guessed it.**
+What is certain: two of the ten exist, they agree with each other, and a third version is sitting
+in the same folder. **The drift the brief warns about has already happened, at n=2.**
+
+**Recommendation: extract to shared data, and do it before the remaining eight are authored.**
+- **Extract** — one record, referenced by all ten, exactly as `SHARED.resources` and
+  `CHANGE_PROPOSALS` already work in `tracks.js`. Cost: one field, and the eight unwritten
+  protocols must be authored to reference it rather than repeat it. Drift becomes structurally
+  impossible.
+- **Inline** — cost is ten copies of a 525-word block, 5,250 words of duplicated copy, and a
+  correction that has to land in ten places. At n=2 it has already failed once.
+
+The decision that must come first is **which of the two versions is canonical.**
+
+#### 2 · The breath cycle exists. Do not build a duplicate.
+
+Confirmed, and it was confirmed once already earlier in this run. **`method-heartmath.html:133`**
+carries an inline `<svg class="sr-fw-diagram">`, commented *"the wave, drawn. one breath cycle,
+ten seconds, turning at four."* Vector, authored in code, which is what the asset rules require
+of it. The brief's *"Unverified — assumed to exist on method pages"* resolves to **it exists**.
+
+#### 3 · The thirty release diagrams and the two-parts diagram
+
+**Delivered and well-formed.** 30 release SVGs at `viewBox="0 0 780 300"`, plus
+`img-090-two-parts.svg` at 780×450. Each carries `role="img"` and a `<title>` — accessible
+without extra work — and the SAFERISE lockup the brief specifies.
+
+**Nothing in the repo renders them, and the repo currently contains no `.svg` files at all.**
+Zero consumers for `img-067`, `img-090`, or any release diagram.
+
+⚠ **They are light-ground artwork and this platform is dark.** Colours across all thirty are
+`#1B2A4A` navy (150 uses), `#2E7D6B` green (210), `#B08D57` bronze (60) and light greys
+`#dcd9d2` / `#9a958b`. **There is no background rect.** Dropped onto the site's `#08080C` ground,
+the navy structure and grey captions go nearly invisible. This needs either a light panel behind
+each diagram or a recolour — **a design decision, not a code one, and it should be settled before
+they are placed.**
+
+⚠ **The brief's §5 says the release diagrams are delivered "SVG + PNG". Only SVG is present.**
+Not a blocker — SVG is the better format here and the brief separately forbids raster for
+code-authored diagrams — but the asset table and the folder disagree.
+
+**Where they should live:** `assets/diagrams/`, as files rather than inlined. They are per-protocol
+(30 variants of one shape), so inlining them would put ~30 copies of near-identical markup into a
+page bundle; as files they cache individually and the protocol page references one by key. The
+brief's own `min-width: 600px` inside a horizontally scrolling container is a stylesheet rule for
+whatever renders them, and belongs in `saferise-system.css` under an `sr-` class when that lands.
+
+*Status:* open — report delivered, two decisions required · *Raised:* 22 Aug 2026
+
+---
+
+
+### SR-205 · Recolouring the diagrams — closed as SUPERSEDED, not as done
+[[SR-202]] found the delivered diagrams were light-ground artwork with no background rect,
+navy and grey on a `#08080C` platform, and reported that they needed a panel or a recolour.
+**Neither happened, and the reason is better than either.**
+
+The redelivered set carries **no hardcoded colour at all**. Every value resolves through six
+custom properties, each with a fallback. Nothing was recoloured; the diagrams inherit.
+
+**Why that beats the fix this entry asked for.** A recolour produces one dark variant. The
+Reader has **three** modes — dark, sepia, light — so a recolour would have had to be redone per
+mode, per diagram, thirty-one times over, and redone again the next time a mode was added. The
+token approach survives the theme switch because the diagram never holds a colour to begin with.
+
+**The general form, worth keeping:** where a fix would produce one variant per theme, the fix is
+usually in the wrong place. Move the decision to the consumer.
+
+Placement and binding are [[SR-209]].
+
+*Status:* closed — superseded by the redelivered set · *Raised:* 22 Aug 2026
+
+---
+
+### SR-206 · Wiring the Reader — seven consumers, three of which mutate at runtime
+**Reported and NOT started.** The gate was whether the Reader is the only consumer of
+`RESOURCE_CONTENT`. It is not, and it is not close.
+
+**Seven consumers, all in `index.html`.** The Reader is one. The others are the protocol page's
+resource cards ([[SR-030]], and **unguarded** — it calls `data.title` with no null check), the
+card-title re-sync, `openResourceModal` (a separate surface), a v12 pass that **mutates**
+`p2-guide` and `p2-disclosure`, a somatic pass that **mutates** `kind`/`title`/`meta` across a key
+set, The Decision, which **creates** entries *and mutates* `READER_PROTOCOLS[pk].keys`, and
+`classifyReaderPages`. Plus the founder generator, which creates ten entries at load.
+
+This is Rule 8's warned case: the object is assembled and rewritten across five separate IIFEs at
+different points in load order. **Superseding it is not a data swap.**
+
+**The finding that matters most is the name collision — now Rule 22.** Six type names are shared
+between the Reader's keys and the authored set, and **two of the six name different resources**.
+A key-by-key migration serves the wrong text while every structural check passes.
+
+**The second is that the hardcoded list has already drifted from itself — now Rule 23.** `p1` is
+served `advisory` while `META['t1-01'].extras` is `[]`; `p2-crisiscard` exists as data with no key
+slot; `p10` carries a one-off `crisis-p10`.
+
+**Also displaced, and no home in the record:** `founder` — *Why I Built This One*, retired
+alongside Source Insights and Reference Case, currently served on all ten.
+
+**SCOPED AT FOUR COMMITS, 22 Aug 2026. Andre's answers, and the sequence.**
+
+**The Decision keeps its Reader slot**, and stops mutating a keys array that will not exist.
+*What it would take to register as a conditional:* `CONDITIONAL_RESOURCES` maps a display name to
+an `extras` flag, and `protocolResources()` filters on it — so registering The Decision means
+adding one map entry and one `extras` value per protocol that carries it. **That is small.** What
+is not small is that The Decision is not in `SHARED.resources` at all, so it would have to be
+added there, which changes every derived count on every surface that reads that array — the
+dashboard fold title, the track-page list, the protocol page. **Recommendation: it stays as-is
+and the derived set accommodates it** — the derivation appends any protocol-specific Reader entry
+after the derived ten rather than requiring it to be in the shared library. One-line
+accommodation against a count change that reaches five surfaces.
+
+**The modal and the cards move WITH the Reader.** [[SR-030]]'s intent — cards and Reader read one
+object so they can never disagree — survives; only the object changes.
+
+**The sequence, and no intermediate state leaves a surface reading a half-migrated object:**
+
+| | commit | why it is safe to stop here |
+|---|---|---|
+| 1 | **Additive only.** Add the four new icons to `PT_RES_ICONS`/`PT_RES_GROUPS`, guard `ptResFromContent`, and add the derivation helper — reading `SHARED.resources` + `extras` — without wiring it to anything. | Nothing consumes the helper yet. Every surface still reads the old object, whole. |
+| 2 | **Cut over the three read surfaces together** — Reader, modal, cards — to the derived key set and `T1_RESOURCES`. | The only commit where the object changes, and all three consumers change in it. There is no point at which one reads new and another reads old. |
+| 3 | **Retire what is displaced.** Remove `founder` and its generator, annotate the 50 superseded literal entries as superseded rather than deleting silently, and remove the `crisis-p10` one-off. | Nothing reads them after 2. |
+| 4 | **Re-point the three mutation passes** — the v12 copy pass, the somatic pass, The Decision's registration — at the new keys. | Each is currently a silent no-op against the new set, not a crash, so the page works between 3 and 4; it just does not yet apply those rewrites. |
+
+**The ordering constraint that decides it:** the three mutation passes run *after* the object is
+built, so they must be fixed after the object changes, not before — fixing them first points them
+at keys that do not exist yet. And the cut-over must be one commit, not three, because the cards
+and the Reader are specified to agree.
+
+⚠ **`ptResFromContent` gets its guard in commit 1, ahead of everything.** It calls `data.title`
+with no null check, so the protocol page throws on the first missing key rather than degrading.
+An unguarded lookup is how a content change takes a page down, and it should be guarded before
+any content change is made — not in the same commit as one.
+
+**The six Companion variants displaced by the collapse to one *Somatic Release Activities*,
+quoted in full so what is lost is visible:**
+
+- **Sensory Companion** (p3, Overwhelm Threshold) — *"Decluttering one small space, phone-free
+  walks, noise-cancelling headphones — daily companions for narrowing the field"*
+- **Relational Companion** (p4, Abandonment Wound) — *"A recurring class with the same group,
+  volunteering, a consistency journal — daily companions for relational safety"*
+- **Creative Companion** (p5, Shame Dissolution) — *"Unshared creative expression, a sharing
+  circle, a private story journal — daily companions for reclaiming hidden parts"*
+- **Ritual Companion** (p6, Grief Integration) — *"Visiting a meaningful place, a memory box,
+  gentle rhythmic movement — daily companions for letting loss move through"*
+- **Behavioral Companion** (p8, Jealousy Release) — *"A social-media boundary day, a skills-based
+  class, a 'good for them' practice — daily companions for steady footing"*
+- **Evidence Companion** (p9, Insecurity Anchor) — *"A wins log, a values card deck, one
+  meaningful self-made object — daily companions for an internal floor of worth"*
+
+Each is protocol-specific and none survives the collapse. The consolidation is deliberate in the
+authored set; this is the record of what it costs.
+
+*Status:* open — scoped at four commits, not started · *Raised:* 22 Aug 2026
+
+---
+
+### SR-207 · Track 02's authored content enters the record
+91 of 91 into `content/t2-resources.js`, extending the file [[SR-203]] created. Counts
+9, 9, 10, 10, 9, 9, 8, 8, 10, 9 — the build sheet exactly, totalling 91. 1,471 body blocks,
+397 cues.
+
+**Shape asserted independently of content**, which is the [[SR-192]] lesson: four cue-card line
+blocks on all ten, and the *Before you start* suggestion line on exactly t2-08 and t2-10, the two
+Numb protocols, and nowhere else. Fidelity checked per protocol — zero words in the output absent
+from the source.
+
+**`sharedRefs` is a new structure, deliberately not a body string.** `{block: N, ref: 'twoParts'}`
+says `T2_SHARED.twoParts` belongs at index N and the body does not contain it. Ten protocols, one
+record.
+
+⚠ **The handover's §1 calls `SHARED-t2-two-instruments.md` the "canonical source". It is not**, and
+this was re-checked against the new bundle rather than assumed from [[SR-203]]: the file is still
+the stale expository version, 472 words against the shipped 538, similarity **0.44**. The shipped
+block is unchanged between bundles — the new t2-01 and t2-02 inline copies are byte-identical to
+each other and match SR-203's extraction once the cue marker and trailing separator are accounted
+for. **SR-203's ruling stands; the handover's label is wrong.**
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-208 · All ten protocols reference the shared block, and the constraint becomes structural
+t2-01 and t2-02 held the block inline; the other eight carried the marker. All ten now reference.
+
+**The measurable result is the `ego` constraint.** Before: **3** occurrences across Track 02 data —
+one in `T2_SHARED`, one in each inline copy. After: **1**, inside `T2_SHARED`, zero anywhere else.
+
+**This is the argument for extraction, and it is stronger than the maintenance argument.** The
+maintenance case is that ten copies drift and one record does not. The real case is that a
+constraint enforced by structure is not a constraint anyone has to remember. There is one copy of
+*"that's just your ego talking"* in the codebase, so it **cannot** appear in a heading, in
+navigation, in metadata or in a second resource — not because a check would catch it, but because
+there is nothing to copy from. A rule that cannot be broken needs no reviewer.
+
+Body blocks 1,507 → 1,471; the 36 removed are the two 18-block inline copies, and nothing is lost.
+
+⚠ **The transform was not idempotent and doubled the file on its second run.** The splice took
+everything up to `if (typeof module` as the shared prefix, which swept in the previous run's
+`T2_RESOURCES`. The boundary is now the declaration's own terminator and idempotence is asserted —
+two consecutive runs produce identical byte counts. **A generator that is not idempotent corrupts
+the moment anyone re-runs it**, and it will look like a content explosion rather than a tooling
+bug.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-209 · The diagrams are placed and inherit the platform's tokens
+31 SVGs into `assets/diagrams/`, as files. Files rather than inline because they are thirty
+per-protocol variants of one shape; inlining puts thirty near-identical copies in a page bundle.
+
+**Placement is by ANCHOR TEXT, never by block index.** An index is a position, and positions move
+the moment a paragraph is added — the same defect class as keying a resource by its number
+([[SR-206]]). Ten Release anchors found, ten placed; the two-parts diagram resolves inside the
+shared block. All 11 referenced files verified present on disk.
+
+**`alt` is the SVG's own `<title>`, transcribed.** Alt text is authored copy and this run wrote
+none; reusing the title the diagram already carries is transcription, and it is what a screen
+reader would receive from the SVG regardless.
+
+**Verified by resolving the token chain, not by rendering** — no browser is available (see the
+sixth measurement artifact), so this is a static resolution check and is labelled as one. Every
+token the 31 SVGs use is bound on the dark scope; the light mode restates all five inverting
+tokens; sepia overrides the one it needs; every `var()` carries a fallback, so a diagram opened
+standalone still renders.
+
+**Both invariants the spec forbids touching are asserted rather than assumed.** Fills use
+`--sr-ink`, the same token as strokes — ten uses on the two-parts diagram — so the gate dot
+inverts with everything else. `--sr-surface` and the `--sr-bg` enclosure rect both default to
+transparent.
+
+⚠ **`--sr-accent` is the one token with no platform equivalent.** It is the diagram's second
+structural colour. The platform's only comparable value is `--sr-track03`, which is Track 03's
+identity colour — using it would borrow a semantic that does not apply. The values set are the
+diagram author's own verified pair from the theming spec, flagged in the CSS for replacement.
+
+Cormorant Garamond confirmed loaded on every page that renders a diagram, so the lockup does not
+fall back to Georgia and stop reading as a mark.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-210 · The awareness-moves placement spec — report only
+**Nothing implemented.** `SHARED-awareness-moves.md` is a placement specification for additions to
+the **meditation scripts**, which is resource content this run is barred from writing.
+
+**Its own title is stale.** It reads *"The two awareness moves"* and defines **five** lettered
+moves — A through E — with E splitting into E1, E1b and E2. Counting placements rather than
+letters gives the six the brief refers to.
+
+| | where it goes | what it does |
+|---|---|---|
+| A · out of the grip | Recognition, **after** the naming | separates the person from the state while still inside it |
+| B · attention by choice | Rise, replacing or preceding the forward scene | names what awareness is for |
+| C · the question underneath | Release, **after** *what was this for* | past what the state did, toward what it was built on |
+| D · the decision | — | four rules, exclusions listed |
+| E1 · forgiveness | closes Release | **travels with C — a protocol carrying C without E1 is unfinished** |
+| E2 · gratitude and release | closes Rise | near-universal, reworded per protocol |
+
+**What honouring it would take is not a rendering change.** The moves are script text placed at
+named points inside the four steps, per protocol, with a table of eleven placements and **three
+refusals**. The refusals carry more weight than the placements and are the reason this cannot be
+applied mechanically:
+
+- **Grief** — there is no forward version of the person to move attention toward, and offering one
+  says the loss should be got past.
+- **Shutdown** — the faculty being asked for is the one that has reduced.
+- **Powerlessness** — telling someone whose situation genuinely cannot be moved that attention is
+  a choice is the cruellest available version of the idea.
+
+It also carries hard vocabulary exclusions in two registers: *higher self, true self, witness,
+observer consciousness, ego death* on Move A, and *attract, draw in, create your reality, call it
+in, align with, abundance, deserve it, the universe* on Move B — with the stated line that
+rehearsing **doing the work** is supported and rehearsing **having the thing** is not, because
+crossing it is manifestation with the vocabulary changed.
+
+**Assessment: this is authoring work, not build work.** The build's only obligation is that
+nothing in the data model prevents a meditation script carrying extra blocks at named points —
+and nothing does; `body` is an ordered array and `cues` already anchor to indices.
+
+*Status:* open — report delivered, content lane owns it · *Raised:* 22 Aug 2026
+
+---
+
+### SR-211 · t2-09's safety gates — four, not three, and never identical
+Asserted, and **two premises corrected**.
+
+**There are four gate-bearing resources, not three.** The handover names Safe Practice, the
+Proximity Guide and Resource 10. **Invitation to Repair carries one too.** All four verified
+present.
+
+**They are not identical passages, and could not have been deduplicated.** The concern was that a
+transform might collapse three repeated passages into one. Pairwise similarity across the four is
+**0.05 to 0.09** — they are written fresh per resource, exactly as the earlier brief specified for
+this gate. The risk being guarded against was not available to occur.
+
+**The assertion was rewritten because the first one was wrong.** It searched for a single quoted
+string from the handover's §6 and found it once, in the Proximity Guide only — which would have
+read as two missing gates. The gates share a **concept**, not a wording, so the assertion now
+tests for the safety markers each passage must carry (*being controlled, monitored, made afraid,
+not the resource for that*) rather than for a shared sentence. **An assertion keyed to a wording
+fails on content that was specified to vary.**
+
+All four are inline: no `<details>` or `<summary>` wrapper on any of them, so none sits behind a
+disclosure.
+
+*Status:* verified · *Raised:* 22 Aug 2026
+
+---
+
+
+### SR-216 · The SR-098 patch — one live change out of six claims
+Checked against the tree first, as instructed. **The patch's central premise is false here.**
+
+It is written as a **register-band correction**: `dispenza` occupying the `kross` slot as
+*interpretive* with `var(--teal)`, and `kross` absent. The registry actually holds **`distance`** —
+register **peer-reviewed**, `var(--gold)`, step 4, page `method-kross.html`. **The band correction
+the patch calls its main substance was done under [[SR-118]]/[[SR-119]]/[[SR-132]].** Only the key
+NAME differs, and [[SR-177]] records that divergence deliberately.
+
+All six framework mappings **already hold** once `kross` reads as `distance`. Both traps check
+out: t3-10 never lost kross, because this repo renamed rather than dropped; and the protocol count
+citing it is **4**, matching the patch's own *"verification count is five, not six"*. The twenty
+extras landed under [[SR-198]]; t1-04's label was already `Repair`.
+
+**The build notes do not reproduce.** They sit above the first resource heading, so the transform
+never collected them — zero `dispenza` in either generated content file.
+
+**The one live change: t3-06 → The Belonging Gap.** Title, label `Stand`, state `unsteady`,
+frameworks `['porges','jung']`, extras `['advisory']` — from the handover and corroborated by the
+delivered content file's own header.
+
+⚠ **The TRACKS row's promise, signature and three quotes still describe Ambition Recovery** —
+*"I hit the goal and felt nothing"*. The bundle supplies no replacement and writing one would be
+authoring member-facing copy. Unchanged, flagged in place.
+
+⚠ **`CLAUDE.md` forbids renaming protocols.** This is an owner decision stated in the master
+handover, not drift — but the conflict is real and recorded rather than glossed.
+
+**Track 03 now has TWO Numb protocols, not three** — t3-08 and t3-09. Any count assuming three is
+wrong.
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-221 · The t3-06 rename is incomplete, and one residue may not transfer
+**Report only, nothing edited.** `content/shared/SHARED-awareness-moves.md` is **partially**
+updated: a newer table at **:382** already reads *"t3-06 Belonging Gap"*, while two older ones
+still read *"t3-06 Ambition Recovery"*.
+
+**:132 and :194 are placement-table rows.** The tables key by **ID first, name second** —
+`t1-01 Anxiety`, `t3-03 Imposter` — so the ID is the key and the name is a human label. **The
+label is safe to update.** Whether the *decision* transfers is the open question: the placement
+was reasoned about Ambition Recovery's content, and t3-06 is now a different protocol wearing the
+same ID.
+
+**:82 is different and probably does NOT transfer.** It is a productivity-framing warning: Move B
+*"is one step from productivity framing. On t3-10 Creative Flow and t3-06 Ambition Recovery it
+must stay on the person doing the work and never touch what the work produces."* That risk is
+about **achievement and output**. The Belonging Gap is about **whether to stay in the room** — a
+social question, not an achievement one. The warning was written for a protocol that no longer
+exists at this ID. **Deleting it and re-deciding is the honest move; carrying it forward silently
+is not.**
+
+⚠ **`t3-06-SWAP-SPEC.md` is cited by the patch and is NOT in the bundle.** Confirmed absent. The
+patch's §112 carries some of it inline — the new name, the label, and that Ambition Recovery is
+**withdrawn from Track 03 and re-scoped for the Elevation Series** — but the spec itself has not
+been seen by this run.
+
+*Status:* open — three residues, one needing a content decision · *Raised:* 22 Aug 2026
+
+---
+
+### SR-224 · Track 03's images, minus the band — and the replacement that does not exist
+Four of five installed: hero, cost, range, change, each measuring **exactly** its stated size.
+Track 03's art entries gain `src`, and [[SR-214]]'s note is corrected — it claimed all five were
+unproduced, which is now false for four.
+
+⚠ **The band is not installed, and the ratio conflict is real.** `t3-band.jpg` measures
+**1400×583 (2.401:1)** against t1 and t2 at **1400×380 (3.684:1)**, with `saferise-track.js`
+declaring `'1400/380'`. Installing it would letterbox or crop it against its two siblings. Nothing
+cropped, nothing regenerated, layout untouched; the slot keeps no `src`, so it renders its
+placeholder and issues no request (Rule 24). **A third candidate exists** — `t3/band.jpg` at
+1907×825 (2.312:1) — in no slot list and matching neither sibling.
+
+⚠ **The t2 range replacement does not exist.** No 2048-wide image is present anywhere on the
+Desktop or in Downloads. **And the defect it was meant to resolve is on `t1/range.jpg`, not t2:**
+t1's corners measure L≈0.92, t2's 0.008–0.034. [[SR-222]] named t1; the instruction named t2.
+Both facts reported; nothing installed for that slot.
+
+**Source located after checking both places**, per the standing instruction — **three identical
+copies** exist: `~/Desktop/assets`, `~/Desktop/assets 2` and `~/Downloads/assets`.
+
+**Hero scrim, measured against its own pixels.** Track 03's is much the brightest of the three —
+h1 mean **0.314** against t1's 0.097 and t2's 0.046, which is the bright detailed left half
+originally attributed to t1.
+
+| | h1 | pull | body |
+|---|---|---|---|
+| before | 1.11:1 | 1.49:1 | 1.44:1 |
+| after | **5.76:1** | 12.34:1 | 11.31:1 |
+
+Two candidates tested; the lighter taken, matching the t1/t2 band rather than over-darkening.
+
+**Frames opened.** `cost` and `range` are dark and on-brief. `change` and `hero` are not — both are
+recorded in [[SR-222]], and `hero`'s text and logo are a prohibition breach rather than a taste
+question. `t3/range.jpg` is also a **healthcare worker in scrubs** where the rest of Track 03 is
+corporate — a family-coherence note, not a defect.
+
+*Status:* fixed for four slots; band and t2 replacement open · *Raised:* 22 Aug 2026
+
+---
+
+### SR-226 · t3-06's track row still carries Ambition Recovery's copy
+[[SR-216]] renamed t3-06 to **The Belonging Gap** and moved its label, state, frameworks and
+extras. The TRACKS row's **promise, signature and three quotes did not move**, because the bundle
+supplies no replacement and writing one would be authoring member-facing copy.
+
+The row now reads *The Belonging Gap Protocol* above *"Find what you actually want, under what you
+were taught to want"* and quotes including *"I hit the goal and felt nothing"*. **A protocol titled
+The Belonging Gap describing an achievement problem is a visible contradiction on a live page**,
+not an internal inconsistency.
+
+Blocked on the content lane. Four strings: promise, signature, and three quotes.
+
+*Status:* open — blocked on content · *Raised:* 22 Aug 2026
+
+---
+
+### SR-227 · CLAUDE.md forbids renaming protocols, and SR-216 renamed one
+Recorded so the rule and its exception are both on the record.
+
+`CLAUDE.md` states, under a CRITICAL heading: *"PRESERVE every ORIGINAL protocol title exactly as
+it currently exists… DO NOT rename protocols."* [[SR-216]] renamed t3-06 from *The Ambition
+Recovery Protocol* to *The Belonging Gap Protocol*.
+
+**This is an owner decision, not drift.** It is stated in the master handover, repeated in the
+instruction, and corroborated by the delivered content file's own header. The patch records that
+Ambition Recovery is **withdrawn from Track 03 and re-scoped for the Elevation Series**, so the
+title did not change — the protocol did.
+
+**The rule's purpose is intact.** It exists to stop a build inventing, shortening or substituting
+titles from a reference image. An owner replacing a protocol is a different act. The rule should
+probably say so, since as written it forbids this and a future run reading it literally would
+revert a deliberate decision.
+
+*Status:* open — recorded; CLAUDE.md may want an explicit exception clause · *Raised:* 22 Aug 2026
+
+---
+
+### SR-222 · Six of fifteen delivered frames read as lifestyle stock, not the briefed register
+**Grouped deliberately.** These arrived as three separate observations and are recorded as one,
+because the question is not whether three files are wrong. It is **whether the image lane has the
+register the briefs specify.** Three separate notes invite three separate re-shoots; one note asks
+the question that actually decides it.
+
+**1 · `assets/t1/range.jpg` is built for a light surface.** Three tilted photo cards composited on
+white. Corners measure **L≈0.92** against a page ground of **L=0.004**. It will render as a
+glaring rectangle. **Not a crop or a ratio fault** — no build-side change fixes it, and a recolour
+or a knockout is image work. Installed as delivered, unmodified.
+
+**2 · `assets/t1/change.jpg` is not its brief.** Brief: *"one person moving easily through an
+ordinary day at home."* Delivered: a man leaning on a **luxury car** outside an architectural
+villa at golden hour. Reads as automotive advertising.
+
+**3 · `assets/t2/hero.jpg` is not its brief** (previously [[SR-215]]). Brief: *"a warm domestic
+interior … Seated"*, with a casting note requiring *"a genuinely different home environment"*.
+Delivered: an outdoor coastal terrace, both standing, holding cocktails. Its **composition** is
+correct — pair in the right third, dark foliage left — so it is the setting and the register that
+differ, not the layout.
+
+**The pattern:** an ordinary day at home became a luxury car; a quiet domestic moment became a
+terrace with cocktails; and a set of three states became a light-surface composite. All three
+drift the same way — toward aspirational lifestyle and away from the ordinary domestic register
+the briefs are explicit about. **That is a lane question, not three file questions.**
+
+**4 · `assets/t2/range.jpg`** ([[SR-225]]). Brief: *the same pair three times — one pressing,
+both settled, one gone, with the other's absence felt.* Delivered shows the pair in panels one and
+two and only the man alone in the third. Installed unmodified.
+
+**5 · `assets/t3/change.jpg`.** Brief: *"someone leaving work at a reasonable hour, unhurried."*
+Delivered is a man in a suit on a clifftop terrace beside an **infinity pool** overlooking the sea.
+It reads as luxury real-estate advertising, and it is the furthest from its brief of any frame so
+far. Its top-right corner also measures **L=0.554** — a bright sky against a page at 0.004.
+
+**6 · `assets/t3/hero.jpg` breaks two absolute rules, not just the register.** The briefs say *"No
+text, numerals, wordmarks or logos in any frame."* This frame carries **a whiteboard covered in
+handwriting and sticky notes, monitors displaying code, and a laptop bearing a manufacturer's
+logo.** It also inverts the hero composition rule: the figure stands **centre**, and the left half
+— which the brief requires *"soft, dark and uncluttered"* for type — is the **busiest, brightest
+part of the frame**. That is why its scrim needed 0.58 alpha out to 66% where Track 02 needed 0.48.
+
+**Six of fifteen delivered frames now drift the same way** — toward aspirational lifestyle, and
+away from the ordinary register the briefs are explicit about. An ordinary day at home became a
+luxury car; leaving work on time became an infinity pool; a quiet domestic moment became cocktails
+on a terrace. **This is not a per-file problem and re-shooting six files will not fix it.** The
+question is whether the image lane has the brief's register at all.
+
+⚠ **One frame is a build blocker rather than a taste question.** `t3/hero.jpg`'s text and logo are
+prohibited outright, and no scrim removes them. It is installed and rendering.
+
+All are installed. None was modified. [[SR-215]] and [[SR-225]] are folded into this entry.
+
+*Status:* open — one content decision, not three · *Raised:* 22 Aug 2026
+
+---
+
+### SR-213 · The image slots read their path from the record
+The slots were **never wired on any track**. `TRACKS[].art` held prose briefs only,
+`content/tracks.js` contained **zero** `assets/` paths, and `js/saferise-track.js` built each path
+as a string — `'assets/t' + t.id + '/cost.jpg · 1600×700 · ' + brief(t,'cost')` — so the path, the
+pixel dimensions and the aspect ratio were all authored in the renderer. **That is the
+hardcoded-path-in-markup pattern this project forbids**, and it is the reason a file drop was
+never going to be enough.
+
+Each art entry is now `{src, ratio, brief}`. `ph()` is replaced by `slot()`, which **receives** a
+record entry rather than constructing one. `SHARED.art.fourSteps` holds the one asset that serves
+all three pages, because a shared image does not belong in `TRACKS`.
+
+Nine files installed. **The degrade is the normal state, not an error state:** no `src` renders
+the labelled placeholder carrying the brief, and a `src` that 404s has its `img` removed by
+`onerror`, revealing the same placeholder rather than a broken-image glyph.
+
+**`alt` is empty by intent.** These illustrate copy that already says the thing, which makes them
+decorative. The `brief` is art direction, not a description of what a sighted user sees, and
+writing descriptive alt would be authoring member-facing copy.
+
+**Three findings from opening every frame, none of which anything downstream would have caught:**
+
+1. ⚠ **`assets/t1/range.jpg` has a white background.** Corners measure L≈0.92 against the
+   platform's `#0B0B12` ground at L=0.004. It is three tilted photo cards composited on white, and
+   it will render as a glaring rectangle in a dark page. **Not a crop or a ratio problem — the
+   file is built for a light surface.**
+2. ⚠ **`assets/t1/change.jpg` does not match its brief.** The brief reads *"one person moving
+   easily through an ordinary day at home"*. Delivered is a man leaning on a **luxury car** outside
+   an architectural villa at golden hour. It reads as automotive advertising.
+3. No text, numerals, wordmarks or logos in any of the eleven frames.
+
+**Verified control-based; no browser is available (sixth measurement artifact).** `esc()` and
+`SHARED` are both in scope at `slot()`; `tracks.js` loads before `saferise-track.js` on all three
+pages; script-block balance identical to `HEAD`; and the emitted markup was simulated against the
+real record for all thirteen slots. **Rule 18's rendered-state check and [[SR-162]]'s
+rect-against-container assertion are UNMET and are not claimed.**
+
+*Status:* fixed · *Raised and fixed:* 22 Aug 2026
+
+---
+
+### SR-214 · Track 03's five landing images do not exist
+No `assets/t3/` in the source folder, no `t3-band.jpg`, no `t3/hero.jpg`. Eleven files were
+delivered; **five are missing and all five are Track 03.**
+
+**Track 03's art entries carry `ratio` and `brief` but deliberately no `src`.** A path in the
+record is a claim the asset exists. Left in, each absent file costs a **404 per slot on every page
+load** before `onerror` could degrade it — four failed requests to reach the same visible result
+as making no request at all. With no `src`, the slot renders its labelled placeholder silently.
+
+**Add `src` when the files land.** Nothing else changes: the wiring, the ratios and the briefs are
+already in place, so Track 03 becomes a genuine file drop even though Tracks 01 and 02 could not.
+
+*Status:* open — blocked on production · *Raised:* 22 Aug 2026
+
+---
+
+### SR-215 · `assets/t2/hero.jpg` does not match its brief
+Recorded for Andre, not blocked, and not judged further.
+
+The Track 02 hero brief specifies *"Two people sharing a quiet moment in a **warm domestic
+interior** at golden hour. **Seated**, turned partly toward each other"*, and the casting note
+requires *"a genuinely different **home** environment in each image"*.
+
+Delivered is an **outdoor coastal terrace** overlooking a Mediterranean town, both figures
+**standing**, each **holding a cocktail**.
+
+The composition brief is met — the pair sit in the right third, and the left third is dark olive
+foliage, which is the soft dark left the type needs. It is the setting and the register that
+differ, and the drinks are not in the brief at all.
+
+Paired with [[SR-213]]'s finding that `t1/change.jpg` is a car advertisement, **two of the eleven
+delivered frames read as lifestyle stock rather than as the brief's domestic register.** That is a
+pattern worth a decision rather than two separate notes.
+
+*Status:* open — recorded for a content decision · *Raised:* 22 Aug 2026
+
+---
+
 
 ## MEDIUM
 
@@ -2219,7 +3529,15 @@ The brief said index.html was already correct — **true of the 1:1, not of work
 that disagrees with its own run-sheet is better than a run-sheet with invented numbers.** The
 four segment lengths are a facilitation decision. The only remaining "Two hours" in the tree.
 
-*Status:* open — blocked on Andre · *Raised:* 21 Aug 2026
+**ANSWERED, 22 Aug 2026. The agenda is 10 / 20 / 20 / 10, summing to 60.** The heading becomes
+"One hour" and the run-sheet agrees with it. Andre's decision — a facilitation call, not a code
+one, which is exactly why this sat open rather than being guessed at.
+
+**Not yet applied**: `dashboard.html:567` still carries the two-hour heading and the
+15/40/45/20 run-sheet. This entry records the answer so the numbers are not invented a second
+time. The edit is one line for the heading and four for the run-sheet.
+
+*Status:* answered — ready to apply · *Raised:* 21 Aug 2026 · *Answered:* 22 Aug 2026
 
 ### SR-146 · Thirty-nine dead links on the member pages
 `dashboard.html` **11**, `protocol.html` **22**, `resource.html` **6**; `index.html` **0**.
@@ -2373,6 +3691,60 @@ measurement path itself.
 ---
 
 ## BACKLOG
+
+### SR-187 · The same prohibition is violated on two more surfaces — scope decision required
+**Recorded, not fixed.** [[SR-181]] and [[SR-185]] cleared the Reader. The same forbidden claims
+render on two other surfaces, found by the Rule 7 / Rule 17 sweep and left alone deliberately
+because the run was scoped to the Reader.
+
+- [resource.html:1003](resource.html:1003) — `padN(current+1)+' of '+padN(v.length)+' · '+r.title`.
+  Structurally identical to the readout removed from the Reader.
+- [dashboard.html:2297](dashboard.html:2297) — `'Resource ' + r.resource + ' of ' + r.resourceTotal`.
+  Literally the same string.
+- [dashboard.html:1781](dashboard.html:1781), [:1866](dashboard.html:1866) —
+  *"N of M protocols still unopened"*. A count of the library, not of the member.
+
+⚠ **CORRECTED — this entry's original text is what caused the error it describes.** It listed
+`dashboard.html:941` alongside the two lines above and described all three as *"N of M protocols
+still unopened"*. **:941 never said that.** It rendered `Resource N of M` from the same
+`sr.resume` record as `:2297` — a member's position inside a protocol. The brief that acted on
+this entry inherited the mislabel and told the run to leave it. It was caught in the working
+tree and fixed under [[SR-191]].
+
+The lesson is Rule 16 turned inward: **a register entry is a premise too.** Rule 16 warns that a
+brief is not evidence; an entry written from a hasty sweep is the same class of claim, and it is
+worse, because the next run treats the register as the record rather than as a report. Quote the
+string an entry is about. Do not paraphrase three sites into one description.
+
+**ANSWERED, 22 Aug 2026. The test is what the string COUNTS, not which page it sits on.**
+
+> A count of the **member** — their position, their progress, their completion — is prohibited
+> on every surface without exception.
+> A count of the **library** — what exists, what has not been opened — is permitted, because it
+> describes a shelf rather than a person.
+
+The first phrasing of this answer was page-based: prohibited on the surfaces a member practises
+on, permitted on the dashboard. **That phrasing is what produced the mislabel above**, because it
+invites you to sort strings by their address instead of by their subject — and the cover ribbon
+sat on the permitted page while counting the forbidden thing. Dropped deliberately. Do not
+reintroduce it.
+
+Applied: [[SR-191]] removed the three sites that counted the member, two of them on the
+dashboard, and left the two that count the library, both on the dashboard.
+
+**Andre's call.** Once answered it is a small, mechanical change on both files, and the answer
+should be written into the content rules so the next run does not re-raise it.
+
+⚠ Note for whoever picks this up: `dashboard.html`'s single `min read` hit is inside a comment
+guarding [[SR-080]] and is **not** a violation — counting it as one is the Rule 21 failure mode.
+`resource.html`'s `read:` fields are empty strings but for one `'7 options'`, which is a count of
+options, not a duration. The ten `N min` hits in `index.html` are the 60-minute 1:1 and workshop
+product specs. None of those three is in scope here.
+
+*Status:* open — blocked on a scope decision · *Raised:* 22 Aug 2026
+
+---
+
 
 ### SR-053 · Frameworks fold promoted to a /method rail destination
 "Where the method comes from" is removed from the dashboard and becomes a rail
@@ -3297,8 +4669,29 @@ Two reasons, both still standing:
 
 **Known and accepted, pending a decision on how a multi-author literature renders in a
 one-person card:** the section heading at `index.html:8261` reads **"Six frameworks."** above
-**five** cards. `frameworkReach('distance')` already returns **6 protocols** and the render loop
+**five** cards. `frameworkReach('distance')` returns **5 protocols** — corrected from 6 by
+[[SR-180]], which took `distance` off `t1-10` as a false attribution; this is a live assertion
+and was rewritten rather than annotated, per Rule 21 — and the render loop
 at `index.html:10489` picks up any `[data-sr-reach]`, so the data side is ready and only the
 card content is missing.
 
-*Status:* open — blocked on a card-format decision · *Raised:* 19 Aug 2026
+**RESOLVED, 22 Aug 2026 — a FINDING card, not a person card.** Andre's decision, and it
+dissolves the format objection rather than working around it: the other five cards are people,
+this one is a body of work, and forcing it into a person shape means either picking one of three
+researchers arbitrarily or inventing a composite. Neither is honest.
+
+Same card, same dimensions, same grid, same hover. Where the five carry a portrait, this carries
+**the framework's mark in gold**. Where they carry a name: **"Distance & rehearsal"**. Where they
+carry a role: **"Kross & Ayduk · Best Possible Self literature"**. The bio becomes **the finding**,
+in the same voice as the others. The reach line is unchanged.
+
+**Re-blocked on the asset, not on the decision.** The mark does not exist. Do not build the card
+until it does — a placeholder in the one slot that distinguishes this card from the other five
+defeats the resolution.
+
+⚠ Note for whoever builds it: the heading at `index.html:8261` reads **"Six frameworks."** above
+five cards, and `frameworkReach('distance')` now returns **5 protocols**, not 6 — [[SR-180]] took
+`distance` off `t1-10` as a false attribution. The reach line must be derived, never typed.
+
+*Status:* open — resolved in design, blocked on the mark · *Raised:* 19 Aug 2026 ·
+*Resolved:* 22 Aug 2026

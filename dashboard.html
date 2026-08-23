@@ -933,13 +933,23 @@
      resource/resourceTotal, which is what the resume card already reads
      (SR-085), so that is the only phrasing this ribbon will ever carry.
      With no writer, it emits nothing. */
-  function ribbonFor(isCurrent){
-    if(!isCurrent) return '';
-    var r = Store.get('sr.resume', null);
-    if(!r || !r.resource || !r.resourceTotal) return '';
-    return '<span class="sr-dash-ribbon">Resource ' + esc(String(r.resource)) +
-           ' of ' + esc(String(r.resourceTotal)) + '</span>';
-  }
+  /* SR-191 · the ribbon is gone. It read the member's position INSIDE a
+     protocol from the same `sr.resume` record the resume card reads, so it
+     failed the same test and had to go with it.
+
+     It was DORMANT, not inert (Rule 14): `sr.resume` has no writer yet
+     (SR-165), so nothing rendered — but a ribbon that returns '' because the
+     record is empty resumes the day resume tracking ships. A latent violation
+     is still a violation; it just has not had its writer yet.
+
+     THE TEST IS WHAT THE STRING COUNTS, NOT WHICH PAGE IT SITS ON. A count of
+     the member — their position, their progress — is prohibited on every
+     surface without exception. A count of the LIBRARY — what exists, what has
+     not been opened — is permitted, because it describes a shelf rather than a
+     person. "N of M protocols still unopened" survives that test; this did not,
+     and it sat on the same page. A page-based reading of the rule is what
+     grouped this ribbon with the library lines and nearly left it standing. */
+  function ribbonFor(){ return ''; }
 
   var CURRENT_TRACK = 1;
   function render(n){
@@ -2292,11 +2302,16 @@
       if(act) act.hidden = true;
       return;
     }
-    var pct = (typeof r.percent === 'number') ? Math.max(0, Math.min(100, r.percent)) : 0;
-    var meta = (r.resource && r.resourceTotal)
-      ? 'Resource ' + srEsc(r.resource) + ' of ' + srEsc(r.resourceTotal) +
-        (r.resourceName ? ' · ' + srEsc(r.resourceName) : '')
-      : '';
+    /* SR-191 · the resume card names where you left off, it does not measure it.
+       The test is WHAT THE STRING COUNTS, not which page it sits on: a count of
+       the member is prohibited on every surface, a count of the library is not.
+       This counted the member.
+
+       Both forms went, for the reason SR-185 records: removing the sentence and
+       leaving the bar is the same claim, drawn instead of written. `r.percent`
+       is left in the record and unread — see the register entry before removing
+       or re-consuming it. */
+    var meta = r.resourceName ? srEsc(r.resourceName) : '';
     slot.innerHTML =
       '<button class="sr-resume" id="srResume">' +
         '<span class="sr-resume-art">' +
@@ -2306,7 +2321,6 @@
           '<span class="sr-resume-name">' + srEsc(r.protocol) + '</span>' +
           (meta ? '<span class="sr-resume-meta">' + meta + '</span>' : '') +
         '</span>' +
-        '<span class="sr-resume-rail"><i style="width:' + pct + '%"></i></span>' +
       '</button>';
     if(act) act.hidden = false;
     slot.querySelector('#srResume').addEventListener('click', function(e){

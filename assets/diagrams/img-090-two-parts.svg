@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 450" role="img">
+<title>The same thing arriving two ways. On the top path their version is measured against yours and comes out as more proof you were right, so one version is left. On the bottom path it arrives whole and sits beside yours, so two versions are left. Both run in one person at the same time.</title>
+<style>
+  svg { --sr-ink: #1B2A4A; --sr-accent: #2E7D6B; --sr-mark: #B08D57;
+        --sr-muted: #6d6a63; --sr-rule: #e4e2dc; --sr-surface: transparent;
+        --sr-bg: transparent; }
+</style>
+<rect class="sr-bg" x="0" y="0" width="100%" height="100%" fill="var(--sr-bg, transparent)"/>
+
+<!-- ═══════ ROW 1 · on your side ═══════ -->
+<text x="40" y="74" font-family="Georgia,serif" font-size="17" font-style="italic" fill="var(--sr-ink, #1B2A4A)">on your side</text>
+
+<rect x="40" y="100" width="78" height="62" rx="3" fill="none" stroke="var(--sr-ink, #1B2A4A)" stroke-width="1.6"/>
+<text x="79" y="137" text-anchor="middle" font-family="Georgia,serif" font-size="15" fill="var(--sr-ink, #1B2A4A)">Theirs</text>
+
+<path d="M126,131 L 198,131" fill="none" stroke="var(--sr-ink, #1B2A4A)" stroke-width="1.5"/>
+<polygon points="206,131 194,126 194,136" fill="var(--sr-ink, #1B2A4A)"/>
+
+<line x1="222" y1="88" x2="222" y2="174" stroke="var(--sr-ink, #1B2A4A)" stroke-width="2"/>
+<circle cx="222" cy="131" r="11" fill="var(--sr-ink, #1B2A4A)"/>
+<circle cx="222" cy="131" r="19" fill="none" stroke="var(--sr-ink, #1B2A4A)" stroke-width="1" opacity=".35"/>
+<text x="222" y="192" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="var(--sr-ink, #1B2A4A)">measured against yours</text>
+
+<path d="M238,131 L 318,131" fill="none" stroke="var(--sr-ink, #1B2A4A)" stroke-width="1.5"/>
+<polygon points="326,131 314,126 314,136" fill="var(--sr-ink, #1B2A4A)"/>
+
+<rect x="334" y="100" width="78" height="62" rx="3" fill="none" stroke="var(--sr-ink, #1B2A4A)" stroke-width="1.6"/>
+<text x="373" y="137" text-anchor="middle" font-family="Georgia,serif" font-size="15" fill="var(--sr-ink, #1B2A4A)">Yours</text>
+<text x="373" y="184" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="var(--sr-ink, #1B2A4A)">and yours wins</text>
+<text x="373" y="203" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-style="italic" fill="var(--sr-muted, #6d6a63)">every single time</text>
+
+<!-- ═══════ ROW 2 · can hear them ═══════ -->
+<text x="40" y="278" font-family="Georgia,serif" font-size="17" font-style="italic" fill="var(--sr-accent, #2E7D6B)">can hear them</text>
+
+<rect x="40" y="304" width="78" height="62" rx="3" fill="none" stroke="var(--sr-accent, #2E7D6B)" stroke-width="1.6"/>
+<text x="79" y="341" text-anchor="middle" font-family="Georgia,serif" font-size="15" fill="var(--sr-accent, #2E7D6B)">Theirs</text>
+
+<path d="M126,335 L 318,335" fill="none" stroke="var(--sr-accent, #2E7D6B)" stroke-width="1.5"/>
+<polygon points="326,335 314,330 314,340" fill="var(--sr-accent, #2E7D6B)"/>
+
+<rect x="334" y="304" width="78" height="62" rx="3" fill="none" stroke="var(--sr-accent, #2E7D6B)" stroke-width="1.6"/>
+<text x="373" y="341" text-anchor="middle" font-family="Georgia,serif" font-size="15" fill="var(--sr-accent, #2E7D6B)">Theirs</text>
+
+<rect x="424" y="304" width="78" height="62" rx="3" fill="none" stroke="var(--sr-accent, #2E7D6B)" stroke-width="1.6"/>
+<text x="463" y="341" text-anchor="middle" font-family="Georgia,serif" font-size="15" fill="var(--sr-accent, #2E7D6B)">Yours</text>
+
+<text x="418" y="388" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="var(--sr-accent, #2E7D6B)">and both are still standing</text>
+<text x="418" y="407" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-style="italic" fill="var(--sr-muted, #6d6a63)">you did not have to agree</text>
+
+<!-- ═══════ one person ═══════ -->
+<path d="M420,131 L 548,131" fill="none" stroke="var(--sr-ink, #1B2A4A)" stroke-width="1" opacity=".35"/>
+<path d="M510,335 L 548,335" fill="none" stroke="var(--sr-accent, #2E7D6B)" stroke-width="1" opacity=".35"/>
+<path d="M548,131 L 560,131 L 560,335 L 548,335" fill="none" stroke="var(--sr-rule, #e4e2dc)" stroke-width="1.4"/>
+
+<text x="578" y="219" font-family="Georgia,serif" font-size="16.5" font-style="italic" fill="var(--sr-ink, #1B2A4A)">Both of these</text>
+<text x="578" y="241" font-family="Georgia,serif" font-size="16.5" font-style="italic" fill="var(--sr-ink, #1B2A4A)">are you.</text>
+<text x="578" y="269" font-family="Georgia,serif" font-size="13.5" font-style="italic" fill="var(--sr-muted, #6d6a63)">The question is which</text>
+<text x="578" y="287" font-family="Georgia,serif" font-size="13.5" font-style="italic" fill="var(--sr-muted, #6d6a63)">one you reach for.</text>
+
+<!-- lockup -->
+<line x1="574" y1="430" x2="658" y2="430" stroke="var(--sr-mark, #B08D57)" stroke-width="1.3" opacity=".8"/>
+<text x="752" y="434" text-anchor="end" font-family="Cormorant Garamond, Cormorant, Georgia, serif" font-weight="300" font-size="10" letter-spacing="4.2" fill="var(--sr-mark, #B08D57)" opacity=".9">SAFERISE</text>
+</svg>

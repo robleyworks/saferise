@@ -54,10 +54,41 @@
      Sixteen illustrations are briefed in track.art and none are produced.
      The page must render correctly with zero art present, so the
      placeholder is the normal state, not an error state. */
-  function brief(t, key) { return (t.art && t.art[key]) || 'brief needed'; }
-  function ph(label, ratio) {
-    return '<div class="sr-tp-ph" style="aspect-ratio:' + (ratio || '16/6') +
-           '"><span>' + label + '</span></div>';
+  /* SR-213 · art entries became objects {src, ratio, brief}. Kept tolerant of
+     a bare string so a slot not yet migrated still returns its brief. */
+  function brief(t, key) {
+    var a = t.art && t.art[key];
+    if (!a) return 'brief needed';
+    return (typeof a === 'string') ? a : (a.brief || 'brief needed');
+  }
+  /* SR-213 · the image slot. It RECEIVES a record entry; it does not build one.
+     Before this, every call site concatenated the path, the pixel dimensions and
+     the brief into a label string — so the asset path lived in this file rather
+     than in the record, which is the pattern the project forbids and the reason
+     nothing was ever wired.
+
+     Degrade path, and it is the normal state rather than an error state: with no
+     `src` the labelled placeholder renders exactly as it always did, carrying the
+     brief so the image lane can still read what the slot wants. Track 03 has no
+     files and exercises this immediately.
+
+     `onerror` removes the img and leaves the placeholder beneath it, so a path
+     that is present in the record but missing on disk degrades to the same
+     labelled state rather than to a broken-image glyph.
+
+     alt is empty by intent. These illustrate copy that already says the thing,
+     which makes them decorative; writing descriptive alt would be authoring
+     member-facing copy, and the `brief` is art direction, not a description of
+     what a sighted user sees. */
+  function slot(a, fallbackLabel, fallbackRatio) {
+    var ratio = (a && a.ratio) || fallbackRatio || '16/6';
+    var label = (a && a.brief) || fallbackLabel || '';
+    var inner = '<span>' + esc(label) + '</span>';
+    if (a && a.src) {
+      inner = '<img class="sr-tp-slotimg" src="' + esc(a.src) + '" alt="" ' +
+              'loading="lazy" decoding="async" onerror="this.remove()">' + inner;
+    }
+    return '<div class="sr-tp-ph" style="aspect-ratio:' + ratio + '">' + inner + '</div>';
   }
 
   /* Covers are path references. No inline base64 anywhere on this page. */
@@ -73,8 +104,25 @@
   }
 
   /* ── 00 · hero ───────────────────────────────────────────────────── */
+  /* SR-213 · the hero carries its photograph and its scrim as custom properties
+     read from the record, never as a hardcoded background. With no `src` the
+     element sets neither and the CSS falls through to the abstract shape it has
+     always drawn — the fallback is never removed, so a missing file renders the
+     original panel rather than an empty one. Track 03 does this today. */
+  function heroVars(t) {
+    var h = t.art && t.art.hero;
+    if (!h || !h.src) return '';
+    return ' style="--sr-hero-img:url(' + esc(h.src) + ')' +
+           (h.scrim ? ';--sr-hero-scrim:' + h.scrim : '') + '"';
+  }
+
   function rHero(t) {
-    return '<div class="sr-tp-hero"><div class="sr-tp-heroin">' +
+    var h = t.art && t.art.hero;
+    return '<div class="sr-tp-hero' + (h && h.src ? ' sr-tp-hero--photo' : '') + '"' +
+      heroVars(t) + '>' +
+      (h && h.src ? '<img class="sr-tp-herostack" src="' + esc(h.src) +
+                    '" alt="" loading="lazy" decoding="async" onerror="this.remove()">' : '') +
+      '<div class="sr-tp-heroin">' +
       '<p class="sr-tp-eyebrow" style="margin-bottom:22px">' + t.kicker + '</p>' +
       '<h1>' + t.heroTitle + '</h1>' +
       '<div class="sr-tp-herorule"><p>' + val(t.heroRule, 'heroRule') + '</p></div>' +
@@ -89,13 +137,24 @@
          dashboard.html shares. The number and label are the same record
          fields they always were — p[0] and p[1] — but the component keeps
          them over the loaded image rather than under it. */
-      return '<article class="sr-tp-pcard" tabindex="0">' +
+      /* SR-182 · the card opens the protocol again. SR-178 stripped the
+         affordance because `protocol.html` ignored ?track= and ?protocol= and
+         every one of the thirty cards could only land on Anxiety Reset — 29
+         silently wrong destinations. The page now resolves both against the
+         record and shows a not-found state rather than a wrong protocol, so
+         there is something to open and role="button" is honest. SR-178's own
+         condition was "the cursor returns when there is something to open".
+
+         The href is built from the record, never typed: t.id and p[0] are the
+         same two values the cover path already derives from. */
+      return '<article class="sr-tp-pcard" tabindex="0" role="button"' +
+        ' data-sr-open="protocol.html?track=' + esc(String(t.id)) +
+        '&amp;protocol=' + esc(String(p[0])) + '">' +
         SafeRiseCover.art({ src: coverPath(t.id, p[0]), no: p[0], label: p[1] }) +
         /* SR-174 · title and promise stay; signature and chips move into
            .sr-tp-preveal, which is out of flow and revealed on hover or focus.
            tabindex makes the card reachable so a keyboard user can open the
-           reveal — it is a readable region, not a control, so it takes no role
-           and no handler (SR-178). */
+           reveal, and now also operate it. */
         '<div class="sr-tp-pmeta"><h3>' + esc(p[2]) + '</h3>' +
         '<p class="sr-tp-pdesc">' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
         '<div class="sr-tp-preveal">' +
@@ -135,7 +194,7 @@
         '<h3 class="sr-tp-jtitle">' + val(j.title, 'journey.title') + '</h3>' +
         '<p class="sr-tp-jsub">' + val(j.sub, 'journey.sub') + '</p>' +
       '</div>' +
-      ph('assets/journey/t' + t.id + '-band.jpg · 1400×380 · ' + brief(t, 'band'), '1400/380') +
+      slot(t.art && t.art.band, brief(t, 'band'), '1400/380') +
       '<div class="sr-tp-jrule"></div>' +
       '<div class="sr-tp-jcols">' +
         '<div class="sr-tp-jcol"><p class="sr-tp-jtag" style="color:var(--gold)">01 · Start here</p>' +
@@ -184,7 +243,7 @@
     return '<div class="sr-tp-band sr-tp-band--alt"><div class="sr-tp-wide">' +
       sechead(c.eyebrow, c.h2, c.lede) +
       '<div class="sr-tp-costimg">' +
-        ph('assets/t' + t.id + '/cost.jpg · 1600×700 · ' + brief(t, 'cost'), '16/7') +
+        slot(t.art && t.art.cost, brief(t, 'cost'), '16/7') +
         '<div class="sr-tp-costcaps">' + c.caps.map(function (x) {
           return '<div class="sr-tp-costcap"><p class="sr-tp-cctime">' + x[0] +
                  '</p><p class="sr-tp-ccname">' + x[1] + '</p></div>';
@@ -204,7 +263,7 @@
     return '<div class="sr-tp-band"><div class="sr-tp-wide">' +
       sechead(r.eyebrow, r.h2, r.lede) +
       '<div class="sr-tp-rangefig"><div class="sr-tp-rangeimg">' +
-        ph('assets/t' + t.id + '/range.jpg · 1600×600 · ' + brief(t, 'range'), '16/6') +
+        slot(t.art && t.art.range, brief(t, 'range'), '16/6') +
         '<div class="sr-tp-rangecaps">' +
           '<div class="sr-tp-rcap"><p class="sr-tp-rcname" style="color:var(--mob)">Mobilisation</p><p class="sr-tp-rcsub">Sympathetic</p></div>' +
           '<div class="sr-tp-rcap"><p class="sr-tp-rcname" style="color:var(--safe)">Safety</p><p class="sr-tp-rcsub">Ventral vagal · your regulated range</p></div>' +
@@ -242,7 +301,7 @@
               'The Protocol Foundation.<br><span class="gold">A guided system.</span>',
               'A repeatable route from recognition to regulation — four actions your own system learns to run.') +
       '<div class="sr-tp-pfimg">' +
-        ph('assets/shared/four-steps.jpg · 1600×500 · shared — four moments, no track cues', '16/5') +
+        slot(SHARED.art && SHARED.art.fourSteps, 'shared — four moments, no track cues', '16/5') +
       '</div>' +
       '<div class="sr-tp-pfcols">' + SHARED.fourSteps.map(function (s, i) {
         return '<div class="sr-tp-pfcol"><p class="sr-tp-pfstep" style="color:' +
@@ -261,7 +320,7 @@
     return '<div class="sr-tp-band"><div class="sr-tp-wide">' +
       sechead(c.eyebrow, c.h2, c.lede) +
       '<div class="sr-tp-sixwrap">' +
-        ph('assets/t' + t.id + '/change.jpg · 1600×700 · ' + brief(t, 'change'), '16/7') +
+        slot(t.art && t.art.change, brief(t, 'change'), '16/7') +
         '<div class="sr-tp-sixinner"><p class="sr-tp-sixkick">Six areas of change</p><div class="sr-tp-sixgrid">' +
         c.items.map(function (i) {
           return '<div class="sr-tp-sixitem"><span class="sr-tp-sixi" style="border-color:' + i[2] +
@@ -391,6 +450,27 @@
     var track = vp.querySelector('.sr-tp-cartrack');
     var cards = track.querySelectorAll('.sr-tp-pcard');
     if (!cards.length) return;
+
+    /* SR-182 · the card is operable again. Delegated on the track rather than
+       bound per card, so it survives a re-render. Keyboard parity is required,
+       not optional: role="button" without Enter and Space is a control that
+       announces itself and then does nothing. Space is preventDefault'ed or the
+       page scrolls under the member. */
+    function openCard(el) {
+      var href = el && el.getAttribute('data-sr-open');
+      if (href) window.location.href = href;
+    }
+    track.addEventListener('click', function (e) {
+      var card = e.target.closest && e.target.closest('.sr-tp-pcard');
+      if (card) openCard(card);
+    });
+    track.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+      var card = e.target.closest && e.target.closest('.sr-tp-pcard');
+      if (!card) return;
+      e.preventDefault();
+      openCard(card);
+    });
     var dots = document.getElementById('carDots');
     var prev = document.getElementById('carPrev');
     var next = document.getElementById('carNext');
