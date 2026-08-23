@@ -299,6 +299,37 @@ the rule can be checked rather than taken on trust. **Twenty-four rules.**
     duration in the record is a claim about something real, and a consumer is entitled to act on
     it without checking.
 
+25. **Where a family of assets places against a family of documents, the rule is POSITIONAL
+    CONSISTENCY, not content fit.** [[SR-256]] is the worked example and the reasoning inverts the
+    intuitive answer. Asked where t3-05's Release diagram belonged, the natural move is to read the
+    blocks and pick the one the picture describes — which gave block 6, the paragraph naming the
+    split. **Every one of the other 29 places on the HEADING block, 29 of 29 with no exception**, so
+    the answer is block 5. Content fit chooses a different block on any protocol whose prose runs
+    differently, and the family stops being a family. **Measure what the siblings do before reasoning
+    about what the asset means**, and record the convention so it is not re-argued each time.
+    Corollary check, one command: a stored index that does not point at a heading is a defect.
+
+26. **AN ASSET'S STORED DESCRIPTION IS A SECOND COPY THAT DOES NOT REGENERATE WITH IT.** [[SR-256]]
+    found t3-06's `alt` reading *"The room and The editing"* while its SVG showed *"The flatness and
+    Reproaching yourself"* — the file was reissued when the protocol was renamed and the description
+    was not. **A screen reader was being handed a description of a diagram that is not on the page**,
+    and no visual check could see it: the image was right, the page was right, only the invisible
+    half was wrong. **Any asset swap must RE-DERIVE the alt from the new asset, never inherit the old
+    one.** Nothing but a regression sweep across the whole family catches this, so sweep the family
+    after any single-member replacement. Generalises past `alt`: captions, transcripts, `aria-label`,
+    manifest titles and any stored text describing a binary are all second copies with the same
+    failure mode.
+
+27. **A DELIVERY IS VERIFIED PER FILE, NEVER PER FOLDER.** `assets 3` carried five files: `t1/range.jpg`
+    was the [[SR-242]] fix and installing it was right ([[SR-257]]), while `journey/t1-band.jpg` in the
+    same folder was 1400×583 and would have **regressed a currently-correct 1400×380 sibling**. Same
+    delivery, same date, one file that fixes a defect and one that creates one. Measure every file
+    against the slot it claims; a folder is not a unit of correctness.
+    **Corollary — check the FORMAT, not the extension.** [[SR-254]]'s two Desktop candidates were
+    **PNG data behind `.jpg` and `.jpeg` extensions at ~1.7 MB**, against siblings at 174–192 KB.
+    Browsers sniff content type, so both would have rendered and shipped **nine times the expected
+    bytes with the extension hiding it**. `PIL.Image.open(p).format` is the check; the filename is not.
+
 **Measurement artifacts — the standing pre-flight**
 
 Seven now, every one found the same way: a plausible reading that was wrong. Run these before
@@ -2681,6 +2712,58 @@ Blocked on the content lane. Four strings: promise, signature, and three quotes.
 
 ---
 
+### SR-257 · The Track 01 range image — the "white ground" was a checkerboard baked into a JPEG
+[[SR-242]] measured corners at L≈0.92 and called it a white ground. **Rendered, it is a
+transparency checkerboard**: three photographs laid out as angled cards over a light chequered
+field, exported to JPEG with the checker pattern baked in as image data. That is why every corner
+read near-white and why no amount of scrim would have helped.
+
+`assets 3/t1/range.jpg` is the same three states — braced, settled, absent, matching the record's
+own brief — composed edge-to-edge at the same 1600×600. Worst corner **L 0.9283 → 0.0619**, from
+**371:1** against the page ground to **25:1**, inside its siblings' range (t2 0.0275, t3 0.0149).
+Confirmed by canvas-sampling the decoded image in the browser, not only the file on disk.
+
+**[[SR-242]]'s instruction to pull the `src` is WITHDRAWN.** It was correct while no replacement
+existed and is wrong now that one does. The record was never edited, so nothing had to be undone.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-258 · t3-06's card strings follow the protocol, a rename late
+The four card strings were Ambition Recovery's and stayed behind when [[SR-216]] renamed t3-06.
+Supplied by Andre, applied verbatim, with the reasoning recorded **beside the strings in
+`content/tracks.js`** so a future run does not "improve" them back toward achievement framing:
+
+> **Belonging is a KIND verdict with a PROSPECTIVE loop** — the pre-speech self-edit — where
+> Imposter Dissolution is a **COMPETENCE verdict with a RETROSPECTIVE** one. The promise is
+> behavioural rather than introspective because the state is **Unsteady** and **Porges** is in the
+> mapping, so the win is being able to speak, not understanding why you could not. One quote
+> deliberately echoes Track 02's Safe Conversation because the mechanism is related; **the
+> resentment tail is what makes it Track 03.**
+
+Retired, and now present nowhere in any served file: *"I hit the goal and felt nothing"*, *"I do
+not know if I want this"*, *"I am chasing something I never chose"*, and the old promise and
+signature. They survive here only as evidence (Rule 21).
+
+Zero Track 03 banned-vocabulary hits across all six new strings — swept against *productivity,
+optimise, performance target, output, efficiency, high performer, peak, elite, edge*.
+
+⚠ **Two things at this ID are NOT resolved and are not card copy.**
+- **t3-06's Release heading still reads *"Why Release goes after the editing"*** (block 13 of
+  `t3p6-guide`) while its diagram now shows flatness and reproaching. Resource content; content
+  lane. Quoted here verbatim so it can be commissioned.
+- **[[SR-240]] cannot move on these strings.** Measured: `index.html`'s `proto-landing-desc` and
+  `tracks.js`'s promise are **two independent sets of copy — 0 of 20 identical, all 16 comparable
+  pairs different**. The homepage needs its own advisory sentence for The Belonging Gap, in its own
+  longer register. Renaming the nine mechanical labels while that line still reads *"recover
+  momentum when ambition has gone flat"* would put [[SR-226]]'s contradiction on the marketing
+  homepage.
+
+*Status:* card copy complete on merge; resource copy open · *Raised and fixed:* 23 Aug 2026
+
+---
+
 ### SR-253 · The inventory derives; `SHARED.resources` becomes presentation only
 `SHARED.resources` was **both** the inventory and the presentation table, and being both is how
 `raising` went missing from three shipping surfaces while Track 03 shipped it on all ten
@@ -2702,7 +2785,8 @@ Expected: `inventory OK — tracks {1: 10, 2: 10, 3: 11}, library 276 pages`. Re
 the authored files are regenerated. **Drift is now loud**: a type in the inventory with no
 presentation row renders nothing and is visible, where the old shape under-reported in silence.
 
-**No track-agnostic surface states a library size.** Checked: `index.html`, `method.html` and
+**No track-agnostic surface states a library size — and this was settled by measurement, not by
+decision.**  Checked: `index.html`, `method.html` and
 `getting-help.html` carry no such numeral, and the dashboard rail always has a selection
 (track 1 by default). The question of what to say with no track selected **does not arise on any
 existing surface** — record this before inventing a phrasing for it.
