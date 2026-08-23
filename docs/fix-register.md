@@ -2679,6 +2679,132 @@ Blocked on the content lane. Four strings: promise, signature, and three quotes.
 
 ---
 
+---
+
+### SR-247 · The resource guidance audio — installed, recorded, wired
+Ten mastered mp3s in `assets/audio/guidance/`, served static. `master-guidance.sh` is the
+mastering chain and is **not** a repo file; it is not installed. Source was
+`~/Downloads/Mastered Resource Guidance.zip` — **spaces, not underscores as briefed, the fourth
+source-name discrepancy in a row.** Copied, never moved; md5 verified per file after copy.
+
+All ten: mono, 44.1 kHz, 128 kbps, 41.7–53.0 s, 653–829 KB. **Head silence 313.1 ms on every
+file, tail 325–354 ms, against a 300 ms spec** — the head excess is 578 samples of MP3 decoder
+delay and the tail excess is frame quantisation at 26.1 ms per frame, so the authored pad is
+exactly 300 on both edges. Nothing clips.
+
+**⚠ −19.4 LUFS against a briefed −16 IS NOT A DEFECT. Do not "fix" it.** `master-guidance.sh`
+states the reasoning in its own comment: *"-19 LUFS for MONO. The -16 figure is the STEREO
+target; a mono file played through both channels lands ~3 LU hotter."* Measured −19.35 to
+−19.49, spread 0.13 LU; true peak −1.30 to −1.52 dBTP, all inside the −1.0 ceiling. A future
+check against −16 would read a 3.4 LU miss that is not there. **If the meditations settle on a
+different target, both sets move together or levels jump when a member crosses between them.**
+
+**The loudness probe was validated before any reading was trusted.** No ffmpeg, ffprobe, sox or
+mediainfo on this machine, so BS.1770-4 was implemented in pure Python and checked against
+synthetic controls first: **0.00 dB** at two levels, sensitivity exactly 6.02 dB. The first
+fixture read 0.70 dB "wrong" and **the fixture was the error, not the probe** — the K-weighting
+chain measures **+0.700 dB at 1 kHz**, and the curve is textbook (+4.0 dB shelf, −2.9 dB at
+60 Hz). Rule 16 applies to the tester's own expectations, not only to briefs.
+
+**`.scrub` was REMOVED, not hidden, and the reasoning generalises.** It carried a progress rail
+and a `#dur` span. [[SR-080]] left `#dur` empty with the note that it would *"fill from the media
+once the real audio exists"*. The audio exists now and the decision is that no duration renders
+— so **a hidden element waiting to be filled is how a forbidden thing comes back**. Delete the
+element, not the value.
+
+**Not autoplaying is structural.** One `Audio` object created once and reused as the rail moves,
+`preload="none"`, no autoplay attribute, `.play()` reachable only from the click handler.
+Changing resource stops playback and clears the source — arriving on a new resource with a voice
+still running is autoplay by another route.
+
+**⚠ TWO MAPPINGS ARE INFERENCES, NOT CORRESPONDENCES — Rule 22 applies to both.**
+- **`fourline` → `crisiscard`** is inferred from the Cue Card record text naming *"the four-line
+  version"*. It is not a verified identity. Check it against the content before relying on it.
+- **`decision` has NO counterpart among the authored eleven.** *The Decision* exists only in
+  `resource.html`'s prototype array. It renders no control, which is correct today, but whether
+  it should have guidance at all is unanswered.
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
+### SR-248 · The synthetic-voice disclosure — CLOSED, NOT APPLICABLE
+Recorded rather than deleted, because the reasoning is the reusable part.
+
+**Andre never claimed his own voice for resource guidance, so there is nothing to disclose.** A
+disclosure exists to correct an impression the product created; where no claim of a human voice
+was made, a synthetic-voice line answers a question nobody was led to ask. The deployment doc
+listing it as a go-live requirement was written against an assumption that does not hold here.
+
+**The guided meditations are a different case and this closure does not extend to them.** There
+the founder's own voice **is** the claim — it is part of what is being sold — so a synthetic
+stand-in there would be a substitution a member would want to know about. **Do not read this
+entry as settling the meditations.** See [[SR-251]].
+
+*Status:* closed — not applicable · *Raised:* 23 Aug 2026 · *Closed:* 23 Aug 2026
+
+---
+
+### SR-249 · The library is 276, and the arithmetic hid a real defect
+**Third counting discrepancy on this project, third real defect.** Recorded because the pattern
+is now the finding: on this codebase a count that does not reconcile has never once been a
+rounding error.
+
+Counted from the record, not the document:
+
+| | `tracks.js` | authored content |
+|---|---|---|
+| resource types | **10** | **11** |
+| `Raising It` | **absent** | 10, Track 03 only |
+| library total | **266** | **276** |
+| meditations | 30 | 30 |
+| guidance-bearing | 236 | **246** |
+
+`tracks.js` derives 12×8 + 10×9 + 8×10 = **266**. The authored files hold 90 + 91 + 95 = **276**.
+
+**The briefed figures were each off by one** — 31 meditations (there are 30, one per protocol)
+and 247 guidance pages (there are 246), inflating the total to 278. There are no "two
+unaccounted pages"; the library is 276 and always was.
+
+**The whole 10-page gap is one resource type**, and that is [[SR-253]].
+
+*Status:* resolved — count established · *Raised and resolved:* 23 Aug 2026
+
+---
+
+### SR-250 · The expert contribution claim is removed, not recounted
+Ten instances of *"Contributes insight to N protocols"* in `index.html`: five derived from `META`
+via `frameworkReach()` (porges, heartmath, mate, jung, watts) and five hardcoded on cards with no
+`FRAMEWORKS` key. **A factual claim about a named person that had to be maintained every time a
+protocol moved, and it had already been wrong once.**
+
+**The eleventh `.expert-contrib-label` survives deliberately** — Dr Kenny Bastien's reads
+*"Foundational — physical wellness, body optimization & lifestyle structure"*, which is a
+description, not a count. A sweep that removes it is measuring the selector, not the claim.
+
+**The `+N more` overflow went with it, and removing only the label would have been worse than
+removing neither.** `data-sr-reach` lives **on the label**, so deleting the label alone leaves
+`querySelectorAll('[data-sr-reach]')` matching nothing — and the five stale markup literals
+**+15, +15, +9, +9, +4** would then render uncorrected. Those are precisely the hand-tallied
+figures [[SR-066]] existed to stop. The script was the only thing holding them right.
+
+[[SR-066]]'s derivation script is removed whole rather than left inert for a future run to
+re-analyse. The curated pills stay as an unquantified sample — **38 still render**, and they still
+name protocols, including *Ambition Recovery* at what was `index.html:8402`, which remains
+[[SR-240]]'s open item.
+
+**⚠ `frameworkReach()` in `content/tracks.js` NOW HAS NO CONSUMER.** Its only remaining
+references are its own definition and its export. **Reported as dead code and deliberately NOT
+deleted**, per the standing instruction.
+
+Verified with the About overlay **open**, not at rest — these cards sit inside `.prog-overlay`,
+`display:none` until shown, so an `innerText` assertion on the page at rest is a false pass
+(Rule 18).
+
+*Status:* complete on merge · *Raised and fixed:* 23 Aug 2026
+
+---
+
 ### SR-227 · CLAUDE.md forbids renaming protocols, and SR-216 renamed one
 Recorded so the rule and its exception are both on the record.
 
