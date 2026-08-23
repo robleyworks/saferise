@@ -10,6 +10,49 @@
 <head>
 <meta name="color-scheme" content="dark">
 <style>html,body{background:#08080C}</style>
+<!-- ══════════ SR-233 · EMBED CHROME, HIDDEN AT PARSE TIME ══════════
+     This page's own nav shell is markup at ~50% of the file; the embed bridge
+     that hides it is at ~99.9%. Everything the browser painted in between showed
+     a second nav bar inside the dashboard frame, then a reflow when the rule
+     finally arrived — measured at 49.6% of the page load, at any bandwidth.
+
+     The order is the bug, so the order is what changes: the class and the rules
+     are installed here, in <head>, before the parser can reach the shell.
+
+     Only the paint-critical half moved. The rest of the bridge — height
+     reporting, theme sync, resource-click routing — stays at the foot because it
+     touches document.body, which does not exist yet at this point in the parse.
+     Moving all of it up throws
+       TypeError: Failed to execute 'observe' on 'MutationObserver'
+     on the MutationObserver line and silently skips every statement after it.
+
+     Inline rather than in the system stylesheet for the same reason the ground
+     colour above is inline: an external sheet is a request, and anything that can
+     arrive late can paint late. These two blocks are one pattern, not two. -->
+<script>if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add('sr-embedded');</script>
+<style>
+/* Hide only the page's own chrome. Nothing else is touched: background,
+   atmospheric layers and spacing render exactly as designed. */
+.sr-embedded .bnav,.sr-embedded .sr-topnav,.sr-embedded .backlink,
+.sr-embedded .resource-back,.sr-embedded footer,
+.sr-embedded .footer-shell{display:none!important}
+/* Container: the real constraint is .inner (protocol) / .shell (reader), not
+   .sec. Widening them to the frame with a 30px gutter puts this page's text on
+   the same line as the dashboard's, so the carousel above and the page below
+   share one measure. Both selectors are (0,2,0) against the page's own (0,1,0)
+   .shell/.inner rules, so they win on specificity from up here — they no longer
+   depend on being appended last. */
+.sr-embedded .shell{max-width:none;padding-left:30px;padding-right:30px}
+.sr-embedded .inner{max-width:none;width:100%}
+/* The shell's --pad drops to 20px at 640px. The gutter has to follow it or the
+   embedded text sits 10px inside the dashboard's line on mobile, which is the
+   same misalignment this block exists to remove (SR-054). */
+@media(max-width:640px){.sr-embedded .shell{padding-left:20px;padding-right:20px}}
+/* theme changes ease at the same rate as the shell */
+.sr-embedded body,.sr-embedded .sec,.sr-embedded .sr-reader,
+.sr-embedded .sr-book,.sr-embedded .sr-book-offer,.sr-embedded .sr-book-dates{
+transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
+</style>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1103,33 +1146,10 @@ renderRail();renderMain();
 (function(){
   var EMBED = /[?&]embed=1/.test(location.search);
   if(!EMBED) return;
-  document.documentElement.classList.add('sr-embedded');
-
-  // Hide only the page's own chrome. Nothing else is touched: background,
-  // container width, atmospheric layers and spacing render exactly as designed.
-  var css = document.createElement('style');
-  css.textContent =
-    '.sr-embedded .bnav,' +
-    '.sr-embedded .sr-topnav,' +
-    '.sr-embedded .backlink,' +
-    '.sr-embedded .resource-back,' +
-    '.sr-embedded footer,' +
-    '.sr-embedded .footer-shell{display:none!important}' +
-    /* Container: the real constraint is .inner (protocol) / .shell (reader), not
-       .sec. Widening them to the frame with a 30px gutter puts this page's text
-       on the same line as the dashboard's, so the carousel above and the page
-       below share one measure. */
-    '.sr-embedded .shell{max-width:none;padding-left:30px;padding-right:30px}' +
-    '.sr-embedded .inner{max-width:none;width:100%}' +
-    /* The shell's --pad drops to 20px at 640px. The gutter has to follow it or
-       the embedded text sits 10px inside the dashboard's line on mobile, which
-       is the same misalignment this block exists to remove (SR-054). */
-    '@media(max-width:640px){.sr-embedded .shell{padding-left:20px;padding-right:20px}}' +
-    /* theme changes ease at the same rate as the shell */
-    '.sr-embedded body,.sr-embedded .sec,.sr-embedded .sr-reader,' +
-    '.sr-embedded .sr-book,.sr-embedded .sr-book-offer,.sr-embedded .sr-book-dates{' +
-    'transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}';
-  document.head.appendChild(css);
+  // SR-233 · the class and the chrome rules are installed in <head>, at parse
+  // time, not here. They used to be injected from this point — ~2.4MB after the
+  // nav shell's own markup — so the shell painted for half the load. What stays
+  // below is the half that genuinely needs the parsed document.
 
   function post(type, data){
     parent.postMessage(Object.assign({sr:true, type:type}, data || {}), '*');
