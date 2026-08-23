@@ -83,9 +83,11 @@ var SHARED = {
     ['pin',   'Proximity Guide',      'How close to stay.',          'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.', 'advisory'],
     ['shield','Disclosure & Support','A script for someone close.','Words for explaining what you are doing and what you need, without over-explaining.', 'disclosure'],
     /* SR-253 · Track 03 only. Subtitle is the authored `sub`, identical on all
-       ten Track 03 protocols. DESCRIPTION IS EMPTY AND NEEDS THE CONTENT LANE —
-       one string. The card renders without it rather than with a placeholder. */
-    ['case',  'Raising It',           'Who to tell, how much, and what to ask for.', '', 'raising'],
+       ten Track 03 protocols. SR-258 supplied the description; the
+       omitted-paragraph branch in rResources() stays, because it is what any
+       future type without one falls back to. */
+    ['case',  'Raising It',           'Who to tell, how much, and what to ask for.',
+     'When the thing that needs saying is at work, and saying it has consequences. What to raise, who to raise it with, and how to put it so it lands as information rather than as a complaint.', 'raising'],
     ['mail',  'Invitation to Repair', 'Reopening it with them.',     'A structured way to open repair with another person when the pattern involves them.', 'repair'],
     ['pen',   'Your Record',          'What changed, in your words.','Prompts tied to this protocol, and the log that tracks your state before and after each session.', 'record'],
     /* SR-180 · tenth resource. Universal — it carries no CONDITIONAL_RESOURCES
@@ -494,9 +496,17 @@ var TRACKS = {
          replacement for them, and writing new ones would be authoring member-facing
          copy. Reported, not invented. */
       ['06','Stand',   'The Belonging Gap Protocol',
-       'Find what you actually want, under what you were taught to want.',
-       'Arriving and feeling nothing. The next target set before the last one landed.',
-       ['I hit the goal and felt nothing','I do not know if I want this','I am chasing something I never chose']],
+       /* SR-258 · these four strings were Ambition Recovery's and stayed behind when
+          SR-216 renamed the protocol. Belonging is a KIND verdict with a PROSPECTIVE
+          loop — the pre-speech self-edit — where Imposter Dissolution is a COMPETENCE
+          verdict with a retrospective one. The promise is behavioural rather than
+          introspective because the state is Unsteady and Porges is in the mapping, so
+          the win is being able to speak, not understanding why you could not. The
+          second quote deliberately echoes Track 02's Safe Conversation, because the
+          mechanism is related; the resentment tail is what makes it Track 03. */
+       'Say the thing in the room you were going to keep to yourself.',
+       'The sentence edited before it leaves. Reading the room for whether you count in it.',
+       ['I revise it before I say it','I do not know if I belong in this room','I say the safe version and then resent it']],
       ['07','Cross',   'The Career Transition Protocol',
        'Move from one role to the next without losing your footing in between.',
        'The old role gone, the new one unproven, no ground underneath either.',
