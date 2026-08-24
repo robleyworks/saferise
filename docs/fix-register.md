@@ -5187,3 +5187,40 @@ is derived from the number of cards.
 
 *Status:* open — resolved in design, blocked on `assets/method/marks/kross.png` ·
 *Raised:* 19 Aug 2026 · *Resolved:* 22 Aug 2026 · *Premises corrected:* 23 Aug 2026
+
+---
+
+### SR-275 · t3-06's "Why Release" heading named the wrong mechanism
+
+`content/t3-resources.js` (`t3p6-guide`) carried the heading **"Why Release goes after the
+editing"**, naming only one of the two things the Release step addresses. The Release cue
+itself (`t3p6-crisiscard`) already names both: *"Two things. The gap... And the editing..."* —
+the gap being the room's verdict, the editing being the persona maintained in response to it.
+Heading corrected to **"Why Release goes after the reading of the room"**, which names the
+first of the two and matches the card's own signature line (*"Reading the room for whether you
+count in it"*, [[SR-258]]).
+
+**The paragraph under the heading is not rewritten, and stays out of scope here.** It runs
+four sentences on the cost of maintaining an edited persona and does not develop "the reading
+of the room" as its own idea — it earns the old heading, not fully the new one. Rewriting it is
+authoring member-facing copy, the same boundary [[SR-226]] and [[SR-258]] drew. **Blocked on the
+content lane**, same class of block as SR-226 before SR-258 closed it.
+
+*Status:* heading fixed; body paragraph open — blocked on content lane · *Raised:* 24 Aug 2026
+
+---
+
+### SR-276 · `.sr-testi` CSS survived its own markup
+
+"Protocol work" (24 Aug 2026, no SR ID) removed every `<section class="sr-testi">` — the two on
+`index.html` and the template in `docs/INTEGRATION.md` — closing the testimonial-placeholder
+question. The three CSS rule blocks that styled the class did not move with it: the base rule
+in `css/saferise-system.css`, the `#prog-couples`/`#prog-corporate` scoped override, and a
+`max-width:760px` responsive tweak. No markup referenced `.sr-testi` anywhere in the tree, so
+the CSS rendered nothing — but a fully-styled dead selector is exactly the kind of slot Rule 19
+exists to close: it would make a re-added `<section class="sr-testi">` look finished on sight,
+with none of the friction that should come from resurrecting a removed pattern. Removed, along
+with the explanatory comment above `section{border-top:0}` that still named `.sr-testi` as a
+section carrying its own border.
+
+*Status:* closed · *Raised:* 24 Aug 2026

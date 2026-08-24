@@ -1362,7 +1362,7 @@ var T3_RESOURCES = {
       "<p><strong>Why the exhale is longer, and why the feet</strong></p>",
       "<p>You can't decide a state down. You can decide your breathing, and it's the one reachable control. Lengthening the out-breath relative to the in-breath shifts things toward settled.</p>",
       "<p>The feet do something specific. This state's signature is unsteadiness in a room, and the floor is the one thing in that room that's holding you on identical terms to everyone else in it.</p>",
-      "<p><strong>Why Release goes after the editing</strong></p>",
+      "<p><strong>Why Release goes after the reading of the room</strong></p>",
       "<p>There's the gap, and there's the maintenance of a version.</p>",
       "<p>Two different costs. The gap is a condition. The editing is continuous work: adjusting register, filtering references, deciding in the half-second before speaking which version is admissible here. It runs all day, in every exchange, and after long enough people can't say what the unedited version sounds like.</p>",
       "<p><strong>The cost that nobody names.</strong> The edited version is the one being assessed. It's careful, appropriate, and less interesting than the person producing it \u2014 and views are being formed of it, in rooms where being memorable is most of what gets you offered things.</p>",
