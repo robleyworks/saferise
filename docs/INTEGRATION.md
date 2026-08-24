@@ -140,11 +140,6 @@ Self-initialising. Several carousels can coexist on a page — each is scoped to
   <p class="sr-note">Attention Advisory and Invitation to Repair appear where…</p>
 </section>
 
-<section class="sr-testi">
-  <blockquote>…</blockquote>
-  <p class="sr-who">First Name, Location<span>Personal Transformation · 3 months</span></p>
-</section>
-
 <section class="sr-human">
   <div class="sr-head">…</div>
   <div class="sr-svc-pair">

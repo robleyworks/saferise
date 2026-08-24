@@ -491,10 +491,12 @@ var TRACKS = {
        'Keep access to what you know while people are watching you use it.',
        'You did the work, and it leaves you the moment people look.',
        ['I know it until people are watching','My mind goes blank on cue','I dread the thing I am good at']],
-      /* SR-216 · renamed. The promise, signature and quotes BELOW still describe
-         Ambition Recovery and are deliberately unchanged: the bundle supplies no
-         replacement for them, and writing new ones would be authoring member-facing
-         copy. Reported, not invented. */
+      /* SR-216 renamed this row and left the four strings below describing Ambition
+         Recovery, because the bundle supplied no replacement and writing one would have
+         been authoring member-facing copy. SR-258 supplied it. The strings below are
+         Belonging Gap's own and the SR-216 caveat no longer applies — rewritten rather
+         than annotated, per Rule 21, so the next reader is not warned about a state that
+         has been resolved. */
       ['06','Stand',   'The Belonging Gap Protocol',
        /* SR-258 · these four strings were Ambition Recovery's and stayed behind when
           SR-216 renamed the protocol. Belonging is a KIND verdict with a PROSPECTIVE

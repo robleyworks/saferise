@@ -2710,7 +2710,29 @@ not an internal inconsistency.
 
 Blocked on the content lane. Four strings: promise, signature, and three quotes.
 
-*Status:* open — blocked on content · *Raised:* 22 Aug 2026
+**CLOSED, 24 Aug 2026 — [[SR-258]] supplied the four strings and they are live.** Verified against
+`content/tracks.js`, not against the entry that claimed to have written them:
+
+| slot | renders |
+|---|---|
+| promise | *Say the thing in the room you were going to keep to yourself.* |
+| signature | *The sentence edited before it leaves. Reading the room for whether you count in it.* |
+| quote 1 | *I revise it before I say it* |
+| quote 2 | *I do not know if I belong in this room* |
+| quote 3 | *I say the safe version and then resent it* |
+
+All five match SR-258's intended values exactly. No occurrence of *"I hit the goal and felt
+nothing"* or *"Find what you actually want"* survives in the row. The label is `Stand`, the name is
+*The Belonging Gap Protocol*.
+
+**One residue removed with the closure.** The `SR-216` comment immediately above the row still read
+*"The promise, signature and quotes BELOW still describe Ambition Recovery and are deliberately
+unchanged"* — true when written, false since SR-258, and positioned where the next reader would
+trust it over the strings themselves. Rewritten rather than annotated, per Rule 21. **A caveat that
+outlives its condition is the same defect class as a stale `alt`** ([[SR-256]], Rule 26): a second
+copy of a fact that did not regenerate when the fact changed.
+
+*Status:* closed — resolved by [[SR-258]] · *Raised:* 22 Aug 2026 · *Closed:* 24 Aug 2026
 
 ---
 
@@ -5091,18 +5113,77 @@ dissolves the format objection rather than working around it: the other five car
 this one is a body of work, and forcing it into a person shape means either picking one of three
 researchers arbitrarily or inventing a composite. Neither is honest.
 
-Same card, same dimensions, same grid, same hover. Where the five carry a portrait, this carries
-**the framework's mark in gold**. Where they carry a name: **"Distance & rehearsal"**. Where they
-carry a role: **"Kross & Ayduk · Best Possible Self literature"**. The bio becomes **the finding**,
-in the same voice as the others. The reach line is unchanged.
+Same card, same dimensions, same grid, same hover. **One slot renders differently.** Where the
+five carry their identity mark, this carries **the framework's mark in gold**. Where they carry a
+name: **"Distance & rehearsal"**. Where they carry a role: **"Kross & Ayduk · Best Possible Self
+literature"**. The bio becomes **the finding**, in the same voice as the others:
 
-**Re-blocked on the asset, not on the decision.** The mark does not exist. Do not build the card
-until it does — a placeholder in the one slot that distinguishes this card from the other five
-defeats the resolution.
+> Watching a state from outside it settles you more durably than distraction does. Rehearsed
+> forward, in detail, it lifts what you expect of the day ahead.
 
-⚠ Note for whoever builds it: the heading at `index.html:8261` reads **"Six frameworks."** above
-five cards, and `frameworkReach('distance')` now returns **5 protocols**, not 6 — [[SR-180]] took
-`distance` off `t1-10` as a false attribution. The reach line must be derived, never typed.
+**Why this is the right shape and not a compromise.** The peer-reviewed band is where findings
+live; `distance` is `register: 'peer-reviewed'` alongside `porges` and `heartmath`. A finding card
+sitting among people *inside that band* therefore reads as deliberate rather than as a gap someone
+could not fill — the band already promises evidence rather than voice. It also generalises: any
+future framework that is not one person now has a form to arrive in, instead of forcing the same
+decision again. That is the difference between a resolution and a workaround.
 
-*Status:* open — resolved in design, blocked on the mark · *Raised:* 19 Aug 2026 ·
-*Resolved:* 22 Aug 2026
+**Re-blocked on the asset, not on the decision.** The mark does not exist.
+
+    path        assets/method/marks/kross.png
+    size        1024 × 1024
+    format      transparent PNG
+    constraint  legible at 96px
+
+Do not build the card until it lands — a placeholder in the one slot that distinguishes this card
+from the other five defeats the resolution.
+
+### ⚠ Four facts in the paragraphs above went stale. Corrected here, 23 Aug 2026.
+
+Measured against the tree, not inferred. The decision is untouched; only its premises move.
+
+1. **There are no portraits.** `.expert-avatar` is a **two-letter monogram** on a flat colour
+   (`SP`, `HM`, `GM`, `CJ`, `AW`). The differentiating slot is a 2-character text node inside a
+   coloured circle, not an image — so the mark replaces a monogram, and the card is the first on
+   the page to put an `<img>` in that position. Size the mark to the monogram's box, not to 1024.
+2. **There is no reach line.** [[SR-250]] removed it along with the claim it derived.
+   `frameworkReach()` in `content/tracks.js:761` now has **no consumer** and is recorded as dead
+   code. What survives is `.expert-contrib > .expert-pills` — a **curated, unquantified** sample of
+   protocol names. "The reach line is unchanged" above means *there is nothing to change*.
+3. **`frameworkReach('distance')` returns 4, not 5.** Recomputed across all 30 `META` rows:
+   `t1-09`, `t2-08`, `t3-03`, `t3-10`. The note below previously said 5; [[SR-216]] had already
+   recorded 4. Since the pills are curated rather than counted, this number now constrains only
+   which pills are honest to show.
+4. **The section renders eleven cards, not five.** Five registered framework cards in
+   `.experts2-grid`, then a divider reading **"Extended Voices"** at `index.html:8354`, then six
+   more in `.experts2-grid-ext`: Dr. Kenny Bastien, Mooji, David Bayer, Peter Levine, Elisabeth
+   Kübler-Ross, Francis Weller — **none with a `FRAMEWORKS` key**. The heading still reads "Six
+   frameworks." The sixth card joins the **first** grid and takes the count from 5 to 6. See
+   [[SR-274]] for the extended six.
+
+**What building it takes once the mark lands — a drop-in, in one file.** Insert a sixth
+`.expert-card2` into `.experts2-grid` at `index.html`, after Alan Watts (:8338) and before the
+grid closes at :8352, matching the existing block exactly:
+
+    <div class="expert-card2">
+      <div class="expert-head">
+        <div class="expert-avatar">          ← mark, not a monogram; gold
+        <div>
+          <p class="expert-name2">           ← Distance & rehearsal
+          <p class="expert-role2">           ← Kross & Ayduk · Best Possible Self literature
+      <p class="expert-bio">                 ← the finding, above
+      <p class="expert-step">                ← Maps to Step 4 — …
+      <div class="expert-contrib">
+        <div class="expert-pills">           ← curated sample, per SR-250
+
+`.expert-step` is a slot the five all carry and the resolution above does not mention;
+`FRAMEWORKS.distance.step` is **4**, so it takes the same Step 4 wording Alan Watts already uses.
+The `.expert-avatar` rule sets a background colour and centres text — the mark needs a rule that
+does not inherit that centring, which is the only new CSS the card requires. `--gold` is the
+declared `colour` on the record.
+
+Nothing else moves: the heading already says six, the grid already reflows, and no count anywhere
+is derived from the number of cards.
+
+*Status:* open — resolved in design, blocked on `assets/method/marks/kross.png` ·
+*Raised:* 19 Aug 2026 · *Resolved:* 22 Aug 2026 · *Premises corrected:* 23 Aug 2026

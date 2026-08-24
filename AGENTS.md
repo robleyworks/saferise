@@ -15,7 +15,6 @@ PRESERVE every ORIGINAL protocol title exactly as it currently exists in the pro
 PRESERVE every ORIGINAL protocol icon and keep each icon associated with its correct protocol.
 
 DO NOT:
-- rename protocols
 - rewrite protocol titles
 - shorten protocol titles
 - invent new protocol names
@@ -25,6 +24,23 @@ DO NOT:
 - remove the icons
 
 The reference image is ONLY a reference for the grid layout, spacing, hierarchy, and overall presentation.
+
+==================================================
+RENAMING A PROTOCOL
+==================================================
+
+Renaming a protocol is a founder decision and requires a rename pass, never a
+find-and-replace. A protocol's name appears in its filename, its register entries, its
+card copy, its alt text, its diagram descriptions, its section headings, and in prose on
+other pages. Several of these are invisible to a diff — an alt text describing a
+regenerated diagram, or a heading naming the old protocol, will pass every structural
+check.
+
+A rename is complete only when a sweep for the old name across every tracked file, in
+every representation including spelled-out and possessive forms, returns nothing but
+deliberate historical records. Where the new name requires new copy, the rename is not
+complete until that copy exists — a protocol carrying its predecessor's promise is worse
+than one not yet renamed.
 
 ==================================================
 PROTOCOL CARD DESCRIPTIONS
