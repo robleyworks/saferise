@@ -180,6 +180,59 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
   transition-delay:calc(var(--i,0)*70ms)}
 .sr-stagger.sr-in>*{opacity:1;transform:none}
 
+/* A9 · SR-277 · track-page section reveal ────────────────────
+   One rhythm for all three tracks: eyebrow, heading, supporting text,
+   then the first thing after them — 0/100/200/300ms. js/saferise-track.js
+   adds .sr-tp-revealsec to each top-level section and .sr-tp-in once it
+   scrolls into view; everything below is a plain CSS transition off that
+   one class, the same shape as .reveal/.sr-stagger above.
+
+   Selectors read structure, not a fixed markup shape, because the hero
+   (h1, no .sr-tp-sechead) and the price panel (manual eyebrow/h2/lede,
+   no .sr-tp-sechead either) both carry the same class names as every
+   sechead()-built section. ".sr-tp-lede+*" exists only to give the price
+   panel a fourth beat where ".sr-tp-sechead+*" finds nothing to match.
+
+   Never targets an <img> or the hero photograph — images stay static by
+   omission, not by an added rule fighting one that would otherwise move
+   them. Reduced motion needs nothing added here: the blanket rule at
+   the bottom of this file already collapses every transition-duration
+   to .01ms, which is what "handled centrally" means. */
+.sr-tp-revealsec .sr-tp-eyebrow,
+.sr-tp-revealsec h1,
+.sr-tp-revealsec h2,
+.sr-tp-revealsec .sr-tp-lede,
+.sr-tp-revealsec .sr-tp-herorule,
+.sr-tp-revealsec .sr-tp-body,
+.sr-tp-revealsec .sr-tp-sechead+*,
+.sr-tp-revealsec .sr-tp-lede+*{
+  opacity:0;transform:translateY(16px);
+  transition:opacity .6s var(--sr-ease),transform .6s var(--sr-ease)}
+.sr-tp-revealsec .sr-tp-eyebrow{transition-delay:0ms}
+.sr-tp-revealsec h1,.sr-tp-revealsec h2{transition-delay:100ms}
+.sr-tp-revealsec .sr-tp-lede,.sr-tp-revealsec .sr-tp-herorule,
+.sr-tp-revealsec .sr-tp-body{transition-delay:200ms}
+.sr-tp-revealsec .sr-tp-sechead+*,.sr-tp-revealsec .sr-tp-lede+*{transition-delay:300ms}
+.sr-tp-revealsec.sr-tp-in .sr-tp-eyebrow,
+.sr-tp-revealsec.sr-tp-in h1,
+.sr-tp-revealsec.sr-tp-in h2,
+.sr-tp-revealsec.sr-tp-in .sr-tp-lede,
+.sr-tp-revealsec.sr-tp-in .sr-tp-herorule,
+.sr-tp-revealsec.sr-tp-in .sr-tp-body,
+.sr-tp-revealsec.sr-tp-in .sr-tp-sechead+*,
+.sr-tp-revealsec.sr-tp-in .sr-tp-lede+*{opacity:1;transform:none}
+
+/* .sr-tp-pcard sets its own `transition:border-color .2s` (SR-174) at
+   higher specificity (.sr-tp .sr-tp-pcard) than .sr-stagger>* (0,1,0), and
+   a shorthand re-declaration resets every longhand it doesn't name — so
+   the card's own rule was silently deleting the stagger's opacity/transform
+   transition, leaving the entrance to snap instead of fade. Restated here at
+   higher specificity than both, adding the two properties rather than
+   replacing the border-color one it still needs on hover. */
+.sr-tp .sr-tp-cartrack.sr-stagger>.sr-tp-pcard{
+  transition:opacity .7s var(--sr-ease),transform .7s var(--sr-ease),border-color .2s;
+  transition-delay:calc(var(--i,0)*70ms)}
+
 
 /* ═════════════════════════════════════════════════════════════
    PART B · COMPONENTS — opt-in, need markup (see INTEGRATION.md)

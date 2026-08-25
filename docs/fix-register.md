@@ -5224,3 +5224,85 @@ with the explanatory comment above `section{border-top:0}` that still named `.sr
 section carrying its own border.
 
 *Status:* closed · *Raised:* 24 Aug 2026
+
+---
+
+### SR-277 · One section-reveal and card-entrance system for all three tracks
+
+**What existed before this.** js/saferise-track.js already renders all three track pages
+(personal-transformation.html, relationship-healing.html, professional-performance.html) from one
+module — SR-209's precedent (one spec, token-driven, many variants) was already satisfied at the
+template layer; there was nothing to extract there. What did not exist was any entrance animation
+at all: the file never loaded js/saferise-system.js (which owns `.sr-stagger`/IntersectionObserver
+for index.html's grids), so every section on every track page rendered instantly, fully visible,
+with zero reveal.
+
+**The four zero-argument, wholly-identical section renderers this run measured — not two.**
+`rInsight()`, `rFourSteps()`, `rProgress()` and `rScope()` take no track argument and emit the same
+markup regardless of which of the three tracks calls them. `rResources(t)` looked like a fifth
+candidate but takes `t.id` for `trackResources(t.id)` ([[SR-253]] — Track 03 has eleven resource
+types, Tracks 01/02 have ten) so it is shared *structure*, not shared *output*. Reported as
+measured, since the count did not match the brief.
+
+**SR-238, SR-239 and SR-234 do not exist.** No register entry, no commit (`git log --all --grep`),
+no code comment anywhere in the tree. The actual card — SR-174/SR-174b/SR-178/SR-162/SR-163/SR-182
+— already satisfies the brief's own card model without changes: `p[1]` (*"the one-word verb"*) is
+the transformation word burned into `.sr-pcover-label`, `p[2]` the title, `p[3]` the promise,
+`p[4]` the signature revealed on hover *and* `:focus-within`, border-color emphasis on hover, and a
+`(hover:none),(max-width:560px)` query that already renders the reveal statically with no
+transition. Nothing here needed rebuilding, so nothing was rebuilt.
+
+**The four Track 01 diagram handoffs — two-pathway flow, breathing waveform, circular sequence,
+baseline graph — are not files in this repo.** No document under `docs/` matches that description.
+They are, however, already *built*: `GRAPHICS.trigger` ("A trigger travels on two timelines"),
+`GRAPHICS.breath` ("The coherence rhythm"), `GRAPHICS.spiral` ("The sequence becomes familiar") and
+`GRAPHICS.progress` ("The floor moves") in js/saferise-track.js are those four diagrams, verbatim,
+already placed in `rInsight()`/`rFourSteps()`/`rProgress()`. Decision: they survive as-is. They
+inherit the shared section's own entrance (fade + rise, the same mechanism as the surrounding
+text) rather than gaining a separate idle-loop animation — a second, diagram-only motion pattern
+would be the "spectacle" the brief rules out, not "attention."
+
+**What was built — reused mechanisms, no new ones:**
+- `.sr-tp-revealsec`/`.sr-tp-in` (css/saferise-system.css, new A9 block): eyebrow 0ms, heading
+  100ms, supporting text 200ms, the first block after them 300ms — plain CSS transitions keyed off
+  one class, added by `initReveal()` in js/saferise-track.js via one IntersectionObserver per page
+  (threshold .12, rootMargin -8%, the same shape `initStagger()` already uses on index.html).
+  Selectors key on class names (`.sr-tp-eyebrow`, `h1`/`h2`, `.sr-tp-lede`, `.sr-tp-sechead+*`),
+  which is why the hero (no `.sr-tp-sechead`) and the price panel (manual markup, also no
+  `.sr-tp-sechead`) both reveal correctly without a special case for either.
+- Card and resource-item groups (the protocol carousel, cost items, range columns, resource
+  items) reuse the platform's own `.sr-stagger`/`.sr-in`/`--i` pair verbatim — the same class
+  wired onto new containers, not a new stagger mechanism.
+- Never targets an `<img>` or the hero photograph. Images stay static by the selectors' own scope,
+  not by a rule fighting one that would otherwise move them.
+
+**One real bug found and fixed in the process, not introduced by it.** `.sr-tp .sr-tp-pcard`'s
+own `transition:border-color .2s` (SR-174) carries higher specificity than `.sr-stagger>*`'s
+transition rule. A shorthand re-declaration resets every longhand it doesn't name, so wiring
+`.sr-stagger` onto `.sr-tp-cartrack` was silently deleting the opacity/transform transition on
+every protocol card — confirmed live: `getComputedStyle` on a hydrated card reported
+`transition-property: border-color` only, and `transition-delay: 0s` on every card regardless of
+its `--i`. Restated at higher specificity (`.sr-tp .sr-tp-cartrack.sr-stagger>.sr-tp-pcard`),
+adding opacity/transform rather than replacing border-color. Verified after the fix: card index 3
+reports `transition-delay: 0.21s` (3 × 70ms) and `transition-property: opacity, transform,
+border-color`.
+
+**Reduced motion, keyboard, touch — asserted, not re-implemented.** The blanket rule already in
+this file (`*,*::before,*::after{transition-duration:.01ms!important;...}`, inside
+`@media (prefers-reduced-motion:reduce)`) collapses every transition added here without a
+per-component block, per CLAUDE.md. Keyboard already has parity — `:focus-within` already
+accompanies every `:hover` this run touches; nothing new was added that lacks it. Touch has no
+hover, and needed none here either: the section reveal is scroll-driven (IntersectionObserver),
+not hover-gated, so it fires identically on a touch device; the one hover-gated surface (the card's
+signature reveal) was already handled by SR-174b's `(hover:none)` query before this run started.
+
+**Verification.** IntersectionObserver never fires in this environment's preview tab —
+`document.hidden` is `true` even on the "active" tab, which is standard Page Visibility throttling
+for a backgrounded renderer, confirmed by a bare test observer also never firing. Verified instead
+by toggling `.sr-tp-in`/`.sr-in` directly and reading `getComputedStyle`: eyebrow/heading/lede/next
+-block delays measured at 0/100/200/300ms exactly, per-card delay measured at `--i × 70ms` after
+the specificity fix. All three pages loaded with zero console errors and no horizontal overflow at
+1440/1024/768/390. Euro invariant re-run: 8 inside `PRICING`, 0 escapes elsewhere, 0 bare `€` —
+unchanged, since content/tracks.js's `PRICING` object was not touched.
+
+*Status:* closed · *Raised:* 25 Aug 2026
