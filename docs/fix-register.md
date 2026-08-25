@@ -129,7 +129,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 **Rules — method**
 
 Earned across Runs C to G. Each cost something to learn; the worked example is named so
-the rule can be checked rather than taken on trust. **Thirty-one rules.** (The count above
+the rule can be checked rather than taken on trust. **Thirty-two rules.** (The count above
 read twenty-four through Rule 27 — a second copy that did not regenerate when Rules 25–27
 were added, the exact failure mode Rule 26 names. Corrected in passing, not chased further.)
 
@@ -397,6 +397,22 @@ were added, the exact failure mode Rule 26 names. Corrected in passing, not chas
     correct; `index.html` was wrong. Any comparison involving a page with a known duplicate-store
     deferral must run against the authored source (`content/tracks.js` here) — never against the
     duplicate, even when the duplicate is the page that happens to be open.
+
+32. **A CONCATENATION AND A RENAME LOOK IDENTICAL IN A DIFF — ONLY THE SURROUNDING COPY TELLS THEM
+    APART, AND IT HAS TO BE CHECKED BEFORE THE EDIT, NOT AFTER.** [[SR-285]] is the worked example.
+    "The Creative Flow Unlock Protocol" → "The Creative Flow Protocol" is an eleven-occurrence
+    string substitution regardless of which of the two defects caused it — a label word wrongly
+    concatenated into a title (mechanical, no new copy needed) or an actual second name for the
+    protocol that the surrounding copy still describes (a rename, where [[SR-279]]'s five
+    copy-content sites would apply). The two are indistinguishable from the string change alone.
+    What distinguished them here: every occurrence's surrounding prose — the card's own landing
+    description, the meditation's own body — was checked for whether it described "unlocking" as a
+    theme before the substitution ran, not after. It did not, so the edit was safe as mechanical.
+    **Had any surrounding copy described unlocking, the identical string edit would have been a
+    silent rename** — correcting the label residue while leaving the protocol's actual subject
+    unaddressed, exactly the failure [[SR-279]] was raised to prevent. Confirm which case applies
+    before treating a multi-occurrence string fix as mechanical; do not infer it from the fact that
+    a clean substitution exists.
 
 **Measurement artifacts — the standing pre-flight**
 
@@ -5561,6 +5577,14 @@ resource library that was never regenerated from the authored files the way `con
 now is for the live pages, a duration sweep ([[SR-080]]) that explicitly excluded `index.html` by
 scope, and photography sourced before the current `assets/t1/` set existed.
 
+**The size of the surface, quantified rather than argued.** [[SR-285]]'s sweep for one rename-class
+defect alone compared **130 rendered title instances across four independent surfaces on this one
+page** — and that was only the thirty protocol titles, one narrow slice of what this fork
+duplicates alongside the pricing, resource vocabulary and photography in (a)–(d) above. An
+architectural finding stated in principle is easy to defer; a defect surface measured at 130
+instances for title strings alone is the strongest argument available for the scoped fix named
+above, not an abstract one.
+
 **The shape of the real fix, reported per instruction, not built now.** The durable fix is
 architectural: stop `index.html` maintaining a second content store, and either (a) delete the
 embedded overlays and route `showProg('couples'|'corporate'|'personal')` to the standalone track
@@ -5846,3 +5870,35 @@ horizontal overflow at either width. Bracket/div balance unchanged from baseline
 (`{0/()−6/[0`, div 2804/2804).
 
 *Status:* closed · *Raised and fixed:* 25 Aug 2026
+
+---
+
+### SR-286 · report only · index.html carries two more protocol titles with words unrelated to either label
+
+Given its own ID, per instruction, rather than left findable only inside [[SR-278]]'s text. A third
+variant of the rename-class defect family: not a rename residue ([[SR-279]]), not a label word
+concatenated into its own title ([[SR-282]]/[[SR-285]]), but **extra descriptive words added to a
+title, matching neither the canonical title nor either protocol's label field.**
+
+| protocol | `index.html` renders | canonical (`content/tracks.js`) | label field | extra words match the label? |
+|---|---|---|---|---|
+| t3-08 | The Decision Fatigue **& Isolation** Protocol | The Decision Fatigue Protocol | `'Decide'` | no |
+| t3-09 | The Burnout **& Chronic** Overload Protocol | The Burnout & Overload Protocol | `'Refill'` | no |
+
+**Ten occurrences each** (`&amp;`- and `&`-encoded forms combined), the same four-store sweep as
+[[SR-285]]: compact protocol-list widget, resource `"title"`, the Reader-title `keys` lookup,
+`aria-label`, `h3`, audio-waveform label, video title, `res-title`, `jprog-section`'s
+`data-jprog-title`, the `consultsummary` default — one short of the eleven-location pattern each,
+missing only an `expert-pill` (curated per [[SR-250]], not one-per-protocol, so its absence here is
+not itself a finding). `content/tracks.js` and `content/t3-resources.js`: zero occurrences of
+either variant — `index.html`-only, consistent with every other member of this defect family.
+
+**Not fixed, and not confirmed mechanical.** Per Rule 32, a multi-occurrence string
+substitution is only safe as a rename-free mechanical edit once the surrounding copy is checked for
+whether it describes the extra words as a theme. That check has not been run here — unlike
+[[SR-285]], where "Unlock" traced cleanly to a known label field, "Isolation" and "Chronic" trace to
+neither protocol's label, which raises rather than lowers the chance they reflect real copy
+somewhere (an earlier, more specific version of either title) rather than pure noise. Confirming
+that is the next step, not assumed by this entry.
+
+*Status:* report only, not fixed · *Raised:* 25 Aug 2026
