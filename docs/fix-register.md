@@ -5957,3 +5957,40 @@ code path specific to `initReveal()` that would behave differently under real fo
 than the hero's already-confirmed success does.
 
 *Status:* report only · *Raised:* 25 Aug 2026
+
+---
+
+### SR-288 · reduced motion had no unconditional visibility override for the SR-277 reveal system
+
+`.sr-tp-revealsec`'s target selectors (eyebrow, h1/h2, lede, herorule, body, the post-sechead and
+post-lede beats) start at `opacity:0` and only reach `opacity:1` once `js/saferise-track.js`'s
+`initReveal()` adds `.sr-tp-in`, which happens on an `IntersectionObserver` firing as a section
+scrolls into view. The adjacent `.sr-stagger` system (`css/saferise-system.css`'s A8 block) carries
+its own unconditional escape hatch inside `@media (prefers-reduced-motion:reduce)` —
+`.sr-stagger>*{opacity:1;transform:none}` — that forces the visible end state regardless of whether
+`.sr-in` was ever added. `.sr-tp-revealsec` had no equivalent. Its own comment block (A9) asserted
+reduced motion "needs nothing added here" because the blanket
+`*,*::before,*::after{transition-duration:.01ms!important}` rule "handles it centrally" — true only
+for a section that has already received `.sr-tp-in`; a section that never does (JS blocked, the
+observer never fires, ten of eleven sections on every one of these pages sit below the fold and are
+never scrolled into view during an unattended load) stays at `opacity:0` indefinitely, near-zero
+transition duration notwithstanding. A near-zero duration still needs a trigger to run at all.
+
+**Fixed** by adding the same class of override `.sr-stagger` already has, for the same selector list
+A9 already declares, inside the existing `prefers-reduced-motion` block:
+`css/saferise-system.css`'s reduced-motion block now also forces `.sr-tp-revealsec`'s eyebrow/h1/h2/
+lede/herorule/body/post-sechead/post-lede targets to `opacity:1;transform:none` unconditionally. The
+A9 comment block was corrected in place (Rule 21 — live, not a dated record) rather than left
+asserting the disproven "needs nothing added" claim.
+
+**Verified with Playwright** (`reduced_motion: 'reduce'` context), all three track pages, on a fresh
+load with no scroll or interaction: 11 `.sr-tp-revealsec` sections each, 10 of 11 below the fold and
+never intersected. Every eyebrow/h1/h2/lede/herorule/body element inside every section read
+`opacity: 1` and had zero running `Animation` objects (`el.getAnimations()`) — visible immediately,
+nothing left running or pending. A same-script control run without `reduced_motion` confirmed the
+fix is scoped correctly: below-the-fold sections on the same three pages still measured `opacity: 0`
+(or a genuine in-flight `0.6s` transition value) under normal motion, so the override does not leak
+outside the media query.
+
+*Status:* closed · *Raised and fixed:* 25 Aug 2026
+
