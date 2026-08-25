@@ -129,7 +129,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
 **Rules — method**
 
 Earned across Runs C to G. Each cost something to learn; the worked example is named so
-the rule can be checked rather than taken on trust. **Twenty-nine rules.** (The count above
+the rule can be checked rather than taken on trust. **Thirty-one rules.** (The count above
 read twenty-four through Rule 27 — a second copy that did not regenerate when Rules 25–27
 were added, the exact failure mode Rule 26 names. Corrected in passing, not chased further.)
 
@@ -361,6 +361,35 @@ were added, the exact failure mode Rule 26 names. Corrected in passing, not chas
     `.transitionDelay` are what distinguish them; a rendered screenshot is not. Extends Rule 14's
     "measure computed style, not rendered geometry" from diagnosing a dormant *existing* rule to
     verifying a newly *added* one is not itself arriving dormant.
+
+30. **HORIZONTAL OVERFLOW: MEASURE THE CONTAINING BLOCK, NOT THE ELEMENT THAT LOOKS WRONG.**
+    [[SR-280]] is the worked example. `#main-nav` (`position:fixed;left:0;right:0`) rendered 487px
+    wide against a 390px viewport, and every symptom pointed at the nav — its own `.nav-link` row,
+    its own `overflow-x:auto`. The nav was innocent. `body{overflow-x:hidden}` had no matching rule
+    on `html`, so unrelated wide content elsewhere on the page widened the initial containing
+    block, and the fixed element — having done nothing wrong itself — inherited the wider box
+    resolving `left`/`right` against it. **A `body`-only `overflow-x:hidden` does not contain the
+    viewport**; the symptom surfaces on whatever is `position:fixed`, which is rarely the cause.
+    Confirmed, not inferred: setting `html{overflow-x:hidden}` alone collapsed both the page's
+    `scrollWidth` and the nav's own computed width back to 390px, with nothing else touched.
+    **Corollary — where the fix lives matters as much as what it is.** The same property change,
+    applied to a stylesheet shared with pages using `position:sticky`, breaks sticky exactly the
+    way a standing comment already documents (`overflow-x` on an ancestor forces the paired
+    `overflow-y` to `auto`). Scope the fix to the page that has the defect, not to every page that
+    shares a stylesheet with it.
+
+31. **A DEFERRED ARCHITECTURAL FINDING RECURS AS NEW-LOOKING SYMPTOMS — CHECK AGAINST IT BEFORE
+    LOGGING SOMETHING AS INDEPENDENT.** [[SR-084]] named and deferred `index.html`'s duplicate
+    content store on 19 Aug — "index.html still carries the cut resources and every duration,"
+    explicitly held back as its own reviewable pass. [[SR-281]] was briefed as five unrelated
+    defects — stale pricing, stale durations, retired vocabulary, a second image set, and the
+    question of whether they shared a cause. **Four of the five were one cause wearing four
+    faces**, and the brief that raised them did not know that going in. A structural finding that
+    is deferred rather than fixed does not stop producing symptoms; it produces a new one every
+    time someone touches the page it lives on, and each will look like its own defect until it is
+    checked against what was already deferred. Before logging a new finding on a surface with a
+    known open architectural deferral, check the deferral first — the finding may already be
+    explained.
 
 **Measurement artifacts — the standing pre-flight**
 
@@ -5451,10 +5480,14 @@ None of these five were rewritten. Inventing Belonging-Gap-themed copy to fill t
 authoring member-facing content, the same boundary [[SR-226]]/[[SR-258]]/[[SR-275]] have already
 drawn around this exact protocol.
 
-**Found in passing, not part of this sweep, not fixed:** `dashboard.html`'s workshop-suggestion
-table also carries **"The Creative Flow Protocol"** for t3-10, where every other surface (including
-`index.html`, `content/tracks.js`) calls it **"The Creative Flow Unlock Protocol."** A different
-protocol, a different staleness, outside the scope Andre authorised here.
+**Found in passing, reported here, corrected below in [[SR-282]] — and this entry had it backwards
+on first pass.** `dashboard.html`'s mood-lookup table carries **"The Creative Flow Protocol"** for
+t3-10. Checked against `content/tracks.js:524` (`['10','Unlock','The Creative Flow Protocol', ...]`)
+rather than against `index.html` as this entry first did: `dashboard.html` is **correct**.
+`index.html` is the one carrying the wrong name — **"The Creative Flow Unlock Protocol,"** eleven
+occurrences, apparently the label field (`'Unlock'`) merged into the title rather than a rename
+residue. Corrected here per Rule 28/16: an unchecked comparison asserted the wrong file was stale.
+See [[SR-282]] for the full accounting.
 
 *Status:* name renamed everywhere live; five copy sites flagged for the content lane ·
 *Raised:* 25 Aug 2026
@@ -5531,6 +5564,12 @@ not something to start three days before a demo of the exact pages it would rewr
 instead: the contained fix** — correct today's content within the existing fork, the same shape as
 [[SR-278]], leaving the architectural merge as a named, scoped follow-up.
 
+**Stated once, plainly, so it does not get lost in the four parts below: the fix is to stop
+`index.html` maintaining a second content store. It is scoped — named, with the two candidate
+shapes above and the reason neither runs this week — not abandoned. Everything in (a)–(d) is a
+correction inside the fork that still exists after this branch merges, not a substitute for
+closing it.**
+
 **(a) Pricing — the tracks are correct, index was stale.** `content/tracks.js`: `TRACKS[2].status`
 and `TRACKS[3].status` are both `'live'`, with real entries in `PRICING` (`t2` €29/mo, `t3` €39/mo)
 in the same object [[SR-124]]'s hydration script already reads. Confirmed further: one of
@@ -5603,3 +5642,158 @@ nothing here was touched, per instruction — report only.
 *Status:* (a) closed, one workshop-price question flagged for the content lane · (b) closed ·
 (c) closed, three resource types flagged as having no counterpart · (d) reported, not fixed ·
 (e) architectural merge reported as a scoped follow-up, not built · *Raised and fixed:* 25 Aug 2026
+
+---
+
+**A decision, recorded — not work left undone.** This pass fixed a page a demo depends on, in the
+week of the demo, without touching the architecture underneath it. That was the correct trade, and
+it should read here as a choice rather than as a gap: [[SR-281]] found the architectural cause
+plainly enough to fix it, and did not, because the fix is a multi-file rewrite of the exact pages
+the demo shows. The contained corrections in (a)–(d) hold until that rewrite happens; they are not
+a substitute for it, and the rewrite is not a task this record has lost track of — it is named,
+scoped, and waiting on time the week of a demo does not have.
+
+---
+
+### SR-282 · report only · "Creative Flow" — the earlier entry had the wrong file
+
+**`dashboard.html` renders the correct title.** `'steady|work': [3,'10','The Creative Flow
+Protocol', ...]` (`dashboard.html:1071`) matches `content/tracks.js:524` —
+`['10','Unlock','The Creative Flow Protocol', ...]` — exactly. `'Unlock'` is the one-word verb/
+label field (the same field that gave t3-06 its label `'Stand'`), not part of the title; no title
+in `dashboard.html`'s table concatenates the two.
+
+**`index.html` renders the wrong one, eleven times**, all reading **"The Creative Flow Unlock
+Protocol"** — the label word folded into the title, not a rename residue: the compact protocol-list
+widget; the `t3-p10-guide` resource's `title`; the `t3-p10` Reader-title lookup entry; the card's
+`aria-label` and visible `h3`; the audio-waveform label and video title (bare "Creative Flow
+Unlock"); `res-title`; `jprog-section`'s `data-jprog-title`; the `consultsummary` default string;
+an `expert-pill` (bare "Creative Flow Unlock"). The same eleven-location shape as [[SR-279]]'s
+Ambition Recovery sweep, on a different protocol, and — unlike SR-279 — with no rename behind it:
+this looks like a plain transcription error at authoring time, title and label merged into one
+string, then copied across all eleven surfaces from that one error.
+
+**The rest of `dashboard.html`'s fifteen-row mood-lookup table, checked against
+`content/tracks.js` directly** (not against `index.html`, which is what produced the wrong
+accusation in [[SR-279]]'s first pass): all fifteen titles match their track's canonical title
+exactly —
+
+| key | track/no | title | matches canonical |
+|---|---|---|---|
+| wired\|self | 1/01 | The Anxiety Reset Protocol | yes |
+| heavy\|self | 1/06 | The Grief Integration Protocol | yes |
+| flat\|self | 1/07 | The Shutdown Recovery Protocol | yes |
+| raw\|self | 1/05 | The Shame Dissolution Protocol | yes |
+| steady\|self | 1/09 | The Insecurity Anchor Protocol | yes |
+| wired\|person | 2/01 | The Safe Conversation Protocol | yes |
+| heavy\|person | 2/02 | The Rupture & Repair Protocol | yes |
+| flat\|person | 2/09 | The Pursue & Withdraw Protocol | yes |
+| raw\|person | 2/03 | The Trust & Betrayal Protocol | yes |
+| steady\|person | 2/08 | The Appreciation & Support Protocol | yes |
+| wired\|work | 3/01 | The High-Stakes Presence Protocol | yes |
+| heavy\|work | 3/09 | The Burnout & Overload Protocol | yes |
+| flat\|work | 3/06 | The Belonging Gap Protocol | yes ([[SR-279]]) |
+| raw\|work | 3/03 | The Imposter Dissolution Protocol | yes |
+| steady\|work | 3/10 | The Creative Flow Protocol | yes |
+
+**Zero stale titles in `dashboard.html`'s lookup table.** Not fixed, because there is nothing to
+fix here — the finding is that `index.html` needs the same rename-pass treatment [[SR-279]] gave
+"Ambition Recovery," authorised as its own procedure, not corrected inline in this report.
+
+*Status:* report only, not fixed · *Raised:* 25 Aug 2026
+
+---
+
+### SR-283 · report only · Track 03's workshop has no price to hydrate from
+
+**What Track 03's workshop card currently renders**, in the plan-trio at `index.html`'s
+`prog-services`/workshops section (badge, heading, price line, description, button):
+
+    [Coming Soon]
+    Professional
+    Coming Soon
+    Pricing TBA
+    Working a Track 03 career & performance protocol live, with peers — launching alongside the
+    Professional plan.
+    [Join Waitlist]
+
+**What `PRICING` holds for the other two tracks' workshops** (`content/tracks.js:51-52`):
+
+    workshopPersonal:     { amount: '€29', per: 'per person' }
+    workshopRelationship: { amount: '€49', per: 'per couple' }
+
+Both are hydrated live via `data-sr-price="workshopPersonal|workshopRelationship"`, the same
+mechanism [[SR-124]] built and [[SR-281]]a reused. Their sibling cards render, verbatim:
+
+    Personal Transformation — €29/person — "Group size: 5–10 people" — "Best for working one
+    Track 01 protocol live, with peers." — [Book — €29]
+
+    Relationship — €49/couple — "Group size: 3–5 couples" — "Best for working a relationship
+    pattern live, alongside your partner and other couples." — [Book — €49/couple]
+
+**No `workshopProfessional` key exists.** This is not a hydration gap — there is nothing in the
+record for the Track 03 card to read, which is exactly why it still shows the honest unhydrated
+state rather than a wrong number. It may be that the Track 03 workshop genuinely has not launched
+yet (the Track 03 *subscription* is `status: 'live'`; a workshop is a separate, later product in
+this codebase's own history — Tracks 01 and 02's workshops evidently landed after their core
+subscriptions did too).
+
+**What a third entry would need, structurally — not proposed as the actual numbers:**
+- `amount` — a price. Track 03 is individual (like Personal Transformation, not paired like
+  Relationship), which suggests `per: 'per person'` follows the Personal Transformation shape
+  rather than the Relationship one — a structural observation, not a number.
+- A group-size line, matching "Group size: 5–10 people" / "Group size: 3–5 couples" in form.
+- A one-line "Best for working..." description, matching the other two in length and register.
+- Whether it launches on its own timeline or "alongside the Professional plan," as the current
+  (unhydrated) description already claims — that claim itself is unverified and not carried over
+  into any proposed fix.
+
+None of this was invented or applied. This is a founder question — whether the workshop is priced
+yet at all — and the report above is what makes it answerable in one read.
+
+*Status:* report only, not fixed · *Raised:* 25 Aug 2026
+
+---
+
+### SR-284 · report only · Five sites still carrying Ambition Recovery's subject under Belonging Gap's name
+
+Quoted verbatim, per instruction, so the content lane can commission replacements without
+re-deriving them from [[SR-279]]. None of these were authored over.
+
+**Card-surface strings — short, formulaic, matching a pattern already used across other cards.
+I can supply replacements if asked; I have not.**
+
+1. `index.html`, the card's `.proto-landing-desc` (visible, directly under the title on
+   `#corporate-protoList`'s t3-06 card):
+   > Reconnect to what originally drove you, and recover momentum when ambition has gone flat.
+
+2. `index.html`, the card's hidden `.proto-trigger` (not rendered, used for matching/search):
+   > Reconnecting to drive when the mission has gone flat or cynical
+
+3. `dashboard.html:1069`, the `'flat|work'` mood-lookup suggestion text (rendered when a member
+   answers a check-in as "flat" and "work"):
+   > Flat about work you used to want has its own protocol.
+
+**Resource content — substantive authored copy requiring the same clinical/therapeutic voice as
+the rest of the protocol's material. I cannot supply replacements; this needs the content lane.**
+
+4. `index.html`, the `t3-p6-guide` resource's `meta` and first two `body` strings (shown wherever
+   this resource is previewed or opened):
+   > Reconnecting to drive when the mission has gone flat or cynical.
+   >
+   > What you may notice in your body: Low-arousal flattening — motivation present in memory but
+   > absent in the body, sometimes masking exhaustion or grief for work that used to feel alive.
+
+5. `index.html`, the `t3-p6-companion` resource's body (the Somatic Release Activities / daily
+   practice suggestion):
+   > Keep a short list, updated monthly, of the parts of the work that still genuinely interest
+   > you — revisit it on the low days.
+
+**Why the line falls where it does.** 1–3 restate a feeling already named elsewhere on the same
+card in Belonging-Gap-correct terms ("reading the room," "editing before it leaves") — a
+new sentence in the same register is a copy-editing task. 4–5 recommend or describe specific
+psychological mechanisms and practices tied to *ambition going flat*; a Belonging Gap replacement
+has to name what Belonging Gap actually does to a person's body and behaviour, which is clinical
+content, not marketing copy, and not mine to invent even at the short lengths involved here.
+
+*Status:* report only, not fixed · *Raised:* 25 Aug 2026
