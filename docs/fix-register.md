@@ -129,7 +129,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
 **Rules — method**
 
 Earned across Runs C to G. Each cost something to learn; the worked example is named so
-the rule can be checked rather than taken on trust. **Twenty-four rules.**
+the rule can be checked rather than taken on trust. **Twenty-nine rules.** (The count above
+read twenty-four through Rule 27 — a second copy that did not regenerate when Rules 25–27
+were added, the exact failure mode Rule 26 names. Corrected in passing, not chased further.)
 
 1. **A deliberate non-fix gets a register entry** carrying the reasoning and an explicit
    do-not-tidy line. An undocumented correct refusal is indistinguishable from an oversight,
@@ -329,6 +331,36 @@ the rule can be checked rather than taken on trust. **Twenty-four rules.**
     **PNG data behind `.jpg` and `.jpeg` extensions at ~1.7 MB**, against siblings at 174–192 KB.
     Browsers sniff content type, so both would have rendered and shipped **nine times the expected
     bytes with the extension hiding it**. `PIL.Image.open(p).format` is the check; the filename is not.
+
+28. **AN ID CITED IN A PREMISE IS A CLAIM THAT EVIDENCE EXISTS, NOT THE EVIDENCE ITSELF —
+    CHECK IT AGAINST THE REGISTER BEFORE ACTING ON IT.** Extends Rule 16, and [[SR-277]] is the
+    worked example — a different failure from the nine premises Rule 16 already catalogues.
+    Those were **stale**: a real record, drifted since it was written. SR-238, SR-239 and
+    SR-234, cited in a brief as completed work ("SR-238 rebuilt the cards as a fixed grid...",
+    "SR-234 made the carousel a 13-second arrival gesture"), **do not exist anywhere in this
+    repository** — no register entry, no commit, no code trace, checked against `git log --all
+    --grep` and this file directly. They were invented and asserted with the appearance of
+    provenance an ID carries by this project's own convention. **A fabricated ID is more
+    dangerous than a stale document**: a stale document is still evidence of something, aged;
+    a fabricated one borrows the register's credibility with nothing behind it, and reads as
+    more trustworthy than an unsourced claim would have. Acting on it here would have meant
+    rebuilding the working SR-174/174b/178/162/163/182 lineage against a history that never
+    happened. The check costs one command and must run before the premise is acted on, not
+    after — Rule 16 says name the source of an asserted value; this rule says an ID is not by
+    itself a source, it is a pointer, and the pointer must resolve.
+
+29. **WHERE TWO RULES SET THE SAME PROPERTY, THE LOSER FAILS SILENTLY — VERIFY A NEW
+    TRANSITION OR ANIMATION BY COMPUTED STYLE, NOT BY WATCHING THE PAGE.** [[SR-277]] is the
+    worked example: `.sr-tp-pcard`'s own `transition:border-color .2s` ([[SR-174]]) outranked
+    `.sr-stagger>*`'s transition rule on specificity, and a shorthand re-declaration resets
+    every longhand it does not name — silently deleting the new reveal's opacity/transform
+    transition on every protocol card. **No error and no visual artefact beyond the plain
+    absence of the thing that should have happened**: a screenshot of the broken state and a
+    screenshot of the fixed one are identical, because both eventually show the card at full
+    opacity — only the path there differs. `getComputedStyle(el).transitionProperty` and
+    `.transitionDelay` are what distinguish them; a rendered screenshot is not. Extends Rule 14's
+    "measure computed style, not rendered geometry" from diagnosing a dormant *existing* rule to
+    verifying a newly *added* one is not itself arriving dormant.
 
 **Measurement artifacts — the standing pre-flight**
 
