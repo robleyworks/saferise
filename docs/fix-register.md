@@ -5902,3 +5902,58 @@ somewhere (an earlier, more specific version of either title) rather than pure n
 that is the next step, not assumed by this entry.
 
 *Status:* report only, not fixed · *Raised:* 25 Aug 2026
+
+---
+
+### SR-287 · report only · the SR-277 reveal system, verified as served, not from source
+
+**Binding order: correct, confirmed two ways.** Source: `renderTrack()` assigns `#page`'s
+`innerHTML` at `js/saferise-track.js:731`; `initReveal()` runs at line 744, after. Empirical: on a
+fresh load of `personal-transformation.html` served from `tools/serve.py` (not opened from disk),
+the hero — the one section intersecting the viewport at load — carried `.sr-tp-in` and a rendered
+opacity of 1 within 500ms; a section with nothing bound to it cannot acquire a class an observer
+never registered. The observer is not firing against an empty page.
+
+**Counts, as served, before any interaction:** 11 `.sr-tp-revealsec` elements in the DOM (hero + 10
+bands; `rScope()` is deliberately excluded from the reveal system, per SR-277's own text). **1**
+carries `.sr-tp-in` immediately after load — the hero. The other 10 `.sr-tp-eyebrow` elements read
+`opacity: 0` at the same moment, matching their un-revealed state exactly.
+
+**A transition genuinely runs — caught directly, not inferred.** `document.querySelector('.sr-tp-
+hero .sr-tp-eyebrow').getAnimations()` returned two live `Animation` objects immediately after
+load, `playState: "running"`, `duration: 600` (matching the CSS's `.6s`), `easing:
+cubic-bezier(0.22, 0.61, 0.36, 1)` (matching `var(--sr-ease)`), `progress: 0` — caught at the first
+frame of the transition the CSS declares, on the properties (`opacity`, `transform`) the CSS
+declares. This is the Web Animations API reporting an active transition directly; it is not read
+from a screenshot or inferred from a before/after diff. One inconsistency in the same sample:
+`hero.classList.contains('sr-tp-in')` read `false` in the same synchronous script that read the
+running animations and an opacity of `1` — reported as observed rather than resolved, since the
+weight of evidence (matching duration, easing and target properties, `playState: running`) leaves
+little room for the transition to be anything other than SR-277's, whatever produced the `classList`
+read's apparent lag.
+
+**Below-the-fold sections do not reveal within this test tool, and the cause is the tool, not the
+code.** Scrolling `#protocols` into view (`window.scrollTo`, confirmed by `getBoundingClientRect()`
+afterward) did not add `.sr-tp-in` after an 800ms wait, nor after 4s. Isolated the cause before
+attributing it: a brand-new, unrelated `IntersectionObserver` bound to the same already-intersecting
+element in the same tab **also never fired once** in 4 seconds — not even its guaranteed initial
+callback. `document.hidden` reads `true` and `document.visibilityState` reads `"hidden"`
+throughout, including immediately after explicitly fronting the tab — this browser pane never
+reports itself as foregrounded to page script, regardless of what the tool is showing the user.
+Chromium suspends `IntersectionObserver` callback delivery and throttles `requestAnimationFrame`
+uniformly for any content in a `document.hidden` context; a `requestAnimationFrame`-based polling
+loop run in the same tab never completed within 30 seconds, and `setTimeout` requests for 50ms
+gaps arrived at 111ms and then 1000ms — the standard Chromium background-tab timer clamp, applied
+to everything in the page, not to this reveal system specifically. A real visitor's foregrounded
+tab does not run in this state.
+
+**What this does and does not establish.** Confirmed: the binding order is correct, the observer is
+live against real DOM nodes (not observing nothing), and a transition matching the CSS exactly does
+run when a section is revealed. Not directly observable in this tool: a scroll-triggered reveal
+firing in real time, because the tool's tab never reports itself visible to the page. The mechanism
+exercised for the below-the-fold case is the same unmodified `IntersectionObserver` construct
+already used elsewhere in this codebase (`js/saferise-system.js`'s `initStagger`) — there is no
+code path specific to `initReveal()` that would behave differently under real foreground conditions
+than the hero's already-confirmed success does.
+
+*Status:* report only · *Raised:* 25 Aug 2026
