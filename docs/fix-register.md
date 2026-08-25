@@ -5405,3 +5405,201 @@ touching a different string on the same card. Flagged, not corrected.
 
 *Status:* closed (Tracks 02/03 derivation); Track 01 not applicable; the `#corporate-protoList`
 title residue open, flagged for a rename pass · *Raised:* 25 Aug 2026
+
+---
+
+### SR-279 · The t3-06 rename pass — "Ambition Recovery" swept, its old copy is not
+
+Andre's decision, authorised as a rename pass under CLAUDE.md's new rename procedure — not folded
+into another fix. **Full sweep, every tracked file, case-insensitive:** `index.html` (11), `dashboard.html`
+(1), `content/tracks.js` (2, one live, one a deliberate [[SR-258]] historical comment), plus four
+docs files carrying it as a dated historical record (`docs/fix-register.md`, `docs/SafeRise_File_Inventory.md`,
+`docs/runs/RUN-C-consolidated.md`, `docs/reference/image-manifest.csv`) — left untouched, per the
+brief's own grouping rule.
+
+**Fourteen live occurrences renamed, name only:**
+
+| file | occurrences | what |
+|---|---|---|
+| `index.html` | 11 | card `h3`/`aria-label`, `t3-p6-guide` resource title, the `t3-p6` Reader-title lookup table, audio/video labels, `res-title`, `jprog-section` title, the `consultsummary` default string, an `expert-pill`, a compact protocol-list widget |
+| `content/tracks.js` | 1 | a FAQ answer on the live professional-performance.html page: *"The Career Transition and Ambition Recovery protocols exist..."* |
+| `dashboard.html` | 1 | the `'flat|work'` mood-lookup suggestion title |
+
+All fourteen verified renamed to **The Belonging Gap Protocol** / bare **Belonging Gap**; zero
+`Ambition Recovery` remains outside the one deliberate SR-258 comment and the four dated docs.
+
+**Copy that carries the old protocol's SUBJECT, not just its name — reported, not authored, per
+instruction:**
+
+1. **`index.html`'s `t3-p6-guide` resource** — `meta`/`body`: *"Reconnecting to drive when the
+   mission has gone flat or cynical"* / *"Low-arousal flattening — motivation present in memory
+   but absent in the body, sometimes masking exhaustion or grief for work that used to feel
+   alive."* This is Ambition Recovery's subject (motivation, drive, ambition gone flat), not
+   Belonging Gap's (reading a room, editing yourself to fit it — confirmed against
+   `content/t3-resources.js`'s actual `t3p6-guide`, which already carries the correct Belonging Gap
+   content and was unaffected, since it is a separate content store from `index.html`'s).
+2. **The card's `.proto-landing-desc`** — *"Reconnect to what originally drove you, and recover
+   momentum when ambition has gone flat."* Same subject mismatch.
+3. **The card's hidden `.proto-trigger`** — *"Reconnecting to drive when the mission has gone flat
+   or cynical."* Same.
+4. **`index.html`'s `t3-p6-companion` body** — *"Keep a short list, updated monthly, of the parts
+   of the work that still genuinely interest you — revisit it on the low days."* Same.
+5. **`dashboard.html`'s `'flat|work'` suggestion text** — *"Flat about work you used to want has
+   its own protocol."* Same subject, kept exactly as-is; only the title field beside it was renamed.
+
+None of these five were rewritten. Inventing Belonging-Gap-themed copy to fill them would be
+authoring member-facing content, the same boundary [[SR-226]]/[[SR-258]]/[[SR-275]] have already
+drawn around this exact protocol.
+
+**Found in passing, not part of this sweep, not fixed:** `dashboard.html`'s workshop-suggestion
+table also carries **"The Creative Flow Protocol"** for t3-10, where every other surface (including
+`index.html`, `content/tracks.js`) calls it **"The Creative Flow Unlock Protocol."** A different
+protocol, a different staleness, outside the scope Andre authorised here.
+
+*Status:* name renamed everywhere live; five copy sites flagged for the content lane ·
+*Raised:* 25 Aug 2026
+
+---
+
+### SR-280 · index.html's nav overflows at 390px — a viewport-widening bug, not a nav design flaw
+
+**Root cause, measured, not guessed.** `body{overflow-x:hidden}` (`index.html:36`) has no matching
+rule on `html`. Content elsewhere on the page exceeds 390px in normal flow; because `html` still
+computes `overflow-x:visible`, the browser's initial containing block — what `#main-nav`
+(`position:fixed;left:0;right:0`) resolves its width against — widens to match it (measured at
+487px against a 390px visual viewport), and the nav's own `.nav-link` row, which already has a
+correctly-configured `overflow-x:auto` wrapper, inherits that widened box instead of the true
+viewport. The nav's internal scroll handling was never the defect; the box it was handling scroll
+*within* was already wrong.
+
+Confirmed empirically, not just by inspection: setting `html{overflow-x:hidden}` alone (matching
+what `body` already carries) dropped `document.documentElement.scrollWidth` from 487 to 390 and
+`#main-nav`'s own computed width from 487px to 390px, with no other change.
+
+**Contained — one line, scoped to `index.html`.** Added to the existing `html{...}` rule at
+`index.html:35`, next to `body`'s. Not added to `css/saferise-system.css`: that file is shared by
+personal-transformation.html / relationship-healing.html / professional-performance.html, whose
+`.sr-tp-nav` and `.sr-tp-stickycta` both use `position:sticky` — and `overflow-x:hidden` on an
+ancestor forces the paired axis (`overflow-y`) to `auto`, which is the exact mechanism a standing
+comment at `index.html:5381` already documents breaking `position:sticky` (it is why that one
+sticky candidate on `index.html` was built with `position:fixed` instead). Scoping this fix to
+`index.html`'s own inline stylesheet, where the matching `body` rule already lives, avoids
+reintroducing that exact defect on the three track pages. Verified after the fix: `html.overflow-y`
+does become `auto` (the documented side effect), `#main-nav` still measures `top:0` after a
+programmatic scroll (position:fixed unaffected), and `index.html` carries no
+`position:sticky` element of its own to break.
+
+**Scope, as asked:** `index.html` only. `dashboard.html` and `protocol.html` (both on this week's
+demo list) checked directly at 390px — no overflow, and neither sets `overflow-x` on `body` or
+`html` at all, because neither has content wide enough to trigger the defect. The three track pages
+were already confirmed overflow-free at 390/768/1024/1440 in [[SR-277]]'s pass and are unaffected by
+this change, since it lives in `index.html`'s own `<style>` block, not the shared stylesheet.
+
+*Status:* closed · *Raised and fixed:* 25 Aug 2026
+
+---
+
+### SR-281 · index.html is a second, unreconciled copy of all three tracks — one cause, four symptoms
+
+**(e) answered first, per instruction, because it reframes (a)–(d).** Yes. `index.html` embeds a
+complete, independent copy of every track: its own protocol-card carousels (`#protoList`,
+`#couples-protoList`, `#corporate-protoList` — titles, promises, hover reveals), its own full
+resource library (a single ~2,800-line object literal carrying every `p{N}`/`t2-p{N}`/`t3-p{N}`
+resource — kind, title, meta, body — independent of `content/t1|t2|t3-resources.js`), its own
+pricing UI (`#all-plans-pricing`, `#couples-pricing`, `#corporate-pricing`, a three-card plan trio,
+two "compact, coming soon" teaser panels), and its own image set. None of these four read from
+`content/tracks.js` or the authored resource files at render time — the one exception is
+`PRICING`, which [[SR-124]] already wired through a `data-sr-price` hydration script, which is
+exactly why (a) was fixable by converting markup to that existing pattern rather than inventing a
+second one.
+
+**This is not new** — [[SR-084]] recorded it by name on 19 Aug 2026 ("index.html still carries the
+cut resources and every duration... 80 strings"), explicitly deferred as its own reviewable pass
+rather than folded into other work. (a)–(d) below are that same fork surfacing in four different
+places: a pricing UI that never got the [[SR-124]] treatment applied to two of its three tracks, a
+resource library that was never regenerated from the authored files the way `content/inventory.js`
+now is for the live pages, a duration sweep ([[SR-080]]) that explicitly excluded `index.html` by
+scope, and photography sourced before the current `assets/t1/` set existed.
+
+**The shape of the real fix, reported per instruction, not built now.** The durable fix is
+architectural: stop `index.html` maintaining a second content store, and either (a) delete the
+embedded overlays and route `showProg('couples'|'corporate'|'personal')` to the standalone track
+pages instead, or (b) rewrite `index.html`'s card/resource/price rendering to consume
+`content/tracks.js` and the authored resource files at load, the way `js/saferise-track.js` already
+does. Either is a multi-file rewrite touching the page's largest structures, days not hours, and
+not something to start three days before a demo of the exact pages it would rewrite. **Applied
+instead: the contained fix** — correct today's content within the existing fork, the same shape as
+[[SR-278]], leaving the architectural merge as a named, scoped follow-up.
+
+**(a) Pricing — the tracks are correct, index was stale.** `content/tracks.js`: `TRACKS[2].status`
+and `TRACKS[3].status` are both `'live'`, with real entries in `PRICING` (`t2` €29/mo, `t3` €39/mo)
+in the same object [[SR-124]]'s hydration script already reads. Confirmed further: one of
+`index.html`'s own three plan-trio cards (Track 02's) was *already* hydrated correctly
+(`data-sr-price="t2"`) — proof this exact pattern was already applied here once and simply never
+reached Track 03's sibling card or the other locations. Every "Join Waitlist" button's `onclick` is
+`showProg('couples'|'corporate')` — the identical call the real "Discover More" links already use;
+there is no separate waitlist capture anywhere, so relabelling was safe with zero logic change.
+Fixed, all real-plan locations: the "Personal Transformation is live today... Relationship and
+Professional are... pricing announced closer to release" intro sentence; both compact teaser panels
+(badge, price line, button); the Track 03 plan-trio card (now matching Track 02's sibling exactly);
+both comparison-table rows (`Available`, `Entry price`) — six locations, all now deriving their
+number from `PRICING` via the existing `data-sr-price` mechanism, none hand-typed.
+**Left alone, deliberately:** the Track 03 **workshop** card still reads Coming Soon / Pricing TBA
+/ Join Waitlist. `PRICING` has `workshopPersonal` and `workshopRelationship` but **no
+`workshopProfessional` key** — Tracks 01 and 02's workshop cards on the same page are correctly
+`Book — €29` / `Book — €49/couple`, live-hydrated; Track 03's genuinely has no price to hydrate
+from. This is very likely still true (the workshop is a distinct product from the Track 03
+subscription, which is live) — flagged as a content-lane question (does a Track 03 workshop exist
+yet?) rather than guessed at.
+
+**(b) Durations — the [[SR-080]] rule, applied to the page [[SR-084]] deferred it from.**
+[[SR-080]]'s own text is explicit about scope: banned are stated/implied lengths of **unrecorded
+self-guided assets** (meditations, scripts, PDFs); kept are **booked live events with a human on
+the other end** — 1:1 and workshop slot times — because those are contractual and already known,
+"the opposite of the unrecorded meditation assets the rule exists for." Checked against that
+boundary, not the naive one: `Length: 60 minutes` (Premium 1:1) and `roughly`/`approximately 60
+minutes` (workshops) are **kept**, correctly, as [[SR-080]] and the `N min` note on the still-open
+[[SR-053]] entry already establish. Removed — all self-guided-asset claims: `PDF · N pages` (14,
+across four page counts) → `PDF · [rest]`; `10-Min`/`10-Minute Guided Meditation` (21, titles and a
+compact-list label) → `Guided Meditation`; the two `Full 10-minute ... is production-ready`
+sentences (20, T2 and T3) → `Full ... is production-ready`; the Foundation Protocol's `14-minute`/
+`14-Min` guided-audio claims (4, hero copy, a waveform label, a feature-list line, a bullet) →
+duration-free; `Session 1 of 7` (2, a Cue Card description that additionally didn't describe the
+resource it sat on) → removed; `Tier: Early Signs` (22, the `consultsummary` default string on
+every jprog section) → removed. 83 strings corrected in total — close to [[SR-084]]'s original
+estimate of 80, confirming that count rather than inverting it.
+
+**(c) Resource vocabulary — full mapping, kind field and card-surface label both.** Current
+canonical names come from `content/tracks.js`'s `SHARED.resources` (11 types, the same table
+`content/inventory.js` derives from):
+
+| `index.html`'s label | canonical replacement | occurrences fixed |
+|---|---|---|
+| Meditation Script | Guided Meditation | 10 (`"kind"`) + 10 (`res-kind`) |
+| Protocol Guide | How This Works | 10 (`"kind"`) + 2 (`res-kind`) |
+| Attention Advisory | Proximity Guide | 6 (`"kind"`) + 1 (a prose note) |
+| Somatic Release *(bare)* | Somatic Release Activities | 2 (`"kind"`) + 2 (`res-kind`) |
+| Progress Tracking + Progress Journal | **merged** into Your Record | 3 pairs → 3 single feature blocks |
+| Cue Card, Disclosure & Support, Invitation to Repair, Somatic Release Activities *(full)* | — | already correct, untouched |
+
+"Progress Tracking"/"Progress Journal" were two resources; the current model consolidated them into
+one ("Your Record" already carries both the log and the prompts, verbatim in
+`SHARED.resources`). Renaming one and orphaning the other would have left a duplicate; the redundant
+block was removed outright, per Rule 19, not hidden. `T2`'s "Session Guide"/"Safety Score" kind
+labels were **not** touched — Track 02 has always used its own two-person resource model, distinct
+from the eleven-type system, and neither name is retired.
+**No counterpart, reported not invented:** three current resource types have **zero** presence
+anywhere in `index.html`'s embedded library — **Safe Practice**, **Accountability & Empathy**, and
+**Raising It** (T3-only). Not mislabelled; simply never added to this older content store when they
+were authored for the real pages.
+
+**(d) Images — two different sets, not one set at two paths.** `assets/pt/*.webp` (5 files,
+last modified 13 Aug) and `assets/t1/*.jpg` (4 files, last modified 22–23 Aug — the same window as
+the recent [[SR-213]]/[[SR-257]]/[[SR-259]] photography installs) share no filenames, no format,
+and no comparable byte sizes (`cost-triptych.webp` 38 KB vs `cost.jpg` 250 KB). `change.jpg` has no
+`assets/pt/` counterpart at all. `index.html` is rendering an older, separate photography set;
+nothing here was touched, per instruction — report only.
+
+*Status:* (a) closed, one workshop-price question flagged for the content lane · (b) closed ·
+(c) closed, three resource types flagged as having no counterpart · (d) reported, not fixed ·
+(e) architectural merge reported as a scoped follow-up, not built · *Raised and fixed:* 25 Aug 2026
