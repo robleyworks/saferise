@@ -455,6 +455,33 @@
       return '<a href="' + l[1] + '"' + (l[2] === id ? ' class="sr-tp-on" aria-current="page"' : '') +
              '>' + l[0] + '</a>';
     }).join('');
+
+    /* SR-289 · at <=480px .sr-tp-navlinks becomes a horizontal scroll strip
+       (css/saferise-system.css, the max-width:480px block) rather than
+       wrapping — by design, so the row stays one line. Its scrollWidth
+       regularly exceeds its clientWidth (measured 597 vs 346 at 390px on
+       this page: 251px, matching the reported clip exactly), and nothing
+       moved the strip's initial scroll position to account for that, so a
+       visitor lands with scrollLeft at 0 while their own current-page pill
+       — five links in, after "The Journey", "About" and the first track —
+       sits past the visible edge, clipped mid-word ("Relationship" reading
+       as "RELATION"). The other links were never unreachable, only the
+       active one was unreadable at rest, which is the one link a visitor
+       does not choose to go find.
+       Not a redesign: the scroll strip is left as the existing narrow-
+       viewport pattern (css/saferise-system.css already hides its
+       scrollbar there), the string is not truncated, no item is hidden,
+       and the type scale (11px/.13em/uppercase) is untouched. This only
+       moves where the strip starts, using the same scrollLeft mechanism
+       already used elsewhere in this codebase (js/saferise-system.js's
+       carousel), so the active pill is never partially offscreen. */
+    if (el) {
+      var onLink = el.querySelector('.sr-tp-on');
+      if (onLink) {
+        var target = onLink.offsetLeft + onLink.offsetWidth - el.clientWidth;
+        el.scrollLeft = Math.max(0, target);
+      }
+    }
   }
 
   /* ── carousel · SR-163 ────────────────────────────────────────────

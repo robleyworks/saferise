@@ -5994,3 +5994,44 @@ outside the media query.
 
 *Status:* closed · *Raised and fixed:* 25 Aug 2026
 
+---
+
+### SR-289 · the active track's own nav pill clips mid-word at ≤480px
+
+At ≤480px, `.sr-tp-navlinks` (`css/saferise-system.css`'s `max-width:480px` block) is deliberately a
+one-line horizontal scroll strip — `flex-wrap:nowrap;overflow-x:auto`, scrollbar hidden — rather than
+wrapping, so the six links (The Journey, About, the three tracks, Dashboard) stay reachable without
+growing the header. Nothing ever moved that strip's initial scroll position, though: every page loads
+with `scrollLeft` at 0, and on `relationship-healing.html` at 390px the row's `scrollWidth` (597px)
+exceeds its `clientWidth` (346px) by exactly 251px — the reported figure. The fifth link, the
+visitor's own current-page pill (`.sr-tp-on`, "Relationship Healing"), sits past that 251px, so the
+one link telling a visitor where they are renders as "RELATION" with "SHIP" clipped out of view by
+the container's own scroll boundary. The other five links were always reachable by scrolling; the
+active one is the link nobody scrolls to find because it is supposed to already say where they are.
+
+**Fixed** in `renderNav()` (`js/saferise-track.js`): after building the link markup, if the active
+link (`.sr-tp-on`) would sit partly outside `#navlinks`' visible clientWidth, its scroll position is
+set so the pill's right edge is fully in view (`el.scrollLeft = max(0, onLink.offsetLeft +
+onLink.offsetWidth - el.clientWidth)`) — a no-op when the active link already fits. Not a redesign:
+the scroll-strip pattern stands as-is, no string is truncated, no nav item is hidden, and the type
+scale (11px, `.13em` tracking, uppercase) is untouched.
+
+**Verified with Playwright**, all three track pages, 390×844 and 320px, on a fresh load with no
+interaction:
+
+| page | width | active label | doc-level overflow | active pill fully inside `#navlinks` |
+|---|---|---|---|---|
+| personal-transformation.html | 390 | Personal Transformation | 0px | yes (scrollLeft 0, already fit) |
+| personal-transformation.html | 320 | Personal Transformation | 0px | yes (scrollLeft 18px) |
+| relationship-healing.html | 390 | Relationship Healing | 0px | yes (scrollLeft 56px) |
+| relationship-healing.html | 320 | Relationship Healing | 0px | yes (scrollLeft 126px) |
+| professional-performance.html | 390 | Professional Performance | 0px | yes (scrollLeft 169px) |
+| professional-performance.html | 320 | Professional Performance | 0px | yes (scrollLeft 239px) |
+
+`document.documentElement.scrollWidth - window.innerWidth` measured `0` on every row above, both
+before and after the fix — this was never page-level overflow (SR-280's `index.html` failure mode),
+only the nav strip's own internal scroll position being wrong.
+
+*Status:* closed · *Raised and fixed:* 25 Aug 2026
+
+---
