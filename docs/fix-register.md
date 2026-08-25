@@ -390,6 +390,13 @@ were added, the exact failure mode Rule 26 names. Corrected in passing, not chas
     checked against what was already deferred. Before logging a new finding on a surface with a
     known open architectural deferral, check the deferral first — the finding may already be
     explained.
+    **Corollary, from [[SR-282]]'s own first-pass error: while two stores exist, the second one is
+    never the reference.** [[SR-282]] initially reported `dashboard.html` as stale by checking it
+    against `index.html` — the duplicate content store SR-281(e) exists to warn about, and
+    therefore the least reliable source in the tree for exactly this question. `dashboard.html` was
+    correct; `index.html` was wrong. Any comparison involving a page with a known duplicate-store
+    deferral must run against the authored source (`content/tracks.js` here) — never against the
+    duplicate, even when the duplicate is the page that happens to be open.
 
 **Measurement artifacts — the standing pre-flight**
 
@@ -5797,3 +5804,45 @@ has to name what Belonging Gap actually does to a person's body and behaviour, w
 content, not marketing copy, and not mine to invent even at the short lengths involved here.
 
 *Status:* report only, not fixed · *Raised:* 25 Aug 2026
+
+---
+
+### SR-285 · t3-10's title fixed — the label folded into the title, mechanically, everywhere it appeared
+
+**Confirmed before applying, per instruction.** All eleven occurrences read against their
+surrounding copy: none describe a distinct "unlocking" theme. The card's own `.proto-landing-desc`
+— *"Release the rigidity that blocks original thinking, and restore access to creative flow"* —
+and the meditation's body — *"Releasing the rigidity that blocks original thinking..."* — are both
+about creative flow as the subject; "Unlock" never appears as a concept in the surrounding prose,
+only as the mechanically-duplicated label word inside the title string. Cleared as mechanical:
+`'Unlock'` is `content/tracks.js:524`'s label field for t3-10, not a second title component, and no
+copy needed writing.
+
+**Both stores swept.** `content/tracks.js` and `content/t3-resources.js`: zero occurrences of
+"Creative Flow Unlock" — the defect was `index.html`-only, confirming SR-282's finding rather than
+surfacing a new site. `index.html`: all eleven occurrences — compact protocol-list widget,
+`t3-p10-guide` resource title, the `t3-p10` Reader-title lookup, `aria-label`, `h3`, the
+audio-waveform label, the video title, `res-title`, `jprog-section`'s `data-jprog-title`, the
+`consultsummary` default, an `expert-pill` — corrected mechanically: `"Creative Flow Unlock"` →
+`"Creative Flow"`, one substring replacement, verified to leave every surrounding sentence
+grammatical (the word simply drops, it was never load-bearing punctuation or a hyphenation).
+
+**The rest of `index.html` checked for the same class — label word folded into title — not for
+every kind of title drift.** Extracted all thirty canonical `(label, title)` pairs from
+`content/tracks.js` and compared against all thirty rendered titles across four independent
+surfaces on `index.html` (`h3.proto-name`, `aria-label`, the two Reader-title lookup patterns
+`'title': '...'`/`title: '...'`, and the eleven `"title": "..."` resource fields carrying
+`— Guided Meditation`/`— Session Guide`/`— Safety Score Check` suffixes) — 130 comparisons in
+total. **t3-10 was the only instance of this defect class.** Two titles differ from canonical for
+an unrelated reason already on record from [[SR-278]] — `"The Decision Fatigue & Isolation
+Protocol"` (canonical: `"The Decision Fatigue Protocol"`) and `"The Burnout & Chronic Overload
+Protocol"` (canonical: `"The Burnout & Overload Protocol"`) — extra descriptive words with no
+relationship to either protocol's label field (`'Decide'`, `'Refill'`), so not the same defect and
+not touched here.
+
+**Verified by rendered text**, both required widths: `#corporate-protoList [data-proto="10"]`'s
+`h3` reads **"The Creative Flow Protocol"** at both 1440 and 390, zero console errors, no
+horizontal overflow at either width. Bracket/div balance unchanged from baseline
+(`{0/()−6/[0`, div 2804/2804).
+
+*Status:* closed · *Raised and fixed:* 25 Aug 2026
