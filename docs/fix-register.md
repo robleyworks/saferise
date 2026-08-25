@@ -6035,3 +6035,60 @@ only the nav strip's own internal scroll position being wrong.
 *Status:* closed · *Raised and fixed:* 25 Aug 2026
 
 ---
+
+### SR-290 · feat · the protocol carousel auto-advances
+
+**History checked first, per instruction.** `js/saferise-track.js`'s own SR-163 comment states
+directly: "this file has no `requestAnimationFrame`, no `setInterval` and no animation" — confirmed
+against the file, `initCarousel()` had pointer-drag, wheel and arrow/dot navigation and nothing that
+runs on its own. The one existing autoplay in this codebase, `js/saferise-system.js`'s marketing-page
+carousel (`initCarousel(root)` for `[data-sr-carousel]`), is a different mechanism for a different
+markup contract — continuous sub-pixel `scrollLeft` drift against a cloned, doubled track for a
+seamless loop, not a discrete one-card step — and it explicitly disables itself under reduced motion
+(`if (reduce) return;`), which this brief requires the opposite of. Neither is a match to extend, so
+this is new behaviour, not a restore.
+
+**Interval:** no prior "one card at a time" implementation exists to match, so **7000ms**, chosen
+fresh, as instructed.
+
+**Built** in `initCarousel()` (`js/saferise-track.js`), reusing the function's own `i`/`per()`/
+`maxIndex()`/`go()` already driving the arrows: a `setInterval(advance, 7000)` where `advance()`
+steps `i` by exactly 1 (never by `per()`, the arrows' page stride) and wraps to 0 past `maxIndex()`
+so it loops continuously. Paused (interval cleared, not just gated) while the pointer is over the
+carousel, while any element inside it holds focus, or while `document.hidden` — resumed the instant
+none of those three are true. The markup gained one wrapping `<div id="carousel" aria-live="off">`
+around the existing carhead+viewport (not `rJourney`, which was already a sibling and stays outside
+the live region) so hover/focus can be scoped to the carousel without touching cards, arrows or dots.
+Arrow clicks, drag and wheel are untouched code, still delegate to the same `go()`/`place()`.
+
+Reduced motion runs the same interval unchanged — no `reduce` check gates it. The sliding transition
+it would otherwise animate is already collapsed by the existing blanket
+`*,*::before,*::after{transition-duration:.01ms!important}` rule: an `!important` stylesheet
+declaration overrides this file's non-`!important` inline `transition:transform .45s…` regardless of
+selector specificity, so reduced motion needed no new CSS, only confirming the existing mechanism
+reaches this component too. No progress bar or completion-reading indicator was added; the existing
+dot rail (SR-163, page position, not a countdown) is unchanged.
+
+**Verified with Playwright**, reading `.sr-tp-cartrack`'s computed transform, all three track pages:
+
+| check | result |
+|---|---|
+| auto-advance occurs, default motion (all 3 pages) | yes — one 252px step (one card) every ~7s, both of two consecutive intervals |
+| transition duration during an auto-advanced step, default motion | `0.45s` |
+| auto-advance occurs, `reduced_motion:'reduce'` (all 3 pages) | yes — same 252px/~7s cadence |
+| transition duration during an auto-advanced step, reduced motion | `0.00001s` (the blanket rule) — no visible slide |
+| hover over `#carViewport` pauses | yes — track unchanged across an 8s hover |
+| unhover resumes | yes |
+| focus inside carousel (`#carNext`) pauses | yes — track unchanged across an 8s focus hold |
+| blur resumes | yes |
+| `document.hidden = true` pauses | yes |
+| `document.hidden` restored to `false` resumes | yes |
+| `aria-live` on `#carousel` | `off` |
+| keyboard focus moved by an auto-advance tick | no — `document.activeElement` unchanged across 7.5s of autoplay |
+| arrow click (`#carNext`) still moves the track | yes |
+| console errors, either motion setting, any page | none |
+
+Swipe (pointer drag) and wheel navigation were not modified — the new code was appended after the
+existing `pointerdown`/`pointermove`/`wheel` listeners and `go(0)` call, none of which were touched.
+
+*Status:* closed · *Raised and fixed:* 25 Aug 2026

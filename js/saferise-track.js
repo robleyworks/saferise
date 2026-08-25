@@ -188,6 +188,13 @@
         '<h2 class="sr-tp-h2--oneline">Start with the state that traps you most.</h2>' +
         '<p class="sr-tp-lede">Each protocol is a complete guided system — tools for before, during and after, with the research shown at every step.</p>' +
       '</div>' +
+      /* SR-290 · aria-live="off" wraps only the carhead+viewport, not
+         rJourney below it — a live-region attribute on the whole #protocols
+         band would apply to unrelated content sharing that ancestor. off,
+         not omitted: it states the auto-advancing region is deliberately
+         silent to assistive tech rather than leaving that to each screen
+         reader's default inference. */
+      '<div class="sr-tp-carousel" id="carousel" aria-live="off">' +
       '<div class="sr-tp-carhead"><span class="sr-tp-carkick">Browse all protocols</span>' +
         /* SR-163 · dots, not "1 / 10". The rail is built by initCarousel once
            it knows how many cards fit, because the number of pages depends on
@@ -197,6 +204,7 @@
         '<button class="sr-tp-carbtn" id="carNext" aria-label="Next protocol"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button></div>' +
       '</div>' +
       '<div class="sr-tp-carviewport" id="carViewport"><div class="sr-tp-cartrack">' + cards + '</div></div>' +
+      '</div>' +
       rJourney(t) +
     '</div>';
   }
@@ -664,6 +672,66 @@
 
     window.addEventListener('resize', function () { go(i); });
     go(0);
+
+    /* ── SR-290 · auto-advance ────────────────────────────────────────
+       No prior implementation for this component: SR-163's own comment
+       above records that this carousel has never had a timer or an
+       animation loop. js/saferise-system.js's marketing carousel does
+       autoplay, but as continuous sub-pixel drift with a cloned-track
+       loop — a different mechanism for a different markup contract, not
+       one this carousel-in-place step model can reuse — and it disables
+       itself under reduced motion, which the brief for this component
+       explicitly forbids. 7000ms chosen fresh, no prior value to match.
+
+       One card at a time, not one page (go(i +/- per()), the arrows'
+       stride) — advance() always steps `i` by exactly 1, wrapping to 0
+       once maxIndex() is passed so it loops rather than stalling at the
+       end. go()/place() never call .focus(), so a tick can never steal
+       keyboard focus, satisfied by construction rather than by a guard.
+
+       Reduced motion changes nothing here: it still ticks on the same
+       interval. The sliding transition it would otherwise animate is
+       already collapsed to .01ms by the blanket
+       `*,*::before,*::after{transition-duration:.01ms!important}` rule
+       in css/saferise-system.css — an !important stylesheet rule beats
+       this file's non-!important inline `transition:transform .45s…`
+       regardless of specificity, so the existing central mechanism
+       already turns every slide instant under reduced motion without
+       this component special-casing it.
+
+       Paused vs resumed only — no permanent stop. Arrow clicks, drag and
+       wheel already pause this the moment the pointer is over the strip
+       (hover) or a button has focus; nothing here needs to also watch
+       for manual navigation. */
+    var AUTO_MS = 7000;
+    var carousel = document.getElementById('carousel');
+    var autoTimer = null, hoverPaused = false, focusPaused = false;
+
+    function advance() {
+      var ni = i + 1;
+      if (ni > maxIndex()) ni = 0;
+      go(ni);
+    }
+    function autoOn() { return !hoverPaused && !focusPaused && !document.hidden && maxIndex() > 0; }
+    function syncAuto() {
+      if (autoOn()) {
+        if (!autoTimer) autoTimer = setInterval(advance, AUTO_MS);
+      } else if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+    }
+    if (carousel) {
+      carousel.addEventListener('mouseenter', function () { hoverPaused = true; syncAuto(); });
+      carousel.addEventListener('mouseleave', function () { hoverPaused = false; syncAuto(); });
+      carousel.addEventListener('focusin', function () { focusPaused = true; syncAuto(); });
+      carousel.addEventListener('focusout', function (e) {
+        if (carousel.contains(e.relatedTarget)) return;
+        focusPaused = false; syncAuto();
+      });
+    }
+    document.addEventListener('visibilitychange', syncAuto);
+    syncAuto();
   }
 
   function initFaq() {
