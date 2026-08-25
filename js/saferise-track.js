@@ -649,6 +649,78 @@
     });
   }
 
+  /* ── SR-277 · section reveal, one system for all three tracks ───────
+     Typography timing (eyebrow/heading/body/next-block: 0/100/200/300ms)
+     lives in css/saferise-system.css as plain CSS transitions keyed off
+     .sr-tp-in — this function's only job is adding that class once a
+     section scrolls into view, and it does that with the same
+     IntersectionObserver shape js/saferise-system.js already uses for
+     .sr-stagger (threshold .12, rootMargin -8% at the bottom), so a track
+     page and a marketing page reveal on the same rhythm without sharing
+     a script.
+
+     Card groups get the platform's EXISTING .sr-stagger/.sr-in pair
+     (css/saferise-system.css line ~178) rather than a new mechanism —
+     the same peer-index stagger index.html's grids already use. This
+     file cannot load js/saferise-system.js to reuse its initStagger()
+     directly (that module also owns the marketing-page auto-carousel and
+     scroll rail, neither of which belongs on a track page), so the small
+     amount of glue is repeated here rather than pulling in the whole file.
+
+     Diagrams get no separate treatment. GRAPHICS.trigger sits inside
+     rInsight's post-sechead block and GRAPHICS.progress opens rProgress
+     directly, so both already ride the section's own "next block" beat;
+     nothing here targets an <img> or a hero photograph, which is the
+     boundary the brief draws between diagram motion and image motion. */
+  var CARD_GROUPS = ['.sr-tp-cartrack', '.sr-tp-costgrid', '.sr-tp-rangecols',
+                      '.sr-tp-sixgrid', '.sr-tp-inc'];
+  function initReveal() {
+    var page = document.getElementById('page');
+    if (!page) return;
+    var sections = [].slice.call(page.children).filter(function (el) {
+      return el.classList.contains('sr-tp-hero') || el.classList.contains('sr-tp-band');
+    });
+    if (!sections.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+      /* No observer: show everything rather than leave it permanently at
+         opacity:0, the same fallback stance slot() and val() take elsewhere
+         in this file — a missing capability degrades to the plain state. */
+      sections.forEach(function (s) {
+        s.classList.add('sr-tp-in');
+        CARD_GROUPS.forEach(function (sel) {
+          var g = s.querySelector(sel);
+          if (g) g.classList.add('sr-in');
+        });
+      });
+      return;
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('sr-tp-in');
+        CARD_GROUPS.forEach(function (sel) {
+          var g = e.target.querySelector(sel);
+          if (g) g.classList.add('sr-in');
+        });
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+    sections.forEach(function (s) {
+      s.classList.add('sr-tp-revealsec');
+      CARD_GROUPS.forEach(function (sel) {
+        var g = s.querySelector(sel);
+        if (g) {
+          g.classList.add('sr-stagger');
+          [].forEach.call(g.children, function (c, i) { c.style.setProperty('--i', i); });
+        }
+      });
+      io.observe(s);
+    });
+  }
+
   /* ── assemble ────────────────────────────────────────────────────── */
   var CURRENT_TRACK = null;
   function renderTrack(id) {
@@ -669,6 +741,7 @@
 
     initCarousel();
     initFaq();
+    initReveal();
     window.SR_TRACK_MISSING = MISSING;
   }
 

@@ -111,9 +111,10 @@ body::before{
    own inline border-top, and crossed near the footer's Scope & Safety
    box on pages where a short trailing section sits close above it.
    Removed outright rather than re-scoped: every section it touched
-   already carries its own separation — .sr-section/.sr-testi have
-   their own border, the rest rely on their existing 72–104px
-   margin/padding — so no replacement hairline is needed anywhere. */
+   already carries its own separation — .sr-section had its own
+   border, the rest rely on their existing 72–104px margin/padding —
+   so no replacement hairline is needed anywhere. .sr-testi is gone
+   (SR-275): the class this note originally credited no longer exists. */
 section{border-top:0!important;padding-block:clamp(72px,9vw,128px)}
 
 /* A5 · surfaces ───────────────────────────────────────────── */
@@ -178,6 +179,59 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
   transition:opacity .7s var(--sr-ease),transform .7s var(--sr-ease);
   transition-delay:calc(var(--i,0)*70ms)}
 .sr-stagger.sr-in>*{opacity:1;transform:none}
+
+/* A9 · SR-277 · track-page section reveal ────────────────────
+   One rhythm for all three tracks: eyebrow, heading, supporting text,
+   then the first thing after them — 0/100/200/300ms. js/saferise-track.js
+   adds .sr-tp-revealsec to each top-level section and .sr-tp-in once it
+   scrolls into view; everything below is a plain CSS transition off that
+   one class, the same shape as .reveal/.sr-stagger above.
+
+   Selectors read structure, not a fixed markup shape, because the hero
+   (h1, no .sr-tp-sechead) and the price panel (manual eyebrow/h2/lede,
+   no .sr-tp-sechead either) both carry the same class names as every
+   sechead()-built section. ".sr-tp-lede+*" exists only to give the price
+   panel a fourth beat where ".sr-tp-sechead+*" finds nothing to match.
+
+   Never targets an <img> or the hero photograph — images stay static by
+   omission, not by an added rule fighting one that would otherwise move
+   them. Reduced motion needs nothing added here: the blanket rule at
+   the bottom of this file already collapses every transition-duration
+   to .01ms, which is what "handled centrally" means. */
+.sr-tp-revealsec .sr-tp-eyebrow,
+.sr-tp-revealsec h1,
+.sr-tp-revealsec h2,
+.sr-tp-revealsec .sr-tp-lede,
+.sr-tp-revealsec .sr-tp-herorule,
+.sr-tp-revealsec .sr-tp-body,
+.sr-tp-revealsec .sr-tp-sechead+*,
+.sr-tp-revealsec .sr-tp-lede+*{
+  opacity:0;transform:translateY(16px);
+  transition:opacity .6s var(--sr-ease),transform .6s var(--sr-ease)}
+.sr-tp-revealsec .sr-tp-eyebrow{transition-delay:0ms}
+.sr-tp-revealsec h1,.sr-tp-revealsec h2{transition-delay:100ms}
+.sr-tp-revealsec .sr-tp-lede,.sr-tp-revealsec .sr-tp-herorule,
+.sr-tp-revealsec .sr-tp-body{transition-delay:200ms}
+.sr-tp-revealsec .sr-tp-sechead+*,.sr-tp-revealsec .sr-tp-lede+*{transition-delay:300ms}
+.sr-tp-revealsec.sr-tp-in .sr-tp-eyebrow,
+.sr-tp-revealsec.sr-tp-in h1,
+.sr-tp-revealsec.sr-tp-in h2,
+.sr-tp-revealsec.sr-tp-in .sr-tp-lede,
+.sr-tp-revealsec.sr-tp-in .sr-tp-herorule,
+.sr-tp-revealsec.sr-tp-in .sr-tp-body,
+.sr-tp-revealsec.sr-tp-in .sr-tp-sechead+*,
+.sr-tp-revealsec.sr-tp-in .sr-tp-lede+*{opacity:1;transform:none}
+
+/* .sr-tp-pcard sets its own `transition:border-color .2s` (SR-174) at
+   higher specificity (.sr-tp .sr-tp-pcard) than .sr-stagger>* (0,1,0), and
+   a shorthand re-declaration resets every longhand it doesn't name — so
+   the card's own rule was silently deleting the stagger's opacity/transform
+   transition, leaving the entrance to snap instead of fade. Restated here at
+   higher specificity than both, adding the two properties rather than
+   replacing the border-color one it still needs on hover. */
+.sr-tp .sr-tp-cartrack.sr-stagger>.sr-tp-pcard{
+  transition:opacity .7s var(--sr-ease),transform .7s var(--sr-ease),border-color .2s;
+  transition-delay:calc(var(--i,0)*70ms)}
 
 
 /* ═════════════════════════════════════════════════════════════
@@ -380,18 +434,6 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
 .sr-feat p{margin:0;font:400 14px/1.68 'DM Sans',sans-serif;color:var(--text3)}
 .sr-feat .sr-tagline{color:var(--primary2);font-style:italic;
   font-family:'Cormorant Garamond',Georgia,serif;font-size:15px}
-
-/* B6 · testimonial ────────────────────────────────────────── */
-.sr-testi{margin-top:100px;padding:64px 56px;position:relative;overflow:hidden;
-  border-radius:16px;border:1px solid rgba(212,168,67,.22);
-  background:linear-gradient(150deg,rgba(212,168,67,.07),rgba(23,23,40,.9) 46%,rgba(14,14,26,.95))}
-.sr-testi::before{content:"\201C";position:absolute;top:-38px;left:26px;
-  font:400 190px/1 'Cinzel',serif;color:rgba(212,168,67,.14)}
-.sr-testi blockquote{position:relative;margin:0 auto;max-width:760px;text-align:center;
-  font:italic 400 clamp(21px,2.3vw,29px)/1.55 'Cormorant Garamond',Georgia,serif;color:var(--text)}
-.sr-testi .sr-who{margin:26px 0 0;text-align:center;font:700 10px/1.8 'DM Sans',sans-serif;
-  letter-spacing:2.6px;text-transform:uppercase;color:var(--primary)}
-.sr-testi .sr-who span{display:block;font-weight:400;letter-spacing:1.6px;color:var(--text3)}
 
 /* B7 · human services pair ────────────────────────────────── */
 .sr-human{margin-top:104px}
@@ -1614,23 +1656,6 @@ details.sr-q .sr-a a{color:var(--primary2)}
 #prog-corporate .sr-feat .sr-tagline{color:var(--sr-accent);font-style:italic;
   font-family:'Cormorant Garamond',Georgia,serif;font-size:15px}
 
-/* B6 · testimonial ────────────────────────────────────────── */
-#prog-couples .sr-testi,
-#prog-corporate .sr-testi{margin-top:100px;padding:64px 56px;position:relative;overflow:hidden;
-  border-radius:16px;border:1px solid color-mix(in srgb, var(--sr-accent) 22%, transparent);
-  background:linear-gradient(150deg,color-mix(in srgb, var(--sr-accent) 7.0%, transparent),rgba(23,23,40,.9) 46%,rgba(14,14,26,.95))}
-#prog-couples .sr-testi::before,
-#prog-corporate .sr-testi::before{content:"\201C";position:absolute;top:-38px;left:26px;
-  font:400 190px/1 'Cinzel',serif;color:color-mix(in srgb, var(--sr-accent) 14.0%, transparent)}
-#prog-couples .sr-testi blockquote,
-#prog-corporate .sr-testi blockquote{position:relative;margin:0 auto;max-width:760px;text-align:center;
-  font:italic 400 clamp(21px,2.3vw,29px)/1.55 'Cormorant Garamond',Georgia,serif;color:var(--text)}
-#prog-couples .sr-testi .sr-who,
-#prog-corporate .sr-testi .sr-who{margin:26px 0 0;text-align:center;font:700 10px/1.8 'DM Sans',sans-serif;
-  letter-spacing:2.6px;text-transform:uppercase;color:var(--sr-accent)}
-#prog-couples .sr-testi .sr-who span,
-#prog-corporate .sr-testi .sr-who span{display:block;font-weight:400;letter-spacing:1.6px;color:var(--text3)}
-
 /* B7 · human services pair ────────────────────────────────── */
 #prog-couples .sr-human,
 #prog-corporate .sr-human{margin-top:104px}
@@ -1787,7 +1812,6 @@ details.sr-q .sr-a a{color:var(--primary2)}
   .sr-features{grid-template-columns:1fr;gap:32px}
   .sr-svc-pair{grid-template-columns:1fr}
   .sr-svc{padding:32px 24px 28px}
-  .sr-testi{padding:48px 26px}
   .sr-ctabar{border-radius:18px;padding:24px 22px;gap:20px}
   .sr-ctabar .sr-acts{width:100%;justify-content:space-between}
 }

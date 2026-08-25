@@ -884,7 +884,7 @@ TRACKS[3].faq = [
     'If you genuinely cannot find a gap anywhere in a day, that is worth noticing. The Burnout & Overload Protocol starts there.']],
   ['What if the problem is the job, not me?',
    ['Then regulating will not fix it, and this track does not claim it will. What it does is give you access to your own judgement, which is what you need in order to see the situation clearly and decide what to do about it.',
-    'The Career Transition and Ambition Recovery protocols exist because sometimes the answer is to leave.']],
+    'The Career Transition and Belonging Gap protocols exist because sometimes the answer is to leave.']],
   ['Can my company buy this for a team?',
    ['Yes. Team access and in-person sessions are handled separately from personal subscriptions \u2014 get in touch and we will put something together.']]
 ];

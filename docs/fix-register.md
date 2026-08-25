@@ -129,7 +129,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
 **Rules — method**
 
 Earned across Runs C to G. Each cost something to learn; the worked example is named so
-the rule can be checked rather than taken on trust. **Twenty-four rules.**
+the rule can be checked rather than taken on trust. **Thirty-two rules.** (The count above
+read twenty-four through Rule 27 — a second copy that did not regenerate when Rules 25–27
+were added, the exact failure mode Rule 26 names. Corrected in passing, not chased further.)
 
 1. **A deliberate non-fix gets a register entry** carrying the reasoning and an explicit
    do-not-tidy line. An undocumented correct refusal is indistinguishable from an oversight,
@@ -329,6 +331,88 @@ the rule can be checked rather than taken on trust. **Twenty-four rules.**
     **PNG data behind `.jpg` and `.jpeg` extensions at ~1.7 MB**, against siblings at 174–192 KB.
     Browsers sniff content type, so both would have rendered and shipped **nine times the expected
     bytes with the extension hiding it**. `PIL.Image.open(p).format` is the check; the filename is not.
+
+28. **AN ID CITED IN A PREMISE IS A CLAIM THAT EVIDENCE EXISTS, NOT THE EVIDENCE ITSELF —
+    CHECK IT AGAINST THE REGISTER BEFORE ACTING ON IT.** Extends Rule 16, and [[SR-277]] is the
+    worked example — a different failure from the nine premises Rule 16 already catalogues.
+    Those were **stale**: a real record, drifted since it was written. SR-238, SR-239 and
+    SR-234, cited in a brief as completed work ("SR-238 rebuilt the cards as a fixed grid...",
+    "SR-234 made the carousel a 13-second arrival gesture"), **do not exist anywhere in this
+    repository** — no register entry, no commit, no code trace, checked against `git log --all
+    --grep` and this file directly. They were invented and asserted with the appearance of
+    provenance an ID carries by this project's own convention. **A fabricated ID is more
+    dangerous than a stale document**: a stale document is still evidence of something, aged;
+    a fabricated one borrows the register's credibility with nothing behind it, and reads as
+    more trustworthy than an unsourced claim would have. Acting on it here would have meant
+    rebuilding the working SR-174/174b/178/162/163/182 lineage against a history that never
+    happened. The check costs one command and must run before the premise is acted on, not
+    after — Rule 16 says name the source of an asserted value; this rule says an ID is not by
+    itself a source, it is a pointer, and the pointer must resolve.
+
+29. **WHERE TWO RULES SET THE SAME PROPERTY, THE LOSER FAILS SILENTLY — VERIFY A NEW
+    TRANSITION OR ANIMATION BY COMPUTED STYLE, NOT BY WATCHING THE PAGE.** [[SR-277]] is the
+    worked example: `.sr-tp-pcard`'s own `transition:border-color .2s` ([[SR-174]]) outranked
+    `.sr-stagger>*`'s transition rule on specificity, and a shorthand re-declaration resets
+    every longhand it does not name — silently deleting the new reveal's opacity/transform
+    transition on every protocol card. **No error and no visual artefact beyond the plain
+    absence of the thing that should have happened**: a screenshot of the broken state and a
+    screenshot of the fixed one are identical, because both eventually show the card at full
+    opacity — only the path there differs. `getComputedStyle(el).transitionProperty` and
+    `.transitionDelay` are what distinguish them; a rendered screenshot is not. Extends Rule 14's
+    "measure computed style, not rendered geometry" from diagnosing a dormant *existing* rule to
+    verifying a newly *added* one is not itself arriving dormant.
+
+30. **HORIZONTAL OVERFLOW: MEASURE THE CONTAINING BLOCK, NOT THE ELEMENT THAT LOOKS WRONG.**
+    [[SR-280]] is the worked example. `#main-nav` (`position:fixed;left:0;right:0`) rendered 487px
+    wide against a 390px viewport, and every symptom pointed at the nav — its own `.nav-link` row,
+    its own `overflow-x:auto`. The nav was innocent. `body{overflow-x:hidden}` had no matching rule
+    on `html`, so unrelated wide content elsewhere on the page widened the initial containing
+    block, and the fixed element — having done nothing wrong itself — inherited the wider box
+    resolving `left`/`right` against it. **A `body`-only `overflow-x:hidden` does not contain the
+    viewport**; the symptom surfaces on whatever is `position:fixed`, which is rarely the cause.
+    Confirmed, not inferred: setting `html{overflow-x:hidden}` alone collapsed both the page's
+    `scrollWidth` and the nav's own computed width back to 390px, with nothing else touched.
+    **Corollary — where the fix lives matters as much as what it is.** The same property change,
+    applied to a stylesheet shared with pages using `position:sticky`, breaks sticky exactly the
+    way a standing comment already documents (`overflow-x` on an ancestor forces the paired
+    `overflow-y` to `auto`). Scope the fix to the page that has the defect, not to every page that
+    shares a stylesheet with it.
+
+31. **A DEFERRED ARCHITECTURAL FINDING RECURS AS NEW-LOOKING SYMPTOMS — CHECK AGAINST IT BEFORE
+    LOGGING SOMETHING AS INDEPENDENT.** [[SR-084]] named and deferred `index.html`'s duplicate
+    content store on 19 Aug — "index.html still carries the cut resources and every duration,"
+    explicitly held back as its own reviewable pass. [[SR-281]] was briefed as five unrelated
+    defects — stale pricing, stale durations, retired vocabulary, a second image set, and the
+    question of whether they shared a cause. **Four of the five were one cause wearing four
+    faces**, and the brief that raised them did not know that going in. A structural finding that
+    is deferred rather than fixed does not stop producing symptoms; it produces a new one every
+    time someone touches the page it lives on, and each will look like its own defect until it is
+    checked against what was already deferred. Before logging a new finding on a surface with a
+    known open architectural deferral, check the deferral first — the finding may already be
+    explained.
+    **Corollary, from [[SR-282]]'s own first-pass error: while two stores exist, the second one is
+    never the reference.** [[SR-282]] initially reported `dashboard.html` as stale by checking it
+    against `index.html` — the duplicate content store SR-281(e) exists to warn about, and
+    therefore the least reliable source in the tree for exactly this question. `dashboard.html` was
+    correct; `index.html` was wrong. Any comparison involving a page with a known duplicate-store
+    deferral must run against the authored source (`content/tracks.js` here) — never against the
+    duplicate, even when the duplicate is the page that happens to be open.
+
+32. **A CONCATENATION AND A RENAME LOOK IDENTICAL IN A DIFF — ONLY THE SURROUNDING COPY TELLS THEM
+    APART, AND IT HAS TO BE CHECKED BEFORE THE EDIT, NOT AFTER.** [[SR-285]] is the worked example.
+    "The Creative Flow Unlock Protocol" → "The Creative Flow Protocol" is an eleven-occurrence
+    string substitution regardless of which of the two defects caused it — a label word wrongly
+    concatenated into a title (mechanical, no new copy needed) or an actual second name for the
+    protocol that the surrounding copy still describes (a rename, where [[SR-279]]'s five
+    copy-content sites would apply). The two are indistinguishable from the string change alone.
+    What distinguished them here: every occurrence's surrounding prose — the card's own landing
+    description, the meditation's own body — was checked for whether it described "unlocking" as a
+    theme before the substitution ran, not after. It did not, so the edit was safe as mechanical.
+    **Had any surrounding copy described unlocking, the identical string edit would have been a
+    silent rename** — correcting the label residue while leaving the protocol's actual subject
+    unaddressed, exactly the failure [[SR-279]] was raised to prevent. Confirm which case applies
+    before treating a multi-occurrence string fix as mechanical; do not infer it from the fact that
+    a clean substitution exists.
 
 **Measurement artifacts — the standing pre-flight**
 
@@ -5187,3 +5271,634 @@ is derived from the number of cards.
 
 *Status:* open — resolved in design, blocked on `assets/method/marks/kross.png` ·
 *Raised:* 19 Aug 2026 · *Resolved:* 22 Aug 2026 · *Premises corrected:* 23 Aug 2026
+
+---
+
+### SR-275 · t3-06's "Why Release" heading named the wrong mechanism
+
+`content/t3-resources.js` (`t3p6-guide`) carried the heading **"Why Release goes after the
+editing"**, naming only one of the two things the Release step addresses. The Release cue
+itself (`t3p6-crisiscard`) already names both: *"Two things. The gap... And the editing..."* —
+the gap being the room's verdict, the editing being the persona maintained in response to it.
+Heading corrected to **"Why Release goes after the reading of the room"**, which names the
+first of the two and matches the card's own signature line (*"Reading the room for whether you
+count in it"*, [[SR-258]]).
+
+**The paragraph under the heading is not rewritten, and stays out of scope here.** It runs
+four sentences on the cost of maintaining an edited persona and does not develop "the reading
+of the room" as its own idea — it earns the old heading, not fully the new one. Rewriting it is
+authoring member-facing copy, the same boundary [[SR-226]] and [[SR-258]] drew. **Blocked on the
+content lane**, same class of block as SR-226 before SR-258 closed it.
+
+*Status:* heading fixed; body paragraph open — blocked on content lane · *Raised:* 24 Aug 2026
+
+---
+
+### SR-276 · `.sr-testi` CSS survived its own markup
+
+"Protocol work" (24 Aug 2026, no SR ID) removed every `<section class="sr-testi">` — the two on
+`index.html` and the template in `docs/INTEGRATION.md` — closing the testimonial-placeholder
+question. The three CSS rule blocks that styled the class did not move with it: the base rule
+in `css/saferise-system.css`, the `#prog-couples`/`#prog-corporate` scoped override, and a
+`max-width:760px` responsive tweak. No markup referenced `.sr-testi` anywhere in the tree, so
+the CSS rendered nothing — but a fully-styled dead selector is exactly the kind of slot Rule 19
+exists to close: it would make a re-added `<section class="sr-testi">` look finished on sight,
+with none of the friction that should come from resurrecting a removed pattern. Removed, along
+with the explanatory comment above `section{border-top:0}` that still named `.sr-testi` as a
+section carrying its own border.
+
+*Status:* closed · *Raised:* 24 Aug 2026
+
+---
+
+### SR-277 · One section-reveal and card-entrance system for all three tracks
+
+**What existed before this.** js/saferise-track.js already renders all three track pages
+(personal-transformation.html, relationship-healing.html, professional-performance.html) from one
+module — SR-209's precedent (one spec, token-driven, many variants) was already satisfied at the
+template layer; there was nothing to extract there. What did not exist was any entrance animation
+at all: the file never loaded js/saferise-system.js (which owns `.sr-stagger`/IntersectionObserver
+for index.html's grids), so every section on every track page rendered instantly, fully visible,
+with zero reveal.
+
+**The four zero-argument, wholly-identical section renderers this run measured — not two.**
+`rInsight()`, `rFourSteps()`, `rProgress()` and `rScope()` take no track argument and emit the same
+markup regardless of which of the three tracks calls them. `rResources(t)` looked like a fifth
+candidate but takes `t.id` for `trackResources(t.id)` ([[SR-253]] — Track 03 has eleven resource
+types, Tracks 01/02 have ten) so it is shared *structure*, not shared *output*. Reported as
+measured, since the count did not match the brief.
+
+**SR-238, SR-239 and SR-234 do not exist.** No register entry, no commit (`git log --all --grep`),
+no code comment anywhere in the tree. The actual card — SR-174/SR-174b/SR-178/SR-162/SR-163/SR-182
+— already satisfies the brief's own card model without changes: `p[1]` (*"the one-word verb"*) is
+the transformation word burned into `.sr-pcover-label`, `p[2]` the title, `p[3]` the promise,
+`p[4]` the signature revealed on hover *and* `:focus-within`, border-color emphasis on hover, and a
+`(hover:none),(max-width:560px)` query that already renders the reveal statically with no
+transition. Nothing here needed rebuilding, so nothing was rebuilt.
+
+**The four Track 01 diagram handoffs — two-pathway flow, breathing waveform, circular sequence,
+baseline graph — are not files in this repo.** No document under `docs/` matches that description.
+They are, however, already *built*: `GRAPHICS.trigger` ("A trigger travels on two timelines"),
+`GRAPHICS.breath` ("The coherence rhythm"), `GRAPHICS.spiral` ("The sequence becomes familiar") and
+`GRAPHICS.progress` ("The floor moves") in js/saferise-track.js are those four diagrams, verbatim,
+already placed in `rInsight()`/`rFourSteps()`/`rProgress()`. Decision: they survive as-is. They
+inherit the shared section's own entrance (fade + rise, the same mechanism as the surrounding
+text) rather than gaining a separate idle-loop animation — a second, diagram-only motion pattern
+would be the "spectacle" the brief rules out, not "attention."
+
+**What was built — reused mechanisms, no new ones:**
+- `.sr-tp-revealsec`/`.sr-tp-in` (css/saferise-system.css, new A9 block): eyebrow 0ms, heading
+  100ms, supporting text 200ms, the first block after them 300ms — plain CSS transitions keyed off
+  one class, added by `initReveal()` in js/saferise-track.js via one IntersectionObserver per page
+  (threshold .12, rootMargin -8%, the same shape `initStagger()` already uses on index.html).
+  Selectors key on class names (`.sr-tp-eyebrow`, `h1`/`h2`, `.sr-tp-lede`, `.sr-tp-sechead+*`),
+  which is why the hero (no `.sr-tp-sechead`) and the price panel (manual markup, also no
+  `.sr-tp-sechead`) both reveal correctly without a special case for either.
+- Card and resource-item groups (the protocol carousel, cost items, range columns, resource
+  items) reuse the platform's own `.sr-stagger`/`.sr-in`/`--i` pair verbatim — the same class
+  wired onto new containers, not a new stagger mechanism.
+- Never targets an `<img>` or the hero photograph. Images stay static by the selectors' own scope,
+  not by a rule fighting one that would otherwise move them.
+
+**One real bug found and fixed in the process, not introduced by it.** `.sr-tp .sr-tp-pcard`'s
+own `transition:border-color .2s` (SR-174) carries higher specificity than `.sr-stagger>*`'s
+transition rule. A shorthand re-declaration resets every longhand it doesn't name, so wiring
+`.sr-stagger` onto `.sr-tp-cartrack` was silently deleting the opacity/transform transition on
+every protocol card — confirmed live: `getComputedStyle` on a hydrated card reported
+`transition-property: border-color` only, and `transition-delay: 0s` on every card regardless of
+its `--i`. Restated at higher specificity (`.sr-tp .sr-tp-cartrack.sr-stagger>.sr-tp-pcard`),
+adding opacity/transform rather than replacing border-color. Verified after the fix: card index 3
+reports `transition-delay: 0.21s` (3 × 70ms) and `transition-property: opacity, transform,
+border-color`.
+
+**Reduced motion, keyboard, touch — asserted, not re-implemented.** The blanket rule already in
+this file (`*,*::before,*::after{transition-duration:.01ms!important;...}`, inside
+`@media (prefers-reduced-motion:reduce)`) collapses every transition added here without a
+per-component block, per CLAUDE.md. Keyboard already has parity — `:focus-within` already
+accompanies every `:hover` this run touches; nothing new was added that lacks it. Touch has no
+hover, and needed none here either: the section reveal is scroll-driven (IntersectionObserver),
+not hover-gated, so it fires identically on a touch device; the one hover-gated surface (the card's
+signature reveal) was already handled by SR-174b's `(hover:none)` query before this run started.
+
+**Verification.** IntersectionObserver never fires in this environment's preview tab —
+`document.hidden` is `true` even on the "active" tab, which is standard Page Visibility throttling
+for a backgrounded renderer, confirmed by a bare test observer also never firing. Verified instead
+by toggling `.sr-tp-in`/`.sr-in` directly and reading `getComputedStyle`: eyebrow/heading/lede/next
+-block delays measured at 0/100/200/300ms exactly, per-card delay measured at `--i × 70ms` after
+the specificity fix. All three pages loaded with zero console errors and no horizontal overflow at
+1440/1024/768/390. Euro invariant re-run: 8 inside `PRICING`, 0 escapes elsewhere, 0 bare `€` —
+unchanged, since content/tracks.js's `PRICING` object was not touched.
+
+*Status:* closed · *Raised:* 25 Aug 2026
+
+---
+
+### SR-278 · "Subject matter voices" and "Science framework" derived from `META[].frameworks`, not hand-typed
+
+**Per-protocol verdict, checked before anything was built, per instruction.** For each of Track
+03's ten protocols, read every authored resource this repo carries for it — content/t3-resources.js's
+full `t3p{N}-guide` (including its own `<h4>What we rest on</h4>` citation section), `t3p{N}-crisiscard`
+and `t3p{N}-companion`, plus index.html's shorter `t3-p{N}-guide` overlay copy — and searched all of
+it for Mooji, David Bayer, Peter Levine, Elisabeth Kübler-Ross and Francis Weller, the five names the
+old line carried. **Zero hits, on any of the ten, in either content store, outside the line itself.**
+None of the five names are decoration in the sense of "unnecessary but not false" — they are not
+present in the actual authored content at all. Meanwhile `content/t3-resources.js`'s own
+`<h4>What we rest on</h4>` section — the platform's own citation of what a protocol's science
+actually is — **matches `META['t3-0N'].frameworks` exactly, 10 protocols for 10**, including the
+six protocols whose old "Subject matter voices" line named nothing in that pair at all. The verdict
+for every one of the ten is therefore the same: **derive, do not delete.** The framework registry is
+not incomplete and the resources do not cite anyone they shouldn't — the old line was simply invented
+independently of both the registry and the platform's own citations, and never checked against
+either.
+
+**What was built.** Both `index.html` occurrences per protocol — the authored-resource-body string
+inside each `t3-p{N}-guide` object and the always-visible card-surface `<p>` in `#corporate-protoList`
+— were regenerated from `content/tracks.js`'s `FRAMEWORKS`/`META` pair: `FRAMEWORKS[k].name` em-dash
+`FRAMEWORKS[k].person`, joined `·`, for each key in `META['t3-0N'].frameworks`, in that order.
+Mechanical, reproducible, and matches the exact em-dash format `t3p{N}-guide`'s own "What we rest on"
+section already uses, so the two now agree instead of contradicting each other on the same page.
+
+    Before (t3-06): Subject matter voices: David Bayer · HeartMath Coherence
+    After  (t3-06): Subject matter voices: Polyvagal Theory — Stephen Porges · Shadow & individuation — Carl Jung
+
+Neither name in the old line matches `META['t3-06'].frameworks: ['porges','jung']`; both names in
+the new one do. All 20 occurrences (10 protocols × 2 surfaces) regenerated
+identically per protocol — verified live: `#corporate-protoList [data-proto="6"]` renders the derived
+Porges/Jung line with zero console errors.
+
+**Track 01 carries no such line anywhere** — no `personal-protoList` container exists in `index.html`
+at all, and `js/saferise-track.js`'s card renderer (the standalone personal-transformation.html)
+never emits a framework-attribution string. Nothing to fix or report further.
+
+**Track 02 carries the same defect class, less severely, and got the same treatment.** Its
+`#couples-protoList` overlay uses a singular `Science framework:` line, one name, never an outside
+figure — but checked against `META['t2-0N'].frameworks`, it named the *wrong* registered framework
+on 4 of 10 (`t2-02`, `t2-05`, `t2-06` each named one framework absent from that protocol's actual
+pair; `t2-07` named Jung twice under two different labels — "Individuation" and "Shadow Work" are
+the same framework, not two — and never named `mate` at all, its actual second framework), and on
+the other 6 was correct-but-partial: naming one real member of the pair and silently dropping the
+other. Same fix, same source: regenerated from `META['t2-0N'].frameworks` using both registered
+names, not one. The label changed from `Science framework:` to `Science frameworks:` because the
+content it introduces is now, correctly, sometimes two — the singular label was never a deliberate
+choice, it was a symptom of the same one-name-at-a-time authoring that produced the wrong name 4
+times out of 10.
+
+**One more finding, out of scope here and not fixed.** `index.html`'s embedded `#corporate-protoList`
+overlay — a second, older content store for Track 03 that parallels `content/t3-resources.js` rather
+than reading from it — still titles protocol 6 **"The Ambition Recovery Protocol."**
+`content/tracks.js` and `content/t3-resources.js` both carry [[SR-216]]'s rename to **"The Belonging
+Gap Protocol"**; this surface was never touched by it. Two further titles read as wording variants
+rather than clear staleness (`"The Decision Fatigue &amp; Isolation Protocol"` vs. `content/tracks.js`'s
+"The Decision Fatigue Protocol"; `"The Burnout &amp; Chronic Overload Protocol"` vs. "The Burnout &
+Overload Protocol") and were left alone pending the same judgement. Under the CLAUDE.md rename
+procedure this branch's "Protocol work" commit added, a rename is a founder decision requiring a
+full rename pass across every representation — not something to fold into a content-accuracy fix
+touching a different string on the same card. Flagged, not corrected.
+
+*Status:* closed (Tracks 02/03 derivation); Track 01 not applicable; the `#corporate-protoList`
+title residue open, flagged for a rename pass · *Raised:* 25 Aug 2026
+
+---
+
+### SR-279 · The t3-06 rename pass — "Ambition Recovery" swept, its old copy is not
+
+Andre's decision, authorised as a rename pass under CLAUDE.md's new rename procedure — not folded
+into another fix. **Full sweep, every tracked file, case-insensitive:** `index.html` (11), `dashboard.html`
+(1), `content/tracks.js` (2, one live, one a deliberate [[SR-258]] historical comment), plus four
+docs files carrying it as a dated historical record (`docs/fix-register.md`, `docs/SafeRise_File_Inventory.md`,
+`docs/runs/RUN-C-consolidated.md`, `docs/reference/image-manifest.csv`) — left untouched, per the
+brief's own grouping rule.
+
+**Fourteen live occurrences renamed, name only:**
+
+| file | occurrences | what |
+|---|---|---|
+| `index.html` | 11 | card `h3`/`aria-label`, `t3-p6-guide` resource title, the `t3-p6` Reader-title lookup table, audio/video labels, `res-title`, `jprog-section` title, the `consultsummary` default string, an `expert-pill`, a compact protocol-list widget |
+| `content/tracks.js` | 1 | a FAQ answer on the live professional-performance.html page: *"The Career Transition and Ambition Recovery protocols exist..."* |
+| `dashboard.html` | 1 | the `'flat|work'` mood-lookup suggestion title |
+
+All fourteen verified renamed to **The Belonging Gap Protocol** / bare **Belonging Gap**; zero
+`Ambition Recovery` remains outside the one deliberate SR-258 comment and the four dated docs.
+
+**Copy that carries the old protocol's SUBJECT, not just its name — reported, not authored, per
+instruction:**
+
+1. **`index.html`'s `t3-p6-guide` resource** — `meta`/`body`: *"Reconnecting to drive when the
+   mission has gone flat or cynical"* / *"Low-arousal flattening — motivation present in memory
+   but absent in the body, sometimes masking exhaustion or grief for work that used to feel
+   alive."* This is Ambition Recovery's subject (motivation, drive, ambition gone flat), not
+   Belonging Gap's (reading a room, editing yourself to fit it — confirmed against
+   `content/t3-resources.js`'s actual `t3p6-guide`, which already carries the correct Belonging Gap
+   content and was unaffected, since it is a separate content store from `index.html`'s).
+2. **The card's `.proto-landing-desc`** — *"Reconnect to what originally drove you, and recover
+   momentum when ambition has gone flat."* Same subject mismatch.
+3. **The card's hidden `.proto-trigger`** — *"Reconnecting to drive when the mission has gone flat
+   or cynical."* Same.
+4. **`index.html`'s `t3-p6-companion` body** — *"Keep a short list, updated monthly, of the parts
+   of the work that still genuinely interest you — revisit it on the low days."* Same.
+5. **`dashboard.html`'s `'flat|work'` suggestion text** — *"Flat about work you used to want has
+   its own protocol."* Same subject, kept exactly as-is; only the title field beside it was renamed.
+
+None of these five were rewritten. Inventing Belonging-Gap-themed copy to fill them would be
+authoring member-facing content, the same boundary [[SR-226]]/[[SR-258]]/[[SR-275]] have already
+drawn around this exact protocol.
+
+**Found in passing, reported here, corrected below in [[SR-282]] — and this entry had it backwards
+on first pass.** `dashboard.html`'s mood-lookup table carries **"The Creative Flow Protocol"** for
+t3-10. Checked against `content/tracks.js:524` (`['10','Unlock','The Creative Flow Protocol', ...]`)
+rather than against `index.html` as this entry first did: `dashboard.html` is **correct**.
+`index.html` is the one carrying the wrong name — **"The Creative Flow Unlock Protocol,"** eleven
+occurrences, apparently the label field (`'Unlock'`) merged into the title rather than a rename
+residue. Corrected here per Rule 28/16: an unchecked comparison asserted the wrong file was stale.
+See [[SR-282]] for the full accounting.
+
+*Status:* name renamed everywhere live; five copy sites flagged for the content lane ·
+*Raised:* 25 Aug 2026
+
+---
+
+### SR-280 · index.html's nav overflows at 390px — a viewport-widening bug, not a nav design flaw
+
+**Root cause, measured, not guessed.** `body{overflow-x:hidden}` (`index.html:36`) has no matching
+rule on `html`. Content elsewhere on the page exceeds 390px in normal flow; because `html` still
+computes `overflow-x:visible`, the browser's initial containing block — what `#main-nav`
+(`position:fixed;left:0;right:0`) resolves its width against — widens to match it (measured at
+487px against a 390px visual viewport), and the nav's own `.nav-link` row, which already has a
+correctly-configured `overflow-x:auto` wrapper, inherits that widened box instead of the true
+viewport. The nav's internal scroll handling was never the defect; the box it was handling scroll
+*within* was already wrong.
+
+Confirmed empirically, not just by inspection: setting `html{overflow-x:hidden}` alone (matching
+what `body` already carries) dropped `document.documentElement.scrollWidth` from 487 to 390 and
+`#main-nav`'s own computed width from 487px to 390px, with no other change.
+
+**Contained — one line, scoped to `index.html`.** Added to the existing `html{...}` rule at
+`index.html:35`, next to `body`'s. Not added to `css/saferise-system.css`: that file is shared by
+personal-transformation.html / relationship-healing.html / professional-performance.html, whose
+`.sr-tp-nav` and `.sr-tp-stickycta` both use `position:sticky` — and `overflow-x:hidden` on an
+ancestor forces the paired axis (`overflow-y`) to `auto`, which is the exact mechanism a standing
+comment at `index.html:5381` already documents breaking `position:sticky` (it is why that one
+sticky candidate on `index.html` was built with `position:fixed` instead). Scoping this fix to
+`index.html`'s own inline stylesheet, where the matching `body` rule already lives, avoids
+reintroducing that exact defect on the three track pages. Verified after the fix: `html.overflow-y`
+does become `auto` (the documented side effect), `#main-nav` still measures `top:0` after a
+programmatic scroll (position:fixed unaffected), and `index.html` carries no
+`position:sticky` element of its own to break.
+
+**Scope, as asked:** `index.html` only. `dashboard.html` and `protocol.html` (both on this week's
+demo list) checked directly at 390px — no overflow, and neither sets `overflow-x` on `body` or
+`html` at all, because neither has content wide enough to trigger the defect. The three track pages
+were already confirmed overflow-free at 390/768/1024/1440 in [[SR-277]]'s pass and are unaffected by
+this change, since it lives in `index.html`'s own `<style>` block, not the shared stylesheet.
+
+*Status:* closed · *Raised and fixed:* 25 Aug 2026
+
+---
+
+### SR-281 · index.html is a second, unreconciled copy of all three tracks — one cause, four symptoms
+
+**(e) answered first, per instruction, because it reframes (a)–(d).** Yes. `index.html` embeds a
+complete, independent copy of every track: its own protocol-card carousels (`#protoList`,
+`#couples-protoList`, `#corporate-protoList` — titles, promises, hover reveals), its own full
+resource library (a single ~2,800-line object literal carrying every `p{N}`/`t2-p{N}`/`t3-p{N}`
+resource — kind, title, meta, body — independent of `content/t1|t2|t3-resources.js`), its own
+pricing UI (`#all-plans-pricing`, `#couples-pricing`, `#corporate-pricing`, a three-card plan trio,
+two "compact, coming soon" teaser panels), and its own image set. None of these four read from
+`content/tracks.js` or the authored resource files at render time — the one exception is
+`PRICING`, which [[SR-124]] already wired through a `data-sr-price` hydration script, which is
+exactly why (a) was fixable by converting markup to that existing pattern rather than inventing a
+second one.
+
+**This is not new** — [[SR-084]] recorded it by name on 19 Aug 2026 ("index.html still carries the
+cut resources and every duration... 80 strings"), explicitly deferred as its own reviewable pass
+rather than folded into other work. (a)–(d) below are that same fork surfacing in four different
+places: a pricing UI that never got the [[SR-124]] treatment applied to two of its three tracks, a
+resource library that was never regenerated from the authored files the way `content/inventory.js`
+now is for the live pages, a duration sweep ([[SR-080]]) that explicitly excluded `index.html` by
+scope, and photography sourced before the current `assets/t1/` set existed.
+
+**The size of the surface, quantified rather than argued.** [[SR-285]]'s sweep for one rename-class
+defect alone compared **130 rendered title instances across four independent surfaces on this one
+page** — and that was only the thirty protocol titles, one narrow slice of what this fork
+duplicates alongside the pricing, resource vocabulary and photography in (a)–(d) above. An
+architectural finding stated in principle is easy to defer; a defect surface measured at 130
+instances for title strings alone is the strongest argument available for the scoped fix named
+above, not an abstract one.
+
+**The shape of the real fix, reported per instruction, not built now.** The durable fix is
+architectural: stop `index.html` maintaining a second content store, and either (a) delete the
+embedded overlays and route `showProg('couples'|'corporate'|'personal')` to the standalone track
+pages instead, or (b) rewrite `index.html`'s card/resource/price rendering to consume
+`content/tracks.js` and the authored resource files at load, the way `js/saferise-track.js` already
+does. Either is a multi-file rewrite touching the page's largest structures, days not hours, and
+not something to start three days before a demo of the exact pages it would rewrite. **Applied
+instead: the contained fix** — correct today's content within the existing fork, the same shape as
+[[SR-278]], leaving the architectural merge as a named, scoped follow-up.
+
+**Stated once, plainly, so it does not get lost in the four parts below: the fix is to stop
+`index.html` maintaining a second content store. It is scoped — named, with the two candidate
+shapes above and the reason neither runs this week — not abandoned. Everything in (a)–(d) is a
+correction inside the fork that still exists after this branch merges, not a substitute for
+closing it.**
+
+**(a) Pricing — the tracks are correct, index was stale.** `content/tracks.js`: `TRACKS[2].status`
+and `TRACKS[3].status` are both `'live'`, with real entries in `PRICING` (`t2` €29/mo, `t3` €39/mo)
+in the same object [[SR-124]]'s hydration script already reads. Confirmed further: one of
+`index.html`'s own three plan-trio cards (Track 02's) was *already* hydrated correctly
+(`data-sr-price="t2"`) — proof this exact pattern was already applied here once and simply never
+reached Track 03's sibling card or the other locations. Every "Join Waitlist" button's `onclick` is
+`showProg('couples'|'corporate')` — the identical call the real "Discover More" links already use;
+there is no separate waitlist capture anywhere, so relabelling was safe with zero logic change.
+Fixed, all real-plan locations: the "Personal Transformation is live today... Relationship and
+Professional are... pricing announced closer to release" intro sentence; both compact teaser panels
+(badge, price line, button); the Track 03 plan-trio card (now matching Track 02's sibling exactly);
+both comparison-table rows (`Available`, `Entry price`) — six locations, all now deriving their
+number from `PRICING` via the existing `data-sr-price` mechanism, none hand-typed.
+**Left alone, deliberately:** the Track 03 **workshop** card still reads Coming Soon / Pricing TBA
+/ Join Waitlist. `PRICING` has `workshopPersonal` and `workshopRelationship` but **no
+`workshopProfessional` key** — Tracks 01 and 02's workshop cards on the same page are correctly
+`Book — €29` / `Book — €49/couple`, live-hydrated; Track 03's genuinely has no price to hydrate
+from. This is very likely still true (the workshop is a distinct product from the Track 03
+subscription, which is live) — flagged as a content-lane question (does a Track 03 workshop exist
+yet?) rather than guessed at.
+
+**(b) Durations — the [[SR-080]] rule, applied to the page [[SR-084]] deferred it from.**
+[[SR-080]]'s own text is explicit about scope: banned are stated/implied lengths of **unrecorded
+self-guided assets** (meditations, scripts, PDFs); kept are **booked live events with a human on
+the other end** — 1:1 and workshop slot times — because those are contractual and already known,
+"the opposite of the unrecorded meditation assets the rule exists for." Checked against that
+boundary, not the naive one: `Length: 60 minutes` (Premium 1:1) and `roughly`/`approximately 60
+minutes` (workshops) are **kept**, correctly, as [[SR-080]] and the `N min` note on the still-open
+[[SR-053]] entry already establish. Removed — all self-guided-asset claims: `PDF · N pages` (14,
+across four page counts) → `PDF · [rest]`; `10-Min`/`10-Minute Guided Meditation` (21, titles and a
+compact-list label) → `Guided Meditation`; the two `Full 10-minute ... is production-ready`
+sentences (20, T2 and T3) → `Full ... is production-ready`; the Foundation Protocol's `14-minute`/
+`14-Min` guided-audio claims (4, hero copy, a waveform label, a feature-list line, a bullet) →
+duration-free; `Session 1 of 7` (2, a Cue Card description that additionally didn't describe the
+resource it sat on) → removed; `Tier: Early Signs` (22, the `consultsummary` default string on
+every jprog section) → removed. 83 strings corrected in total — close to [[SR-084]]'s original
+estimate of 80, confirming that count rather than inverting it.
+
+**(c) Resource vocabulary — full mapping, kind field and card-surface label both.** Current
+canonical names come from `content/tracks.js`'s `SHARED.resources` (11 types, the same table
+`content/inventory.js` derives from):
+
+| `index.html`'s label | canonical replacement | occurrences fixed |
+|---|---|---|
+| Meditation Script | Guided Meditation | 10 (`"kind"`) + 10 (`res-kind`) |
+| Protocol Guide | How This Works | 10 (`"kind"`) + 2 (`res-kind`) |
+| Attention Advisory | Proximity Guide | 6 (`"kind"`) + 1 (a prose note) |
+| Somatic Release *(bare)* | Somatic Release Activities | 2 (`"kind"`) + 2 (`res-kind`) |
+| Progress Tracking + Progress Journal | **merged** into Your Record | 3 pairs → 3 single feature blocks |
+| Cue Card, Disclosure & Support, Invitation to Repair, Somatic Release Activities *(full)* | — | already correct, untouched |
+
+"Progress Tracking"/"Progress Journal" were two resources; the current model consolidated them into
+one ("Your Record" already carries both the log and the prompts, verbatim in
+`SHARED.resources`). Renaming one and orphaning the other would have left a duplicate; the redundant
+block was removed outright, per Rule 19, not hidden. `T2`'s "Session Guide"/"Safety Score" kind
+labels were **not** touched — Track 02 has always used its own two-person resource model, distinct
+from the eleven-type system, and neither name is retired.
+**No counterpart, reported not invented:** three current resource types have **zero** presence
+anywhere in `index.html`'s embedded library — **Safe Practice**, **Accountability & Empathy**, and
+**Raising It** (T3-only). Not mislabelled; simply never added to this older content store when they
+were authored for the real pages.
+
+**(d) Images — two different sets, not one set at two paths.** `assets/pt/*.webp` (5 files,
+last modified 13 Aug) and `assets/t1/*.jpg` (4 files, last modified 22–23 Aug — the same window as
+the recent [[SR-213]]/[[SR-257]]/[[SR-259]] photography installs) share no filenames, no format,
+and no comparable byte sizes (`cost-triptych.webp` 38 KB vs `cost.jpg` 250 KB). `change.jpg` has no
+`assets/pt/` counterpart at all. `index.html` is rendering an older, separate photography set;
+nothing here was touched, per instruction — report only.
+
+*Status:* (a) closed, one workshop-price question flagged for the content lane · (b) closed ·
+(c) closed, three resource types flagged as having no counterpart · (d) reported, not fixed ·
+(e) architectural merge reported as a scoped follow-up, not built · *Raised and fixed:* 25 Aug 2026
+
+---
+
+**A decision, recorded — not work left undone.** This pass fixed a page a demo depends on, in the
+week of the demo, without touching the architecture underneath it. That was the correct trade, and
+it should read here as a choice rather than as a gap: [[SR-281]] found the architectural cause
+plainly enough to fix it, and did not, because the fix is a multi-file rewrite of the exact pages
+the demo shows. The contained corrections in (a)–(d) hold until that rewrite happens; they are not
+a substitute for it, and the rewrite is not a task this record has lost track of — it is named,
+scoped, and waiting on time the week of a demo does not have.
+
+---
+
+### SR-282 · report only · "Creative Flow" — the earlier entry had the wrong file
+
+**`dashboard.html` renders the correct title.** `'steady|work': [3,'10','The Creative Flow
+Protocol', ...]` (`dashboard.html:1071`) matches `content/tracks.js:524` —
+`['10','Unlock','The Creative Flow Protocol', ...]` — exactly. `'Unlock'` is the one-word verb/
+label field (the same field that gave t3-06 its label `'Stand'`), not part of the title; no title
+in `dashboard.html`'s table concatenates the two.
+
+**`index.html` renders the wrong one, eleven times**, all reading **"The Creative Flow Unlock
+Protocol"** — the label word folded into the title, not a rename residue: the compact protocol-list
+widget; the `t3-p10-guide` resource's `title`; the `t3-p10` Reader-title lookup entry; the card's
+`aria-label` and visible `h3`; the audio-waveform label and video title (bare "Creative Flow
+Unlock"); `res-title`; `jprog-section`'s `data-jprog-title`; the `consultsummary` default string;
+an `expert-pill` (bare "Creative Flow Unlock"). The same eleven-location shape as [[SR-279]]'s
+Ambition Recovery sweep, on a different protocol, and — unlike SR-279 — with no rename behind it:
+this looks like a plain transcription error at authoring time, title and label merged into one
+string, then copied across all eleven surfaces from that one error.
+
+**The rest of `dashboard.html`'s fifteen-row mood-lookup table, checked against
+`content/tracks.js` directly** (not against `index.html`, which is what produced the wrong
+accusation in [[SR-279]]'s first pass): all fifteen titles match their track's canonical title
+exactly —
+
+| key | track/no | title | matches canonical |
+|---|---|---|---|
+| wired\|self | 1/01 | The Anxiety Reset Protocol | yes |
+| heavy\|self | 1/06 | The Grief Integration Protocol | yes |
+| flat\|self | 1/07 | The Shutdown Recovery Protocol | yes |
+| raw\|self | 1/05 | The Shame Dissolution Protocol | yes |
+| steady\|self | 1/09 | The Insecurity Anchor Protocol | yes |
+| wired\|person | 2/01 | The Safe Conversation Protocol | yes |
+| heavy\|person | 2/02 | The Rupture & Repair Protocol | yes |
+| flat\|person | 2/09 | The Pursue & Withdraw Protocol | yes |
+| raw\|person | 2/03 | The Trust & Betrayal Protocol | yes |
+| steady\|person | 2/08 | The Appreciation & Support Protocol | yes |
+| wired\|work | 3/01 | The High-Stakes Presence Protocol | yes |
+| heavy\|work | 3/09 | The Burnout & Overload Protocol | yes |
+| flat\|work | 3/06 | The Belonging Gap Protocol | yes ([[SR-279]]) |
+| raw\|work | 3/03 | The Imposter Dissolution Protocol | yes |
+| steady\|work | 3/10 | The Creative Flow Protocol | yes |
+
+**Zero stale titles in `dashboard.html`'s lookup table.** Not fixed, because there is nothing to
+fix here — the finding is that `index.html` needs the same rename-pass treatment [[SR-279]] gave
+"Ambition Recovery," authorised as its own procedure, not corrected inline in this report.
+
+*Status:* report only, not fixed · *Raised:* 25 Aug 2026
+
+---
+
+### SR-283 · report only · Track 03's workshop has no price to hydrate from
+
+**What Track 03's workshop card currently renders**, in the plan-trio at `index.html`'s
+`prog-services`/workshops section (badge, heading, price line, description, button):
+
+    [Coming Soon]
+    Professional
+    Coming Soon
+    Pricing TBA
+    Working a Track 03 career & performance protocol live, with peers — launching alongside the
+    Professional plan.
+    [Join Waitlist]
+
+**What `PRICING` holds for the other two tracks' workshops** (`content/tracks.js:51-52`):
+
+    workshopPersonal:     { amount: '€29', per: 'per person' }
+    workshopRelationship: { amount: '€49', per: 'per couple' }
+
+Both are hydrated live via `data-sr-price="workshopPersonal|workshopRelationship"`, the same
+mechanism [[SR-124]] built and [[SR-281]]a reused. Their sibling cards render, verbatim:
+
+    Personal Transformation — €29/person — "Group size: 5–10 people" — "Best for working one
+    Track 01 protocol live, with peers." — [Book — €29]
+
+    Relationship — €49/couple — "Group size: 3–5 couples" — "Best for working a relationship
+    pattern live, alongside your partner and other couples." — [Book — €49/couple]
+
+**No `workshopProfessional` key exists.** This is not a hydration gap — there is nothing in the
+record for the Track 03 card to read, which is exactly why it still shows the honest unhydrated
+state rather than a wrong number. It may be that the Track 03 workshop genuinely has not launched
+yet (the Track 03 *subscription* is `status: 'live'`; a workshop is a separate, later product in
+this codebase's own history — Tracks 01 and 02's workshops evidently landed after their core
+subscriptions did too).
+
+**What a third entry would need, structurally — not proposed as the actual numbers:**
+- `amount` — a price. Track 03 is individual (like Personal Transformation, not paired like
+  Relationship), which suggests `per: 'per person'` follows the Personal Transformation shape
+  rather than the Relationship one — a structural observation, not a number.
+- A group-size line, matching "Group size: 5–10 people" / "Group size: 3–5 couples" in form.
+- A one-line "Best for working..." description, matching the other two in length and register.
+- Whether it launches on its own timeline or "alongside the Professional plan," as the current
+  (unhydrated) description already claims — that claim itself is unverified and not carried over
+  into any proposed fix.
+
+None of this was invented or applied. This is a founder question — whether the workshop is priced
+yet at all — and the report above is what makes it answerable in one read.
+
+*Status:* report only, not fixed · *Raised:* 25 Aug 2026
+
+---
+
+### SR-284 · report only · Five sites still carrying Ambition Recovery's subject under Belonging Gap's name
+
+Quoted verbatim, per instruction, so the content lane can commission replacements without
+re-deriving them from [[SR-279]]. None of these were authored over.
+
+**Card-surface strings — short, formulaic, matching a pattern already used across other cards.
+I can supply replacements if asked; I have not.**
+
+1. `index.html`, the card's `.proto-landing-desc` (visible, directly under the title on
+   `#corporate-protoList`'s t3-06 card):
+   > Reconnect to what originally drove you, and recover momentum when ambition has gone flat.
+
+2. `index.html`, the card's hidden `.proto-trigger` (not rendered, used for matching/search):
+   > Reconnecting to drive when the mission has gone flat or cynical
+
+3. `dashboard.html:1069`, the `'flat|work'` mood-lookup suggestion text (rendered when a member
+   answers a check-in as "flat" and "work"):
+   > Flat about work you used to want has its own protocol.
+
+**Resource content — substantive authored copy requiring the same clinical/therapeutic voice as
+the rest of the protocol's material. I cannot supply replacements; this needs the content lane.**
+
+4. `index.html`, the `t3-p6-guide` resource's `meta` and first two `body` strings (shown wherever
+   this resource is previewed or opened):
+   > Reconnecting to drive when the mission has gone flat or cynical.
+   >
+   > What you may notice in your body: Low-arousal flattening — motivation present in memory but
+   > absent in the body, sometimes masking exhaustion or grief for work that used to feel alive.
+
+5. `index.html`, the `t3-p6-companion` resource's body (the Somatic Release Activities / daily
+   practice suggestion):
+   > Keep a short list, updated monthly, of the parts of the work that still genuinely interest
+   > you — revisit it on the low days.
+
+**Why the line falls where it does.** 1–3 restate a feeling already named elsewhere on the same
+card in Belonging-Gap-correct terms ("reading the room," "editing before it leaves") — a
+new sentence in the same register is a copy-editing task. 4–5 recommend or describe specific
+psychological mechanisms and practices tied to *ambition going flat*; a Belonging Gap replacement
+has to name what Belonging Gap actually does to a person's body and behaviour, which is clinical
+content, not marketing copy, and not mine to invent even at the short lengths involved here.
+
+*Status:* report only, not fixed · *Raised:* 25 Aug 2026
+
+---
+
+### SR-285 · t3-10's title fixed — the label folded into the title, mechanically, everywhere it appeared
+
+**Confirmed before applying, per instruction.** All eleven occurrences read against their
+surrounding copy: none describe a distinct "unlocking" theme. The card's own `.proto-landing-desc`
+— *"Release the rigidity that blocks original thinking, and restore access to creative flow"* —
+and the meditation's body — *"Releasing the rigidity that blocks original thinking..."* — are both
+about creative flow as the subject; "Unlock" never appears as a concept in the surrounding prose,
+only as the mechanically-duplicated label word inside the title string. Cleared as mechanical:
+`'Unlock'` is `content/tracks.js:524`'s label field for t3-10, not a second title component, and no
+copy needed writing.
+
+**Both stores swept.** `content/tracks.js` and `content/t3-resources.js`: zero occurrences of
+"Creative Flow Unlock" — the defect was `index.html`-only, confirming SR-282's finding rather than
+surfacing a new site. `index.html`: all eleven occurrences — compact protocol-list widget,
+`t3-p10-guide` resource title, the `t3-p10` Reader-title lookup, `aria-label`, `h3`, the
+audio-waveform label, the video title, `res-title`, `jprog-section`'s `data-jprog-title`, the
+`consultsummary` default, an `expert-pill` — corrected mechanically: `"Creative Flow Unlock"` →
+`"Creative Flow"`, one substring replacement, verified to leave every surrounding sentence
+grammatical (the word simply drops, it was never load-bearing punctuation or a hyphenation).
+
+**The rest of `index.html` checked for the same class — label word folded into title — not for
+every kind of title drift.** Extracted all thirty canonical `(label, title)` pairs from
+`content/tracks.js` and compared against all thirty rendered titles across four independent
+surfaces on `index.html` (`h3.proto-name`, `aria-label`, the two Reader-title lookup patterns
+`'title': '...'`/`title: '...'`, and the eleven `"title": "..."` resource fields carrying
+`— Guided Meditation`/`— Session Guide`/`— Safety Score Check` suffixes) — 130 comparisons in
+total. **t3-10 was the only instance of this defect class.** Two titles differ from canonical for
+an unrelated reason already on record from [[SR-278]] — `"The Decision Fatigue & Isolation
+Protocol"` (canonical: `"The Decision Fatigue Protocol"`) and `"The Burnout & Chronic Overload
+Protocol"` (canonical: `"The Burnout & Overload Protocol"`) — extra descriptive words with no
+relationship to either protocol's label field (`'Decide'`, `'Refill'`), so not the same defect and
+not touched here.
+
+**Verified by rendered text**, both required widths: `#corporate-protoList [data-proto="10"]`'s
+`h3` reads **"The Creative Flow Protocol"** at both 1440 and 390, zero console errors, no
+horizontal overflow at either width. Bracket/div balance unchanged from baseline
+(`{0/()−6/[0`, div 2804/2804).
+
+*Status:* closed · *Raised and fixed:* 25 Aug 2026
+
+---
+
+### SR-286 · report only · index.html carries two more protocol titles with words unrelated to either label
+
+Given its own ID, per instruction, rather than left findable only inside [[SR-278]]'s text. A third
+variant of the rename-class defect family: not a rename residue ([[SR-279]]), not a label word
+concatenated into its own title ([[SR-282]]/[[SR-285]]), but **extra descriptive words added to a
+title, matching neither the canonical title nor either protocol's label field.**
+
+| protocol | `index.html` renders | canonical (`content/tracks.js`) | label field | extra words match the label? |
+|---|---|---|---|---|
+| t3-08 | The Decision Fatigue **& Isolation** Protocol | The Decision Fatigue Protocol | `'Decide'` | no |
+| t3-09 | The Burnout **& Chronic** Overload Protocol | The Burnout & Overload Protocol | `'Refill'` | no |
+
+**Ten occurrences each** (`&amp;`- and `&`-encoded forms combined), the same four-store sweep as
+[[SR-285]]: compact protocol-list widget, resource `"title"`, the Reader-title `keys` lookup,
+`aria-label`, `h3`, audio-waveform label, video title, `res-title`, `jprog-section`'s
+`data-jprog-title`, the `consultsummary` default — one short of the eleven-location pattern each,
+missing only an `expert-pill` (curated per [[SR-250]], not one-per-protocol, so its absence here is
+not itself a finding). `content/tracks.js` and `content/t3-resources.js`: zero occurrences of
+either variant — `index.html`-only, consistent with every other member of this defect family.
+
+**Not fixed, and not confirmed mechanical.** Per Rule 32, a multi-occurrence string
+substitution is only safe as a rename-free mechanical edit once the surrounding copy is checked for
+whether it describes the extra words as a theme. That check has not been run here — unlike
+[[SR-285]], where "Unlock" traced cleanly to a known label field, "Isolation" and "Chronic" trace to
+neither protocol's label, which raises rather than lowers the chance they reflect real copy
+somewhere (an earlier, more specific version of either title) rather than pure noise. Confirming
+that is the next step, not assumed by this entry.
+
+*Status:* report only, not fixed · *Raised:* 25 Aug 2026
