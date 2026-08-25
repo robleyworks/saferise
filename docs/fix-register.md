@@ -5338,3 +5338,70 @@ the specificity fix. All three pages loaded with zero console errors and no hori
 unchanged, since content/tracks.js's `PRICING` object was not touched.
 
 *Status:* closed · *Raised:* 25 Aug 2026
+
+---
+
+### SR-278 · "Subject matter voices" and "Science framework" derived from `META[].frameworks`, not hand-typed
+
+**Per-protocol verdict, checked before anything was built, per instruction.** For each of Track
+03's ten protocols, read every authored resource this repo carries for it — content/t3-resources.js's
+full `t3p{N}-guide` (including its own `<h4>What we rest on</h4>` citation section), `t3p{N}-crisiscard`
+and `t3p{N}-companion`, plus index.html's shorter `t3-p{N}-guide` overlay copy — and searched all of
+it for Mooji, David Bayer, Peter Levine, Elisabeth Kübler-Ross and Francis Weller, the five names the
+old line carried. **Zero hits, on any of the ten, in either content store, outside the line itself.**
+None of the five names are decoration in the sense of "unnecessary but not false" — they are not
+present in the actual authored content at all. Meanwhile `content/t3-resources.js`'s own
+`<h4>What we rest on</h4>` section — the platform's own citation of what a protocol's science
+actually is — **matches `META['t3-0N'].frameworks` exactly, 10 protocols for 10**, including the
+six protocols whose old "Subject matter voices" line named nothing in that pair at all. The verdict
+for every one of the ten is therefore the same: **derive, do not delete.** The framework registry is
+not incomplete and the resources do not cite anyone they shouldn't — the old line was simply invented
+independently of both the registry and the platform's own citations, and never checked against
+either.
+
+**What was built.** Both `index.html` occurrences per protocol — the authored-resource-body string
+inside each `t3-p{N}-guide` object and the always-visible card-surface `<p>` in `#corporate-protoList`
+— were regenerated from `content/tracks.js`'s `FRAMEWORKS`/`META` pair: `FRAMEWORKS[k].name` em-dash
+`FRAMEWORKS[k].person`, joined `·`, for each key in `META['t3-0N'].frameworks`, in that order.
+Mechanical, reproducible, and matches the exact em-dash format `t3p{N}-guide`'s own "What we rest on"
+section already uses, so the two now agree instead of contradicting each other on the same page.
+
+    Before (t3-06): Subject matter voices: David Bayer · HeartMath Coherence
+    After  (t3-06): Subject matter voices: Polyvagal Theory — Stephen Porges · Shadow & individuation — Carl Jung
+
+Neither name in the old line matches `META['t3-06'].frameworks: ['porges','jung']`; both names in
+the new one do. All 20 occurrences (10 protocols × 2 surfaces) regenerated
+identically per protocol — verified live: `#corporate-protoList [data-proto="6"]` renders the derived
+Porges/Jung line with zero console errors.
+
+**Track 01 carries no such line anywhere** — no `personal-protoList` container exists in `index.html`
+at all, and `js/saferise-track.js`'s card renderer (the standalone personal-transformation.html)
+never emits a framework-attribution string. Nothing to fix or report further.
+
+**Track 02 carries the same defect class, less severely, and got the same treatment.** Its
+`#couples-protoList` overlay uses a singular `Science framework:` line, one name, never an outside
+figure — but checked against `META['t2-0N'].frameworks`, it named the *wrong* registered framework
+on 4 of 10 (`t2-02`, `t2-05`, `t2-06` each named one framework absent from that protocol's actual
+pair; `t2-07` named Jung twice under two different labels — "Individuation" and "Shadow Work" are
+the same framework, not two — and never named `mate` at all, its actual second framework), and on
+the other 6 was correct-but-partial: naming one real member of the pair and silently dropping the
+other. Same fix, same source: regenerated from `META['t2-0N'].frameworks` using both registered
+names, not one. The label changed from `Science framework:` to `Science frameworks:` because the
+content it introduces is now, correctly, sometimes two — the singular label was never a deliberate
+choice, it was a symptom of the same one-name-at-a-time authoring that produced the wrong name 4
+times out of 10.
+
+**One more finding, out of scope here and not fixed.** `index.html`'s embedded `#corporate-protoList`
+overlay — a second, older content store for Track 03 that parallels `content/t3-resources.js` rather
+than reading from it — still titles protocol 6 **"The Ambition Recovery Protocol."**
+`content/tracks.js` and `content/t3-resources.js` both carry [[SR-216]]'s rename to **"The Belonging
+Gap Protocol"**; this surface was never touched by it. Two further titles read as wording variants
+rather than clear staleness (`"The Decision Fatigue &amp; Isolation Protocol"` vs. `content/tracks.js`'s
+"The Decision Fatigue Protocol"; `"The Burnout &amp; Chronic Overload Protocol"` vs. "The Burnout &
+Overload Protocol") and were left alone pending the same judgement. Under the CLAUDE.md rename
+procedure this branch's "Protocol work" commit added, a rename is a founder decision requiring a
+full rename pass across every representation — not something to fold into a content-accuracy fix
+touching a different string on the same card. Flagged, not corrected.
+
+*Status:* closed (Tracks 02/03 derivation); Track 01 not applicable; the `#corporate-protoList`
+title residue open, flagged for a rename pass · *Raised:* 25 Aug 2026
