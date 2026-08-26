@@ -941,6 +941,21 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
   .sr-begin-card:first-child{border-top:0}
 }
 
+/* SR-292 · applied by srHideDeadViews() (dashboard.html) when the Resume
+   card is hidden. Mirrors the three rules above at each of the same
+   breakpoints so the remaining two cards fill the row evenly instead of the
+   base rules' reserved-but-empty third track — a higher-specificity class
+   selector left unscoped would otherwise win over those media rules at every
+   width, including the mobile single-column stack. */
+.sr-begin-row.sr-begin-row--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:1100px){
+  .sr-begin-row.sr-begin-row--2{grid-template-columns:1fr 1fr}
+  .sr-begin-row.sr-begin-row--2 .sr-begin-card:nth-child(3){grid-column:auto;border-left:1px solid var(--hair);border-top:0}
+}
+@media(max-width:700px){
+  .sr-begin-row.sr-begin-row--2{grid-template-columns:1fr}
+}
+
 /* media layer */
 .sr-dash-player{background:#08080C}
 .sr-dash-player-stage{position:relative;aspect-ratio:16/9;
