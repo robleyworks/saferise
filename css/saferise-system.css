@@ -195,9 +195,14 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
 
    Never targets an <img> or the hero photograph — images stay static by
    omission, not by an added rule fighting one that would otherwise move
-   them. Reduced motion needs nothing added here: the blanket rule at
-   the bottom of this file already collapses every transition-duration
-   to .01ms, which is what "handled centrally" means. */
+   them. The blanket rule at the bottom of this file collapses every
+   transition-duration to .01ms, but a section that never receives
+   .sr-tp-in (JS never runs, the observer never fires, it sits below a
+   fold that's never scrolled) stays at opacity:0 regardless of duration
+   — a near-zero transition still needs a trigger. SR-288 adds the same
+   unconditional override this file already gives .sr-stagger>* (see the
+   prefers-reduced-motion block below): these selectors forced to
+   opacity:1/transform:none, independent of .sr-tp-in. */
 .sr-tp-revealsec .sr-tp-eyebrow,
 .sr-tp-revealsec h1,
 .sr-tp-revealsec h2,
@@ -1829,6 +1834,14 @@ details.sr-q .sr-a a{color:var(--primary2)}
   body::before{animation:none}
   *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
   .sr-stagger>*{opacity:1;transform:none}
+  .sr-tp-revealsec .sr-tp-eyebrow,
+  .sr-tp-revealsec h1,
+  .sr-tp-revealsec h2,
+  .sr-tp-revealsec .sr-tp-lede,
+  .sr-tp-revealsec .sr-tp-herorule,
+  .sr-tp-revealsec .sr-tp-body,
+  .sr-tp-revealsec .sr-tp-sechead+*,
+  .sr-tp-revealsec .sr-tp-lede+*{opacity:1;transform:none}
   .sr-cover:hover,.sr-svc:hover{transform:none}
   .sr-cover:hover .sr-art{transform:none}
 }

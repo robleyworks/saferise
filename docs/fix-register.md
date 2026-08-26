@@ -5957,3 +5957,138 @@ code path specific to `initReveal()` that would behave differently under real fo
 than the hero's already-confirmed success does.
 
 *Status:* report only · *Raised:* 25 Aug 2026
+
+---
+
+### SR-288 · reduced motion had no unconditional visibility override for the SR-277 reveal system
+
+`.sr-tp-revealsec`'s target selectors (eyebrow, h1/h2, lede, herorule, body, the post-sechead and
+post-lede beats) start at `opacity:0` and only reach `opacity:1` once `js/saferise-track.js`'s
+`initReveal()` adds `.sr-tp-in`, which happens on an `IntersectionObserver` firing as a section
+scrolls into view. The adjacent `.sr-stagger` system (`css/saferise-system.css`'s A8 block) carries
+its own unconditional escape hatch inside `@media (prefers-reduced-motion:reduce)` —
+`.sr-stagger>*{opacity:1;transform:none}` — that forces the visible end state regardless of whether
+`.sr-in` was ever added. `.sr-tp-revealsec` had no equivalent. Its own comment block (A9) asserted
+reduced motion "needs nothing added here" because the blanket
+`*,*::before,*::after{transition-duration:.01ms!important}` rule "handles it centrally" — true only
+for a section that has already received `.sr-tp-in`; a section that never does (JS blocked, the
+observer never fires, ten of eleven sections on every one of these pages sit below the fold and are
+never scrolled into view during an unattended load) stays at `opacity:0` indefinitely, near-zero
+transition duration notwithstanding. A near-zero duration still needs a trigger to run at all.
+
+**Fixed** by adding the same class of override `.sr-stagger` already has, for the same selector list
+A9 already declares, inside the existing `prefers-reduced-motion` block:
+`css/saferise-system.css`'s reduced-motion block now also forces `.sr-tp-revealsec`'s eyebrow/h1/h2/
+lede/herorule/body/post-sechead/post-lede targets to `opacity:1;transform:none` unconditionally. The
+A9 comment block was corrected in place (Rule 21 — live, not a dated record) rather than left
+asserting the disproven "needs nothing added" claim.
+
+**Verified with Playwright** (`reduced_motion: 'reduce'` context), all three track pages, on a fresh
+load with no scroll or interaction: 11 `.sr-tp-revealsec` sections each, 10 of 11 below the fold and
+never intersected. Every eyebrow/h1/h2/lede/herorule/body element inside every section read
+`opacity: 1` and had zero running `Animation` objects (`el.getAnimations()`) — visible immediately,
+nothing left running or pending. A same-script control run without `reduced_motion` confirmed the
+fix is scoped correctly: below-the-fold sections on the same three pages still measured `opacity: 0`
+(or a genuine in-flight `0.6s` transition value) under normal motion, so the override does not leak
+outside the media query.
+
+*Status:* closed · *Raised and fixed:* 25 Aug 2026
+
+---
+
+### SR-289 · the active track's own nav pill clips mid-word at ≤480px
+
+At ≤480px, `.sr-tp-navlinks` (`css/saferise-system.css`'s `max-width:480px` block) is deliberately a
+one-line horizontal scroll strip — `flex-wrap:nowrap;overflow-x:auto`, scrollbar hidden — rather than
+wrapping, so the six links (The Journey, About, the three tracks, Dashboard) stay reachable without
+growing the header. Nothing ever moved that strip's initial scroll position, though: every page loads
+with `scrollLeft` at 0, and on `relationship-healing.html` at 390px the row's `scrollWidth` (597px)
+exceeds its `clientWidth` (346px) by exactly 251px — the reported figure. The fifth link, the
+visitor's own current-page pill (`.sr-tp-on`, "Relationship Healing"), sits past that 251px, so the
+one link telling a visitor where they are renders as "RELATION" with "SHIP" clipped out of view by
+the container's own scroll boundary. The other five links were always reachable by scrolling; the
+active one is the link nobody scrolls to find because it is supposed to already say where they are.
+
+**Fixed** in `renderNav()` (`js/saferise-track.js`): after building the link markup, if the active
+link (`.sr-tp-on`) would sit partly outside `#navlinks`' visible clientWidth, its scroll position is
+set so the pill's right edge is fully in view (`el.scrollLeft = max(0, onLink.offsetLeft +
+onLink.offsetWidth - el.clientWidth)`) — a no-op when the active link already fits. Not a redesign:
+the scroll-strip pattern stands as-is, no string is truncated, no nav item is hidden, and the type
+scale (11px, `.13em` tracking, uppercase) is untouched.
+
+**Verified with Playwright**, all three track pages, 390×844 and 320px, on a fresh load with no
+interaction:
+
+| page | width | active label | doc-level overflow | active pill fully inside `#navlinks` |
+|---|---|---|---|---|
+| personal-transformation.html | 390 | Personal Transformation | 0px | yes (scrollLeft 0, already fit) |
+| personal-transformation.html | 320 | Personal Transformation | 0px | yes (scrollLeft 18px) |
+| relationship-healing.html | 390 | Relationship Healing | 0px | yes (scrollLeft 56px) |
+| relationship-healing.html | 320 | Relationship Healing | 0px | yes (scrollLeft 126px) |
+| professional-performance.html | 390 | Professional Performance | 0px | yes (scrollLeft 169px) |
+| professional-performance.html | 320 | Professional Performance | 0px | yes (scrollLeft 239px) |
+
+`document.documentElement.scrollWidth - window.innerWidth` measured `0` on every row above, both
+before and after the fix — this was never page-level overflow (SR-280's `index.html` failure mode),
+only the nav strip's own internal scroll position being wrong.
+
+*Status:* closed · *Raised and fixed:* 25 Aug 2026
+
+---
+
+### SR-290 · feat · the protocol carousel auto-advances
+
+**History checked first, per instruction.** `js/saferise-track.js`'s own SR-163 comment states
+directly: "this file has no `requestAnimationFrame`, no `setInterval` and no animation" — confirmed
+against the file, `initCarousel()` had pointer-drag, wheel and arrow/dot navigation and nothing that
+runs on its own. The one existing autoplay in this codebase, `js/saferise-system.js`'s marketing-page
+carousel (`initCarousel(root)` for `[data-sr-carousel]`), is a different mechanism for a different
+markup contract — continuous sub-pixel `scrollLeft` drift against a cloned, doubled track for a
+seamless loop, not a discrete one-card step — and it explicitly disables itself under reduced motion
+(`if (reduce) return;`), which this brief requires the opposite of. Neither is a match to extend, so
+this is new behaviour, not a restore.
+
+**Interval:** no prior "one card at a time" implementation exists to match, so **7000ms**, chosen
+fresh, as instructed.
+
+**Built** in `initCarousel()` (`js/saferise-track.js`), reusing the function's own `i`/`per()`/
+`maxIndex()`/`go()` already driving the arrows: a `setInterval(advance, 7000)` where `advance()`
+steps `i` by exactly 1 (never by `per()`, the arrows' page stride) and wraps to 0 past `maxIndex()`
+so it loops continuously. Paused (interval cleared, not just gated) while the pointer is over the
+carousel, while any element inside it holds focus, or while `document.hidden` — resumed the instant
+none of those three are true. The markup gained one wrapping `<div id="carousel" aria-live="off">`
+around the existing carhead+viewport (not `rJourney`, which was already a sibling and stays outside
+the live region) so hover/focus can be scoped to the carousel without touching cards, arrows or dots.
+Arrow clicks, drag and wheel are untouched code, still delegate to the same `go()`/`place()`.
+
+Reduced motion runs the same interval unchanged — no `reduce` check gates it. The sliding transition
+it would otherwise animate is already collapsed by the existing blanket
+`*,*::before,*::after{transition-duration:.01ms!important}` rule: an `!important` stylesheet
+declaration overrides this file's non-`!important` inline `transition:transform .45s…` regardless of
+selector specificity, so reduced motion needed no new CSS, only confirming the existing mechanism
+reaches this component too. No progress bar or completion-reading indicator was added; the existing
+dot rail (SR-163, page position, not a countdown) is unchanged.
+
+**Verified with Playwright**, reading `.sr-tp-cartrack`'s computed transform, all three track pages:
+
+| check | result |
+|---|---|
+| auto-advance occurs, default motion (all 3 pages) | yes — one 252px step (one card) every ~7s, both of two consecutive intervals |
+| transition duration during an auto-advanced step, default motion | `0.45s` |
+| auto-advance occurs, `reduced_motion:'reduce'` (all 3 pages) | yes — same 252px/~7s cadence |
+| transition duration during an auto-advanced step, reduced motion | `0.00001s` (the blanket rule) — no visible slide |
+| hover over `#carViewport` pauses | yes — track unchanged across an 8s hover |
+| unhover resumes | yes |
+| focus inside carousel (`#carNext`) pauses | yes — track unchanged across an 8s focus hold |
+| blur resumes | yes |
+| `document.hidden = true` pauses | yes |
+| `document.hidden` restored to `false` resumes | yes |
+| `aria-live` on `#carousel` | `off` |
+| keyboard focus moved by an auto-advance tick | no — `document.activeElement` unchanged across 7.5s of autoplay |
+| arrow click (`#carNext`) still moves the track | yes |
+| console errors, either motion setting, any page | none |
+
+Swipe (pointer drag) and wheel navigation were not modified — the new code was appended after the
+existing `pointerdown`/`pointermove`/`wheel` listeners and `go(0)` call, none of which were touched.
+
+*Status:* closed · *Raised and fixed:* 25 Aug 2026
