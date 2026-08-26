@@ -4,8 +4,8 @@
    Read by: public track pages, dashboard carousel + Arrive check-in,
             protocol page, library filter, plans, checkout, framework pages,
             and the image lane (track.art carries the illustration briefs).
-   SHARED.fourSteps holds the PUBLIC-FACING step names (Recognition /
-   Regulation / Release / Rehearsal). The member-facing method names stay
+   SHARED.fourSteps holds the PUBLIC-FACING step names (Recognise /
+   Regulate / Release / Rise). The member-facing method names stay
    inside the product, not on sales pages.
    SHARED.faq is 12 items; each track adds 6 of its own = 18 per page.
    Pricing locked 2026-08. Elevation hidden for launch (visible:false).
@@ -67,8 +67,8 @@ var PRICING = {
 /* ── SHARED · identical on every track. Edited here, never per track. ── */
 var SHARED = {
   fourSteps: [
-    { name: 'Recognition', body: 'Nothing settles while what you are feeling stays vague. The first step makes it specific.', cite: 'Porges \u00B7 Polyvagal Theory' },
-    { name: 'Regulation',  body: 'The body needs evidence of safety, not an argument for it. The session gives it that, and paces it for you.', cite: 'HeartMath \u00B7 Cardiac coherence' },
+    { name: 'Recognise', body: 'Nothing settles while what you are feeling stays vague. The first step makes it specific.', cite: 'Porges \u00B7 Polyvagal Theory' },
+    { name: 'Regulate',  body: 'The body needs evidence of safety, not an argument for it. The session gives it that, and paces it for you.', cite: 'HeartMath \u00B7 Cardiac coherence' },
     { name: 'Release',     body: 'What you stop fighting stops needing to be fought. Acceptance is a decision, not a feeling you wait for.', cite: 'Mat\u00E9 \u00B7 Compassionate Inquiry' },
     { name: 'Rise',        body: 'You finish as the person on the other side of it, and leave carrying the state rather than the memory of it.', cite: 'Mental rehearsal \u00B7 Observer stance' }
   ],
