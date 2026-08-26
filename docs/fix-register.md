@@ -6156,3 +6156,82 @@ directly. No console errors. Spot-checked three more of the ten `t2-p*-safety` r
 (`t2-p2`, `t2-p5`, `t2-p10`) for the same relabeled title.
 
 *Status:* closed · *Raised and fixed:* 26 Aug 2026
+
+---
+
+### SR-292 · Record, Sessions and Resume hidden behind one flag — none of the three has ever had a writer
+
+[[SR-165]] found `sr.record.runs`, `sr.sessions.booked` and `sr.resume` each with a reader and no
+writer anywhere in the repo, and left the Resume case blocked on the accounts work rather than
+writing to `localStorage` per-browser. This entry does not add writers or touch that finding — it
+stops `dashboard.html` presenting three permanently-empty views as if they held real content, without
+deleting the code they read from.
+
+**The three entry points turned out not to be a matching set of nav items** — each view is reached a
+different way, which is why "one flag, three targets" took more than toggling a nav array:
+- **Sessions** has exactly one door: the nav rail's `data-route="coaching"` button ("Sessions &
+  workshops"). `openRoute()`'s `LAYERS` map (`{coaching: 'sessions'}`) sends that click into
+  `openModal('sessions')` — there is no second path in.
+- **Record** has two: `data-modal="record"` CTAs at `dashboard.html:441` ("See your record", inside
+  `.sr-sum-acts`) and `:501` ("Open your record", inside `.sr-cadence`). Both sit inside the populated
+  "Your record" section (state arc, journal excerpts, cadence line) — that section is not itself dead
+  and stays untouched; only these two links into the empty modal are hidden.
+- **Resume** is a whole card — the "02 · Carry on" `article.sr-begin-card--panel` in the three-card
+  `.sr-begin-row` grid (`dashboard.html:166-175`), built by the `buildResume()` IIFE.
+
+**Flag:** `SR_DEAD_VIEWS_ENABLED`, a `var` in the dashboard's script block in `dashboard.html`,
+declared immediately above the function that reads it (and above the `Store` IIFE, which it does not
+gate — Journal, which does have a writer, uses the same `Store`), documented in place:
+
+```js
+/* Record, Sessions and Resume each have a reader (srBuildRecord, srBuildSessions, buildResume)
+   and no writer anywhere in the repo (SR-165). Flip true only once one of the three gets a real
+   writer; until then they'd only ever render their empty state.
+
+   Declared and consumed here, both before the Store IIFE — srHideDeadViews() must run after
+   this line assigns the flag, not merely after `var` hoists its name (a `var` read before its
+   assignment line runs is `undefined`, which is falsy, so an earlier call than this would hide
+   unconditionally regardless of the flag's value). */
+var SR_DEAD_VIEWS_ENABLED = false;
+```
+
+That last paragraph documents a real bug caught during this run, not a hypothetical: the function was
+first written correctly but *called* from its original spot right after `paintFoldTitle(1)`, several
+lines above where the flag gets assigned. `var`'s declaration hoists; its assignment does not — so at
+call time the flag read as `undefined`, and the dashboard hid all three views regardless of the flag's
+value. Setting it to `true` and reloading should have restored everything and did not, which is what
+caught it. Fixed by moving the function definition and its call to directly after the assignment.
+
+**Wiring**, in `srHideDeadViews()` (called once, immediately after the flag): the nav button and both
+Record CTAs' wrapping elements (`.sr-sum-acts` / `.sr-cadence`) are hidden via `el.style.display =
+'none'`, not the `hidden` attribute — `.sr-dash-navrailbtn` sets its own `display`, an author rule
+that beats the UA `[hidden]` default, exactly the trap `.sr-begin-act[hidden]{display:none}` was
+already patched for elsewhere in this file (SR-085). That trap is why the nav button stayed visible
+on the first pass despite `.hidden = true` reading back as `true`. The Resume card is hidden the same
+way, and its `.sr-begin-row` parent gains a `sr-begin-row--2` class.
+
+**The grid needed that class, not just a hidden card.** `.sr-begin-row` is `grid-template-columns:
+repeat(3, minmax(0,1fr))` at ≥1101px — an explicit 3-track row. `display:none` removes an item from
+grid placement entirely, but the *track* stays reserved: with only 2 of 3 items left, the row rendered
+Clearing and Start-new in columns 1–2 and left column 3 empty — a visible gap, confirmed with a
+screenshot before adding any fix. `css/saferise-dashboard.css` gained a `sr-begin-row--2` modifier
+mirroring the base rule's three breakpoints (base, `≤1100px`, `≤700px`) so the two remaining cards
+split the row evenly instead; it has to repeat all three breakpoints because a compound class selector
+outspecifies the base rule's plain-class media overrides, so an unscoped 2-column override would have
+also wrongly beaten the ≤700px single-column stack.
+
+**Verified** against the local static server in the Browser pane, both with `SR_DEAD_VIEWS_ENABLED` at
+its real default (`false`) and flipped to `true`:
+- `false`, 1280px: nav rail shows Dashboard / method / account only, no "Sessions & workshops"; both
+  Record CTAs and the Resume card are absent (confirmed via `offsetParent === null`, not just a class
+  check); `.sr-begin-row` computed to two even 578px tracks with no gap between Clearing and Start-new
+  (screenshotted).
+- `false`, 390px: same three hidden; `.sr-begin-row` computed to a single track, Clearing flows
+  directly into Start-new with no blank space, and the bottom mobile tab bar shows two icons with no
+  dangling third (screenshotted).
+- `true`, reloaded: all three reappeared (`offsetParent !== null` again, row lost `--2`), and clicking
+  the now-visible Record CTA still opened the modal to its known "Nothing logged yet" empty state —
+  confirming nothing was deleted, only conditionally hidden.
+- No console errors in any of the above states.
+
+*Status:* closed · *Raised and fixed:* 26 Aug 2026

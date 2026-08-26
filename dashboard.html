@@ -1374,6 +1374,45 @@
   }
   paintFoldTitle(1);
 
+  /* ══════════ SR-292 · DEAD VIEWS ══════════
+     Record, Sessions and Resume each have a reader (srBuildRecord, srBuildSessions,
+     buildResume below) and no writer anywhere in the repo ([[SR-165]]) — every visitor
+     hits the same permanent empty state. Flip this to true only once one of the three
+     gets a real writer; until then, srHideDeadViews() keeps their entry points out of
+     the UI without deleting the views themselves.
+
+     Declared and consumed here, both before the Store IIFE — srHideDeadViews() must run
+     after this line assigns the flag, not merely after `var` hoists its name (a `var`
+     read before its assignment line runs is `undefined`, which is falsy, so an earlier
+     call than this would hide unconditionally regardless of the flag's value). */
+  var SR_DEAD_VIEWS_ENABLED = false;
+
+  /* Hides the three entry points into a permanently-empty view: the nav rail's only path
+     to Sessions (data-route="coaching" -> LAYERS.coaching -> openModal('sessions')), both
+     CTAs that open the Record modal, and the "Carry on" Resume card. Nothing is removed —
+     openModal/VIEWS/MODALS, the nav button, both CTAs and the Resume card markup and its
+     builder all stay exactly as they are, ready for SR_DEAD_VIEWS_ENABLED to flip. */
+  function srHideDeadViews(){
+    if(SR_DEAD_VIEWS_ENABLED) return;
+    /* .sr-dash-navrailbtn sets its own display, an author rule that beats the
+       UA [hidden] default (same trap SR-085 already hit on .sr-begin-act) —
+       so this hides via inline style, not the hidden attribute. */
+    var sessionsNav = document.querySelector('.sr-dash-navrailbtn[data-route="coaching"]');
+    if(sessionsNav) sessionsNav.style.display = 'none';
+    document.querySelectorAll('[data-modal="record"]').forEach(function(btn){
+      var wrap = btn.closest('.sr-sum-acts, .sr-cadence');
+      (wrap || btn).style.display = 'none';
+    });
+    var resumeCard = document.getElementById('srResumeSlot');
+    resumeCard = resumeCard && resumeCard.closest('.sr-begin-card--panel');
+    if(resumeCard){
+      resumeCard.style.display = 'none';
+      var row = resumeCard.closest('.sr-begin-row');
+      if(row) row.classList.add('sr-begin-row--2');
+    }
+  }
+  srHideDeadViews();
+
   /* ══════════ SR-070 · STORAGE ══════════
      Device storage with an in-memory fallback. Ported from the mockup as-is,
      including the write probe: Safari in private browsing throws SecurityError
