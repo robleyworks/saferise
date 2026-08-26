@@ -19,6 +19,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   consumer.
 - **Highest ID issued: SR-179.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-180. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
+  **This ceiling note is itself stale** — entries through **SR-290** are already written up below it
+  without it having been updated in between; per the register's own gap rule this is not tidied
+  retroactively. The `fix/dashboard-dead-views` run read the body, not this note, found **SR-290**
+  the true last entry, and allocated **SR-291** and **SR-292** from there. Next run: allocate from
+  **SR-293**.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to
@@ -6101,3 +6106,53 @@ existing `pointerdown`/`pointermove`/`wheel` listeners and `go(0)` call, none of
 **Deliberately reverses [[SR-163]].** SR-163 found this carousel a stepped pager with no autoplay;
 this entry intentionally reverses that finding on this one point by adding auto-advance. See
 SR-163's dated note above.
+
+---
+
+### SR-291 · the opening capacity reading no longer outlives the tab, and "Safety Score" is renamed on every visible surface
+
+**Storage.** `index.html:4780` and `:4794` wrote `safety-opening-<key>` — the `{avg, ts}` snapshot the
+self-check widget compares the live average against — to `localStorage`, so a single opening reading
+persisted indefinitely across sessions on a shared device. Both call sites now read/write
+`sessionStorage` instead. The before/after delta (`safety-opening-note-<key>`) is computed the same
+way, from whatever is in storage at render time, so it is unaffected within one sitting; only the
+survival window changed.
+
+**Label.** "Safety Score" is renamed to "Capacity Check" (or "Capacity check" mid-sentence) on every
+surface a visitor reads: the resource `kind` badge and its Reader-page equivalent (both now routed
+through a new `srKindLabel()` mapping function rather than printing `data.kind` directly), the ten
+`t2-p*-safety` resource titles ("— Safety Score Check" → "— Capacity Check") and their shared body
+sentence ("run the Safety Score" → "run the Capacity check"), the ten static `res-kind` badges on the
+Track 02 landing sections, the "Safety Score" `<h3>` heading and five FAQ/marketing sentences on the
+same page, and the one mention in `dashboard.html`'s Session Guide copy.
+
+**Left alone, on instruction, for a later single-pass rename — reported here so that pass has a
+manifest:**
+- `data.kind: "Safety Score"` — the literal value in all ten `RESOURCE_CONTENT` entries
+  (`t2-p1-safety` … `t2-p10-safety`), still matched by `data.kind === 'Safety Score'` at
+  `index.html:4671` and `:5041` and keyed into `KIND_META['Safety Score']` (`index.html:4878`).
+- Function/variable names: `safetyState`, `safetyEnsure`, `safetyRows`, `safetyWidgetHTML`,
+  `safetyPick`, `safetyTierFor`, `safetyUpdate`, `safetySaveOpening`, `safetyTogglePanel`,
+  `SAFETY_QUESTIONS`, the new `srKindLabel`.
+- CSS classes: `.safety-widget`, `.safety-tabs`, `.safety-tab`, `.safety-qrow`, `.safety-qtext`,
+  `.safety-btns`, `.safety-btn`, `.safety-result`, `.safety-avg-label`, `.safety-avg`, `.safety-tier`,
+  `.safety-support`, `.safety-actions`, `.safety-save-btn`, `.safety-opening-note`.
+- Resource/DOM id prefix `t2-p*-safety`, and the two `// ---- Safety Score interactive widget ----`
+  section comments.
+- Adjacent labels that do **not** contain the literal phrase "Safety Score" and so were left
+  untouched under a literal reading of the brief, flagged here as a likely companion rename: the
+  widget's own tab labels "Your Score" / "Their Score", the button "Save as Opening Score", and the
+  "Opening score was …" / "Opening score saved …" note text.
+
+**Verified** against a local static server (`tools/serve.py`) in the Browser pane: opened
+`t2-p1-safety`, confirmed the rendered kind badge and title both read "Capacity Check"; set all ten
+self-answers to 4 and saved as opening (avg 4.0, written to `sessionStorage` only —
+`localStorage.getItem` for the same key returned `null`); dropped the self-answers to 2 and confirmed
+the note read "Opening score was 4.0 — this is -2.0 from there."; reloaded the tab in place and
+confirmed the reading was still present; opened a second, independent tab against the same origin and
+confirmed `sessionStorage.getItem('safety-opening-t2-p1-safety')` was `null` there — a fresh tab
+carries no prior reading, which is the tab-close case sessionStorage cannot be scripted around
+directly. No console errors. Spot-checked three more of the ten `t2-p*-safety` resources
+(`t2-p2`, `t2-p5`, `t2-p10`) for the same relabeled title.
+
+*Status:* closed · *Raised and fixed:* 26 Aug 2026
