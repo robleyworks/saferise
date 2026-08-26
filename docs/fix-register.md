@@ -1326,6 +1326,11 @@ for both, which is a design decision, not a refactor.
 
 *Status:* complete on merge · *Raised:* 21 Aug 2026 · *Fixed:* 21 Aug 2026
 
+**Superseded, in part — 25 Aug 2026.** [[SR-290]] intentionally reversed the "stepped pager, no
+autoplay" finding above: it adds auto-advance to this same track-page protocol carousel. The
+reversal is a deliberate decision, not drift — SR-163 is superseded on this point and must not be
+re-applied to `initCarousel()` / `js/saferise-track.js` going forward.
+
 ### SR-166 · The two carousels are different interaction models
 **Blocked on a design decision, not on effort.** `dashboard.html` moves its protocol row by
 continuous constant-velocity drift over two identical card sets, wrapping by exactly one set's
@@ -6092,3 +6097,7 @@ Swipe (pointer drag) and wheel navigation were not modified — the new code was
 existing `pointerdown`/`pointermove`/`wheel` listeners and `go(0)` call, none of which were touched.
 
 *Status:* closed · *Raised and fixed:* 25 Aug 2026
+
+**Deliberately reverses [[SR-163]].** SR-163 found this carousel a stepped pager with no autoplay;
+this entry intentionally reverses that finding on this one point by adding auto-advance. See
+SR-163's dated note above.
