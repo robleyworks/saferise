@@ -2000,7 +2000,6 @@
       hDots.forEach(function(d,n){ d.classList.toggle('on', n === heroIndex); });
     }
     function heroStart(){
-      if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       heroStop(); heroTimer = setInterval(function(){ heroGo(heroIndex + 1); }, 7500);
     }
     function heroStop(){ if(heroTimer){ clearInterval(heroTimer); heroTimer = null; } }
@@ -2186,7 +2185,6 @@
   // costs more than the motion gains. Arrows and track changes re-arm it briefly.
   var SETTLE = 13000;
   function startFlow(){
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ target = 0; return; }
     if(halfWidth()) target = SPEED;
     if(!raf){ last = null; raf = requestAnimationFrame(tick); }
     clearTimeout(startFlow._t);
@@ -2300,13 +2298,6 @@
   function openProtocol(name, src, no, track, resource){
     pOpen = {name:name, no:no || '01', track:track || 1};
     var lib = document.getElementById('srLibrary');
-
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-      document.body.classList.add('reading');
-      resource ? loadResource(resource) : loadProtocol();
-      window.scrollTo({top:0});
-      return;
-    }
 
     var start = lib ? lib.getBoundingClientRect().top : 0;
     document.body.classList.add('shifting');            // fades the other sections

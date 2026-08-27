@@ -12,8 +12,6 @@
 (function () {
   'use strict';
 
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   /* ─────────────────────────────────────────────────────────
      1 · CAROUSEL
      Markup contract:
@@ -59,7 +57,7 @@
     function go(n) {
       pos = (n + cards.length) % cards.length;
       lock = Date.now() + 700;
-      track.scrollTo({ left: cards[pos].offsetLeft, behavior: reduce ? 'auto' : 'smooth' });
+      track.scrollTo({ left: cards[pos].offsetLeft, behavior: 'smooth' });
       paint();
     }
 
@@ -135,8 +133,11 @@
                    resume timer that was already pending when the
                    permanent stop happened, which re-checks `stopped`
                    the moment it fires rather than trusting the state
-                   it was scheduled under. */
-    if (reduce) return;
+                   it was scheduled under.
+
+       SR-303 · Phase E removed this autoplay's old reduced-motion opt-out
+       (`if (reduce) return;`) — it now drifts for every visitor, matching
+       every other animation on the site. */
 
     var LAP_SECONDS = 32;      // full traversal of the real 10, within the 25-40s ask
     var TICK_MS = 50;          // interval rate; speed is time-based, not tick-count-based
@@ -365,7 +366,7 @@
       b.type = 'button';
       b.textContent = label;
       b.addEventListener('click', function () {
-        sec.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
       railIn.appendChild(b);
       chapters.push({ sec: sec, btn: b });
@@ -390,7 +391,7 @@
           if (cur) {
             var r = cur.btn.getBoundingClientRect(), rr = railIn.getBoundingClientRect();
             if (r.left < rr.left || r.right > rr.right) {
-              railIn.scrollTo({ left: cur.btn.offsetLeft - 60, behavior: reduce ? 'auto' : 'smooth' });
+              railIn.scrollTo({ left: cur.btn.offsetLeft - 60, behavior: 'smooth' });
             }
           }
         }

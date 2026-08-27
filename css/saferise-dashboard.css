@@ -43,7 +43,6 @@ a{color:inherit;text-decoration:none}
    of order. Specificity, not !important. */
 body section{padding-block:0}
 :focus-visible{outline:2px solid var(--gold-lt);outline-offset:3px;border-radius:3px}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 
 .shell{max-width:1180px;margin:0 auto;padding:0 24px}
 h1{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(30px,4.4vw,48px);line-height:1.14}
@@ -1021,10 +1020,6 @@ body.shifting .shell > .sr-dash-close,
 body.shifting .sr-dash-top{opacity:0;transition:opacity .42s ease}
 .sr-proto{animation:srRise .6s cubic-bezier(.22,.61,.36,1) both}
 @keyframes srRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){
-  body.shifting .shell > .sr-dash-sec,body.shifting .sr-dash-top{opacity:1;transition:none}
-  .sr-proto{animation:none}
-}
 
 /* ── Cue Card ── */
 .sr-dash-navrailbtn--crisis svg{stroke:var(--gold)}
