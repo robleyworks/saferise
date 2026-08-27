@@ -17,13 +17,19 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-179.** Reserved block open: **SR-154 to SR-175**, ceiling
-  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. Allocate from SR-180. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
-  **This ceiling note is itself stale** — entries through **SR-290** are already written up below it
+- **Highest ID issued: SR-302.** Reserved block open: **SR-154 to SR-175**, ceiling
+  **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
+  **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
   retroactively. The `fix/dashboard-dead-views` run read the body, not this note, found **SR-290**
-  the true last entry, and allocated **SR-291** and **SR-292** from there. Next run: allocate from
-  **SR-293**.
+  the true last entry, and allocated **SR-291** and **SR-292** from there.
+  **A second gap, same shape, found by the combined Phase-E/F pass (27 Aug 2026):** commits already
+  carry **SR-293 through SR-302** (the step-name verb-form migration, the flat|work re-route, and the
+  t3-p6/"recognisable" copy fixes) with no matching entries written up below — this note is the only
+  record of them existing until they're backfilled. **Do not reissue SR-293–302.** This same pass
+  allocated **SR-303–SR-307** for its own five sections (motion-suppression removal, the cost-image
+  aspect-ratio fix, the protocol.html base64 dedup, this header correction, and the Phase F sweep +
+  report) — see `docs/resource-migration-report.md`. Next run: allocate from **SR-308**.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to
