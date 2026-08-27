@@ -68,7 +68,7 @@ What follows is a consolidated account of the discussion: first capturing the id
 
 You began with the proposition that **meditation may be one of the most valuable skill sets humanity can learn and master**.
 
-Your comparison was important. You placed it conceptually above areas in which society already recognizes the importance of development:
+Your comparison was important. You placed it conceptually above areas in which society already recognises the importance of development:
 
 - nutrition,
 - physical fitness,
@@ -712,7 +712,7 @@ You next introduced Ibrahim Traoré in Burkina Faso as an example of purpose-dri
 
 Your central interest wasn't actually politics.
 
-It was what happens when an individual recognizes:
+It was what happens when an individual recognises:
 
 > I have a purpose.
 
@@ -722,7 +722,7 @@ It was what happens when an individual recognizes:
 
 And then sustains attention and behaviour around that mission.
 
-You were particularly interested in the possibility that such leadership can cause ordinary citizens, community leaders, villages and organizations to recognize **their own capacity to contribute**.
+You were particularly interested in the possibility that such leadership can cause ordinary citizens, community leaders, villages and organizations to recognise **their own capacity to contribute**.
 
 ### The refinement I suggested
 
@@ -920,7 +920,7 @@ and never **document what happened or extract the knowledge contained within it*
 
 You argued that a person's life can effectively become a **laboratory within its own domain and discipline**.
 
-But because people interpret their experiences primarily as adversity or struggle, they may fail to recognize them as potential:
+But because people interpret their experiences primarily as adversity or struggle, they may fail to recognise them as potential:
 
 - lessons;
 - applications;
@@ -976,7 +976,7 @@ But they deserve to be investigated.
 
 I then extrapolated your Life Laboratory idea.
 
-People may be carrying extraordinary practical knowledge without recognizing it.
+People may be carrying extraordinary practical knowledge without recognising it.
 
 For example:
 
@@ -1128,8 +1128,8 @@ This became the term I used for the capacity to:
 
 - examine the life you have lived;
 - observe what it created within you;
-- recognize what is inherited;
-- recognize what is reactive;
+- recognise what is inherited;
+- recognise what is reactive;
 - determine what deserves to remain;
 - release or reinterpret what no longer serves;
 - consciously choose what receives attention;
@@ -1311,11 +1311,11 @@ You're asking what happens if internal literacy becomes culturally ordinary.
 
 Imagine children understanding attention.
 
-Teenagers recognizing that thoughts aren't automatically facts.
+Teenagers recognising that thoughts aren't automatically facts.
 
 Parents understanding their own activation before passing it to their children.
 
-Partners recognizing survival states during conflict.
+Partners recognising survival states during conflict.
 
 Teachers understanding emotional systems.
 
@@ -1323,7 +1323,7 @@ Workers understanding attention.
 
 Leaders understanding ego and purpose.
 
-Creators recognizing the accumulated knowledge of their Life Laboratory.
+Creators recognising the accumulated knowledge of their Life Laboratory.
 
 Communities becoming better equipped to translate adversity into learning rather than simply transmitting it.
 
@@ -1419,7 +1419,7 @@ With the counterforce being:
 
 > **NOISE → CAPTURED ATTENTION → INVERSION → SURVIVAL → IDENTIFICATION → REACTION → REPETITION**
 
-And SafeRise increasingly appears to be about helping a person recognize when they are caught in the second movement and giving them practical ways to return to the first.
+And SafeRise increasingly appears to be about helping a person recognise when they are caught in the second movement and giving them practical ways to return to the first.
 
 ---
 
