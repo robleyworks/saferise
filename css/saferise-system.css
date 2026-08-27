@@ -2593,7 +2593,7 @@ body.sr-breath .sr-player.is-next .audio-play{
 }
 .sr-tp .sr-tp-pbody{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:12.5px;color:var(--text3);line-height:1.55;padding-top:8px;border-top:1px solid var(--hair)}
 .sr-tp /* cost of the state */
-.sr-tp-costimg{position:relative;border-radius:14px;overflow:hidden;line-height:0;margin-top:6px;aspect-ratio:2172/545}
+.sr-tp-costimg{position:relative;border-radius:14px;overflow:hidden;line-height:0;margin-top:6px;aspect-ratio:16/7}
 .sr-tp .sr-tp-costimg img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
 .sr-tp .sr-tp-costscrim{position:absolute;left:0;right:0;bottom:0;height:46%;pointer-events:none;
   background:linear-gradient(180deg,transparent,rgba(8,8,12,.5) 48%,rgba(8,8,12,.9))}
