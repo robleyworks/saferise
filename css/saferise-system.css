@@ -195,12 +195,13 @@ select:focus-visible,textarea:focus-visible,summary:focus-visible{
 
    Never targets an <img> or the hero photograph — images stay static by
    omission, not by an added rule fighting one that would otherwise move
-   them. The blanket rule at the bottom of this file collapses every
-   transition-duration to .01ms, but a section that never receives
-   .sr-tp-in (JS never runs, the observer never fires, it sits below a
-   fold that's never scrolled) stays at opacity:0 regardless of duration
-   — a near-zero transition still needs a trigger. SR-288 adds the same
-   unconditional override this file already gives .sr-stagger>* (see the
+   them. SR-303 removed the sitewide transition/animation-duration
+   suppression that used to live in the prefers-reduced-motion block below
+   (Phase E — animations now run for every visitor), but a section that
+   never receives .sr-tp-in (JS never runs, the observer never fires, it
+   sits below a fold that's never scrolled) still stays at opacity:0
+   regardless of motion preference — a trigger that never fires never
+   fires. SR-288's unconditional override survives that removal (see the
    prefers-reduced-motion block below): these selectors forced to
    opacity:1/transform:none, independent of .sr-tp-in. */
 .sr-tp-revealsec .sr-tp-eyebrow,
@@ -1830,9 +1831,13 @@ details.sr-q .sr-a a{color:var(--primary2)}
   .sr-foot-in{padding:0 20px}
   .sr-scope{padding:24px 20px}
 }
+/* SR-303 · Phase E — motion suppression removed site-wide; animations now run
+   for every visitor regardless of prefers-reduced-motion. This block keeps only
+   the SR-288 unconditional visibility override: it guarantees .sr-stagger and
+   .sr-tp-revealsec targets read opacity:1 even when their triggering animation
+   never ran (JS blocked, IntersectionObserver never fired, never scrolled into
+   view) — a visibility guarantee, not a motion suppression, so it stays. */
 @media (prefers-reduced-motion:reduce){
-  body::before{animation:none}
-  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
   .sr-stagger>*{opacity:1;transform:none}
   .sr-tp-revealsec .sr-tp-eyebrow,
   .sr-tp-revealsec h1,
@@ -1842,8 +1847,6 @@ details.sr-q .sr-a a{color:var(--primary2)}
   .sr-tp-revealsec .sr-tp-body,
   .sr-tp-revealsec .sr-tp-sechead+*,
   .sr-tp-revealsec .sr-tp-lede+*{opacity:1;transform:none}
-  .sr-cover:hover,.sr-svc:hover{transform:none}
-  .sr-cover:hover .sr-art{transform:none}
 }
 
 /* SR-029 — honest "video not yet available" state for the Watch pane.
@@ -2340,12 +2343,11 @@ body.sr-breath .sr-player.is-next .audio-play{
   50%    {box-shadow:0 0 34px -6px rgba(212,168,67,.5);background:rgba(212,168,67,.11)}
 }
 
-/* No per-component prefers-reduced-motion block here — CLAUDE.md is
-   explicit that reduced motion is handled centrally (see the sitewide
-   rule near the top of this file forcing transition/animation-duration
-   to .01ms!important on *, ::before, ::after under this same media
-   query). That rule already neutralizes every animation above, static
-   marker intact, without a second per-component override. */
+/* No per-component prefers-reduced-motion block here — SR-303 (Phase E)
+   removed the sitewide transition/animation-duration suppression that used
+   to neutralize every animation under this media query. These pulse
+   animations now run unconditionally for every visitor, reduced-motion
+   preference included, same as everywhere else on the site. */
 
 /* ══════════════════════════════════════════════════
    PART B2 · THE PROTOCOL COVER · SR-162
@@ -2591,7 +2593,7 @@ body.sr-breath .sr-player.is-next .audio-play{
 }
 .sr-tp .sr-tp-pbody{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:12.5px;color:var(--text3);line-height:1.55;padding-top:8px;border-top:1px solid var(--hair)}
 .sr-tp /* cost of the state */
-.sr-tp-costimg{position:relative;border-radius:14px;overflow:hidden;line-height:0;margin-top:6px;aspect-ratio:2172/545}
+.sr-tp-costimg{position:relative;border-radius:14px;overflow:hidden;line-height:0;margin-top:6px;aspect-ratio:16/7}
 .sr-tp .sr-tp-costimg img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
 .sr-tp .sr-tp-costscrim{position:absolute;left:0;right:0;bottom:0;height:46%;pointer-events:none;
   background:linear-gradient(180deg,transparent,rgba(8,8,12,.5) 48%,rgba(8,8,12,.9))}

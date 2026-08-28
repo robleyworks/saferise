@@ -32,7 +32,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
 img,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--gold-lt);outline-offset:3px;border-radius:3px}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 
 /* Line A — enclosures sit on the shell edge (111px at 1440).
    Line B — all text sits --pad in from it (141px at 1440). */

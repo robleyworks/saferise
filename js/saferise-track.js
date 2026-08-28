@@ -690,14 +690,12 @@
        keyboard focus, satisfied by construction rather than by a guard.
 
        Reduced motion changes nothing here: it still ticks on the same
-       interval. The sliding transition it would otherwise animate is
-       already collapsed to .01ms by the blanket
+       interval. SR-303 (Phase E) removed the blanket
        `*,*::before,*::after{transition-duration:.01ms!important}` rule
-       in css/saferise-system.css — an !important stylesheet rule beats
-       this file's non-!important inline `transition:transform .45s…`
-       regardless of specificity, so the existing central mechanism
-       already turns every slide instant under reduced motion without
-       this component special-casing it.
+       that used to live in css/saferise-system.css, so the sliding
+       transition (this file's inline `transition:transform .45s…`) now
+       plays at full speed under reduced motion too — the same as every
+       other animation on the site post-Phase E.
 
        Paused vs resumed only — no permanent stop. Arrow clicks, drag and
        wheel already pause this the moment the pointer is over the strip
