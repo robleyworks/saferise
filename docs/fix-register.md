@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-302.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-308.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -29,7 +29,14 @@ Canonical record of defects and design decisions. Commits reference the ID:
   record of them existing until they're backfilled. **Do not reissue SR-293–302.** This same pass
   allocated **SR-303–SR-307** for its own five sections (motion-suppression removal, the cost-image
   aspect-ratio fix, the protocol.html base64 dedup, this header correction, and the Phase F sweep +
-  report) — see `docs/resource-migration-report.md`. Next run: allocate from **SR-308**.
+  report) — see `docs/resource-migration-report.md`.
+  **A third instance, same shape, same run:** this header was corrected to SR-302 in the SR-306
+  commit, then SR-307 was allocated after that commit landed — restating the exact gap it had just
+  closed. Also caught in the same pass: SR-306 was briefly double-issued (reused for both the
+  header-correction commit and, by mistake, the pricing-correction commit below) before being
+  caught and corrected to SR-308. **Do not reissue SR-306 a third time or SR-307.** SR-308 is the
+  founder-confirmed pricing correction (t1's introductory rate ended, workshopRelationship
+  €49→€39) — `content/tracks.js`, `index.html`, `protocol.html`. Next run: allocate from **SR-309**.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

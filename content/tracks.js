@@ -23,7 +23,7 @@
    exactly what a disputed charge asks for. Same class of deliberate
    double-record as extras:null in META — do not collapse it.
 
-   SR-306 · founder-confirmed 28 Aug 2026: the €9 introductory rate has ended.
+   SR-308 · founder-confirmed 28 Aug 2026: the €9 introductory rate has ended.
    t1.amount is now €19, matching `standard`, and `introductory` is false — no
    surface should print an intro/standard split or a data-sr-intro badge for
    t1 any more. The mechanism (`introductory: true` + a `standard` sub-record)
@@ -47,7 +47,7 @@ var PRICING = {
      price, never a workshop price. Workshops are priced per format, so there
      are two keys and the block reads 'from' the lower one. */
   workshopPersonal:     { amount: '\u20AC29',  per: 'per person' },
-  /* SR-306 · founder-confirmed 28 Aug 2026: €49 -> €39 per couple. */
+  /* SR-308 · founder-confirmed 28 Aug 2026: €49 -> €39 per couple. */
   workshopRelationship: { amount: '\u20AC39',  per: 'per couple' },
   /* SR-136/SR-137 · there is no `premium` key. It held \u20AC275 / session for the
      1:1, which turned out to be the SAME offer as `premium1` under a second name —
