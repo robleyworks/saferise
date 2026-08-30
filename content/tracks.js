@@ -18,27 +18,25 @@
    'locked 2026-08' marker that was only ever right about t1. Confirmed
    20 Aug 2026: standard is €19 / €29 / €39.
 
-   READ THIS BEFORE "TIDYING" t1 · amount and standard are BOTH correct and
-   both are meant to be here. `amount` is what a member is charged today.
-   `standard` is the list price it returns to. t1 currently charges €9, an
-   introductory rate; €19 is what it becomes after soft launch. Neither figure
-   is stale — deleting either one destroys the evidence that a promotion ran,
-   which is exactly what a disputed charge asks for. Same class of deliberate
+   READ THIS BEFORE "TIDYING" t1 · `standard` stays even though it now equals
+   `amount` — deleting it destroys the evidence that a promotion ran, which is
+   exactly what a disputed charge asks for. Same class of deliberate
    double-record as extras:null in META — do not collapse it.
 
-   `introductory: true` is the flag a surface MUST check before printing
-   `amount`. A price shown without the label reads as the permanent rate, and a
-   member who signs up at €9 and later sees €19 with no warning has been
-   switched. The promise is that early subscribers keep €9 for as long as they
-   stay subscribed; cancel and return, and they return at `standard`.
+   SR-306 · founder-confirmed 28 Aug 2026: the €9 introductory rate has ended.
+   t1.amount is now €19, matching `standard`, and `introductory` is false — no
+   surface should print an intro/standard split or a data-sr-intro badge for
+   t1 any more. The mechanism (`introductory: true` + a `standard` sub-record)
+   stays in place, unused while every track's amount already equals its
+   standard price, ready if a future promotion needs the same evidence trail.
 
    `includes` states cumulative access as data rather than as copy. €29 buys
    Tracks 01–02 and €39 buys all three — these are not three separate
    products, and a surface that prints the price without the inclusion makes
    the top tier look expensive instead of obvious. */
 var PRICING = {
-  t1:      { amount: '\u20AC9',   per: '/ month', words: 'Nine euros a month.',
-             introductory: true,
+  t1:      { amount: '\u20AC19',  per: '/ month', words: 'Nineteen euros a month.',
+             introductory: false,
              standard: { amount: '\u20AC19', per: '/ month', words: 'Nineteen euros a month.' },
              includes: ['t1'] },
   t2:      { amount: '\u20AC29',  per: '/ month', words: 'Twenty-nine euros a month.',
@@ -49,7 +47,8 @@ var PRICING = {
      price, never a workshop price. Workshops are priced per format, so there
      are two keys and the block reads 'from' the lower one. */
   workshopPersonal:     { amount: '\u20AC29',  per: 'per person' },
-  workshopRelationship: { amount: '\u20AC49',  per: 'per couple' },
+  /* SR-306 · founder-confirmed 28 Aug 2026: €49 -> €39 per couple. */
+  workshopRelationship: { amount: '\u20AC39',  per: 'per couple' },
   /* SR-136/SR-137 · there is no `premium` key. It held \u20AC275 / session for the
      1:1, which turned out to be the SAME offer as `premium1` under a second name —
      dashboard.html and protocol.html sold "Premium 1:1" at \u20AC275 / 90 min while
