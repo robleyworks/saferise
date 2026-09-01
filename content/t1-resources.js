@@ -367,7 +367,8 @@ var T1_RESOURCES = {
     sharedRefs: [],
     diagrams: []
   },
-  "t1p2-advisory": {
+  "t1p2-advisory": /* superseded 2026-09-01 · earlier body, retained for reference
+{
     kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
     body: [
       "<p>Some anger has a live external source that keeps supplying it. Where that is the case, how much contact you have is a real variable \u2014 and one you have more say over than you have over the state.</p>",
@@ -388,8 +389,22 @@ var T1_RESOURCES = {
     cues: [],
     sharedRefs: [],
     diagrams: []
+  }
+*/
+  {
+    kind:'Attention Advisory', title:'Anger Alchemy — Where to Direct Your Attention', meta:'Attention guide · three levels of closeness', locked:false,
+    body:[
+      "<div class='sr-guide-intro'><span class='sr-section-kicker'>THE QUESTION THIS HELPS YOU ANSWER</span><h3>How close should I stay to the person or situation that keeps bringing this anger up?</h3><p>Not every source of anger needs the same response. Sometimes you need a better boundary inside a relationship. Sometimes you need real distance. And sometimes the situation is bigger than self-regulation and needs outside support. Use these levels as a practical check-in, not a permanent label.</p></div>",
+      "<div class='sr-tier-stack'>"+
+        "<div class='sr-tier-card t1'><div class='sr-tier-no'>01<small>Stay connected</small></div><div><h3 class='sr-tier-title'>Reduce Exposure, Keep the Relationship</h3><div class='sr-tier-summary'>There is genuine friction, but there is also evidence that the person can listen, adjust, apologise, or repair — even if they do not get it right every time.</div><div class='sr-tier-details'><div class='sr-tier-detail'><b>Use this when</b><span>The relationship still has value and there is some real capacity for change.</span></div><div class='sr-tier-detail'><b>Your move</b><span>Change the conditions: shorter conversations, clearer limits, better timing, more space before re-engaging.</span></div></div></div></div>"+
+        "<div class='sr-tier-card t2'><div class='sr-tier-no'>02<small>Protect yourself</small></div><div><h3 class='sr-tier-title'>Protective Distance</h3><div class='sr-tier-summary'>The same pattern keeps repeating, acknowledgment is weak or short-lived, and staying close regularly costs you more than the relationship is giving back.</div><div class='sr-tier-details'><div class='sr-tier-detail'><b>What to notice</b><span>You keep recovering from the same interaction, explaining the same boundary, or preparing yourself for the next repeat.</span></div><div class='sr-tier-detail'><b>Your move</b><span>Reduce access, frequency, intensity, or dependence. Distance can be practical without becoming dramatic.</span></div></div></div></div>"+
+        "<div class='sr-tier-card t3'><div class='sr-tier-no'>03<small>Get support</small></div><div><h3 class='sr-tier-title'>Beyond Self-Regulation</h3><div class='sr-tier-summary'>The anger is responding to ongoing harm, intimidation, coercion, danger, or circumstances that are not yours to regulate your way through alone.</div><div class='sr-tier-details'><div class='sr-tier-detail'><b>This is different</b><span>The main question is no longer “How do I calm down?” but “What support, protection, or change do I need?”</span></div><div class='sr-tier-detail'><b>Your move</b><span>Bring in qualified or trusted outside support appropriate to the situation rather than treating the problem as an emotional-management failure.</span></div></div></div></div>"+
+      "</div>",
+      "<div class='sr-tier-foot'><span class='sr-section-kicker'>THE LEVEL CAN CHANGE</span><p>These are not permanent addresses. A relationship can move closer or further away as behaviour changes. After you use the Anger Alchemy protocol, ask one grounded question: <em>What level of access to me makes sense based on what is actually happening — not what I hope will happen?</em></p></div>"
+    ]
   },
-  "t1p2-disclosure": {
+  "t1p2-disclosure": /* superseded 2026-09-01 · earlier body, retained for reference
+{
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
       "<p>Take these exactly, or change every word.</p>",
@@ -423,8 +438,29 @@ var T1_RESOURCES = {
     cues: [],
     sharedRefs: [],
     diagrams: []
+  }
+*/
+  {
+    kind:'Disclosure & Support', title:'Let someone know what anger is like for you — and how they can support you', meta:'Disclosure guide · Anger Alchemy', locked:false,
+    body:[
+      "<div class='sr-guide-intro'><span class='sr-section-kicker'>WHAT THIS RESOURCE IS FOR</span><h3>Tell someone you trust what you are dealing with before anger becomes the whole conversation</h3><p>This is a disclosure guide. It helps you explain that anger is something you are actively working with, what tends to set it off, how it affects you, what the Anger Alchemy protocol helps you do, and what kind of support is genuinely useful. The person does not need to fix you or agree with every feeling. The aim is to help them understand you better and know how to respond.</p></div>",
+      "<div class='sr-distinction'><div><b>Disclosure & Support</b><p>“Here is what I am going through, how it shows up for me, what I am doing about it, and what would help.” It is about being understood and supported.</p></div><div><b>Invitation to Repair</b><p>“Something happened between us that needs to be addressed.” It is about a specific rupture, mutual accountability, and whether the relationship can repair.</p></div></div>",
+      "<span class='sr-section-kicker'>WHAT TO SHARE</span><div class='sr-disclosure-grid'>"+
+        "<div class='sr-disclosure-card'><span class='num'>01</span><b>What I am struggling with</b><p>Say plainly that anger has been harder to manage lately, or that certain situations can bring a strong surge before you have time to think.</p></div>"+
+        "<div class='sr-disclosure-card'><span class='num'>02</span><b>What it looks like in me</b><p>Maybe you get quiet, sharp, restless, hot, defensive, distant, impatient, or need to leave the room. Name your real pattern rather than a textbook description.</p></div>"+
+        "<div class='sr-disclosure-card'><span class='num'>03</span><b>What tends to bring it on</b><p>Examples might be feeling dismissed, being interrupted, broken agreements, pressure, disrespect, feeling trapped, or carrying too much for too long.</p></div>"+
+        "<div class='sr-disclosure-card'><span class='num'>04</span><b>What I am doing about it</b><p>Explain that you are using Anger Alchemy to create space first, identify the boundary or need underneath, settle the body, and choose a response rather than react from the peak.</p></div>"+
+        "<div class='sr-disclosure-card'><span class='num'>05</span><b>What I need from you</b><p>Be specific: a little space, a calmer tone, time to finish a sentence, checking back later, not following you into another room, or simply listening without solving.</p></div>"+
+        "<div class='sr-disclosure-card'><span class='num'>06</span><b>What does not help</b><p>For example: telling you to calm down, debating your feeling while you are still activated, mocking the protocol, demanding an immediate answer, or treating a request for space as rejection.</p></div>"+
+      "</div>",
+      "<div class='sr-script-card featured'><span class='sr-section-kicker'>A FULL DISCLOSURE SCRIPT — MAKE IT YOUR OWN</span><blockquote>“I want to tell you something about what I’ve been working on, because I’d rather you understand it than have to guess. Anger can come up very strongly for me, especially when I feel dismissed, pressured, or like a boundary has been crossed. When it hits, I can become tense and reactive before I’ve worked out what I actually need. I’m using the Anger Alchemy protocol to slow that process down — I take some space, settle the first surge, work out what is underneath it, and then decide how I want to respond. I’m not asking you to manage my anger for me. What helps most is giving me a little room when I say I need it, not pushing for an immediate answer, and being willing to come back to the conversation once I’m clearer. If you’re unsure what I need in the moment, you can just ask me.”</blockquote></div>",
+      "<div class='sr-section-block'><span class='sr-section-kicker'>SHORTER VERSION</span><div class='sr-big-quote'><span>“</span><blockquote>I’m working on how I handle anger. If I ask for a little space, I’m not shutting you out — I’m trying to come back to the conversation with the part of me that can actually think and speak clearly.</blockquote></div></div>",
+      "<div class='sr-section-block'><span class='sr-section-kicker'>SUPPORT CAN BE SIMPLE</span><ul class='sr-easy-list'><li><strong>“Do you need space or company?”</strong> gives you a choice without guessing.</li><li><strong>“Do you want me to listen or help problem-solve?”</strong> keeps support practical.</li><li><strong>“When should we check back in?”</strong> makes space feel temporary rather than like abandonment.</li><li><strong>Respecting the pause.</strong> Sometimes the most supportive thing is not continuing the argument while the protocol is being used.</li></ul></div>",
+      "<div class='sr-callout'><strong>What this disclosure does not do</strong><p>It does not excuse hurtful behaviour, ask someone to tolerate being treated badly, or settle a specific conflict. If there is a rupture between you, use the Invitation to Repair after you have regulated enough to address what actually happened.</p></div>"
+    ]
   },
-  "t1p2-repair": {
+  "t1p2-repair": /* superseded 2026-09-01 · earlier body, retained for reference
+{
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
     body: [
       "<p>Send it from the far side of the protocol, not the middle. An invitation written from inside the state reads as an opening move in a case, and gets answered as one.</p>",
@@ -438,6 +474,18 @@ var T1_RESOURCES = {
     cues: [],
     sharedRefs: [],
     diagrams: []
+  }
+*/
+  {
+    kind:'Invitation to Repair', title:'Anger Alchemy — The Invitation to Repair', meta:'Engagement invitation · use when there is real room for repair', locked:false,
+    body:[
+      "<div class='sr-guide-intro'><span class='sr-section-kicker'>WHEN TO USE THIS</span><h3>After the heat has come down — when the relationship still has room for honesty</h3><p>This is not a script for winning an argument or forcing an apology. It is a way to put the issue back on the table clearly and see whether the other person can meet you there.</p></div>",
+      "<div class='sr-highlight-row'><div><b>Use it when</b><span>The problem matters, you can speak without attacking, and the other person has shown at least some capacity to listen or take responsibility.</span></div><div><b>Do not use it to</b><span>Extract reassurance, prove you are right, or keep chasing someone who repeatedly refuses accountability.</span></div></div>",
+      "<div class='sr-script-card featured'><span class='sr-section-kicker'>THE SCRIPT — SAY IT OR SEND IT</span><blockquote>“I want to talk about something that’s been sitting between us. This isn’t about relitigating who’s right — it’s that this pattern has been costing me more than I’ve said out loud, and I’d rather bring it to you directly than keep carrying it quietly. I’m not looking for a fight, and I’m not looking for a verdict. I’d like a real conversation, when we’re both actually able to have it.”</blockquote></div>",
+      "<div class='sr-section-block'><span class='sr-section-kicker'>WHAT REAL ENGAGEMENT CAN SOUND LIKE</span><ul class='sr-easy-list positive'><li>“I didn’t realise that’s how it landed — tell me more.”</li><li>A genuine question before an explanation.</li><li>Naming their part without making you drag it out of them.</li><li>Suggesting something concrete that could be different next time.</li></ul></div>",
+      "<div class='sr-section-block'><span class='sr-section-kicker'>WHAT DEFLECTION CAN LOOK LIKE</span><ul class='sr-easy-list caution'><li>“You’re too sensitive — I didn’t mean it that way.”</li><li>Immediately turning the conversation to everything you have done wrong.</li><li>Agreeing quickly just to end the conversation, then nothing changes.</li><li>Making your request for clarity or respect the problem.</li></ul></div>",
+      "<div class='sr-callout'><strong>If it does not land</strong><p>That is not a failed attempt. It is information. You may need more distance, a different boundary, or support deciding what continued contact costs you. Repair requires two people; clarity only requires one.</p></div>"
+    ]
   },
   "t1p2-record": {
     kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
