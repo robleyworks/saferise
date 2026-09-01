@@ -5205,7 +5205,7 @@ function closeReader(){
   document.getElementById('reader-overlay').classList.remove('active');
 }
 
-// Wire up every resource item, crisis-card opener, and inline crisis-resource link.
+// Wire up every resource item, cue-card opener, and inline crisis-resource link.
 // Attached directly (not delegated) for the same reason as the hero/exp tabs:
 // the journey wrapper calls event.stopPropagation() on click, which would
 // otherwise block a listener delegated to an ancestor.
@@ -6080,7 +6080,7 @@ document.querySelectorAll('#protoList [data-proto-key]').forEach(function(expand
       <p class="pt-note" style="margin-top:6px">Introductory rate — yours for as long as you stay subscribed</p>
       <div class="pt-pricelist">
         <p>Every protocol in the track, with its full resource set</p>
-        <p>Guided audio, follow-along video, crisis cards</p>
+        <p>Guided audio, follow-along video, cue cards</p>
         <p>Source citations at every step</p>
         <p>Journal and progress tracking, private to you</p>
         <p>New protocols and resources, included as the track grows</p>
@@ -6125,7 +6125,7 @@ document.querySelectorAll('#protoList [data-proto-key]').forEach(function(expand
         </details>
         <details class="sr-q">
           <summary><span class="sr-sign"></span>What actually comes with a protocol?</summary>
-          <p class="sr-a">A guided audio session, a printable step guide, the science behind the pattern, body-based practices for between sessions, journalling prompts, and a crisis card. Some protocols also include an Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.</p>
+          <p class="sr-a">A guided audio session, a printable step guide, the science behind the pattern, body-based practices for between sessions, journalling prompts, and a cue card. Some protocols also include an Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.</p>
           <p class="sr-a">You are not expected to use all of it. Most people use two or three and ignore the rest.</p>
         </details>
         <details class="sr-q">
@@ -7431,7 +7431,7 @@ document.querySelectorAll('#protoList [data-proto-key]').forEach(function(expand
       <div style="background:var(--card);border:1px solid var(--border);border-top:3px solid var(--primary);padding:28px 22px;display:flex;flex-direction:column;">
         <p style="font-size:9px;letter-spacing:3px;color:var(--primary);font-weight:700;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Track 01</p>
         <p style="font-family:'Cinzel',serif;font-size:18px;color:var(--text);margin-bottom:12px;">Personal Transformation</p>
-        <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--text2);font-style:italic;line-height:1.6;flex:1;margin-bottom:20px;">Ten precision protocols for your own nervous system — anxiety, anger, shame, grief, burnout. Each one includes a step guide and a printable crisis card.</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--text2);font-style:italic;line-height:1.6;flex:1;margin-bottom:20px;">Ten precision protocols for your own nervous system — anxiety, anger, shame, grief, burnout. Each one includes a step guide and a printable cue card.</p>
         <p style="font-family:'Cinzel',serif;font-size:22px;color:var(--primary);margin-bottom:6px;">Free → <span data-sr-price="t1" data-sr-price-form="mo">€19/mo</span></p>
         <p style="font-size:10px;color:var(--text3);font-family:'DM Sans',sans-serif;margin-bottom:16px;">Foundation free forever · <span data-sr-price="t1" data-sr-price-form="mo">€19/mo</span>, cancel anytime</p>
         <button onclick="showMain()" style="background:var(--primary);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:11px;border:none;border-radius:2px;cursor:pointer;width:100%;">Begin Free ◆</button>
