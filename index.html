@@ -1150,6 +1150,13 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
 <link rel="stylesheet" href="/css/saferise-system.css">
 <script src="content/inventory.js"></script>
 <script src="content/tracks.js"></script>
+<!-- SR-311 · content migration Stage 3: the reader (getResourceData(), below)
+     now reads these instead of the RESOURCE_CONTENT teaser copy inline in
+     this file. RESOURCE_CONTENT stays in place, unread outside the parked
+     t1p2-companion case — see docs/fix-register.md. -->
+<script src="content/t1-resources.js"></script>
+<script src="content/t2-resources.js"></script>
+<script src="content/t3-resources.js"></script>
 
 </head>
 <body>
@@ -4242,7 +4249,7 @@ function renderProtocolPage(pk){
   // string, so the two can never say different things about one resource.
   // (see syncProtocolResourceCardTitles for when cards are re-synced.)
   function ptResFromContent(type, kindLabel){
-    var data = RESOURCE_CONTENT[pk + '-' + type];
+    var data = getResourceData(pk + '-' + type);
     return { type: type, html: ptResItem(pk, type, kindLabel, data.title, data.meta) };
   }
   const resItems = [];
@@ -4493,7 +4500,7 @@ function syncLegacyProtocolPreviews(){
     if (nameEl) nameEl.textContent = d.title;
 
     item.querySelectorAll('[data-resource]').forEach(function(resEl){
-      const data = RESOURCE_CONTENT[resEl.dataset.resource];
+      const data = getResourceData(resEl.dataset.resource);
       if (!data) return;
       const titleEl = resEl.querySelector('.res-title'), metaEl = resEl.querySelector('.res-meta');
       if (titleEl) titleEl.textContent = data.title;
@@ -4510,7 +4517,7 @@ document.addEventListener('DOMContentLoaded', syncLegacyProtocolPreviews);
 // is gone, but the sync is kept as the single source of card copy.
 function syncProtocolResourceCardTitles(){
   document.querySelectorAll('#protoList .res-item[data-resource]').forEach(function(resEl){
-    const data = RESOURCE_CONTENT[resEl.dataset.resource];
+    const data = getResourceData(resEl.dataset.resource);
     if (!data) return;
     const titleEl = resEl.querySelector('.res-title'), metaEl = resEl.querySelector('.res-meta');
     if (titleEl) titleEl.textContent = data.title;
@@ -4639,8 +4646,63 @@ function rmStyleFor(kind){
    (it gates the widget-injection checks below and keys KIND_META/
    RM_KIND_STYLE); this maps it to the renamed on-screen label only. */
 function srKindLabel(kind){ return kind === 'Safety Score' ? 'Capacity Check' : kind; }
+
+/* SR-311 · content migration Stage 3 — THE data-source choice for the
+   reader. Every resource lookup in this file now goes through here instead
+   of indexing RESOURCE_CONTENT directly, so there is exactly one place that
+   decides where a resource's body comes from.
+
+   Normalises a light-store-style key onto the heavy store's own shape —
+   bare "pN-type" (Track 1's un-prefixed form) becomes "t1pN-type"; hyphenated
+   "tX-pN-type" (Track 2/3's form) becomes "tXpN-type" — then reads
+   T1_RESOURCES / T2_RESOURCES / T3_RESOURCES (content/t1|2|3-resources.js,
+   loaded above). Confirmed by the migration's own coverage check
+   (content-store-coverage.csv) that the heavy store is now a strict
+   superset of the light one, with two deliberate exceptions, both found
+   only by tracing this file's own runtime patches against it, not by the
+   static coverage check:
+     - t1p2-companion: heavy keeps its original coaching-tip content;
+       RESOURCE_CONTENT's p2-companion instead holds a distinct interactive
+       body-map widget (Stage 1B). Not a light/heavy pair of the same
+       resource, so excluded rather than merged.
+     - p2-guide: the "sr-v12-content-and-copy" script below rewrites
+       RESOURCE_CONTENT['p2-guide'].body in place at load, to a practical
+       step-by-step sequence. Heavy's t1p2-guide is a different resource
+       under the same nominal slot — a "How This Works" mechanism
+       explanation — with no heavy entry holding the patched content
+       anywhere (checked t1p2-guide and t1p2-practice, both are the
+       explanatory/technique kind, neither matches). Redirecting this one
+       would have silently swapped in unrelated content, so it stays on
+       RESOURCE_CONTENT pending a founder decision, same as the Stage 1
+       cases.
+   (RESOURCE_CONTENT['p2-disclosure'] carries a similar in-place patch —
+   swapping one "SHORTER VERSION" paragraph to a script-card style — but
+   heavy's t1p2-disclosure already had that exact swap folded into its
+   static body during Stage 1A, so p2-disclosure redirects safely; the
+   runtime patch for it is now a harmless no-op left in place, not deleted.)
+
+   RESOURCE_CONTENT itself is left in place, unread, for every other key —
+   nothing here deletes or empties it. */
+function getResourceData(key){
+  if (key === 'p2-companion' || key === 'p2-guide') return RESOURCE_CONTENT[key];
+  var norm = key;
+  var m = /^p(\d+)-(.+)$/.exec(key);
+  if (m) {
+    norm = 't1p' + m[1] + '-' + m[2];
+  } else {
+    m = /^(t[123])-p(\d+)-(.+)$/.exec(key);
+    if (m) norm = m[1] + 'p' + m[2] + '-' + m[3];
+  }
+  var store = norm.indexOf('t1p') === 0 ? (typeof T1_RESOURCES !== 'undefined' && T1_RESOURCES)
+            : norm.indexOf('t2p') === 0 ? (typeof T2_RESOURCES !== 'undefined' && T2_RESOURCES)
+            : norm.indexOf('t3p') === 0 ? (typeof T3_RESOURCES !== 'undefined' && T3_RESOURCES)
+            : null;
+  if (store && store[norm]) return store[norm];
+  return RESOURCE_CONTENT[key]; // safety net only — the coverage check found nothing that should reach this
+}
+
 function openResourceModal(key){
-  const data = RESOURCE_CONTENT[key];
+  const data = getResourceData(key);
   if(!data) return;
   const style = rmStyleFor(data.kind);
   const kindEl = document.getElementById('rm-kind');
@@ -4966,7 +5028,7 @@ function openReader(protocolKey, initialKey){
      claims and removing them would be a design change, not a removal. */
 
   proto.keys.forEach(function(key, idx){
-    const data = RESOURCE_CONTENT[key];
+    const data = getResourceData(key);
     if (!data) return;
     const style = rmStyleFor(data.kind);
     const meta = kindMetaFor(data.kind);
@@ -5067,7 +5129,7 @@ function selectReaderTab(protocolKey, key){
   const proto = READER_PROTOCOLS[protocolKey];
   if (!proto) return;
   const idx = proto.keys.indexOf(key);
-  const data = RESOURCE_CONTENT[key];
+  const data = getResourceData(key);
   readerVisited.add(key);
 
   document.querySelectorAll('#reader-tabs .reader-tab').forEach(function(t){
@@ -5123,14 +5185,14 @@ function selectReaderTab(protocolKey, key){
   const nextBtn = document.getElementById('reader-next-btn');
   if (idx > 0) {
     prevBtn.classList.remove('disabled');
-    document.getElementById('reader-prev-label').textContent = 'Previous: ' + RESOURCE_CONTENT[proto.keys[idx-1]].title.split(' ').slice(0,3).join(' ');
+    document.getElementById('reader-prev-label').textContent = 'Previous: ' + getResourceData(proto.keys[idx-1]).title.split(' ').slice(0,3).join(' ');
     prevBtn.onclick = function(){ selectReaderTab(protocolKey, proto.keys[idx-1]); };
   } else {
     prevBtn.classList.add('disabled');
   }
   if (idx < proto.keys.length - 1) {
     nextBtn.classList.remove('disabled');
-    document.getElementById('reader-next-label').textContent = 'Next: ' + RESOURCE_CONTENT[proto.keys[idx+1]].title.split(' ').slice(0,3).join(' ');
+    document.getElementById('reader-next-label').textContent = 'Next: ' + getResourceData(proto.keys[idx+1]).title.split(' ').slice(0,3).join(' ');
     nextBtn.onclick = function(){ selectReaderTab(protocolKey, proto.keys[idx+1]); };
   } else {
     nextBtn.classList.add('disabled');
@@ -9433,7 +9495,7 @@ window.addEventListener('load', function(){
         JPROG_PROMPTS[pk]['The Chosen Self']=CHOSEN_PROMPTS[pk];
       }
 
-      const guide=RESOURCE_CONTENT[pk+'-guide'];
+      const guide=getResourceData(pk+'-guide');
       const d=IDENTITY_DATA[pk];
       if(guide && d){
         const marker='id-step4-guide';
@@ -10240,7 +10302,7 @@ window.addEventListener('load', function(){
     if(typeof RESOURCE_CONTENT === 'undefined') return;
     document.querySelectorAll('.reader-page[data-reader-page]').forEach(function(page){
       const key = page.dataset.readerPage;
-      const data = RESOURCE_CONTENT[key];
+      const data = getResourceData(key);
       if(!data) return;
       const cls = KIND_CLASS[data.kind];
       if(cls) page.dataset.v29Kind = cls;

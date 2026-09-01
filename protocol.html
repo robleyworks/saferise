@@ -606,6 +606,14 @@ body,.sr-book,.sr-book-offer,.sr-book-dates{transition:background-color 1.4s eas
      PAGE_PROTOCOL resolves ?track= and ?protocol= against TRACKS at parse time.
      Placed here rather than in <head> to match the other pages that read it. -->
 <script src="content/tracks.js"></script>
+<!-- SR-311 · content migration Stage 3 — SR-127 found this page loaded none of
+     the three heavy resource stores (not just t3-resources.js, though that was
+     the specific gap SR-127 named). This page has no reader/RESOURCE_CONTENT
+     code of its own yet — these make the data available for whichever track's
+     protocol is resolved above, ready for that reader to be built. -->
+<script src="content/t1-resources.js"></script>
+<script src="content/t2-resources.js"></script>
+<script src="content/t3-resources.js"></script>
 
 <!-- SR-182 · shown only when a protocol was ASKED FOR and could not be found.
      A member who follows a card to a protocol that does not resolve gets told
