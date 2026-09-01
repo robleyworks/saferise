@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-315.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-316 (double-issued — see below).** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -43,7 +43,15 @@ Canonical record of defects and design decisions. Commits reference the ID:
   `getResourceData()`), SR-312 (display rename, "crisis card" -> "cue card"), SR-313/314/315
   (Stage 5, Tracks 01/02/03 — every heavy resource type given a reader tab, verified live with
   zero empty tabs across all 30 protocols). Reachable-by-UI bytes: t1 99.6%, t2 100.1%, t3 100.0%
-  of authored totals — see the migration's own run report. Next run: allocate from **SR-316**.
+  of authored totals — see the migration's own run report.
+  **A fourth instance, same shape:** this note's own arithmetic was off by one — it correctly stated
+  "highest issued: SR-315" but the commit making that statement was itself SR-316, and this note
+  then told the next run to allocate from SR-316 too, instead of SR-317. The next run (wiring in
+  five new pages, method.html/coming-soon.html renamed to make room) read this note and did exactly
+  that: **SR-316 is now double-issued** — once for this header-correction commit, once for
+  `feat: SR-316 — wire in the five new pages`. Neither commit is being renamed (both unpushed at
+  time of writing but the register does not rewrite history to fix an ID slip, per its own rule).
+  **Do not reissue SR-316.** Next run: allocate from **SR-317**.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to
