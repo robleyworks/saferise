@@ -45,16 +45,16 @@ var T2_SHARED = {
 };
 
 var T2_PROTOCOL_KEYS = {
-  "t2-01": { reader: "t2p1", keys: ["t2p1-meditation", "t2p1-crisiscard", "t2p1-guide", "t2p1-companion", "t2p1-practice", "t2p1-disclosure", "t2p1-repair", "t2p1-record", "t2p1-accountability"] },
-  "t2-02": { reader: "t2p2", keys: ["t2p2-meditation", "t2p2-crisiscard", "t2p2-guide", "t2p2-companion", "t2p2-practice", "t2p2-disclosure", "t2p2-repair", "t2p2-record", "t2p2-accountability"] },
-  "t2-03": { reader: "t2p3", keys: ["t2p3-meditation", "t2p3-crisiscard", "t2p3-guide", "t2p3-companion", "t2p3-practice", "t2p3-advisory", "t2p3-disclosure", "t2p3-repair", "t2p3-record", "t2p3-accountability"] },
-  "t2-04": { reader: "t2p4", keys: ["t2p4-meditation", "t2p4-crisiscard", "t2p4-guide", "t2p4-companion", "t2p4-practice", "t2p4-advisory", "t2p4-disclosure", "t2p4-repair", "t2p4-record", "t2p4-accountability"] },
-  "t2-05": { reader: "t2p5", keys: ["t2p5-meditation", "t2p5-crisiscard", "t2p5-guide", "t2p5-companion", "t2p5-practice", "t2p5-disclosure", "t2p5-repair", "t2p5-record", "t2p5-accountability"] },
-  "t2-06": { reader: "t2p6", keys: ["t2p6-meditation", "t2p6-crisiscard", "t2p6-guide", "t2p6-companion", "t2p6-practice", "t2p6-disclosure", "t2p6-repair", "t2p6-record", "t2p6-accountability"] },
-  "t2-07": { reader: "t2p7", keys: ["t2p7-meditation", "t2p7-crisiscard", "t2p7-guide", "t2p7-companion", "t2p7-practice", "t2p7-disclosure", "t2p7-record", "t2p7-accountability"] },
-  "t2-08": { reader: "t2p8", keys: ["t2p8-meditation", "t2p8-crisiscard", "t2p8-guide", "t2p8-companion", "t2p8-practice", "t2p8-disclosure", "t2p8-record", "t2p8-accountability"] },
-  "t2-09": { reader: "t2p9", keys: ["t2p9-meditation", "t2p9-crisiscard", "t2p9-guide", "t2p9-companion", "t2p9-practice", "t2p9-advisory", "t2p9-disclosure", "t2p9-repair", "t2p9-record", "t2p9-accountability"] },
-  "t2-10": { reader: "t2p10", keys: ["t2p10-meditation", "t2p10-crisiscard", "t2p10-guide", "t2p10-companion", "t2p10-practice", "t2p10-advisory", "t2p10-disclosure", "t2p10-record", "t2p10-accountability"] }
+  "t2-01": { reader: "t2p1", keys: ["t2p1-meditation", "t2p1-crisiscard", "t2p1-guide", "t2p1-companion", "t2p1-practice", "t2p1-disclosure", "t2p1-repair", "t2p1-record", "t2p1-accountability", "t2p1-safety"] },
+  "t2-02": { reader: "t2p2", keys: ["t2p2-meditation", "t2p2-crisiscard", "t2p2-guide", "t2p2-companion", "t2p2-practice", "t2p2-disclosure", "t2p2-repair", "t2p2-record", "t2p2-accountability", "t2p2-safety"] },
+  "t2-03": { reader: "t2p3", keys: ["t2p3-meditation", "t2p3-crisiscard", "t2p3-guide", "t2p3-companion", "t2p3-practice", "t2p3-advisory", "t2p3-disclosure", "t2p3-repair", "t2p3-record", "t2p3-accountability", "t2p3-safety"] },
+  "t2-04": { reader: "t2p4", keys: ["t2p4-meditation", "t2p4-crisiscard", "t2p4-guide", "t2p4-companion", "t2p4-practice", "t2p4-advisory", "t2p4-disclosure", "t2p4-repair", "t2p4-record", "t2p4-accountability", "t2p4-safety"] },
+  "t2-05": { reader: "t2p5", keys: ["t2p5-meditation", "t2p5-crisiscard", "t2p5-guide", "t2p5-companion", "t2p5-practice", "t2p5-disclosure", "t2p5-repair", "t2p5-record", "t2p5-accountability", "t2p5-safety"] },
+  "t2-06": { reader: "t2p6", keys: ["t2p6-meditation", "t2p6-crisiscard", "t2p6-guide", "t2p6-companion", "t2p6-practice", "t2p6-disclosure", "t2p6-repair", "t2p6-record", "t2p6-accountability", "t2p6-safety"] },
+  "t2-07": { reader: "t2p7", keys: ["t2p7-meditation", "t2p7-crisiscard", "t2p7-guide", "t2p7-companion", "t2p7-practice", "t2p7-disclosure", "t2p7-record", "t2p7-accountability", "t2p7-safety"] },
+  "t2-08": { reader: "t2p8", keys: ["t2p8-meditation", "t2p8-crisiscard", "t2p8-guide", "t2p8-companion", "t2p8-practice", "t2p8-disclosure", "t2p8-record", "t2p8-accountability", "t2p8-safety"] },
+  "t2-09": { reader: "t2p9", keys: ["t2p9-meditation", "t2p9-crisiscard", "t2p9-guide", "t2p9-companion", "t2p9-practice", "t2p9-advisory", "t2p9-disclosure", "t2p9-repair", "t2p9-record", "t2p9-accountability", "t2p9-safety"] },
+  "t2-10": { reader: "t2p10", keys: ["t2p10-meditation", "t2p10-crisiscard", "t2p10-guide", "t2p10-companion", "t2p10-practice", "t2p10-advisory", "t2p10-disclosure", "t2p10-record", "t2p10-accountability", "t2p10-safety"] }
 };
 
 var T2_RESOURCES = {
@@ -2253,6 +2253,76 @@ var T2_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 this repairs by flagging rather than by recovering. <em>\"I'll send you one line when I go under, even if that's all I can manage\"</em> is small, specific, observable, and doesn't ask you to be different.</p>",
       "<p><strong>Where this stops</strong> \u2014 this isn't an instruction to be less affected for other people's convenience, and you don't owe anyone a better performance. If today isn't the day for this resource, that's a legitimate answer \u2014 it's the one here you can leave for as long as you need to.</p>"
     ],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t2p1-safety": {
+    kind: "Safety Score", title: "The Safe Conversation Protocol — Capacity Check", sub: "Pre-Engagement Self-Check · Run Before Engaging",
+    body: ["Before opening this protocol, run the Capacity check — ten questions assessing your own condition, on the same premise as an oxygen mask: put yours on before you try to help anyone else with theirs.", "Score each question 1–5, average the ten, and check your tier: Ready to Engage (4.0–5.0) · Proceed with Caution (2.5–3.9) · Not Ready — Mask On First (below 2.5).", "Score the person you're about to engage too, using the same ten questions read from the outside — not for precision, but so you're not walking in blind to their condition.", "Contempt and sarcasm surface fastest from a depleted baseline — a low score here is often the real reason a conversation turns sharp.", "Run the score again at the end of the conversation and compare it to where you started — an improved score means the exchange moved toward regulation; a lower one is useful information for next time, not a verdict.", "A pull to resolve this fast, or confidence that overrides a depleted score, is usually the clearest sign you're not ready yet — not permission to skip the check."],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t2p2-safety": {
+    kind: "Safety Score", title: "The Rupture & Repair Protocol — Capacity Check", sub: "Pre-Engagement Self-Check · Run Before Engaging",
+    body: ["Before opening this protocol, run the Capacity check — ten questions assessing your own condition, on the same premise as an oxygen mask: put yours on before you try to help anyone else with theirs.", "Score each question 1–5, average the ten, and check your tier: Ready to Engage (4.0–5.0) · Proceed with Caution (2.5–3.9) · Not Ready — Mask On First (below 2.5).", "Score the person you're about to engage too, using the same ten questions read from the outside — not for precision, but so you're not walking in blind to their condition.", "Repair attempted from exhaustion tends to repeat the rupture instead of closing it. Run the score before initiating repair, not just before the original conflict.", "Run the score again at the end of the conversation and compare it to where you started — an improved score means the exchange moved toward regulation; a lower one is useful information for next time, not a verdict.", "A pull to resolve this fast, or confidence that overrides a depleted score, is usually the clearest sign you're not ready yet — not permission to skip the check."],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t2p3-safety": {
+    kind: "Safety Score", title: "The Trust & Betrayal Protocol — Capacity Check", sub: "Pre-Engagement Self-Check · Run Before Engaging",
+    body: ["Before opening this protocol, run the Capacity check — ten questions assessing your own condition, on the same premise as an oxygen mask: put yours on before you try to help anyone else with theirs.", "Score each question 1–5, average the ten, and check your tier: Ready to Engage (4.0–5.0) · Proceed with Caution (2.5–3.9) · Not Ready — Mask On First (below 2.5).", "Score the person you're about to engage too, using the same ten questions read from the outside — not for precision, but so you're not walking in blind to their condition.", "These conversations carry more charge than most. A mid-range score is common and workable; a low score here especially warrants the pause.", "Run the score again at the end of the conversation and compare it to where you started — an improved score means the exchange moved toward regulation; a lower one is useful information for next time, not a verdict.", "A pull to resolve this fast, or confidence that overrides a depleted score, is usually the clearest sign you're not ready yet — not permission to skip the check."],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t2p4-safety": {
+    kind: "Safety Score", title: "The Resentment Release Protocol — Capacity Check", sub: "Pre-Engagement Self-Check · Run Before Engaging",
+    body: ["Before opening this protocol, run the Capacity check — ten questions assessing your own condition, on the same premise as an oxygen mask: put yours on before you try to help anyone else with theirs.", "Score each question 1–5, average the ten, and check your tier: Ready to Engage (4.0–5.0) · Proceed with Caution (2.5–3.9) · Not Ready — Mask On First (below 2.5).", "Score the person you're about to engage too, using the same ten questions read from the outside — not for precision, but so you're not walking in blind to their condition.", "Resentment already carries stored activation — checking your score first keeps the release from becoming a fresh grievance.", "Run the score again at the end of the conversation and compare it to where you started — an improved score means the exchange moved toward regulation; a lower one is useful information for next time, not a verdict.", "A pull to resolve this fast, or confidence that overrides a depleted score, is usually the clearest sign you're not ready yet — not permission to skip the check."],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t2p5-safety": {
+    kind: "Safety Score", title: "The Intimacy Barrier Protocol — Capacity Check", sub: "Pre-Engagement Self-Check · Run Before Engaging",
+    body: ["Before opening this protocol, run the Capacity check — ten questions assessing your own condition, on the same premise as an oxygen mask: put yours on before you try to help anyone else with theirs.", "Score each question 1–5, average the ten, and check your tier: Ready to Engage (4.0–5.0) · Proceed with Caution (2.5–3.9) · Not Ready — Mask On First (below 2.5).", "Score the person you're about to engage too, using the same ten questions read from the outside — not for precision, but so you're not walking in blind to their condition.", "Vulnerability requires more baseline safety than most conversations. Weight the body-calm and thoughts-steady questions most heavily here.", "Run the score again at the end of the conversation and compare it to where you started — an improved score means the exchange moved toward regulation; a lower one is useful information for next time, not a verdict.", "A pull to resolve this fast, or confidence that overrides a depleted score, is usually the clearest sign you're not ready yet — not permission to skip the check."],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t2p6-safety": {
+    kind: "Safety Score", title: "The Double Standard Protocol — Capacity Check", sub: "Pre-Engagement Self-Check · Run Before Engaging",
+    body: ["Before opening this protocol, run the Capacity check — ten questions assessing your own condition, on the same premise as an oxygen mask: put yours on before you try to help anyone else with theirs.", "Score each question 1–5, average the ten, and check your tier: Ready to Engage (4.0–5.0) · Proceed with Caution (2.5–3.9) · Not Ready — Mask On First (below 2.5).", "Score the person you're about to engage too, using the same ten questions read from the outside — not for precision, but so you're not walking in blind to their condition.", "Perceived unfairness activates quickly. A low score can make an honest imbalance look like a bigger injustice than it is — or the reverse.", "Run the score again at the end of the conversation and compare it to where you started — an improved score means the exchange moved toward regulation; a lower one is useful information for next time, not a verdict.", "A pull to resolve this fast, or confidence that overrides a depleted score, is usually the clearest sign you're not ready yet — not permission to skip the check."],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t2p7-safety": {
+    kind: "Safety Score", title: "The Projection Clarity Protocol — Capacity Check", sub: "Pre-Engagement Self-Check · Run Before Engaging",
+    body: ["Before opening this protocol, run the Capacity check — ten questions assessing your own condition, on the same premise as an oxygen mask: put yours on before you try to help anyone else with theirs.", "Score each question 1–5, average the ten, and check your tier: Ready to Engage (4.0–5.0) · Proceed with Caution (2.5–3.9) · Not Ready — Mask On First (below 2.5).", "Score the person you're about to engage too, using the same ten questions read from the outside — not for precision, but so you're not walking in blind to their condition.", "Distinguishing what's yours from what's theirs is much harder from a depleted state, where everything can start to feel personal.", "Run the score again at the end of the conversation and compare it to where you started — an improved score means the exchange moved toward regulation; a lower one is useful information for next time, not a verdict.", "A pull to resolve this fast, or confidence that overrides a depleted score, is usually the clearest sign you're not ready yet — not permission to skip the check."],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t2p8-safety": {
+    kind: "Safety Score", title: "The Appreciation & Support Protocol — Capacity Check", sub: "Pre-Engagement Self-Check · Run Before Engaging",
+    body: ["Before opening this protocol, run the Capacity check — ten questions assessing your own condition, on the same premise as an oxygen mask: put yours on before you try to help anyone else with theirs.", "Score each question 1–5, average the ten, and check your tier: Ready to Engage (4.0–5.0) · Proceed with Caution (2.5–3.9) · Not Ready — Mask On First (below 2.5).", "Score the person you're about to engage too, using the same ten questions read from the outside — not for precision, but so you're not walking in blind to their condition.", "Even a positive-focused conversation lands better from a regulated state — appreciation offered from exhaustion can come across as flat or obligatory.", "Run the score again at the end of the conversation and compare it to where you started — an improved score means the exchange moved toward regulation; a lower one is useful information for next time, not a verdict.", "A pull to resolve this fast, or confidence that overrides a depleted score, is usually the clearest sign you're not ready yet — not permission to skip the check."],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t2p9-safety": {
+    kind: "Safety Score", title: "The Pursue & Withdraw Protocol — Capacity Check", sub: "Pre-Engagement Self-Check · Run Before Engaging",
+    body: ["Before opening this protocol, run the Capacity check — ten questions assessing your own condition, on the same premise as an oxygen mask: put yours on before you try to help anyone else with theirs.", "Score each question 1–5, average the ten, and check your tier: Ready to Engage (4.0–5.0) · Proceed with Caution (2.5–3.9) · Not Ready — Mask On First (below 2.5).", "Score the person you're about to engage too, using the same ten questions read from the outside — not for precision, but so you're not walking in blind to their condition.", "The pursuing partner especially should check this before initiating contact — pursuit from a low score often reads as pressure rather than connection.", "Run the score again at the end of the conversation and compare it to where you started — an improved score means the exchange moved toward regulation; a lower one is useful information for next time, not a verdict.", "A pull to resolve this fast, or confidence that overrides a depleted score, is usually the clearest sign you're not ready yet — not permission to skip the check."],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t2p10-safety": {
+    kind: "Safety Score", title: "The Conscious Separation Protocol — Capacity Check", sub: "Pre-Engagement Self-Check · Run Before Engaging",
+    body: ["Before opening this protocol, run the Capacity check — ten questions assessing your own condition, on the same premise as an oxygen mask: put yours on before you try to help anyone else with theirs.", "Score each question 1–5, average the ten, and check your tier: Ready to Engage (4.0–5.0) · Proceed with Caution (2.5–3.9) · Not Ready — Mask On First (below 2.5).", "Score the person you're about to engage too, using the same ten questions read from the outside — not for precision, but so you're not walking in blind to their condition.", "Of all ten, this is the one where a low score most often leads to words that can't be taken back. If in doubt, wait.", "Run the score again at the end of the conversation and compare it to where you started — an improved score means the exchange moved toward regulation; a lower one is useful information for next time, not a verdict.", "A pull to resolve this fast, or confidence that overrides a depleted score, is usually the clearest sign you're not ready yet — not permission to skip the check."],
     cues: [],
     sharedRefs: [],
     diagrams: []

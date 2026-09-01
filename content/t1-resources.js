@@ -17,7 +17,7 @@
    ════════════════════════════════════════════════════════════════════════ */
 
 var T1_PROTOCOL_KEYS = {
-  "t1-01": { reader: "t1p1", keys: ["t1p1-meditation", "t1p1-crisiscard", "t1p1-guide", "t1p1-companion", "t1p1-practice", "t1p1-disclosure", "t1p1-record", "t1p1-accountability"] },
+  "t1-01": { reader: "t1p1", keys: ["t1p1-meditation", "t1p1-crisiscard", "t1p1-guide", "t1p1-companion", "t1p1-practice", "t1p1-advisory", "t1p1-disclosure", "t1p1-record", "t1p1-accountability"] },
   "t1-02": { reader: "t1p2", keys: ["t1p2-meditation", "t1p2-crisiscard", "t1p2-guide", "t1p2-companion", "t1p2-practice", "t1p2-advisory", "t1p2-disclosure", "t1p2-repair", "t1p2-record", "t1p2-accountability"] },
   "t1-03": { reader: "t1p3", keys: ["t1p3-meditation", "t1p3-crisiscard", "t1p3-guide", "t1p3-companion", "t1p3-practice", "t1p3-advisory", "t1p3-disclosure", "t1p3-record", "t1p3-accountability"] },
   "t1-04": { reader: "t1p4", keys: ["t1p4-meditation", "t1p4-crisiscard", "t1p4-guide", "t1p4-companion", "t1p4-practice", "t1p4-advisory", "t1p4-disclosure", "t1p4-repair", "t1p4-record", "t1p4-accountability"] },
@@ -26,7 +26,7 @@ var T1_PROTOCOL_KEYS = {
   "t1-07": { reader: "t1p7", keys: ["t1p7-meditation", "t1p7-crisiscard", "t1p7-guide", "t1p7-companion", "t1p7-practice", "t1p7-disclosure", "t1p7-record", "t1p7-accountability"] },
   "t1-08": { reader: "t1p8", keys: ["t1p8-meditation", "t1p8-crisiscard", "t1p8-guide", "t1p8-companion", "t1p8-practice", "t1p8-advisory", "t1p8-disclosure", "t1p8-repair", "t1p8-record", "t1p8-accountability"] },
   "t1-09": { reader: "t1p9", keys: ["t1p9-meditation", "t1p9-crisiscard", "t1p9-guide", "t1p9-companion", "t1p9-practice", "t1p9-advisory", "t1p9-disclosure", "t1p9-repair", "t1p9-record", "t1p9-accountability"] },
-  "t1-10": { reader: "t1p10", keys: ["t1p10-meditation", "t1p10-crisiscard", "t1p10-guide", "t1p10-companion", "t1p10-practice", "t1p10-advisory", "t1p10-disclosure", "t1p10-record", "t1p10-accountability"] }
+  "t1-10": { reader: "t1p10", keys: ["t1p10-meditation", "t1p10-crisiscard", "t1p10-guide", "t1p10-companion", "t1p10-practice", "t1p10-advisory", "t1p10-disclosure", "t1p10-record", "t1p10-accountability", "t1p10-crisis"] }
 };
 
 var T1_RESOURCES = {
@@ -160,6 +160,17 @@ var T1_RESOURCES = {
       "<p>Some states need another human being, and no self-guided practice substitutes for one. Contact someone today \u2014 a doctor, a crisis line in your country, or a person you trust \u2014 if you're having thoughts of harming yourself, if the fast state doesn't let up over days rather than hours, if you're avoiding leaving the house, or if you're using something to get through it.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're already working with a therapist, doctor or counsellor, this sits alongside that. It replaces nothing and competes with nothing. Tell them you're using it \u2014 most will want to know, and some will have views about the breathing worth hearing.</p>"
+    ],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t1p1-advisory": {
+    kind: "Attention Advisory", title: "Anxiety Reset — Where to Direct Your Attention", sub: "Attention guide · Practising safely",
+    body: [
+      "<div class='sr-guide-intro'><span class='sr-section-kicker'>THE QUESTION THIS HELPS YOU ANSWER</span><h3>How do I turn my attention inward safely, when focusing inward is itself what feels activating?</h3><p>This practice asks you to notice your body and your breath — exactly the kind of inward attention that can feel uncomfortable, or even unsafe, when anxiety is already high. Use this guide before your first session, or any time turning inward feels like more than you can hold right now.</p></div>",
+      "<div class='sr-section-block'><span class='sr-section-kicker'>HOW TO STAY SAFE WHILE YOU PRACTISE</span><ul class='sr-easy-list'><li><strong>Never while driving or operating machinery.</strong> This practice asks for your full attention — give it somewhere you can safely close your eyes or soften your focus.</li><li><strong>Keep your eyes open if that feels safer.</strong> The sequence works with eyes open, oriented to the room, just as well as with eyes closed.</li><li><strong>Pause any time.</strong> There is no part of this you have to push through. Stopping and returning later is not failure.</li><li><strong>Choose the shorter reset.</strong> If the full session feels like too much today, the four-line Cue Card is built for exactly that moment.</li></ul></div>",
+      "<div class='sr-callout'><strong>If you are in crisis right now</strong><p>This protocol is a self-regulation practice, not crisis care. If you are in immediate danger, contact your local emergency number, or reach <a href='https://findahelpline.com' target='_blank' rel='noopener'>findahelpline.com</a> for a free, confidential helpline in your country.</p></div>"
     ],
     cues: [],
     sharedRefs: [],
@@ -2369,6 +2380,13 @@ var T1_RESOURCES = {
       "<p><strong>The checkable change</strong> \u2014 this repairs by sending something rather than by improving. <em>\"When I'm under, I'll send you one line saying so, even if that's all I can manage\"</em> is small, specific, observable, and doesn't ask you to be different.</p>",
       "<p><strong>Where this stops</strong> \u2014 this is not an instruction to be less flattened for other people's convenience, and you don't owe anyone a better performance while you're in the middle of something hard. If today isn't the day for this one, that's a legitimate answer \u2014 it's the resource here you can leave for as long as you need to.</p>"
     ],
+    cues: [],
+    sharedRefs: [],
+    diagrams: []
+  },
+  "t1p10-crisis": {
+    kind: "Support Resources", title: "You don't have to carry this alone", sub: "If you're in immediate danger, contact local emergency services",
+    body: ["This protocol is a supplement to professional support, not a substitute for it.", "If you're in crisis or having thoughts of harming yourself, please reach out to a crisis line in your country, or to someone you trust, before continuing with this material."],
     cues: [],
     sharedRefs: [],
     diagrams: []
