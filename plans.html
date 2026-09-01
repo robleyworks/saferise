@@ -4,13 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>SafeRise — Method</title>
+<title>SafeRise — Plans</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-
-
 
 :root{
   --bg:#0A0A0F; --bg2:#0E0E15; --bg3:#13131C;
@@ -364,15 +362,45 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   background:linear-gradient(180deg,transparent 30%,color-mix(in srgb,var(--bg) 88%,transparent))}
 .band2 .cap{position:relative;z-index:2;padding:26px 30px;font-family:'DM Sans',sans-serif;
   font-size:14px;color:var(--text2);max-width:58ch}
-
-
-
+.limits{background:var(--bg3);border:1px solid var(--hair);border-radius:18px;padding:30px 30px 26px;margin-top:30px}
+.limits h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:24px;margin-bottom:12px}
+.limits p{font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.65;color:var(--text2);margin-bottom:10px}
 .certs{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
 .cert{font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:.1em;
   border:1px solid var(--hair2);border-radius:999px;padding:9px 17px;color:var(--text2)}
 .ctarow{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:34px}
 @media(max-width:860px){.grid3,.grid2{grid-template-columns:1fr}
   .reg{grid-template-columns:1fr}.regl{padding-bottom:0;border-bottom:0}}
+
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+.tier{background:var(--card);border:1px solid var(--hair);border-radius:20px;
+  padding:30px 26px 26px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.tier::before{content:'';position:absolute;inset:0 0 auto 0;height:2px;background:var(--accent);opacity:.6}
+.tier.t1{--accent:var(--t1)} .tier.t2{--accent:var(--t2)} .tier.t3{--accent:var(--t3)}
+.tier .k{font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+.tier h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:27px;margin-bottom:6px}
+.tier .amt{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;
+  color:var(--gold-lt);line-height:1;margin:16px 0 4px}
+.tier .per{font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--text3);margin-bottom:18px}
+.tier ul{list-style:none;margin:0 0 22px;padding:0}
+.tier li{font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;color:var(--text2);
+  padding:8px 0 8px 20px;position:relative;border-top:1px solid var(--hair)}
+.tier li::before{content:'\25C6';position:absolute;left:0;color:var(--gold);font-size:8px;top:12px}
+.tier li:first-child{border-top:0}
+.tier .go{margin-top:auto}
+
+
+
+
+.cmp{width:100%;border-collapse:collapse;margin-top:28px;font-family:'DM Sans',sans-serif}
+.cmp th,.cmp td{text-align:left;padding:15px 16px;border-bottom:1px solid var(--hair);font-size:14px}
+.cmp th{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.cmp td:first-child{color:var(--text3)}
+.cmp tr td:not(:first-child){color:var(--text2)}
+@media(max-width:860px){.tiers{grid-template-columns:1fr}.cmp{font-size:13px}
+  .cmp th,.cmp td{padding:11px 9px}}
+
 
 /* ═══ image slots ═══ */
 .slot{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--hair);
@@ -402,7 +430,6 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .figtxt p{font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.62;color:var(--text2)}
 @media(max-width:860px){.duo,.figrow{grid-template-columns:1fr}
   .figrow .slot{min-height:210px}}
-
 
 </style>
 </head>
@@ -438,185 +465,101 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   </div>
 </nav>
 <main id="main">
+
 <section class="pg"><div class="wrap pghead">
-  <p class="eyebrow">The method</p>
-  <h1>A lion walks <em>into your office.</em></h1>
-  <p class="pglead">It does not matter whether it is narcissistic or avoidant. You are
-    not safe. You would not carry on working. Your whole system would take over
-    &#8212; fight or run &#8212; before you had a chance to think about it.</p>
-  <p class="pglead">That same mechanism fires when you feel triggered, overwhelmed,
-    rejected, or under pressure. So the question is not how to fight the lion, or how
-    to outrun it. It is what happens if you are steady enough that the room cannot
-    take you over in the first place.</p>
-</div></section>
-
-<section class="sec2 sec2--alt"><div class="wrap">
-  <div class="sh"><p class="eyebrow">01 &#183; Why knowing has never been enough</p>
-    <h2>The body decides. <em>Then you find out.</em></h2></div>
-  <div class="prose">
-    <p>Two things happen, and not at the same time.</p>
-    <p><strong>First your body protects you.</strong> It commits to a response before
-      you have processed a single word. Heart, breath, jaw, hands &#8212; all of it
-      moving while you are still catching up.</p>
-    <p><strong>Then your mind explains what happened.</strong> By which point the thing
-      you needed &#8212; perspective, patience, the ability to choose &#8212; was not
-      available. Not because you are weak. Because it goes offline first, by design.</p>
-    <p>So one more explanation of the pattern was never going to stop it. You already
-      have the explanation. You have probably had it for years.</p>
-  </div>
-  <div class="slot slot--wide"><div class="slotmeta"><p class="slotid">IMG-M1</p><p class="slotdim">1600 &#215; 600 &#183; diagram or photograph</p><p class="slotbrief">Two timelines from one moment: the protective response firing, and meaning arriving late. Abstract, or a figure mid-reaction with the expression not yet resolved. Not a brain diagram.</p></div></div>
+  <p class="eyebrow">Plans</p>
+  <h1>Three plans. Each one <em>nested inside the next.</em></h1>
+  <p class="pglead">All three tracks are live. Every plan includes everything below it,
+    so adding a track never means paying twice for the same thing. Cancel any time and
+    keep whatever you have written.</p>
 </div></section>
 
 <section class="sec2"><div class="wrap">
-  <div class="sh"><p class="eyebrow">02 &#183; What is actually holding you up</p>
-    <h2>Scaffolding holds <em>until the conditions change.</em></h2></div>
-  <div class="prose">
-    <p>Before you could choose, people handed you beliefs about safety, success, love
-      and what is possible. Some strengthened you. Some hurt you. Some were just
-      somebody else&#8217;s idea of life, given to you before you could decide whether
-      it was true. Eventually you started calling that collection <em>me</em>.</p>
-    <p>It works. It holds you up. And you do not notice it is holding you up until
-      something takes a piece of it away.</p>
-    <p>Somebody says something. Somebody reacts in a way you were not expecting.
-      Something you were counting on does not arrive. And you drop &#8212; and then do
-      something that looks nothing like the person you were trying to be.</p>
+  <div class="sh"><p class="eyebrow">Choose a track</p>
+    <h2>Start where the pattern <em>actually shows up.</em></h2>
+    <p>Every plan opens all ten protocols in its track on day one, with the full
+      resource set on each. Later plans include the earlier ones.</p></div>
+  <div class="tiers">
+    <div class="tier t1">
+      <p class="k">Track 01</p><h3>Personal Transformation</h3>
+      <p class="amt">&#8364;19</p><p class="per">per month &#183; cancel anytime</p>
+      <ul>
+        <li>Ten protocols for your own system</li>
+        <li>Anxiety, anger, shame, grief, shutdown</li>
+        <li>Guided audio and follow-along video</li>
+        <li>Step guide and cue card, printable</li>
+        <li>Journal and record, private to you</li>
+      </ul>
+      <a class="cta go" href="personal-transformation.html">Start &#8212; &#8364;19</a>
+    </div>
+    <div class="tier t2">
+      <p class="k">Track 02 &#183; includes Track 01</p><h3>Relationship Healing</h3>
+      <p class="amt">&#8364;29</p><p class="per">per month &#183; cancel anytime</p>
+      <ul>
+        <li>Everything in Personal Transformation</li>
+        <li>Ten protocols for what happens between you</li>
+        <li>Rupture, trust, resentment, intimacy</li>
+        <li>Session guides written to read together</li>
+        <li>Capacity check, before a hard conversation</li>
+      </ul>
+      <a class="cta go" href="relationship-healing.html">Start &#8212; &#8364;29</a>
+    </div>
+    <div class="tier t3">
+      <p class="k">Track 03 &#183; includes 01 and 02</p><h3>Professional Performance</h3>
+      <p class="amt">&#8364;39</p><p class="per">per month &#183; cancel anytime</p>
+      <ul>
+        <li>Everything in the two tracks below</li>
+        <li>Ten protocols for pressure and visibility</li>
+        <li>Conflict, imposter, burnout, decisions</li>
+        <li>Word-for-word, breath-marked scripts</li>
+        <li>Somatic release for the minute before</li>
+      </ul>
+      <a class="cta go" href="professional-performance.html">Start &#8212; &#8364;39</a>
+    </div>
   </div>
-  <div class="pull2"><p>It was never the comment. It is that you needed the comment to
-    go a certain way in order to stay composed. You were being held up from the
-    outside. And the outside moved.</p></div>
 </div></section>
 
 <section class="sec2 sec2--alt"><div class="wrap">
-  <div class="sh"><p class="eyebrow">03 &#183; The state it is holding</p>
-    <h2>Your body already <em>knows which one.</em></h2>
-    <p>Watch the state, not the story. You move across a range, and only one part of it
-      gives you perspective, patience and judgement.</p></div>
+  <div class="figrow"><div class="slot "><div class="slotmeta"><p class="slotid">IMG-P1</p><p class="slotdim">1200 × 900 · photograph</p><p class="slotbrief">A protocol open on a real device, in a real room. Held in a hand, at a desk at night. Product, not lifestyle.</p></div></div><div class="figtxt"><h3>Everything opens on day one</h3><p>No unlocking, no sequence to work through, nothing held back until you have proved something. Every protocol in your plan is open from the first day, and the library grows while you are a member.</p></div></div>
+
+<div class="sh" style="margin-top:44px"><p class="eyebrow">What every protocol opens</p>
+    <h2>One resource for <em>each kind of moment.</em></h2>
+    <p>Included from your first day, on every protocol in your plan. The library grows
+      &#8212; anything added while you are a member is yours.</p></div>
   <div class="grid3">
-    <div class="gc"><p class="k" style="color:var(--t1)">Wound up</p>
-      <h3>Everything needs handling, now.</h3>
-      <p>Racing, bracing, scanning. Short with people you love. The reaction is out
-        before you decided on it.</p></div>
-    <div class="gc"><p class="k" style="color:var(--t3)">Steady</p>
-      <h3>This is hard. I can deal with it.</h3>
-      <p>Shoulders drop, breath opens, attention comes back. The hard thing has not
-        moved. You have options in front of it.</p></div>
-    <div class="gc"><p class="k" style="color:var(--t2)">Flat</p>
-      <h3>None of it is worth the energy.</h3>
-      <p>Distant, switched off, hard to reach &#8212; including for you. Not laziness.
-        Your system saving what is left.</p></div>
+    <div class="gc"><h3>Guided experience</h3><p>The full session, voiced and paced.
+      Headphones, nothing to read.</p></div>
+    <div class="gc"><h3>How this works</h3><p>What is happening in your body during
+      this state, and why the four steps land in that order.</p></div>
+    <div class="gc"><h3>Protocol guide</h3><p>The printable step guide, formatted for
+      your phone or the fridge door.</p></div>
+    <div class="gc"><h3>Somatic release</h3><p>Body-based companions between sessions
+      &#8212; the small physical things that keep it in place.</p></div>
+    <div class="gc"><h3>Cue card</h3><p>The four-line version, for the moment it is
+      actually happening.</p></div>
+    <div class="gc"><h3>Your record</h3><p>Prompts tied to this protocol, and the log
+      that tracks your state before and after.</p></div>
   </div>
-  <div class="band2"><img src="assets/pt/nervous-system-range.webp" alt="" onerror="this.style.opacity=0">
-    <p class="cap">You already know your steady self. The work is getting back there on
-      purpose, instead of waiting for the day to hand it to you.</p></div>
 </div></section>
 
 <section class="sec2"><div class="wrap">
-  <div class="sh"><p class="eyebrow">04 &#183; None of this started here</p>
-    <h2>People kept finding <em>the same instrument.</em></h2></div>
-  <div class="prose">
-    <p>Go back far enough and you find people in almost every part of the world
-      arriving at the same thing. Separately. With no contact between them.</p>
-    <p>In India they worked with the breath &#8212; lengthening it, slowing it,
-      watching it &#8212; thousands of years ago. In China the same: breath, posture
-      and attention held together. Buddhist monks followed a single breath in and out
-      and built a discipline on it.</p>
-    <p>The desert monks of early Christianity repeated one phrase until the noise went
-      quiet. Jewish prayer had its own solitude and its own address to the heart.
-      Muslim practice had remembrance &#8212; a name repeated, breath by breath, until
-      the body settled. The Stoics in Rome just called it attention. Watch what
-      arrives. Do not be governed by it.</p>
-    <p>Different languages. Different gods. Different centuries.</p>
-    <p><strong>They all arrived at the same four operations. Slow the breath. Turn the
-      attention inward. Name what is there. Come back to a settled place.</strong></p>
-    <p>That is not a coincidence and it is not a belief system. That is people finding
-      the same instrument over and over, because it was already in them. It is already
-      in you. It has been the whole time.</p>
-  </div>
-</div></section>
-
-<section class="sec2 sec2--alt"><div class="wrap">
-  <div class="sh"><p class="eyebrow">05 &#183; The four steps</p>
-    <h2>The same order, <em>every time.</em></h2>
-    <p>A route your body learns to recognise, so on a bad day you are not deciding what
-      to do. You are following something you already know.</p></div>
-  <div class="grid2">
-    <div class="gc"><p class="k">Step 01</p><h3>Recognise</h3>
-      <p>Say what is actually there, specifically. Not &#8220;I feel anxious&#8221;
-        &#8212; finish the sentence. What I am afraid will happen is ___. Being precise
-        settles something on its own.</p><p class="cite">Porges</p></div>
-    <div class="gc"><p class="k">Step 02</p><h3>Regulate</h3>
-      <p>Hand on your chest. In for four, out for six. Your body will not take an
-        argument for safety. It takes evidence, and a slower breath out is the
-        evidence.</p><p class="cite">HeartMath</p></div>
-    <div class="gc"><p class="k">Step 03</p><h3>Release</h3>
-      <p>Stop the second fight &#8212; the one against how you feel about how you feel.
-        You are not agreeing with it. You are stopping the struggle, including the part
-        aimed at yourself.</p><p class="cite">Mat&#233;</p></div>
-    <div class="gc"><p class="k">Step 04</p><h3>Rise</h3>
-      <p>Still breathing that way, be the person on the other side of it for one
-        breath. Not a plan. Not a decision. One breath, so your body knows the way
-        back.</p><p class="cite">Kross &amp; Ayduk</p></div>
-  </div>
-  <div class="slot slot--band"><div class="slotmeta"><p class="slotid">IMG-M2</p><p class="slotdim">1400 &#215; 380 &#183; full width</p><p class="slotbrief">The four steps as one continuous gesture across a single wide frame &#8212; naming, hand to heart, releasing, opening. Not four panels. Ordinary room, close-cropped, hands doing the work.</p></div></div>
-</div></section>
-
-<section class="sec2"><div class="wrap">
-  <div class="sh"><p class="eyebrow">06 &#183; Why the long breath out</p>
-    <h2>Six breaths a minute is <em>where it settles.</em></h2></div>
-  <div class="prose">
-    <p>Around six breaths a minute is where the gap between your heartbeats becomes
-      most even. Not a mood. Something measurable, and something you can do on purpose
-      in a car park.</p>
-    <p><strong>The breath out is the part that does the work.</strong> Breathing out
-      for longer than you breathe in tips the balance towards the branch of your system
-      that handles rest rather than threat. The rhythm of your heart becomes more
-      ordered, and your brain reads that order as evidence rather than as an
-      argument.</p>
-    <p>No force. No perfect count. Your body reads the rhythm before your mind has
-      agreed to anything &#8212; which is the point, because on a bad day your mind is
-      not agreeing to much.</p>
-  </div>
-  <div class="slot slot--wide"><div class="slotmeta"><p class="slotid">IMG-M3</p><p class="slotdim">1200 &#215; 500 &#183; abstract, no people</p><p class="slotbrief">The four-in six-out rhythm as a visual. A breath curve, a slow pulse, a waveform settling into order. Gold against near-black. The one place a graphic beats a photograph.</p></div></div>
-</div></section>
-
-<section class="sec2 sec2--alt"><div class="wrap">
-  <div class="sh"><p class="eyebrow">07 &#183; What this rests on</p>
-    <h2>Six frameworks, and <em>which is which.</em></h2>
-    <p>Psychology platforms are everywhere now and it has got noisy. Most of it hands
-      you more labels without building any more capacity. So here is what this rests
-      on, and which part is evidence and which part is a way of looking at things —
-      or see <a href="frameworks.html">the full register</a>, sourced and cited.</p></div>
-  <div class="slot slot--wide"><div class="slotmeta"><p class="slotid">IMG-M4</p><p class="slotdim">1600 &#215; 600 &#183; abstract texture</p><p class="slotbrief">Material, light, depth. No people, no objects, no text. Gold, bronze and deep teal against near-black. Quiet and substantial rather than decorative.</p></div></div>
-  <div class="reg">
-    <div class="regl"><p class="regk">Peer-reviewed</p><p class="regs">Published, replicated research</p></div>
-    <div class="regr">
-      <p class="regn"><a href="method-porges.html">Stephen Porges &#183; Polyvagal Theory</a></p>
-      <p class="regd">Why safety runs everything underneath, and why those three states
-        are a range you move across rather than moods you are in.</p>
-      <p class="regn" style="margin-top:20px"><a href="method-heartmath.html">HeartMath &#183; Cardiac coherence</a></p>
-      <p class="regd">What a paced breath does to the rhythm of the heart, measured.</p>
-      <p class="regn" style="margin-top:20px"><a href="method-kross.html">Kross &amp; Ayduk &#183; Distanced self-talk</a></p>
-      <p class="regd">Looking at a state from outside it, and what that changes about
-        what you can do next.</p>
-    </div>
-    <div class="regl"><p class="regk">Clinical practice</p><p class="regs">An established practitioner method</p></div>
-    <div class="regr"><p class="regn"><a href="method-mate.html">Gabor Mat&#233; &#183; Compassionate Inquiry</a></p>
-      <p class="regd">Asking what a pattern was protecting, instead of asking how to
-        make it stop.</p></div>
-    <div class="regl"><p class="regk">A way of looking</p><p class="regs">A lens, not evidence &#8212; and said so</p></div>
-    <div class="regr">
-      <p class="regn"><a href="method-jung.html">Carl Jung &#183; Shadow and individuation</a></p>
-      <p class="regd">Naming what is actually there, and the self you choose rather
-        than the one you were handed.</p>
-      <p class="regn" style="margin-top:20px"><a href="method-watts.html">Alan Watts &#183; Non-resistance</a></p>
-      <p class="regd">What happens when you stop the second fight.</p>
-    </div>
-  </div>
+  <div class="sh"><p class="eyebrow">Side by side</p>
+    <h2>Each track includes <em>the ones before it.</em></h2></div>
+  <table class="cmp">
+    <tr><th></th><th>Personal</th><th>Relationship</th><th>Professional</th></tr>
+    <tr><td>Monthly</td><td>&#8364;19</td><td>&#8364;29</td><td>&#8364;39</td></tr>
+    <tr><td>Protocols</td><td>10</td><td>20</td><td>30</td></tr>
+    <tr><td>Who it is for</td><td>You alone</td><td>You and another</td><td>You under pressure</td></tr>
+    <tr><td>Best for</td><td>Anxiety, anger, grief, shutdown</td><td>Rupture, trust, distance</td><td>Pressure, conflict, burnout</td></tr>
+    <tr><td>Format</td><td>Self-paced</td><td>Self-paced</td><td>Self-paced</td></tr>
+    <tr><td>Available</td><td>Now</td><td>Now</td><td>Now</td></tr>
+  </table>
   <div class="ctarow">
-    <a class="cta" href="plans.html">See the plans &#8594;</a>
-    <a class="ctaalt" href="about.html">Or read where this came from</a>
+    <a class="cta" href="personal-transformation.html">Start with Personal Transformation &#8594;</a>
+    <a class="ctaalt" href="live-sessions.html">Live sessions are priced separately</a>
   </div>
 </div></section>
+
 </main>
 <footer class="foot">
   <div class="wrap">
