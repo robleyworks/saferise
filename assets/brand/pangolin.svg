@@ -1,0 +1,94 @@
+<svg width="100%" viewBox="0 0 480 500" preserveAspectRatio="xMidYMid meet" style="display:block;max-width:520px;filter:drop-shadow(0 0 60px rgba(212,168,67,0.15));">
+<style>
+  svg { --sr-gold: #D4A843; --sr-void: #040408; --sr-void-outer: #0A0A18; --sr-body: #1C1C2E; }
+</style>
+        <defs>
+          <radialGradient id="heroGlow" cx="50%" cy="50%" r="52%">
+            <stop offset="0%" stop-color="var(--sr-gold, #D4A843)" stop-opacity="0.22"/>
+            <stop offset="100%" stop-color="var(--sr-void, #040408)" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="240" cy="258" rx="220" ry="210" fill="url(#heroGlow)"/>
+        <!-- Threat rings -->
+        <circle cx="240" cy="258" r="205" stroke="var(--sr-gold, #D4A843)" stroke-width="0.4" fill="none" opacity="0.06"/>
+        <circle cx="240" cy="258" r="175" stroke="var(--sr-gold, #D4A843)" stroke-width="0.6" fill="none" opacity="0.1"/>
+        <circle cx="240" cy="258" r="145" stroke="var(--sr-gold, #D4A843)" stroke-width="0.8" fill="none" opacity="0.14"/>
+        <!-- Threat vectors -->
+        <line x1="32" y1="108" x2="120" y2="188" stroke="var(--sr-gold, #D4A843)" stroke-width="1.5" opacity="0.2" stroke-linecap="round"/>
+        <circle cx="122" cy="190" r="7" stroke="var(--sr-gold, #D4A843)" stroke-width="1" fill="none" opacity="0.28"/>
+        <line x1="448" y1="105" x2="362" y2="186" stroke="var(--sr-gold, #D4A843)" stroke-width="1.5" opacity="0.2" stroke-linecap="round"/>
+        <circle cx="360" cy="188" r="7" stroke="var(--sr-gold, #D4A843)" stroke-width="1" fill="none" opacity="0.28"/>
+        <line x1="240" y1="22" x2="240" y2="112" stroke="var(--sr-gold, #D4A843)" stroke-width="1.5" opacity="0.2" stroke-linecap="round"/>
+        <circle cx="240" cy="114" r="7" stroke="var(--sr-gold, #D4A843)" stroke-width="1" fill="none" opacity="0.28"/>
+        <line x1="35" y1="400" x2="118" y2="328" stroke="var(--sr-gold, #D4A843)" stroke-width="1.2" opacity="0.16" stroke-linecap="round"/>
+        <line x1="445" y1="402" x2="362" y2="328" stroke="var(--sr-gold, #D4A843)" stroke-width="1.2" opacity="0.16" stroke-linecap="round"/>
+        <!-- Chaos particles -->
+        <circle cx="55" cy="185" r="3" fill="var(--sr-gold, #D4A843)" opacity="0.18"/>
+        <circle cx="425" cy="180" r="3" fill="var(--sr-gold, #D4A843)" opacity="0.18"/>
+        <circle cx="55" cy="330" r="2.5" fill="var(--sr-gold, #D4A843)" opacity="0.14"/>
+        <circle cx="425" cy="326" r="2.5" fill="var(--sr-gold, #D4A843)" opacity="0.14"/>
+        <!-- PANGOLIN BODY -->
+        <circle cx="245" cy="265" r="118" fill="var(--sr-void-outer, #0A0A18)" opacity="0.6"/>
+        <circle cx="240" cy="258" r="115" fill="var(--sr-void, #040408)" stroke="var(--sr-gold, #D4A843)" stroke-width="2.5" opacity="0.4"/>
+        <circle cx="240" cy="258" r="106" fill="var(--sr-body, #1C1C2E)" stroke="var(--sr-gold, #D4A843)" stroke-width="2" opacity="0.92"/>
+        <!-- Outer scale ring -->
+        <path d="M240 152 Q256 146 268 156 Q256 168 240 152Z" fill="var(--sr-gold, #D4A843)" opacity="0.50"/>
+        <path d="M268 156 Q283 148 294 160 Q282 172 268 156Z" fill="var(--sr-gold, #D4A843)" opacity="0.48"/>
+        <path d="M294 160 Q307 154 315 168 Q304 179 294 160Z" fill="var(--sr-gold, #D4A843)" opacity="0.45"/>
+        <path d="M315 168 Q326 164 332 178 Q321 188 315 168Z" fill="var(--sr-gold, #D4A843)" opacity="0.43"/>
+        <path d="M332 178 Q342 176 346 192 Q335 200 332 178Z" fill="var(--sr-gold, #D4A843)" opacity="0.41"/>
+        <path d="M346 192 Q355 192 357 208 Q346 215 346 192Z" fill="var(--sr-gold, #D4A843)" opacity="0.39"/>
+        <path d="M357 208 Q365 210 364 227 Q353 232 357 208Z" fill="var(--sr-gold, #D4A843)" opacity="0.37"/>
+        <path d="M362 228 Q369 232 365 249 Q354 252 362 228Z" fill="var(--sr-gold, #D4A843)" opacity="0.35"/>
+        <path d="M363 251 Q368 257 362 273 Q351 274 363 251Z" fill="var(--sr-gold, #D4A843)" opacity="0.34"/>
+        <path d="M358 275 Q362 282 354 295 Q343 295 358 275Z" fill="var(--sr-gold, #D4A843)" opacity="0.34"/>
+        <path d="M348 296 Q351 304 341 314 Q330 313 348 296Z" fill="var(--sr-gold, #D4A843)" opacity="0.35"/>
+        <path d="M333 314 Q335 323 323 329 Q312 328 333 314Z" fill="var(--sr-gold, #D4A843)" opacity="0.37"/>
+        <path d="M315 328 Q316 337 303 341 Q292 339 315 328Z" fill="var(--sr-gold, #D4A843)" opacity="0.39"/>
+        <path d="M273 350 Q272 359 258 359 Q247 357 273 350Z" fill="var(--sr-gold, #D4A843)" opacity="0.43"/>
+        <path d="M240 362 Q235 370 222 368 Q214 364 240 362Z" fill="var(--sr-gold, #D4A843)" opacity="0.45"/>
+        <path d="M205 361 Q200 369 187 363 Q177 358 205 361Z" fill="var(--sr-gold, #D4A843)" opacity="0.43"/>
+        <path d="M182 355 Q176 362 164 355 Q155 349 182 355Z" fill="var(--sr-gold, #D4A843)" opacity="0.41"/>
+        <path d="M140 330 Q131 335 122 325 Q115 317 140 330Z" fill="var(--sr-gold, #D4A843)" opacity="0.37"/>
+        <path d="M107 292 Q97 294 91 282 Q87 272 107 292Z" fill="var(--sr-gold, #D4A843)" opacity="0.34"/>
+        <path d="M86 243 Q76 241 74 228 Q74 217 86 243Z" fill="var(--sr-gold, #D4A843)" opacity="0.35"/>
+        <path d="M84 191 Q75 185 77 172 Q80 161 84 191Z" fill="var(--sr-gold, #D4A843)" opacity="0.39"/>
+        <path d="M104 145 Q96 136 102 123 Q107 113 104 145Z" fill="var(--sr-gold, #D4A843)" opacity="0.43"/>
+        <path d="M143 112 Q137 101 147 90 Q154 81 143 112Z" fill="var(--sr-gold, #D4A843)" opacity="0.47"/>
+        <path d="M195 96 Q191 85 203 77 Q210 70 195 96Z" fill="var(--sr-gold, #D4A843)" opacity="0.49"/>
+        <path d="M222 94 Q219 83 232 77 Q239 73 222 94Z" fill="var(--sr-gold, #D4A843)" opacity="0.50"/>
+        <!-- Mid scale ring -->
+        <path d="M240 168 Q253 163 262 172 Q253 181 240 168Z" fill="var(--sr-gold, #D4A843)" opacity="0.40"/>
+        <path d="M262 172 Q274 167 281 177 Q272 186 262 172Z" fill="var(--sr-gold, #D4A843)" opacity="0.38"/>
+        <path d="M281 177 Q292 174 297 185 Q288 193 281 177Z" fill="var(--sr-gold, #D4A843)" opacity="0.36"/>
+        <path d="M297 185 Q307 184 310 195 Q301 202 297 185Z" fill="var(--sr-gold, #D4A843)" opacity="0.34"/>
+        <path d="M310 196 Q319 197 320 209 Q311 215 310 196Z" fill="var(--sr-gold, #D4A843)" opacity="0.32"/>
+        <path d="M319 210 Q327 213 325 225 Q316 229 319 210Z" fill="var(--sr-gold, #D4A843)" opacity="0.30"/>
+        <path d="M325 245 Q331 251 325 263 Q316 264 325 245Z" fill="var(--sr-gold, #D4A843)" opacity="0.29"/>
+        <path d="M312 283 Q316 291 306 298 Q297 297 312 283Z" fill="var(--sr-gold, #D4A843)" opacity="0.31"/>
+        <path d="M284 311 Q286 320 274 322 Q265 321 284 311Z" fill="var(--sr-gold, #D4A843)" opacity="0.35"/>
+        <path d="M247 329 Q247 337 235 337 Q226 335 247 329Z" fill="var(--sr-gold, #D4A843)" opacity="0.39"/>
+        <path d="M207 338 Q204 346 192 342 Q183 339 207 338Z" fill="var(--sr-gold, #D4A843)" opacity="0.37"/>
+        <path d="M166 330 Q160 337 150 330 Q143 325 166 330Z" fill="var(--sr-gold, #D4A843)" opacity="0.33"/>
+        <path d="M132 304 Q123 309 116 299 Q111 292 132 304Z" fill="var(--sr-gold, #D4A843)" opacity="0.30"/>
+        <path d="M110 265 Q101 267 97 256 Q95 247 110 265Z" fill="var(--sr-gold, #D4A843)" opacity="0.29"/>
+        <path d="M113 198 Q104 194 106 182 Q109 173 113 198Z" fill="var(--sr-gold, #D4A843)" opacity="0.33"/>
+        <path d="M139 160 Q130 153 136 141 Q141 132 139 160Z" fill="var(--sr-gold, #D4A843)" opacity="0.37"/>
+        <path d="M180 136 Q172 128 181 118 Q187 110 180 136Z" fill="var(--sr-gold, #D4A843)" opacity="0.39"/>
+        <path d="M226 130 Q220 121 231 113 Q238 107 226 130Z" fill="var(--sr-gold, #D4A843)" opacity="0.40"/>
+        <!-- Heart core -->
+        <circle cx="240" cy="258" r="42" fill="var(--sr-gold, #D4A843)" opacity="0.07"/>
+        <circle cx="240" cy="258" r="28" fill="var(--sr-gold, #D4A843)" opacity="0.12"/>
+        <circle cx="240" cy="258" r="16" fill="var(--sr-gold, #D4A843)" opacity="0.20"/>
+        <circle cx="240" cy="258" r="8" fill="var(--sr-gold, #D4A843)" opacity="0.32"/>
+        <path d="M240 272 Q228 260 228 251 Q228 243 234 242 Q240 241 240 246 Q240 241 246 242 Q252 243 252 251 Q252 260 240 272Z" fill="var(--sr-gold, #D4A843)" opacity="0.90"/>
+        <!-- Snout peeking -->
+        <path d="M224 346 Q230 358 240 361 Q250 358 256 346" stroke="var(--sr-gold, #D4A843)" stroke-width="1.5" fill="var(--sr-body, #1C1C2E)" opacity="0.8"/>
+        <circle cx="226" cy="342" r="4" fill="var(--sr-void-outer, #0A0A18)" stroke="var(--sr-gold, #D4A843)" stroke-width="1.1" opacity="0.9"/>
+        <circle cx="227" cy="342" r="1.8" fill="var(--sr-gold, #D4A843)" opacity="0.8"/>
+        <!-- Tail curl -->
+        <path d="M148 348 Q130 362 116 374 Q104 384 100 396 Q97 406 103 411 Q110 415 118 409 Q126 402 128 392" stroke="var(--sr-gold, #D4A843)" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.65"/>
+        <!-- Front claws -->
+        <path d="M292 338 Q304 345 312 356" stroke="var(--sr-gold, #D4A843)" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.55"/>
+        <path d="M308 356 Q313 362 317 358 M308 356 Q310 363 314 364 M308 356 Q304 362 308 366" stroke="var(--sr-gold, #D4A843)" stroke-width="1.2" fill="none" opacity="0.5" stroke-linecap="round"/>
+      </svg>
