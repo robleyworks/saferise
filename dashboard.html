@@ -791,6 +791,9 @@
 <!-- SR-162 · the protocol cover, shared with the track pages. Must load
      before the inline script below, which calls SafeRiseCover.art(). -->
 <script src="js/saferise-card.js"></script>
+<!-- SR-326 · the access gate. Must load before the inline script below,
+     which reads SafeRiseAccess.hasAccess() to build OWNED. -->
+<script src="js/saferise-access.js"></script>
 <script>
 (function(){
   // COVER_01 is embedded for this mockup; 02–10 resolve from assets/covers/NN.jpg
@@ -1070,7 +1073,21 @@
     'raw|work':     [3,'03','The Imposter Dissolution Protocol','Raw and exposed at work is imposter territory.'],
     'steady|work':  [3,'10','The Creative Flow Protocol','Steady is the state creative work actually needs.']
   };
-  var OWNED = {1:true, 2:false, 3:false};
+  /* SR-326 · was a hardcoded literal ({1:true, 2:false, 3:false}); now reads
+     SafeRiseAccess.hasAccess(), so it changes when a real session does
+     rather than needing an edit here. A function, not a value computed
+     once, so a sign-in mid-visit is picked up the next time recommend()
+     runs rather than needing a reload. Each track's ownership is stood in
+     for by its own protocol 01 — the only per-protocol id hasAccess()
+     actually knows how to check, and today the only track where that
+     matches the hardcoded literal exactly is Track 1: t1-p01 is the free
+     protocol, so OWNED(1) is true whether or not anyone is signed in,
+     same as the literal it replaces; OWNED(2) and OWNED(3) are false
+     signed out and true once SafeRiseAccess.currentUser() is set, which
+     the literal could never do. */
+  function OWNED(track) {
+    return !!(window.SafeRiseAccess && SafeRiseAccess.hasAccess('t' + track + '-p01'));
+  }
   /* SR-063/SR-064 · derived, not typed. The old TRACKPRICE said €29 and €49,
      which were the retired tiers — the locked record is t2 €19 and t3 €29. */
   /* SR-064 · Static price strings in the markup are placeholders now.
@@ -1113,7 +1130,7 @@
     var thumb = document.getElementById('srResultThumb');
     thumb.src = COVERDIR[track] + no + '.jpg';
     var act = document.getElementById('srResultAct');
-    if(OWNED[track]){
+    if(OWNED(track)){
       document.getElementById('srResultKick').textContent = 'Opens next \u00B7 in your plan';
       act.innerHTML = '<button class="sr-dash-pill" id="srBeginBtn">Open protocol ' + ARROW + '</button>';
       document.getElementById('srBeginBtn').addEventListener('click', function(){

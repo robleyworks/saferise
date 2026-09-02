@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-325.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-326.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -72,8 +72,12 @@ Canonical record of defects and design decisions. Commits reference the ID:
   member-framework-pages run checked `git log --grep` for SR-324 before
   allocating, found it free, and used **SR-324**. The link-sweep run checked
   `git log --grep` for SR-325 and SR-326 before allocating either — both free —
-  planning to use **SR-325** for Section A (finish the sweep) and **SR-326** for
-  Section B (the soft gate), committed separately. Next run: allocate from **SR-327**.
+  and used **SR-325** for Section A (finish the sweep) and **SR-326** for
+  Section B (the soft gate), committed separately. Re-checking `--grep="SR-326"`
+  before the Section B commit turned up a false positive worth recording: SR-325's
+  own commit body names "SR-326" in prose (forward-referencing this exact section),
+  so a naive grep match is not the same as an ID already being issued — read what
+  matched, not just whether something did. Next run: allocate from **SR-327**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -235,6 +239,56 @@ Canonical record of defects and design decisions. Commits reference the ID:
   before touching it; SR-326's soft gate is what decides what a signed-out visitor
   sees when a card opens. `docs/page-invariants.md` carries the guard and this one
   documented exception.
+  **SR-326 · the soft gate.** A placeholder access system, real when Outseta
+  lands: `js/saferise-access.js` exposes exactly `currentUser()`, `isFree(id)`,
+  `hasAccess(id)` (`isFree(id) || !!currentUser()`), `signIn(email)`, `signOut()`,
+  `onChange(fn)` — nothing else in the repo reads a session, token or plan
+  (grepped for the storage key and for reimplementations of the five functions;
+  found none). Storage is `localStorage`, keyed `sr.session`, with the same
+  write-probe/in-memory fallback `protocol.html`'s and `dashboard.html`'s own
+  `Store` already use for journal entries and resume points — `sessionStorage`
+  is this codebase's deliberate, different choice for the theme toggle, a
+  per-tab preference, not a sign-in. **Free protocol id confirmed against the
+  record, not assumed:** the brief's `t1-01` does not match what
+  `protocol.html`'s own `PAGE_PROTOCOL` resolver (SR-182) already builds —
+  `'t' + trackId + '-p' + the two-digit number`, i.e. `t1-p01` for the Anxiety
+  Reset, which is also its `FALLBACK.protocolId`. `isFree()` uses `t1-p01`.
+  `protocol.html` calls `hasAccess(PAGE_PROTOCOL.protocolId)` once resolution
+  finishes; denied renders `#sr-gate-wall` in place of the content (same
+  hide-siblings mechanism `#sr-notfound`/SR-182 already established on this
+  page) — never a redirect, the query string stays valid. The wall's "Get free
+  access" reveals an email-only form; submit calls `signIn()` and restores the
+  hidden content in place, no reload. "Open the Anxiety Reset instead" is a
+  plain link to `t1-p01`. No pre-protocol email gate anywhere — the free
+  protocol was already ungated by construction (its `resolved` state is
+  `false`, so the gate IIFE returns before it ever runs). The three public
+  track pages load `saferise-access.js` too, but only to call the auth-free
+  `isFree()` for a quiet "Free" corner-label on the Anxiety Reset card
+  (`.sr-tp-free`, same weight/treatment as the shared cover component's
+  existing number/state labels — text only, no pill, no ribbon) — matching by
+  id through the one shared source of truth rather than retyping
+  `t.id===1 && p[0]==='01'` a second time, the same defect class as a price
+  typed into a page instead of read from the record. `dashboard.html`'s
+  hardcoded `OWNED = {1:true, 2:false, 3:false}` is now `OWNED(track)`, a
+  function calling `hasAccess('t'+track+'-p01')` — identical behaviour signed
+  out (Track 1 true, 2/3 false) and now also correctly turns 2/3 true once a
+  session exists, which the literal never could.
+  Verified live: signed out, `t1-p01` renders normally and any other protocol
+  shows the wall with the URL unchanged; the wall's email form grants access
+  in place; the session survives navigating to a different protocol/track;
+  `signOut()` + reload returns to the gated state; the reader still opens from
+  `index.html`; `dashboard.html` loads `SafeRiseAccess` with no errors; zero
+  genuine console errors across every page checked (this session's browser
+  harness carries stale entries in its console-message buffer from far
+  earlier navigations — cross-checked against `read_network_requests` each
+  time before treating one as real). esprima-clean on every touched file.
+  One pre-existing, unrelated finding surfaced while checking theme
+  persistence on `protocol.html`: standalone (not `?embed=1`), the page never
+  reads `sessionStorage['sr-theme']` at all — that whole read is gated inside
+  an `if(!EMBED) return;` IIFE meant for when the page is framed by
+  `dashboard.html`. Not a regression, not touched by this SR — `protocol.html`
+  is a member page, not one of this run's public pages, and its theme
+  behaviour predates SR-326 entirely.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

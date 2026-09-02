@@ -163,10 +163,23 @@
 
          The href is built from the record, never typed: t.id and p[0] are the
          same two values the cover path already derives from. */
+      /* SR-326 · a quiet "Free" mark on the one card that opens with nothing
+         asked of you — same corner-label treatment SafeRiseCover.art()
+         already gives the number and the state word, not a pill or a
+         ribbon, so it reads as one more fact about the card rather than a
+         badge, an unlock or a reward. isFree() is a pure static check (no
+         session, no token, no plan), so calling it here doesn't touch the
+         "nothing outside saferise-access.js reads auth state" rule — the
+         alternative was retyping 't1-01' as a track-id/protocol-number
+         match, the same defect class as a price typed into a page instead
+         of read from the record. */
+      var protocolId = 't' + t.id + '-p' + p[0];
+      var free = (window.SafeRiseAccess && SafeRiseAccess.isFree(protocolId))
+        ? '<span class="sr-tp-free">Free</span>' : '';
       return '<article class="sr-tp-pcard" tabindex="0" role="button"' +
         ' data-sr-open="protocol.html?track=' + esc(String(t.id)) +
         '&amp;protocol=' + esc(String(p[0])) + '">' +
-        SafeRiseCover.art({ src: coverPath(t.id, p[0]), no: p[0], label: p[1] }) +
+        SafeRiseCover.art({ src: coverPath(t.id, p[0]), no: p[0], label: p[1], extra: free }) +
         /* SR-174 · title and promise stay; signature and chips move into
            .sr-tp-preveal, which is out of flow and revealed on hover or focus.
            tabindex makes the card reachable so a keyboard user can open the

@@ -591,13 +591,38 @@ textarea{min-height:100px}
   .sr-book-offer{border-right:0;border-bottom:1px solid var(--hair,#22222E)}
 }
 
+/* ---- SR-326 · the soft gate — restrained, matching dashboard.html and
+   .sr-book's own offer-panel treatment on this page ---- */
+.sr-gate{max-width:640px;margin:0 auto;padding:120px 30px 80px}
+.sr-gate-in{background:var(--band,#0E0E1A);border:1px solid var(--hair,#22222E);
+  border-radius:14px;padding:40px 36px;text-align:center}
+.sr-gate h1{margin-bottom:14px}
+.sr-gate-in>#sr-gate-offer>p{font-size:14.5px;color:var(--text2,#9C9AA4);line-height:1.7;
+  max-width:44ch;margin:0 auto}
+.sr-gate-acts{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:26px}
+.sr-gate-pill{display:inline-flex;align-items:center;justify-content:center;min-height:44px;
+  padding:13px 28px;border-radius:8px;border:0;background:var(--gold,#D4A843);color:#08080C;
+  font:700 11px/1 'DM Sans',sans-serif;letter-spacing:.15em;text-transform:uppercase;cursor:pointer}
+.sr-gate-pill:hover{background:var(--gold-lt,#ECC96A)}
+.sr-gate-ghost{font:500 13px/1.4 'DM Sans',sans-serif;color:var(--text3,#6A6874);text-decoration:none;
+  border-bottom:1px solid var(--hair,#22222E)}
+.sr-gate-ghost:hover{color:var(--gold,#D4A843);border-color:var(--gold,#D4A843)}
+.sr-gate-note{font-size:11.5px;color:var(--text3,#6A6874);margin-top:18px}
+.sr-gate-signup{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:320px;margin:0 auto}
+.sr-gate-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3,#6A6874);
+  align-self:flex-start}
+.sr-gate-input{width:100%;min-height:44px;padding:0 14px;border-radius:8px;
+  border:1px solid var(--hair,#22222E);background:var(--card,#15151F);color:var(--text,#F5EDD8);
+  font:400 14px/1 'DM Sans',sans-serif}
+.sr-gate-input:focus{outline:2px solid var(--gold,#D4A843);outline-offset:1px}
+
 /* ---- reading modes: midnight (default) · sunrise ----
    Same tokens the resource reader uses, so the two agree rather than being two
    interpretations of the same idea. ---- */
 body.rd-soft{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card:#54648C;
   --hair:#8492B4;--text:#FFFDF8;--text2:#DDE3F0;--text3:#AEB7CE;--ink:#FBFAF5;
   --recess:rgba(24,30,60,.2);--lift:rgba(255,226,186,.1)}
-body,.sr-book,.sr-book-offer,.sr-book-dates{transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
+body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
 </style>
 </head>
 <body>
@@ -614,6 +639,9 @@ body,.sr-book,.sr-book-offer,.sr-book-dates{transition:background-color 1.4s eas
 <script src="content/t1-resources.js"></script>
 <script src="content/t2-resources.js"></script>
 <script src="content/t3-resources.js"></script>
+<!-- SR-326 · the access gate. Loaded before the resolution IIFE below, which
+     calls SafeRiseAccess.hasAccess() once PAGE_PROTOCOL has resolved. -->
+<script src="js/saferise-access.js"></script>
 
 <!-- SR-182 · shown only when a protocol was ASKED FOR and could not be found.
      A member who follows a card to a protocol that does not resolve gets told
@@ -628,6 +656,33 @@ body,.sr-book,.sr-book-offer,.sr-book-dates{transition:background-color 1.4s eas
        opened and nothing has been recorded.</p>
     <p id="sr-notfound-req" class="sr-notfound-req"></p>
     <p><a href="dashboard.html">Back to your dashboard</a></p>
+  </div>
+</section>
+
+<!-- SR-326 · the soft gate. Shown in place of a protocol's content when
+     SafeRiseAccess.hasAccess() is false for it — never a redirect, so the
+     URL a member followed here stays valid for when they do have access.
+     Hidden by default; the resolution IIFE below reveals it and hides the
+     rest of the page the same way #sr-notfound does. Member surface,
+     restrained language, matching dashboard.html. -->
+<section id="sr-gate-wall" class="sr-gate" hidden>
+  <div class="sr-gate-in">
+    <div id="sr-gate-offer">
+      <h1>Create an account to open this one.</h1>
+      <p>The Anxiety Reset is free and needs nothing from you — try that first
+         if you would rather see how this works before deciding.</p>
+      <div class="sr-gate-acts">
+        <button type="button" class="sr-gate-pill" id="sr-gate-signup-open">Get free access</button>
+        <a class="sr-gate-ghost" id="sr-gate-open-free" href="protocol.html?track=1&amp;protocol=01">Open the Anxiety Reset instead</a>
+      </div>
+      <p class="sr-gate-note">Email only. No card. Nothing to install.</p>
+    </div>
+    <form id="sr-gate-signup" class="sr-gate-signup" hidden>
+      <label for="sr-gate-email" class="sr-gate-label">Email</label>
+      <input type="email" id="sr-gate-email" class="sr-gate-input" required autocomplete="email" placeholder="you@example.com">
+      <button type="submit" class="sr-gate-pill">Continue</button>
+      <p class="sr-gate-note">No password, no card, no name — just an email, so this is here next time too.</p>
+    </form>
   </div>
 </section>
 
@@ -1205,6 +1260,55 @@ var PAGE_PROTOCOL = (function () {
   document.title = 'SafeRise \u2014 ' + PAGE_PROTOCOL.protocol;
   var t = document.querySelector('.bannerimg');
   if (t) t.setAttribute('aria-label', PAGE_PROTOCOL.protocol + ' cover');
+})();
+
+/* SR-326 \u00b7 the soft gate. Runs after the resolution IIFE above, so it only
+   ever sees a genuinely resolved protocol \u2014 the not-found case already
+   returned, and the "nothing requested" default is the free protocol
+   itself (FALLBACK.protocolId), which always passes hasAccess() and never
+   reaches here regardless. IN PLACE, never a redirect: the query string
+   that brought a member here is untouched, so the same link opens the
+   content the moment they have access. */
+(function () {
+  if (!PAGE_PROTOCOL.resolved) return;
+  if (!window.SafeRiseAccess || SafeRiseAccess.hasAccess(PAGE_PROTOCOL.protocolId)) return;
+
+  var wall = document.getElementById('sr-gate-wall');
+  if (!wall) return;
+
+  var hidden = [];
+  var kids = document.body.children, i;
+  for (i = 0; i < kids.length; i++) {
+    var k = kids[i];
+    if (k !== wall && k.tagName !== 'SCRIPT' && !k.hidden) {
+      k.hidden = true;
+      hidden.push(k);
+    }
+  }
+  wall.hidden = false;
+  document.title = 'SafeRise \u2014 Create an account to open this one';
+
+  var offer  = document.getElementById('sr-gate-offer');
+  var signup = document.getElementById('sr-gate-signup');
+  var openBtn = document.getElementById('sr-gate-signup-open');
+  if (openBtn) openBtn.addEventListener('click', function () {
+    offer.hidden = true;
+    signup.hidden = false;
+    var email = document.getElementById('sr-gate-email');
+    if (email) email.focus();
+  });
+
+  if (signup) signup.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = document.getElementById('sr-gate-email');
+    if (!email || !email.value.trim()) return;
+    SafeRiseAccess.signIn(email.value.trim());
+    /* access granted \u2014 restore the page exactly as the not-found branch
+       never had to, since that case has nothing to restore to */
+    wall.hidden = true;
+    hidden.forEach(function (k) { k.hidden = false; });
+    document.title = 'SafeRise \u2014 ' + PAGE_PROTOCOL.protocol;
+  });
 })();
 
 function todayISO(){
