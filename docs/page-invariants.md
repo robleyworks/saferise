@@ -48,14 +48,34 @@ pages persuade someone who has not joined yet.
   `professional-performance.html` — rendered by `js/saferise-track.js`
   from `content/tracks.js`, styled by the `.sr-tp` block in
   `css/saferise-system.css`.
-- `frameworks.html` and the six `method-*.html` pages (jung, kross, watts,
-  mate, porges, heartmath) — styled by `css/saferise-method.css`.
 
 **MEMBER · restrained.** Cinzel headings, flat card fills, no gradient.
 Member pages get out of the way while someone is in a difficult state —
 this is deliberate, not an oversight to "fix" toward the public look.
 
 - `dashboard.html`, `protocol.html`, `resource.html`.
+- `member-frameworks.html` and the six `member-*.html` framework pages
+  (jung, kross, watts, mate, porges, heartmath) — styled by
+  `css/saferise-method.css`. **SR-324 · moved here from PUBLIC**, reversing
+  part of SR-320/321: these seven were briefly given the decorated
+  treatment, then confirmed member-only and reverted — Cinzel 400 headings
+  again, flat `#15151F`/`#0E0E1A` card and band fills, `#08080C` ground,
+  `#22222E` hairlines. Sunrise support and `sessionStorage['sr-theme']`
+  were never removed and still carry. All seven already used
+  `dashboard.html`'s member nav-rail (`.sr-dash-navrail`) — that part of
+  SR-320/321 never touched it, so there was nothing to add.
+  **`member-` is now this repo's convention for a member-surface page
+  whose name would otherwise collide with, or be confused for, a
+  public one** — the rename that prompted it: `method.html` (public) and
+  the old bare `frameworks.html`/`method-*.html` (member) shared the word
+  "method," which read as one system from a filename alone when they are
+  two. `dashboard.html`, `protocol.html` and `resource.html` predate the
+  convention and keep their bare names — there is no public page any of
+  those three could be mistaken for.
+  **`method.html` (public, a narrative explainer of the six frameworks)
+  and `member-frameworks.html` (member, the full attribution/credits
+  register) are DIFFERENT PAGES and must not be conflated** — this is the
+  exact confusion the rename exists to prevent.
 - The resource reader inside `index.html` (`openReader`/`READER_PROTOCOLS`
   and everything `docs/INTEGRATION.md` and `CLAUDE.md`'s platform-landmines
   section describe).

@@ -118,7 +118,7 @@
   </div>
 
   <div class="sr-mi-grid">
-    <a class="sr-mi-card sr-mi-card--peer" href="method-porges.html" data-fw="porges">
+    <a class="sr-mi-card sr-mi-card--peer" href="member-porges.html" data-fw="porges">
       <div class="sr-mi-cardtop">
         <span class="sr-mi-cardno">01</span>
       </div>
@@ -132,7 +132,7 @@
       <span class="sr-mi-go">Read the page <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
     </a>
 
-    <a class="sr-mi-card sr-mi-card--peer" href="method-heartmath.html" data-fw="heartmath">
+    <a class="sr-mi-card sr-mi-card--peer" href="member-heartmath.html" data-fw="heartmath">
       <div class="sr-mi-cardtop">
         <span class="sr-mi-cardno">02</span>
       </div>
@@ -146,7 +146,7 @@
       <span class="sr-mi-go">Read the page <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
     </a>
 
-    <a class="sr-mi-card sr-mi-card--peer" href="method-kross.html" data-fw="distance">
+    <a class="sr-mi-card sr-mi-card--peer" href="member-kross.html" data-fw="distance">
       <div class="sr-mi-cardtop">
         <span class="sr-mi-cardno">04</span>
       </div>
@@ -178,7 +178,7 @@
   </div>
 
   <div class="sr-mi-grid">
-    <a class="sr-mi-card sr-mi-card--clin" href="method-mate.html" data-fw="mate">
+    <a class="sr-mi-card sr-mi-card--clin" href="member-mate.html" data-fw="mate">
       <div class="sr-mi-cardtop">
         <span class="sr-mi-cardno">03</span>
       </div>
@@ -209,7 +209,7 @@
   </div>
 
   <div class="sr-mi-grid">
-    <a class="sr-mi-card sr-mi-card--int" href="method-jung.html" data-fw="jung">
+    <a class="sr-mi-card sr-mi-card--int" href="member-jung.html" data-fw="jung">
       <div class="sr-mi-cardtop">
         <span class="sr-mi-cardno">05</span>
       </div>
@@ -222,7 +222,7 @@
       <span class="sr-mi-go">Read the page <svg viewBox="0 0 12 8"><path d="M0 4h11M7.5 1 11 4l-3.5 3"/></svg></span>
     </a>
 
-    <a class="sr-mi-card sr-mi-card--int" href="method-watts.html" data-fw="watts">
+    <a class="sr-mi-card sr-mi-card--int" href="member-watts.html" data-fw="watts">
       <div class="sr-mi-cardtop">
         <span class="sr-mi-cardno">06</span>
       </div>
@@ -526,7 +526,7 @@
    markup. The href and the ordinal stay in the HTML as the served fallback if
    the record fails to load, and are overwritten from the record on every load
    so the two can never drift apart again — which is exactly how SR-176
-   happened. `distance` is served by method-kross.html; that mapping now lives
+   happened. `distance` is served by member-kross.html; that mapping now lives
    in one place. */
 (function(){
   if (typeof FRAMEWORKS === "undefined") return;   // fallback markup stands
@@ -617,7 +617,7 @@
   // on the dashboard with neither the Sessions view nor Account open — the
   // control named a destination it did not reach. The route now travels in the
   // hash and dashboard.html runs openRoute() with it on arrival.
-  var PAGES = { method: 'frameworks.html', dashboard: 'dashboard.html' };
+  var PAGES = { method: 'member-frameworks.html', dashboard: 'dashboard.html' };
   document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
     b.addEventListener('click', function(){
       var key = b.getAttribute('data-route');

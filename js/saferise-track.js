@@ -452,7 +452,7 @@
     3: 'professional-performance.html'
   };
   function renderNav(id) {
-    var links = [['The Journey', 'frameworks.html'], ['About', 'frameworks.html']];
+    var links = [['The Journey', 'member-frameworks.html'], ['About', 'member-frameworks.html']];
     Object.keys(TRACKS).forEach(function (k) {
       var t = TRACKS[k];
       if (t.visible && ROUTES[k]) links.push([t.name, ROUTES[k], +k]);

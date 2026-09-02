@@ -61,7 +61,7 @@
 <!-- ╔══ TEMPLATE REGION 0 · BACK BAR ═══════════════════════════════════════╗
      Identical on all six pages. Register chip changes; nothing else does. -->
 <div class="sr-fw-backbar">
-  <a class="sr-fw-back" href="frameworks.html">
+  <a class="sr-fw-back" href="member-frameworks.html">
     <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
     Where the method comes from
   </a>
@@ -443,7 +443,7 @@
 <!-- ╔══ TEMPLATE REGION 7 · PAGER ═════════════════════════════════════════╗ -->
 <div class="sr-fw-body">
   <nav class="sr-fw-pager" aria-label="Other frameworks">
-    <a href="frameworks.html">
+    <a href="member-frameworks.html">
       <span class="sr-fw-pagertile" aria-hidden="true">All<br>six</span>
       <div>
       <span class="sr-fw-pagerkick">Back to</span>
@@ -491,7 +491,7 @@
   // on the dashboard with neither the Sessions view nor Account open — the
   // control named a destination it did not reach. The route now travels in the
   // hash and dashboard.html runs openRoute() with it on arrival.
-  var PAGES = { method: 'frameworks.html', dashboard: 'dashboard.html' };
+  var PAGES = { method: 'member-frameworks.html', dashboard: 'dashboard.html' };
   document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
     b.addEventListener('click', function(){
       var key = b.getAttribute('data-route');

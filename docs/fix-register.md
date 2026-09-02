@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-323.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-324.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -68,8 +68,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
   register/invariants update), exactly as instructed. The consolidated-run's
   Section 1 (homepage swap) checked `git log --grep` for SR-322 before allocating,
   found it free, and used **SR-322**. The freemium-route run checked `git log --grep`
-  for SR-323 before allocating, found it free, and used **SR-323**. Next run:
-  allocate from **SR-324**.
+  for SR-323 before allocating, found it free, and used **SR-323**. The
+  member-framework-pages run checked `git log --grep` for SR-324 before
+  allocating, found it free, and used **SR-324**. Next run: allocate from **SR-325**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -170,6 +171,50 @@ Canonical record of defects and design decisions. Commits reference the ID:
   item in the Protocols dropdown — CSS for `.nm.free` already existed, unused until
   now) are proposed, not yet added — awaiting approval of the wording. `prog-foundation`
   itself is untouched and left in `index.html`; retiring it is a separate pass.
+  **SR-324 · member framework pages: rename, revert, relabel.** `frameworks.html`
+  and the six `method-*.html` pages (jung, kross, watts, mate, porges, heartmath)
+  were confirmed member-only and renamed `member-frameworks.html` / `member-*.html`
+  — `git mv`, history preserved. Reason: "method" named both the public
+  `method.html` and this member page family, reading as one system from a
+  filename alone. `member-` is now the convention for a member page whose name
+  would otherwise collide with or be mistaken for a public one; `dashboard.html`,
+  `protocol.html` and `resource.html` predate it and have no public page to
+  collide with, so they keep their bare names. Every inbound reference updated:
+  each of the six pages' own `sr-fw-back` link, pager link and `PAGES` table;
+  `member-frameworks.html`'s six cross-links to the individual pages and its own
+  `PAGES` table; `resource.html:816` and `protocol.html:648`'s nav ("The
+  Journey"); `js/saferise-track.js:455` (the three public track pages' "The
+  Journey"/"About" links); `dashboard.html`'s `PAGES.method` and its SR-104
+  comment; `content/tracks.js`'s `FRAMEWORKS` object (all six `page:` fields plus
+  one comment) — this last one wasn't named in the instruction but is a live
+  inbound reference (`member-frameworks.html` reads `FRAMEWORKS[key].page` at
+  runtime to build its six cross-links), found by grep, updated and verified.
+  Styling reverted (undoing part of SR-320/321): `css/saferise-method.css`'s
+  `:root` back to flat `--band`/`--card` (`#0E0E1A`/`#15151F`, not the gradient),
+  `#08080C` ground, `#22222E` hairline; `h1`/`h2`/`h3` back to Cinzel 400 at the
+  original sizes; `body.rd-soft` (sunrise) back to flat `#4D5C82`/`#54648C`,
+  matching `saferise-dashboard.css`'s own `body.rd-soft` exactly. `--gold`,
+  `--gold-lt`, `--teal`, `--text`, `--text2`, `--text3`, `--mob`, `--safe`,
+  `--shut` untouched throughout — as always, shared by both surfaces regardless
+  of which one a page is on. Member nav: no change needed — grep confirmed all
+  seven already carried `dashboard.html`'s `.sr-dash-navrail` (self-contained in
+  `saferise-method.css`, never touched by SR-320/321), so there was no public nav
+  to remove. `docs/page-invariants.md` moved all seven from PUBLIC to MEMBER and
+  recorded the `member-` convention.
+  **Found while investigating, not acted on:** the public `method.html`'s
+  register (`.regn` paragraphs naming each framework and its attribution) carries
+  no links at all in the file's current state — plain text, not `<a>` tags. The
+  premise that it "currently links to frameworks.html and the six" does not hold
+  for what's actually in the repo; an earlier pass in this session did wrap those
+  names in links, but the four-updated-pages drop (SR-318) silently reverted that
+  along with everything else it reverted, and it was not among the things SR-318's
+  verification checked. Report-only per instruction — nothing in `method.html`
+  changed. The exact same shape of problem exists one level up: the three public
+  track pages' "The Journey"/"About" nav links (`js/saferise-track.js:455`) still
+  point at what is now a member page — updated to the new filename in this pass
+  since that was explicitly instructed, but the underlying question (should a
+  public page link to a member page at all, signed out) is unresolved and applies
+  to both call sites identically.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

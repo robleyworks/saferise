@@ -1236,7 +1236,7 @@
   // Routes that now have a real page of their own. Checked before ROUTES so the
   // rail and any [data-route-link] navigate there instead of opening the
   // "Not built yet" modal. Add to this map as each page lands.
-  var PAGES = { method: 'frameworks.html' };
+  var PAGES = { method: 'member-frameworks.html' };
   /* Routes that are now a view in the shell rather than a page. Checked after
      PAGES and before ROUTES, so the rail reaches them without carrying a
      data-modal of its own — the rail's own listener would otherwise fire
@@ -1297,8 +1297,8 @@
     });
   });
 
-  /* SR-104 · a rail route can arrive from another page. frameworks.html and
-     method-porges.html carry the same rail but none of the modals it opens, so
+  /* SR-104 · a rail route can arrive from another page. member-frameworks.html
+     and member-porges.html carry the same rail but none of the modals it opens, so
      they hand the route over in the hash (dashboard.html#route=coaching) and
      this resolves it through the same openRoute() the rail here uses — one
      resolver, not two. Deferred to DOMContentLoaded because openModal() reads
