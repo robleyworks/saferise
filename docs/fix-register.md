@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-319.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-321.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -61,7 +61,12 @@ Canonical record of defects and design decisions. Commits reference the ID:
   SR-318 free, and used **SR-318**. **Do not reissue SR-317.**
   The next run (corrections pass on the SR-318 findings) checked `git log --grep` for
   SR-319 before allocating, found it free, and used **SR-319**. **Do not reissue
-  SR-318.** Next run: allocate from **SR-320**.
+  SR-318.** The two-surface conversion run checked `git log --grep` for SR-320 and
+  SR-321 before allocating either — both free — and used **SR-320** for Section 1
+  (the track-page renderer, a single commit since it serves three live pages) and
+  **SR-321** for Sections 2 and 5 together (the static public pages plus this
+  register/invariants update), exactly as instructed. Next run: allocate from
+  **SR-322**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -89,6 +94,24 @@ Canonical record of defects and design decisions. Commits reference the ID:
   left unchanged — founder-confirmed as intentional, distinguishing it from the
   withdrawn Ambition Recovery protocol. Added `docs/page-invariants.md`, the checklist
   a hand-delivered public-page drop must be verified against going forward.
+  **SR-320/SR-321 · the two-surface conversion.** Locked decision: public pages carry
+  the decorated visual language, member pages stay restrained. SR-320 (Section 1)
+  converted `.sr-tp` in `css/saferise-system.css` — the block styling all three
+  renderer-built track pages — to Cormorant Garamond 300 headings, gradient band/card
+  fills and 18px band radius, matching `plans.html`'s `:root` exactly; `--gold`,
+  `--gold-lt`, `--teal`, `--text`, `--text2`, `--text3`, `--mob`, `--safe` and `--shut`
+  are unchanged. SR-321 (Sections 2 and 5) applied the identical conversion to
+  `css/saferise-method.css` (`frameworks.html` and the six `method-*.html` pages,
+  midnight AND sunrise/`rd-soft` palettes both moved to the gradient fills — the
+  sunrise block had gone stale to flat colours and would have un-decorated the page on
+  toggle), and recorded the two-surface rule in `docs/page-invariants.md`: every page
+  belongs to one surface or the other, never a third look. Section 3 (the join) found
+  one pre-existing gap, unchanged by this pass because it was outside Section 1's
+  presentation-only scope: `personal-transformation.html` and the other two track
+  pages read `sessionStorage['sr-theme']` correctly (the value is never reset crossing
+  from a public page) but have no sunrise visual state to apply it to — the reader
+  inside `index.html` is the same. Section 4's shared-tokens extraction is a plan only,
+  not executed — see the run's own report.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

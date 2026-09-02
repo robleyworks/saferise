@@ -29,3 +29,48 @@ Any hand-delivered public page must carry:
 - **Protocol titles**: from `content/tracks.js`, never from memory or an
   earlier drop.
 - **Terms and Privacy**: remain `href="#"` until those pages exist.
+
+## The two surfaces (SR-320)
+
+Every page on this site belongs to exactly one of two surfaces. A third
+visual language is not permitted — a new page is either public or member,
+never something in between.
+
+**PUBLIC · decorated.** Headings in Cormorant Garamond 300 with italic
+gold-lt accents, gradient band/card fills
+(`linear-gradient(145deg,rgba(24,24,34,.86),rgba(14,14,21,.92))`), 18px
+band radius, ground `#0A0A0F`, hairline `rgba(245,237,216,.09)`. Public
+pages persuade someone who has not joined yet.
+
+- `plans.html`, `method.html`, `live-sessions.html`, `about.html`,
+  `coming-soon.html` — hand-authored, own inline `<style>`.
+- `personal-transformation.html`, `relationship-healing.html`,
+  `professional-performance.html` — rendered by `js/saferise-track.js`
+  from `content/tracks.js`, styled by the `.sr-tp` block in
+  `css/saferise-system.css`.
+- `frameworks.html` and the six `method-*.html` pages (jung, kross, watts,
+  mate, porges, heartmath) — styled by `css/saferise-method.css`.
+
+**MEMBER · restrained.** Cinzel headings, flat card fills, no gradient.
+Member pages get out of the way while someone is in a difficult state —
+this is deliberate, not an oversight to "fix" toward the public look.
+
+- `dashboard.html`, `protocol.html`, `resource.html`.
+- The resource reader inside `index.html` (`openReader`/`READER_PROTOCOLS`
+  and everything `docs/INTEGRATION.md` and `CLAUDE.md`'s platform-landmines
+  section describe).
+
+**Never differs across either line** — same value in both palettes, both
+surfaces: `--gold` `#D4A843`/`#FFD894` (sunrise), `--gold-lt`, `--teal`,
+`--text`, `--text2`, `--text3`, `--mob`, `--safe`, `--shut` (autonomic
+states, not tracks — never rename or repurpose them), the icon set, and
+`sessionStorage['sr-theme']` plus both its palettes (midnight and
+sunrise render differently, but the same two palettes apply everywhere
+that theme is implemented at all). A page that changes any of these to
+look more "its own" has drifted off both surfaces at once.
+
+A page's surface is fixed by what kind of moment it serves, not by when
+it was built or who built it. When adding a new page, decide which
+surface it belongs to before writing its first line of CSS — never
+average the two, and never invent a third look because a mockup made it
+look like a nice middle ground.
