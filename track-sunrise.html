@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — sunrise, directional light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0A0A0F; --band:#0E0E15; --band2:#111119; --card2:#13131C;
+  --card:linear-gradient(145deg,rgba(24,24,34,.86),rgba(14,14,21,.92));
+  --hair:rgba(245,237,216,.09); --hair2:rgba(245,237,216,.16);
+  --text:#F5EDD8; --text2:#9C9AA4; --text3:#6A6874;
+  --gold:#D4A843; --gold-lt:#E8C877; --teal:#4E9AA6;
+  --mob:#C97A5A; --safe:#7FA88C; --shut:#5A6B84;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+body.rd-soft{
+  --bg:#465578; --band:#4D5C82; --band2:#526292; --card2:#54648C;
+  --card:linear-gradient(145deg,rgba(90,106,150,.92),rgba(77,92,130,.96));
+  --hair:#8492B4; --hair2:rgba(255,253,248,.3);
+  --text:#FFFDF8; --text2:#DDE3F0; --text3:#AEB7CE;
+  --gold:#FFD894; --gold-lt:#FFE8B6; --teal:#8FC7D2;
+  --mob:#E0A184; --safe:#A7CDB2; --shut:#8494B0;
+}
+
+
+/* ═══ the light source · fixed, so the angle holds across pages and scroll ═══ */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:0;transition:opacity 2.4s ease;
+  background:
+    radial-gradient(58% 42% at 84% -6%, rgba(255,216,148,.30), transparent 62%),
+    radial-gradient(90% 70% at 84% -6%, rgba(255,196,132,.14), transparent 70%),
+    linear-gradient(196deg, rgba(255,222,170,.10) 0%, transparent 46%);}
+body.rd-soft::before{opacity:1}
+/* a matching cool fall-off at the opposite corner, so the light reads directional */
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:0;transition:opacity 2.4s ease;
+  background:radial-gradient(70% 60% at 8% 108%, rgba(40,52,86,.34), transparent 66%);}
+body.rd-soft::after{opacity:1}
+.nav,.wrap,.foot{position:relative;z-index:1}
+
+/* surfaces catch the light from the same angle */
+body.rd-soft .band{background:linear-gradient(198deg,
+  color-mix(in srgb,var(--band) 88%,#FFE8B6 12%) 0%, var(--band) 58%)}
+body.rd-soft .band--alt{background:linear-gradient(198deg,
+  color-mix(in srgb,var(--band2) 88%,#FFE8B6 10%) 0%, var(--band2) 60%)}
+body.rd-soft .c{background:linear-gradient(198deg,
+  rgba(104,120,166,.94) 0%, rgba(77,92,130,.96) 62%)}
+body.rd-soft .cover{background:linear-gradient(198deg,
+  color-mix(in srgb,var(--card2) 84%,#FFE8B6 16%), var(--bg))}
+body.rd-soft .figure{background:linear-gradient(198deg,
+  color-mix(in srgb,var(--card2) 86%,#FFE8B6 14%), var(--band))}
+body.rd-soft .priceb{background:linear-gradient(198deg,
+  rgba(104,120,166,.94) 0%, rgba(77,92,130,.96) 62%)}
+
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+  transition:background-color 2.4s ease,color 2.4s ease}
+body,.nav,.band,.c,.cover,.st,.rail,.pcard,.faq,.foot,.priceb{
+  transition:background-color 2.4s ease,border-color 2.4s ease,color 2.4s ease}
+.wrap{max-width:1060px;margin:0 auto;padding:0 28px}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:60;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--hair)}
+.navin{max-width:1060px;margin:0 auto;padding:15px 28px;display:flex;align-items:center;gap:28px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none}
+.brand span:first-child{color:var(--gold)}
+.brand b{font-size:11.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase}
+.nlinks{display:flex;gap:24px;margin-left:auto;font-size:13px;color:var(--text2)}
+.nlinks a{color:inherit;text-decoration:none}
+.tog{display:inline-flex;border:1px solid var(--hair2);border-radius:24px;overflow:hidden}
+.tog{position:relative;z-index:2}
+.tog button{background:transparent;border:0;cursor:pointer;font:700 9.5px/1 'DM Sans',sans-serif;
+  letter-spacing:.17em;text-transform:uppercase;color:var(--text3);padding:10px 14px}
+.tog button.on{background:color-mix(in srgb,var(--gold) 18%,transparent);color:var(--gold)}
+
+.hero{padding:126px 0 44px;position:relative}
+.eb{font-size:10px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.eb::before{content:'';width:26px;height:1px;background:var(--gold);opacity:.45}
+h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(34px,4.6vw,58px);
+  line-height:1.06;letter-spacing:-.022em;max-width:17ch}
+h1 em{font-style:italic;color:var(--gold-lt)}
+.rule{border-left:2px solid var(--gold);padding-left:20px;margin:26px 0 0;max-width:46ch}
+.rule p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;
+  line-height:1.5;color:var(--text)}
+.lede{font-size:16px;line-height:1.68;color:var(--text2);max-width:56ch;margin-top:20px}
+
+.band{background:var(--band);border:1px solid var(--hair);border-radius:18px;
+  padding:44px 34px;margin:22px 0}
+.band--alt{background:var(--band2)}
+.sh{max-width:60ch;margin-bottom:24px}
+.sh h2{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(25px,3vw,36px);
+  line-height:1.12;letter-spacing:-.018em;margin:14px 0 12px}
+.sh h2 em{font-style:italic;color:var(--gold-lt)}
+.sh p{font-size:15px;line-height:1.66;color:var(--text2)}
+
+.rail{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px}
+.pcard{text-decoration:none;color:var(--text)}
+.cover{aspect-ratio:3/4;border-radius:14px;border:1px solid var(--hair);
+  background:linear-gradient(160deg,var(--card2),var(--bg));
+  display:grid;place-items:center;margin-bottom:10px;position:relative;overflow:hidden}
+.cover span{font-size:34px;font-family:'Cormorant Garamond',serif;font-weight:300;
+  color:var(--text);opacity:.45}
+.pst{font-size:8.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:4px}
+.pnm{font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.2}
+
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:20px}
+.c{background:var(--card);border:1px solid var(--hair);border-radius:18px;padding:24px;
+  position:relative;overflow:hidden}
+.c::before{content:'';position:absolute;inset:0 0 auto 0;height:2px;background:var(--ac);opacity:.7}
+.c .k{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--text3);margin-bottom:9px}
+.c h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:22px;margin-bottom:7px}
+.c p{font-size:13.5px;line-height:1.56;color:var(--text2)}
+.c .cite{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-top:12px}
+
+.figure{aspect-ratio:16/6;border-radius:18px;border:1px solid var(--hair);
+  background:linear-gradient(160deg,var(--card2),var(--band));display:grid;place-items:center;
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--text3)}
+.states{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--hair2);margin-top:18px}
+.st{padding:18px 20px 16px 0;border-right:1px solid var(--hair)}
+.st:last-child{border-right:0}
+.stn{font-family:'Cormorant Garamond',serif;font-size:19px;margin-bottom:3px}
+.sts{font-size:11.5px;color:var(--text3)}
+
+.priceb{display:flex;align-items:center;gap:26px;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--hair);border-radius:18px;padding:30px 32px;margin-top:22px}
+.priceb .amt{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--gold-lt);line-height:1}
+.priceb .per{font-size:12px;color:var(--text3);margin-top:4px}
+.cta{display:inline-flex;align-items:center;gap:11px;background:var(--gold);color:#15151F;
+  padding:14px 28px;border-radius:999px;font-size:12.5px;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;text-decoration:none;margin-left:auto}
+
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:0 32px;margin-top:16px}
+.fq{padding:16px 0;border-bottom:1px solid var(--hair)}
+.fq p{font-family:'Cormorant Garamond',serif;font-size:18px}
+.foot{border-top:1px solid var(--hair);padding:34px 0 44px;font-size:12.5px;color:var(--text3)}
+@media(max-width:900px){.rail{grid-template-columns:repeat(2,1fr)}
+  .cards,.faq,.states{grid-template-columns:1fr}
+  .st{border-right:0;border-bottom:1px solid var(--hair)}}
+</style>
+</head>
+<body class="rd-soft">
+
+<nav class="nav"><div class="navin">
+  <a class="brand" href="#"><span>&#9672;</span><b>SafeRise Protocol</b></a>
+  <div class="nlinks"><a href="#">Protocols</a><a href="#">Method</a><a href="#">Plans</a>
+    <a href="#">Live sessions</a><a href="#">About</a></div>
+  <div class="tog"><button id="mid">Midnight</button><button id="sun" class="on">Sunrise</button></div>
+</div></nav>
+
+<div class="wrap hero">
+  <p class="eb">Track 01 &#183; Personal Transformation</p>
+  <h1>What is happening <em>inside me?</em></h1>
+  <div class="rule"><p>The states that take over before you have decided how you want to
+    meet them.</p></div>
+  <p class="lede">Fear, anger, overwhelm, grief, insecurity, shutdown. Ten protocols, one
+    for each, and you open the one the day calls for. Nothing here asks you to be
+    consistent &#8212; it asks you to be there once, when it matters.</p>
+</div>
+
+<div class="wrap">
+  <div class="band">
+    <div class="sh"><p class="eb">01 &#183; Where to begin</p>
+      <h2>Start with the state <em>that traps you most.</em></h2>
+      <p>Each protocol is built for a single state, so you are not choosing from a menu
+        while you are in it.</p></div>
+    <div class="rail">
+      <a class="pcard" href="#"><span class="cover"><span>01</span></span>
+        <p class="pst" style="color:var(--mob)">Agitated</p><p class="pnm">Anxiety Reset</p></a>
+      <a class="pcard" href="#"><span class="cover"><span>02</span></span>
+        <p class="pst" style="color:var(--mob)">Agitated</p><p class="pnm">Anger Alchemy</p></a>
+      <a class="pcard" href="#"><span class="cover"><span>05</span></span>
+        <p class="pst" style="color:var(--gold)">Unsteady</p><p class="pnm">Shame Dissolution</p></a>
+      <a class="pcard" href="#"><span class="cover"><span>07</span></span>
+        <p class="pst" style="color:var(--shut)">Numb</p><p class="pnm">Shutdown Recovery</p></a>
+    </div>
+  </div>
+
+  <div class="band band--alt">
+    <div class="sh"><p class="eb">02 &#183; And why it matters now</p>
+      <h2>What it costs to <em>leave it running.</em></h2>
+      <p>Not a warning. A description of what the state does to a day when nothing
+        interrupts it.</p></div>
+    <div class="figure">cost.jpg &#183; 1600 &#215; 700</div>
+  </div>
+
+  <div class="band">
+    <div class="sh"><p class="eb">03 &#183; The state it is holding</p>
+      <h2>Your range, and <em>where it narrows.</em></h2></div>
+    <div class="figure" style="aspect-ratio:16/6">range.jpg &#183; 1600 &#215; 600</div>
+    <div class="states">
+      <div class="st"><p class="stn" style="color:var(--mob)">Mobilisation</p><p class="sts">Sympathetic</p></div>
+      <div class="st"><p class="stn" style="color:var(--safe)">Safety</p><p class="sts">Ventral vagal &#183; your regulated range</p></div>
+      <div class="st"><p class="stn" style="color:var(--shut)">Shutdown</p><p class="sts">Dorsal vagal</p></div>
+    </div>
+  </div>
+
+  <div class="band band--alt">
+    <div class="sh"><p class="eb">04 &#183; A guided system</p>
+      <h2>The same four steps. <em>The same voice.</em></h2></div>
+    <div class="cards">
+      <div class="c" style="--ac:var(--mob)"><p class="k">Step 01</p><h3>Recognise</h3>
+        <p>Say what is actually there, specifically. Being precise settles something on its own.</p>
+        <p class="cite">Porges</p></div>
+      <div class="c" style="--ac:var(--safe)"><p class="k">Step 02</p><h3>Regulate</h3>
+        <p>Hand on your chest. In for four, out for six. Your body takes evidence, not argument.</p>
+        <p class="cite">HeartMath</p></div>
+      <div class="c" style="--ac:var(--shut)"><p class="k">Step 03</p><h3>Release</h3>
+        <p>Stop the second fight. You are not agreeing with it.</p>
+        <p class="cite">Mat&#233;</p></div>
+      <div class="c" style="--ac:var(--gold)"><p class="k">Step 04</p><h3>Rise</h3>
+        <p>One breath as the person on the other side of it. Not a plan.</p>
+        <p class="cite">Kross &amp; Ayduk</p></div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="sh"><p class="eb">05 &#183; What it costs to start</p>
+      <h2>The full track.</h2></div>
+    <div class="priceb">
+      <div><p class="amt">&#8364;19</p><p class="per">per month &#183; cancel anytime</p></div>
+      <a class="cta" href="#">Start Personal Transformation &#8594;</a>
+    </div>
+  </div>
+
+  <div class="band band--alt">
+    <div class="sh"><p class="eb">06 &#183; What is left to ask</p>
+      <h2>Before you <em>start.</em></h2></div>
+    <div class="faq">
+      <div class="fq"><p>Do I need to do this every day?</p></div>
+      <div class="fq"><p>What if I have tried meditation and it did not work?</p></div>
+      <div class="fq"><p>Is this therapy?</p></div>
+      <div class="fq"><p>What happens to what I write?</p></div>
+    </div>
+  </div>
+
+  <div class="foot">SafeRise Protocol is self-guided education and training in
+    nervous-system regulation. It is not therapy or medical treatment.</div>
+</div>
+
+<script>
+var b=document.body;
+document.getElementById('mid').onclick=function(){
+  b.classList.remove('rd-soft');
+  this.classList.add('on');document.getElementById('sun').classList.remove('on');};
+document.getElementById('sun').onclick=function(){
+  b.classList.add('rd-soft');
+  this.classList.add('on');document.getElementById('mid').classList.remove('on');};
+</script>
+</body>
+</html>
