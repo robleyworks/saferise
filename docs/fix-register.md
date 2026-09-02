@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-321.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-322.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -65,8 +65,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
   SR-321 before allocating either — both free — and used **SR-320** for Section 1
   (the track-page renderer, a single commit since it serves three live pages) and
   **SR-321** for Sections 2 and 5 together (the static public pages plus this
-  register/invariants update), exactly as instructed. Next run: allocate from
-  **SR-322**.
+  register/invariants update), exactly as instructed. The consolidated-run's
+  Section 1 (homepage swap) checked `git log --grep` for SR-322 before allocating,
+  found it free, and used **SR-322**. Next run: allocate from **SR-323**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -112,6 +113,44 @@ Canonical record of defects and design decisions. Commits reference the ID:
   from a public page) but have no sunrise visual state to apply it to — the reader
   inside `index.html` is the same. Section 4's shared-tokens extraction is a plan only,
   not executed — see the run's own report.
+  **SR-322 · consolidated run, Section 1: the homepage swap.** `index.html`'s
+  `#main-content` (the old hero/pattern/protocol-preview/scientific-backbone/
+  pangolin-founder/foundation-free/device-merch/comparison/purchase-CTA/testimonials/
+  FAQ/founder-teaser sections, lines 1207–2876) replaced with `home-v72.html`'s hero,
+  three orientation doors and three step-two blocks, wrapped in a new `.sr-home` class
+  scoped in `css/saferise-system.css` — not `:root`, since index.html's own `:root`
+  (`--bg`, `--card`, `--primary`, `--text2`…) is unscoped and still feeds the nav, the
+  reader, the resource/consultation modals and all ten `.prog-overlay` panels; a bare
+  `:root` block would have repainted all of it. Four of `.sr-home`'s class names —
+  `.eyebrow`, `.ghost`, `.hero`, `.pk` — already existed as bare, unscoped rules in
+  index.html's own `<style>`; verified programmatically that nothing outside the
+  replaced region used them as a bare class, so scoping neutralises the collision and
+  the old rules are left in place, now dead, per instruction. The two script blocks
+  that sat inside `#main-content` (`showMain()`/`showProg()`, used by the nav and every
+  `.prog-overlay` CTA) were left exactly where they were — only the markup above them
+  was replaced. home-v72.html's own theme-toggle script (a second, non-persistent
+  `data-theme` flip with no `sessionStorage` call) was dropped entirely rather than
+  merged in, per instruction — this page has no toggle yet, and when one is added it
+  must use the same `sessionStorage['sr-theme']` mechanism as everywhere else. Absolute
+  `https://thesaferiseprotocol.com/assets/...` image URLs converted to repo-relative,
+  and Track 1's cover paths corrected from `assets/covers/t1-NN.jpg` (matching nothing
+  on disk) to `assets/covers/NN.jpg` (the actual convention `coverPath()` in
+  `js/saferise-track.js` already uses — Tracks 2/3 covers were already right).
+  Old homepage sections moved verbatim to `archive/index-old.html` (a static reference
+  copy, not a live page). `home-v72.html` deleted from the repo root now its sections
+  are merged — it was already committed outside this session, so git history keeps it.
+  **Carried forward, not consolidated:** `.pcar` is a third carousel implementation in
+  this codebase, alongside the track-page renderer's and the dashboard's.
+  Verified live: reader opens and all 11 tabs of `p1` render distinct bodies
+  (`RESOURCE_CONTENT`/`READER_PROTOCOLS`/`getResourceData()`/`openReader()`/
+  `selectReaderTab()` untouched), `showProg()`/`showMain()` still switch correctly,
+  doors set `body[data-open]` and reveal their step section, zero console errors
+  besides one pre-existing 404 for a missing cover image unrelated to this change.
+  The door-click handler's `requestAnimationFrame` callback (protocol-carousel sizing)
+  could not be observed firing in this session's browser harness — the same
+  environment-level rAF/visibility throttling on a backgrounded tab noted in SR-320's
+  report, not a code defect: calling the deferred logic directly produces the correct
+  `--cw` and animation state.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to
