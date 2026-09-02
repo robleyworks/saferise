@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-316 (double-issued — see below).** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-318.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -51,7 +51,31 @@ Canonical record of defects and design decisions. Commits reference the ID:
   that: **SR-316 is now double-issued** — once for this header-correction commit, once for
   `feat: SR-316 — wire in the five new pages`. Neither commit is being renamed (both unpushed at
   time of writing but the register does not rewrite history to fix an ID slip, per its own rule).
-  **Do not reissue SR-316.** Next run: allocate from **SR-317**.
+  **Do not reissue SR-316.** SR-317 was the corrective commit that wrote this very
+  paragraph (`docs: SR-317 correction — SR-316 was double-issued by this file's own
+  off-by-one`) — but that commit left the "Highest ID issued" line above still reading
+  SR-316, a fifth instance of the same off-by-one shape, one level up: the note that
+  documents the slip became stale the moment it was written. The next run (verifying the
+  four-updated-pages drop) did not trust this note's text and instead ran
+  `git log --grep` for SR-317 and SR-318 before allocating, found SR-317 taken and
+  SR-318 free, and used **SR-318**. **Do not reissue SR-317.** Next run: allocate from
+  **SR-319**.
+  **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
+  `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
+  `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
+  (zero console errors, all nav targets 200, all icons/images render, all 30 protocol
+  titles match `content/tracks.js`). Findings reported, not fixed, per this task's own
+  report-only framing for the sections that surfaced them: (1) `plans.html`'s "How This
+  Works" icon uses a branching-flow path, not `dashboard.html`'s `gear` icon; (2)
+  `plans.html`'s t3-06 card reads "The Belonging Gap" — the lone entry of 30 carrying a
+  "The" prefix (content itself correct, not "Ambition Recovery"); (3) four "Rests on:"
+  attributions on `plans.html` diverge from `dashboard.html`'s `SOURCES` object — Guided
+  Experience wrongly adds HeartMath to a Porges-only claim, Cue Card and Progress
+  Journal cite different frameworks entirely, and Attention Advisory drops the named-
+  clinician scope-boundary claim in favor of an unrelated Jung/Watts attribution; (4)
+  all four replaced pages reverted their theme persistence from `sessionStorage`
+  `'sr-theme'` (the prior session's fix) back to `localStorage` `'sr.theme'`, confirmed
+  live — the toggle changes `data-theme` visually but does not persist across reload.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

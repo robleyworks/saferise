@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 
+
 :root{
   --bg:#0A0A0F; --bg2:#0E0E15; --bg3:#13131C;
   --card:linear-gradient(145deg,rgba(24,24,34,.86),rgba(14,14,21,.92));
@@ -431,6 +432,67 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 @media(max-width:860px){.duo,.figrow{grid-template-columns:1fr}
   .figrow .slot{min-height:210px}}
 
+
+.ptrack{border:1px solid var(--hair);border-radius:22px;overflow:hidden;margin-top:22px;
+  background:var(--card);position:relative}
+.ptrack::before{content:'';position:absolute;inset:0 0 auto 0;height:2px;background:var(--accent);opacity:.65}
+.ptrack.t1{--accent:var(--t1)} .ptrack.t2{--accent:var(--t2)} .ptrack.t3{--accent:var(--t3)}
+.phead{display:flex;gap:30px;align-items:flex-start;padding:34px 34px 0;flex-wrap:wrap}
+.phead .pk{font-family:'DM Sans',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.phead h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:34px;line-height:1.08}
+.pq{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--gold-lt);margin-top:6px}
+.ppr{margin-left:auto;text-align:right}
+.ppr .amt{font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:300;
+  color:var(--gold-lt);line-height:1}
+.ppr .per{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text3);margin:4px 0 16px}
+.pbody{font-family:'DM Sans',sans-serif;font-size:15.5px;line-height:1.65;color:var(--text2);
+  padding:18px 34px 4px;max-width:74ch}
+.plist{padding:16px 34px 30px}
+.prow{display:grid;grid-template-columns:34px 92px minmax(0,1.05fr) minmax(0,1.5fr);
+  gap:16px;align-items:baseline;padding:13px 0;border-top:1px solid var(--hair)}
+.pnum{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--text3)}
+.pst{font-family:'DM Sans',sans-serif;font-size:8.5px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase}
+.pst.agitated{color:var(--t1)} .pst.unsteady{color:var(--gold)} .pst.numb{color:var(--t2)}
+.pnm{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--text)}
+.pds{font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.5;color:var(--text2)}
+@media(max-width:900px){.prow{grid-template-columns:28px 1fr;gap:6px 12px}
+  .pnm,.pds{grid-column:2}.pst{grid-column:2}
+  .ppr{margin-left:0;text-align:left}.phead{padding:26px 22px 0}
+  .pbody,.plist{padding-left:22px;padding-right:22px}}
+
+
+.rcard{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:0;
+  border:1px solid var(--hair);border-radius:18px;overflow:hidden;margin-top:14px;
+  background:var(--card)}
+.rmain{padding:28px 30px}
+.rmain h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:27px;line-height:1.1}
+.rsub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;
+  color:var(--gold-lt);margin:6px 0 12px}
+.rdesc{font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.62;color:var(--text2)}
+.rwhy{padding:28px 30px;border-left:1px solid var(--hair);background:var(--bg3)}
+.rwk{font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:11px}
+.rwt{font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;color:var(--text2)}
+.rrests{font-family:'DM Sans',sans-serif;font-size:11.5px;color:var(--text3);
+  margin-top:16px;padding-top:13px;border-top:1px solid var(--hair)}
+@media(max-width:900px){.rcard{grid-template-columns:1fr}
+  .rwhy{border-left:0;border-top:1px solid var(--hair)}}
+
+
+/* ═══ icons — the dashboard set ═══ */
+.ico{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;
+  border:1px solid var(--hair2);border-radius:999px;flex:none;
+  transition:border-color .4s ease,color .4s ease}
+.ico svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.ico{color:var(--gold)}
+.rmain h3{display:flex;align-items:center;gap:13px}
+.gc h3{display:flex;align-items:center;gap:12px}
+.gc .ico{width:30px;height:30px}
+.gc .ico svg{width:15px;height:15px}
+
 </style>
 </head>
 <body>
@@ -465,101 +527,124 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   </div>
 </nav>
 <main id="main">
-
 <section class="pg"><div class="wrap pghead">
   <p class="eyebrow">Plans</p>
-  <h1>Three plans. Each one <em>nested inside the next.</em></h1>
-  <p class="pglead">All three tracks are live. Every plan includes everything below it,
-    so adding a track never means paying twice for the same thing. Cancel any time and
-    keep whatever you have written.</p>
+  <h1>Thirty protocols. <em>You will use one at a time.</em></h1>
+  <p class="pglead">Three tracks, ten protocols each, every one built for a single
+    state. You are not choosing from a menu while you are in it &#8212; you open the
+    one the day calls for. Every plan includes the ones below it, so adding a track
+    never means paying twice for the same thing.</p>
 </div></section>
 
 <section class="sec2"><div class="wrap">
-  <div class="sh"><p class="eyebrow">Choose a track</p>
-    <h2>Start where the pattern <em>actually shows up.</em></h2>
-    <p>Every plan opens all ten protocols in its track on day one, with the full
-      resource set on each. Later plans include the earlier ones.</p></div>
-  <div class="tiers">
-    <div class="tier t1">
-      <p class="k">Track 01</p><h3>Personal Transformation</h3>
-      <p class="amt">&#8364;19</p><p class="per">per month &#183; cancel anytime</p>
-      <ul>
-        <li>Ten protocols for your own system</li>
-        <li>Anxiety, anger, shame, grief, shutdown</li>
-        <li>Guided audio and follow-along video</li>
-        <li>Step guide and cue card, printable</li>
-        <li>Journal and record, private to you</li>
-      </ul>
-      <a class="cta go" href="personal-transformation.html">Start &#8212; &#8364;19</a>
-    </div>
-    <div class="tier t2">
-      <p class="k">Track 02 &#183; includes Track 01</p><h3>Relationship Healing</h3>
-      <p class="amt">&#8364;29</p><p class="per">per month &#183; cancel anytime</p>
-      <ul>
-        <li>Everything in Personal Transformation</li>
-        <li>Ten protocols for what happens between you</li>
-        <li>Rupture, trust, resentment, intimacy</li>
-        <li>Session guides written to read together</li>
-        <li>Capacity check, before a hard conversation</li>
-      </ul>
-      <a class="cta go" href="relationship-healing.html">Start &#8212; &#8364;29</a>
-    </div>
-    <div class="tier t3">
-      <p class="k">Track 03 &#183; includes 01 and 02</p><h3>Professional Performance</h3>
-      <p class="amt">&#8364;39</p><p class="per">per month &#183; cancel anytime</p>
-      <ul>
-        <li>Everything in the two tracks below</li>
-        <li>Ten protocols for pressure and visibility</li>
-        <li>Conflict, imposter, burnout, decisions</li>
-        <li>Word-for-word, breath-marked scripts</li>
-        <li>Somatic release for the minute before</li>
-      </ul>
-      <a class="cta go" href="professional-performance.html">Start &#8212; &#8364;39</a>
-    </div>
+  <div class="sh"><p class="eyebrow">What is in each one</p>
+    <h2>Every protocol, <em>named.</em></h2>
+    <p>So you can see what you would actually be opening, rather than a count.</p></div>
+  <div class="ptrack t1" id="plan-t1">
+  <div class="phead">
+    <div><p class="pk">Track 01</p>
+      <h3>Personal Transformation</h3><p class="pq">What happens inside me</p></div>
+    <div class="ppr"><p class="amt">&#8364;19</p><p class="per">per month</p>
+      <a class="cta" href="personal-transformation.html">Open Personal Transformation &#8594;</a></div>
   </div>
+  <p class="pbody">Fear, anger, overwhelm, grief, insecurity, shutdown. The states that take over before you have had time to decide how you want to meet them.</p>
+  <div class="plist"><div class="prow"><span class="pnum">01</span><span class="pst agitated">Agitated</span><span class="pnm">Anxiety Reset</span><span class="pds">The dread with no single object, and the racing that comes with it.</span></div><div class="prow"><span class="pnum">02</span><span class="pst agitated">Agitated</span><span class="pnm">Anger Alchemy</span><span class="pds">When it has already come out of your mouth, and when it has not yet.</span></div><div class="prow"><span class="pnum">03</span><span class="pst agitated">Agitated</span><span class="pnm">Overwhelm Threshold</span><span class="pds">Too much at once, and no obvious first thing to do.</span></div><div class="prow"><span class="pnum">04</span><span class="pst agitated">Agitated</span><span class="pnm">Abandonment Wound</span><span class="pds">When someone going quiet becomes an emergency.</span></div><div class="prow"><span class="pnum">05</span><span class="pst unsteady">Unsteady</span><span class="pnm">Shame Dissolution</span><span class="pds">The one that says it is not what you did, it is you.</span></div><div class="prow"><span class="pnum">06</span><span class="pst unsteady">Unsteady</span><span class="pnm">Grief Integration</span><span class="pds">Not a stage to move through. A weight to carry differently.</span></div><div class="prow"><span class="pnum">07</span><span class="pst numb">Numb</span><span class="pnm">Shutdown Recovery</span><span class="pds">When switching off cost less than staying on.</span></div><div class="prow"><span class="pnum">08</span><span class="pst unsteady">Unsteady</span><span class="pnm">Jealousy Release</span><span class="pds">Comparison that stopped being useful a long time ago.</span></div><div class="prow"><span class="pnum">09</span><span class="pst unsteady">Unsteady</span><span class="pnm">Insecurity Anchor</span><span class="pds">The measuring that never resolves, whatever the answer is.</span></div><div class="prow"><span class="pnum">10</span><span class="pst numb">Numb</span><span class="pnm">Powerlessness &amp; Despair</span><span class="pds">When effort has stopped seeming to matter.</span></div></div>
+</div><div class="ptrack t2" id="plan-t2">
+  <div class="phead">
+    <div><p class="pk">Track 02 &#183; includes Track 01</p>
+      <h3>Relationship Healing</h3><p class="pq">What keeps happening between us</p></div>
+    <div class="ppr"><p class="amt">&#8364;29</p><p class="per">per month</p>
+      <a class="cta" href="relationship-healing.html">Open Relationship Healing &#8594;</a></div>
+  </div>
+  <p class="pbody">Pursuit, withdrawal, resentment, disconnection, trust and repair &#8212; worked from the part you can actually influence. You do not need the other person to be doing this too.</p>
+  <div class="plist"><div class="prow"><span class="pnum">01</span><span class="pst agitated">Agitated</span><span class="pnm">Safe Conversation</span><span class="pds">How to start the one you have been avoiding.</span></div><div class="prow"><span class="pnum">02</span><span class="pst unsteady">Unsteady</span><span class="pnm">Rupture &amp; Repair</span><span class="pds">What to do after, when neither of you knows how to begin.</span></div><div class="prow"><span class="pnum">03</span><span class="pst agitated">Agitated</span><span class="pnm">Trust &amp; Betrayal</span><span class="pds">Living with what happened without living inside it.</span></div><div class="prow"><span class="pnum">04</span><span class="pst unsteady">Unsteady</span><span class="pnm">Resentment Release</span><span class="pds">The ledger you have been keeping, and what it costs to hold.</span></div><div class="prow"><span class="pnum">05</span><span class="pst unsteady">Unsteady</span><span class="pnm">Intimacy Barrier</span><span class="pds">Wanting closeness and moving away from it at the same time.</span></div><div class="prow"><span class="pnum">06</span><span class="pst unsteady">Unsteady</span><span class="pnm">Double Standard</span><span class="pds">The rule that applies to them and not to you, or the reverse.</span></div><div class="prow"><span class="pnum">07</span><span class="pst agitated">Agitated</span><span class="pnm">Projection Clarity</span><span class="pds">Working out which part of this is actually theirs.</span></div><div class="prow"><span class="pnum">08</span><span class="pst numb">Numb</span><span class="pnm">Appreciation &amp; Support</span><span class="pds">The repair that is not urgent, on a day when nothing is wrong.</span></div><div class="prow"><span class="pnum">09</span><span class="pst unsteady">Unsteady</span><span class="pnm">Pursue &amp; Withdraw</span><span class="pds">The loop where the more you reach, the further they go.</span></div><div class="prow"><span class="pnum">10</span><span class="pst numb">Numb</span><span class="pnm">Conscious Separation</span><span class="pds">Ending something without becoming someone you do not recognise.</span></div></div>
+</div><div class="ptrack t3" id="plan-t3">
+  <div class="phead">
+    <div><p class="pk">Track 03 &#183; includes 01 and 02</p>
+      <h3>Professional Performance</h3><p class="pq">What changes when the stakes rise</p></div>
+    <div class="ppr"><p class="amt">&#8364;39</p><p class="per">per month</p>
+      <a class="cta" href="professional-performance.html">Open Professional Performance &#8594;</a></div>
+  </div>
+  <p class="pbody">Visibility, decisions, conflict, belonging, perfectionism, burnout. Not about the job. About which version of you arrives when the room gets difficult.</p>
+  <div class="plist"><div class="prow"><span class="pnum">01</span><span class="pst agitated">Agitated</span><span class="pnm">High-Stakes Presence</span><span class="pds">Before the room. Presence rather than rehearsal.</span></div><div class="prow"><span class="pnum">02</span><span class="pst agitated">Agitated</span><span class="pnm">Conflict Navigation</span><span class="pds">Disagreement without it becoming about who you are.</span></div><div class="prow"><span class="pnum">03</span><span class="pst unsteady">Unsteady</span><span class="pnm">Imposter Dissolution</span><span class="pds">The verdict about your competence, replayed after the fact.</span></div><div class="prow"><span class="pnum">04</span><span class="pst agitated">Agitated</span><span class="pnm">Perfectionism Release</span><span class="pds">When good enough is genuinely enough and you cannot feel it.</span></div><div class="prow"><span class="pnum">05</span><span class="pst agitated">Agitated</span><span class="pnm">Performance Anxiety</span><span class="pds">The moments where your ability matters most.</span></div><div class="prow"><span class="pnum">06</span><span class="pst unsteady">Unsteady</span><span class="pnm">The Belonging Gap</span><span class="pds">The half-second of editing before you speak.</span></div><div class="prow"><span class="pnum">07</span><span class="pst unsteady">Unsteady</span><span class="pnm">Career Transition</span><span class="pds">Direction, when the effort is no longer the question.</span></div><div class="prow"><span class="pnum">08</span><span class="pst numb">Numb</span><span class="pnm">Decision Fatigue</span><span class="pds">When every choice costs more than it should.</span></div><div class="prow"><span class="pnum">09</span><span class="pst numb">Numb</span><span class="pnm">Burnout &amp; Overload</span><span class="pds">Load over weeks, which is not the same as a bad mood.</span></div><div class="prow"><span class="pnum">10</span><span class="pst unsteady">Unsteady</span><span class="pnm">Creative Flow</span><span class="pds">The state the work actually needs, and how to get back to it.</span></div></div>
+</div>
 </div></section>
 
 <section class="sec2 sec2--alt"><div class="wrap">
-  <div class="figrow"><div class="slot "><div class="slotmeta"><p class="slotid">IMG-P1</p><p class="slotdim">1200 × 900 · photograph</p><p class="slotbrief">A protocol open on a real device, in a real room. Held in a hand, at a desk at night. Product, not lifestyle.</p></div></div><div class="figtxt"><h3>Everything opens on day one</h3><p>No unlocking, no sequence to work through, nothing held back until you have proved something. Every protocol in your plan is open from the first day, and the library grows while you are a member.</p></div></div>
-
-<div class="sh" style="margin-top:44px"><p class="eyebrow">What every protocol opens</p>
-    <h2>One resource for <em>each kind of moment.</em></h2>
-    <p>Included from your first day, on every protocol in your plan. The library grows
-      &#8212; anything added while you are a member is yours.</p></div>
-  <div class="grid3">
-    <div class="gc"><h3>Guided experience</h3><p>The full session, voiced and paced.
-      Headphones, nothing to read.</p></div>
-    <div class="gc"><h3>How this works</h3><p>What is happening in your body during
-      this state, and why the four steps land in that order.</p></div>
-    <div class="gc"><h3>Protocol guide</h3><p>The printable step guide, formatted for
-      your phone or the fridge door.</p></div>
-    <div class="gc"><h3>Somatic release</h3><p>Body-based companions between sessions
-      &#8212; the small physical things that keep it in place.</p></div>
-    <div class="gc"><h3>Cue card</h3><p>The four-line version, for the moment it is
-      actually happening.</p></div>
-    <div class="gc"><h3>Your record</h3><p>Prompts tied to this protocol, and the log
-      that tracks your state before and after.</p></div>
-  </div>
+  <div class="sh"><p class="eyebrow">What every protocol opens</p>
+    <h2>Ten resources, one for <em>each kind of moment.</em></h2>
+    <p>Not one recording. Ten pieces per protocol, and you use whichever the day calls
+      for &#8212; all of them open from your first day. Each one says what it rests on,
+      so you can see which part is evidence and which part is ours.</p></div>
+  <div class="rcard">
+      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></span>Guided Experience</h3><p class="rsub">The whole thing, carried for you.</p><p class="rdesc">The four steps voiced end to end, paced so you are not holding the sequence yourself while you are inside the state. Word for word, breath-marked, with the pauses built in rather than left to you.</p></div>
+      <div class="rwhy"><p class="rwk">Why voiced</p><p class="rwt">A state narrows what you can hold in mind. Being talked through it removes the one job you cannot do well in that moment — remembering what comes next.</p>
+        <p class="rrests">Rests on: Porges &#183; HeartMath</p></div>
+    </div><div class="rcard">
+      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 14c3 0 3-4 6-4s3 4 6 4 4-2 4-2"/><path d="M4 18c3 0 3-3 6-3s3 3 6 3 4-1.5 4-1.5"/><circle cx="12" cy="6" r="2.6"/></svg></span>Breathwork</h3><p class="rsub">Four in. Six out. The part that measurably works.</p><p class="rdesc">A paced rhythm at around six breaths a minute, which is where the gap between heartbeats becomes most even. Usable on its own, in a car park, without the rest of the protocol.</p></div>
+      <div class="rwhy"><p class="rwk">Why the long out-breath</p><p class="rwt">Breathing out longer than you breathe in tips the balance toward the branch of your system that handles rest rather than threat. Your body reads the rhythm before your mind agrees to anything.</p>
+        <p class="rrests">Rests on: HeartMath &#183; cardiac coherence</p></div>
+    </div><div class="rcard">
+      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="4.6" r="2.2"/><path d="M12 7v7M12 14l-3.4 6M12 14l3.4 6M7 9.5l5 1.4 5-1.4"/></svg></span>Somatic Release</h3><p class="rsub">For when sitting still is not available.</p><p class="rdesc">Something physical to do with the charge that is already in your body — pressure, movement, weight, temperature. For the states that will not be talked down and need discharging first.</p></div>
+      <div class="rwhy"><p class="rwk">Why the body first</p><p class="rwt">Some activation has to go somewhere before attention is available at all. Asking someone to observe a state their body is still braced against is asking for the wrong thing in the wrong order.</p>
+        <p class="rrests">Rests on: Porges &#183; autonomic states</p></div>
+    </div><div class="rcard">
+      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg></span>How This Works</h3><p class="rsub">The mechanism, not the metaphor.</p><p class="rdesc">What is actually happening in your body during this specific state, why these four steps land in this order, and what the research does and does not say about it.</p></div>
+      <div class="rwhy"><p class="rwk">Why explain it</p><p class="rwt">Anti-dependency. If you understand the mechanism you can run it without us, adapt it, and eventually not need the recording at all. The aim is that you need this less, not more.</p>
+        <p class="rrests">Rests on: The full framework register</p></div>
+    </div><div class="rcard">
+      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 9h7M9 13h7M9 17h4"/></svg></span>Protocol Guide</h3><p class="rsub">On paper. In your hand.</p><p class="rdesc">The printable step guide for this protocol — formatted for a phone screen, a wallet, or the fridge door. The whole sequence on one page with nothing to scroll.</p></div>
+      <div class="rwhy"><p class="rwk">Why printed</p><p class="rwt">A device is a poor companion in the middle of a state. Something on paper does not notify you, does not need a signal, and does not offer you anything else to look at.</p>
+        <p class="rrests">Rests on: SafeRise material &#183; no external claim</p></div>
+    </div><div class="rcard">
+      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 11h6M6.5 14h4"/></svg></span>Cue Card</h3><p class="rsub">Four lines. Always here.</p><p class="rdesc">You do not have to remember anything. Name it &#8212; finish the sentence. Hand to heart, in for four, out for six. Stop fighting it. One breath as the person on the other side.</p></div>
+      <div class="rwhy"><p class="rwk">Why four lines</p><p class="rwt">Because the moment you need it is the moment you can hold least. This is the version for someone who has done it before and needs the order, not the explanation.</p>
+        <p class="rrests">Rests on: SafeRise material &#183; no external claim</p></div>
+    </div><div class="rcard">
+      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/></svg></span>Progress Journal</h3><p class="rsub">Somewhere to put it down.</p><p class="rdesc">Prompts written for this specific protocol, and a place to write in your own words. Stays on your device. No sync, ever &#8212; including to us.</p></div>
+      <div class="rwhy"><p class="rwk">Why writing</p><p class="rwt">Putting a state into your own sentences moves it from something you are inside to something you are looking at. That shift is the whole of the first step, done on paper.</p>
+        <p class="rrests">Rests on: Kross &amp; Ayduk &#183; distanced self-talk</p></div>
+    </div><div class="rcard">
+      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-8M22 20H2"/></svg></span>Progress Tracking</h3><p class="rsub">What you noticed, before and after.</p><p class="rdesc">A record of the state you were in when you started and where you were when you finished. No score, no streak, no target, nothing to keep up or fall behind.</p></div>
+      <div class="rwhy"><p class="rwk">Why no score</p><p class="rwt">Because you will arrive here on your worst day. A number that says you have slipped is the last thing that should meet you, and a number that says you are doing well is not why you came.</p>
+        <p class="rrests">Rests on: SafeRise material &#183; no external claim</p></div>
+    </div><div class="rcard">
+      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5L21 19H3z"/><path d="M12 10v4M12 16.6v.1"/></svg></span>Attention Advisory</h3><p class="rsub">Where it belongs today. Which fights are not yours.</p><p class="rdesc">Guidance on where your attention actually needs to go in this pattern, and what it is being pulled toward that has nothing to offer you.</p></div>
+      <div class="rwhy"><p class="rwk">Why attention</p><p class="rwt">Something you never consciously chose is deciding what receives your attention. Naming that, in this specific pattern, is where authorship starts.</p>
+        <p class="rrests">Rests on: Jung &#183; Watts &#183; interpretive</p></div>
+    </div><div class="rcard">
+      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></span>Disclosure &amp; Invitation</h3><p class="rsub">Words for the people around you.</p><p class="rdesc">A script for explaining what you are doing, and a structured way to open repair when the pattern involves someone else.</p></div>
+      <div class="rwhy"><p class="rwk">Why scripts</p><p class="rwt">The hardest part is rarely the protocol. It is the first sentence to another person.</p>
+        <p class="rrests">Rests on: SafeRise material &#183; no external claim</p></div>
+    </div>
 </div></section>
 
 <section class="sec2"><div class="wrap">
-  <div class="sh"><p class="eyebrow">Side by side</p>
-    <h2>Each track includes <em>the ones before it.</em></h2></div>
+  <div class="sh"><p class="eyebrow">How access works</p>
+    <h2>It adds up. <em>It does not reset.</em></h2></div>
   <table class="cmp">
     <tr><th></th><th>Personal</th><th>Relationship</th><th>Professional</th></tr>
     <tr><td>Monthly</td><td>&#8364;19</td><td>&#8364;29</td><td>&#8364;39</td></tr>
-    <tr><td>Protocols</td><td>10</td><td>20</td><td>30</td></tr>
-    <tr><td>Who it is for</td><td>You alone</td><td>You and another</td><td>You under pressure</td></tr>
-    <tr><td>Best for</td><td>Anxiety, anger, grief, shutdown</td><td>Rupture, trust, distance</td><td>Pressure, conflict, burnout</td></tr>
-    <tr><td>Format</td><td>Self-paced</td><td>Self-paced</td><td>Self-paced</td></tr>
+    <tr><td>Protocols open</td><td>10</td><td>20</td><td>30</td></tr>
+    <tr><td>Resources open</td><td>100</td><td>200</td><td>300</td></tr>
+    <tr><td>Works on</td><td>You alone</td><td>You and another</td><td>You under pressure</td></tr>
+    <tr><td>Needs anyone else</td><td>No</td><td>No</td><td>No</td></tr>
     <tr><td>Available</td><td>Now</td><td>Now</td><td>Now</td></tr>
   </table>
+  <div class="grid3" style="margin-top:30px">
+    <div class="gc"><h3>Nothing is held back</h3><p>Every protocol in your track is open
+      on day one. No unlocking, no sequence, nothing waiting for you to prove
+      something.</p></div>
+    <div class="gc"><h3>Cancel whenever</h3><p>Access runs to the end of the period you
+      paid for. What you have written stays yours.</p></div>
+    <div class="gc"><h3>Move between tracks</h3><p>Change up or down at any point.
+      Upgrading is immediate. Downgrading takes effect at the end of the period.</p></div>
+  </div>
   <div class="ctarow">
     <a class="cta" href="personal-transformation.html">Start with Personal Transformation &#8594;</a>
     <a class="ctaalt" href="live-sessions.html">Live sessions are priced separately</a>
   </div>
 </div></section>
-
 </main>
 <footer class="foot">
   <div class="wrap">
@@ -589,10 +674,10 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   function applyTheme(n){
     document.documentElement.setAttribute('data-theme',n);
     if(l) l.textContent = n==='midnight' ? 'Midnight' : 'Sunrise';
-    try{ sessionStorage.setItem('sr-theme', n); }catch(e){}
+    try{ localStorage.setItem('sr.theme', n); }catch(e){}
   }
   try{
-    var saved = sessionStorage.getItem('sr-theme');
+    var saved = localStorage.getItem('sr.theme');
     if(saved==='midnight'||saved==='sunrise') applyTheme(saved);
   }catch(e){}
   if(t) t.addEventListener('click',function(){

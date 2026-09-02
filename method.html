@@ -404,6 +404,19 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   .figrow .slot{min-height:210px}}
 
 
+
+/* ═══ icons — the dashboard set ═══ */
+.ico{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;
+  border:1px solid var(--hair2);border-radius:999px;flex:none;
+  transition:border-color .4s ease,color .4s ease}
+.ico svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.ico{color:var(--gold)}
+.rmain h3{display:flex;align-items:center;gap:13px}
+.gc h3{display:flex;align-items:center;gap:12px}
+.gc .ico{width:30px;height:30px}
+.gc .ico svg{width:15px;height:15px}
+
 </style>
 </head>
 <body>
@@ -493,15 +506,15 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
       gives you perspective, patience and judgement.</p></div>
   <div class="grid3">
     <div class="gc"><p class="k" style="color:var(--t1)">Wound up</p>
-      <h3>Everything needs handling, now.</h3>
+      <h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5L21 19H3z"/><path d="M12 10v4M12 16.6v.1"/></svg></span>Everything needs handling, now.</h3>
       <p>Racing, bracing, scanning. Short with people you love. The reaction is out
         before you decided on it.</p></div>
     <div class="gc"><p class="k" style="color:var(--t3)">Steady</p>
-      <h3>This is hard. I can deal with it.</h3>
+      <h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></span>This is hard. I can deal with it.</h3>
       <p>Shoulders drop, breath opens, attention comes back. The hard thing has not
         moved. You have options in front of it.</p></div>
     <div class="gc"><p class="k" style="color:var(--t2)">Flat</p>
-      <h3>None of it is worth the energy.</h3>
+      <h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-8M22 20H2"/></svg></span>None of it is worth the energy.</h3>
       <p>Distant, switched off, hard to reach &#8212; including for you. Not laziness.
         Your system saving what is left.</p></div>
   </div>
@@ -540,19 +553,19 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
     <p>A route your body learns to recognise, so on a bad day you are not deciding what
       to do. You are following something you already know.</p></div>
   <div class="grid2">
-    <div class="gc"><p class="k">Step 01</p><h3>Recognise</h3>
+    <div class="gc"><p class="k">Step 01</p><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 14c3 0 3-4 6-4s3 4 6 4 4-2 4-2"/><path d="M4 18c3 0 3-3 6-3s3 3 6 3 4-1.5 4-1.5"/><circle cx="12" cy="6" r="2.6"/></svg></span>Recognise</h3>
       <p>Say what is actually there, specifically. Not &#8220;I feel anxious&#8221;
         &#8212; finish the sentence. What I am afraid will happen is ___. Being precise
         settles something on its own.</p><p class="cite">Porges</p></div>
-    <div class="gc"><p class="k">Step 02</p><h3>Regulate</h3>
+    <div class="gc"><p class="k">Step 02</p><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></span>Regulate</h3>
       <p>Hand on your chest. In for four, out for six. Your body will not take an
         argument for safety. It takes evidence, and a slower breath out is the
         evidence.</p><p class="cite">HeartMath</p></div>
-    <div class="gc"><p class="k">Step 03</p><h3>Release</h3>
+    <div class="gc"><p class="k">Step 03</p><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="4.6" r="2.2"/><path d="M12 7v7M12 14l-3.4 6M12 14l3.4 6M7 9.5l5 1.4 5-1.4"/></svg></span>Release</h3>
       <p>Stop the second fight &#8212; the one against how you feel about how you feel.
         You are not agreeing with it. You are stopping the struggle, including the part
         aimed at yourself.</p><p class="cite">Mat&#233;</p></div>
-    <div class="gc"><p class="k">Step 04</p><h3>Rise</h3>
+    <div class="gc"><p class="k">Step 04</p><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg></span>Rise</h3>
       <p>Still breathing that way, be the person on the other side of it for one
         breath. Not a plan. Not a decision. One breath, so your body knows the way
         back.</p><p class="cite">Kross &amp; Ayduk</p></div>
@@ -584,31 +597,30 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
     <h2>Six frameworks, and <em>which is which.</em></h2>
     <p>Psychology platforms are everywhere now and it has got noisy. Most of it hands
       you more labels without building any more capacity. So here is what this rests
-      on, and which part is evidence and which part is a way of looking at things —
-      or see <a href="frameworks.html">the full register</a>, sourced and cited.</p></div>
+      on, and which part is evidence and which part is a way of looking at things.</p></div>
   <div class="slot slot--wide"><div class="slotmeta"><p class="slotid">IMG-M4</p><p class="slotdim">1600 &#215; 600 &#183; abstract texture</p><p class="slotbrief">Material, light, depth. No people, no objects, no text. Gold, bronze and deep teal against near-black. Quiet and substantial rather than decorative.</p></div></div>
   <div class="reg">
     <div class="regl"><p class="regk">Peer-reviewed</p><p class="regs">Published, replicated research</p></div>
     <div class="regr">
-      <p class="regn"><a href="method-porges.html">Stephen Porges &#183; Polyvagal Theory</a></p>
+      <p class="regn">Stephen Porges &#183; Polyvagal Theory</p>
       <p class="regd">Why safety runs everything underneath, and why those three states
         are a range you move across rather than moods you are in.</p>
-      <p class="regn" style="margin-top:20px"><a href="method-heartmath.html">HeartMath &#183; Cardiac coherence</a></p>
+      <p class="regn" style="margin-top:20px">HeartMath &#183; Cardiac coherence</p>
       <p class="regd">What a paced breath does to the rhythm of the heart, measured.</p>
-      <p class="regn" style="margin-top:20px"><a href="method-kross.html">Kross &amp; Ayduk &#183; Distanced self-talk</a></p>
+      <p class="regn" style="margin-top:20px">Kross &amp; Ayduk &#183; Distanced self-talk</p>
       <p class="regd">Looking at a state from outside it, and what that changes about
         what you can do next.</p>
     </div>
     <div class="regl"><p class="regk">Clinical practice</p><p class="regs">An established practitioner method</p></div>
-    <div class="regr"><p class="regn"><a href="method-mate.html">Gabor Mat&#233; &#183; Compassionate Inquiry</a></p>
+    <div class="regr"><p class="regn">Gabor Mat&#233; &#183; Compassionate Inquiry</p>
       <p class="regd">Asking what a pattern was protecting, instead of asking how to
         make it stop.</p></div>
     <div class="regl"><p class="regk">A way of looking</p><p class="regs">A lens, not evidence &#8212; and said so</p></div>
     <div class="regr">
-      <p class="regn"><a href="method-jung.html">Carl Jung &#183; Shadow and individuation</a></p>
+      <p class="regn">Carl Jung &#183; Shadow and individuation</p>
       <p class="regd">Naming what is actually there, and the self you choose rather
         than the one you were handed.</p>
-      <p class="regn" style="margin-top:20px"><a href="method-watts.html">Alan Watts &#183; Non-resistance</a></p>
+      <p class="regn" style="margin-top:20px">Alan Watts &#183; Non-resistance</p>
       <p class="regd">What happens when you stop the second fight.</p>
     </div>
   </div>
@@ -646,10 +658,10 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   function applyTheme(n){
     document.documentElement.setAttribute('data-theme',n);
     if(l) l.textContent = n==='midnight' ? 'Midnight' : 'Sunrise';
-    try{ sessionStorage.setItem('sr-theme', n); }catch(e){}
+    try{ localStorage.setItem('sr.theme', n); }catch(e){}
   }
   try{
-    var saved = sessionStorage.getItem('sr-theme');
+    var saved = localStorage.getItem('sr.theme');
     if(saved==='midnight'||saved==='sunrise') applyTheme(saved);
   }catch(e){}
   if(t) t.addEventListener('click',function(){

@@ -391,7 +391,7 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
 .offer{display:grid;grid-template-columns:1fr 300px;gap:0;border:1px solid var(--hair);
   border-radius:20px;overflow:hidden;margin-top:20px;background:var(--card)}
 .offerin{padding:32px 30px}
-.offerin h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:27px;margin-bottom:10px}
+.offerin h3{display:flex;align-items:center;gap:13px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:27px;margin-bottom:10px}
 .offerin p{font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.65;color:var(--text2);margin-bottom:14px}
 .offerin ul{list-style:none;padding:0;margin:0}
 .offerin li{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text2);
@@ -443,6 +443,19 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
 .figtxt p{font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.62;color:var(--text2)}
 @media(max-width:860px){.duo,.figrow{grid-template-columns:1fr}
   .figrow .slot{min-height:210px}}
+
+
+/* ═══ icons — the dashboard set ═══ */
+.ico{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;
+  border:1px solid var(--hair2);border-radius:999px;flex:none;
+  transition:border-color .4s ease,color .4s ease}
+.ico svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.ico{color:var(--gold)}
+.rmain h3{display:flex;align-items:center;gap:13px}
+.gc h3{display:flex;align-items:center;gap:12px}
+.gc .ico{width:30px;height:30px}
+.gc .ico svg{width:15px;height:15px}
 
 </style>
 </head>
@@ -505,7 +518,7 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
     <h2>Someone else <em>in the room.</em></h2></div>
 
   <div class="offer">
-    <div class="offerin"><h3>Premium 1:1</h3>
+    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg></span>Premium 1:1</h3>
       <p>One focused hour, live, for whatever the self-guided protocols cannot fully
         reach on their own. Your record is read beforehand, so the session starts where
         you actually are rather than at the beginning.</p>
@@ -520,7 +533,7 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
   </div>
 
   <div class="offer">
-    <div class="offerin"><h3>Group workshops</h3>
+    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></span>Group workshops</h3>
       <p>A small group working one protocol together, live, facilitated. Something
         changes when you are not the only one regulating &#8212; watching someone else
         move through the step you are stuck on often does more than reading about it.</p>
@@ -545,7 +558,7 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
       answered first.</p></div>
 
   <div class="offer">
-    <div class="offerin"><h3>Corporate retreat</h3>
+    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg></span>Corporate retreat</h3>
       <p>A half day, in person, built from sixty to ninety minute segments. The agenda
         is curated with your organisers rather than handed over pre-built. A team does
         not just need to hear about regulation &#8212; in a room together they can watch
@@ -561,7 +574,7 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
   </div>
 
   <div class="offer">
-    <div class="offerin"><h3>Annual access</h3>
+    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><path d="M12 3v2.6M12 18.4V21M3 12h2.6M18.4 12H21M5.6 5.6l1.9 1.9M16.5 16.5l1.9 1.9M18.4 5.6l-1.9 1.9M7.5 16.5l-1.9 1.9"/></svg></span>Annual access</h3>
       <p>Platform access across a company for a year, invoiced once. Most retreats lead
         into this &#8212; the day starts something, and the protocols are what continues
         it. Individual records stay private, including from the employer paying for it.</p>
@@ -614,10 +627,10 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
   function applyTheme(n){
     document.documentElement.setAttribute('data-theme',n);
     if(l) l.textContent = n==='midnight' ? 'Midnight' : 'Sunrise';
-    try{ sessionStorage.setItem('sr-theme', n); }catch(e){}
+    try{ localStorage.setItem('sr.theme', n); }catch(e){}
   }
   try{
-    var saved = sessionStorage.getItem('sr-theme');
+    var saved = localStorage.getItem('sr.theme');
     if(saved==='midnight'||saved==='sunrise') applyTheme(saved);
   }catch(e){}
   if(t) t.addEventListener('click',function(){

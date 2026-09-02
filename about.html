@@ -404,6 +404,19 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   .figrow .slot{min-height:210px}}
 
 
+
+/* ═══ icons — the dashboard set ═══ */
+.ico{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;
+  border:1px solid var(--hair2);border-radius:999px;flex:none;
+  transition:border-color .4s ease,color .4s ease}
+.ico svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.ico{color:var(--gold)}
+.rmain h3{display:flex;align-items:center;gap:13px}
+.gc h3{display:flex;align-items:center;gap:12px}
+.gc .ico{width:30px;height:30px}
+.gc .ico svg{width:15px;height:15px}
+
 </style>
 </head>
 <body>
@@ -533,11 +546,11 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
     <h2>A platform making claims about the body <em>should say who checked them.</em></h2></div>
   <div class="grid2">
     <div class="gc"><p class="k">Clinical collaborator</p>
-      <h3>Dr. Keny F. Bastien, MD</h3>
+      <h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg></span>Dr. Keny F. Bastien, MD</h3>
       <p>Checks what the protocols say about the body, and where the line sits between
         what the research supports and what it does not.</p></div>
     <div class="gc"><p class="k">Behind it</p>
-      <h3>Kenor International BV</h3>
+      <h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg></span>Kenor International BV</h3>
       <p>An independent practice created by Andre Robley. Certified in meditation
         coaching, somatic coaching and Jungian practice.</p></div>
   </div>
@@ -575,10 +588,10 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   function applyTheme(n){
     document.documentElement.setAttribute('data-theme',n);
     if(l) l.textContent = n==='midnight' ? 'Midnight' : 'Sunrise';
-    try{ sessionStorage.setItem('sr-theme', n); }catch(e){}
+    try{ localStorage.setItem('sr.theme', n); }catch(e){}
   }
   try{
-    var saved = sessionStorage.getItem('sr-theme');
+    var saved = localStorage.getItem('sr.theme');
     if(saved==='midnight'||saved==='sunrise') applyTheme(saved);
   }catch(e){}
   if(t) t.addEventListener('click',function(){
