@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-327.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-328.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -79,7 +79,8 @@ Canonical record of defects and design decisions. Commits reference the ID:
   so a naive grep match is not the same as an ID already being issued — read what
   matched, not just whether something did. The coming-soon-v14 run checked
   `git log --grep` for SR-327 before allocating, found it free, and used
-  **SR-327**. Next run: allocate from **SR-328**.
+  **SR-327**. The small-fixes run checked `git log --grep` for SR-328 before
+  allocating, found it free, and used **SR-328**. Next run: allocate from **SR-329**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -328,6 +329,30 @@ Canonical record of defects and design decisions. Commits reference the ID:
   `.thesis` duplicated, `.phid`/`.phdim`/`.phbrief`) ships in the mock with
   zero matching markup anywhere in the body — an earlier design iteration's
   leftover rules, harmless but unused; left in place, not asked for.
+  **SR-328 · small fixes, closing SR-327's own findings.** (1) "Six more
+  tracks in development" → "Seven more tracks" in the Protocols ▾ dropdown's
+  "What's coming" entry, on every public page that carries it —
+  `coming-soon.html`, `about.html`, `live-sessions.html`, `anxiety-reset.html`,
+  `method.html`, `plans.html`. The three track pages and `index.html` don't
+  carry this dropdown at all (grep-confirmed), so there was nothing to touch
+  there. (2) The dead `.cband`/`.tslot`/`.thesis`/`.bandnote` CSS SR-327
+  flagged, removed from `coming-soon.html` — zero matching markup, confirmed
+  before removal. `.shared` survived: it IS used (once, the closing
+  "shared thread" paragraph), had two same-selector definitions shadowing
+  each other by cascade order, and only the later one — kept — was ever the
+  value actually rendering; the earlier, already-overridden duplicate went
+  with the rest. (3) `track-sunrise.html` — a reference build for SR-320's
+  sunrise/light-theme work, tracked by an out-of-band commit
+  (`6f000b0 "Create track-sunrise.html"`), never linked from any nav
+  (grep-confirmed) — moved to `archive/track-sunrise.html` with a header
+  comment matching `archive/index-old.html`'s own convention: not a live
+  page, not served, not maintained, kept only as the original worked
+  example now that its token values and light-layer treatment are already
+  live elsewhere in the CSS.
+  Verified live: dropdown reads "Seven" on every page checked; `coming-soon.html`
+  still renders all 7 tracks with `.shared` intact after the CSS removal, same
+  8 image 404s as before (nothing broken by the cleanup); esprima-clean on
+  every touched file.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

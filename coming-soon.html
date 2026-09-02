@@ -441,44 +441,13 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   .std:last-child{border-bottom:0}}
 
 
-.thesis{max-width:60ch}
-.thesis p{font-size:16.5px;line-height:1.7;color:var(--text2);margin-bottom:15px}
-.thesis p strong{color:var(--text);font-weight:400}
-.shared{border-left:2px solid var(--gold);padding:6px 0 6px 22px;margin:34px 0 0;max-width:56ch}
-.shared p{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;
-  line-height:1.45;color:var(--text)}
-
-
-.cband{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--hair);
-  margin-top:20px;background:linear-gradient(160deg,var(--bg3),var(--bg2));
-  aspect-ratio:24/11;display:flex;align-items:stretch}
-.cband .ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;z-index:1}
-.cband .ph p{font-family:'DM Sans',sans-serif;color:var(--text3)}
-.cband .phid{font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);opacity:.8}
-.cband .phdim{font-size:10px;letter-spacing:.2em;margin-top:6px}
-.cband .phbrief{font-size:13px;line-height:1.55;margin-top:11px;max-width:44ch}
-.cband::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(10,10,15,.30) 0%,rgba(10,10,15,.86) 62%,rgba(10,10,15,.95) 100%)}
-.cband .over{position:relative;z-index:2;display:grid;width:100%;
-  grid-template-columns:1fr 1fr;gap:0}
-.cband.solo .over{grid-template-columns:1fr}
-.tslot{padding:34px 32px;text-shadow:0 1px 14px rgba(0,0,0,.7);display:flex;flex-direction:column;justify-content:flex-end;
-  border-right:1px solid var(--hair);transition:background-color .5s var(--ease)}
-.tslot:last-child{border-right:0}
-.tslot:hover{background:color-mix(in srgb,var(--bg) 34%,transparent)}
-.tslot h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:28px;line-height:1.1}
-.tslot .ask{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;
-  line-height:1.4;color:var(--ac);margin:9px 0 12px}
-.tslot p.d{font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.58;color:var(--text2)}
-.bandnote{font-family:'DM Sans',sans-serif;font-size:11.5px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--text3);margin-top:11px}
-.thesis{max-width:62ch}
-.thesis p{font-size:16.5px;line-height:1.7;color:var(--text2);margin-bottom:15px}
+/* SR-328 · .cband/.tslot/.thesis/.bandnote removed — a superseded layout's
+   CSS with zero matching markup anywhere on this page. .shared is the one
+   survivor: two definitions had shadowed each other (cascade order, same
+   selector), and only the second — kept below — was ever actually applied. */
 .shared{border-left:2px solid var(--gold);padding:6px 0 6px 22px;margin:36px 0 0;max-width:60ch}
 .shared p{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;
   line-height:1.45;color:var(--text)}
-@media(max-width:900px){.cband{aspect-ratio:auto}.cband .over{grid-template-columns:1fr}
-  .tslot{border-right:0;border-bottom:1px solid var(--hair);padding:26px 22px}
-  .cband .ph{position:relative;aspect-ratio:24/10}}
 
 
 /* ═══ hero with a full-width image behind the text ═══ */
@@ -571,7 +540,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
             <span class="nmd">What changes when the stakes rise</span></a>
           <a role="menuitem" href="coming-soon.html" class="nm soon">
             <span class="nmk">Not yet open</span><span class="nmn">What&#8217;s coming</span>
-            <span class="nmd">Six more tracks in development</span></a>
+            <span class="nmd">Seven more tracks in development</span></a>
         </div>
       </div>
       <a href="method.html">Method</a><a href="plans.html">Plans</a><a href="live-sessions.html">Live sessions</a><a href="about.html">About</a>
