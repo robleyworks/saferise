@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-324.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-325.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -70,7 +70,10 @@ Canonical record of defects and design decisions. Commits reference the ID:
   found it free, and used **SR-322**. The freemium-route run checked `git log --grep`
   for SR-323 before allocating, found it free, and used **SR-323**. The
   member-framework-pages run checked `git log --grep` for SR-324 before
-  allocating, found it free, and used **SR-324**. Next run: allocate from **SR-325**.
+  allocating, found it free, and used **SR-324**. The link-sweep run checked
+  `git log --grep` for SR-325 and SR-326 before allocating either — both free —
+  planning to use **SR-325** for Section A (finish the sweep) and **SR-326** for
+  Section B (the soft gate), committed separately. Next run: allocate from **SR-327**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -215,6 +218,23 @@ Canonical record of defects and design decisions. Commits reference the ID:
   since that was explicitly instructed, but the underlying question (should a
   public page link to a member page at all, signed out) is unresolved and applies
   to both call sites identically.
+  **SR-325 · finish the public→member link sweep.** Resolves the question SR-324
+  left open: a public page must never link to a member page; "Log in" is the one
+  permitted exception. `js/saferise-track.js`'s `renderNav()` no longer pushes
+  "The Journey"/"About" (`member-frameworks.html`) or "Dashboard"
+  (`dashboard.html`) — removed, not repointed, per instruction. `method.html`'s
+  register confirmed already plain text (SR-324's finding), nothing to remove.
+  Grepped the whole tree rather than working from a list — the instruction's own
+  warning, "my lists have now been incomplete twice" — and found six more: every
+  public page's footer `<a href="dashboard.html">Account</a>` (`method.html`,
+  `plans.html`, `live-sessions.html`, `about.html`, `coming-soon.html`,
+  `anxiety-reset.html`), removed. **Left alone, by design, not oversight:** the 30
+  protocol-preview cards on the three public track pages
+  (`js/saferise-track.js:167`, `data-sr-open="protocol.html?..."`) — this is the
+  carousel's core content interaction, not navigation, confirmed with the founder
+  before touching it; SR-326's soft gate is what decides what a signed-out visitor
+  sees when a card opens. `docs/page-invariants.md` carries the guard and this one
+  documented exception.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

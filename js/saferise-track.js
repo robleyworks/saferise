@@ -452,12 +452,16 @@
     3: 'professional-performance.html'
   };
   function renderNav(id) {
-    var links = [['The Journey', 'member-frameworks.html'], ['About', 'member-frameworks.html']];
+    /* SR-325 · no more "The Journey" / "About" (member-frameworks.html) or
+       "Dashboard" (dashboard.html). A public page must never link to a
+       member page; "Log in" is the one permitted exception, and this nav
+       carries no "Log in" item at all today, so nothing here qualifies.
+       Removed, not repointed — see docs/page-invariants.md. */
+    var links = [];
     Object.keys(TRACKS).forEach(function (k) {
       var t = TRACKS[k];
       if (t.visible && ROUTES[k]) links.push([t.name, ROUTES[k], +k]);
     });
-    links.push(['Dashboard', 'dashboard.html']);
     var el = document.getElementById('navlinks');
     if (el) el.innerHTML = links.map(function (l) {
       return '<a href="' + l[1] + '"' + (l[2] === id ? ' class="sr-tp-on" aria-current="page"' : '') +

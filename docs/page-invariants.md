@@ -94,3 +94,35 @@ it was built or who built it. When adding a new page, decide which
 surface it belongs to before writing its first line of CSS — never
 average the two, and never invent a third look because a mockup made it
 look like a nice middle ground.
+
+## No public page links to a member page (SR-325)
+
+**No public page links to a member page.** The only exception is the
+"Log in" nav item. If a public page needs to reference member content, it
+describes it in text rather than linking — the six framework names on
+`method.html`'s register are the model: named, attributed, and marked
+peer-reviewed / clinical practice / interpretive, all as plain text, no
+`<a>`.
+
+**The one documented exception**, and it stays an exception rather than a
+loophole: the 30 protocol-preview cards on the three public track pages
+link to `protocol.html` (a member page) by design. They are the
+carousel's core content interaction, not navigation — a visitor is
+opening a specific protocol, not browsing to "the member area" — and
+`protocol.html` itself decides what a signed-out visitor sees there
+(the soft gate, SR-326). Do not remove this link reflexively because it
+matches the pattern; it was confirmed as the one place the rule doesn't
+apply.
+
+**Why this file exists, restated with the sharper example:** `SR-318`'s
+hand-delivered drop didn't just revert the theme mechanism
+(`sessionStorage['sr-theme']` → `localStorage['sr.theme']`, the incident
+that opened this file) — it also silently reverted a **second**,
+independently-committed fix in the same drop: `method.html`'s six
+framework names had been wrapped in links to their framework pages in an
+earlier pass, and the drop's stale snapshot predated that pass, so the
+links were gone with no diff to flag it. Two committed fixes, lost by the
+same hand-delivered page, for the same underlying reason — a page
+generated from a snapshot older than the fixes it silently undid. Check
+every invariant in this file against a hand-delivered drop, not just the
+one that broke last time.
