@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-322.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-323.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -67,7 +67,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
   **SR-321** for Sections 2 and 5 together (the static public pages plus this
   register/invariants update), exactly as instructed. The consolidated-run's
   Section 1 (homepage swap) checked `git log --grep` for SR-322 before allocating,
-  found it free, and used **SR-322**. Next run: allocate from **SR-323**.
+  found it free, and used **SR-322**. The freemium-route run checked `git log --grep`
+  for SR-323 before allocating, found it free, and used **SR-323**. Next run:
+  allocate from **SR-324**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -151,6 +153,23 @@ Canonical record of defects and design decisions. Commits reference the ID:
   environment-level rAF/visibility throttling on a backgrounded tab noted in SR-320's
   report, not a code defect: calling the deferred logic directly produces the correct
   `--cw` and animation state.
+  **SR-323 · the freemium route.** Section 2b's investigation found `prog-foundation`
+  (the free Anxiety Reset / Foundation Protocol) had just been left unreachable by
+  SR-322's homepage swap — its only trigger, the old homepage's `unlockFoundation()`
+  email-gate form, was archived along with the rest of the old homepage. Extracted
+  `prog-foundation`'s content into `anxiety-reset.html` — public surface, decorated
+  language, standard public nav/footer/theme, no gate of any kind, verbatim content
+  (video session, four steps, free framing) with a handful of adaptations that could
+  not survive as a standalone page: the `showProg('personal')` back-link became a
+  real link to `index.html`; "Unlocked" as the eyebrow (nothing on this page was ever
+  locked) became "Free · no account, no email, no payment"; the two closing CTAs'
+  `scrollIntoView` targets (ids that only exist on `index.html`) became real links to
+  `personal-transformation.html#start` and `plans.html`. Marked the completion point
+  in the file for Section 6's signup-after-completion offer to attach to later — not
+  built in this pass. Inbound routes (a homepage line, a `plans.html` entry, a free
+  item in the Protocols dropdown — CSS for `.nm.free` already existed, unused until
+  now) are proposed, not yet added — awaiting approval of the wording. `prog-foundation`
+  itself is untouched and left in `index.html`; retiring it is a separate pass.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

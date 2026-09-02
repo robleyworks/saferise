@@ -43,7 +43,7 @@ band radius, ground `#0A0A0F`, hairline `rgba(245,237,216,.09)`. Public
 pages persuade someone who has not joined yet.
 
 - `plans.html`, `method.html`, `live-sessions.html`, `about.html`,
-  `coming-soon.html` — hand-authored, own inline `<style>`.
+  `coming-soon.html`, `anxiety-reset.html` — hand-authored, own inline `<style>`.
 - `personal-transformation.html`, `relationship-healing.html`,
   `professional-performance.html` — rendered by `js/saferise-track.js`
   from `content/tracks.js`, styled by the `.sr-tp` block in

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>SafeRise — The Anxiety Reset, free</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg:#0A0A0F; --bg2:#0E0E15; --bg3:#13131C;
+  --card:linear-gradient(145deg,rgba(24,24,34,.86),rgba(14,14,21,.92));
+  --hair:rgba(245,237,216,.09);
+  --hair2:rgba(245,237,216,.16);
+  --text:#F5EDD8; --text2:#9C9AA4; --text3:#6A6874;
+  --gold:#D4A843; --gold-lt:#E8C877; --gold-dim:rgba(212,168,67,.42);
+  --t1:#C97B5A; --t2:#7A8FA8; --t3:#6E9080;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --wrap:1180px;
+}
+[data-theme="sunrise"]{
+  --bg:#465578; --bg2:#4D5C82; --bg3:#54648C;
+  --card:linear-gradient(145deg,rgba(90,106,150,.9),rgba(77,92,130,.94));
+  --hair:#8492B4; --hair2:rgba(255,253,248,.3);
+  --text:#FFFDF8; --text2:#DDE3F0; --text3:#AEB7CE;
+  --gold:#FFD894; --gold-lt:#FFE8B6; --gold-dim:rgba(255,216,148,.42);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  transition:background-color 1.4s ease,color 1.4s ease}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 30px}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:20px;top:20px;z-index:200;background:var(--gold);color:#000;padding:10px 16px;border-radius:6px}
+body,.card,.foot{transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
+
+/* ═══════════ nav (identical markup to plans.html/method.html) ═══════════ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--hair);transition:background-color 1.4s ease}
+.navin{max-width:var(--wrap);margin:0 auto;padding:17px 30px;
+  display:flex;align-items:center;gap:34px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text)}
+.bmark{color:var(--gold);font-size:15px;line-height:1}
+.bname{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.24em;text-transform:uppercase}
+.navlinks{display:flex;gap:28px;margin-left:auto;align-items:center}
+.navlinks a{font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text2);
+  text-decoration:none;transition:color .3s var(--ease)}
+.navlinks a:hover{color:var(--text)}
+.themetog{display:flex;align-items:center;gap:8px;background:none;border:0;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--text3);padding:7px 0}
+.themetog:hover{color:var(--gold)}
+.tdot{width:7px;height:7px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 18%,transparent)}
+.navcta{font-family:'DM Sans',sans-serif;font-size:13px;text-decoration:none;
+  color:var(--text);border:1px solid var(--hair2);border-radius:999px;
+  padding:9px 21px;transition:all .35s var(--ease)}
+.navcta:hover{border-color:var(--gold);color:var(--gold-lt)}
+.ndrop{position:relative}
+.ntop{background:none;border:0;cursor:pointer;padding:0;display:flex;align-items:center;gap:7px;
+  font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text2);
+  transition:color .3s var(--ease)}
+.ntop:hover,.ndrop.open .ntop{color:var(--text)}
+.ncar{font-size:9px;transition:transform .3s var(--ease)}
+.ndrop.open .ncar{transform:rotate(180deg)}
+.nmenu{position:absolute;top:calc(100% + 16px);left:-22px;width:330px;padding:10px;
+  background:var(--bg2);border:1px solid var(--hair2);border-radius:18px;
+  box-shadow:0 26px 64px rgba(0,0,0,.6);
+  opacity:0;visibility:hidden;transform:translateY(-8px);
+  transition:opacity .3s var(--ease),transform .3s var(--ease),visibility .3s}
+.ndrop.open .nmenu{opacity:1;visibility:visible;transform:none}
+.nm{display:block;padding:13px 15px;border-radius:12px;text-decoration:none;
+  position:relative;transition:background .25s var(--ease)}
+.nm::before{content:'';position:absolute;left:0;top:16px;bottom:16px;width:2px;
+  border-radius:2px;background:var(--accent,transparent);opacity:0;transition:opacity .25s var(--ease)}
+.nm:hover{background:var(--bg3)}
+.nm:hover::before{opacity:1}
+.nm.t1{--accent:var(--t1)} .nm.t2{--accent:var(--t2)} .nm.t3{--accent:var(--t3)}
+.nm.free{--accent:var(--gold)}
+.nmk{display:block;font-family:'DM Sans',sans-serif;font-size:8.5px;font-weight:700;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.nm.free .nmk{color:var(--gold)}
+.nmn{display:block;font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--text);
+  line-height:1.2}
+.nmd{display:block;font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--text3);
+  margin-top:3px}
+.nm.soon{opacity:.62}
+
+/* ═══════════ page header ═══════════ */
+.pg{padding:118px 0 0}
+.pghead{padding:54px 0 34px;text-align:center}
+.pgback{display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);
+  text-decoration:none;margin-bottom:30px;transition:color .3s var(--ease)}
+.pgback:hover{color:var(--gold)}
+.pgback svg{width:14px;height:9px}
+.eyebrow{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--gold);
+  display:flex;align-items:center;justify-content:center;gap:13px}
+.eyebrow::before,.eyebrow::after{content:'';width:26px;height:1px;background:var(--gold-dim)}
+.pghead h1{font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:clamp(34px,5vw,58px);line-height:1.08;letter-spacing:-.02em;margin:22px auto 0;max-width:16ch}
+.pglead{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;
+  color:var(--text2);max-width:52ch;margin:20px auto 0}
+
+/* ═══════════ the module ═══════════ */
+.sec{padding:44px 0}
+.modwrap{max-width:940px;margin:0 auto}
+.mod{border:2px solid var(--gold);background:var(--card);border-radius:18px;overflow:hidden}
+.modhead{background:var(--bg3);padding:26px 32px;border-bottom:1px solid var(--hair);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.modkick{font-size:9px;letter-spacing:.22em;color:var(--gold);font-weight:700;
+  text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:6px}
+.modhead h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:25px;
+  color:var(--text);margin-bottom:4px}
+.modsub{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--text3);font-style:italic}
+.modbadges{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.badge{font-size:9px;letter-spacing:.18em;font-weight:700;text-transform:uppercase;
+  font-family:'DM Sans',sans-serif;padding:6px 14px;border-radius:999px}
+.badge-free{color:var(--bg);background:var(--gold)}
+.badge-pilot{color:var(--gold);border:1px solid var(--gold)}
+
+.media-block{background:var(--bg3);border:1px solid var(--hair)}
+.media-header{padding:10px 14px;border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:8px}
+.media-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.7}
+.media-label{font-size:9px;letter-spacing:.2em;color:var(--gold);font-weight:700;
+  text-transform:uppercase;font-family:'DM Sans',sans-serif}
+.video-wrap{background:var(--bg3);border-bottom:1px solid var(--hair);padding:30px 32px}
+.video-inner-wrap{max-width:640px;margin:0 auto}
+.video-placeholder{position:relative;width:100%;padding-top:56.25%;background:var(--card);
+  overflow:hidden;border-radius:12px}
+.video-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:12px}
+.play-btn{width:52px;height:52px;border-radius:50%;border:2px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;transition:all .25s var(--ease);
+  background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.play-btn svg{fill:var(--gold);margin-left:4px}
+.video-title{font-size:11px;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;text-align:center}
+.video-bar{padding:10px 14px;background:var(--bg2);display:flex;align-items:center;gap:10px;
+  border-radius:0 0 12px 12px}
+.v-time{font-size:10px;color:var(--text3);font-family:'DM Sans',sans-serif}
+.v-track{flex:1;height:3px;background:var(--hair2);border-radius:2px;position:relative}
+.v-progress{width:0;height:100%;background:var(--gold);border-radius:2px}
+.v-dot{position:absolute;right:-4px;top:-3px;width:9px;height:9px;border-radius:50%;background:var(--gold)}
+
+.modbody{display:grid;grid-template-columns:1fr 320px}
+.steps{padding:26px 30px;border-right:1px solid var(--hair)}
+.stepskick{font-size:10px;letter-spacing:.2em;color:var(--gold);font-weight:700;
+  text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:18px}
+.stepitem{display:flex;align-items:flex-start;gap:16px;padding:13px 0;border-bottom:1px solid var(--hair)}
+.stepitem:last-of-type{border-bottom:none}
+.stepitem svg{flex-shrink:0;margin-top:2px}
+.stepname{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.stepnum{font-size:9px;letter-spacing:.2em;color:var(--gold);font-family:'DM Sans',sans-serif;font-weight:700}
+.stepword{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--text);
+  letter-spacing:.02em;text-transform:uppercase}
+.stepbody{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--text2);line-height:1.6}
+.modnote{margin-top:14px;padding:14px 18px;background:color-mix(in srgb,var(--gold) 7%,transparent);
+  border-left:3px solid var(--gold)}
+.modnote p{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--text2);
+  line-height:1.7;font-style:italic}
+.modside{padding:22px;display:flex;flex-direction:column;gap:13px}
+
+.audio-placeholder{padding:16px 14px;background:var(--card)}
+.audio-caption{font-size:10px;color:var(--text3);letter-spacing:.05em;margin-bottom:6px}
+.audio-waveform{display:flex;align-items:center;gap:2px;margin:10px 0;height:36px}
+.audio-waveform span{width:3px;border-radius:2px;background:var(--gold);opacity:.5}
+.audio-controls{display:flex;align-items:center;gap:10px;margin-top:10px}
+.audio-play{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  background:color-mix(in srgb,var(--gold) 9%,transparent)}
+.audio-play svg{fill:var(--gold);margin-left:2px}
+.audio-track{flex:1;height:2px;background:var(--hair2);border-radius:1px}
+.audio-fill{width:0;height:100%;background:var(--gold);border-radius:1px}
+.audio-time{font-size:10px;color:var(--text3);font-family:'DM Sans',sans-serif}
+
+.pdf-placeholder{padding:14px;display:flex;align-items:center;gap:12px;background:var(--card)}
+.pdf-icon{width:34px;height:42px;background:var(--bg2);border-radius:3px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;
+  border:1px solid var(--hair)}
+.pdf-icon::after{content:'PDF';font-size:7px;font-weight:700;color:var(--gold);
+  position:absolute;bottom:5px;letter-spacing:.05em}
+.pdf-title{font-size:11px;font-weight:600;color:var(--text);margin-bottom:3px;
+  letter-spacing:.02em;font-family:'DM Sans',sans-serif}
+.pdf-sub{font-size:10px;color:var(--text3);font-family:'DM Sans',sans-serif}
+.pdf-dl{width:26px;height:26px;border-radius:50%;border:1px solid var(--hair);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:auto}
+.pdf-dl svg{stroke:var(--gold)}
+
+/* ═══════════ completion / upsell ═══════════ */
+.done{max-width:760px;margin:56px auto 0;padding-top:44px;border-top:1px solid var(--hair);text-align:center}
+.donekick{font-size:9px;letter-spacing:.22em;color:var(--gold);font-weight:700;
+  text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:16px}
+.done h2{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(26px,3.6vw,40px);
+  line-height:1.15;margin-bottom:20px}
+.done h2 em{font-style:italic;color:var(--gold-lt)}
+.done p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;
+  color:var(--text2);line-height:1.75;margin-bottom:14px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0;text-align:left}
+.ccard{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:26px 22px;position:relative}
+.ccard.on{border-color:var(--gold)}
+.ctag{font-size:9px;letter-spacing:.18em;color:var(--text3);font-weight:700;
+  text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:14px}
+.ccard.on .ctag{color:var(--gold)}
+.cbadge{position:absolute;top:-1px;right:16px;background:var(--gold);color:var(--bg);
+  font-size:9px;font-weight:700;letter-spacing:.15em;padding:4px 12px;border-radius:0 0 6px 6px;
+  font-family:'DM Sans',sans-serif;text-transform:uppercase}
+.ccard ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.ccard li{font-family:'Cormorant Garamond',serif;font-size:15.5px;color:var(--text2);
+  padding-left:18px;position:relative;line-height:1.4}
+.ccard.on li{color:var(--text)}
+.ccard li::before{content:'◆';position:absolute;left:0;color:var(--gold);font-size:9px;top:4px}
+.doneacts{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:8px}
+.pill{display:inline-block;background:var(--gold);color:var(--bg);font-size:11px;font-weight:700;
+  letter-spacing:.17em;text-transform:uppercase;padding:16px 32px;border-radius:999px;border:0;
+  cursor:pointer;text-decoration:none}
+.pill:hover{background:var(--gold-lt)}
+.ghostlink{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text3);text-decoration:none;
+  border-bottom:1px solid var(--hair2)}
+.ghostlink:hover{color:var(--gold-lt);border-color:var(--gold)}
+.donenote{font-size:11px;color:var(--text3);font-family:'DM Sans',sans-serif;margin-top:6px}
+
+/* ═══════════ footer ═══════════ */
+.foot{border-top:1px solid var(--hair);padding:44px 0 40px;background:var(--bg)}
+.scope{font-family:'DM Sans',sans-serif;font-size:12.5px;line-height:1.62;color:var(--text3);max-width:74ch}
+.scope strong{color:var(--text2);font-weight:500}
+.flinks{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px}
+.flinks a{font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--text3);
+  text-decoration:none;transition:color .3s var(--ease)}
+.flinks a:hover{color:var(--gold)}
+
+@media(max-width:760px){
+  .modbody{grid-template-columns:1fr}
+  .steps{border-right:none;border-bottom:1px solid var(--hair)}
+  .compare{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav">
+  <div class="navin">
+    <a class="brand" href="index.html"><span class="bmark">&#9672;</span><span class="bname">SafeRise Protocol</span></a>
+    <div class="navlinks">
+      <div class="ndrop">
+        <button class="ntop" type="button" aria-expanded="false" aria-haspopup="true" id="ptrig">
+          Protocols <span class="ncar" aria-hidden="true">&#9662;</span></button>
+        <div class="nmenu" role="menu" aria-labelledby="ptrig">
+          <a role="menuitem" href="personal-transformation.html" class="nm t1">
+            <span class="nmk">Track 01</span><span class="nmn">Personal Transformation</span>
+            <span class="nmd">What happens inside me</span></a>
+          <a role="menuitem" href="relationship-healing.html" class="nm t2">
+            <span class="nmk">Track 02</span><span class="nmn">Relationship Healing</span>
+            <span class="nmd">What keeps happening between us</span></a>
+          <a role="menuitem" href="professional-performance.html" class="nm t3">
+            <span class="nmk">Track 03</span><span class="nmn">Professional Performance</span>
+            <span class="nmd">What changes when the stakes rise</span></a>
+          <a role="menuitem" href="coming-soon.html" class="nm soon">
+            <span class="nmk">Not yet open</span><span class="nmn">What&#8217;s coming</span>
+            <span class="nmd">Six more tracks in development</span></a>
+        </div>
+      </div>
+      <a href="method.html">Method</a><a href="plans.html">Plans</a><a href="live-sessions.html">Live sessions</a><a href="about.html">About</a>
+    </div>
+    <button class="themetog" id="tog" type="button" aria-label="Switch theme">
+      <span class="tdot"></span><span id="togl">Midnight</span></button>
+    <a class="navcta" href="dashboard.html">Log in</a>
+  </div>
+</nav>
+
+<main id="main">
+<section class="pg"><div class="wrap">
+  <div class="pghead">
+    <a class="pgback" href="index.html">
+      <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+      Back to the homepage
+    </a>
+    <p class="eyebrow">Free &middot; no account, no email, no payment</p>
+    <h1>Your Foundation Protocol</h1>
+    <p class="pglead">The four-step nervous-system reset &mdash; free, no time limit. This is the
+      same protocol every other module builds on.</p>
+  </div>
+
+  <div class="sec"><div class="modwrap">
+    <div class="mod">
+      <div class="modhead">
+        <div>
+          <p class="modkick">Foundation module &middot; free access &middot; no registration required</p>
+          <h3>The SafeRise Protocol</h3>
+          <p class="modsub">The four-step nervous-system reset. Master this first &mdash; it's the through-line connecting every protocol.</p>
+        </div>
+        <div class="modbadges">
+          <span class="badge badge-free">Free</span>
+          <span class="badge badge-pilot">Pilot module</span>
+        </div>
+      </div>
+
+      <div class="video-wrap"><div class="video-inner-wrap">
+        <div class="media-block">
+          <div class="media-header"><span class="media-dot"></span><span class="media-label">Guided video session &middot; foundation practice</span></div>
+          <div class="video-placeholder">
+            <div class="video-inner">
+              <div class="play-btn" aria-label="Play introduction"><svg width="22" height="24" viewBox="0 0 22 24"><path d="M2 1l19 11L2 23V1z"/></svg></div>
+              <p class="video-title">SafeRise Protocol &mdash; Foundation Guided Session</p>
+              <p style="font-size:11px;color:var(--text3);letter-spacing:.04em">Andre Robley &middot; Founder</p>
+            </div>
+          </div>
+          <div class="video-bar">
+            <span class="v-time"></span>
+            <div class="v-track"><div class="v-progress"><div class="v-dot"></div></div></div>
+            <span class="v-time"></span>
+          </div>
+        </div>
+      </div></div>
+
+      <div class="modbody">
+        <div class="steps">
+          <p class="stepskick">The four-step practice</p>
+
+          <div class="stepitem">
+            <svg width="44" height="44" viewBox="0 0 280 140">
+              <circle cx="80" cy="70" r="28" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.3"/>
+              <circle cx="80" cy="70" r="16" fill="var(--bg3)" opacity="0.5"/>
+              <circle cx="80" cy="70" r="7" fill="var(--gold)" opacity="0.7"/>
+              <ellipse cx="185" cy="88" rx="28" ry="19" fill="var(--bg2)" stroke="var(--gold)" stroke-width="1" opacity="0.85"/>
+              <path d="M168 86 Q174 80 180 86 Q174 92 168 86Z" fill="var(--gold)" opacity="0.35"/>
+              <path d="M166 80 Q162 72 158 64 Q155 57 154 50" stroke="var(--gold)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.75"/>
+              <circle cx="153" cy="48" r="5" fill="var(--bg3)" stroke="var(--gold)" stroke-width="0.9" opacity="0.9"/>
+              <circle cx="154" cy="47" r="2" fill="var(--gold)" opacity="0.85"/>
+            </svg>
+            <div>
+              <div class="stepname"><span class="stepnum">01</span><span class="stepword">Recognise</span></div>
+              <p class="stepbody">Pause. Name the trigger with precision. Specificity dissolves the fog and interrupts the unconscious survival response.</p>
+            </div>
+          </div>
+
+          <div class="stepitem">
+            <svg width="44" height="44" viewBox="0 0 280 140">
+              <defs><radialGradient id="ar2g" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="var(--gold)" stop-opacity="0.22"/><stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/></radialGradient></defs>
+              <ellipse cx="85" cy="72" rx="45" ry="40" fill="url(#ar2g)"/>
+              <path d="M57 90 Q47 74 50 57 Q54 42 66 34 Q78 26 90 30 Q102 34 108 49 Q114 64 106 76 Q98 88 86 90 Q72 93 60 86Z" fill="var(--bg2)" stroke="var(--gold)" stroke-width="1.2" opacity="0.88"/>
+              <path d="M62 74 Q68 68 74 74 Q68 80 62 74Z" fill="var(--gold)" opacity="0.38"/>
+              <circle cx="90" cy="34" r="3.5" fill="var(--bg3)" stroke="var(--gold)" stroke-width="0.9" opacity="0.9"/>
+              <circle cx="91" cy="33" r="1.8" fill="var(--gold)" opacity="0.82"/>
+              <circle cx="85" cy="72" r="10" fill="var(--gold)" opacity="0.18"/>
+              <path d="M85 81 Q78 74 78 68 Q78 62 82 61 Q85 60 85 64 Q85 60 88 61 Q92 62 92 68 Q92 74 85 81Z" fill="var(--gold)" opacity="0.88"/>
+            </svg>
+            <div>
+              <div class="stepname"><span class="stepnum">02</span><span class="stepword">Regulate</span></div>
+              <p class="stepbody">Hand on chest. Breathe into the heart. The heart holds what the mind cannot resolve.</p>
+            </div>
+          </div>
+
+          <div class="stepitem">
+            <svg width="44" height="44" viewBox="0 0 280 140">
+              <path d="M36 105 Q28 90 26 75 Q24 63 30 58 Q35 55 38 63 L40 78 Q42 63 44 51 Q46 41 52 41 Q58 41 58 51 L58 68 Q60 55 64 51 Q68 45 73 49 Q77 53 75 65 L73 78 Q76 67 80 65 Q85 61 88 67 Q91 73 86 85 Q82 95 78 105Z" stroke="var(--gold)" stroke-width="1.1" fill="var(--bg2)" opacity="0.75"/>
+              <circle cx="52" cy="32" r="2.5" fill="var(--gold)" opacity="0.55"/>
+              <circle cx="40" cy="19" r="2" fill="var(--gold)" opacity="0.4"/>
+              <circle cx="64" cy="22" r="1.8" fill="var(--gold)" opacity="0.38"/>
+              <ellipse cx="195" cy="85" rx="22" ry="17" fill="var(--bg2)" stroke="var(--gold)" stroke-width="1" opacity="0.85"/>
+              <path d="M177 83 Q183 78 189 83 Q183 88 177 83Z" fill="var(--gold)" opacity="0.35"/>
+              <path d="M175 78 Q171 70 168 62" stroke="var(--gold)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7"/>
+              <circle cx="167" cy="60" r="4.5" fill="var(--bg2)" stroke="var(--gold)" stroke-width="0.9" opacity="0.85"/>
+            </svg>
+            <div>
+              <div class="stepname"><span class="stepnum">03</span><span class="stepword">Release</span></div>
+              <p class="stepbody">Acknowledge without judgment. Forgive yourself. Release resistance &mdash; it holds activation in place.</p>
+            </div>
+          </div>
+
+          <div class="stepitem">
+            <svg width="44" height="44" viewBox="0 0 280 140">
+              <defs><radialGradient id="ar4g" cx="50%" cy="60%" r="55%"><stop offset="0%" stop-color="var(--gold)" stop-opacity="0.2"/><stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/></radialGradient></defs>
+              <ellipse cx="110" cy="88" rx="105" ry="55" fill="url(#ar4g)"/>
+              <line x1="110" y1="28" x2="110" y2="6" stroke="var(--gold)" stroke-width="1.5" opacity="0.55" stroke-linecap="round"/>
+              <line x1="110" y1="28" x2="88" y2="10" stroke="var(--gold)" stroke-width="1" opacity="0.35" stroke-linecap="round"/>
+              <line x1="110" y1="28" x2="132" y2="10" stroke="var(--gold)" stroke-width="1" opacity="0.35" stroke-linecap="round"/>
+              <circle cx="110" cy="5" r="4.5" fill="var(--gold)" opacity="0.72"/>
+              <circle cx="110" cy="88" r="35" fill="var(--card)" stroke="var(--gold)" stroke-width="1.3" opacity="0.92"/>
+              <path d="M110 50 Q116 47 121 53 Q116 59 110 50Z" fill="var(--gold)" opacity="0.46"/>
+              <circle cx="110" cy="88" r="9" fill="var(--gold)" opacity="0.18"/>
+              <path d="M110 97 Q103 90 103 84 Q103 78 107 77 Q110 76 110 80 Q110 76 113 77 Q117 78 117 84 Q117 90 110 97Z" fill="var(--gold)" opacity="0.90"/>
+              <path d="M100 120 Q104 127 110 129 Q116 127 120 120" stroke="var(--gold)" stroke-width="1.1" fill="var(--card)" opacity="0.75"/>
+            </svg>
+            <div>
+              <div class="stepname"><span class="stepnum">04</span><span class="stepword">Rise</span></div>
+              <p class="stepbody">Thank your heart. Notice what changed and what that change says about who you are becoming. Name the specific identity you choose in relation to this pattern, state it as a decision rather than a hope, and take one small action that gives that identity evidence. Each cycle expands your baseline capacity &mdash; the learning compounds.</p>
+            </div>
+          </div>
+
+          <div class="modnote">
+            <p>The foundation every protocol is built on. Master the four steps here &mdash; then apply the same sequence to any specific state through the ten precision protocols in Personal Transformation.</p>
+          </div>
+        </div>
+
+        <div class="modside">
+          <div class="media-block">
+            <div class="media-header"><span class="media-dot"></span><span class="media-label">Guided audio practice</span></div>
+            <div class="audio-placeholder">
+              <p class="audio-caption">Full four-step practice</p>
+              <div class="audio-waveform" aria-hidden="true"></div>
+              <div class="audio-controls">
+                <div class="audio-play"><svg width="10" height="12" viewBox="0 0 10 12"><path d="M1 0l9 6-9 6V0z"/></svg></div>
+                <div class="audio-track"><div class="audio-fill"></div></div>
+                <span class="audio-time"></span>
+              </div>
+            </div>
+          </div>
+          <div class="media-block">
+            <div class="media-header"><span class="media-dot"></span><span class="media-label">Protocol reference guide</span></div>
+            <div class="pdf-placeholder">
+              <div class="pdf-icon" aria-hidden="true"></div>
+              <div style="flex:1"><p class="pdf-title">SafeRise Protocol &mdash; Reference Guide</p><p class="pdf-sub">PDF &middot; free download</p></div>
+              <div class="pdf-dl"><svg width="12" height="14" viewBox="0 0 12 14" fill="none" stroke-linecap="round"><path d="M6 1v9M2 7l4 4 4-4M1 13h10" stroke-width="1.5"/></svg></div>
+            </div>
+          </div>
+          <div class="media-block">
+            <div class="media-header"><span class="media-dot"></span><span class="media-label">Interactive workbook</span></div>
+            <div class="pdf-placeholder">
+              <div class="pdf-icon" aria-hidden="true"></div>
+              <div style="flex:1"><p class="pdf-title">SafeRise Protocol &mdash; Practice Workbook</p><p class="pdf-sub">PDF &middot; fillable &amp; printable</p></div>
+              <div class="pdf-dl"><svg width="12" height="14" viewBox="0 0 12 14" fill="none" stroke-linecap="round"><path d="M6 1v9M2 7l4 4 4-4M1 13h10" stroke-width="1.5"/></svg></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SR-323 · COMPLETION POINT. The protocol has no further step after
+         the module above — there is no "finish" button to instrument, no
+         quiz, no gate. This is where a member is once they have run the
+         four steps. Section 6's signup-after-completion offer (approved
+         copy: "Keep what you just started.") attaches here, replacing the
+         upsell block below it — never before the module, never as a modal
+         over it. Not built in this pass. -->
+
+    <div class="done">
+      <p class="donekick">You've experienced the foundation</p>
+      <h2>Ready to go deeper<br>into a specific state?</h2>
+      <p>The foundation works across every state. But sometimes you need a protocol built
+        precisely for what you're carrying right now &mdash; the specific signature, the exact
+        trigger, the research behind that particular state.</p>
+      <p>That's what the ten precision protocols in Personal Transformation deliver. Each one
+        is a complete guided system &mdash; audio session, reference guide and workbook &mdash;
+        built around one state you know well.</p>
+
+      <div class="compare">
+        <div class="ccard">
+          <p class="ctag">Foundation protocol &middot; free</p>
+          <ul>
+            <li>The four-step methodology</li>
+            <li>Guided audio</li>
+            <li>PDF reference guide</li>
+            <li>Interactive workbook</li>
+          </ul>
+        </div>
+        <div class="ccard on">
+          <span class="cbadge">Most chosen</span>
+          <p class="ctag">Personal Transformation &middot; <span data-sr-price="t1" data-sr-price-form="mo">&euro;19/mo</span></p>
+          <ul>
+            <li>Everything in Foundation, plus:</li>
+            <li>All ten precision protocols</li>
+            <li>The full resource library per protocol</li>
+            <li>Cancel anytime</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doneacts">
+        <a class="pill" href="personal-transformation.html#start">Start Personal Transformation &mdash; <span data-sr-price="t1" data-sr-price-form="mo">&euro;19/mo</span></a>
+        <a class="ghostlink" href="plans.html">See all plans</a>
+        <p class="donenote">Cancel anytime &middot; nested access &mdash; higher tiers include everything below them</p>
+      </div>
+    </div>
+  </div></div>
+</div></section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p class="scope"><strong>Scope &amp; safety.</strong> SafeRise Protocol is
+      self-guided education and training in nervous-system regulation. It is not
+      therapy, medical treatment, or a substitute for professional care, and it has not
+      been through a clinical trial. If you are in crisis, contact your local emergency
+      service.</p>
+    <div class="flinks">
+      <a href="mailto:contact@thesaferiseprotocol.com">Contact</a><a href="method.html#faq">FAQ</a>
+      <a href="dashboard.html">Account</a><a href="plans.html">Billing</a><a href="mailto:contact@thesaferiseprotocol.com">Support</a>
+      <a href="#">Terms</a><a href="#">Privacy</a>
+    </div>
+  </div>
+</footer>
+<script>
+(function(){
+  var dd=document.querySelector('.ndrop'), dt=document.getElementById('ptrig');
+  function close(){dd.classList.remove('open');dt.setAttribute('aria-expanded','false');}
+  dt.addEventListener('click',function(e){e.stopPropagation();
+    var o=dd.classList.toggle('open');dt.setAttribute('aria-expanded',o?'true':'false');});
+  dd.addEventListener('mouseenter',function(){dd.classList.add('open');});
+  dd.addEventListener('mouseleave',close);
+  document.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  var t=document.getElementById('tog'), l=document.getElementById('togl');
+  function applyTheme(n){
+    document.documentElement.setAttribute('data-theme',n);
+    if(l) l.textContent = n==='midnight' ? 'Midnight' : 'Sunrise';
+    try{ sessionStorage.setItem('sr-theme', n); }catch(e){}
+  }
+  try{
+    var saved = sessionStorage.getItem('sr-theme');
+    if(saved==='midnight'||saved==='sunrise') applyTheme(saved);
+  }catch(e){}
+  if(t) t.addEventListener('click',function(){
+    var c=document.documentElement.getAttribute('data-theme');
+    applyTheme(c==='midnight'?'sunrise':'midnight');
+  });
+})();
+</script>
+</body>
+</html>
