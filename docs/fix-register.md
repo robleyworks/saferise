@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-328.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-329.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -80,7 +80,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
   matched, not just whether something did. The coming-soon-v14 run checked
   `git log --grep` for SR-327 before allocating, found it free, and used
   **SR-327**. The small-fixes run checked `git log --grep` for SR-328 before
-  allocating, found it free, and used **SR-328**. Next run: allocate from **SR-329**.
+  allocating, found it free, and used **SR-328**. The coming-soon-v17 run
+  checked `git log --grep` for SR-329 before allocating, found it free, and
+  used **SR-329**. Next run: allocate from **SR-330**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -353,6 +355,45 @@ Canonical record of defects and design decisions. Commits reference the ID:
   still renders all 7 tracks with `.shared` intact after the CSS removal, same
   8 image 404s as before (nothing broken by the cleanup); esprima-clean on
   every touched file.
+  **SR-329 · coming-soon.html rewritten again, from coming-soon-v17.html.**
+  Headline → "Bring more of your life under your own design."; the lead's
+  closing sentence ("Not more subjects...") dropped as a duplicate of the new
+  headline; `.chero .inner`'s padding gained the 30px horizontal inset every
+  section below it already had (`132px 0 84px` → `132px 30px 84px`), fixing
+  the hero sitting flush left against an indented page; card `min-height`
+  290px → 318px; hint line → "Hover or focus a track to read it in full";
+  track descriptions now visible at rest, clamped to three lines
+  (`-webkit-line-clamp:3` inside a `-webkit-box`) under a bottom fade,
+  expanding to full (`-webkit-line-clamp:12`, fade opacity 0) on
+  `:hover`/`:focus-within`, and unclamped entirely (`unset`, fade
+  `display:none`) under the existing `max-width:900px` breakpoint — all
+  already correctly built into the supplied file, nothing to fix there.
+  The supplied file's own precondition warning proved out a *third* time,
+  named explicitly in this task's own brief ("This has been wrong in three
+  consecutive hand-delivered pages"): `localStorage`/`'sr.theme'` again,
+  corrected to `sessionStorage`/`'sr-theme'` copied verbatim; the footer's
+  `<a href="dashboard.html">Account</a>` again, removed; the Protocols ▾
+  dropdown's "Six more tracks" again, corrected to "Seven"; the `.cband`/
+  `.tslot`/`.thesis`/`.bandnote` dead CSS SR-328 had just removed, again —
+  all four confirmed to have regressed because the supplied file was
+  generated from a snapshot older than SR-327/SR-328, not because anything
+  about those fixes was wrong. Handled identically to SR-327/SR-328: kept
+  the live values, did not reimplement the theme block, removed the dead
+  CSS a second time (same one survivor, `.shared`, same reasoning).
+  Verified live: hero and section text left edges both measured at exactly
+  30px (confirmed via computed padding, not just visual inspection);
+  every card's description clamps to 3 lines at rest and expands on
+  keyboard focus (`-webkit-line-clamp` 3 → 12, confirmed atomically to
+  avoid a focus-loss race between separate tool calls this session's
+  browser harness has shown before); all 7 cards' h3 sit at an identical
+  offset from their own card top; at 375px width the clamp computes
+  `none` and the fade `display:none` — full text, no clamp, matching the
+  390px mobile requirement; theme toggle works and carries to `about.html`;
+  exactly 8 image 404s (`document.images` `naturalWidth:0` check, cross-
+  verified with direct `curl`, since this session's console-message and
+  network-request tools returned inconsistent/empty results against a
+  freshly-reopened browser pane — not trusted on their own this pass);
+  esprima-clean, HTML structurally balanced.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

@@ -441,10 +441,11 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   .std:last-child{border-bottom:0}}
 
 
-/* SR-328 · .cband/.tslot/.thesis/.bandnote removed — a superseded layout's
-   CSS with zero matching markup anywhere on this page. .shared is the one
-   survivor: two definitions had shadowed each other (cascade order, same
-   selector), and only the second — kept below — was ever actually applied. */
+/* SR-329 · .cband/.tslot/.thesis/.bandnote removed again — the supplied
+   file was generated from a pre-SR-328 snapshot and carried the same dead
+   CSS back. Zero matching markup, confirmed before removal. .shared is the
+   one survivor: two definitions shadowed each other by cascade order: only
+   the second — kept below — was ever actually applied. */
 .shared{border-left:2px solid var(--gold);padding:6px 0 6px 22px;margin:36px 0 0;max-width:60ch}
 .shared p{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;
   line-height:1.45;color:var(--text)}
@@ -459,7 +460,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 88%,transparent) 34%,
     color-mix(in srgb,var(--bg) 46%,transparent) 66%,color-mix(in srgb,var(--bg) 74%,transparent) 100%),
     linear-gradient(180deg,color-mix(in srgb,var(--bg) 14%,transparent),var(--bg) 93%)}
-.chero .inner{position:relative;z-index:2;padding:132px 0 84px;max-width:800px}
+.chero .inner{position:relative;z-index:2;padding:132px 30px 84px;max-width:860px}
 .chero h1{font-family:'Cormorant Garamond',serif;font-weight:300;
   font-size:clamp(42px,6.4vw,80px);line-height:1;letter-spacing:-.032em;
   margin:22px 0;max-width:13ch}
@@ -487,14 +488,14 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .tstack{display:flex;flex-direction:column;gap:18px;margin-top:30px}
 .tb{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--hair);
   background:var(--bg2);display:grid;grid-template-columns:1.15fr 1fr;
-  min-height:290px;transition:border-color .5s var(--ease),transform .5s var(--ease)}
+  min-height:318px;transition:border-color .5s var(--ease),transform .5s var(--ease)}
 .tb:hover,.tb:focus-within{border-color:var(--ac);transform:translateY(-3px);outline:none}
 .tbimg{position:relative;overflow:hidden}
 .tbimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   transition:transform 1.2s var(--ease),filter .6s var(--ease);filter:saturate(.72)}
 .tb:hover .tbimg img,.tb:focus-within .tbimg img{transform:scale(1.04);filter:saturate(.95)}
 .tbimg::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent 42%,var(--bg2) 97%)}
+  background:linear-gradient(90deg,transparent 58%,var(--bg2) 99%)}
 .fid{position:absolute;bottom:10px;left:12px;z-index:3;font:700 8.5px/1 'DM Sans',sans-serif;
   letter-spacing:.2em;text-transform:uppercase;color:#fff;opacity:.5;
   text-shadow:0 1px 8px rgba(0,0,0,.9)}
@@ -502,10 +503,16 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .tbtxt{padding:34px 34px 34px 8px;display:flex;flex-direction:column;justify-content:flex-start}
 .tbtxt h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:27px;line-height:1.1}
 .tbtxt .ask{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17.5px;
-  line-height:1.4;color:var(--ac);margin:9px 0 0;min-height:3em}
-.deep{max-height:0;opacity:0;overflow:hidden;
-  transition:max-height .7s var(--ease),opacity .5s var(--ease),margin .7s var(--ease)}
-.tb:hover .deep,.tb:focus-within .deep{max-height:340px;opacity:1;margin-top:14px}
+  line-height:1.4;color:var(--ac);margin:9px 0 0;min-height:2.8em}
+/* description always visible — clamped at rest, opens fully on hover */
+.deep{margin-top:13px;position:relative}
+.deep p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+  overflow:hidden;transition:-webkit-line-clamp .5s var(--ease)}
+.tb:hover .deep p,.tb:focus-within .deep p{-webkit-line-clamp:12}
+.deep::after{content:'';position:absolute;left:0;right:0;bottom:0;height:34px;
+  pointer-events:none;opacity:1;transition:opacity .45s var(--ease);
+  background:linear-gradient(180deg,transparent,var(--bg2))}
+.tb:hover .deep::after,.tb:focus-within .deep::after{opacity:0}
 .deep p{font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.62;color:var(--text2)}
 .hint{font-family:'DM Sans',sans-serif;font-size:11.5px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--text3);margin-top:16px}
@@ -515,7 +522,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   .tbimg::after{background:linear-gradient(180deg,transparent 46%,var(--bg2) 98%)}
   .tbtxt{padding:24px}
   .tbtxt .ask{min-height:0}
-  .deep{max-height:none;opacity:1;margin-top:12px}}
+  .deep p{-webkit-line-clamp:unset}.deep::after{display:none}}
 
 </style>
 </head>
@@ -556,13 +563,13 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   <img src="assets/coming/coming-hero.jpg" alt="">
   <div class="wrap inner">
     <p class="eyebrow">What&#8217;s coming</p>
-    <h1>Once you can change one thing, <em>you can change anything.</em></h1>
+    <h1>Bring more of your life <em>under your own design.</em></h1>
     <p class="lead">How you think, how you feel, what you expect, what you notice, what
       you do next &#8212; none of that was chosen. It was installed, and it has been
       running your life since.</p>
     <p class="lead">Learn to reach it in one place and you can reach it everywhere: your
       body, your money, your closeness, your work, your sense of what is even possible
-      for you. Not more subjects. More of your life made yours to design.</p>
+      for you.</p>
   </div>
 </section>
 
@@ -656,7 +663,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
         <div class="deep"><p>For the cycles that repeat despite every intention. What the behaviour is protecting you from feeling, why willpower keeps losing to it, and what has to be built underneath before it stops being needed. Rebuilding an identity that no longer depends on the thing, and meeting the return without treating yourself as the failure.</p></div>
       </div>
     </article></div>
-  <p class="hint">Hover or focus a track to open it</p>
+  <p class="hint">Hover or focus a track to read it in full</p>
   <div class="shared"><p>The subject changes. What remains familiar underneath: notice
     where attention goes, recognise the pattern forming around it, understand the belief
     giving it meaning, regulate the state it creates, and recover greater choice.</p></div>
