@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-329.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-330.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -82,7 +82,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
   **SR-327**. The small-fixes run checked `git log --grep` for SR-328 before
   allocating, found it free, and used **SR-328**. The coming-soon-v17 run
   checked `git log --grep` for SR-329 before allocating, found it free, and
-  used **SR-329**. Next run: allocate from **SR-330**.
+  used **SR-329**. The image-wiring run checked `git log --grep` for SR-330
+  before allocating, found it free, and used **SR-330**. Next run: allocate
+  from **SR-331**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -394,6 +396,37 @@ Canonical record of defects and design decisions. Commits reference the ID:
   network-request tools returned inconsistent/empty results against a
   freshly-reopened browser pane — not trusted on their own this pass);
   esprima-clean, HTML structurally balanced.
+  **SR-330 · the coming-soon images, wired.** Confirms SR-327's eight slots
+  now resolve — the eight files landed at `assets/coming/` under the exact
+  names. `coming-soon.html` needed no change at all: its eight `<img src>`
+  values already matched the file paths exactly. **One real defect found,
+  reported, not fixed:** `band-06.jpg` is a **PNG** wearing a `.jpg`
+  extension (confirmed both by `file` and PIL:
+  `PNG image data, 1717 x 916`), not the `1200 × 640` JPEG every sibling is.
+  Renders fine regardless — browsers sniff the real bytes, not the
+  extension, and 1717:916 happens to be almost the same aspect ratio as
+  1200:640 (1.874 vs 1.875), so `object-fit:cover` shows no visible seam —
+  but it is roughly 4–20× the file weight of a correctly-encoded sibling
+  (1.77 MB against 87–195 KB) for no visual gain, and the wrong format is
+  exactly the defect this task's own brief said to watch for. Not
+  re-encoded here — Section 1 of this task was report-only for the files.
+  All seven other files: real JPEGs, correct `1200 × 640` /
+  `3840 × 1200` dimensions.
+  Verified live: all eight `document.images` report `naturalWidth > 0`
+  (not just an absent console error); desktop layout confirmed via computed
+  style rather than a screenshot — this session's screenshot tool returned
+  blank captures at a resized (1400×900) viewport, a repeat of the same
+  tooling artifact seen earlier in this session, not a page defect — image
+  column left of the text column, `.tbimg::after`'s fade
+  (`linear-gradient(90deg, transparent 58%, var(--bg2) 99%)`) confirmed
+  present and giving the text side clean ground; no layout shift by
+  construction, since `.tb`'s `min-height` and `.tbimg`'s sizing come from
+  the CSS grid, never from the image's own intrinsic size (the `<img>` is
+  `position:absolute;inset:0` inside a sized, `position:relative` parent);
+  theme toggle confirmed working with sunrise included. Total added weight:
+  **2.89 MB** across the eight files. `coming-hero.jpg` is 502.3 KB — over
+  the 500 KB the brief asked to flag, by a margin of 2.3 KB.
+  `band-06.jpg` alone is 1.77 MB, well over half the total.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to
