@@ -440,6 +440,114 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   .std{border-right:0;border-bottom:1px solid var(--hair);padding-right:0}
   .std:last-child{border-bottom:0}}
 
+
+.thesis{max-width:60ch}
+.thesis p{font-size:16.5px;line-height:1.7;color:var(--text2);margin-bottom:15px}
+.thesis p strong{color:var(--text);font-weight:400}
+.shared{border-left:2px solid var(--gold);padding:6px 0 6px 22px;margin:34px 0 0;max-width:56ch}
+.shared p{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;
+  line-height:1.45;color:var(--text)}
+
+
+.cband{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--hair);
+  margin-top:20px;background:linear-gradient(160deg,var(--bg3),var(--bg2));
+  aspect-ratio:24/11;display:flex;align-items:stretch}
+.cband .ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;z-index:1}
+.cband .ph p{font-family:'DM Sans',sans-serif;color:var(--text3)}
+.cband .phid{font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);opacity:.8}
+.cband .phdim{font-size:10px;letter-spacing:.2em;margin-top:6px}
+.cband .phbrief{font-size:13px;line-height:1.55;margin-top:11px;max-width:44ch}
+.cband::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(10,10,15,.30) 0%,rgba(10,10,15,.86) 62%,rgba(10,10,15,.95) 100%)}
+.cband .over{position:relative;z-index:2;display:grid;width:100%;
+  grid-template-columns:1fr 1fr;gap:0}
+.cband.solo .over{grid-template-columns:1fr}
+.tslot{padding:34px 32px;text-shadow:0 1px 14px rgba(0,0,0,.7);display:flex;flex-direction:column;justify-content:flex-end;
+  border-right:1px solid var(--hair);transition:background-color .5s var(--ease)}
+.tslot:last-child{border-right:0}
+.tslot:hover{background:color-mix(in srgb,var(--bg) 34%,transparent)}
+.tslot h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:28px;line-height:1.1}
+.tslot .ask{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;
+  line-height:1.4;color:var(--ac);margin:9px 0 12px}
+.tslot p.d{font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.58;color:var(--text2)}
+.bandnote{font-family:'DM Sans',sans-serif;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text3);margin-top:11px}
+.thesis{max-width:62ch}
+.thesis p{font-size:16.5px;line-height:1.7;color:var(--text2);margin-bottom:15px}
+.shared{border-left:2px solid var(--gold);padding:6px 0 6px 22px;margin:36px 0 0;max-width:60ch}
+.shared p{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;
+  line-height:1.45;color:var(--text)}
+@media(max-width:900px){.cband{aspect-ratio:auto}.cband .over{grid-template-columns:1fr}
+  .tslot{border-right:0;border-bottom:1px solid var(--hair);padding:26px 22px}
+  .cband .ph{position:relative;aspect-ratio:24/10}}
+
+
+/* ═══ hero with a full-width image behind the text ═══ */
+.chero{position:relative;min-height:600px;display:flex;align-items:flex-end;
+  overflow:hidden;border-bottom:1px solid var(--hair)}
+.chero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:center 42%;filter:saturate(.55) contrast(1.05);opacity:.42;transform:scale(1.03)}
+.chero::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 88%,transparent) 34%,
+    color-mix(in srgb,var(--bg) 46%,transparent) 66%,color-mix(in srgb,var(--bg) 74%,transparent) 100%),
+    linear-gradient(180deg,color-mix(in srgb,var(--bg) 14%,transparent),var(--bg) 93%)}
+.chero .inner{position:relative;z-index:2;padding:132px 0 84px;max-width:800px}
+.chero h1{font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:clamp(42px,6.4vw,80px);line-height:1;letter-spacing:-.032em;
+  margin:22px 0;max-width:13ch}
+.chero h1 em{font-style:italic;color:var(--gold-lt)}
+.chero .lead{font-family:'DM Sans',sans-serif;font-size:17.5px;line-height:1.7;
+  color:var(--text2);max-width:62ch}
+.chero .lead + .lead{margin-top:14px}
+
+/* ═══ attention → awareness → authorship ═══ */
+.archgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+.arch3{display:flex;flex-direction:column;gap:0}
+.astep{display:grid;grid-template-columns:54px 1fr;gap:18px;align-items:start;
+  padding:20px 0;position:relative}
+.astep + .astep::before{content:'';position:absolute;left:26px;top:-14px;width:1px;height:28px;
+  background:linear-gradient(180deg,transparent,var(--gold));opacity:.55}
+.aicon{width:54px;height:54px;border-radius:999px;border:1px solid var(--hair2);
+  display:grid;place-items:center;color:var(--gold);flex:none;
+  background:radial-gradient(70% 70% at 50% 30%,color-mix(in srgb,var(--gold) 12%,transparent),transparent)}
+.aicon svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.3;
+  stroke-linecap:round;stroke-linejoin:round}
+.astep h4{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:23px;margin-bottom:5px}
+.astep p{font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.58;color:var(--text2)}
+
+/* ═══ track bands · one image each, aligned text block ═══ */
+.tstack{display:flex;flex-direction:column;gap:18px;margin-top:30px}
+.tb{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--hair);
+  background:var(--bg2);display:grid;grid-template-columns:1.15fr 1fr;
+  min-height:290px;transition:border-color .5s var(--ease),transform .5s var(--ease)}
+.tb:hover,.tb:focus-within{border-color:var(--ac);transform:translateY(-3px);outline:none}
+.tbimg{position:relative;overflow:hidden}
+.tbimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transition:transform 1.2s var(--ease),filter .6s var(--ease);filter:saturate(.72)}
+.tb:hover .tbimg img,.tb:focus-within .tbimg img{transform:scale(1.04);filter:saturate(.95)}
+.tbimg::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 42%,var(--bg2) 97%)}
+.fid{position:absolute;bottom:10px;left:12px;z-index:3;font:700 8.5px/1 'DM Sans',sans-serif;
+  letter-spacing:.2em;text-transform:uppercase;color:#fff;opacity:.5;
+  text-shadow:0 1px 8px rgba(0,0,0,.9)}
+/* every band's text starts at the same height */
+.tbtxt{padding:34px 34px 34px 8px;display:flex;flex-direction:column;justify-content:flex-start}
+.tbtxt h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:27px;line-height:1.1}
+.tbtxt .ask{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17.5px;
+  line-height:1.4;color:var(--ac);margin:9px 0 0;min-height:3em}
+.deep{max-height:0;opacity:0;overflow:hidden;
+  transition:max-height .7s var(--ease),opacity .5s var(--ease),margin .7s var(--ease)}
+.tb:hover .deep,.tb:focus-within .deep{max-height:340px;opacity:1;margin-top:14px}
+.deep p{font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.62;color:var(--text2)}
+.hint{font-family:'DM Sans',sans-serif;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text3);margin-top:16px}
+@media(max-width:900px){.archgrid{grid-template-columns:1fr;gap:32px}
+  .tb{grid-template-columns:1fr;min-height:0}
+  .tbimg{aspect-ratio:24/11}
+  .tbimg::after{background:linear-gradient(180deg,transparent 46%,var(--bg2) 98%)}
+  .tbtxt{padding:24px}
+  .tbtxt .ask{min-height:0}
+  .deep{max-height:none;opacity:1;margin-top:12px}}
+
 </style>
 </head>
 <body>
@@ -475,54 +583,122 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 </nav>
 <main id="main">
 
-<section class="pg"><div class="wrap pghead">
-  <p class="eyebrow">What&#8217;s coming</p>
-  <h1>Six more tracks, <em>in development.</em></h1>
-  <p class="pglead">Three tracks are live and complete. These six are being written to
-    the same standard, and they open when they are ready rather than on a date. Nothing
-    below is available yet, and none of it changes what your plan includes today.</p>
-</div></section>
-
-<section class="sec2"><div class="wrap">
-  <div class="sh"><p class="eyebrow">In development</p><h2>What is being written <em>next.</em></h2></div>
-  <div class="tgrid2"><div class="tcard" style="--accent:var(--t1)">
-      <div class="art"><p class="sid">IMG-C1</p><p class="sdim">1200 &#215; 900</p></div>
-      <div class="in"><p class="st">In development</p><h3>Fitness</h3><p>Strength, stamina and resilience — the body as somewhere you live rather than something you manage.</p></div>
-    </div><div class="tcard" style="--accent:var(--t2)">
-      <div class="art"><p class="sid">IMG-C2</p><p class="sdim">1200 &#215; 900</p></div>
-      <div class="in"><p class="st">In development</p><h3>Intimacy &amp; Embodiment</h3><p>Desire, connection and sexuality, worked with the same steadiness as everything else here.</p></div>
-    </div><div class="tcard" style="--accent:var(--t3)">
-      <div class="art"><p class="sid">IMG-C3</p><p class="sdim">1200 &#215; 900</p></div>
-      <div class="in"><p class="st">In development</p><h3>Recovery &amp; Compulsion</h3><p>The cycles that repeat, and rebuilding an identity that does not depend on them.</p></div>
-    </div><div class="tcard" style="--accent:var(--t1)">
-      <div class="art"><p class="sid">IMG-C4</p><p class="sdim">1200 &#215; 900</p></div>
-      <div class="in"><p class="st">In development</p><h3>Embodied Nutrition</h3><p>Eating, awareness and the body — without rules, targets or a plan to fall off.</p></div>
-    </div><div class="tcard" style="--accent:var(--t2)">
-      <div class="art"><p class="sid">IMG-C5</p><p class="sdim">1200 &#215; 900</p></div>
-      <div class="in"><p class="st">In development</p><h3>Money Shift</h3><p>What money is standing in for, and the state you are in when you decide about it.</p></div>
-    </div><div class="tcard" style="--accent:var(--t3)">
-      <div class="art"><p class="sid">IMG-C6</p><p class="sdim">1200 &#215; 900</p></div>
-      <div class="in"><p class="st">In development</p><h3>The Disciplined Man</h3><p>Structure, follow-through and the version of yourself you keep postponing.</p></div>
-    </div></div>
-</div></section>
+<section class="chero">
+  <img src="assets/coming/coming-hero.jpg" alt="">
+  <div class="wrap inner">
+    <p class="eyebrow">What&#8217;s coming</p>
+    <h1>Once you can change one thing, <em>you can change anything.</em></h1>
+    <p class="lead">How you think, how you feel, what you expect, what you notice, what
+      you do next &#8212; none of that was chosen. It was installed, and it has been
+      running your life since.</p>
+    <p class="lead">Learn to reach it in one place and you can reach it everywhere: your
+      body, your money, your closeness, your work, your sense of what is even possible
+      for you. Not more subjects. More of your life made yours to design.</p>
+  </div>
+</section>
 
 <section class="sec2 sec2--alt"><div class="wrap">
-  <div class="sh"><p class="eyebrow">Every track, the same standard</p>
-    <h2>Whatever the subject, <em>the method does not change.</em></h2></div>
-  <div class="stdrow">
-    <div class="std"><p class="k">Grounded</p><p>Built on the same six frameworks, with the register of each one named.</p></div>
-    <div class="std"><p class="k">Self-guided</p><p>No cohort, no schedule, no one else needed in the room.</p></div>
-    <div class="std"><p class="k">Whole</p><p>Body, state, and the identity underneath — worked together, not separately.</p></div>
-    <div class="std"><p class="k">Private</p><p>Your record is yours. Never shared, never used to score you.</p></div>
-    <div class="std"><p class="k">The four steps</p><p>Recognise, Regulate, Release, Rise. Same order, every protocol.</p></div>
+  <div class="archgrid">
+    <div>
+      <p class="eyebrow">Why these belong together</p>
+      <h2>Different parts of life. <em>The same inner architecture.</em></h2>
+      <p style="font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;color:var(--text2);margin-top:14px">
+        What shapes how you eat, love, train, build, earn and grow is not behaviour
+        alone. Beneath each are patterns of attention, learned responses and intrinsic
+        beliefs that influence what you notice, how you interpret what happens, what you
+        expect from yourself and others, and what you repeatedly choose.</p>
+      <p style="font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;color:var(--text2);margin-top:13px">
+        SafeRise brings those layers into awareness &#8212; so you can recognise the
+        pattern, regulate the state beneath it, release what no longer needs to govern
+        you, and act with greater authorship.</p>
+    </div>
+    <div class="arch3">
+      <div class="astep"><span class="aicon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z"/></svg></span>
+        <div><h4>Attention</h4><p>Where it goes without being asked. What you notice
+          first, and what you have stopped seeing.</p></div></div>
+      <div class="astep"><span class="aicon"><svg viewBox="0 0 24 24"><path d="M3 18h18M6.5 18a5.5 5.5 0 0 1 11 0"/><path d="M12 4.5V7M4.6 8.2l1.7 1.7M19.4 8.2l-1.7 1.7"/></svg></span>
+        <div><h4>Awareness</h4><p>Seeing the pattern while it runs, rather than
+          recognising it afterwards.</p></div></div>
+      <div class="astep"><span class="aicon"><svg viewBox="0 0 24 24"><path d="M9 11V5.6a1.6 1.6 0 0 1 3.2 0V11"/><path d="M12.2 11V4.2a1.6 1.6 0 0 1 3.2 0V11"/><path d="M15.4 11V6.4a1.6 1.6 0 0 1 3.2 0V15a5.6 5.6 0 0 1-5.6 5.6h-1.4A6.8 6.8 0 0 1 5 13.8l-.6-1.5a1.6 1.6 0 0 1 2.9-1.3L9 14"/></svg></span>
+        <div><h4>Authorship</h4><p>Choosing from there. The same situation, and a
+          response that is actually yours.</p></div></div>
+    </div>
   </div>
 </div></section>
 
-<section class="sec2"><div class="wrap closing">
-  <h2>Growth has <em>no finish line.</em></h2>
-  <p>New tracks, new depth, one long path. Nothing here expires and nothing waits for you.</p>
+<section class="sec2"><div class="wrap">
+  <div class="sh"><p class="eyebrow">Coming soon</p>
+    <h2>Seven tracks, <em>already being written.</em></h2>
+    <p>Each one goes somewhere the first three do not. Watch this space.</p></div>
+  <div class="tstack"><article class="tb" style="--ac:var(--gold)" tabindex="0">
+      <div class="tbimg"><img src="assets/coming/band-01.jpg" alt="">
+        <span class="fid">band-01.jpg &#183; 1200 &#215; 640</span></div>
+      <div class="tbtxt">
+        <h3>Elevation Series</h3>
+        <p class="ask">What happens when survival is no longer the only thing asking for your attention?</p>
+        <div class="deep"><p>For the inner patterns that appear when life begins asking more of you. Willing your energy and frequency toward alignment &#8212; with the universe, with your calling, with the life you would choose deliberately rather than fall into. Attracting what you desire rather than waiting on it. Living in harmony instead of against yourself. Greater purpose, creativity, self-trust and presence.</p></div>
+      </div>
+    </article><article class="tb" style="--ac:var(--t2)" tabindex="0">
+      <div class="tbimg"><img src="assets/coming/band-02.jpg" alt="">
+        <span class="fid">band-02.jpg &#183; 1200 &#215; 640</span></div>
+      <div class="tbtxt">
+        <h3>Sex &amp; Intimacy</h3>
+        <p class="ask">What changes when being close also means being seen?</p>
+        <div class="deep"><p>What you believe about desire was handed to you before you had a say, and it has been deciding what you are allowed to want ever since. This is about the parts you set aside &#8212; the curiosity you learned to call wrong, the conversations avoided for years, and where your own lines actually sit between curiosity and pursuit, a lifestyle and love, being wanted and being known.</p></div>
+      </div>
+    </article><article class="tb" style="--ac:var(--t1)" tabindex="0">
+      <div class="tbimg"><img src="assets/coming/band-03.jpg" alt="">
+        <span class="fid">band-03.jpg &#183; 1200 &#215; 640</span></div>
+      <div class="tbtxt">
+        <h3>Fitness Mindset</h3>
+        <p class="ask">What happens when motivation is no longer carrying you?</p>
+        <div class="deep"><p>Go beneath motivation and willpower to what actually keeps you going. How to move toward the body you want from where your conditioning and your circumstances actually are &#8212; not from where you wish they were. How to stop fighting the resistance inside you and build momentum from within, so progress comes from something steadier than discipline.</p></div>
+      </div>
+    </article><article class="tb" style="--ac:var(--t3)" tabindex="0">
+      <div class="tbimg"><img src="assets/coming/band-04.jpg" alt="">
+        <span class="fid">band-04.jpg &#183; 1200 &#215; 640</span></div>
+      <div class="tbtxt">
+        <h3>Nutrition &amp; Body Healing</h3>
+        <p class="ask">What are you responding to when you reach for food, control or avoidance?</p>
+        <div class="deep"><p>The relationship between awareness, nourishment and the body. Changing what you reach for and why &#8212; shifting appetite and inclination at the level they actually form, rather than by force. Understanding your own biochemistry and what it is asking for, and what it takes to protect your health against illness rather than respond to it after the fact.</p></div>
+      </div>
+    </article><article class="tb" style="--ac:var(--t1)" tabindex="0">
+      <div class="tbimg"><img src="assets/coming/band-05.jpg" alt="">
+        <span class="fid">band-05.jpg &#183; 1200 &#215; 640</span></div>
+      <div class="tbtxt">
+        <h3>Entrepreneur&#8217;s Journey</h3>
+        <p class="ask">Who do you become when there is no guarantee it will work?</p>
+        <div class="deep"><p>For the inner landscape behind building something of your own &#8212; uncertainty, risk, visibility, comparison, responsibility, failure and ambition. Holding your nerve when nothing has arrived yet, staying in your own lane when everyone else looks further ahead, and becoming the person the thing requires rather than waiting to feel ready.</p></div>
+      </div>
+    </article><article class="tb" style="--ac:var(--t2)" tabindex="0">
+      <div class="tbimg"><img src="assets/coming/band-06.jpg" alt="">
+        <span class="fid">band-06.jpg &#183; 1200 &#215; 640</span></div>
+      <div class="tbtxt">
+        <h3>Money Mindset</h3>
+        <p class="ask">What does money mean before you ever spend it?</p>
+        <div class="deep"><p>The patterns underneath earning, spending, scarcity, security, worth, risk and possibility. What you were taught money means, what it stands in for, and the beliefs that quietly decide what you think you are allowed to hold, ask for, build or become. The state you are in when you decide about it usually matters more than the numbers.</p></div>
+      </div>
+    </article><article class="tb" style="--ac:var(--t3)" tabindex="0">
+      <div class="tbimg"><img src="assets/coming/band-07.jpg" alt="">
+        <span class="fid">band-07.jpg &#183; 1200 &#215; 640</span></div>
+      <div class="tbtxt">
+        <h3>Recovery &amp; Compulsion</h3>
+        <p class="ask">What is the thing you keep returning to actually holding at bay?</p>
+        <div class="deep"><p>For the cycles that repeat despite every intention. What the behaviour is protecting you from feeling, why willpower keeps losing to it, and what has to be built underneath before it stops being needed. Rebuilding an identity that no longer depends on the thing, and meeting the return without treating yourself as the failure.</p></div>
+      </div>
+    </article></div>
+  <p class="hint">Hover or focus a track to open it</p>
+  <div class="shared"><p>The subject changes. What remains familiar underneath: notice
+    where attention goes, recognise the pattern forming around it, understand the belief
+    giving it meaning, regulate the state it creates, and recover greater choice.</p></div>
 </div></section>
 
+<section class="sec2 sec2--alt"><div class="wrap closing">
+  <h2>Growth has <em>no finish line.</em></h2>
+  <p>There is no point at which you are done and no version of you that stops changing.
+    Each of these goes further into the same work &#8212; and they will be here whenever
+    you are ready for them.</p>
+</div></section>
 </main>
 <footer class="foot">
   <div class="wrap">

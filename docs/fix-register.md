@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-326.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-327.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -77,7 +77,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
   before the Section B commit turned up a false positive worth recording: SR-325's
   own commit body names "SR-326" in prose (forward-referencing this exact section),
   so a naive grep match is not the same as an ID already being issued — read what
-  matched, not just whether something did. Next run: allocate from **SR-327**.
+  matched, not just whether something did. The coming-soon-v14 run checked
+  `git log --grep` for SR-327 before allocating, found it free, and used
+  **SR-327**. Next run: allocate from **SR-328**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -289,6 +291,43 @@ Canonical record of defects and design decisions. Commits reference the ID:
   `dashboard.html`. Not a regression, not touched by this SR — `protocol.html`
   is a member page, not one of this run's public pages, and its theme
   behaviour predates SR-326 entirely.
+  **SR-327 · coming-soon.html rewritten from mock-coming-soon-v14.html.** Full-
+  width hero image, a new "Attention → Awareness → Authorship" three-step
+  diagram (icons in the dashboard `ICO` line-icon style), and seven tracks —
+  Recovery & Compulsion restored, all seven renamed (Elevation Series, Sex &
+  Intimacy, Fitness Mindset, Nutrition & Body Healing, Entrepreneur's Journey,
+  Money Mindset, Recovery & Compulsion) — one image per track, image-left/
+  text-right, hover-or-focus expands the deeper description
+  (`:hover`/`:focus-within`, so keyboard `Tab` does the same as a mouse; the
+  H3 in every card starts at the identical 232px offset from the card top
+  regardless of description length, confirmed live), card grid removed. The
+  mock's own precondition warning proved out a third time: its footer still
+  carried `<a href="dashboard.html">Account</a>`, the exact link SR-325 had
+  just removed — built from a snapshot older than that fix, same shape as the
+  two SR-318 already cost this file. Kept the current (fixed) footer, not the
+  mock's. Its nav matched the current one exactly, byte for byte — nothing to
+  preserve there. Theme mechanism was wrong as flagged: `localStorage`/
+  `'sr.theme'`, corrected to `sessionStorage`/`'sr-theme'` copied verbatim
+  from the working block already in this file, not reimplemented. All 8
+  inline base64 JPEGs (1 hero + 7 bands) replaced with file references —
+  `assets/coming/coming-hero.jpg`, `assets/coming/band-01.jpg` …
+  `band-07.jpg` — none of which exist yet; confirmed live as exactly 8 404s,
+  nothing else, and the layout does not break (each `.tbimg` is sized by the
+  grid, not by the image). The mock's own visible art-brief captions
+  (`.fid`, bottom-left of each band image, same always-visible-until-real
+  convention as the `NEEDS ART` slots elsewhere in this codebase) said
+  "2400 × 1100"; corrected to the "1200 × 640" this task specified as the
+  real target, all 7. Checked for `quantum`/`rewire`/`streak`/`badge`/
+  `graduate`/`practice`: zero, as supplied. "frequency" and "attracting"
+  confirmed exactly once each, both in Elevation Series only, left alone.
+  **Found, not fixed, flagged instead:** the Protocols ▾ dropdown's "What's
+  coming" entry still reads "Six more tracks in development" — stale now
+  that this page lists seven; out of scope here since touching the dropdown
+  is a nav change and this run's nav was confirmed to already match, not
+  something to edit incidentally. A block of dead CSS (`.cband`/`.tslot`/
+  `.thesis` duplicated, `.phid`/`.phdim`/`.phbrief`) ships in the mock with
+  zero matching markup anywhere in the body — an earlier design iteration's
+  leftover rules, harmless but unused; left in place, not asked for.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to
