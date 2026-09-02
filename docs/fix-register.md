@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-318.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-319.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -58,8 +58,10 @@ Canonical record of defects and design decisions. Commits reference the ID:
   documents the slip became stale the moment it was written. The next run (verifying the
   four-updated-pages drop) did not trust this note's text and instead ran
   `git log --grep` for SR-317 and SR-318 before allocating, found SR-317 taken and
-  SR-318 free, and used **SR-318**. **Do not reissue SR-317.** Next run: allocate from
-  **SR-319**.
+  SR-318 free, and used **SR-318**. **Do not reissue SR-317.**
+  The next run (corrections pass on the SR-318 findings) checked `git log --grep` for
+  SR-319 before allocating, found it free, and used **SR-319**. **Do not reissue
+  SR-318.** Next run: allocate from **SR-320**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -76,6 +78,17 @@ Canonical record of defects and design decisions. Commits reference the ID:
   all four replaced pages reverted their theme persistence from `sessionStorage`
   `'sr-theme'` (the prior session's fix) back to `localStorage` `'sr.theme'`, confirmed
   live — the toggle changes `data-theme` visually but does not persist across reload.
+  **SR-319 · corrections pass on the four SR-318 findings, plus an invariants doc.**
+  All four fixed on `plans.html`, `method.html`, `live-sessions.html`, `about.html`:
+  (1) theme storage restored to `sessionStorage['sr-theme']`, copied verbatim from
+  `dashboard.html`'s `THEME_KEY`/`setTheme`; verified live, persists across reload and
+  across pages. (2) All ten "Rests on:" lines on `plans.html` replaced verbatim with
+  `dashboard.html`'s `SOURCES` object, including the six that were only lightly
+  paraphrased, not just the four flagged wrong. (3) `plans.html`'s "How This Works"
+  icon swapped to `ICO.gear`'s exact path. The t3-06 "The Belonging Gap" prefix was
+  left unchanged — founder-confirmed as intentional, distinguishing it from the
+  withdrawn Ambition Recovery protocol. Added `docs/page-invariants.md`, the checklist
+  a hand-delivered public-page drop must be verified against going forward.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

@@ -658,10 +658,10 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   function applyTheme(n){
     document.documentElement.setAttribute('data-theme',n);
     if(l) l.textContent = n==='midnight' ? 'Midnight' : 'Sunrise';
-    try{ localStorage.setItem('sr.theme', n); }catch(e){}
+    try{ sessionStorage.setItem('sr-theme', n); }catch(e){}
   }
   try{
-    var saved = localStorage.getItem('sr.theme');
+    var saved = sessionStorage.getItem('sr-theme');
     if(saved==='midnight'||saved==='sunrise') applyTheme(saved);
   }catch(e){}
   if(t) t.addEventListener('click',function(){
