@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="midnight">
 <head>
 <meta charset="UTF-8">
 <!-- SR-164 · the ground colour, inline and first, ahead of every stylesheet.
@@ -1161,87 +1161,91 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
 </head>
 <body>
 
-<nav id="main-nav" style="position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(8,8,16,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all 0.3s;">
-
-  <!-- Top bar: logo + theme + CTA -->
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 40px;border-bottom:1px solid rgba(212,168,67,0.1);">
-    <!-- Logo -->
-    <div style="display:flex;align-items:center;gap:12px;">
-      <svg width="30" height="30" viewBox="0 0 44 44" fill="none">
-        <circle cx="22" cy="22" r="20" fill="#1C1C2E" stroke="#D4A843" stroke-width="1.2" opacity="0.9"/>
-        <path d="M22 8 Q25 7 27 10 Q25 13 22 8Z" fill="#D4A843" opacity="0.5"/>
-        <path d="M27 10 Q30 9 32 12 Q30 15 27 10Z" fill="#D4A843" opacity="0.45"/>
-        <path d="M32 12 Q35 12 36 16 Q34 18 32 12Z" fill="#D4A843" opacity="0.40"/>
-        <path d="M36 17 Q37 20 35 24 Q33 25 36 17Z" fill="#D4A843" opacity="0.37"/>
-        <path d="M34 25 Q34 28 31 31 Q29 31 34 25Z" fill="#D4A843" opacity="0.36"/>
-        <path d="M29 31 Q28 34 25 35 Q23 34 29 31Z" fill="#D4A843" opacity="0.38"/>
-        <path d="M17 35 Q15 35 13 32 Q12 30 17 35Z" fill="#D4A843" opacity="0.38"/>
-        <path d="M11 30 Q9 28 9 24 Q10 22 11 30Z" fill="#D4A843" opacity="0.36"/>
-        <path d="M9 23 Q9 20 11 16 Q12 14 9 23Z" fill="#D4A843" opacity="0.36"/>
-        <path d="M13 12 Q14 9 17 8 Q18 8 13 12Z" fill="#D4A843" opacity="0.40"/>
-        <path d="M18 7 Q20 5 22 8 Q21 9 18 7Z" fill="#D4A843" opacity="0.45"/>
-        <path d="M22 26 Q17 21 17 18 Q17 14 19 14 Q22 13 22 15 Q22 13 25 14 Q27 14 27 18 Q27 21 22 26Z" fill="#D4A843" opacity="0.82"/>
-      </svg>
-      <div style="line-height:1.1;">
-        <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--primary);letter-spacing:3px;">SAFERISE</div>
-        <div style="font-size:8px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;font-family:'DM Sans',sans-serif;">Protocol</div>
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav">
+  <div class="navin">
+    <a class="brand" href="index.html"><span class="bmark">&#9672;</span><span class="bname">SafeRise</span></a>
+    <div class="navlinks">
+      <div class="ndrop">
+        <button class="ntop" type="button" aria-expanded="false" aria-haspopup="true" id="ptrig">
+          Protocols <span class="ncar" aria-hidden="true">&#9662;</span></button>
+        <div class="nmenu" role="menu" aria-labelledby="ptrig">
+          <a role="menuitem" href="personal-transformation.html" class="nm t1">
+            <span class="nmk">Track 01</span><span class="nmn">Personal Transformation</span>
+            <span class="nmd">What happens inside me</span></a>
+          <a role="menuitem" href="relationship-healing.html" class="nm t2">
+            <span class="nmk">Track 02</span><span class="nmn">Relationship Healing</span>
+            <span class="nmd">What keeps happening between us</span></a>
+          <a role="menuitem" href="professional-performance.html" class="nm t3">
+            <span class="nmk">Track 03</span><span class="nmn">Professional Performance</span>
+            <span class="nmd">What changes when the stakes rise</span></a>
+          <a role="menuitem" href="coming-soon.html" class="nm soon">
+            <span class="nmk">Not yet open</span><span class="nmn">What&#8217;s coming</span>
+            <span class="nmd">Seven more tracks in development</span></a>
+        </div>
       </div>
+      <a href="method.html">Method</a><a href="plans.html">Plans</a><a href="live-sessions.html">Live sessions</a><a href="about.html">About</a>
     </div>
+    <button class="themetog" id="tog" type="button" aria-label="Switch theme">
+      <span class="tdot"></span><span id="togl">Midnight</span></button>
+    <a class="navcta" href="dashboard.html">Log in</a>
   </div>
-
-  <!-- Menu bar: section links -->
-  <div style="display:flex;align-items:center;justify-content:center;gap:0;padding:0 40px;overflow-x:auto;">
-    <a href="#journey" class="nav-link" onclick="setActive(this);showMain()">The Journey</a>
-    <a href="javascript:void(0)" class="nav-link" onclick="setActive(this);showProg('about')">About</a>
-    <span style="width:1px;height:16px;background:var(--border);margin:0 6px;display:inline-block;vertical-align:middle;opacity:0.5;"></span>
-    <a href="personal-transformation.html" class="nav-link">Personal Transformation</a>
-    <a href="relationship-healing.html" class="nav-link tab-rose">Relationship Healing</a>
-    <a href="professional-performance.html" class="nav-link tab-teal">Professional</a>
-    <button class="nav-link" style="background:none;border:none;cursor:pointer;color:var(--text3);" onclick="setActive(this);showProg('compare')">Compare Plans</button>
-    <button class="nav-link" style="background:none;border:none;cursor:pointer;color:var(--text3);" onclick="setActive(this);showProg('services')">Services</button>
-  </div>
-
 </nav>
 
 <div id="main-content">
-<div class="sr-home">
-<section class="hero">
+<div class="sr-home" id="main">
+
+<section class="hero filmhero">
   <div class="heroart" aria-hidden="true">
-    <img src="assets/dashboard/hero-corridor.jpg" alt="">
-  </div>
-  <div class="wrap heroin">
-    <p class="eyebrow">Self-guided nervous-system regulation</p>
-    <!-- INTERIM copy — approved 2026-09-02, not final. -->
-    <h1>You know what affects you. You can explain it. <em>But it still has control over you.</em></h1>
-    <p class="herolead">A state arrives and runs your reaction before you have chosen
-      anything. There is a protocol for each one. You put it on, a voice takes you
-      through four steps, and you come out the other side the one deciding again.</p>
-    <div class="herorule"><p>No course. No schedule. Nothing to install.</p></div>
+    <img src="assets/home/hero-film.jpg" alt="">
+    <div class="filmgrain"></div>
   </div>
 
+  <div class="wrap heroin filmcopy">
+    <p class="eyebrow">SafeRise · Emotional Regulation Protocols</p>
+    <h1>When dysregulation changes how you see the moment, <em>it can change what happens next.</em></h1>
+    <p class="herolead filmlead"><strong>SafeRise</strong> — powerful, curated protocols for emotional regulation, leading to Personal Transformation, Relationship Healing and Professional Performance — grounded in neuroscience, delivered from lived experience.</p>
+  </div>
+
+  <button class="filmplay" id="filmPlay" type="button" aria-label="Play SafeRise lived-experience film">
+    <span class="playring"><span class="playtri"></span></span>
+    <span class="playmeta">
+      <strong>Watch the film</strong>
+      <small>Four lived-experience vignettes · about 60 sec</small>
+    </span>
+  </button>
+
+  <div class="wrap filmfooter filmfooter-solo">
+    
+  </div>
+</section>
+<section class="postfilm-recognition">
+  <div class="wrap postfilm-grid">
+    <div class="postfilm-copy reveal">
+      <p class="eyebrow">What can happen when regulation drops</p>
+      <h2>The feeling passes. <em>What you made of it can stay.</em></h2>
+      <p>When you feel unregulated, it can change what you notice, what you think happened, what you believe somebody meant, and what you decide about yourself, them, or what comes next.</p>
+      <p>A difficult hour can keep travelling — into the next conversation, the next decision, the next opportunity, and the way you begin expecting life to meet you.</p>
+    </div>
+    <div class="postfilm-pull reveal">
+      <p>It does not only affect how you feel in the moment. It can affect the meaning you carry out of it.</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="routersec" id="router">
   <div class="wrap doorswrap">
-    <p class="doorcue">Where is this showing up?</p>
+    <div class="routerhead"><div><p class="eyebrow router-eyebrow">Where to go next</p><h2 class="router-question">Where do I tend to feel unregulated?</h2></div><p class="routernote">No course. No schedule.<br>Nothing to install.</p></div>
     <div class="doors">
-      <a class="door t1" href="#step-t1" data-track="t1">
-        <span class="dglyph" aria-hidden="true"><svg viewBox="0 0 40 32">
-          <path d="M4 24c5-16 9 6 13-10 4-13 7 13 11 3 2-5 4 4 8 1"/></svg></span>
-        <h2 class="dh">On my own</h2>
-        <p>What happens inside me &#8212; fear, anger, overwhelm, grief, shutdown.</p>
-        <span class="dgo">Personal Transformation &#8594;</span>
+      <a class="door t1 reveal" href="#step-t1" data-track="t1"><span class="doorart"><img src="assets/home/door-t1.jpg" alt="" onerror="this.style.opacity=0"></span>
+        <span class="dglyph" aria-hidden="true"><svg viewBox="0 0 40 36"><circle cx="20" cy="12" r="6"/><path d="M8 30c0-6.6 5.4-10 12-10s12 3.4 12 10"/></svg></span><p class="dkick">On my own</p><h2 class="dh">Inside me.</h2><p class="dbody">Fear, anger, overwhelm, grief, insecurity, shutdown.</p><span class="dgo">Explore Personal Transformation &#8594;</span>
       </a>
-      <a class="door t2" href="#step-t2" data-track="t2">
-        <span class="dglyph" aria-hidden="true"><svg viewBox="0 0 40 32">
-          <path d="M3 26c8 0 10-16 17-16s9 16 17 16"/><circle cx="20" cy="10" r="2.6"/></svg></span>
-        <h2 class="dh">With someone</h2>
-        <p>What keeps happening between us &#8212; pursuit, withdrawal, trust, repair.</p>
-        <span class="dgo">Relationship Healing &#8594;</span>
+      <a class="door t2 reveal" href="#step-t2" data-track="t2"><span class="doorart"><img src="assets/home/door-t2.jpg" alt="" onerror="this.style.opacity=0"></span>
+        <span class="dglyph" aria-hidden="true"><svg viewBox="0 0 40 36"><circle cx="13" cy="12" r="5.4"/><circle cx="27" cy="12" r="5.4"/><path d="M3 30c0-5.6 4.5-8.6 10-8.6M37 30c0-5.6-4.5-8.6-10-8.6"/><path d="M16.4 25.4h7.2"/></svg></span><p class="dkick">With someone</p><h2 class="dh">Between us.</h2><p class="dbody">Conflict, trust, resentment, intimacy, pursuit, withdrawal.</p><span class="dgo">Explore Relationship Healing &#8594;</span>
       </a>
-      <a class="door t3" href="#step-t3" data-track="t3">
-        <span class="dglyph" aria-hidden="true"><svg viewBox="0 0 40 32">
-          <path d="M4 27c9 0 13-15 22-21 3-2 6-3 10-4"/><circle cx="36" cy="4" r="2.4"/></svg></span>
-        <h2 class="dh">At work</h2>
-        <p>What changes when the stakes rise &#8212; visibility, conflict, burnout.</p>
-        <span class="dgo">Professional Performance &#8594;</span>
+      <a class="door t3 reveal" href="#step-t3" data-track="t3"><span class="doorart"><img src="assets/home/door-t3.jpg" alt="" onerror="this.style.opacity=0"></span>
+        <span class="dglyph" aria-hidden="true"><svg viewBox="0 0 40 36"><path d="M6 12h28v18H6z"/><path d="M15 12V7.6A2 2 0 0 1 17 5.6h6a2 2 0 0 1 2 2V12"/><path d="M6 20h28"/></svg></span><p class="dkick">At work</p><h2 class="dh">In my work.</h2><p class="dbody">Pressure, visibility, belonging, performance, decisions, burnout.</p><span class="dgo">Explore Professional Performance &#8594;</span>
       </a>
     </div>
   </div>
@@ -1257,12 +1261,12 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
         None of that turns up in the moment your reaction gets decided &#8212; because
         that is not a knowledge problem. It is a state problem, and a state does not
         respond to an argument.</p>
-      <p class="body"><strong>Almost everything available to you works on the story.
-        This works on the moment the story is running.</strong></p>
+      <p class="body"><strong>Almost everything available to you works on the story. This works on the state that wrote it.</strong></p>
     </div>
-    <div class="panel">
-      <img src="assets/t1/hero.jpg" alt="" onerror="this.style.opacity=0">
+    <div class="panel track-panel t1panel">
+      <img src="assets/home/panel-t1.jpg" alt="" onerror="this.style.opacity=0">
       <div class="panelin">
+        <span class="trackicon" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="17" r="7"/><path d="M12 40c1-9 6-14 12-14s11 5 12 14"/><path d="M8 12c6-8 26-8 32 0"/></svg></span>
         <p class="pk">Where to begin</p>
         <h3>The one you open is the one the day calls for.</h3>
         <p>Fear, anger, overwhelm, grief, insecurity, shutdown. You are not choosing from a menu while you are in it &#8212; you already know which one it is.</p>
@@ -1272,83 +1276,83 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
       <div class="panelcar"><div class="pcar" data-car="t1" style="--accent:var(--t1)">
       <div class="pcarhead"><p class="pk">Ten protocols &#183; one for each state</p>
         <span class="cnt">Hover to pause</span></div>
-      <div class="pcarview"><div class="pcartrack"><a class="pc" href="#">
+      <div class="pcarview"><div class="pcartrack"><a class="pc" href="protocol.html?track=1&amp;protocol=01">
           <span class="pcimg"><img src="assets/covers/01.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">01</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Anxiety Reset</span></a><a class="pc" href="#">
+          <span class="pcname">Anxiety Reset</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=02">
           <span class="pcimg"><img src="assets/covers/02.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">02</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Anger Alchemy</span></a><a class="pc" href="#">
+          <span class="pcname">Anger Alchemy</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=03">
           <span class="pcimg"><img src="assets/covers/03.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">03</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Fear Transmutation</span></a><a class="pc" href="#">
+          <span class="pcname">Overwhelm Threshold</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=04">
           <span class="pcimg"><img src="assets/covers/04.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">04</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Abandonment Wound</span></a><a class="pc" href="#">
+          <span class="pcname">Abandonment Wound</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=05">
           <span class="pcimg"><img src="assets/covers/05.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">05</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Shame Dissolution</span></a><a class="pc" href="#">
+          <span class="pcname">Shame Dissolution</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=06">
           <span class="pcimg"><img src="assets/covers/06.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">06</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Grief Integration</span></a><a class="pc" href="#">
+          <span class="pcname">Grief Integration</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=07">
           <span class="pcimg"><img src="assets/covers/07.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">07</span></span>
           <span class="pcstate">Numb</span>
-          <span class="pcname">Shutdown Recovery</span></a><a class="pc" href="#">
+          <span class="pcname">Shutdown Recovery</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=08">
           <span class="pcimg"><img src="assets/covers/08.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">08</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Jealousy Release</span></a><a class="pc" href="#">
+          <span class="pcname">Jealousy Release</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=09">
           <span class="pcimg"><img src="assets/covers/09.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">09</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Insecurity Anchor</span></a><a class="pc" href="#">
+          <span class="pcname">Insecurity Anchor</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=10">
           <span class="pcimg"><img src="assets/covers/10.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">10</span></span>
           <span class="pcstate">Numb</span>
-          <span class="pcname">Powerlessness &amp; Despair</span></a><a class="pc" href="#">
+          <span class="pcname">Powerlessness &amp; Despair</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=01">
           <span class="pcimg"><img src="assets/covers/01.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">01</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Anxiety Reset</span></a><a class="pc" href="#">
+          <span class="pcname">Anxiety Reset</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=02">
           <span class="pcimg"><img src="assets/covers/02.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">02</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Anger Alchemy</span></a><a class="pc" href="#">
+          <span class="pcname">Anger Alchemy</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=03">
           <span class="pcimg"><img src="assets/covers/03.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">03</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Fear Transmutation</span></a><a class="pc" href="#">
+          <span class="pcname">Overwhelm Threshold</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=04">
           <span class="pcimg"><img src="assets/covers/04.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">04</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Abandonment Wound</span></a><a class="pc" href="#">
+          <span class="pcname">Abandonment Wound</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=05">
           <span class="pcimg"><img src="assets/covers/05.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">05</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Shame Dissolution</span></a><a class="pc" href="#">
+          <span class="pcname">Shame Dissolution</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=06">
           <span class="pcimg"><img src="assets/covers/06.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">06</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Grief Integration</span></a><a class="pc" href="#">
+          <span class="pcname">Grief Integration</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=07">
           <span class="pcimg"><img src="assets/covers/07.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">07</span></span>
           <span class="pcstate">Numb</span>
-          <span class="pcname">Shutdown Recovery</span></a><a class="pc" href="#">
+          <span class="pcname">Shutdown Recovery</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=08">
           <span class="pcimg"><img src="assets/covers/08.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">08</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Jealousy Release</span></a><a class="pc" href="#">
+          <span class="pcname">Jealousy Release</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=09">
           <span class="pcimg"><img src="assets/covers/09.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">09</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Insecurity Anchor</span></a><a class="pc" href="#">
+          <span class="pcname">Insecurity Anchor</span></a><a class="pc" href="protocol.html?track=1&amp;protocol=10">
           <span class="pcimg"><img src="assets/covers/10.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">10</span></span>
           <span class="pcstate">Numb</span>
@@ -1356,15 +1360,7 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
     </div></div>
     </div>
     </div>
-
-    <div class="split">
-      <div class="splitart"><img src="assets/journey/t1-band.jpg" alt="" onerror="this.style.opacity=0"></div>
-      <div class="splittxt">
-        <h3>Nothing waits for you to fall behind it.</h3>
-        <p>No course to work through, no schedule to keep, and no version of yourself you are building towards who no longer needs it. Be there once, when it matters.</p>
-      </div>
-    </div>
-  </div>
+</div>
 </section>
 
 <section class="step" id="step-t2">
@@ -1379,111 +1375,109 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
         too. That is the half you can always reach &#8212; and changing it changes what
         the other half is responding to.</strong></p>
     </div>
-    <div class="panel">
-      <img src="assets/t2/hero.jpg" alt="" onerror="this.style.opacity=0">
+    <div class="panel track-panel t2panel">
+      <img src="assets/home/panel-t2.jpg" alt="" onerror="this.style.opacity=0">
       <div class="panelin">
+        <span class="trackicon" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="17" cy="17" r="6"/><circle cx="31" cy="17" r="6"/><path d="M7 39c1-8 5-13 10-13s9 5 10 13"/><path d="M21 39c1-8 5-13 10-13s9 5 10 13"/></svg></span>
         <p class="pk">Where to begin</p>
         <h3>Pursuit, withdrawal, rupture, repair.</h3>
         <p>The argument is rarely where it begins. Each protocol works one pattern, from the side of it you can actually reach.</p>
+        <div class="panelnote">
+          <p class="panelnote-k">Why this works on your side</p>
+          <h4>They do not have to be doing this too.</h4>
+          <p>No shared schedule, no joint sessions, nothing that needs both of you willing on the same day. You change what the other half is responding to.</p>
+        </div>
         <div class="paneldo">
           <a class="cta" href="relationship-healing.html">Open Relationship Healing &#8594;</a>
         </div>
       <div class="panelcar"><div class="pcar" data-car="t2" style="--accent:var(--t2)">
       <div class="pcarhead"><p class="pk">Ten protocols &#183; one for each state</p>
         <span class="cnt">Hover to pause</span></div>
-      <div class="pcarview"><div class="pcartrack"><a class="pc" href="#">
+      <div class="pcarview"><div class="pcartrack"><a class="pc" href="protocol.html?track=2&amp;protocol=01">
           <span class="pcimg"><img src="assets/covers/t2-01.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">01</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Conflict De-escalation</span></a><a class="pc" href="#">
+          <span class="pcname">Safe Conversation</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=02">
           <span class="pcimg"><img src="assets/covers/t2-02.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">02</span></span>
-          <span class="pcstate">Agitated</span>
-          <span class="pcname">Rupture &amp; Repair</span></a><a class="pc" href="#">
+          <span class="pcstate">Unsteady</span>
+          <span class="pcname">Rupture &amp; Repair</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=03">
           <span class="pcimg"><img src="assets/covers/t2-03.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">03</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Trust &amp; Betrayal</span></a><a class="pc" href="#">
+          <span class="pcname">Trust &amp; Betrayal</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=04">
           <span class="pcimg"><img src="assets/covers/t2-04.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">04</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Pursue &amp; Withdraw</span></a><a class="pc" href="#">
+          <span class="pcname">Resentment Release</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=05">
           <span class="pcimg"><img src="assets/covers/t2-05.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">05</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Boundary Setting</span></a><a class="pc" href="#">
+          <span class="pcname">Intimacy Barrier</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=06">
           <span class="pcimg"><img src="assets/covers/t2-06.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">06</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">The Insecurity Anchor</span></a><a class="pc" href="#">
+          <span class="pcname">Double Standard</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=07">
           <span class="pcimg"><img src="assets/covers/t2-07.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">07</span></span>
-          <span class="pcstate">Numb</span>
-          <span class="pcname">Disconnection</span></a><a class="pc" href="#">
+          <span class="pcstate">Agitated</span>
+          <span class="pcname">Projection Clarity</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=08">
           <span class="pcimg"><img src="assets/covers/t2-08.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">08</span></span>
-          <span class="pcstate">Unsteady</span>
-          <span class="pcname">Appreciation &amp; Support</span></a><a class="pc" href="#">
+          <span class="pcstate">Numb</span>
+          <span class="pcname">Appreciation &amp; Support</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=09">
           <span class="pcimg"><img src="assets/covers/t2-09.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">09</span></span>
-          <span class="pcstate">Numb</span>
-          <span class="pcname">Separation</span></a><a class="pc" href="#">
+          <span class="pcstate">Unsteady</span>
+          <span class="pcname">Pursue &amp; Withdraw</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=10">
           <span class="pcimg"><img src="assets/covers/t2-10.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">10</span></span>
-          <span class="pcstate">Unsteady</span>
-          <span class="pcname">The Invitation</span></a><a class="pc" href="#">
+          <span class="pcstate">Numb</span>
+          <span class="pcname">Conscious Separation</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=01">
           <span class="pcimg"><img src="assets/covers/t2-01.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">01</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Conflict De-escalation</span></a><a class="pc" href="#">
+          <span class="pcname">Safe Conversation</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=02">
           <span class="pcimg"><img src="assets/covers/t2-02.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">02</span></span>
-          <span class="pcstate">Agitated</span>
-          <span class="pcname">Rupture &amp; Repair</span></a><a class="pc" href="#">
+          <span class="pcstate">Unsteady</span>
+          <span class="pcname">Rupture &amp; Repair</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=03">
           <span class="pcimg"><img src="assets/covers/t2-03.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">03</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Trust &amp; Betrayal</span></a><a class="pc" href="#">
+          <span class="pcname">Trust &amp; Betrayal</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=04">
           <span class="pcimg"><img src="assets/covers/t2-04.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">04</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Pursue &amp; Withdraw</span></a><a class="pc" href="#">
+          <span class="pcname">Resentment Release</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=05">
           <span class="pcimg"><img src="assets/covers/t2-05.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">05</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Boundary Setting</span></a><a class="pc" href="#">
+          <span class="pcname">Intimacy Barrier</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=06">
           <span class="pcimg"><img src="assets/covers/t2-06.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">06</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">The Insecurity Anchor</span></a><a class="pc" href="#">
+          <span class="pcname">Double Standard</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=07">
           <span class="pcimg"><img src="assets/covers/t2-07.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">07</span></span>
-          <span class="pcstate">Numb</span>
-          <span class="pcname">Disconnection</span></a><a class="pc" href="#">
+          <span class="pcstate">Agitated</span>
+          <span class="pcname">Projection Clarity</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=08">
           <span class="pcimg"><img src="assets/covers/t2-08.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">08</span></span>
-          <span class="pcstate">Unsteady</span>
-          <span class="pcname">Appreciation &amp; Support</span></a><a class="pc" href="#">
+          <span class="pcstate">Numb</span>
+          <span class="pcname">Appreciation &amp; Support</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=09">
           <span class="pcimg"><img src="assets/covers/t2-09.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">09</span></span>
-          <span class="pcstate">Numb</span>
-          <span class="pcname">Separation</span></a><a class="pc" href="#">
+          <span class="pcstate">Unsteady</span>
+          <span class="pcname">Pursue &amp; Withdraw</span></a><a class="pc" href="protocol.html?track=2&amp;protocol=10">
           <span class="pcimg"><img src="assets/covers/t2-10.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">10</span></span>
-          <span class="pcstate">Unsteady</span>
-          <span class="pcname">The Invitation</span></a></div></div>
+          <span class="pcstate">Numb</span>
+          <span class="pcname">Conscious Separation</span></a></div></div>
     </div></div>
     </div>
     </div>
-
-    <div class="split">
-      <div class="splitart"><img src="assets/journey/t2-band.jpg" alt="" onerror="this.style.opacity=0"></div>
-      <div class="splittxt">
-        <h3>They do not have to be doing this too.</h3>
-        <p>No shared schedule, no joint sessions, nothing that needs both of you willing on the same day. You change what the other half is responding to.</p>
-      </div>
-    </div>
-  </div>
+</div>
 </section>
 
 <section class="step" id="step-t3">
@@ -1498,122 +1492,156 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
       <p class="body"><strong>Work on the version that arrives, and the rest follows.
         Work on the room instead, and you are managing the symptom.</strong></p>
     </div>
-    <div class="panel">
-      <img src="assets/t3/hero.jpg" alt="" onerror="this.style.opacity=0">
+    <div class="panel track-panel t3panel">
+      <img src="assets/home/panel-t3.jpg" alt="" onerror="this.style.opacity=0">
       <div class="panelin">
+        <span class="trackicon" aria-hidden="true"><svg viewBox="0 0 48 48"><rect x="8" y="16" width="32" height="23" rx="3"/><path d="M17 16v-4h14v4"/><path d="M8 25h32"/><path d="M20 25v4h8v-4"/></svg></span>
         <p class="pk">Where to begin</p>
         <h3>Visibility, conflict, belonging, burnout.</h3>
         <p>The moments where your ability matters most are the ones where something else is running you. Each protocol works one of them.</p>
+        <div class="panelnote">
+          <p class="panelnote-k">Built for the working day</p>
+          <h4>It fits inside a working day.</h4>
+          <p>No course to schedule around, nothing to complete, nothing anyone else can see. You run it before the room, or after it.</p>
+        </div>
         <div class="paneldo">
           <a class="cta" href="professional-performance.html">Open Professional Performance &#8594;</a>
         </div>
       <div class="panelcar"><div class="pcar" data-car="t3" style="--accent:var(--t3)">
       <div class="pcarhead"><p class="pk">Ten protocols &#183; one for each state</p>
         <span class="cnt">Hover to pause</span></div>
-      <div class="pcarview"><div class="pcartrack"><a class="pc" href="#">
+      <div class="pcarview"><div class="pcartrack"><a class="pc" href="protocol.html?track=3&amp;protocol=01">
           <span class="pcimg"><img src="assets/covers/t3-01.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">01</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">High-Stakes Presence</span></a><a class="pc" href="#">
+          <span class="pcname">High-Stakes Presence</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=02">
           <span class="pcimg"><img src="assets/covers/t3-02.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">02</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Conflict at Work</span></a><a class="pc" href="#">
+          <span class="pcname">Conflict Navigation</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=03">
           <span class="pcimg"><img src="assets/covers/t3-03.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">03</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Imposter Dissolution</span></a><a class="pc" href="#">
+          <span class="pcname">Imposter Dissolution</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=04">
           <span class="pcimg"><img src="assets/covers/t3-04.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">04</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Decision Pressure</span></a><a class="pc" href="#">
+          <span class="pcname">Perfectionism Release</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=05">
           <span class="pcimg"><img src="assets/covers/t3-05.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">05</span></span>
-          <span class="pcstate">Unsteady</span>
-          <span class="pcname">Perfectionism</span></a><a class="pc" href="#">
+          <span class="pcstate">Agitated</span>
+          <span class="pcname">Performance Anxiety</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=06">
           <span class="pcimg"><img src="assets/covers/t3-06.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">06</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">The Belonging Gap</span></a><a class="pc" href="#">
+          <span class="pcname">Belonging Gap</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=07">
           <span class="pcimg"><img src="assets/covers/t3-07.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">07</span></span>
-          <span class="pcstate">Numb</span>
-          <span class="pcname">Career Transition</span></a><a class="pc" href="#">
+          <span class="pcstate">Unsteady</span>
+          <span class="pcname">Career Transition</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=08">
           <span class="pcimg"><img src="assets/covers/t3-08.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">08</span></span>
-          <span class="pcstate">Unsteady</span>
-          <span class="pcname">Visibility</span></a><a class="pc" href="#">
+          <span class="pcstate">Numb</span>
+          <span class="pcname">Decision Fatigue</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=09">
           <span class="pcimg"><img src="assets/covers/t3-09.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">09</span></span>
           <span class="pcstate">Numb</span>
-          <span class="pcname">Burnout &amp; Overload</span></a><a class="pc" href="#">
+          <span class="pcname">Burnout &amp; Overload</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=10">
           <span class="pcimg"><img src="assets/covers/t3-10.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">10</span></span>
-          <span class="pcstate">Numb</span>
-          <span class="pcname">Creative Flow</span></a><a class="pc" href="#">
+          <span class="pcstate">Unsteady</span>
+          <span class="pcname">Creative Flow</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=01">
           <span class="pcimg"><img src="assets/covers/t3-01.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">01</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">High-Stakes Presence</span></a><a class="pc" href="#">
+          <span class="pcname">High-Stakes Presence</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=02">
           <span class="pcimg"><img src="assets/covers/t3-02.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">02</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Conflict at Work</span></a><a class="pc" href="#">
+          <span class="pcname">Conflict Navigation</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=03">
           <span class="pcimg"><img src="assets/covers/t3-03.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">03</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">Imposter Dissolution</span></a><a class="pc" href="#">
+          <span class="pcname">Imposter Dissolution</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=04">
           <span class="pcimg"><img src="assets/covers/t3-04.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">04</span></span>
           <span class="pcstate">Agitated</span>
-          <span class="pcname">Decision Pressure</span></a><a class="pc" href="#">
+          <span class="pcname">Perfectionism Release</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=05">
           <span class="pcimg"><img src="assets/covers/t3-05.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">05</span></span>
-          <span class="pcstate">Unsteady</span>
-          <span class="pcname">Perfectionism</span></a><a class="pc" href="#">
+          <span class="pcstate">Agitated</span>
+          <span class="pcname">Performance Anxiety</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=06">
           <span class="pcimg"><img src="assets/covers/t3-06.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">06</span></span>
           <span class="pcstate">Unsteady</span>
-          <span class="pcname">The Belonging Gap</span></a><a class="pc" href="#">
+          <span class="pcname">Belonging Gap</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=07">
           <span class="pcimg"><img src="assets/covers/t3-07.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">07</span></span>
-          <span class="pcstate">Numb</span>
-          <span class="pcname">Career Transition</span></a><a class="pc" href="#">
+          <span class="pcstate">Unsteady</span>
+          <span class="pcname">Career Transition</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=08">
           <span class="pcimg"><img src="assets/covers/t3-08.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">08</span></span>
-          <span class="pcstate">Unsteady</span>
-          <span class="pcname">Visibility</span></a><a class="pc" href="#">
+          <span class="pcstate">Numb</span>
+          <span class="pcname">Decision Fatigue</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=09">
           <span class="pcimg"><img src="assets/covers/t3-09.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">09</span></span>
           <span class="pcstate">Numb</span>
-          <span class="pcname">Burnout &amp; Overload</span></a><a class="pc" href="#">
+          <span class="pcname">Burnout &amp; Overload</span></a><a class="pc" href="protocol.html?track=3&amp;protocol=10">
           <span class="pcimg"><img src="assets/covers/t3-10.jpg" alt="" loading="lazy"
             onerror="this.style.opacity=0"><span class="pcnum">10</span></span>
-          <span class="pcstate">Numb</span>
+          <span class="pcstate">Unsteady</span>
           <span class="pcname">Creative Flow</span></a></div></div>
     </div></div>
     </div>
     </div>
-
-    <div class="split">
-      <div class="splitart"><img src="assets/journey/t3-band.jpg" alt="" onerror="this.style.opacity=0"></div>
-      <div class="splittxt">
-        <h3>It fits inside a working day.</h3>
-        <p>No course to schedule around, nothing to complete, nothing anyone else can see. You run it before the room, or after it.</p>
-      </div>
-    </div>
-  </div>
+</div>
 </section>
 
+<footer class="foot">
+  <div class="wrap">
+    <p class="scope"><strong>Scope &amp; safety.</strong> SafeRise Protocol is
+      self-guided education and training in nervous-system regulation. It is not
+      therapy, medical treatment, or a substitute for professional care, and it has not
+      been through a clinical trial. If you are in crisis, contact your local emergency
+      service.</p>
+    <div class="flinks">
+      <a href="mailto:contact@thesaferiseprotocol.com">Contact</a><a href="method.html#faq">FAQ</a>
+      <a href="plans.html">Billing</a><a href="mailto:contact@thesaferiseprotocol.com">Support</a>
+      <a href="#">Terms</a><a href="#">Privacy</a>
+    </div>
+  </div>
+</footer>
+<div class="filmmodal" id="filmModal" aria-hidden="true">
+  <div class="filmmodalback" data-close-film></div>
+  <div class="filmframe" role="dialog" aria-modal="true" aria-label="SafeRise lived-experience film preview">
+    <button class="filmclose" type="button" data-close-film aria-label="Close film">×</button>
+    <div class="filmpreview">
+      <img src="assets/home/film-poster.jpg" alt="">
+      <div class="previewshade"></div>
+      <div class="previewcenter">
+        <span class="previewlabel">A film in production</span>
+        <h2>What dysregulation changed for me.</h2>
+        <p>A short documentary, currently being made.</p>
+      </div>
+    </div>
+    <div class="filmchapters">
+      <div><span>01</span><strong>Anxiety</strong><small>Scanning for a problem that never resolves</small></div>
+      <div><span>02</span><strong>Relationship rupture</strong><small>Building the next argument before speaking</small></div>
+      <div><span>03</span><strong>Feedback pressure</strong><small>Hearing threat before hearing the message</small></div>
+      <div><span>04</span><strong>Emotional overwhelm</strong><small>Losing access to the next clear choice</small></div>
+    </div>
+    <div class="filmtimeline">
+      <span class="timecurrent">0:00</span>
+      <div class="timelinebar"><i></i></div>
+      <span>1:04</span>
+    </div>
+  </div>
 </div>
-<!-- SR-322 · door + protocol-preview-carousel controller, lifted from
-     home-v72.html. The theme-toggle piece of that file's original script
-     is deliberately NOT here — it flipped data-theme directly with no
-     sessionStorage call, a second, non-persistent theme mechanism. This
-     page has no theme toggle yet (that's the nav-unification/sunrise
-     work), so there is nothing to wire it to; when a toggle is added
-     here it must use the sessionStorage['sr-theme'] mechanism already
-     used everywhere else, never this. -->
+</div>
+<!-- SR-332 · nav + door + protocol-preview-carousel controller, lifted
+     from home-v84.html. Theme toggle (#tog/#togl) uses the same
+     sessionStorage['sr-theme'] mechanism every other public page uses.
+     ndrop dropdown open/close matches plans.html's copy exactly. -->
 <script>
 (function(){
   document.querySelectorAll('.sr-home .door').forEach(function(d){
@@ -1633,22 +1661,25 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
     var view=c.querySelector('.pcarview'),
         tr=c.querySelector('.pcartrack'),
         cards=Array.prototype.slice.call(tr.children),
-        n=cards.length/2, GAP=24, w=0;
+        n=cards.length/2, GAP=16, w=0;
 
     function size(){
-      // exactly three across the viewport, gaps included
-      var cw=(view.clientWidth-GAP*2)/3;
+      // fixed target card width — the count follows the viewport,
+      // so a cover is the same size at every breakpoint
+      var TARGET=170, vw=view.clientWidth;
+      var per=Math.max(2,Math.round((vw+GAP)/(TARGET+GAP)));
+      var cw=(vw-GAP*(per-1))/per;
       c.style.setProperty('--cw',cw+'px');
       w=0; for(var i=0;i<n;i++) w+=cw+GAP;
       tr.style.setProperty('--w','-'+w+'px');
       tr.style.animation='none'; void tr.offsetWidth;
-      tr.style.animation='sr-home-pcroll '+(n*4.2)+'s linear infinite';
+      tr.style.animation='pcroll '+(n*4.2)+'s linear infinite';
     }
     c._size=size;
     window.addEventListener('resize',size);
     if(view.clientWidth>0) size();
 
-    // only the three inside the frame are lit; the ones entering and
+    // only the cards fully inside the frame are lit; the ones entering and
     // leaving sit at 16% so they read as arriving rather than clipped
     function tick(){
       var vb=view.getBoundingClientRect();
@@ -1663,6 +1694,74 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
     }
     requestAnimationFrame(tick);
   });
+
+  var dd=document.querySelector('.ndrop'), dt=document.getElementById('ptrig');
+  function closeDrop(){dd.classList.remove('open');dt.setAttribute('aria-expanded','false');}
+  dt.addEventListener('click',function(e){
+    e.stopPropagation();
+    var open=dd.classList.toggle('open');
+    dt.setAttribute('aria-expanded',open?'true':'false');
+  });
+  dd.addEventListener('mouseenter',function(){dd.classList.add('open');dt.setAttribute('aria-expanded','true');});
+  dd.addEventListener('mouseleave',closeDrop);
+  document.addEventListener('click',closeDrop);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDrop();});
+
+  var t=document.getElementById('tog'), l=document.getElementById('togl');
+  var THEME_KEY='sr-theme';
+  function applyTheme(n){
+    document.documentElement.setAttribute('data-theme',n);
+    if(l) l.textContent = n==='midnight' ? 'Midnight' : 'Sunrise';
+    try{ sessionStorage.setItem(THEME_KEY,n); }catch(e){}
+  }
+  try{
+    var saved=sessionStorage.getItem(THEME_KEY);
+    if(saved==='midnight'||saved==='sunrise') applyTheme(saved);
+  }catch(e){}
+  if(t) t.addEventListener('click',function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    applyTheme(cur==='midnight'?'sunrise':'midnight');
+  });
+
+  var els=[].slice.call(document.querySelectorAll('.sr-home .reveal'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target);}
+      });
+    },{threshold:.14,rootMargin:'0px 0px -6% 0px'});
+    els.forEach(function(el){io.observe(el);});
+  }else{els.forEach(function(el){el.classList.add('is-visible');});}
+
+  var heroImg=document.querySelector('.sr-home .filmhero .heroart img');
+  var ticking=false;
+  function moveHero(){
+    var y=window.scrollY||0;
+    if(heroImg) heroImg.style.objectPosition='center calc(42% + '+Math.min(8,y*.01)+'%)';
+    ticking=false;
+  }
+  window.addEventListener('scroll',function(){
+    if(!ticking){requestAnimationFrame(moveHero);ticking=true;}
+  },{passive:true});
+  moveHero();
+
+  var filmPlay=document.getElementById('filmPlay');
+  var filmModal=document.getElementById('filmModal');
+  if(filmPlay && filmModal){
+    function openFilm(){
+      filmModal.classList.add('open');
+      filmModal.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+    function closeFilm(){
+      filmModal.classList.remove('open');
+      filmModal.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    }
+    filmPlay.addEventListener('click',openFilm);
+    filmModal.querySelectorAll('[data-close-film]').forEach(function(el){el.addEventListener('click',closeFilm);});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape') closeFilm();});
+  }
 })();
 </script>
 <!-- sr-footer-template: the single reusable footer partial. Cloned into

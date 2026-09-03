@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-331.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-332.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -85,7 +85,8 @@ Canonical record of defects and design decisions. Commits reference the ID:
   used **SR-329**. The image-wiring run checked `git log --grep` for SR-330
   before allocating, found it free, and used **SR-330**. The plans.html rewrite
   run checked `git log --grep` for SR-331 before allocating, found it free, and
-  used **SR-331**. Next run: allocate from **SR-332**.
+  used **SR-331**. The index.html-homepage run checked `git log --grep` for SR-332 before
+  allocating, found it free, and used **SR-332**. Next run: allocate from **SR-333**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -6687,3 +6688,144 @@ its real default (`false`) and flipped to `true`:
 - No console errors in any of the above states.
 
 *Status:* closed · *Raised and fixed:* 26 Aug 2026
+
+---
+
+**SR-332 · index.html's homepage replaced, from home-v84.html.** The nav-unification/sunrise
+work SR-322's own comment deferred ("this page has no theme toggle yet... when a toggle is
+added here it must use the sessionStorage['sr-theme'] mechanism already used everywhere else")
+lands here. `#main-nav` (legacy, inline-styled, no dropdown, no theme toggle) is replaced
+wholesale by the `.nav`/`.ndrop`/`.foot` pattern every other public page already uses — the
+one exception to "keep #main-nav" the founder granted mid-run, after a CRITICAL orphan audit:
+every `showProg()`/`showMain()` trigger `#main-nav` carried is *also* provided independently by
+`sr-footer-template` (a separate legacy footer partial cloned into `#main-content` and every
+`.prog-overlay`), so removing `#main-nav` orphans nothing — confirmed by tracing all ~30
+`showProg`/`showMain` call sites in the file to their containing region before touching
+anything. `sr-footer-template` itself, the ten `.prog-overlay` panels, and the whole resource
+reader (`RESOURCE_CONTENT`, `READER_PROTOCOLS`, `getResourceData`, `openReader`,
+`selectReaderTab`) are untouched — confirmed still working live (`openReader('p2')` opens with
+79 tabs and full body text).
+
+The `.sr-home` div's inner markup is replaced by home-v84.html's hero-film/doors/track-panel
+redesign, still wrapped in `.sr-home` (now also carrying `id="main"` for the new skip link) so
+the existing door-click and `.pcar`-sizing controller script keeps working unchanged in
+principle — though the sizing algorithm itself changed with the source: SR-322's script forced
+exactly three cards across the viewport (`GAP=24`); home-v84's targets a fixed ~170px card
+width with the count following the viewport (`GAP=16`), confirmed live post-fix at `--cw:
+167.57px` after a door click. `css/saferise-system.css`'s PART D block is replaced to match —
+not layered on top of SR-322's version, which would have left two conflicting `--cw` algorithms
+and two `.pcartrack{gap}` values fighting by source order. The old nav, old `.sr-home` markup
+and old PART D CSS are preserved verbatim in `archive/index-home-pre-sr332.html` (not linked,
+not live) rather than deleted.
+
+Building the new PART D block surfaced defects in the supplied file rather than just carrying
+it forward:
+- **Six stray, unmatched closing `}` characters** in home-v84.html's own `<style>` block
+  (a hand-patched, multi-pass "vNN" file — this one had reached v84) — caught by a
+  brace-balance check during extraction, not by eye; skipped rather than carried forward.
+- **Two invalid `:root`/`html` selectors.** The source's `:root{--bg:...}` token block and a
+  bare `html{scroll-behavior:smooth}` rule, both scoped by prefixing `.sr-home ` in front —
+  which produces `.sr-home :root{...}` and `.sr-home html{...}`, selectors that can never match
+  anything (`:root`/`html` can only be an *ancestor* of `.sr-home`, never a descendant). Caught
+  by the same reasoning PART C's own comment already documents for exactly this trap ("index.html
+  already has its own unscoped `:root`... a bare `:root` block here would have repainted all of
+  it") — fixed by making `.sr-home` itself carry the tokens (matching the existing SR-322
+  pattern) instead of a descendant-scoped `:root`; the `html{scroll-behavior}` rule was dropped,
+  not reinterpreted, since a class selector cannot scope a property on the document root at all.
+- **Three more of the same class, one tier down** — `body[data-open="t1"] #step-t1` and its two
+  sibling/companion rules had `.sr-home ` prepended in front of `body[...]` rather than *after*
+  it, producing `.sr-home body[data-open="t1"] #step-t1` — again never-matching, since `body` is
+  an ancestor of `.sr-home`, not a descendant. This one wasn't caught by static review; it was
+  caught live — clicking a door left `#step-t1` at `display:none` and `.pcar`'s `--cw` computed
+  to a nonsensical `-8px` (the sizing function's own fallback math for a zero-width, still-hidden
+  container). Fixed by moving `.sr-home` to sit *after* `body[data-open="…"]` in all three rules,
+  matching the pattern the pre-existing, unrelated `body[data-open] .sr-home .door` rule already
+  used correctly one section over. Reloaded and reverified: `#step-t1` now `display:block`,
+  `--cw: 167.57px`.
+- **The same ancestor/descendant mistake in JS, not just CSS.** The new nav's dropdown script
+  read `document.querySelector('.sr-home .ndrop')` — but `.ndrop` lives inside `<nav class="nav">`,
+  a *sibling* of `.sr-home`, not a descendant of it. This threw `Cannot read properties of null
+  (reading 'addEventListener')` on load, which silently aborted the rest of that IIFE —
+  including the film-modal open/close listeners defined later in the same function, so
+  `#filmPlay` did nothing when clicked. Fixed by dropping the incorrect `.sr-home ` scope
+  (`document.querySelector('.ndrop')`); reverified live — the dropdown opens/closes on click,
+  hover and Escape, and the film modal now opens and closes correctly too.
+- **`assets/covers/t1-01.jpg` through `t1-10.jpg` (20 references, doubled for the carousel
+  loop) don't exist.** The site's real track-1 covers are bare-numbered — `assets/covers/01.jpg`
+  through `10.jpg`, no `t1-` prefix — confirmed by directory listing, not assumption; t2 and t3
+  correctly use the `t2-`/`t3-` prefix and needed no change. All 20 references rewritten;
+  confirmed all 30 files across all three tracks exist on disk.
+- **All 60 `.pc` protocol-card `href="#"` placeholders** (30 protocols × 2, doubled for the
+  seamless carousel loop) resolved to `protocol.html?track={N}&protocol={NN}`, reading the track
+  number from each carousel's own `data-car="tN"` and the protocol number from its `.pcnum`
+  label — the same `?track=&protocol=` scheme `js/saferise-track.js` already uses to open
+  `protocol.html` from the three track pages' own carousels (SR-182's comment there: "the href
+  is built from the record, never typed").
+- **`assets/home/door-t1.jpg` and `door-t2.jpg` are PNG data saved with a `.jpg` extension** —
+  same defect class as SR-330's `band-06.jpg`. Flagged, not fixed, per that precedent; the
+  `<img>` tags reference them correctly regardless of the file's actual encoding, since browsers
+  sniff image content rather than trusting the extension.
+- **`assets/home/` already held real, larger photographs under the exact eight target
+  filenames** (`hero-film.jpg`, `door-t1/t2/t3.jpg`, `panel-t1/t2/t3.jpg`, `film-poster.jpg`) —
+  not placed by this run. Confirmed by comparing embedded-base64 byte counts against the
+  on-disk files (58 KB–288 KB embedded vs. 271 KB–1.87 MB on disk, every one of the eight
+  larger): these are the real final photographs, not extracted placeholders. The eight base64
+  data URIs in home-v84.html were stripped and pointed at the existing files rather than
+  decoded and written over them — decoding the smaller embedded copies would have silently
+  regressed real, already-supplied assets. Zero `data:image/jpeg` URIs remain inside `.sr-home`
+  (confirmed by count); the ten still in the file all sit inside the unrelated, untouched
+  `#prog-personal` panel, pre-existing and out of scope.
+
+**Brand mark:** now reads "SafeRise" (not "SafeRise Protocol") in index.html's nav, per
+instruction. Six other public/member pages still read "SafeRise Protocol" in their own
+`.bname` — `coming-soon.html`, `method.html`, `live-sessions.html`, `about.html`, `plans.html`,
+`anxiety-reset.html` — unchanged, out of this task's scope, reported rather than silently fixed.
+
+**Nav CTA:** home-v84.html's supplied nav read "Sign in"; `#main-nav` had no equivalent button
+to "keep live" against (it had no theme toggle, no dropdown, no CTA in that shape at all), so
+there was nothing to diff against. Normalized to "Log in," matching every other public page's
+`.navcta` text (plans.html, coming-soon.html, method.html, live-sessions.html, about.html,
+anxiety-reset.html all read "Log in").
+
+**Theme.** home-v84.html's own theme script already used `sessionStorage`/`'sr-theme'` correctly
+— unlike every "vNN" drop this session before it, which all shipped the wrong `localStorage`/
+`'sr.theme'` mechanism and needed the live one copied back in. Verified anyway, live, per
+standing instruction to verify rather than assume: `<html>` had no `data-theme` default at all
+(index.html predates the whole theme system), so the toggle's first click was a no-op —
+`cur === 'midnight' ? 'sunrise' : 'midnight'` reads `null !== 'midnight'` as false and applies
+`'midnight'` again. Fixed by adding `data-theme="midnight"` to `<html>`, matching every other
+public page's own default. Full carry sequence reverified after the fix: Sunrise set on
+`index.html`, `sessionStorage['sr-theme']` and `--gold` both confirmed sunrise-valued; navigated
+to `plans.html` — still Sunrise; back to `index.html` — still Sunrise, toggle label reads
+"Sunrise."
+
+**Page weight.** `index.html`: 960,235 → 968,045 bytes (+0.8%) — the eight images that would
+otherwise have added roughly 1 MB of inline base64 are external, cacheable file references
+instead. `css/saferise-system.css`: 209,902 → 246,799 bytes (+17.6%), the new PART D block.
+
+**Verified live**, Browser pane against the local static server: homepage renders (hero, film
+grain, play button); all three doors click through to their track panel, dim the other two to
+0.4 opacity and hold the clicked one at 1 (the `body[data-open]` specificity fix, above); all
+three `.pcar` carousels size to ~170px cards post-click; the film modal opens on `#filmPlay`
+and closes via its close button (the `.ndrop` scoping fix, above); the nav dropdown opens on
+click/hover and closes on click-outside/Escape; the resource reader still opens
+(`openReader('p2')`, 79 tabs, full body text) and `showProg`/`showMain` are still defined;
+`.prog-overlay` panels and `sr-footer-template` untouched; zero esprima errors across all 11
+inline `<script>` blocks; HTML tag-balanced (a custom `html.parser`-based scanner, not
+regex/brace-counting — proven unreliable earlier this session for JS string literals that
+contain HTML-like substrings); zero CSS syntax errors sitewide (`tinycss2`). Console errors
+from the two bugs above were caught, fixed, and reverified clean on reload; the Browser pane's
+own `read_console_messages` continued to echo the pre-fix errors after the fix landed and after
+a cache-busted reload — confirmed via a fresh `window.onerror` listener and, more directly, by
+the actual behavior (dropdown and film modal both working) that this was the console-log tool
+echoing its own accumulated history across navigations, not a live re-check; not a real,
+unfixed defect.
+
+The coming-soon-images run checked `git log --grep` for SR-330 before allocating, found it
+free, and used **SR-330**. The plans.html rewrite run checked `git log --grep` for SR-331
+before allocating, found it free, and used **SR-331**. This run checked `git log --grep` for
+SR-332 before allocating (background + `sleep`, after a foreground `git log --grep` call hung —
+the same transient issue on record earlier this session, worked around the same way), found it
+free, and used **SR-332**. Next run: allocate from **SR-333**.
+
+*Status:* closed · *Raised and fixed:* 3 Sep 2026

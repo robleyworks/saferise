@@ -95,6 +95,37 @@ surface it belongs to before writing its first line of CSS — never
 average the two, and never invent a third look because a mockup made it
 look like a nice middle ground.
 
+### `index.html`'s homepage: nav, theme toggle, and the `.sr-home` scoping trap (SR-332)
+
+`index.html` closes the gap SR-322 deliberately left open ("this page has no theme toggle yet
+... when a toggle is added here it must use the sessionStorage['sr-theme'] mechanism already
+used everywhere else"). `#main-nav` (legacy, inline-styled) is replaced by the same
+`.nav`/`.ndrop`/`.foot` pattern every other public page uses, with its own real theme toggle.
+`.nav` and `.foot` sit OUTSIDE `.sr-home` in the markup (`.nav` as a sibling of `#main-content`,
+`.foot` nested as the last child of `.sr-home` alongside `#filmModal`) — each carries its own
+small local `--bg`/`--gold`/… token block in `css/saferise-system.css` rather than relying on
+`.sr-home`'s, for the same reason PART C's own comment gives for `.sr-tp`: index.html already
+has an unscoped `:root` that the reader, resource modals and every `.prog-overlay` still depend
+on, so nothing here may touch a bare `:root`.
+
+**The scoping trap this caused, twice, in one pass:** prefixing every selector in a page's own
+CSS with `.sr-home ` to bring it into the shared system sheet is *not* a mechanical find-and-
+replace. A selector whose first component is `.sr-home`'s own ANCESTOR — `:root`, `html`, or
+`body[data-open="…"]` — breaks if `.sr-home` is prepended in front of it: `.sr-home :root` and
+`.sr-home body[...]` can never match anything, since `.sr-home` is always a *descendant* of
+`body`/`html`, never an ancestor of them. The fix is selector-dependent, not one rule: `:root`
+and `html` become `.sr-home` itself (it already carries the equivalent of a local `:root`);
+`body[data-open="t1"] #step-t1` needs `.sr-home` inserted *after* `body[...]`, not before it
+(`body[data-open="t1"] .sr-home #step-t1`) — exactly the pattern the pre-existing
+`body[data-open] .sr-home .door` rule from the same file already used correctly. The same
+mistake bit the door-controller JS too: `document.querySelector('.sr-home .ndrop')` returned
+null because `.ndrop` lives in `.nav`, a sibling of `.sr-home`, not a descendant — and because
+that line sat inside the same IIFE as the film-modal listeners, the null-reference error
+silently aborted everything defined after it in that function. Any future pass that lifts
+another page's CSS or JS into a `.sr-home`/`.sr-tp`-scoped block should check every selector
+and every `querySelector` call against where the referenced element actually lives in *this*
+page's DOM, not assume the source page's flat structure carries over.
+
 ## No public page links to a member page (SR-325)
 
 **No public page links to a member page.** The only exception is the
