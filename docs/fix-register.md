@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-333.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-334.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6827,7 +6827,9 @@ before allocating, found it free, and used **SR-331**. This run checked `git log
 SR-332 before allocating (background + `sleep`, after a foreground `git log --grep` call hung —
 the same transient issue on record earlier this session, worked around the same way), found it
 free, and used **SR-332**. This run checked `git log --grep` for SR-333 before allocating
-(background + `sleep`), found it free, and used **SR-333**. Next run: allocate from **SR-334**.
+(background + `sleep`), found it free, and used **SR-333**. The member-coming-soon run checked
+`git log --grep` for SR-334 before allocating (same method), found it free, and used
+**SR-334**. Next run: allocate from **SR-335**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
 
@@ -6910,5 +6912,76 @@ route modal. Clicked back to Dashboard to confirm the rail's active-state toggli
 for every original button. Zero console errors throughout. esprima-clean (1 inline script
 block) and zero `tinycss2` errors in `css/saferise-dashboard.css`.
 
-*Status:* Log out closed. "What's coming" open — awaiting a routing decision (see above).
-*Raised:* 3 Sep 2026
+*Status:* closed. Log out shipped as-is; the "What's coming" routing question was put to the
+founder directly rather than decided here — answer and follow-up work in **SR-334**.
+*Raised and fixed:* 3 Sep 2026
+
+---
+
+**SR-334 · `member-coming-soon.html` — the member-surface "What's coming."** Founder's answer
+to SR-333's open routing question: build a real member-surface page
+(`member-coming-soon.html`, a `PAGES` entry, not a `LAYERS` modal or a route straight to the
+public page), drafted by this run rather than supplied as a source file, reusing the public
+page's own seven-track content verbatim.
+
+**Content — reused, not rewritten, and deliberately incomplete relative to the source.** All
+seven track titles, "ask" questions, fuller descriptions and images (`assets/coming/band-
+01.jpg` through `band-07.jpg`) copied character-for-character from `coming-soon.html`, plus its
+closing "The subject changes..." note. Dropped: the "Bring more of your life under your own
+design" hero pitch and the "Why these belong together" architecture explainer — both written
+for a visitor who has not joined yet, and out of place addressed to someone already inside.
+This is the actual shape of "reuse the grid, trim the onboarding framing" scoped during the
+routing discussion, not a fresh editorial pass.
+
+**Surface — restrained, matching `member-frameworks.html`/`member-porges.html` exactly**, not
+`coming-soon.html`'s own decorated `<style>` block: `css/saferise-method.css`, the same 74px
+icon rail, `body.rd-soft` for Sunrise (not the public surface's `[data-theme]` swap — see
+`docs/page-invariants.md`'s "never differs" note: the `sessionStorage['sr-theme']` *key* is
+shared, the CSS mechanism that reads it is not). No new page-local `<style>` block — the one
+genuinely new rule needed (see below) went into `css/saferise-method.css` instead, matching
+that file's own header comment: "nothing in this file styles itself."
+
+**One new CSS rule, not a new component.** `css/saferise-method.css`'s only existing card-art
+slot, `.sr-mi-cardtile`, is an 88px circular NEEDS-ART placeholder sized for the six framework
+icons — wrong shape and wrong intent for seven tracks that already have real, landscape
+(1200×640) photographs. Added `.sr-mi-cardart`: a rectangular image bleeding through the
+card's own padding via negative margins (`margin:-26px calc(-1 * var(--pad)) 18px`), rounded to
+match the card's existing 14px corners. Everything else — `.sr-mi-band`, `.sr-mi-grid`,
+`.sr-mi-card`, `.sr-mi-cardno`, `.sr-mi-says`, `.sr-mi-holds`, `.sr-fw-mast`/`.sr-fw-stance`,
+`.sr-fw-backbar`, `.sr-fw-foot`, `.sr-mi-claim` — reused exactly as `member-frameworks.html`
+already uses them; `.sr-mi-holds`, styled for a "load-bearing for" fact line with a top rule,
+turned out to fit the fuller per-track description with no modification at all once its
+optional `<b>` label child was simply omitted.
+
+**Wiring, mirroring dashboard.html's own two SR-333 fixes exactly, on a new page:**
+- `dashboard.html`'s `PAGES` map gained `coming: 'member-coming-soon.html'`; `ROUTES.coming`
+  (SR-333's honest placeholder) is left in place, now unreachable — `PAGES` is checked first in
+  `openRoute()` — matching the precedent `method` already set (its own `ROUTES` entry is
+  equally dead once its `PAGES` entry exists, and was never removed).
+- The new page carries its own rail, per the established `member-*.html` pattern (SR-104):
+  no `openRoute()`/route-modal machinery exists outside `dashboard.html`, so each rail click
+  either navigates directly (its own local `PAGES` map: `coming` → self, `method` →
+  `member-frameworks.html`, `dashboard` → `dashboard.html`) or hands the route to
+  `dashboard.html` via `#route=` for it to resolve on arrival.
+- Log out — `js/saferise-access.js` loaded fresh on this page (it wasn't already), the same
+  `SafeRiseAccess.signOut()` then `index.html` redirect as `dashboard.html`'s own button, and
+  the same `.sr-dash-navrailbtn[data-route]` selector fix excluding it from the generic
+  rail-click delegation, since it carries no `data-route` here either.
+- **Flagged, not touched:** the six other `member-*.html` pages
+  (`member-heartmath.html`, `member-porges.html`, `member-jung.html`, `member-kross.html`,
+  `member-mate.html`, `member-watts.html`) all carry their own copy of the same rail and are now
+  three pages behind `dashboard.html`/`member-frameworks.html`/`member-coming-soon.html` — no
+  "What's coming" entry, no Log out. Same flag raised in SR-333, not acted on then or now; the
+  founder has not asked for those six to be brought current.
+
+**Verified live**, Browser pane against the local static server: all seven cards render with
+their images loaded (`naturalWidth > 0`, not just `complete`) and correct titles; Sunrise/
+Midnight toggle flips `body.rd-soft` and persists to `sessionStorage['sr-theme']`; signed in via
+`SafeRiseAccess.signIn()`, clicked Log out on the new page — landed on `index.html`,
+`localStorage['sr.session']` confirmed `null`, matching `dashboard.html`'s own behavior exactly;
+navigated `dashboard.html` → clicked "What's coming" → landed on `member-coming-soon.html` (URL
+confirmed, not assumed); clicked "Dashboard" from there → landed back on `dashboard.html`. Zero
+console errors across the full round trip. esprima-clean (1 inline script block per page),
+zero `tinycss2` errors in `css/saferise-method.css`, HTML tag-balanced.
+
+*Status:* closed · *Raised and fixed:* 3 Sep 2026

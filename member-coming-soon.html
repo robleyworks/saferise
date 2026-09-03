@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — /coming-soon (MEMBER) — the seven tracks still being written
+
+  SR-333. Member-surface counterpart to the public coming-soon.html: same
+  seven tracks, same copy for each (title, the "ask" question, the fuller
+  description), same images — reused verbatim rather than rewritten, since
+  the tracks themselves are the same tracks either way. What's dropped is
+  the public-onboarding framing that doesn't fit a member already inside:
+  the "Bring more of your life under your own design" hero pitch and the
+  "why these belong together" architecture explainer, both written for
+  someone who hasn't joined yet.
+
+  Restrained, not decorated — same rule as member-frameworks.html and
+  member-porges.html: Cinzel/DM Sans, css/saferise-method.css, the 74px
+  icon rail, Midnight/Sunrise via body.rd-soft. Do not pull in
+  coming-soon.html's own <style> block (Cormorant Garamond display type,
+  gradient card fills, the public --bg/--gold token values) — that
+  palette belongs to the public surface only. See docs/page-invariants.md.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 pattern, carried from member-frameworks.html/protocol.html/resource.html —
+     the ground colour, inline and first, ahead of every stylesheet. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#0A0A0F}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — What&#8217;s coming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ═══ ICON RAIL — verbatim from the dashboard. /coming-soon is the active route. ═══ -->
+<nav class="sr-dash-navrail" aria-label="Sections">
+  <span class="sr-dash-navrailmark">◈</span>
+  <button class="sr-dash-navrailbtn" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
+  <button class="sr-dash-navrailbtn" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
+  <button class="sr-dash-navrailbtn on" data-route="coming"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18"/><path d="M5 17c3-6 5-9 7-9s4 3 7 9"/><circle cx="12" cy="8" r="1.3"/></svg><span>What&#8217;s coming</span></button>
+  <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
+  <div class="sr-dash-navrailfoot">
+    <button class="sr-dash-navrailbtn" data-route="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.2H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/></svg><span>Account &amp; plan</span></button>
+    <button class="sr-dash-navrailbtn" id="srSignOut" type="button"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4H7a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h8"/><path d="M11 12h9"/><path d="M17 8l4 4-4 4"/></svg><span>Log out</span></button>
+  </div>
+</nav>
+
+<main id="main" class="shell">
+
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="dashboard.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Dashboard
+  </a>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<header class="sr-fw-mast sr-mi-mast" style="display:block">
+  <span class="eyebrow">Coming soon</span>
+  <h1>Seven tracks,<br>already being written</h1>
+  <p class="sr-fw-stance">Each one goes somewhere the first three do not — into work, money,
+    intimacy, recovery, and what comes after survival stops being the only thing asking for
+    your attention. Same method, same four steps, a different room in the same house.</p>
+</header>
+
+<div class="sr-mi-bands" id="srBands">
+<div class="sr-mi-bandcol">
+
+<section class="sr-mi-band">
+  <div class="sr-mi-grid">
+
+    <article class="sr-mi-card">
+      <span class="sr-mi-cardart"><img src="assets/coming/band-01.jpg" alt=""></span>
+      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">01</span></div>
+      <h3>Elevation Series</h3>
+      <p class="sr-mi-says">What happens when survival is no longer the only thing asking for
+        your attention?</p>
+      <p class="sr-mi-holds">For the inner patterns that appear when life begins asking more of
+        you. Willing your energy and frequency toward alignment — with the universe, with your
+        calling, with the life you would choose deliberately rather than fall into. Attracting
+        what you desire rather than waiting on it. Living in harmony instead of against
+        yourself. Greater purpose, creativity, self-trust and presence.</p>
+    </article>
+
+    <article class="sr-mi-card">
+      <span class="sr-mi-cardart"><img src="assets/coming/band-02.jpg" alt=""></span>
+      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">02</span></div>
+      <h3>Sex &amp; Intimacy</h3>
+      <p class="sr-mi-says">What changes when being close also means being seen?</p>
+      <p class="sr-mi-holds">What you believe about desire was handed to you before you had a
+        say, and it has been deciding what you are allowed to want ever since. This is about
+        the parts you set aside — the curiosity you learned to call wrong, the conversations
+        avoided for years, and where your own lines actually sit between curiosity and
+        pursuit, a lifestyle and love, being wanted and being known.</p>
+    </article>
+
+    <article class="sr-mi-card">
+      <span class="sr-mi-cardart"><img src="assets/coming/band-03.jpg" alt=""></span>
+      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">03</span></div>
+      <h3>Fitness Mindset</h3>
+      <p class="sr-mi-says">What happens when motivation is no longer carrying you?</p>
+      <p class="sr-mi-holds">Go beneath motivation and willpower to what actually keeps you
+        going. How to move toward the body you want from where your conditioning and your
+        circumstances actually are — not from where you wish they were. How to stop fighting
+        the resistance inside you and build momentum from within, so progress comes from
+        something steadier than discipline.</p>
+    </article>
+
+    <article class="sr-mi-card">
+      <span class="sr-mi-cardart"><img src="assets/coming/band-04.jpg" alt=""></span>
+      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">04</span></div>
+      <h3>Nutrition &amp; Body Healing</h3>
+      <p class="sr-mi-says">What are you responding to when you reach for food, control or
+        avoidance?</p>
+      <p class="sr-mi-holds">The relationship between awareness, nourishment and the body.
+        Changing what you reach for and why — shifting appetite and inclination at the level
+        they actually form, rather than by force. Understanding your own biochemistry and what
+        it is asking for, and what it takes to protect your health against illness rather than
+        respond to it after the fact.</p>
+    </article>
+
+    <article class="sr-mi-card">
+      <span class="sr-mi-cardart"><img src="assets/coming/band-05.jpg" alt=""></span>
+      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">05</span></div>
+      <h3>Entrepreneur&#8217;s Journey</h3>
+      <p class="sr-mi-says">Who do you become when there is no guarantee it will work?</p>
+      <p class="sr-mi-holds">For the inner landscape behind building something of your own —
+        uncertainty, risk, visibility, comparison, responsibility, failure and ambition.
+        Holding your nerve when nothing has arrived yet, staying in your own lane when everyone
+        else looks further ahead, and becoming the person the thing requires rather than
+        waiting to feel ready.</p>
+    </article>
+
+    <article class="sr-mi-card">
+      <span class="sr-mi-cardart"><img src="assets/coming/band-06.jpg" alt=""></span>
+      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">06</span></div>
+      <h3>Money Mindset</h3>
+      <p class="sr-mi-says">What does money mean before you ever spend it?</p>
+      <p class="sr-mi-holds">The patterns underneath earning, spending, scarcity, security,
+        worth, risk and possibility. What you were taught money means, what it stands in for,
+        and the beliefs that quietly decide what you think you are allowed to hold, ask for,
+        build or become. The state you are in when you decide about it usually matters more
+        than the numbers.</p>
+    </article>
+
+    <article class="sr-mi-card">
+      <span class="sr-mi-cardart"><img src="assets/coming/band-07.jpg" alt=""></span>
+      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">07</span></div>
+      <h3>Recovery &amp; Compulsion</h3>
+      <p class="sr-mi-says">What is the thing you keep returning to actually holding at bay?</p>
+      <p class="sr-mi-holds">For the cycles that repeat despite every intention. What the
+        behaviour is protecting you from feeling, why willpower keeps losing to it, and what
+        has to be built underneath before it stops being needed. Rebuilding an identity that no
+        longer depends on the thing, and meeting the return without treating yourself as the
+        failure.</p>
+    </article>
+
+  </div>
+</section>
+
+</div>
+</div>
+
+<div class="sr-mi-claim">
+  <p>The subject changes. What remains familiar underneath: notice where attention goes,
+    recognise the pattern forming around it, understand the belief giving it meaning, regulate
+    the state it creates, and recover greater choice.</p>
+</div>
+
+<footer class="sr-fw-foot">
+  <p>SafeRise Protocol is an independent practice created by Andre Robley.
+    Contact <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferiseprotocol.com</a>.</p>
+</footer>
+
+</main>
+
+<script src="js/saferise-access.js"></script>
+<script>
+(function(){
+  // ── reading mode, shared with the dashboard and reader (body.rd-soft) ──
+  var THEME_KEY = 'sr-theme';
+  function setTheme(mode){
+    document.body.classList.toggle('rd-soft', mode === 'sunrise');
+    document.querySelectorAll('[data-theme]').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-theme') === mode);
+    });
+    try{ sessionStorage.setItem(THEME_KEY, mode); }catch(e){}
+  }
+  document.querySelectorAll('[data-theme]').forEach(function(b){
+    b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme')); });
+  });
+  var saved = 'midnight';
+  try{ saved = sessionStorage.getItem(THEME_KEY) || 'midnight'; }catch(e){}
+  setTheme(saved);
+
+  // ── rail routes ──
+  // Same pattern as member-frameworks.html (SR-104): the dashboard resolves
+  // every rail route through openRoute(), which opens a route modal that
+  // only exists in dashboard.html. This page carries no such modal, so the
+  // rail leaves for the dashboard and lets it answer. 'coming' is the page
+  // you are already on. Log out carries no data-route on purpose — it is
+  // not a destination in this map, so it is wired separately below and
+  // excluded here by selector, same fix as dashboard.html (SR-333).
+  var PAGES = { coming: 'member-coming-soon.html', method: 'member-frameworks.html', dashboard: 'dashboard.html' };
+  document.querySelectorAll('.sr-dash-navrailbtn[data-route]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var key = b.getAttribute('data-route');
+      if(key === 'coming') return;                 // already here
+      if(PAGES[key]){ window.location.href = PAGES[key]; return; }
+      window.location.href = 'dashboard.html#route=' + encodeURIComponent(key);
+    });
+  });
+
+  var srSignOutBtn = document.getElementById('srSignOut');
+  if (srSignOutBtn) {
+    srSignOutBtn.addEventListener('click', function(){
+      if (window.SafeRiseAccess) SafeRiseAccess.signOut();
+      window.location.href = 'index.html';
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1256,7 +1256,7 @@
   // Routes that now have a real page of their own. Checked before ROUTES so the
   // rail and any [data-route-link] navigate there instead of opening the
   // "Not built yet" modal. Add to this map as each page lands.
-  var PAGES = { method: 'member-frameworks.html' };
+  var PAGES = { method: 'member-frameworks.html', coming: 'member-coming-soon.html' };
   /* Routes that are now a view in the shell rather than a page. Checked after
      PAGES and before ROUTES, so the rail reaches them without carrying a
      data-modal of its own — the rail's own listener would otherwise fire
