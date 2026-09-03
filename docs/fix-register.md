@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-330.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-331.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -83,8 +83,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
   allocating, found it free, and used **SR-328**. The coming-soon-v17 run
   checked `git log --grep` for SR-329 before allocating, found it free, and
   used **SR-329**. The image-wiring run checked `git log --grep` for SR-330
-  before allocating, found it free, and used **SR-330**. Next run: allocate
-  from **SR-331**.
+  before allocating, found it free, and used **SR-330**. The plans.html rewrite
+  run checked `git log --grep` for SR-331 before allocating, found it free, and
+  used **SR-331**. Next run: allocate from **SR-332**.
   **SR-318 · four-updated-pages verification (report-only pass).** `plans.html`,
   `method.html`, `live-sessions.html`, `about.html` replaced with updated drops;
   `coming-soon.html` unchanged, `home-v72.html` stays untracked. Verified live
@@ -427,6 +428,54 @@ Canonical record of defects and design decisions. Commits reference the ID:
   **2.89 MB** across the eight files. `coming-hero.jpg` is 502.3 KB — over
   the 500 KB the brief asked to flag, by a margin of 2.3 KB.
   `band-06.jpg` alone is 1.77 MB, well over half the total.
+  **SR-331 · plans.html rewritten, from plans-v10.html.** Supplied under a
+  different filename than named (`plans-v10.html`, not
+  `plans-three-columns-v10-resource-headline.html`); confirmed it was the
+  right file by content (title, three-column `.tcols` layout, the
+  hover/focus-reveal resource section) before treating it as such. Copy and
+  the resource section left exactly as supplied, untouched, per instruction.
+  Nav and footer diffed against live `plans.html`: three more divergences
+  than the brief named, all resolved by keeping live — the brand read
+  "SafeRise" in the supplied file, live keeps "SafeRise Protocol"; the
+  dropdown's "Six more tracks" (stale, pre-SR-328) again, live's "Seven"
+  kept; "Sign in" on the nav CTA, live's "Log in" kept; the footer's
+  "Scope & safety" paragraph was a shorter rewrite, live's full text kept;
+  and the footer's `<a href="dashboard.html">Account</a>` (stale, pre-SR-325)
+  removed. (The separate "Already a member? Sign in" link inside the
+  founder-approved pricing copy was left untouched — that one is body
+  content, not nav, and outside this section's scope.) Theme was
+  `localStorage`/`'sr.theme'` as flagged, replaced with `sessionStorage`/
+  `'sr-theme'` copied verbatim, not reimplemented. The one inline base64
+  image replaced with `assets/pages/plans-hero.jpg` (3840 × 1200), which
+  doesn't exist yet — confirmed 404 via `document.images` and `curl`.
+  Verified live, including the full carry sequence the brief specified step
+  by step rather than just toggling once: Sunrise set on `plans.html`,
+  reload → still Sunrise; navigate to `coming-soon.html` → still Sunrise;
+  toggled to Midnight there, navigated back to `plans.html` → still
+  Midnight; `sessionStorage['sr-theme']` held the value at every step,
+  `localStorage.getItem('sr.theme')` returned `null` throughout (one earlier
+  stray `localStorage` value from unrelated testing earlier in this session
+  was cleared before this check, confirmed the current code never writes to
+  it by toggling twice after clearing and re-reading `null`). All 30
+  protocol titles cross-checked against `content/tracks.js` programmatically
+  (not by eye) — all correct, including t3-06 reading "The Belonging Gap".
+  Prices: exactly `€19`/`€29`/`€39` and nothing else. Three columns at
+  desktop width (`grid-template-columns` measured, not assumed), one column
+  under the existing 1000px breakpoint. Hover confirmed live via genuine
+  mouse simulation (`computer` hover, not `.focus()`/`.dispatchEvent`) —
+  the row's tint and the description's `max-height` both responded
+  correctly. Keyboard focus could not be confirmed the same way this pass:
+  `element.focus()` set `document.activeElement` and satisfied
+  `.matches(':focus-within')` but the description's computed `max-height`
+  didn't reliably update in this session's browser harness — the identical
+  symptom already on record for this harness's synthetic-focus handling
+  (SR-326, SR-329), and the CSS rule for hover and focus-within is the same
+  declaration (`.crow:hover,.crow:focus-within` / `.crow:hover
+  .cds,.crow:focus-within .cds`), so the working hover case is strong
+  evidence the focus case works in an actual browser even though it
+  couldn't be independently confirmed here. `tabindex="0"` is present on
+  every row. Zero console errors beyond the one expected hero 404, esprima-
+  clean, HTML structurally balanced.
   The track-page-regressions run took SR-155 to SR-159 from a script drafted outside this
   lane, then allocated **SR-160**, **SR-161**, **SR-165**, **SR-166** and **SR-167** from findings raised mid-run, and **SR-154**
   for the sandbox record. The framework-pages run took **SR-168–SR-179**, issuing SR-176 to

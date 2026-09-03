@@ -493,6 +493,360 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .gc .ico{width:30px;height:30px}
 .gc .ico svg{width:15px;height:15px}
 
+
+/* hero image behind the headline — matches coming-soon */
+.phero{position:relative;min-height:520px;display:flex;align-items:flex-end;
+  overflow:hidden;border-bottom:1px solid var(--hair)}
+.phero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:center 44%;filter:saturate(.55) contrast(1.05);opacity:.40;transform:scale(1.03)}
+.phero::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 88%,transparent) 34%,
+    color-mix(in srgb,var(--bg) 48%,transparent) 68%,color-mix(in srgb,var(--bg) 76%,transparent) 100%),
+    linear-gradient(180deg,color-mix(in srgb,var(--bg) 12%,transparent),var(--bg) 94%)}
+.phero .inner{position:relative;z-index:2;padding:126px 0 76px;max-width:780px}
+.phero h1{font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:clamp(40px,6vw,74px);line-height:1.02;letter-spacing:-.03em;margin:22px 0;max-width:14ch}
+.phero h1 em{font-style:italic;color:var(--gold-lt)}
+.phero .lead{font-family:'DM Sans',sans-serif;font-size:17.5px;line-height:1.7;
+  color:var(--text2);max-width:60ch}
+
+/* nested-access diagram */
+.nestgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}
+.nest{display:flex;flex-direction:column;gap:9px}
+.nrow{position:relative;border:1px solid var(--hair);border-radius:14px;padding:17px 20px;
+  background:var(--card);overflow:hidden}
+.nrow::before{content:'';position:absolute;inset:0 0 auto 0;height:2px;background:var(--ac);opacity:.7}
+.nrow .top{display:flex;align-items:baseline;gap:12px}
+.nrow h4{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:20px}
+.nrow .pr{margin-left:auto;font-family:'Cormorant Garamond',serif;font-size:23px;color:var(--gold-lt)}
+.nrow p{font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--text3);margin-top:5px}
+.nbar{display:flex;gap:3px;margin-top:11px}
+.nbar i{height:5px;flex:1;border-radius:2px;background:var(--hair2)}
+.nbar i.on{background:var(--ac)}
+
+/* protocol rows — hover opens the description */
+.prow{display:grid;grid-template-columns:34px 92px minmax(0,1fr);gap:16px;
+  align-items:start;padding:14px 0;border-top:1px solid var(--hair);
+  transition:background-color .45s var(--ease);cursor:default}
+.prow:hover,.prow:focus-within{background:color-mix(in srgb,var(--gold) 5%,transparent);outline:none}
+.prow .pnm{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--text)}
+.prow .pds{max-height:0;opacity:0;overflow:hidden;
+  transition:max-height .55s var(--ease),opacity .4s var(--ease),margin .55s var(--ease);
+  font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.5;color:var(--text2)}
+.prow:hover .pds,.prow:focus-within .pds{max-height:90px;opacity:1;margin-top:5px}
+.phint{font-family:'DM Sans',sans-serif;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text3);margin-top:14px}
+@media(max-width:900px){.nestgrid{grid-template-columns:1fr;gap:30px}
+  .prow{grid-template-columns:28px 1fr}.prow .pnm,.prow .pds{grid-column:2}
+  .prow .pds{max-height:none;opacity:1;margin-top:4px}}
+
+
+/* three tracks as parallel columns */
+.tcols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px;align-items:start}
+.tcol{border:1px solid var(--hair);border-radius:20px;overflow:hidden;background:var(--card);
+  position:relative;display:flex;flex-direction:column;
+  transition:border-color .5s var(--ease),transform .5s var(--ease)}
+.tcol::before{content:'';position:absolute;inset:0 0 auto 0;height:2px;background:var(--ac);opacity:.7}
+.tcol:hover{border-color:var(--ac);transform:translateY(-3px)}
+.tcol.t1{--ac:var(--t1)} .tcol.t2{--ac:var(--t2)} .tcol.t3{--ac:var(--t3)}
+.tchead{padding:28px 24px 22px;border-bottom:1px solid var(--hair)}
+.tchead .pk{font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:9px;min-height:2.4em}
+.tchead h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:26px;
+  line-height:1.12;min-height:2.24em}
+.tchead .pq{font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--gold-lt);margin-top:6px}
+.tcprice{display:flex;align-items:baseline;gap:9px;margin-top:16px}
+.tcprice .amt{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;
+  color:var(--gold-lt);line-height:1}
+.tcprice .per{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text3)}
+.tcbody{padding:20px 24px 4px;font-family:'DM Sans',sans-serif;font-size:14px;
+  line-height:1.62;color:var(--text2);min-height:7.4em}
+.tclist{padding:8px 24px 22px;flex:1}
+.crow{display:grid;grid-template-columns:26px 1fr;gap:11px;align-items:start;
+  padding:10px 0;border-top:1px solid var(--hair);transition:background-color .4s var(--ease)}
+.crow:first-child{border-top:0}
+.crow:hover,.crow:focus-within{background:color-mix(in srgb,var(--ac) 8%,transparent);outline:none}
+.crow .cn{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--text3)}
+.crow .cnm{font-family:'Cormorant Garamond',serif;font-size:17.5px;line-height:1.2;color:var(--text)}
+.crow .cst{font-family:'DM Sans',sans-serif;font-size:8px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;display:block;margin-top:3px}
+.cst.agitated{color:var(--t1)} .cst.unsteady{color:var(--gold)} .cst.numb{color:var(--t2)}
+.crow .cds{max-height:0;opacity:0;overflow:hidden;
+  transition:max-height .5s var(--ease),opacity .38s var(--ease),margin .5s var(--ease);
+  font-family:'DM Sans',sans-serif;font-size:12.5px;line-height:1.5;color:var(--text2)}
+.crow:hover .cds,.crow:focus-within .cds{max-height:110px;opacity:1;margin-top:6px}
+.tcfoot{padding:0 24px 26px}
+.tcfoot .cta{width:100%;justify-content:center}
+.tcols{align-items:stretch}
+.tcol{height:100%}
+.tchead{min-height:196px}
+.tcbody{min-height:150px}
+.tcfoot{margin-top:auto}
+
+
+/* compact access notes — replaces three boxed cards */
+.accessnotes{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  margin-top:34px;
+  border-top:1px solid var(--hair2);
+  border-bottom:1px solid var(--hair);
+}
+.accessnote{
+  padding:24px 26px 22px;
+}
+.accessnote + .accessnote{
+  border-left:1px solid var(--hair);
+}
+.accessnote h3{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:400;
+  font-size:21px;
+  line-height:1.18;
+  margin-bottom:7px;
+  color:var(--text);
+}
+.accessnote p{
+  font-family:'DM Sans',sans-serif;
+  font-size:13.5px;
+  line-height:1.55;
+  color:var(--text2);
+}
+@media(max-width:860px){
+  .accessnotes{grid-template-columns:1fr}
+  .accessnote + .accessnote{border-left:0;border-top:1px solid var(--hair)}
+}
+
+/* plan title fills + equal price CTAs */
+.tchead{
+  background:color-mix(in srgb,var(--ac) 18%,var(--bg3));
+}
+.tcol.t1 .tchead{background:color-mix(in srgb,var(--t1) 22%,var(--bg3))}
+.tcol.t2 .tchead{background:color-mix(in srgb,var(--t2) 22%,var(--bg3))}
+.tcol.t3 .tchead{background:color-mix(in srgb,var(--t3) 22%,var(--bg3))}
+.tcfoot .cta{
+  width:100%;
+  min-height:52px;
+  justify-content:center;
+  padding-left:24px;
+  padding-right:24px;
+  font-size:15px;
+  letter-spacing:.06em;
+}
+@media(max-width:1000px){.tcols{grid-template-columns:1fr}
+  .tchead .pk,.tchead h3,.tcbody{min-height:0}
+  .crow .cds{max-height:none;opacity:1;margin-top:5px}}
+
+
+/* ===== v7 · judgement/value proposition mockup ===== */
+.planhero{
+  position:relative;min-height:660px;overflow:hidden;border-bottom:1px solid var(--hair);
+  display:flex;align-items:flex-end;background:var(--bg)
+}
+.planheroart{position:absolute;inset:0}
+.planheroart img{
+  width:100%;height:100%;object-fit:cover;object-position:67% 42%;
+  filter:saturate(.62) contrast(1.04);opacity:.58;transform:scale(1.025)
+}
+.planheroart::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 94%,transparent) 31%,
+      color-mix(in srgb,var(--bg) 70%,transparent) 55%,color-mix(in srgb,var(--bg) 30%,transparent) 78%),
+    linear-gradient(180deg,color-mix(in srgb,var(--bg) 20%,transparent) 0%,
+      color-mix(in srgb,var(--bg) 24%,transparent) 58%,var(--bg) 100%)
+}
+.planheroin{position:relative;z-index:2;width:100%;padding-top:150px;padding-bottom:80px}
+.planherocopy{max-width:680px}
+.planhero h1{
+  font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:clamp(46px,6.3vw,80px);line-height:.98;letter-spacing:-.035em;
+  margin:24px 0 22px;max-width:10ch
+}
+.planhero h1 em{font-style:italic;color:var(--gold-lt)}
+.planlede{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(20px,2.1vw,27px);
+  line-height:1.42;color:var(--text);max-width:28ch
+}
+.planlede strong{font-weight:400;color:var(--gold-lt)}
+.planbody{
+  font-family:'DM Sans',sans-serif;font-size:15.5px;line-height:1.72;
+  color:var(--text2);max-width:63ch;margin-top:22px
+}
+.planpull{
+  margin-top:26px;padding:12px 0 12px 20px;border-left:2px solid var(--gold);
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--text)
+}
+.planclose{
+  margin-top:22px;font-family:'DM Sans',sans-serif;font-size:13px;
+  line-height:1.6;color:var(--text3);letter-spacing:.035em;max-width:62ch
+}
+
+/* Cards: preserve equal dimensions but make the scope line read first */
+.tcbody strong{display:block;color:var(--gold-lt);font-weight:500;margin-bottom:7px}
+.sh{max-width:760px}
+.sh p{max-width:70ch}
+
+/* Resource section: editorial, not a stack of boxes */
+.resourceintro{
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);
+  gap:70px;align-items:center;padding:18px 0 42px
+}
+.resourceintrocopy h2{
+  font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:clamp(34px,4vw,52px);line-height:1.06;letter-spacing:-.025em;
+  margin:18px 0 18px;max-width:14ch
+}
+.resourceintrocopy h2 em{font-style:italic;color:var(--gold-lt)}
+.resourceintrocopy>p:not(.eyebrow):not(.resourcepromise){
+  font-family:'DM Sans',sans-serif;font-size:15.5px;line-height:1.7;color:var(--text2);
+  max-width:65ch
+}
+.resourcepromise{
+  margin-top:22px;padding-top:19px;border-top:1px solid var(--hair2);
+  font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.45;color:var(--text)
+}
+.resourcevisual{
+  position:relative;aspect-ratio:1/1;max-width:390px;width:100%;justify-self:end;
+  border-radius:50%;
+  background:radial-gradient(circle at center,color-mix(in srgb,var(--gold) 12%,var(--bg3)) 0 15%,var(--bg3) 16% 22%,transparent 23%);
+}
+.rvcore{
+  position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);
+  font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:.28em;color:var(--gold);
+}
+.rvring{
+  position:absolute;border:1px solid var(--hair2);border-radius:50%;
+  inset:20%;display:flex;align-items:flex-start;justify-content:center
+}
+.rvring span{
+  transform:translateY(-50%);background:var(--bg2);padding:0 9px;
+  font-family:'DM Sans',sans-serif;font-size:8px;letter-spacing:.23em;color:var(--text3)
+}
+.rv2{inset:10%}.rv3{inset:0}
+.rv1{border-color:color-mix(in srgb,var(--gold) 28%,var(--hair2))}
+.rv2{border-color:color-mix(in srgb,var(--t2) 34%,var(--hair2))}
+.rv3{border-color:color-mix(in srgb,var(--t3) 34%,var(--hair2))}
+
+.valuegroups{border-top:1px solid var(--hair2)}
+.valuegroup{
+  display:grid;grid-template-columns:72px minmax(0,1fr);gap:24px;
+  padding:27px 0;border-bottom:1px solid var(--hair);
+  transition:padding-left .35s var(--ease),background-color .35s var(--ease)
+}
+.valuegroup:hover{padding-left:12px;background:color-mix(in srgb,var(--gold) 3%,transparent)}
+.vgnum{
+  font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--text3);line-height:1
+}
+.vgk{
+  font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:7px
+}
+.valuegroup h3{
+  font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:400;
+  line-height:1.2;max-width:35ch;color:var(--text)
+}
+.valuegroup div>p:last-child{
+  font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.55;color:var(--text3);margin-top:7px
+}
+
+@media(max-width:900px){
+  .planhero{min-height:620px}
+  .planheroart img{object-position:72% center}
+  .planheroart::after{
+    background:
+      linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 84%,transparent) 60%,color-mix(in srgb,var(--bg) 48%,transparent) 100%),
+      linear-gradient(180deg,color-mix(in srgb,var(--bg) 30%,transparent),var(--bg) 95%)
+  }
+  .resourceintro{grid-template-columns:1fr;gap:32px}
+  .resourcevisual{justify-self:start;max-width:300px}
+}
+
+
+/* ===== v8 · substantial resource value ===== */
+.planherocopy{max-width:720px}
+.planhero h1{max-width:12ch}
+.planlede{max-width:35ch;font-size:clamp(20px,2vw,26px)}
+.planbody{max-width:68ch}
+.planclose{
+  margin-top:24px;padding-top:18px;border-top:1px solid var(--hair2);
+  color:var(--gold-lt);font-size:13px;font-weight:500
+}
+.planintro{margin-bottom:30px}
+
+.resource-section{padding-top:78px;padding-bottom:82px}
+.resource-head{max-width:820px;margin-bottom:50px}
+.resource-head h2{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4.5vw,56px);
+  font-weight:300;line-height:1.05;letter-spacing:-.025em;margin:17px 0 18px;max-width:18ch
+}
+.resource-head h2 em{font-style:italic;color:var(--gold-lt)}
+.resource-head>p:last-child{
+  font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.72;color:var(--text2);max-width:72ch
+}
+
+.resource-suites{border-top:1px solid var(--hair2)}
+.resource-suite{
+  display:grid;grid-template-columns:minmax(260px,.72fr) minmax(0,1.55fr);
+  gap:54px;padding:48px 0;border-bottom:1px solid var(--hair2)
+}
+.suite-intro{padding-right:10px;position:relative}
+.suite-num{
+  display:block;font-family:'Cormorant Garamond',serif;font-size:42px;line-height:1;
+  color:var(--text3);margin-bottom:20px
+}
+.suite-k{
+  font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:.27em;
+  color:var(--gold);margin-bottom:11px
+}
+.suite-intro h3{
+  font-family:'Cormorant Garamond',serif;font-weight:400;font-size:30px;line-height:1.12;
+  letter-spacing:-.012em;margin-bottom:13px;max-width:15ch
+}
+.suite-intro>p:last-child{
+  font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.65;color:var(--text3);max-width:34ch
+}
+
+.suite-items{display:grid;grid-template-columns:1fr;gap:0}
+.resource-item{
+  display:grid;grid-template-columns:44px minmax(0,1fr);gap:17px;
+  padding:4px 0 26px;margin-bottom:26px;border-bottom:1px solid var(--hair)
+}
+.resource-item:last-child{margin-bottom:0;border-bottom:0;padding-bottom:0}
+.ri-icon{
+  width:38px;height:38px;border:1px solid var(--hair2);border-radius:50%;
+  display:grid;place-items:center;color:var(--gold-lt);
+  font-family:'Cormorant Garamond',serif;font-size:19px
+}
+.resource-item h4{
+  font-family:'Cormorant Garamond',serif;font-weight:400;font-size:26px;
+  line-height:1.1;margin-bottom:5px;color:var(--text)
+}
+.ri-value{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;
+  line-height:1.4;color:var(--gold-lt);margin-bottom:7px
+}
+.resource-item div>p:last-child{
+  font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.62;
+  color:var(--text2);max-width:68ch
+}
+.resource-closing{
+  margin-top:42px;padding:28px 0 0;border-top:1px solid var(--hair2);
+  display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start
+}
+.resource-closing .eyebrow{margin:0}
+.resource-closing>p:last-child{
+  font-family:'Cormorant Garamond',serif;font-size:23px;line-height:1.45;
+  color:var(--text);max-width:42ch
+}
+
+@media(max-width:900px){
+  .resource-suite{grid-template-columns:1fr;gap:28px;padding:38px 0}
+  .suite-intro h3{max-width:22ch}
+  .suite-intro>p:last-child{max-width:60ch}
+  .resource-closing{grid-template-columns:1fr;gap:12px}
+}
+
 </style>
 </head>
 <body>
@@ -527,122 +881,243 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   </div>
 </nav>
 <main id="main">
-<section class="pg"><div class="wrap pghead">
-  <p class="eyebrow">Plans</p>
-  <h1>Thirty protocols. <em>You will use one at a time.</em></h1>
-  <p class="pglead">Three tracks, ten protocols each, every one built for a single
-    state. You are not choosing from a menu while you are in it &#8212; you open the
-    one the day calls for. Every plan includes the ones below it, so adding a track
-    never means paying twice for the same thing.</p>
-</div></section>
 
-<section class="sec2"><div class="wrap">
-  <div class="sh"><p class="eyebrow">What is in each one</p>
-    <h2>Every protocol, <em>named.</em></h2>
-    <p>So you can see what you would actually be opening, rather than a count.</p></div>
-  <div class="ptrack t1" id="plan-t1">
-  <div class="phead">
-    <div><p class="pk">Track 01</p>
-      <h3>Personal Transformation</h3><p class="pq">What happens inside me</p></div>
-    <div class="ppr"><p class="amt">&#8364;19</p><p class="per">per month</p>
-      <a class="cta" href="personal-transformation.html">Open Personal Transformation &#8594;</a></div>
-  </div>
-  <p class="pbody">Fear, anger, overwhelm, grief, insecurity, shutdown. The states that take over before you have had time to decide how you want to meet them.</p>
-  <div class="plist"><div class="prow"><span class="pnum">01</span><span class="pst agitated">Agitated</span><span class="pnm">Anxiety Reset</span><span class="pds">The dread with no single object, and the racing that comes with it.</span></div><div class="prow"><span class="pnum">02</span><span class="pst agitated">Agitated</span><span class="pnm">Anger Alchemy</span><span class="pds">When it has already come out of your mouth, and when it has not yet.</span></div><div class="prow"><span class="pnum">03</span><span class="pst agitated">Agitated</span><span class="pnm">Overwhelm Threshold</span><span class="pds">Too much at once, and no obvious first thing to do.</span></div><div class="prow"><span class="pnum">04</span><span class="pst agitated">Agitated</span><span class="pnm">Abandonment Wound</span><span class="pds">When someone going quiet becomes an emergency.</span></div><div class="prow"><span class="pnum">05</span><span class="pst unsteady">Unsteady</span><span class="pnm">Shame Dissolution</span><span class="pds">The one that says it is not what you did, it is you.</span></div><div class="prow"><span class="pnum">06</span><span class="pst unsteady">Unsteady</span><span class="pnm">Grief Integration</span><span class="pds">Not a stage to move through. A weight to carry differently.</span></div><div class="prow"><span class="pnum">07</span><span class="pst numb">Numb</span><span class="pnm">Shutdown Recovery</span><span class="pds">When switching off cost less than staying on.</span></div><div class="prow"><span class="pnum">08</span><span class="pst unsteady">Unsteady</span><span class="pnm">Jealousy Release</span><span class="pds">Comparison that stopped being useful a long time ago.</span></div><div class="prow"><span class="pnum">09</span><span class="pst unsteady">Unsteady</span><span class="pnm">Insecurity Anchor</span><span class="pds">The measuring that never resolves, whatever the answer is.</span></div><div class="prow"><span class="pnum">10</span><span class="pst numb">Numb</span><span class="pnm">Powerlessness &amp; Despair</span><span class="pds">When effort has stopped seeming to matter.</span></div></div>
-</div><div class="ptrack t2" id="plan-t2">
-  <div class="phead">
-    <div><p class="pk">Track 02 &#183; includes Track 01</p>
-      <h3>Relationship Healing</h3><p class="pq">What keeps happening between us</p></div>
-    <div class="ppr"><p class="amt">&#8364;29</p><p class="per">per month</p>
-      <a class="cta" href="relationship-healing.html">Open Relationship Healing &#8594;</a></div>
-  </div>
-  <p class="pbody">Pursuit, withdrawal, resentment, disconnection, trust and repair &#8212; worked from the part you can actually influence. You do not need the other person to be doing this too.</p>
-  <div class="plist"><div class="prow"><span class="pnum">01</span><span class="pst agitated">Agitated</span><span class="pnm">Safe Conversation</span><span class="pds">How to start the one you have been avoiding.</span></div><div class="prow"><span class="pnum">02</span><span class="pst unsteady">Unsteady</span><span class="pnm">Rupture &amp; Repair</span><span class="pds">What to do after, when neither of you knows how to begin.</span></div><div class="prow"><span class="pnum">03</span><span class="pst agitated">Agitated</span><span class="pnm">Trust &amp; Betrayal</span><span class="pds">Living with what happened without living inside it.</span></div><div class="prow"><span class="pnum">04</span><span class="pst unsteady">Unsteady</span><span class="pnm">Resentment Release</span><span class="pds">The ledger you have been keeping, and what it costs to hold.</span></div><div class="prow"><span class="pnum">05</span><span class="pst unsteady">Unsteady</span><span class="pnm">Intimacy Barrier</span><span class="pds">Wanting closeness and moving away from it at the same time.</span></div><div class="prow"><span class="pnum">06</span><span class="pst unsteady">Unsteady</span><span class="pnm">Double Standard</span><span class="pds">The rule that applies to them and not to you, or the reverse.</span></div><div class="prow"><span class="pnum">07</span><span class="pst agitated">Agitated</span><span class="pnm">Projection Clarity</span><span class="pds">Working out which part of this is actually theirs.</span></div><div class="prow"><span class="pnum">08</span><span class="pst numb">Numb</span><span class="pnm">Appreciation &amp; Support</span><span class="pds">The repair that is not urgent, on a day when nothing is wrong.</span></div><div class="prow"><span class="pnum">09</span><span class="pst unsteady">Unsteady</span><span class="pnm">Pursue &amp; Withdraw</span><span class="pds">The loop where the more you reach, the further they go.</span></div><div class="prow"><span class="pnum">10</span><span class="pst numb">Numb</span><span class="pnm">Conscious Separation</span><span class="pds">Ending something without becoming someone you do not recognise.</span></div></div>
-</div><div class="ptrack t3" id="plan-t3">
-  <div class="phead">
-    <div><p class="pk">Track 03 &#183; includes 01 and 02</p>
-      <h3>Professional Performance</h3><p class="pq">What changes when the stakes rise</p></div>
-    <div class="ppr"><p class="amt">&#8364;39</p><p class="per">per month</p>
-      <a class="cta" href="professional-performance.html">Open Professional Performance &#8594;</a></div>
-  </div>
-  <p class="pbody">Visibility, decisions, conflict, belonging, perfectionism, burnout. Not about the job. About which version of you arrives when the room gets difficult.</p>
-  <div class="plist"><div class="prow"><span class="pnum">01</span><span class="pst agitated">Agitated</span><span class="pnm">High-Stakes Presence</span><span class="pds">Before the room. Presence rather than rehearsal.</span></div><div class="prow"><span class="pnum">02</span><span class="pst agitated">Agitated</span><span class="pnm">Conflict Navigation</span><span class="pds">Disagreement without it becoming about who you are.</span></div><div class="prow"><span class="pnum">03</span><span class="pst unsteady">Unsteady</span><span class="pnm">Imposter Dissolution</span><span class="pds">The verdict about your competence, replayed after the fact.</span></div><div class="prow"><span class="pnum">04</span><span class="pst agitated">Agitated</span><span class="pnm">Perfectionism Release</span><span class="pds">When good enough is genuinely enough and you cannot feel it.</span></div><div class="prow"><span class="pnum">05</span><span class="pst agitated">Agitated</span><span class="pnm">Performance Anxiety</span><span class="pds">The moments where your ability matters most.</span></div><div class="prow"><span class="pnum">06</span><span class="pst unsteady">Unsteady</span><span class="pnm">The Belonging Gap</span><span class="pds">The half-second of editing before you speak.</span></div><div class="prow"><span class="pnum">07</span><span class="pst unsteady">Unsteady</span><span class="pnm">Career Transition</span><span class="pds">Direction, when the effort is no longer the question.</span></div><div class="prow"><span class="pnum">08</span><span class="pst numb">Numb</span><span class="pnm">Decision Fatigue</span><span class="pds">When every choice costs more than it should.</span></div><div class="prow"><span class="pnum">09</span><span class="pst numb">Numb</span><span class="pnm">Burnout &amp; Overload</span><span class="pds">Load over weeks, which is not the same as a bad mood.</span></div><div class="prow"><span class="pnum">10</span><span class="pst unsteady">Unsteady</span><span class="pnm">Creative Flow</span><span class="pds">The state the work actually needs, and how to get back to it.</span></div></div>
-</div>
-</div></section>
-
-<section class="sec2 sec2--alt"><div class="wrap">
-  <div class="sh"><p class="eyebrow">What every protocol opens</p>
-    <h2>Ten resources, one for <em>each kind of moment.</em></h2>
-    <p>Not one recording. Ten pieces per protocol, and you use whichever the day calls
-      for &#8212; all of them open from your first day. Each one says what it rests on,
-      so you can see which part is evidence and which part is ours.</p></div>
-  <div class="rcard">
-      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></span>Guided Experience</h3><p class="rsub">The whole thing, carried for you.</p><p class="rdesc">The four steps voiced end to end, paced so you are not holding the sequence yourself while you are inside the state. Word for word, breath-marked, with the pauses built in rather than left to you.</p></div>
-      <div class="rwhy"><p class="rwk">Why voiced</p><p class="rwt">A state narrows what you can hold in mind. Being talked through it removes the one job you cannot do well in that moment — remembering what comes next.</p>
-        <p class="rrests">Rests on: Porges &#183; Polyvagal Theory &#8212; peer-reviewed</p></div>
-    </div><div class="rcard">
-      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 14c3 0 3-4 6-4s3 4 6 4 4-2 4-2"/><path d="M4 18c3 0 3-3 6-3s3 3 6 3 4-1.5 4-1.5"/><circle cx="12" cy="6" r="2.6"/></svg></span>Breathwork</h3><p class="rsub">Four in. Six out. The part that measurably works.</p><p class="rdesc">A paced rhythm at around six breaths a minute, which is where the gap between heartbeats becomes most even. Usable on its own, in a car park, without the rest of the protocol.</p></div>
-      <div class="rwhy"><p class="rwk">Why the long out-breath</p><p class="rwt">Breathing out longer than you breathe in tips the balance toward the branch of your system that handles rest rather than threat. Your body reads the rhythm before your mind agrees to anything.</p>
-        <p class="rrests">Rests on: HeartMath &#183; cardiac coherence near 0.1 Hz &#8212; peer-reviewed</p></div>
-    </div><div class="rcard">
-      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="4.6" r="2.2"/><path d="M12 7v7M12 14l-3.4 6M12 14l3.4 6M7 9.5l5 1.4 5-1.4"/></svg></span>Somatic Release</h3><p class="rsub">For when sitting still is not available.</p><p class="rdesc">Something physical to do with the charge that is already in your body — pressure, movement, weight, temperature. For the states that will not be talked down and need discharging first.</p></div>
-      <div class="rwhy"><p class="rwk">Why the body first</p><p class="rwt">Some activation has to go somewhere before attention is available at all. Asking someone to observe a state their body is still braced against is asking for the wrong thing in the wrong order.</p>
-        <p class="rrests">Rests on: Porges &#183; Polyvagal Theory &#8212; peer-reviewed</p></div>
-    </div><div class="rcard">
-      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><path d="M12 3v2.6M12 18.4V21M3 12h2.6M18.4 12H21M5.6 5.6l1.9 1.9M16.5 16.5l1.9 1.9M18.4 5.6l-1.9 1.9M7.5 16.5l-1.9 1.9"/></svg></span>How This Works</h3><p class="rsub">The mechanism, not the metaphor.</p><p class="rdesc">What is actually happening in your body during this specific state, why these four steps land in this order, and what the research does and does not say about it.</p></div>
-      <div class="rwhy"><p class="rwk">Why explain it</p><p class="rwt">Anti-dependency. If you understand the mechanism you can run it without us, adapt it, and eventually not need the recording at all. The aim is that you need this less, not more.</p>
-        <p class="rrests">Rests on: All six frameworks, each with its register named</p></div>
-    </div><div class="rcard">
-      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 9h7M9 13h7M9 17h4"/></svg></span>Protocol Guide</h3><p class="rsub">On paper. In your hand.</p><p class="rdesc">The printable step guide for this protocol — formatted for a phone screen, a wallet, or the fridge door. The whole sequence on one page with nothing to scroll.</p></div>
-      <div class="rwhy"><p class="rwk">Why printed</p><p class="rwt">A device is a poor companion in the middle of a state. Something on paper does not notify you, does not need a signal, and does not offer you anything else to look at.</p>
-        <p class="rrests">Rests on: SafeRise practice material &#183; no external claim</p></div>
-    </div><div class="rcard">
-      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 11h6M6.5 14h4"/></svg></span>Cue Card</h3><p class="rsub">Four lines. Always here.</p><p class="rdesc">You do not have to remember anything. Name it &#8212; finish the sentence. Hand to heart, in for four, out for six. Stop fighting it. One breath as the person on the other side.</p></div>
-      <div class="rwhy"><p class="rwk">Why four lines</p><p class="rwt">Because the moment you need it is the moment you can hold least. This is the version for someone who has done it before and needs the order, not the explanation.</p>
-        <p class="rrests">Rests on: Working-memory narrowing under threat &#8212; established</p></div>
-    </div><div class="rcard">
-      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/></svg></span>Progress Journal</h3><p class="rsub">Somewhere to put it down.</p><p class="rdesc">Prompts written for this specific protocol, and a place to write in your own words. Stays on your device. No sync, ever &#8212; including to us.</p></div>
-      <div class="rwhy"><p class="rwk">Why writing</p><p class="rwt">Putting a state into your own sentences moves it from something you are inside to something you are looking at. That shift is the whole of the first step, done on paper.</p>
-        <p class="rrests">Rests on: Mat&#233; &#183; Compassionate Inquiry &#8212; clinical practice</p></div>
-    </div><div class="rcard">
-      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V9M10 20V4M16 20v-8M22 20H2"/></svg></span>Progress Tracking</h3><p class="rsub">What you noticed, before and after.</p><p class="rdesc">A record of the state you were in when you started and where you were when you finished. No score, no streak, no target, nothing to keep up or fall behind.</p></div>
-      <div class="rwhy"><p class="rwk">Why no score</p><p class="rwt">Because you will arrive here on your worst day. A number that says you have slipped is the last thing that should meet you, and a number that says you are doing well is not why you came.</p>
-        <p class="rrests">Rests on: SafeRise measurement &#183; not an external claim</p></div>
-    </div><div class="rcard">
-      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5L21 19H3z"/><path d="M12 10v4M12 16.6v.1"/></svg></span>Attention Advisory</h3><p class="rsub">Where it belongs today. Which fights are not yours.</p><p class="rdesc">Guidance on where your attention actually needs to go in this pattern, and what it is being pulled toward that has nothing to offer you.</p></div>
-      <div class="rwhy"><p class="rwk">Why attention</p><p class="rwt">Something you never consciously chose is deciding what receives your attention. Naming that, in this specific pattern, is where authorship starts.</p>
-        <p class="rrests">Rests on: Scope boundary &#183; reviewed with Dr Keny F. Bastien MD</p></div>
-    </div><div class="rcard">
-      <div class="rmain"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></span>Disclosure &amp; Invitation</h3><p class="rsub">Words for the people around you.</p><p class="rdesc">A script for explaining what you are doing, and a structured way to open repair when the pattern involves someone else.</p></div>
-      <div class="rwhy"><p class="rwk">Why scripts</p><p class="rwt">The hardest part is rarely the protocol. It is the first sentence to another person.</p>
-        <p class="rrests">Rests on: SafeRise practice material &#183; no external claim</p></div>
+<section class="planhero">
+  <div class="planheroart"><img src="assets/pages/plans-hero.jpg" alt=""></div>
+  <div class="wrap planheroin">
+    <div class="planherocopy">
+      <p class="eyebrow">Plans</p>
+      <h1>Build more capacity where life asks the most of you.</h1>
+      <p class="planlede">Regulation gives you back access to internal resources that become harder to reach when a triggered state is governing you.</p>
+      <p class="planbody">With more internal resource, you have more command of your attention. With more command of attention, you can perceive more clearly, judge more soundly, and respond with greater authenticity to who you are, what you value, and what you genuinely desire.</p>
+      
     </div>
+  </div>
+</section>
+
+
+<section class="sec2"><div class="wrap">
+  <div class="sh planintro">
+      <p class="eyebrow">Choose your scope</p>
+      <h2>Choose the scope of life in which you want to <em>build and apply that capacity.</em></h2>
+      <p>Each plan builds on the same underlying work — nervous-system regulation, greater command of attention, sounder judgement and more deliberate response — then extends that capacity into a wider part of your life.</p>
+    </div>
+    <div class="tcols"><div class="tcol t1">
+      <div class="tchead"><p class="pk">Track 01 &#183; Personal</p><h3>Personal Transformation</h3><p class="pq">What happens inside me?</p>
+        <div class="tcprice"><span class="amt">&#8364;19</span><span class="per">per month</span></div></div>
+      <p class="tcbody"><strong>Your inner life.</strong> Work with the states that pull attention away from you — fear, anger, overwhelm, grief, insecurity and shutdown — so you have more room to decide what deserves your attention and what you do next.</p>
+      <div class="tclist"><div class="crow" tabindex="0"><span class="cn">01</span><div><span class="cnm">Anxiety Reset</span><span class="cst agitated">Agitated</span><p class="cds">The dread with no single object, and the racing that comes with it.</p></div></div><div class="crow" tabindex="0"><span class="cn">02</span><div><span class="cnm">Anger Alchemy</span><span class="cst agitated">Agitated</span><p class="cds">When it has already come out of your mouth, and when it has not yet.</p></div></div><div class="crow" tabindex="0"><span class="cn">03</span><div><span class="cnm">Overwhelm Threshold</span><span class="cst agitated">Agitated</span><p class="cds">Too much at once, and no obvious first thing to do.</p></div></div><div class="crow" tabindex="0"><span class="cn">04</span><div><span class="cnm">Abandonment Wound</span><span class="cst agitated">Agitated</span><p class="cds">When someone going quiet becomes an emergency.</p></div></div><div class="crow" tabindex="0"><span class="cn">05</span><div><span class="cnm">Shame Dissolution</span><span class="cst unsteady">Unsteady</span><p class="cds">The one that says it is not what you did, it is you.</p></div></div><div class="crow" tabindex="0"><span class="cn">06</span><div><span class="cnm">Grief Integration</span><span class="cst unsteady">Unsteady</span><p class="cds">Not a stage to move through. A weight to carry differently.</p></div></div><div class="crow" tabindex="0"><span class="cn">07</span><div><span class="cnm">Shutdown Recovery</span><span class="cst numb">Numb</span><p class="cds">When switching off cost less than staying on.</p></div></div><div class="crow" tabindex="0"><span class="cn">08</span><div><span class="cnm">Jealousy Release</span><span class="cst unsteady">Unsteady</span><p class="cds">Comparison that stopped being useful a long time ago.</p></div></div><div class="crow" tabindex="0"><span class="cn">09</span><div><span class="cnm">Insecurity Anchor</span><span class="cst unsteady">Unsteady</span><p class="cds">The measuring that never resolves, whatever the answer is.</p></div></div><div class="crow" tabindex="0"><span class="cn">10</span><div><span class="cnm">Powerlessness &amp; Despair</span><span class="cst numb">Numb</span><p class="cds">When effort has stopped seeming to matter.</p></div></div></div>
+      <div class="tcfoot"><a class="cta" href="personal-transformation.html">Start with Personal Transformation &#8594;</a></div>
+    </div><div class="tcol t2">
+      <div class="tchead"><p class="pk">Tracks 01 + 02</p><h3>Personal + Relationship</h3><p class="pq">What keeps happening between us?</p>
+        <div class="tcprice"><span class="amt">&#8364;29</span><span class="per">per month</span></div></div>
+      <p class="tcbody"><strong>Your inner life + your relationships.</strong> Bring the same regulation into pursuit, withdrawal, resentment, disconnection, trust and repair — before a difficult state becomes the story you carry into the next conversation.</p>
+      <div class="tclist"><div class="crow" tabindex="0"><span class="cn">01</span><div><span class="cnm">Safe Conversation</span><span class="cst agitated">Agitated</span><p class="cds">How to start the one you have been avoiding.</p></div></div><div class="crow" tabindex="0"><span class="cn">02</span><div><span class="cnm">Rupture &amp; Repair</span><span class="cst unsteady">Unsteady</span><p class="cds">What to do after, when neither of you knows how to begin.</p></div></div><div class="crow" tabindex="0"><span class="cn">03</span><div><span class="cnm">Trust &amp; Betrayal</span><span class="cst agitated">Agitated</span><p class="cds">Living with what happened without living inside it.</p></div></div><div class="crow" tabindex="0"><span class="cn">04</span><div><span class="cnm">Resentment Release</span><span class="cst unsteady">Unsteady</span><p class="cds">The ledger you have been keeping, and what it costs to hold.</p></div></div><div class="crow" tabindex="0"><span class="cn">05</span><div><span class="cnm">Intimacy Barrier</span><span class="cst unsteady">Unsteady</span><p class="cds">Wanting closeness and moving away from it at the same time.</p></div></div><div class="crow" tabindex="0"><span class="cn">06</span><div><span class="cnm">Double Standard</span><span class="cst unsteady">Unsteady</span><p class="cds">The rule that applies to them and not to you, or the reverse.</p></div></div><div class="crow" tabindex="0"><span class="cn">07</span><div><span class="cnm">Projection Clarity</span><span class="cst agitated">Agitated</span><p class="cds">Working out which part of this is actually theirs.</p></div></div><div class="crow" tabindex="0"><span class="cn">08</span><div><span class="cnm">Appreciation &amp; Support</span><span class="cst numb">Numb</span><p class="cds">The repair that is not urgent, on a day when nothing is wrong.</p></div></div><div class="crow" tabindex="0"><span class="cn">09</span><div><span class="cnm">Pursue &amp; Withdraw</span><span class="cst unsteady">Unsteady</span><p class="cds">The loop where the more you reach, the further they go.</p></div></div><div class="crow" tabindex="0"><span class="cn">10</span><div><span class="cnm">Conscious Separation</span><span class="cst numb">Numb</span><p class="cds">Ending something without becoming someone you do not recognise.</p></div></div></div>
+      <div class="tcfoot"><a class="cta" href="relationship-healing.html">&#8364;29</a></div>
+    </div><div class="tcol t3">
+      <div class="tchead"><p class="pk">Tracks 01 + 02 + 03</p><h3>Personal + Relationship + Professional</h3><p class="pq">What changes when the stakes rise?</p>
+        <div class="tcprice"><span class="amt">&#8364;39</span><span class="per">per month</span></div></div>
+      <p class="tcbody"><strong>Your inner life + relationships + high-stakes work.</strong> Apply the same capacity to visibility, decisions, conflict, pressure and belonging — where the read you make can shape the move that follows.</p>
+      <div class="tclist"><div class="crow" tabindex="0"><span class="cn">01</span><div><span class="cnm">High-Stakes Presence</span><span class="cst agitated">Agitated</span><p class="cds">Before the room. Presence rather than rehearsal.</p></div></div><div class="crow" tabindex="0"><span class="cn">02</span><div><span class="cnm">Conflict Navigation</span><span class="cst agitated">Agitated</span><p class="cds">Disagreement without it becoming about who you are.</p></div></div><div class="crow" tabindex="0"><span class="cn">03</span><div><span class="cnm">Imposter Dissolution</span><span class="cst unsteady">Unsteady</span><p class="cds">The verdict about your competence, replayed after the fact.</p></div></div><div class="crow" tabindex="0"><span class="cn">04</span><div><span class="cnm">Perfectionism Release</span><span class="cst agitated">Agitated</span><p class="cds">When good enough is genuinely enough and you cannot feel it.</p></div></div><div class="crow" tabindex="0"><span class="cn">05</span><div><span class="cnm">Performance Anxiety</span><span class="cst agitated">Agitated</span><p class="cds">The moments where your ability matters most.</p></div></div><div class="crow" tabindex="0"><span class="cn">06</span><div><span class="cnm">The Belonging Gap</span><span class="cst unsteady">Unsteady</span><p class="cds">The half-second of editing before you speak.</p></div></div><div class="crow" tabindex="0"><span class="cn">07</span><div><span class="cnm">Career Transition</span><span class="cst unsteady">Unsteady</span><p class="cds">Direction, when the effort is no longer the question.</p></div></div><div class="crow" tabindex="0"><span class="cn">08</span><div><span class="cnm">Decision Fatigue</span><span class="cst numb">Numb</span><p class="cds">When every choice costs more than it should.</p></div></div><div class="crow" tabindex="0"><span class="cn">09</span><div><span class="cnm">Burnout &amp; Overload</span><span class="cst numb">Numb</span><p class="cds">Load over weeks, which is not the same as a bad mood.</p></div></div><div class="crow" tabindex="0"><span class="cn">10</span><div><span class="cnm">Creative Flow</span><span class="cst unsteady">Unsteady</span><p class="cds">The state the work actually needs, and how to get back to it.</p></div></div></div>
+      <div class="tcfoot"><a class="cta" href="professional-performance.html">&#8364;39</a></div>
+    </div></div>
+  <p class="phint">Hover a protocol to read what it is for</p>
+</div></section>
+
+
+<section class="sec2 sec2--alt resource-section"><div class="wrap">
+  <div class="resource-head">
+    <p class="eyebrow">Inside every protocol</p>
+    <h2>Each protocol is <em>a complete guided session and support system of tools dedicated to the moment dysregulation is happening — plus what you need before it and after.</em></h2>
+    <p>What you need changes depending on where you are in the moment. SafeRise gives you different forms of support for regulation, understanding, integration and real-life use — all built around the same specific state.</p>
+  </div>
+
+  <div class="resource-suites">
+
+    <section class="resource-suite">
+      <div class="suite-intro">
+        <span class="suite-num">01</span>
+        <p class="suite-k">REGULATE</p>
+        <h3>When the state has already taken hold.</h3>
+        <p>Start where your system actually is. These resources help create enough regulation and internal resource for attention and reflection to become available again.</p>
+      </div>
+      <div class="suite-items">
+        <article class="resource-item">
+          <div class="ri-icon">◎</div>
+          <div>
+            <h4>Guided Experience</h4>
+            <p class="ri-value">The full Recognise → Regulate → Release → Rise protocol.</p>
+            <p>Follow the complete process when you do not want to work out the next step yourself. The experience is built specifically around the state you opened.</p>
+          </div>
+        </article>
+        <article class="resource-item">
+          <div class="ri-icon">≈</div>
+          <div>
+            <h4>Breathwork</h4>
+            <p class="ri-value">A direct way back into rhythm.</p>
+            <p>Use paced breathing with the full protocol or on its own when you need a simpler way to help the body settle and restore capacity.</p>
+          </div>
+        </article>
+        <article class="resource-item">
+          <div class="ri-icon">↟</div>
+          <div>
+            <h4>Somatic Release</h4>
+            <p class="ri-value">For when thinking is not the place to begin.</p>
+            <p>Movement, pressure, weight and sensation give the body something practical to do with activation before asking it for reflection.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="resource-suite">
+      <div class="suite-intro">
+        <span class="suite-num">02</span>
+        <p class="suite-k">UNDERSTAND</p>
+        <h3>When you need to know what just happened.</h3>
+        <p>Regulation creates room. These resources help you use that room to examine the pattern, the meaning you made and what captured your attention.</p>
+      </div>
+      <div class="suite-items">
+        <article class="resource-item">
+          <div class="ri-icon">◇</div>
+          <div>
+            <h4>How This Works</h4>
+            <p class="ri-value">Understand the mechanism, not just the instruction.</p>
+            <p>See what may be happening in the body and why the protocol moves in this order, so the method becomes something you understand rather than simply follow.</p>
+          </div>
+        </article>
+        <article class="resource-item">
+          <div class="ri-icon">◫</div>
+          <div>
+            <h4>Perspectives</h4>
+            <p class="ri-value">More than one way to understand the same experience.</p>
+            <p>Explore psychological, philosophical and human-development lenses without being told that any single explanation has to be yours.</p>
+          </div>
+        </article>
+        <article class="resource-item">
+          <div class="ri-icon">⌖</div>
+          <div>
+            <h4>Attention Advisory</h4>
+            <p class="ri-value">See what has your attention — and what it is costing.</p>
+            <p>Examine where attention tends to go in this state, what keeps pulling it there, and where more deliberate attention may become available.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="resource-suite">
+      <div class="suite-intro">
+        <span class="suite-num">03</span>
+        <p class="suite-k">INTEGRATE</p>
+        <h3>When the moment has passed but the learning should not.</h3>
+        <p>Turn an experience into something you can see, name and return to without turning your practice into a score or performance system.</p>
+      </div>
+      <div class="suite-items">
+        <article class="resource-item">
+          <div class="ri-icon">▤</div>
+          <div>
+            <h4>Progress Journal</h4>
+            <p class="ri-value">Put the experience into your own words.</p>
+            <p>Protocol-specific prompts help you capture what happened, what became visible and what you want to carry forward. Your writing remains yours.</p>
+          </div>
+        </article>
+        <article class="resource-item">
+          <div class="ri-icon">↕</div>
+          <div>
+            <h4>Capacity Check</h4>
+            <p class="ri-value">Notice what changed without grading yourself.</p>
+            <p>A simple before-and-after check helps you recognise whether more capacity became available during the session — without streaks, scores or targets.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="resource-suite">
+      <div class="suite-intro">
+        <span class="suite-num">04</span>
+        <p class="suite-k">USE IT IN REAL LIFE</p>
+        <h3>When you need the work to leave the screen with you.</h3>
+        <p>Condensed, practical supports help you return to the method when there is no time or attention for the full experience.</p>
+      </div>
+      <div class="suite-items">
+        <article class="resource-item">
+          <div class="ri-icon">≡</div>
+          <div>
+            <h4>Cue Card</h4>
+            <p class="ri-value">The essential sequence when bandwidth is low.</p>
+            <p>A condensed version of the method for the moments when you have done the work before and need the order, not another explanation.</p>
+          </div>
+        </article>
+        <article class="resource-item">
+          <div class="ri-icon">↔</div>
+          <div>
+            <h4>Disclosure &amp; Invitation</h4>
+            <p class="ri-value">When regulation needs to become communication.</p>
+            <p>Language for explaining what is happening without making another person responsible for fixing it — and for asking clearly for what would help.</p>
+          </div>
+        </article>
+        <article class="resource-item">
+          <div class="ri-icon">▣</div>
+          <div>
+            <h4>Protocol Guide</h4>
+            <p class="ri-value">Know what to use, when, and why.</p>
+            <p>A practical reference for returning to the protocol outside the guided experience and choosing the resource that fits the moment.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="resource-closing">
+    <p class="eyebrow">The value of the library</p>
+    <p>One state can require regulation in the body, understanding in the mind, reflection afterward and support in the next real conversation. The resources are designed to stay with that full arc.</p>
+  </div>
 </div></section>
 
 <section class="sec2"><div class="wrap">
-  <div class="sh"><p class="eyebrow">How access works</p>
-    <h2>It adds up. <em>It does not reset.</em></h2></div>
-  <table class="cmp">
-    <tr><th></th><th>Personal</th><th>Relationship</th><th>Professional</th></tr>
-    <tr><td>Monthly</td><td>&#8364;19</td><td>&#8364;29</td><td>&#8364;39</td></tr>
-    <tr><td>Protocols open</td><td>10</td><td>20</td><td>30</td></tr>
-    <tr><td>Resources open</td><td>100</td><td>200</td><td>300</td></tr>
-    <tr><td>Works on</td><td>You alone</td><td>You and another</td><td>You under pressure</td></tr>
-    <tr><td>Needs anyone else</td><td>No</td><td>No</td><td>No</td></tr>
-    <tr><td>Available</td><td>Now</td><td>Now</td><td>Now</td></tr>
-  </table>
-  <div class="grid3" style="margin-top:30px">
-    <div class="gc"><h3>Nothing is held back</h3><p>Every protocol in your track is open
-      on day one. No unlocking, no sequence, nothing waiting for you to prove
-      something.</p></div>
-    <div class="gc"><h3>Cancel whenever</h3><p>Access runs to the end of the period you
-      paid for. What you have written stays yours.</p></div>
-    <div class="gc"><h3>Move between tracks</h3><p>Change up or down at any point.
-      Upgrading is immediate. Downgrading takes effect at the end of the period.</p></div>
+
+  <div class="nestgrid">
+    <div>
+      <p class="eyebrow">How access works</p>
+      <h2>One membership. <em>More access as you move up.</em></h2>
+      <p style="font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;color:var(--text2);margin-top:14px">
+        Each level includes the tracks beneath it. Move up when you want a wider
+        library; move down when you need less. Your own journal entries remain yours
+        regardless of the plan you choose.</p>
+      <p class="phint" style="margin-top:18px">One capacity, applied more widely.</p>
+    </div>
+    <div class="nest">
+      <div class="nrow" style="--ac:var(--t1)"><div class="top"><h4>Personal Transformation</h4>
+        <span class="pr">&#8364;19</span></div>
+        <p>Inner life &#183; Track 01</p>
+        <div class="nbar"><i class="on"></i><i></i><i></i></div></div>
+      <div class="nrow" style="--ac:var(--t2)"><div class="top"><h4>Personal + Relationship</h4>
+        <span class="pr">&#8364;29</span></div>
+        <p>Inner life + relationships &#183; Tracks 01 + 02</p>
+        <div class="nbar"><i class="on"></i><i class="on"></i><i></i></div></div>
+      <div class="nrow" style="--ac:var(--t3)"><div class="top"><h4>Full Access</h4>
+        <span class="pr">&#8364;39</span></div>
+        <p>Inner life + relationships + professional &#183; Tracks 01 + 02 + 03</p>
+        <div class="nbar"><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+    </div>
+  </div>
+  <div class="accessnotes">
+    <div class="accessnote">
+      <h3>Open from day one</h3>
+      <p>Use any protocol included in your plan whenever it is relevant.</p>
+    </div>
+    <div class="accessnote">
+      <h3>Flexible membership</h3>
+      <p>Cancel when you need to. Your access continues through the paid period.</p>
+    </div>
+    <div class="accessnote">
+      <h3>Change as life changes</h3>
+      <p>Move up for wider access, or step down at the end of your billing period.</p>
+    </div>
   </div>
   <div class="ctarow">
-    <a class="cta" href="personal-transformation.html">Start with Personal Transformation &#8594;</a>
-    <a class="ctaalt" href="live-sessions.html">Live sessions are priced separately</a>
+    <a class="cta" href="personal-transformation.html">Explore Personal Transformation &#8594;</a>
+    <a class="ctaalt" href="dashboard.html">Already a member? Sign in</a>
   </div>
 </div></section>
 </main>
