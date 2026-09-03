@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-332.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-333.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6826,6 +6826,89 @@ free, and used **SR-330**. The plans.html rewrite run checked `git log --grep` f
 before allocating, found it free, and used **SR-331**. This run checked `git log --grep` for
 SR-332 before allocating (background + `sleep`, after a foreground `git log --grep` call hung —
 the same transient issue on record earlier this session, worked around the same way), found it
-free, and used **SR-332**. Next run: allocate from **SR-333**.
+free, and used **SR-332**. This run checked `git log --grep` for SR-333 before allocating
+(background + `sleep`), found it free, and used **SR-333**. Next run: allocate from **SR-334**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
+
+---
+
+**SR-333 · dashboard nav rail — "What's coming" and Log out.** Two additions to
+`.sr-dash-navrail`, the same rail also carried verbatim in `member-heartmath.html`,
+`member-frameworks.html`, `member-porges.html`, `member-jung.html`, `member-kross.html`,
+`member-mate.html` and `member-watts.html` — **not** touched by this run, since the brief
+scoped this to dashboard.html specifically; those seven pages' rails are now visually behind
+dashboard.html's until (if) they get the same two buttons, flagged here rather than silently
+left to drift or silently extended past what was asked.
+
+**"What's coming"** — new rail button, placed between "Where the method comes from" and
+"Sessions & workshops" as specified, `data-route="coming"`, an SVG horizon-with-a-rising-arc-
+and-point glyph (same 24×24 viewBox as the rest; unlike the rest, given `stroke-linecap="round"
+stroke-linejoin="round"` inline, since the brief asked for round caps explicitly and the
+existing set has none declared at all — relying on SVG's own default butt caps/miter joins —
+matching the brief's literal spec for the two new icons rather than the existing icons'
+actual, slightly different rendering).
+
+**Routing — reported, not decided.** `openRoute()` resolves a `data-route` three ways, checked
+in order: `PAGES[key]` navigates to a real file (`window.location.href`, currently only
+`method: 'member-frameworks.html'`); `LAYERS[key]` opens an in-shell modal (currently only
+`coaching: 'sessions'`); everything else falls to `ROUTES[key]`, an honest "not built yet"
+placeholder modal naming what it would be and where. `coming` is wired to the third path for
+now — `ROUTES.coming` reads "What's coming" / "The tracks still being written, and when each
+one is expected." / `/coming-soon` — so the button is fully honest and functional rather than a
+silent no-op while this is open. Sending a member straight to `coming-soon.html` as-is
+(option a) would drop them onto a fully public-surface page — its own `.nav` with a "Log in"
+CTA that would just bounce an already-signed-in member back to `dashboard.html`, and a
+public-onboarding pitch ("Bring more of your life under your own design," "why these belong
+together") that doesn't fit someone already a member. `coming-soon.html`'s actual "Seven
+tracks, already being written" grid is hardcoded static HTML, not sourced from a shared data
+file the way `content/tracks.js` feeds the three live track pages, so there is no cheap re-render
+path into a member-styled shell either — building one is real content work, not a wiring
+change. Reported per instruction rather than picking one; asked the founder directly.
+
+**Log out** — new button in `.sr-dash-navrailfoot` alongside "Account & plan," `id="srSignOut"`,
+no `data-route` (it is not a ROUTES/LAYERS/PAGES destination, it leaves the shell). A door-with-
+exit-arrow glyph, same round-cap treatment as "What's coming." `.sr-dash-navrailfoot` gained a
+1px `--hair`-coloured divider above it (`::before`) and switched to its own small flex column
+so both footer buttons stack with the same 6px gap the main rail uses — satisfying "below a
+divider, not in the same group as the routes" by putting Log out in the group that was already
+visually separated from the routes (margin-top:auto), rather than inventing a third tier.
+**Known, pre-existing limitation, not introduced by this fix:** `.sr-dash-navrailfoot` — and so
+both "Account & plan" and now "Log out" — is `display:none` on the ≤900px rail-becomes-bottom-
+tab-bar layout (`css/saferise-dashboard.css`, the existing mobile block). A signed-in member on
+mobile currently has no rail path to sign out, same as they already have no rail path to
+Account & plan; flagged, not fixed, since fixing the mobile rail's footer visibility is a
+layout decision beyond "add two buttons."
+
+The click handler calls `SafeRiseAccess.signOut()` — the only place auth state is written,
+per that file's own header comment — then `window.location.href = 'index.html'`, matching the
+instruction exactly. Reintroduced a routeless-button exclusion at the generic rail click
+handler (`.sr-dash-navrailbtn[data-route]` instead of `.sr-dash-navrailbtn`), which SR-086's
+own comment had removed on the reasoning that every remaining button carried `data-route` —
+true again now that a legitimately routeless button exists, so the fix is a selector change
+matching that same invariant, not a re-added generic guard.
+
+**Caught during implementation, not from the brief:** the `coming` ROUTES entry's title was
+first written with an HTML entity (`What&#8217;s coming`) copied from the button's own markup —
+wrong, since `ROUTES` values are set via `.textContent` in `openRoute()`
+(`document.getElementById('srRouteTitle').textContent = r[0]`), which does not decode HTML
+entities; it would have rendered the literal string "What&#8217;s coming" in the modal.
+Fixed by using the real Unicode right single quotation mark character in the JS string literal
+instead of the HTML-entity form the button's own `<span>` correctly uses.
+
+**Verified live**, Browser pane against the local static server: both buttons render with
+identical icon sizing, stroke colour and stroke width to the other four (19×19, confirmed via
+computed style, not by eye alone); the divider renders between the main rail and the footer
+group. Signed in via `SafeRiseAccess.signIn()`, clicked Log out: landed on `index.html`
+(`location.href` confirmed), `localStorage.getItem('sr.session')` confirmed `null`. Navigated
+back to `dashboard.html` signed out, called `SafeRiseAccess.signIn()` again: `currentUser()`
+and `hasAccess()` both confirmed restored. Clicked "What's coming": opens the "not built yet"
+modal with the correct title/body/path, gets the `on` highlight, and the apostrophe renders as
+a real character, not the escaped entity. Clicked Log out: confirmed it never receives the
+`on` class (excluded from the generic rail click handler, as intended) and does not open the
+route modal. Clicked back to Dashboard to confirm the rail's active-state toggling still works
+for every original button. Zero console errors throughout. esprima-clean (1 inline script
+block) and zero `tinycss2` errors in `css/saferise-dashboard.css`.
+
+*Status:* Log out closed. "What's coming" open — awaiting a routing decision (see above).
+*Raised:* 3 Sep 2026
