@@ -384,9 +384,9 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .lvdoor p{font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.6;color:var(--text2)}
 .lvdoor .go{margin-top:8px;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--gold-lt)}
-.lvsec{display:none}
-body[data-lv="me"] #lv-me,body[data-lv="org"] #lv-org{display:block;animation:rise .7s var(--ease) both}
-body[data-lv] .lvdoor{opacity:.42;transition:opacity .5s var(--ease)}
+.lvsec{display:block}
+body[data-lv="me"] #lv-me,body[data-lv="org"] #lv-org{display:block}
+body[data-lv] .lvdoor{opacity:1;transition:opacity .5s var(--ease)}
 body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
 .offer{display:grid;grid-template-columns:1fr 300px;gap:0;border:1px solid var(--hair);
   border-radius:20px;overflow:hidden;margin-top:20px;background:var(--card)}
@@ -457,13 +457,83 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
 .gc .ico{width:30px;height:30px}
 .gc .ico svg{width:15px;height:15px}
 
+
+/* ═══════════ remote-first live sessions pass ═══════════ */
+.livehero .pghead{padding-bottom:54px}
+.formatnote{
+  margin-top:26px;max-width:62ch;display:flex;gap:13px;align-items:flex-start;
+  padding:15px 18px;border:1px solid var(--hair2);border-radius:14px;
+  background:color-mix(in srgb,var(--bg3) 72%,transparent)
+}
+.formatdot{width:9px;height:9px;flex:0 0 9px;margin-top:7px;border-radius:50%;
+  background:var(--gold);box-shadow:0 0 0 5px color-mix(in srgb,var(--gold) 12%,transparent)}
+.formatnote p{font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.58;color:var(--text2)}
+.formatnote strong{color:var(--text);font-weight:500}
+
+/* make image use contextual, not decorative */
+.lvsec>.wrap>.slot--wide{
+  aspect-ratio:16/5.3;
+  max-height:440px;
+  margin-bottom:6px;
+}
+.lvsec>.wrap>.slot--wide img{filter:saturate(.72) contrast(1.03)}
+.lvsec>.wrap>.slot--wide::after{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(10,10,15,.05),rgba(10,10,15,.50))
+}
+.lvsec>.wrap>.slot--wide span{z-index:2}
+
+/* format chips */
+.formatchips{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 2px}
+.formatchip{
+  font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  padding:8px 12px;border:1px solid var(--hair2);border-radius:999px;color:var(--text2)
+}
+.formatchip.remote{color:var(--gold-lt);border-color:var(--gold-dim)}
+
+
+/* ═══════════ v3 image + commercial architecture ═══════════ */
+.livehero{position:relative;overflow:hidden}
+.liveheroart{position:absolute;inset:0;z-index:0}
+.liveheroart img{width:100%;height:100%;object-fit:cover;object-position:center 42%;filter:saturate(.65) contrast(1.04);opacity:.55}
+.liveheroart::after{content:'';position:absolute;inset:0;background:
+  linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 92%,transparent) 35%,color-mix(in srgb,var(--bg) 54%,transparent) 72%,var(--bg) 100%),
+  linear-gradient(180deg,var(--bg) 0%,transparent 28%,color-mix(in srgb,var(--bg) 80%,transparent) 78%,var(--bg) 100%)}
+.livehero .pghead{position:relative;z-index:2;min-height:560px;display:flex;flex-direction:column;justify-content:center}
+.livehero .pghead h1{max-width:18ch}
+.livehero .pglead{max-width:49ch}
+.lvdoors{position:relative;z-index:3;margin-top:-36px}
+.lvdoor{backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg2) 86%,transparent)}
+.credline{display:flex;justify-content:space-between;gap:22px;align-items:center;padding:16px 20px;margin:18px 0 2px;
+  border:1px solid var(--hair2);border-radius:14px;background:var(--bg3)}
+.credline span,.credline strong{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5}
+.credline span{color:var(--gold-lt);letter-spacing:.04em}
+.credline strong{color:var(--text2);font-weight:500;text-align:right}
+.privacycall{margin:20px 0 6px;border-left:2px solid var(--gold);padding:7px 0 7px 22px;max-width:68ch}
+.privacycall p{font-family:'Cormorant Garamond',serif;font-size:27px;font-style:italic;color:var(--text);line-height:1.3}
+.privacycall span{display:block;margin-top:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);line-height:1.6}
+.offer.withart{grid-template-columns:260px minmax(0,1fr) 300px}
+.offerart{position:relative;min-height:100%;overflow:hidden;background:var(--bg3)}
+.offerart img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.78) contrast(1.03)}
+.offerart::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 55%,color-mix(in srgb,var(--bg3) 78%,transparent))}
+.offerin strong{color:var(--text);font-weight:500}
+.whyandre{margin-top:17px;padding-top:15px;border-top:1px solid var(--hair)}
+.whyandre .minihead{margin:0 0 5px;color:var(--gold-lt);font-size:11px;text-transform:uppercase;letter-spacing:.16em}
+.pricechoice+.pricechoice{border-top:1px solid var(--hair);padding-top:18px;margin-top:8px}
+.pricescope{font-family:'DM Sans',sans-serif;font-size:11.5px;color:var(--text3);line-height:1.5;margin:-8px 0 18px}
+.smallamt{font-size:30px!important;margin-top:10px}
+.quoteamt{font-size:34px!important}
+.eventoffer{border-color:color-mix(in srgb,var(--gold) 24%,var(--hair))}
+@media(max-width:1050px){.offer.withart{grid-template-columns:220px minmax(0,1fr)}.offer.withart .offerside{grid-column:1/-1;border-left:0;border-top:1px solid var(--hair)}}
+@media(max-width:760px){.offer.withart{grid-template-columns:1fr}.offerart{min-height:260px}.credline{display:block}.credline strong{display:block;text-align:left;margin-top:6px}.livehero .pghead{min-height:620px}}
+
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <nav class="nav">
   <div class="navin">
-    <a class="brand" href="index.html"><span class="bmark">&#9672;</span><span class="bname">SafeRise Protocol</span></a>
+    <a class="brand" href="index.html"><span class="bmark">&#9672;</span><span class="bname">SafeRise</span></a>
     <div class="navlinks">
       <div class="ndrop">
         <button class="ntop" type="button" aria-expanded="false" aria-haspopup="true" id="ptrig">
@@ -492,92 +562,130 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
 </nav>
 <main id="main">
 
-<section class="pg"><div class="wrap pghead">
+<section class="pg livehero">
+  <div class="liveheroart" aria-hidden="true"><img src="https://images.pexels.com/photos/4098997/pexels-photo-4098997.jpeg?auto=compress&cs=tinysrgb&w=1800" alt=""></div>
+  <div class="wrap pghead">
   <p class="eyebrow">Live sessions</p>
-  <h1>The protocols work alone. <em>These are for when they do not go far enough.</em></h1>
-  <p class="pglead">A private hour, a room of people working the same protocol, or a
-    half day in person with a team. All of it runs the same four steps &#8212; the
-    difference is that someone else is holding the room.</p>
+  <h1>The protocol is still yours. <em>Sometimes it helps to have someone hold the process with you.</em></h1>
+  <p class="pglead">Premium 1:1 and public workshops are always remote. You join from wherever you are, and the same SafeRise process is applied live to the moment you are working through.</p>
+  <div class="formatnote">
+    <span class="formatdot"></span>
+    <p><strong>Remote by default.</strong> In-person delivery is reserved for organisations, retreats, festivals, conferences and other hosted live events.</p>
+  </div>
   <h2 class="sr-only-h">Choose how you want to work</h2>
   <div class="lvdoors">
     <a class="lvdoor me" href="#lv-me" data-lv="me">
       <h3>For me</h3>
-      <p>A private session, or a live workshop alongside other people working the
-        same thing.</p>
-      <span class="go">Premium 1:1 &#183; Workshops &#8594;</span></a>
+      <p>Premium 1:1 with Andre, or a live online workshop alongside others working the same protocol.</p>
+      <span class="go">Premium 1:1 &#183; Online workshops &#8595;</span></a>
     <a class="lvdoor org" href="#lv-org" data-lv="org">
       <h3>For my organisation</h3>
-      <p>A half day in person for a team, or an ongoing arrangement across a company.</p>
-      <span class="go">Retreats &#183; Annual access &#8594;</span></a>
+      <p>Hosted workshops, retreats and event sessions for teams, organisations, festivals and conferences — plus ongoing platform access.</p>
+      <span class="go">Workshops &#183; Retreats &#183; Events &#8595;</span></a>
   </div>
 </div></section>
 
 <section class="sec2 lvsec" id="lv-me"><div class="wrap">
-  <div class="slot slot--wide" style="--accent:var(--t1)"><div class="slotmeta"><p class="slotid">IMG-L1</p><p class="slotdim">1600 × 600 · photograph</p><p class="slotbrief">Two people in conversation, online or across a table. Ordinary room, unposed, nobody performing calm.</p></div></div>
+  <div class="slot slot--wide" style="padding:0"><img src="https://images.pexels.com/photos/4098997/pexels-photo-4098997.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;top:12px;left:14px;z-index:3;font-family:'Cormorant Garamond',serif;font-size:26px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.9)">17</span></div>
   <div class="sh" style="margin-top:38px"><p class="eyebrow">For me</p>
-    <h2>Someone else <em>in the room.</em></h2></div>
+    <h2>Stay where you are. <em>Bring someone into the process.</em></h2>
+    <p>There is no clinic to travel to and no room you need to enter. Premium 1:1 and public workshops happen live by video, so support can meet the moment while it is still relevant.</p>
+  </div>
+  <div class="credline"><span>Every session, held by a trained practitioner.</span>
+    <strong>Meditation Coach &#183; Certified Somatic Coach &#183; Certified Jungian Practitioner</strong></div>
+  <div class="formatchips"><span class="formatchip remote">Remote by default</span><span class="formatchip">Private video</span><span class="formatchip">Live online group</span></div>
 
-  <div class="offer">
+  <div class="offer withart">
+    <div class="offerart"><img src="https://images.pexels.com/photos/4098997/pexels-photo-4098997.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Person joining a private live video session from home"></div>
     <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg></span>Premium 1:1</h3>
-      <p>One focused hour, live, for whatever the self-guided protocols cannot fully
-        reach on their own. Your record is read beforehand, so the session starts where
-        you actually are rather than at the beginning.</p>
-      <ul><li>Sixty minutes, live video</li>
-        <li>Nothing to prepare &#8212; come as you are</li>
-        <li>The four steps applied to your situation, not a script</li>
-        <li>A written follow-up within two days</li>
-        <li>Free reschedule up to 24 hours before</li></ul></div>
-    <div class="offerside"><p class="amt">&#8364;129</p><p class="per">per session</p>
-      <a class="cta" href="mailto:contact@thesaferiseprotocol.com?subject=Book%20a%20session">Book a session &#8594;</a>
-      <p class="per" style="margin:16px 0 0">Three-session series &#8212; &#8364;299</p></div>
+      <p><strong>A private session with the founder.</strong> One focused remote hour for a specific situation, a pattern that keeps returning, or something you do not want to work through alone.</p>
+      <ul>
+        <li>60 minutes, live video, just the two of you</li>
+        <li>Nothing required beforehand — come as you are</li>
+        <li>Recognise &#8594; Regulate &#8594; Release &#8594; Rise applied to your situation</li>
+        <li>A brief written follow-up: what emerged and where to focus next</li>
+        <li>Free reschedule up to 24 hours before</li>
+      </ul>
+      <div class="whyandre"><p class="minihead">Why Andre directly</p>
+        <p>Meditative attention, somatic awareness and a Jungian/shadow lens can be brought in where they are useful — without forcing your situation into one method.</p>
+      </div>
+    </div>
+    <div class="offerside">
+      <div class="pricechoice"><p class="amt">&#8364;129</p><p class="per">single session</p>
+        <p class="pricescope">One live situation, decision or moment.</p></div>
+      <div class="pricechoice"><p class="amt">&#8364;299</p><p class="per">3-session series</p>
+        <p class="pricescope">A pattern worth following across time.</p></div>
+      <a class="cta" href="mailto:contact@thesaferiseprotocol.com?subject=Book%20Premium%201%3A1">Book a session &#8594;</a>
+    </div>
   </div>
 
-  <div class="offer">
-    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></span>Group workshops</h3>
-      <p>A small group working one protocol together, live, facilitated. Something
-        changes when you are not the only one regulating &#8212; watching someone else
-        move through the step you are stuck on often does more than reading about it.</p>
-      <ul><li>About sixty minutes, live video</li>
-        <li>Five to ten people, or three to five couples</li>
-        <li>You are never required to share</li>
-        <li>A recording goes to everyone who attends</li>
-        <li>Full refund if cancelled 48 hours before</li></ul></div>
-    <div class="offerside"><p class="amt">&#8364;29</p><p class="per">per person &#183; Personal</p>
-      <a class="cta" href="mailto:contact@thesaferiseprotocol.com?subject=Reserve%20a%20place">Reserve a place &#8594;</a>
-      <p class="per" style="margin:16px 0 0">Relationship &#8212; &#8364;39 per couple</p></div>
+  <div class="offer withart">
+    <div class="offerart"><img src="https://images.pexels.com/photos/6937837/pexels-photo-6937837.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Participant engaging in a remote group session by video"></div>
+    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></span>Live online workshops</h3>
+      <p><strong>Live, focused, guided — with others walking the same path.</strong> A small group works one SafeRise protocol together by video. The process can be shared without the story becoming shared.</p>
+      <ul>
+        <li>About 60 minutes, remote by live video</li>
+        <li>Personal: 5–10 people</li>
+        <li>Relationship: 3–5 couples</li>
+        <li>You are never required to explain what happened</li>
+        <li>One Personal and one Relationship workshop planned monthly</li>
+      </ul>
+    </div>
+    <div class="offerside">
+      <div class="pricechoice"><p class="amt">&#8364;29</p><p class="per">Personal &#183; per person</p></div>
+      <div class="pricechoice"><p class="amt">&#8364;39</p><p class="per">Relationship &#183; per couple</p></div>
+      <a class="cta" href="mailto:contact@thesaferiseprotocol.com?subject=Reserve%20a%20workshop">Reserve a place &#8594;</a>
+    </div>
   </div>
 </div></section>
 
 <section class="sec2 lvsec" id="lv-org"><div class="wrap">
-  <div class="slot slot--wide" style="--accent:var(--t3)"><div class="slotmeta"><p class="slotid">IMG-L2</p><p class="slotdim">1600 × 600 · photograph</p><p class="slotbrief">A team in a plain room, chairs in a loose circle, no branding, no lanyards. Working, not team-building.</p></div></div>
+  <div class="slot slot--wide" style="padding:0"><img src="https://images.pexels.com/photos/7640444/pexels-photo-7640444.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;top:12px;left:14px;z-index:3;font-family:'Cormorant Garamond',serif;font-size:26px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.9)">18</span></div>
   <div class="sh" style="margin-top:38px"><p class="eyebrow">For my organisation</p>
-    <h2>Nobody has to disclose anything <em>to anyone.</em></h2>
-    <p>This is not a wellbeing seminar and it is not a team-building exercise. Nothing
-      shared in the room is reported back to leadership, and no one is required to
-      participate beyond what feels right. That is usually the first question, so it is
-      answered first.</p></div>
+    <h2>Bring regulation <em>into the environments where people actually need it.</em></h2>
+    <p>Organisation work is the exception to the remote-first model. SafeRise can be delivered inside an office, at a retreat, festival, conference or hosted live event — and remotely when a distributed team makes that more useful.</p>
+  </div>
+  <div class="privacycall"><p>Nobody has to disclose anything to anyone.</p>
+    <span>The process is shared. Personal material remains personal. Individual SafeRise records are never opened to leadership.</span></div>
+  <div class="formatchips"><span class="formatchip">Office</span><span class="formatchip">Retreat</span><span class="formatchip">Festival</span><span class="formatchip">Conference</span><span class="formatchip remote">Remote team</span></div>
 
-  <div class="offer">
-    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg></span>Corporate retreat</h3>
-      <p>A half day, in person, built from sixty to ninety minute segments. The agenda
-        is curated with your organisers rather than handed over pre-built. A team does
-        not just need to hear about regulation &#8212; in a room together they can watch
-        each other do it, which changes what is possible afterwards.</p>
-      <ul><li>Half a day, roughly three to four hours</li>
-        <li>At your location, or a venue arranged together</li>
-        <li>A short intake beforehand on the pattern the team is navigating</li>
-        <li>A written debrief for the organisation afterwards</li>
-        <li>Founder-led, never outsourced</li></ul></div>
-    <div class="offerside"><p class="amt">&#8364;1,800</p><p class="per">flat &#183; groups up to 50</p>
-      <a class="cta" href="mailto:contact@thesaferiseprotocol.com?subject=Request%20a%20retreat">Request a retreat &#8594;</a>
-      <p class="per" style="margin:16px 0 0">Over 50 &#8212; &#8364;3,500 flat</p></div>
+  <div class="offer withart orgoffer">
+    <div class="offerart"><img src="https://images.pexels.com/photos/7640444/pexels-photo-7640444.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Employees taking part in a facilitated organisation workshop"></div>
+    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg></span>Organisation workshop or retreat</h3>
+      <p>A live, facilitated format built around the audience and environment in front of us — from a focused office workshop to a half-day retreat.</p>
+      <ul>
+        <li>In person at your office, venue or retreat location</li>
+        <li>Remote delivery available for distributed teams</li>
+        <li>Focused 60–90 minute sessions or half-day formats</li>
+        <li>A short intake beforehand on the context the group is navigating</li>
+        <li>Founder-led; format and boundaries agreed in advance</li>
+      </ul>
+    </div>
+    <div class="offerside">
+      <p class="amt">&#8364;1,800</p><p class="per">half-day &#183; up to 50</p>
+      <p class="amt smallamt">&#8364;3,500</p><p class="per">half-day &#183; over 50</p>
+      <a class="cta" href="mailto:contact@thesaferiseprotocol.com?subject=Organisation%20workshop%20or%20retreat">Discuss the format &#8594;</a>
+    </div>
+  </div>
+
+  <div class="offer withart eventoffer">
+    <div class="offerart"><img src="https://images.pexels.com/photos/8761323/pexels-photo-8761323.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Speaker and audience at a live conference event"></div>
+    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 19h14M8 16v-5M12 16V7M16 16v-3"/><circle cx="12" cy="4.5" r="1.5"/></svg></span>Conference, festival or hosted live event</h3>
+      <p>From a breakout room to a festival programme or intimate stage session, the experience is shaped to the audience and event rather than forced into the half-day retreat format.</p>
+      <ul>
+        <li>Conference breakout or workshop sessions</li>
+        <li>Festival and cultural-programme formats</li>
+        <li>Hosted live experiences for communities or organisations</li>
+        <li>Scope, audience size and travel agreed case by case</li>
+      </ul>
+    </div>
+    <div class="offerside"><p class="amt quoteamt">Custom</p><p class="per">scoped case by case</p>
+      <a class="cta" href="mailto:contact@thesaferiseprotocol.com?subject=SafeRise%20live%20event">Enquire &#8594;</a></div>
   </div>
 
   <div class="offer">
     <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><path d="M12 3v2.6M12 18.4V21M3 12h2.6M18.4 12H21M5.6 5.6l1.9 1.9M16.5 16.5l1.9 1.9M18.4 5.6l-1.9 1.9M7.5 16.5l-1.9 1.9"/></svg></span>Annual access</h3>
-      <p>Platform access across a company for a year, invoiced once. Most retreats lead
-        into this &#8212; the day starts something, and the protocols are what continues
-        it. Individual records stay private, including from the employer paying for it.</p>
+      <p><strong>The event ends. The work does not have to.</strong> A workshop or retreat gives people a shared reference point. Annual SafeRise access gives each person somewhere private to continue afterwards — without turning individual use into employer data.</p>
       <ul><li>All three tracks, every employee</li>
         <li>One invoice, flat, no per-seat counting</li>
         <li>Journals and records never visible to the company</li>
@@ -590,9 +698,9 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
     <div class="fitcol yes"><h4>Right for you if</h4>
       <li>Your team has a real, recurring dynamic worth addressing together</li>
       <li>Leadership will let people take part honestly, unmonitored</li>
-      <li>You want something that continues after the day, not a one-off event</li></div>
+      <li>You want the live event to connect to something people can continue privately afterwards</li></div>
     <div class="fitcol no"><h4>Not the right fit if</h4>
-      <li>You are looking for a motivational speaker or a fun team outing</li>
+      <li>You are looking only for a keynote-style motivational performance or entertainment</li>
       <li>Findings need to be reported back to leadership by name</li>
       <li>Someone in the room needs clinical support rather than a facilitated day</li></div>
   </div>
@@ -607,8 +715,7 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
       been through a clinical trial. If you are in crisis, contact your local emergency
       service.</p>
     <div class="flinks">
-      <a href="mailto:contact@thesaferiseprotocol.com">Contact</a><a href="method.html#faq">FAQ</a>
-      <a href="plans.html">Billing</a><a href="mailto:contact@thesaferiseprotocol.com">Support</a>
+      <a href="mailto:contact@thesaferiseprotocol.com">Contact</a><a href="method.html#faq">FAQ</a><a href="plans.html">Billing</a><a href="mailto:contact@thesaferiseprotocol.com">Support</a>
       <a href="#">Terms</a><a href="#">Privacy</a>
     </div>
   </div>
