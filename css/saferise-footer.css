@@ -1,0 +1,56 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   SafeRise — shared public-page footer · SR-336
+
+   The ONE source of the grouped, four-column footer, rendered by
+   SafeRiseFooter.render() (js/saferise-footer.js) — same pattern as
+   js/saferise-rail.js. Loaded by all nine public pages: about.html,
+   anxiety-reset.html, coming-soon.html, live-sessions.html, method.html,
+   plans.html, personal-transformation.html, relationship-healing.html,
+   professional-performance.html.
+
+   Content and visual design lifted from method.html/live-sessions.html's
+   own hand-authored grouped footer (four columns: Tracks, SafeRise, Help,
+   Legal) — this file reproduces it, it does not redesign it.
+
+   NAMESPACED sr-pf- ("public footer"), not the bare .foot/.scope/.fcols/
+   .fcol/.fch the reference implementation used. Those bare names are
+   NOT available: css/saferise-system.css already defines an unscoped
+   .foot{…} and .scope{…} (SR-332, index.html's own nav+footer pair, with
+   a [data-theme="sunrise"] .foot override alongside it). The three track
+   pages already load saferise-system.css for their .sr-tp styling — so a
+   <footer class="foot"> dropped onto a track page would silently inherit
+   SR-332's rules instead of this file's, or fight it by load order,
+   depending on which stylesheet a given page happens to list last. This
+   is the exact "class name already means something else" trap
+   CLAUDE.md's design-system section already warns about (.track / the
+   video scrubber). Namespacing here avoids repeating it a second time —
+   found by checking before writing, not by hitting it.
+
+   TOKEN COMPATIBILITY — this file has to render correctly under three
+   different token scopes across nine pages: each of the six self-
+   contained pages' own inline :root, and the three track pages' .sr-tp
+   scope (css/saferise-system.css). --bg, --hair, --gold, --text/2/3 are
+   confirmed identical in both (docs/page-invariants.md's "never differs"
+   list). --ease and --wrap are NOT — .sr-tp defines neither. --ease is
+   read with a literal fallback (var(--ease, cubic-bezier(.22,.61,.36,1)))
+   rather than assumed present. --wrap avoided entirely: this file gives
+   the footer its own max-width wrapper (.sr-pf-wrap) instead of reusing
+   each page's own .wrap utility class, which .sr-tp has no rule for at
+   all — a bare <div class="wrap"> would render un-styled, full-bleed, on
+   the three track pages specifically. */
+
+.sr-pf-foot{border-top:1px solid var(--hair);padding:44px 0 40px;background:var(--bg);
+  transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
+.sr-pf-wrap{max-width:1180px;margin:0 auto;padding:0 30px}
+.sr-pf-scope{font-family:'DM Sans',sans-serif;font-size:12.5px;line-height:1.62;
+  color:var(--text3);max-width:74ch}
+.sr-pf-scope strong{color:var(--text2);font-weight:500}
+.sr-pf-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin-top:30px;
+  padding-top:28px;border-top:1px solid var(--hair)}
+.sr-pf-col{display:flex;flex-direction:column;gap:9px}
+.sr-pf-colhead{font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.sr-pf-col a{font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text2);
+  text-decoration:none;transition:color .3s var(--ease, cubic-bezier(.22,.61,.36,1))}
+.sr-pf-col a:hover{color:var(--text)}
+@media(max-width:820px){.sr-pf-cols{grid-template-columns:1fr 1fr;gap:24px}}

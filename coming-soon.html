@@ -307,15 +307,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   line-height:1.2}
 @keyframes pcroll{from{transform:translateX(0)}to{transform:translateX(var(--w))}}
 
-/* ═══════════ footer ═══════════ */
-.foot{border-top:1px solid var(--hair);padding:44px 0 40px;background:var(--bg)}
-.scope{font-family:'DM Sans',sans-serif;font-size:12.5px;line-height:1.62;
-  color:var(--text3);max-width:74ch}
-.scope strong{color:var(--text2);font-weight:500}
-.flinks{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px}
-.flinks a{font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--text3);
-  text-decoration:none;transition:color .3s var(--ease)}
-.flinks a:hover{color:var(--gold)}
+/* SR-336 · footer CSS moved to css/saferise-footer.css */
 
 .pg{padding:118px 0 0}
 .pghead{padding:54px 0 40px}
@@ -525,6 +517,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   .deep p{-webkit-line-clamp:unset}.deep::after{display:none}}
 
 </style>
+<link rel="stylesheet" href="css/saferise-footer.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -676,20 +669,9 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
     you are ready for them.</p>
 </div></section>
 </main>
-<footer class="foot">
-  <div class="wrap">
-    <p class="scope"><strong>Scope &amp; safety.</strong> SafeRise Protocol is
-      self-guided education and training in nervous-system regulation. It is not
-      therapy, medical treatment, or a substitute for professional care, and it has not
-      been through a clinical trial. If you are in crisis, contact your local emergency
-      service.</p>
-    <div class="flinks">
-      <a href="mailto:contact@thesaferiseprotocol.com">Contact</a><a href="method.html#faq">FAQ</a>
-      <a href="plans.html">Billing</a><a href="mailto:contact@thesaferiseprotocol.com">Support</a>
-      <a href="#">Terms</a><a href="#">Privacy</a>
-    </div>
-  </div>
-</footer>
+<div id="srFooter"></div>
+<script src="js/saferise-footer.js"></script>
+<script>SafeRiseFooter.render();</script>
 <script>
 (function(){
   var dd=document.querySelector('.ndrop'), dt=document.getElementById('ptrig');

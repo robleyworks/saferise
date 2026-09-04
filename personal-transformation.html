@@ -25,6 +25,7 @@
 <!-- The design system loads LAST, after every other stylesheet.
      It wins by cascade order, not by !important. -->
 <link rel="stylesheet" href="css/saferise-system.css">
+<link rel="stylesheet" href="css/saferise-footer.css">
 </head>
 <body class="sr-tp">
 
@@ -42,7 +43,9 @@
 
 <main class="sr-tp-shell" id="main"><div id="page"></div></main>
 
-<footer>&copy; 2026 SafeRise Protocol &middot; an independent practice created by Andre Robley &middot; <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferiseprotocol.com</a></footer>
+<div id="srFooter"></div>
+<script src="js/saferise-footer.js"></script>
+<script>SafeRiseFooter.render();</script>
 
 <div class="sr-tp-stickycta">
   <p id="stickyline"></p>

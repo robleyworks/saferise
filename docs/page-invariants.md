@@ -72,6 +72,22 @@ this is deliberate, not an oversight to "fix" toward the public look.
   the markup or the CSS in again. See that module's own header comment
   for the `onRoute`/`theme` options `dashboard.html` needs and no other
   page does.
+
+  **SR-336 · the same is now true of the public footer.** The grouped
+  four-column footer (Tracks / SafeRise / Help / Legal) is
+  `SafeRiseFooter.render()` (`js/saferise-footer.js`), styled by
+  `css/saferise-footer.css` under `sr-pf-*` class names — deliberately
+  NOT `.foot`/`.scope`, which `css/saferise-system.css` already defines
+  unscoped for `index.html`'s own footer (SR-332); a page loading both
+  stylesheets would otherwise get whichever `.foot` rule happened to
+  load last. Nine public pages call it: `about.html`, `anxiety-reset.html`,
+  `coming-soon.html`, `live-sessions.html`, `method.html`, `plans.html`,
+  and the three track pages. `index.html` is deliberately NOT one of the
+  nine — it keeps its own SR-332 `.foot` and the separate, older
+  `sr-footer-template` partial (still feeding `#main-content` and every
+  `.prog-overlay`), both untouched; see the SR-336 fix-register entry for
+  the resulting stacked-footer state there, reported rather than
+  resolved.
   **`member-` is now this repo's convention for a member-surface page
   whose name would otherwise collide with, or be confused for, a
   public one** — the rename that prompted it: `method.html` (public) and

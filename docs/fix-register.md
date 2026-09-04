@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-335.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-336.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6830,7 +6830,9 @@ free, and used **SR-332**. This run checked `git log --grep` for SR-333 before a
 (background + `sleep`), found it free, and used **SR-333**. The member-coming-soon run checked
 `git log --grep` for SR-334 before allocating (same method), found it free, and used
 **SR-334**. The rail-extraction run checked `git log --grep` for SR-335 before allocating
-(background + `sleep`), found it free, and used **SR-335**. Next run: allocate from **SR-336**.
+(background + `sleep`), found it free, and used **SR-335**. The footer-extraction run checked
+`git log --grep` for SR-336 before allocating (same method), found it free, and used
+**SR-336**. Next run: allocate from **SR-337**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
 
@@ -7073,5 +7075,106 @@ unrelated FRAMEWORKS card-integrity script still finds and patches all 6 `[data-
 confirming that script (a separate `<script>` block, untouched) still runs correctly alongside
 the new rail script. Zero console errors on every page tested. esprima-clean and zero
 `tinycss2` errors across every touched file (details above).
+
+*Status:* closed · *Raised and fixed:* 3 Sep 2026
+
+---
+
+**SR-336 · `js/saferise-footer.js` — one shared grouped footer, extracted from nine copies
+(and a stacked one on `index.html`, left alone).** Same motivation as SR-335, one component
+over: the flat, six-link `.flinks` row was independently duplicated across six pages
+(`about.html`, `anxiety-reset.html`, `coming-soon.html`, `live-sessions.html`, `method.html`,
+`plans.html`), the three track pages carried an even sparser one-line `<footer>&copy;…` with
+no shared structure at all, and mid-session a hand-authored, grouped four-column replacement
+(Tracks / SafeRise / Help / Legal) landed — uncommitted, in progress — on `method.html` and
+`live-sessions.html`, byte-identical between the two, confirming both the content and the
+`.fcols`/`.fcol`/`.fch` markup shape to extract before writing a line of the module.
+
+**Same pattern as `SafeRiseRail.render()`.** `SafeRiseFooter.render(opts)` takes no
+`activeRoute` — unlike the rail, nothing in the footer varies by which page is asking,
+including a page linking to itself (`method.html`'s own footer links to `method.html`,
+matching the hand-authored reference exactly, not tidied away as a self-link).
+
+**Renamed the reference's own classes, and this is the one deliberate content difference
+between what shipped in `method.html`/`live-sessions.html` and what nine pages get now.**
+`.foot`/`.scope`/`.fcols`/`.fcol`/`.fch` were NOT available: `css/saferise-system.css` already
+defines an unscoped `.foot{…}` and `.scope{…}` (SR-332, `index.html`'s own nav+footer pair,
+with a `[data-theme="sunrise"] .foot` override alongside it). The three track pages already
+load `saferise-system.css` for their `.sr-tp` styling, so a `<footer class="foot">` dropped
+onto a track page would have silently inherited SR-332's index.html-specific rules instead of
+this module's, or fought them by load order — the exact "class name already means something
+else" trap CLAUDE.md's own design-system section names by example (`.track`, the video
+scrubber). Found by checking `css/saferise-system.css` before writing, not by shipping it and
+finding out. Renamed to `sr-pf-*` ("public footer") — `.sr-pf-foot`, `.sr-pf-wrap`,
+`.sr-pf-scope`, `.sr-pf-cols`, `.sr-pf-col`, `.sr-pf-colhead` — structure and visual result
+unchanged, only the selectors differ from the reference implementation.
+
+**Token compatibility across three different scopes, engineered rather than assumed.** This
+file has to render correctly on the six self-contained pages' own inline `:root` AND the three
+track pages' `.sr-tp` scope (`css/saferise-system.css`). Checked both before writing:
+`--bg`/`--hair`/`--gold`/`--text`/`--text2`/`--text3` are confirmed identical in both
+(`docs/page-invariants.md`'s "never differs" list) — safe to use directly. `--ease` and
+`--wrap` are NOT — `.sr-tp` defines neither. `--ease` is read with a literal fallback
+(`var(--ease, cubic-bezier(.22,.61,.36,1))`) rather than assumed present. `--wrap`/`.wrap` are
+avoided entirely: the module gives the footer its own `.sr-pf-wrap` with a hardcoded
+`max-width:1180px` instead of reusing each page's own `.wrap` utility class, which `.sr-tp` has
+no rule for at all — a bare `<div class="wrap">` would have rendered the whole footer
+un-styled and full-bleed on the three track pages specifically. Verified live on
+`personal-transformation.html`: `--gold`/`--bg` both resolve to `.sr-tp`'s own values (not the
+six pages' identical-but-separately-defined ones), `.sr-pf-wrap` computes to exactly 1180px,
+and the link-hover transition (`--ease`'s fallback) resolves to the correct cubic-bezier.
+
+**Nine pages swapped**, each losing its own footer markup and CSS for
+`<div id="srFooter"></div>`, `<link rel="stylesheet" href="css/saferise-footer.css">`,
+`<script src="js/saferise-footer.js">` and one `SafeRiseFooter.render()` call: `about.html`,
+`anxiety-reset.html`, `coming-soon.html`, `plans.html` (flat `.flinks`, confirmed
+byte-identical across all four before editing), `method.html` and `live-sessions.html` (the
+in-progress grouped prototype — its now-dead `.flinks`-family CSS, left behind when the
+markup moved to `.fcols` but never removed, is cleaned up as part of this extraction, not a
+separate fix), and the three track pages, which go from a one-line copyright string to the
+full grouped footer with Scope & safety text for the first time — the actual content gain
+here, same as SR-335's six framework pages gaining What's coming and Log out.
+
+**`index.html` — NOT one of the nine, untouched, exactly as instructed.** It keeps both its
+existing footers: the SR-332 `.foot` (flat-row, `css/saferise-system.css`) and the separate,
+older `sr-footer-template` (a `<template>` + clone-script feeding `#main-content` and every
+`.prog-overlay`, its own three-column grouped layout — `.sr-foot-grid`/`.sr-foot-col`,
+pre-existing, unrelated to this module). Neither was touched. The two stacked footers SR-332
+already flagged remain stacked, unresolved — reported again here rather than silently fixed,
+per instruction not to touch `sr-footer-template` or its clone script.
+
+**Section 3 — reported, not acted on:** a full pairwise check of the six self-contained pages'
+own `:root` and `[data-theme="sunrise"]` token blocks (not eyeballed — extracted and diffed)
+found **zero divergence** between them; all six carry byte-identical values for every shared
+token, matching each other exactly. The real divergence is one level up, between page
+*families*, not within the six: the six self-contained pages' own `:root` defines
+`--wrap`/`--ease`/`--gold-dim`/`--hair2`/`--bg2`/`--bg3`/`--t1`/`--t2`/`--t3`/`--card`, while
+`.sr-tp` (the three track pages' scope, in `css/saferise-system.css`) defines an overlapping
+but not-identical set — no `--wrap`, `--ease`, `--gold-dim`, `--hair2`, `--t1`/`--t2`/`--t3`,
+and adds `--band`/`--band2`/`--teal`/`--mob`/`--safe`/`--shut`, which the six pages have no
+equivalent for at all. This is not a hypothetical: it is exactly what forced the `--ease`
+fallback and the `.sr-pf-wrap`-instead-of-`.wrap` decision above — a concrete case where the
+divergence already had a real consequence, not just a description of one. Migrating the six
+pages onto `css/saferise-system.css` (unifying the token vocabulary properly, rather than
+working around the gaps per-component) is a separate decision, not made here.
+
+**Verified live**, Browser pane against the local static server: `about.html` — all four
+columns render with the exact specified links/labels/hrefs (`Tracks` including *Coming soon*,
+`SafeRise` including a self-link, `Help`, `Legal`'s two `href="#"` entries), Scope & safety
+text intact. `personal-transformation.html` — footer renders with 4 columns where there was
+one bare copyright line before, token resolution and the `--ease`/`.wrap` workarounds both
+confirmed correct (above). A network sweep across all nine confirmed `id="srFooter"`,
+`js/saferise-footer.js`, and zero remaining `.flinks`/`.fcols` references on every page.
+`plans.html` — theme toggle re-tested with the new footer present: `--bg` on both `<html>` and
+the footer element updates to the sunrise value immediately (confirmed via the CSS custom
+property directly, not just the resolved color, to separate a real bug from the session's
+already-documented backgrounded-tab `getComputedStyle` lag — foregrounding the pane and
+re-reading confirmed `.sr-pf-foot`'s `background-color` does update, at `rgb(70, 85, 120)` /
+`#465578`; not a real defect). The one console 404 seen during this pass
+(`assets/pages/plans-hero.jpg`) is SR-331's own already-documented, pre-existing gap, unrelated
+to this fix. Zero console errors otherwise. esprima-clean (2 script blocks — the footer render
+call plus each page's own pre-existing script — on every page), zero `tinycss2` errors across
+every inline `<style>` block and the new `css/saferise-footer.css`, HTML tag-balanced on all
+nine.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
