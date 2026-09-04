@@ -240,12 +240,6 @@ body .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color
 .sr-dash-jnote{margin-top:14px;padding-left:15px;border-left:2px solid rgba(78,154,166,.6);font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14px;color:var(--text2);line-height:1.62}
 .sr-dash-jmeta{margin-top:auto;padding-top:24px;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--text3);line-height:1.9}
 
-/* ============ understanding ============ */
-/* NEEDS ART — no framework illustration exists; typographic tile stands in */
-
-/* ============ growth ============ */
-/* NEEDS ART — no 1:1 session photograph exists yet */
-
 /* ============ triad ============ */
 .sr-dash-tpanel{background:var(--band);border:1px solid var(--hair);border-radius:14px;padding:24px var(--pad)}
 
@@ -459,10 +453,13 @@ body.reading #srLibrary{margin-top:22px}
 .sr-dash-bookpanel{position:relative;display:flex;align-items:flex-end;overflow:hidden}
 .sr-dash-bookpanel + .sr-dash-bookpanel:before{content:"";position:absolute;left:0;top:-10%;bottom:-10%;width:1px;
   background:rgba(255,255,255,.14);transform:skewX(-9deg);z-index:2}
-/* NEEDS ART — three photographs at 900x450. SWAP each with <img src="assets/sessions/…"> */
-.sr-dash-bookpanel.b1{background:radial-gradient(56% 90% at 40% 60%,rgba(236,201,106,.26),transparent 66%),linear-gradient(120deg,#0B0B12,#1C1509 62%,#2A1E10)}
-.sr-dash-bookpanel.b2{background:radial-gradient(56% 90% at 46% 55%,rgba(155,127,212,.22),transparent 66%),linear-gradient(120deg,#0C0B13,#1A1526 62%,#241C36)}
-.sr-dash-bookpanel.b3{background:radial-gradient(56% 90% at 52% 58%,rgba(78,154,166,.2),transparent 66%),linear-gradient(120deg,#0A0F12,#132228 62%,#1B2F35)}
+/* SR-340 · wired. Gradients stay as a layered fallback behind each photograph
+   (b1: Workshops, b2: Premium 1:1, b3: Next available / calendar) — real CSS
+   rules, not an inline style attribute, so there is no HTML-attribute quote to
+   escape (see SR-338's write-up for what that trap looks like). */
+.sr-dash-bookpanel.b1{background:url('../assets/sessions/workshops.jpg') center/cover no-repeat,radial-gradient(56% 90% at 40% 60%,rgba(236,201,106,.26),transparent 66%),linear-gradient(120deg,#0B0B12,#1C1509 62%,#2A1E10)}
+.sr-dash-bookpanel.b2{background:url('../assets/sessions/premium-1on1.jpg') center/cover no-repeat,radial-gradient(56% 90% at 46% 55%,rgba(155,127,212,.22),transparent 66%),linear-gradient(120deg,#0C0B13,#1A1526 62%,#241C36)}
+.sr-dash-bookpanel.b3{background:url('../assets/sessions/calendar.jpg') center/cover no-repeat,radial-gradient(56% 90% at 52% 58%,rgba(78,154,166,.2),transparent 66%),linear-gradient(120deg,#0A0F12,#132228 62%,#1B2F35)}
 .sr-dash-booklabel{position:relative;z-index:3;padding:0 0 14px;width:100%}
 .sr-dash-booklabel span{display:block;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
   color:rgba(245,237,216,.72);font-weight:700}
@@ -471,17 +468,15 @@ body.reading #srLibrary{margin-top:22px}
 @media(max-width:1000px){ .sr-dash-bookband{grid-template-columns:1fr 1fr;height:120px} .sr-dash-bookband .b3{display:none} }
 @media(max-width:640px){ .sr-dash-bookband{grid-template-columns:1fr} .sr-dash-bookband .b2{display:none} }
 
-/* ============ evidence ============ */
-
-/* ============ expand your practice ============ */
-
 /* ============ reflection archive ============ */
 .sr-dash-arch{display:grid;grid-template-columns:1.35fr 1fr;gap:20px}
 .sr-dash-archmain{background:var(--band);border:1px solid var(--hair);border-radius:14px;overflow:hidden}
 .sr-dash-archbanner{position:relative;height:112px;margin:0 calc(var(--pad) * -1);
-  /* NEEDS ART — SWAP: <img src="assets/dashboard/state-banner.jpg"> at 1400x220 —
-     corrected from the original 1200x300 (4:1): the rendered container is
-     ~712x112 (~6.35:1) at 1440px, and 1400x220 (~6.36:1) is the closer match. */
+  /* SR-340 · wired (see .sr-dash-archbannerart, below this rule's markup, an
+     <img> layered via negative z-index). Fallback gradient stays here for a
+     404. If the file is ever regenerated, 1400x220 fits the rendered
+     container (~712x112, ~6.35:1 at 1440px) closer than the 1200x300
+     supplied. */
   background:radial-gradient(60% 130% at 24% 60%,rgba(212,168,67,.24),transparent 62%),
              linear-gradient(102deg,#0C0C14,#141019 46%,#231A10 100%);
   border-bottom:1px solid var(--hair);display:flex;align-items:flex-end}
@@ -670,7 +665,8 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
 .sr-dash-tpanel--banner{padding-top:0;overflow:hidden}
 .sr-dash-tpanel--banner > *:not(.sr-dash-archbanner){padding-left:0;padding-right:0}
 .sr-dash-archbanner--journal{margin:0 calc(var(--pad) * -1) 22px;height:112px;
-  /* NEEDS ART — SWAP: <img src="assets/dashboard/journal-banner.jpg"> at 1000x260 */
+  /* SR-340 · wired (see .sr-dash-archbannerart in the markup). Fallback
+     gradient stays here for a 404. */
   background:radial-gradient(60% 130% at 74% 55%,rgba(155,127,212,.22),transparent 62%),
              linear-gradient(102deg,#0C0C14,#151125 46%,#221B33 100%)}
 .sr-dash-archbanner--journal .sr-dash-archbannerin{padding:0 var(--pad) 15px}
@@ -1055,7 +1051,12 @@ body.shifting .sr-dash-top{opacity:0;transition:opacity .42s ease}
 .sr-begin-card--media{padding:0}
 body .sr-cover{min-height:340px}  /* same 0,1,1 as the base rule above — order preserved */
 .sr-cover-art{
-  background:radial-gradient(48% 58% at 44% 60%,rgba(236,201,106,.4),transparent 72%),
+  /* SR-340 · wired. The winning rule for .sr-cover-art (this one loads later
+     than the one above at line ~964, same specificity) — the earlier rule's
+     own NEEDS-ART comment named 1100x900; the file actually supplied is
+     900x600, flagged in the SR-340 write-up, not resolved here. */
+  background:url('../assets/dashboard/clearing-tile.jpg') center/cover no-repeat,
+             radial-gradient(48% 58% at 44% 60%,rgba(236,201,106,.4),transparent 72%),
              linear-gradient(150deg,#0A0A10 0%,#1B1206 50%,#33240F 100%)}
 .sr-cover-scrim{background:linear-gradient(180deg,rgba(8,8,12,.24) 0%,transparent 32%,rgba(8,8,12,.78) 100%)}
 /* the cover melts into the ground on its right edge rather than butting a border */
@@ -1074,6 +1075,14 @@ body .sr-cover{min-height:340px}  /* same 0,1,1 as the base rule above — order
   -webkit-backdrop-filter:blur(14px) saturate(130%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 14px 34px rgba(0,0,0,.3);
 }
+/* SR-340 · "Where you left off" is the one .sr-begin-card--panel that gets a
+   photograph — the existing backdrop-filter:blur(14px) saturate(130%) above
+   was already built to sit over an image, unused until now. A flat
+   rgba(10,10,16,.62) gradient layers ON TOP of the photo (background-color
+   is always the BOTTOM layer, never a top wash, so a same-stop gradient
+   stands in for one) to keep the text as legible as the plain-ground
+   version had it. */
+.sr-begin-card--resume{background:linear-gradient(rgba(10,10,16,.62),rgba(10,10,16,.62)),url('../assets/dashboard/left-off-tile.jpg') center/cover no-repeat}
 .sr-begin-card--panel + .sr-begin-card--panel{margin-left:0}
 .sr-begin-card--panel .sr-begin-act{border-top-color:rgba(255,255,255,.1)}
 .sr-begin-card--panel .sr-dash-input,

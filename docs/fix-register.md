@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-339.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-340.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6836,7 +6836,9 @@ free, and used **SR-332**. This run checked `git log --grep` for SR-333 before a
 (background + `sleep`), found it free, and used **SR-337**. The asset-wiring run checked
 `git log --grep` for SR-338 and SR-339 before allocating (same method), found both free, and
 used **SR-338** for the asset/orphan work and **SR-339** for the token migration (separate
-commits, per instruction). Next run: allocate from **SR-340**.
+commits, per instruction). The dashboard-images run checked `git log --grep` for SR-340 before
+allocating (same method), found it free, and used **SR-340**. Next run: allocate from
+**SR-341**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
 
@@ -7334,3 +7336,106 @@ present, old `:root` block absent) via a direct `fetch` sweep, sidestepping the 
 entirely for that check. `tinycss2`-clean, esprima-clean, HTML tag-balanced on all six.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
+
+---
+
+**SR-340 · eight dashboard images wired; a real relative-URL bug caught wiring them; the last
+four orphans removed.**
+
+**All eight files confirmed** — real JPEG (`baseline` or `progressive`, never PNG-as-.jpg),
+correct dimensions per the brief, with one exception: **`hero-corridor.jpg` was NOT actually
+replaced.** Its modification date (Aug 19) predates every other file here by two weeks (the
+other seven are all 3–4 Sep), and its dimensions are 1500×499 — nowhere near the specified
+2400×900. This is the same file already wired since earlier this session, still sitting there
+under the same name. Reported, not silently re-wired to a file that doesn't exist — the `<img>`
+tag already correctly references `assets/dashboard/hero-corridor.jpg`; there is nothing to
+change in code, only a file that needs actually placing.
+
+**Three session banners wired** (`.sr-dash-bookpanel.b1/.b2/.b3` — Workshops, Premium 1:1, Next
+available/calendar) and the literal `<em>Banner photograph pending</em>` production note
+removed from all three `<span>` labels in the HTML — confirmed gone, not just visually covered.
+
+**Two Begin-Here tiles.** `clearing-tile.jpg` replaces `.sr-cover-art`'s gradient (card 1, "The
+Clearing") — its own `NEEDS-ART` comment named 1100×900, the file supplied is 900×600; flagged,
+not reconciled. `left-off-tile.jpg` needed a class that didn't exist: `.sr-begin-card--panel`
+is shared between card 2 ("Where you left off") and card 3 ("Start new"), so a background
+image on the shared class would have wrongly painted card 3 too. Added `sr-begin-card--resume`
+as a second, card-2-only modifier class (matching the `--media`/`--panel` naming already
+established for cards 1/2+3) and put the photo there instead, with a flat same-stop
+`linear-gradient` layered on top to preserve the legibility wash the plain-ground version had
+— `background-color` is always the bottom layer in CSS, never a top wash, so a solid-color
+gradient stands in for one. The card's existing `backdrop-filter:blur(14px) saturate(130%)`
+had been sitting there unused, built for exactly this and never fed an image before now.
+
+**Card 3's `<img id="srResultThumb">` is not an art slot.** `src=""` because nothing has been
+selected yet; `recommend()` (dashboard.html:1127) sets `thumb.src` to the chosen protocol's own
+cover once both fields are answered, and `onerror="this.hidden=true"` keeps it invisible until
+then. Confirmed this is the mechanism, not a placeholder — left untouched, per instruction.
+
+**Both record banners re-verified**, now with real files instead of the 404s SR-337/338 left
+as expected placeholders: both render at exactly 112px, both bleed via the negative margin
+SR-337 gave them, both `<img>`s confirmed `naturalWidth` matching their real dimensions.
+
+**Section 5 — confirmed the new file, not assumed.** Every one of the other seven files is
+readable at its stated size; `hero-corridor.jpg` is not new — see above, not repeated here.
+
+**Section 6 — the sweep, and what it actually found.** A regex sweep of every `style="...
+url(...)"` attribute across `dashboard.html` and all eight member pages found exactly one
+match: the SR-338 `a1` hero-slide fix itself, already corrected to single-quoted `url()`
+inside a double-quoted JS string, confirmed still correct. The SVG `url(#id)` fragment
+references in `member-heartmath.html`/`member-porges.html` are presentation attributes, not
+`style=`, and contain no string delimiter to collide with — safe by construction, not by luck.
+**One adjacent, more consequential finding, outside the literal sweep but the same bug class:**
+building the five wirings above as `url(...)` written directly inside
+`css/saferise-dashboard.css` used **document-relative paths** (`url('assets/sessions/…')`) —
+which a browser resolves against the *stylesheet's own location* (`/css/`) when the `url()`
+lives in an actual `.css` file, not the document, giving `/css/assets/sessions/…` — a 404,
+masked by the same gradient-fallback design that made SR-338's truncation bug invisible too.
+Caught by checking the network log's actual request URLs during verification, not by trusting
+`getComputedStyle` (which reported the *intended* value, "resolved" in a way that looked
+correct until the request itself was inspected). Fixed with `../assets/…` on all five. This is
+the same *class* of bug `js/saferise-track.js`'s own SR-261 comment already documents and
+named in detail (`"A relative url() inside a custom property is resolved against the
+STYLESHEET that consumes it, not the document that declared it"`) — recurring here in a
+different concrete form (a literal CSS-file `url()`, not a custom-property-in-an-inline-style
+one), caught the same way SR-261 says it was caught the first time: nothing errors, the
+fallback quietly stands in, and only checking the actual network request reveals it.
+
+**Section 7 — the four remaining orphans removed.** Re-confirmed before deleting, not assumed
+from the SR-338 report alone: "understanding" and "growth" (`css/saferise-dashboard.css`,
+former lines 243–247) still have no HTML section under either name, and `dashboard.html`
+still explicitly records "understanding" as dissolved. "evidence" and "expand your practice"
+(former lines 474, 476) still have nothing under them at all. All four headers removed.
+
+**Verified live**, Browser pane against the local static server, both themes, working around
+this session's own known stale-CSS-cache artifact each time (fetched fresh + injected, per the
+SR-339 precedent) rather than trusting a plain reload: `document.images` confirms
+`naturalWidth` > 0 for all newly-wired `<img>` elements (hero-corridor, state-banner,
+journal-banner) and `getComputedStyle(...).backgroundImage` resolves the real file for every
+background-image-based wiring (the three session banners, the Clearing tile, the resume tile)
+— cross-checked against the network log's actual request status, which is what caught the
+`/css/assets/…` bug above; `getComputedStyle` alone would have reported success. Both
+`state-banner.jpg` and `journal-banner.jpg` are genuinely abstract, near-black, blurred-light-
+photography — confirmed by opening each file directly, not inferred from how dark they look
+inline — and read consistently against both Midnight and Sunrise's mid-blue ground; nothing
+looked mismatched in either theme. No layout shift is possible by construction: every one of
+the eight images is either `position:absolute` (removed from flow entirely, matching the
+existing `.sr-dash-hero-art` precedent) or a `background-image` on an already fixed-size
+container (`height:112px`/`150px`, or `position:absolute;inset:0`) — none rely on the image's
+own intrinsic size to establish layout. `.sr-begin-card--resume` (the "Where you left off"
+tile) is currently `display:none` via the pre-existing, unrelated `SR_DEAD_VIEWS_ENABLED` flag
+— confirmed the wiring itself is correct by temporarily forcing it visible for the check, then
+reverting to the real deployed state rather than leaving the override in place. `tinycss2`-
+clean, esprima-clean, HTML tag-balanced.
+
+**Section 9 — every remaining unfilled slot:**
+| Slot | Path | Size |
+|---|---|---|
+| Journey band, tracks 3 & 4 | `assets/journey/t3-band.jpg`, `t4-band.jpg` | 1400×380 |
+| Hero slideshow, slides 2 & 3 | unnamed | 1600×520 each |
+| Clearing player video poster | unnamed | unspecified |
+| The Clearing card art (dead, overridden rule) | unnamed, 1100×900 named vs. 900×600 supplied | see above |
+| Frameworks tile ("Understanding") | unnamed | unspecified — typographic tile stands in |
+| Hero corridor | `assets/dashboard/hero-corridor.jpg` | 2400×900 — **file not actually replaced**, see above |
+
+*Status:* closed · *Raised and fixed:* 4 Sep 2026
