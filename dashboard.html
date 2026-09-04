@@ -831,7 +831,7 @@
   // sits in the Go Deeper library for that track.
   // SWAP when the band photographs exist — all four at 1400 x 380:
   //   assets/journey/t1-band.jpg · t2-band.jpg · t3-band.jpg · t4-band.jpg
-  var BAND = { };
+  var BAND = { 1:'assets/journey/t1-band.jpg', 2:'assets/journey/t2-band.jpg' };
 
   var JOURNEY = {
     1:{note:'Personal Transformation · run alone', title:'Experience it. Record what shifts.<br>Go deeper when you\u2019re ready.',
@@ -1976,8 +1976,12 @@
      meta:'Released Thursday', cta:'Play episode'}
   ];
   var HERO_ART = {
-    // NEEDS ART — each slide takes a 1600x520 photograph or poster frame
-    a1:'radial-gradient(70% 120% at 68% 46%,rgba(236,201,106,.34),transparent 66%),linear-gradient(110deg,#0B0B12,#241B10 62%,#3A2A12)',
+    // NEEDS ART — a2 and a3 still take a 1600x520 photograph or poster frame each.
+    // a1 is wired to assets/shared/four-steps.jpg (1600x500, ~20px short of the
+    // 520 slot height — object-fit:cover absorbs the difference invisibly). The
+    // gradient stays layered underneath as the same fallback it always was, in
+    // case the file ever moves or 404s.
+    a1:"url('assets/shared/four-steps.jpg') center/cover no-repeat,radial-gradient(70% 120% at 68% 46%,rgba(236,201,106,.34),transparent 66%),linear-gradient(110deg,#0B0B12,#241B10 62%,#3A2A12)",
     a2:'radial-gradient(70% 120% at 68% 46%,rgba(78,154,166,.3),transparent 66%),linear-gradient(110deg,#0B0B12,#14232A 62%,#1D3A42)',
     a3:'radial-gradient(70% 120% at 68% 46%,rgba(155,127,212,.3),transparent 66%),linear-gradient(110deg,#0B0B12,#1B1630 62%,#2C2350)'
   };

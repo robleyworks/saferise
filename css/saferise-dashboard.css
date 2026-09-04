@@ -9,13 +9,6 @@
    otherwise win, and it resolves the two-line margin system.
    ========================================================================== */
 
-/* ── outstanding-art markers carried over from rules removed in SR-049 ──
-   These sat inside the declaration blocks of orphaned rules.
-   The rules are gone; the artwork is still outstanding. */
- /* NEEDS ART — pangolin illustration. SWAP: <img src="assets/pangolin-clearing.jpg"> */
- /* NEEDS ART — pangolin illustration. SWAP: <img src="assets/pangolin-clearing.jpg"> */
- /* NEEDS ART — SWAP: poster frame 1000x625, subject low-left */
-
 /* ============ shared tokens — v29 / reader, verbatim ============
    The four track accents are NOT defined here. They live in
    saferise-system.css as --sr-track01..04 and are the single source of
@@ -220,9 +213,6 @@ body .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color
 .sr-dash-empty{border:1px dashed var(--hair);border-radius:12px;padding:34px 30px;max-width:520px}
 .sr-dash-empty h3{margin-bottom:10px}
 .sr-dash-empty p{font-size:13.5px;color:var(--text2);line-height:1.75;margin-bottom:18px}
-
-/* ============ four steps — pfimg / pfcols pattern from v29 ============ */
-/* NEEDS ART — no band photograph for Tracks 02/03 yet; tonal stand-in keeps the structure legible */
 
 /* ============ journey triptych — .journey / .jcols / .jopt from v29 ============ */
 .sr-dash-jpanel{padding:0;overflow:hidden}
@@ -489,7 +479,9 @@ body.reading #srLibrary{margin-top:22px}
 .sr-dash-arch{display:grid;grid-template-columns:1.35fr 1fr;gap:20px}
 .sr-dash-archmain{background:var(--band);border:1px solid var(--hair);border-radius:14px;overflow:hidden}
 .sr-dash-archbanner{position:relative;height:112px;margin:0 calc(var(--pad) * -1);
-  /* NEEDS ART — SWAP: <img src="assets/dashboard/state-banner.jpg"> at 1200x300 */
+  /* NEEDS ART — SWAP: <img src="assets/dashboard/state-banner.jpg"> at 1400x220 —
+     corrected from the original 1200x300 (4:1): the rendered container is
+     ~712x112 (~6.35:1) at 1440px, and 1400x220 (~6.36:1) is the closer match. */
   background:radial-gradient(60% 130% at 24% 60%,rgba(212,168,67,.24),transparent 62%),
              linear-gradient(102deg,#0C0C14,#141019 46%,#231A10 100%);
   border-bottom:1px solid var(--hair);display:flex;align-items:flex-end}

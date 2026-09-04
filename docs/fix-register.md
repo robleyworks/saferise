@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-337.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-338.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6833,7 +6833,9 @@ free, and used **SR-332**. This run checked `git log --grep` for SR-333 before a
 (background + `sleep`), found it free, and used **SR-335**. The footer-extraction run checked
 `git log --grep` for SR-336 before allocating (same method), found it free, and used
 **SR-336**. The dashboard-alignment run checked `git log --grep` for SR-337 before allocating
-(background + `sleep`), found it free, and used **SR-337**. Next run: allocate from **SR-338**.
+(background + `sleep`), found it free, and used **SR-337**. The asset-wiring run checked
+`git log --grep` for SR-338 before allocating (same method), found it free, and used
+**SR-338** for the asset/orphan work. Next run: allocate from **SR-339**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
 
@@ -7223,5 +7225,70 @@ banner's own height and bleed were confirmed correct independently instead (both
 112px).** Confirmed exactly two new 404s in the console (`state-banner.jpg`,
 `journal-banner.jpg`), both expected and reported, not fixed. Zero other console errors.
 `tinycss2`-clean, esprima-clean.
+
+*Status:* closed · *Raised and fixed:* 3 Sep 2026
+
+---
+
+**SR-338 · three unused assets wired, three orphaned "NEEDS ART" markers removed, four more
+found and reported.**
+
+**Journey band.** `BAND` was `{ }`; set to `{1:'assets/journey/t1-band.jpg',
+2:'assets/journey/t2-band.jpg'}`. Both files confirmed exactly 1400×380 on disk — the size the
+comment names — so `.sr-dash-jband img{width:100%;height:auto}` needed no change. `t3`/`t4`
+stay absent from the map rather than getting empty placeholder entries: `renderJourney()`'s own
+ternary (`BAND[n] ? '<img…>' : '<div class="sr-dash-jplaceholder…' `) already treats a missing
+key as "show the pending placeholder," which is the correct behavior for a track with no
+photograph yet — an empty-string or `null` entry would only add a case that means the same
+thing a missing key already means.
+
+**Hero slideshow, slide `a1`.** Wired `assets/shared/four-steps.jpg` as an additional
+`background-image` layer ahead of the two existing gradients (`url(...) center/cover no-repeat,
+<gradient>, <gradient>`) — the gradients stay in place as the same fallback they always were,
+now genuinely reachable if the file ever moves. **Caught and fixed during verification, not in
+the original edit:** the first version wrote `url("...")` — double quotes — into a value that
+gets concatenated into `style="background:' + HERO_ART[b.art] + '"`, an HTML attribute already
+delimited by double quotes. The embedded `"` closed the attribute early, truncating the whole
+declaration to `style="background:url("` and silently breaking every slide, not just `a1` (the
+`style` attribute itself was cut off, dropping whatever came after in the same string too).
+Fixed by switching the JS string to double quotes and the CSS `url()` to single quotes
+(`"url('...')..."`), then re-verified: `getComputedStyle` resolves the real file, and it 200s
+over the network, not 404s. Slides `a2`/`a3` still take a 1600×520 photograph or poster frame
+each — reported, not touched; nothing in the reuse check names a match for either.
+
+**Comment correction.** The state banner's `NEEDS ART` comment moved from the (real, since
+SR-337) 1200×300 to **1400×220**, matching the ~6.35:1 the container actually renders at
+1440px — noted directly in the comment why, so the next person reading it doesn't have to
+re-derive it. The journal banner's 1000×260 is untouched, confirmed close enough not to need
+correcting.
+
+**Orphans removed** (all three named, all in `css/saferise-dashboard.css`): the pangolin-
+illustration marker (duplicated, lines 15–16) and the 1000×625 poster-frame marker (line 17) —
+both explicitly labeled in the file's own comment as surviving rules SR-049 already deleted —
+plus the "four steps — pfimg/pfcols pattern from v29" section header and its lone `NEEDS ART`
+line (former line 225), which had no CSS rules under it at all.
+
+**Four more found while checking, not asked for, not removed — reported instead, matching
+SR-336/SR-337's own pattern of not silently expanding a fix's scope:**
+- **"understanding" and "growth"** (former lines 243–247) are *also* orphaned in the identical
+  way — `NEEDS ART` comment, nothing else under the header. `grep` for "growth" anywhere in
+  `dashboard.html`, case-insensitive, returns nothing. "Understanding" is worse than merely
+  unstyled: `dashboard.html` itself has a comment saying the section was **dissolved** ("the
+  four portals now sit as one line above the FAQ") — the CSS header describes a section the
+  HTML explicitly records removing.
+- **"evidence" and "expand your practice"** (former lines 474, 476) are section headers with
+  *nothing at all* under them, not even a `NEEDS ART` line — no matching HTML section exists
+  under either name; "evidence" only appears in unrelated prose elsewhere on the page.
+
+**Verified live**, Browser pane against the local static server: track 1 and track 2 of the
+journey section both render a real `<img>` (confirmed via `srJBand.innerHTML`, not assumed from
+the `BAND` map alone); switching to track 3 correctly still shows the "band photograph pending"
+placeholder. The hero slideshow's `a1` slide's `background-image` resolves to the real file
+(confirmed via `getComputedStyle`) and the request 200s. Zero unexpected console errors —
+the two pre-existing, already-reported `state-banner.jpg`/`journal-banner.jpg` 404s from
+SR-337 are the only ones present, accumulating harmlessly across this session's repeated
+navigations in the same tab (a known artifact of this test harness's console log, not a growing
+list of real errors — confirmed by cross-checking the network log's own per-request status
+each time, not the raw console count). `tinycss2`-clean, esprima-clean, HTML tag-balanced.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
