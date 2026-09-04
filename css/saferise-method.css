@@ -126,6 +126,11 @@ body.rd-soft .sr-fw-reg--int:before{background:#BFE4EA}
   place-items:center;align-content:center;text-align:center;font-size:8.5px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--text3);line-height:1.9;padding:18px}
 .sr-fw-tileart b{display:block;color:var(--gold);font-weight:700;font-size:9px}
+/* SR-341 · the six masthead tiles landed — image fills the inner circle,
+   solid hairline replacing the dashed needs-art ring that only ever meant
+   "nothing here yet." */
+.sr-fw-tileart:has(img){border-style:solid;border-color:var(--hair);padding:0}
+.sr-fw-tileart img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
 
 /* ══════════ SECTIONS ══════════
    Eyebrow + h2 only. No third line. */
@@ -383,10 +388,14 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
    same six tiles the framework mastheads need. */
 .sr-mi-cardtile{width:88px;height:88px;border-radius:50%;border:1px solid var(--hair);
   background:var(--band2);display:grid;place-items:center;text-align:center;font-size:8px;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--text3);line-height:1.5;margin-bottom:18px}
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text3);line-height:1.5;margin-bottom:18px;
+  overflow:hidden}
 .sr-mi-card--int .sr-mi-cardtile{border-color:rgba(78,154,166,.42)}
 .sr-mi-cardtile b{color:var(--gold);font-weight:700;display:block}
 .sr-mi-card--int .sr-mi-cardtile b{color:var(--teal)}
+/* SR-341 · the six framework tiles (Art region A) landed — image fills the
+   circle, cropped, in place of the "Tile 0N 200×200" text placeholder. */
+.sr-mi-cardtile img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
 /* SR-333 · a rectangular hero image for a card, where .sr-mi-cardtile above is
    a small circular NEEDS-ART tile sized for the six framework icons. The
    coming-soon tracks already have real, landscape photographs (assets/coming/,

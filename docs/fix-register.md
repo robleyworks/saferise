@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-341.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-342.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6842,7 +6842,11 @@ allocating (same method), found it free, and used **SR-340**. The track-nav run'
 session, attributed to a concurrent GitHub Desktop process); rather than retry indefinitely,
 it cross-checked this register's own two pointers instead — the "Highest ID issued" note
 above and this paragraph's own trailing "Next run" sentence — both agreeing on **SR-341**,
-and used it. Next run: allocate from **SR-342**.
+and used it. The framework-images run checked `git log --oneline` for the true HEAD (this
+pass's own rule: allocate from `git log --grep='SR-'`, never from this register's own note —
+`git status`/`git add`/`git commit` were locked out for an extended period by a stuck
+GitHub Desktop fetch, but `git log` itself still answered, confirmed SR-341 as the highest
+commit tag with no SR-342 anywhere, and used **SR-342**. Next run: allocate from **SR-343**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
 
@@ -7531,5 +7535,101 @@ nav re-themes correctly on arrival. `main#main`'s `padding-top:110px` confirmed 
 nav's own live-measured height (~97–98px) at both mobile and desktop widths — no overlap, no
 gap. `tinycss2`-clean, esprima-clean (`js/saferise-nav.js` and the edited `js/saferise-track.js`),
 HTML tag-balanced on all three track pages.
+
+*Status:* closed · *Raised and fixed:* 4 Sep 2026
+
+---
+
+**SR-342 · the fourteen framework images (`assets/frameworks/`) discovered, mapped, and
+wired — three placements, not two.** No filename list was supplied; the fourteen files
+were grouped by measured dimension (`sips -g pixelWidth -g pixelHeight`), not by name:
+six 400×400 PNGs, six 2680×720 JPEGs, one 1340×300 JPEG, one 1340×420 JPEG — 6/6/1/1,
+matching the expected count with nothing left over and nothing missing.
+
+**Placement found by grep, not assumed.** Every slot but one already existed as a
+commented-out `<img class="sr-fw-bandart" src="assets/method/…">` beside a
+`<span class="sr-fw-needsart">` placeholder, which `css/saferise-method.css`'s own
+comment says gets "removed the moment a real asset lands" — so each wiring both
+uncommented the `<img>` (repointed to the real `assets/frameworks/…` path, since moving
+the delivered files to match a path written before they existed would have been
+motion for its own sake) and deleted the needsart span, per that file's own stated rule:
+
+| Region | Count | Slot | Spec vs delivered |
+|---|---|---|---|
+| B · section band | 6 | each `member-*.html`, `.sr-fw-band` | 1340×360 spec'd, 2680×720 delivered — exactly 2×, retina |
+| index hero | 1 | `member-frameworks.html`, `.sr-mi-hero` | 1340×300, exact match |
+| guided-meditation band | 1 | `member-frameworks.html`, `.sr-mi-vehart` | 1340×420, exact match |
+| A · masthead tile | 6 | each `member-*.html`, `.sr-fw-tile`/`.sr-fw-tileart` | 200×200 spec'd, 400×400 delivered — 2×, retina |
+| index card tile (A reused) | 6 | `member-frameworks.html`, `.sr-mi-cardtile` | same six files again — `css/saferise-method.css`'s own "ART REGIONS" comment names this as region D, "the 200×200 tile again … on the pager and the index cards. Zero new art" |
+
+**The masthead tile (region A) was not in the first pass.** The initial grep of each
+`member-*.html`'s first 60 lines, done to locate a "second tile use" the CSS comment
+implied, found nothing — the masthead sits lower in the file and isn't named
+`masthead` in any class. It surfaced only during live verification, screenshotting
+`member-porges.html` and finding its own header still reading "NEEDS ART · 200×200 ·
+GOLD SYMBOL TILE" in a dashed circle beside the page's h1. Re-grepped precisely
+(`.sr-fw-tile`/`.sr-fw-tileart`) and found identical on all six pages. Wired the same
+six files a second time, matched by page rather than by a `data-fw` attribute (each
+page has exactly one). `.sr-fw-tileart`'s dashed gold border was itself the "needs
+art" signal — left in place, a real photograph would have rendered inside a "still
+pending" ring — so `.sr-fw-tileart:has(img){border-style:solid;border-color:var(--hair)}`
+was added rather than leaving it. `.sr-mi-cardtile` needed the equivalent treatment for
+the image itself (`object-fit:cover;border-radius:50%`) but no border fix — that one
+never carried a dashed ring, being closer in weight already.
+
+**The "pager" reuse the CSS comment also names does not have a slot.** Each
+`member-*.html`'s own `.sr-fw-pager` is a single "Back to all six frameworks" link —
+`<span class="sr-fw-pagertile">All<br>six</span>` — not a per-framework item any one of
+the six delivered tiles maps onto. Left untouched and reported rather than invented.
+
+**Tile mapping is by `data-fw`, not by the "Tile 0N" label.** `member-frameworks.html`'s
+six cards are grouped into three register bands (peer-reviewed / clinical practice /
+interpretive) and the visible "Tile 0N" placeholder numbers followed BAND position, not
+`FRAMEWORKS` ordinal — Tile 03 sits on the `distance` card (`data-fw="distance"`,
+`href="member-kross.html"`, ordinal 4), Tile 04 on `mate` (ordinal 3). Mapped by
+`data-fw`/`href` throughout, confirmed against `content/tracks.js`'s own `FRAMEWORKS`
+object, never by reading the tile numbers in visual order.
+
+**⚠ Naming constraint — checked, clean, nothing stopped.** None of the fourteen
+filenames carry "dispenza" — the sixth framework's files are named `kross`, matching
+`member-kross.html` and `FRAMEWORKS.distance.page` (the live data key is `distance`,
+not `dispenza` or `kross`; `kross` is this repo's established page/file-naming
+convention for that framework, same as the other five). `grep -ric "dispenza"` across
+the repo (`.git` excluded) returns 31 matches across `content/tracks.js` (3),
+`docs/fix-register.md` (~15), `RUN-E-REPORT.md`, `docs/runs/*.md` and
+`docs/reference/portal-personal-target.html` (2) — every one is a comment or a
+documentation file narrating the historical SR-118 `dispenza → distance` rename, not a
+member-visible string. `FRAMEWORKS` itself carries zero `dispenza` keys. No filename,
+alt text or caption written for this pass names it either. Nothing to stop for.
+
+**Alt text.** Written after viewing all fourteen files directly, describing only what
+is visually present — line colours, shapes, composition for the twelve abstract
+graphics; literal scene description for the two photographs (a lit shelf with books
+and a vase; a woman with headphones on a couch at night). No framework claim
+("polyvagal theory", "cardiac coherence") appears in any alt attribute, matching the
+instruction's own worked example.
+
+**Verified live**, Browser pane against the local static server. `[...document.images]
+.filter(i => i.src.includes('frameworks'))` on `member-frameworks.html` and a
+`fetch`-driven `new Image()` load check against all fourteen files directly (used
+after the Browser pane itself went into a stuck-hidden state mid-session, the same
+`document.hidden`-true artifact this session has hit before — `naturalWidth`/`naturalHeight`
+checks run through a real `Image()` load event rather than a live DOM read are
+unaffected by that) confirm all fourteen files return their correct measured
+dimensions with no load failure. `fetch` of all six `member-*.html` pages' raw HTML via
+`DOMParser` confirms each page's own masthead tile and band `src` point at the file
+matching that page's own framework — no cross-wiring. Two full screenshots (the index
+hero + all six card tiles; the Porges masthead) taken before the pane went hidden
+confirm the solid-ring fix reads correctly with no leftover dashed border under a real
+image. Zero `sr-fw-needsart`/"Needs art" strings remain in any of the seven edited
+files. `tinycss2`-clean on `css/saferise-method.css`. An HTML-balance check flagged an
+identical `</div>`/`</section>` mismatch on all six `member-*.html` pages — confirmed
+via `git diff` to be **pre-existing in the template**, unrelated to this pass: this
+pass's own diff on each file is a strict, self-contained substitution (a comment and a
+`<span>…</span>` removed, one `<img>` added), which cannot change tag balance by
+construction. Reported, not fixed — out of this pass's scope.
+
+**Not done, reported:** the `.sr-fw-pager` "all six" reuse the CSS comment names has no
+real slot to wire, as above.
 
 *Status:* closed · *Raised and fixed:* 4 Sep 2026
