@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-336.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-337.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6832,7 +6832,8 @@ free, and used **SR-332**. This run checked `git log --grep` for SR-333 before a
 **SR-334**. The rail-extraction run checked `git log --grep` for SR-335 before allocating
 (background + `sleep`), found it free, and used **SR-335**. The footer-extraction run checked
 `git log --grep` for SR-336 before allocating (same method), found it free, and used
-**SR-336**. Next run: allocate from **SR-337**.
+**SR-336**. The dashboard-alignment run checked `git log --grep` for SR-337 before allocating
+(background + `sleep`), found it free, and used **SR-337**. Next run: allocate from **SR-338**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
 
@@ -7176,5 +7177,51 @@ to this fix. Zero console errors otherwise. esprima-clean (2 script blocks — t
 call plus each page's own pre-existing script — on every page), zero `tinycss2` errors across
 every inline `<style>` block and the new `css/saferise-footer.css`, HTML tag-balanced on all
 nine.
+
+*Status:* closed · *Raised and fixed:* 3 Sep 2026
+
+---
+
+**SR-337 · dashboard middle-row alignment, and three art slots wired ahead of the files.**
+Both rules live in `css/saferise-dashboard.css` only — not duplicated across files the way the
+rail and footer were (checked, per instruction, before assuming). `.sr-dash-archbanner` (the
+"state" card — its class name says `arch`, short for the reflection-archive wrapper around it,
+but the HTML's own `<!-- 2 · state -->` comment and the founder's own description agree it is
+the state card) was `height:120px`; `.sr-dash-archbanner--journal` was `height:104px`. Both set
+to **112px**. The state banner also gained `margin:0 calc(var(--pad) * -1)`, the same bleed the
+journal banner already had — it did not have one before, which was the other half of the
+misalignment.
+
+**A naming collision resolved with the founder mid-task, not guessed at.** The state banner's
+own `NEEDS ART` comment already named `assets/archive-banner.jpg`; Section 3's brief separately
+listed both `assets/dashboard/state-banner.jpg` and `assets/archive-banner.jpg` as if they were
+two different slots, for an element that only has one. Asked directly: `state-banner.jpg` is
+the name going forward — it matches the `assets/dashboard/` convention `journal-banner.jpg`
+already uses, `archive-banner.jpg` sits loose at the assets root and predates that convention.
+Confirmed `assets/archive-banner.jpg` does not exist on disk (nothing to move), so this is a
+comment update, not a file relocation. The comment now reads
+`assets/dashboard/state-banner.jpg`; `archive-banner.jpg` is retired, referenced nowhere.
+
+**Three slots wired as real `<img>` tags**, matching the rest of the codebase's own established
+pattern (`.sr-dash-hero-art`): `position:absolute;inset:0` with a negative `z-index` so the
+element's existing gradient stays the fallback background, and `onerror="this.style.opacity=0"`
+so a 404 shows the gradient cleanly rather than a broken-image icon. `assets/dashboard/state-
+banner.jpg` and `assets/dashboard/journal-banner.jpg` are now referenced; both 404 (confirmed —
+neither file exists yet, exactly as the brief said to expect). `assets/archive-banner.jpg` is
+NOT referenced anywhere, per the resolution above.
+
+**Verified live**, Browser pane against the local static server, at both 1440px and 1024px:
+both banners measure exactly 112px at both widths. At 1440px the two cards sit in the same
+grid row (`.sr-dash-arch{grid-template-columns:1.35fr 1fr}`) and start at the identical `top`
+(confirmed via `getBoundingClientRect`, not eyeballed) — their first real content
+(`.sr-dash-arcsvg` vs `.sr-dash-entryhead .eyebrow`) lands within 2px of each other, the small
+remainder being the ordinary difference between an SVG element's own box and a text line's,
+not a margin/padding mismatch. **At 1024px the cards stack — this is a pre-existing
+`@media(max-width:1100px){.sr-dash-arch{grid-template-columns:1fr}}` breakpoint, unrelated to
+this fix — so "the same vertical line" is no longer a side-by-side comparison there; each
+banner's own height and bleed were confirmed correct independently instead (both still exactly
+112px).** Confirmed exactly two new 404s in the console (`state-banner.jpg`,
+`journal-banner.jpg`), both expected and reported, not fixed. Zero other console errors.
+`tinycss2`-clean, esprima-clean.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026

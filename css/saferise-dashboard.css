@@ -488,13 +488,18 @@ body.reading #srLibrary{margin-top:22px}
 /* ============ reflection archive ============ */
 .sr-dash-arch{display:grid;grid-template-columns:1.35fr 1fr;gap:20px}
 .sr-dash-archmain{background:var(--band);border:1px solid var(--hair);border-radius:14px;overflow:hidden}
-.sr-dash-archbanner{position:relative;height:120px;
-  /* NEEDS ART — SWAP: <img src="assets/archive-banner.jpg"> at 1200x300 */
+.sr-dash-archbanner{position:relative;height:112px;margin:0 calc(var(--pad) * -1);
+  /* NEEDS ART — SWAP: <img src="assets/dashboard/state-banner.jpg"> at 1200x300 */
   background:radial-gradient(60% 130% at 24% 60%,rgba(212,168,67,.24),transparent 62%),
              linear-gradient(102deg,#0C0C14,#141019 46%,#231A10 100%);
   border-bottom:1px solid var(--hair);display:flex;align-items:flex-end}
 .sr-dash-archbannerin{padding:0 0 16px}
 .sr-dash-archbannerin p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:16px;color:var(--text2);line-height:1.5}
+/* SR-337 · matches .sr-dash-hero-art's own pattern (position:absolute;inset:0;
+   negative z-index) — the banner's own gradient stays the fallback, painting
+   underneath, and shows through cleanly (no broken-image icon) once the img's
+   onerror handler hides it. */
+.sr-dash-archbannerart{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
 .sr-dash-archin{padding:24px 0 26px}
 .sr-dash-archkick{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:16px}
 /* SR-085 · the HTML [hidden] attribute does not reach SVG children — the UA
@@ -672,7 +677,7 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
 /* journal panel takes the same banner treatment as the archive */
 .sr-dash-tpanel--banner{padding-top:0;overflow:hidden}
 .sr-dash-tpanel--banner > *:not(.sr-dash-archbanner){padding-left:0;padding-right:0}
-.sr-dash-archbanner--journal{margin:0 calc(var(--pad) * -1) 22px;height:104px;
+.sr-dash-archbanner--journal{margin:0 calc(var(--pad) * -1) 22px;height:112px;
   /* NEEDS ART — SWAP: <img src="assets/dashboard/journal-banner.jpg"> at 1000x260 */
   background:radial-gradient(60% 130% at 74% 55%,rgba(155,127,212,.22),transparent 62%),
              linear-gradient(102deg,#0C0C14,#151125 46%,#221B33 100%)}
