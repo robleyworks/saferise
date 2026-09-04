@@ -3058,6 +3058,46 @@ body.sr-breath .sr-player.is-next .audio-play{
 }
 
 /* ═════════════════════════════════════════════════════════════
+   PART C½ · PUBLIC-PAGE TOKENS (SR-338)
+
+   Six self-contained public pages — about.html, anxiety-reset.html,
+   coming-soon.html, live-sessions.html, method.html, plans.html — each
+   carried their own byte-identical copy of this token block in their own
+   inline <style>. SR-336 confirmed all six matched exactly before this was
+   written; migrating meant moving one already-agreed block, not
+   reconciling six different ones.
+
+   Scoped to .sr-public, not :root, for the same reason PART C's own
+   comment gives for .sr-tp and PART D's gives for .sr-home: index.html
+   already has its own unscoped :root (--bg, --card, --primary, --text2…)
+   that the reader, resource modals and every .prog-overlay still depend
+   on, and dashboard.html/the three track pages define their own,
+   differently-valued tokens too. A bare :root block here would repaint
+   all of it. Each of the six pages adds class="sr-public" to <body> and
+   nothing else needs to change — every existing rule on those pages
+   already reads var(--bg)/var(--gold)/etc unscoped, and a custom property
+   set on an ancestor is visible to every descendant regardless of what
+   selector the descendant's own rule uses. */
+.sr-public{
+  --bg:#0A0A0F; --bg2:#0E0E15; --bg3:#13131C;
+  --card:linear-gradient(145deg,rgba(24,24,34,.86),rgba(14,14,21,.92));
+  --hair:rgba(245,237,216,.09);
+  --hair2:rgba(245,237,216,.16);
+  --text:#F5EDD8; --text2:#9C9AA4; --text3:#6A6874;
+  --gold:#D4A843; --gold-lt:#E8C877; --gold-dim:rgba(212,168,67,.42);
+  --t1:#C97B5A; --t2:#7A8FA8; --t3:#6E9080;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --wrap:1180px;
+}
+[data-theme="sunrise"] .sr-public{
+  --bg:#465578; --bg2:#4D5C82; --bg3:#54648C;
+  --card:linear-gradient(145deg,rgba(90,106,150,.9),rgba(77,92,130,.94));
+  --hair:#8492B4; --hair2:rgba(255,253,248,.3);
+  --text:#FFFDF8; --text2:#DDE3F0; --text3:#AEB7CE;
+  --gold:#FFD894; --gold-lt:#FFE8B6; --gold-dim:rgba(255,216,148,.42);
+}
+
+/* ═════════════════════════════════════════════════════════════
    PART D · HOMEPAGE NAV + HERO + FILM + DOORS + TRACK PANELS (SR-332)
    index.html's #main-nav (legacy, inline-styled) and .sr-home content
    are both replaced by this block, lifted from home-v84.html — the

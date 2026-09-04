@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-338.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-339.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6834,8 +6834,9 @@ free, and used **SR-332**. This run checked `git log --grep` for SR-333 before a
 `git log --grep` for SR-336 before allocating (same method), found it free, and used
 **SR-336**. The dashboard-alignment run checked `git log --grep` for SR-337 before allocating
 (background + `sleep`), found it free, and used **SR-337**. The asset-wiring run checked
-`git log --grep` for SR-338 before allocating (same method), found it free, and used
-**SR-338** for the asset/orphan work. Next run: allocate from **SR-339**.
+`git log --grep` for SR-338 and SR-339 before allocating (same method), found both free, and
+used **SR-338** for the asset/orphan work and **SR-339** for the token migration (separate
+commits, per instruction). Next run: allocate from **SR-340**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
 
@@ -7290,5 +7291,46 @@ SR-337 are the only ones present, accumulating harmlessly across this session's 
 navigations in the same tab (a known artifact of this test harness's console log, not a growing
 list of real errors — confirmed by cross-checking the network log's own per-request status
 each time, not the raw console count). `tinycss2`-clean, esprima-clean, HTML tag-balanced.
+
+*Status:* closed · *Raised and fixed:* 3 Sep 2026
+
+---
+
+**SR-339 · the public-page token migration.** Approved and executed: a new `.sr-public` scope
+in `css/saferise-system.css`, following the `.sr-home`/`.sr-tp` pattern those two already
+established (scoped, not `:root`, for the identical reason both of their own comments already
+give — `index.html`'s existing unscoped `:root`, and `dashboard.html`'s/the three track pages'
+own differently-valued tokens, would all repaint under a bare `:root` block). The token values
+are the exact block SR-336 already confirmed byte-identical across all six pages — moving one
+already-agreed block, not reconciling six different ones.
+
+**Six pages migrated:** `about.html`, `anxiety-reset.html`, `coming-soon.html`, `plans.html`,
+`method.html`, `live-sessions.html`. Each: `<body>` → `<body class="sr-public">`,
+`<link rel="stylesheet" href="css/saferise-system.css">` added (after the page's own `</style>`,
+matching the established "system CSS loads last" convention), and the page's own duplicated
+`:root`/`[data-theme="sunrise"]` block removed, replaced with a one-line comment pointing at
+where it went. Nothing else on any of the six pages changed — every existing rule already reads
+`var(--bg)`/`var(--gold)`/etc. unscoped, and a custom property set on `<body>` is visible to
+every descendant regardless of what selector a given rule uses, so the hundreds of other rules
+on each page needed no edits at all.
+
+**Left inline, per instruction:** each page's own `<style>html,body{background:#0A0A0F}</style>`
+flash-prevention snippet — deliberate, predates the token system, exists specifically so the
+browser has something to paint before any stylesheet downloads.
+
+**Verified live**, Browser pane against the local static server. First reading showed `--bg`
+resolving to an empty string on `about.html` despite `class="sr-public"` and the stylesheet
+link both being present and the link 200-ing — this session's own previously-documented
+persistent sub-resource cache (serves a stale, pre-edit version of a CSS file per-URL across
+navigations, confirmed elsewhere in this session's own history) rather than a real defect:
+confirmed by `fetch('css/saferise-system.css',{cache:'no-store'})` returning the correct,
+current `.sr-public` rule from the server every time, and conclusively by removing the cached
+`<link>` and injecting the freshly-fetched CSS text directly into a `<style>` tag in the live
+page — `--bg` immediately resolved to `#0A0A0F`, `.nav`'s computed background matched the
+correct token-derived color, and toggling to Sunrise correctly flipped `--bg` to `#465578` on
+both `<body>` and the SR-336 footer's own `.sr-pf-foot` in the same pass. All six pages'
+markup confirmed structurally identical after migration (`sr-public` present, system-css link
+present, old `:root` block absent) via a direct `fetch` sweep, sidestepping the cache issue
+entirely for that check. `tinycss2`-clean, esprima-clean, HTML tag-balanced on all six.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026

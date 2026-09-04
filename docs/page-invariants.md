@@ -88,6 +88,21 @@ this is deliberate, not an oversight to "fix" toward the public look.
   `.prog-overlay`), both untouched; see the SR-336 fix-register entry for
   the resulting stacked-footer state there, reported rather than
   resolved.
+
+  **SR-339 · the six self-contained public pages' own tokens are no
+  longer six copies either.** `.sr-public` in `css/saferise-system.css`
+  carries the `--bg`/`--gold`/`--hair`/etc. block SR-336 already confirmed
+  byte-identical across `about.html`, `anxiety-reset.html`,
+  `coming-soon.html`, `live-sessions.html`, `method.html` and `plans.html`
+  — each now adds `class="sr-public"` to `<body>` and loads
+  `css/saferise-system.css`, rather than carrying its own copy of the
+  block. Scoped for the same reason `.sr-home`/`.sr-tp` are: a bare
+  `:root` would repaint `index.html`'s own unscoped tokens and
+  `dashboard.html`'s/the three track pages' differently-valued ones.
+  Each page's own `<style>html,body{background:…}</style>`
+  flash-prevention snippet stays inline, deliberately — it predates the
+  token system and exists so the browser has something to paint before
+  any stylesheet arrives.
   **`member-` is now this repo's convention for a member-surface page
   whose name would otherwise collide with, or be confused for, a
   public one** — the rename that prompted it: `method.html` (public) and
