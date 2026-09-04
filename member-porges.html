@@ -39,6 +39,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/saferise-method.css">
+<link rel="stylesheet" href="css/saferise-rail.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -46,15 +47,7 @@
 <!-- ═══ ICON RAIL — verbatim from the dashboard. /method is the active route.
      SR-075 · library, journal, record and laboratory were removed from the
      dashboard by SR-068 and SR-069; this copy kept linking to all four. ═══ -->
-<nav class="sr-dash-navrail" aria-label="Sections">
-  <span class="sr-dash-navrailmark">◈</span>
-  <button class="sr-dash-navrailbtn" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></button>
-  <button class="sr-dash-navrailbtn on" data-route="method"><svg viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M12 12c0 4-3 6-6 6M12 12c0 4 3 6 6 6"/><circle cx="12" cy="3" r="1.6"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg><span>Where the method comes from</span></button>
-  <button class="sr-dash-navrailbtn" data-route="coaching"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/></svg><span>Sessions &amp; workshops</span></button>
-  <div class="sr-dash-navrailfoot">
-    <button class="sr-dash-navrailbtn" data-route="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.2H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/></svg><span>Account &amp; plan</span></button>
-  </div>
-</nav>
+<nav class="sr-dash-navrail" id="srRail" aria-label="Sections"></nav>
 
 <main id="main" class="shell">
 
@@ -462,45 +455,8 @@
 
 </main>
 
-<script>
-(function(){
-  // ── reading mode, shared with the dashboard and reader (body.rd-soft) ──
-  var THEME_KEY = 'sr-theme';
-  function setTheme(mode){
-    document.body.classList.toggle('rd-soft', mode === 'sunrise');
-    document.querySelectorAll('[data-theme]').forEach(function(b){
-      b.classList.toggle('on', b.getAttribute('data-theme') === mode);
-    });
-    try{ sessionStorage.setItem(THEME_KEY, mode); }catch(e){}
-  }
-  document.querySelectorAll('[data-theme]').forEach(function(b){
-    b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme')); });
-  });
-  var saved = 'midnight';
-  try{ saved = sessionStorage.getItem(THEME_KEY) || 'midnight'; }catch(e){}
-  setTheme(saved);
-
-  // ── rail routes ──
-  // The dashboard resolves every rail route through openRoute(), which opens a
-  // route modal that only exists in dashboard.html. These pages carry no such
-  // modal, so the rail leaves for the dashboard and lets it answer. /method is
-  // the page you are already on.
-  //
-  // SR-104 · leaving is not arriving. 'coaching' and 'account' matched nothing
-  // in PAGES and fell through to a bare `dashboard.html`, so the member landed
-  // on the dashboard with neither the Sessions view nor Account open — the
-  // control named a destination it did not reach. The route now travels in the
-  // hash and dashboard.html runs openRoute() with it on arrival.
-  var PAGES = { method: 'member-frameworks.html', dashboard: 'dashboard.html' };
-  document.querySelectorAll('.sr-dash-navrailbtn').forEach(function(b){
-    b.addEventListener('click', function(){
-      var key = b.getAttribute('data-route');
-      if(key === 'method') return;                 // already here
-      if(PAGES[key]){ window.location.href = PAGES[key]; return; }
-      window.location.href = 'dashboard.html#route=' + encodeURIComponent(key);
-    });
-  });
-})();
-</script>
+<script src="js/saferise-access.js"></script>
+<script src="js/saferise-rail.js"></script>
+<script>SafeRiseRail.render('method');</script>
 </body>
 </html>

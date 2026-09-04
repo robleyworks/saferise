@@ -1,0 +1,72 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   SafeRise — shared member nav rail · SR-335
+
+   The ONE source of the .sr-dash-navrail* rules. Previously duplicated in
+   css/saferise-dashboard.css (dashboard.html only) and css/saferise-method.css
+   (member-frameworks.html and the six member-* pages), and already drifted
+   before this file existed: SR-333's .sr-dash-navrailfoot divider rule
+   landed only in saferise-dashboard.css, so patching Log out into the six
+   member-* pages by hand would have rendered it without its divider there.
+
+   Loaded by every page that calls SafeRiseRail.render() (js/saferise-rail.js):
+   dashboard.html, member-frameworks.html, member-coming-soon.html, and the
+   six member-*.html framework pages — nine pages, one file. Load it AFTER
+   each page's own stylesheet (saferise-dashboard.css / saferise-method.css),
+   same "loads last, wins by cascade order" rule the design system already
+   follows elsewhere, so a future page-specific override still can.
+
+   Moved here too: the bare `body{padding-left:74px}` rule (and its
+   `@media` reset to `0`/`padding-bottom:66px`) that makes room for the
+   fixed rail — it was identical in both source files and is really part
+   of the rail's own layout contract, not either page family's base
+   styling, so it belongs with the component that needs it. Removed from
+   both saferise-dashboard.css and saferise-method.css's own body rules.
+
+   NOT moved: each stylesheet's own long "every surface eases together"
+   transition selector list — .sr-dash-navrail is one entry among many
+   dashboard- or method-family classes in each, and both already include
+   it, so the shared file doesn't need to repeat it.
+
+   .sr-dash-navrailbtn--crisis (saferise-dashboard.css only, three rules)
+   was NOT carried forward — grepped for across every .html file in the
+   repo and matched nothing. Dead code, not reused. */
+
+body{padding-left:74px}
+
+.sr-dash-navrail{position:fixed;left:0;top:0;bottom:0;width:74px;z-index:50;background:#0B0B12;
+  border-right:1px solid var(--hair);display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 0}
+.sr-dash-navrailmark{width:34px;height:34px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;
+  color:var(--gold);font-size:14px;margin-bottom:16px;flex:0 0 auto}
+.sr-dash-navrailbtn{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:transparent;
+  border:0;cursor:pointer;position:relative;transition:background .18s}
+.sr-dash-navrailbtn svg{width:19px;height:19px;stroke:var(--text3);fill:none;stroke-width:1.35;transition:stroke .18s}
+.sr-dash-navrailbtn:hover{background:rgba(255,255,255,.04)}
+.sr-dash-navrailbtn:hover svg{stroke:var(--text2)}
+.sr-dash-navrailbtn.on{background:rgba(212,168,67,.12)}
+.sr-dash-navrailbtn.on svg{stroke:var(--gold)}
+.sr-dash-navrailbtn.on:before{content:"";position:absolute;left:-15px;top:12px;bottom:12px;width:2px;background:var(--gold);border-radius:0 2px 2px 0}
+.sr-dash-navrailbtn span{position:absolute;left:56px;white-space:nowrap;background:#1C1C21;border:1px solid var(--hair);
+  border-radius:5px;padding:7px 11px;font-size:11.5px;letter-spacing:.06em;color:var(--text2);opacity:0;pointer-events:none;transition:opacity .16s;z-index:3}
+.sr-dash-navrailbtn:hover span{opacity:1}
+/* SR-333 · the Log out divider. Confirmed present here — this is the rule
+   that was missing from saferise-method.css before this file existed. */
+.sr-dash-navrailfoot{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding-top:16px;position:relative}
+.sr-dash-navrailfoot:before{content:"";position:absolute;top:0;left:12px;right:12px;height:1px;background:var(--hair)}
+
+body.rd-soft .sr-dash-navrail{background:#3C4B78}
+
+/* SR-335 · breakpoint reconciliation. saferise-dashboard.css used 760px,
+   saferise-method.css used 700px — the same mobile row-layout switch, two
+   different trigger widths. Resolved to 760px, dashboard.html's original
+   value, since the rail was built there first. The eight pages that
+   previously switched at 700px now switch 60px later (wider); flagged in
+   the SR-335 write-up, not hidden. */
+@media(max-width:760px){
+  body{padding-left:0;padding-bottom:66px}
+  .sr-dash-navrail{top:auto;left:0;right:0;bottom:0;width:auto;height:66px;flex-direction:row;justify-content:space-around;
+    border-right:0;border-top:1px solid var(--hair);padding:0 8px}
+  .sr-dash-navrailmark,.sr-dash-navrailfoot{display:none}
+  .sr-dash-navrailbtn.on:before{left:12px;right:12px;top:-1px;bottom:auto;width:auto;height:2px;border-radius:0 0 2px 2px}
+  .sr-dash-navrailbtn span{display:none}
+}

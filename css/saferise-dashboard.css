@@ -273,25 +273,10 @@ body .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color
    navigation costs no vertical space, a wider canvas, and paired sections
    instead of a single stacked column. NOT borrowed: composite scores, rings,
    streaks or challenge lists — see the note in the handover. */
-body{padding-left:74px}
-.sr-dash-navrail{position:fixed;left:0;top:0;bottom:0;width:74px;z-index:50;background:#0B0B12;
-  border-right:1px solid var(--hair);display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 0}
-.sr-dash-navrailmark{width:34px;height:34px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;
-  color:var(--gold);font-size:14px;margin-bottom:16px;flex:0 0 auto}
-.sr-dash-navrailbtn{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:transparent;
-  border:0;cursor:pointer;position:relative;transition:background .18s}
-.sr-dash-navrailbtn svg{width:19px;height:19px;stroke:var(--text3);fill:none;stroke-width:1.35;transition:stroke .18s}
-.sr-dash-navrailbtn:hover{background:rgba(255,255,255,.04)}
-.sr-dash-navrailbtn:hover svg{stroke:var(--text2)}
-.sr-dash-navrailbtn.on{background:rgba(212,168,67,.12)}
-.sr-dash-navrailbtn.on svg{stroke:var(--gold)}
-.sr-dash-navrailbtn.on:before{content:"";position:absolute;left:-15px;top:12px;bottom:12px;width:2px;background:var(--gold);border-radius:0 2px 2px 0}
-.sr-dash-navrailbtn span{position:absolute;left:56px;white-space:nowrap;background:#1C1C21;border:1px solid var(--hair);
-  border-radius:5px;padding:7px 11px;font-size:11.5px;letter-spacing:.06em;color:var(--text2);opacity:0;pointer-events:none;transition:opacity .16s;z-index:3}
-.sr-dash-navrailbtn:hover span{opacity:1}
-.sr-dash-navrailfoot{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:6px;
-  padding-top:16px;position:relative}
-.sr-dash-navrailfoot:before{content:"";position:absolute;top:0;left:12px;right:12px;height:1px;background:var(--hair)}
+/* SR-335 · .sr-dash-navrail* and the body{padding-left:74px} it needs both
+   moved to css/saferise-rail.css, the one shared file every rail-carrying
+   page now loads (dashboard.html included) — see that file's own header
+   comment for what moved, what didn't, and why. */
 
 /* wider canvas, tighter rhythm */
 .shell{max-width:1340px}
@@ -549,14 +534,9 @@ body.reading #srLibrary{margin-top:22px}
 .sr-dash-arclegend{display:flex;flex-direction:column;gap:9px;font-size:12px;color:var(--text2)}
 .sr-dash-arclegend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:9px;vertical-align:middle}
 .sr-dash-arcnote{font-size:12px;color:var(--text3);line-height:1.65;flex:1 1 200px;min-width:0}
-@media(max-width:760px){
-  body{padding-left:0;padding-bottom:66px}
-  .sr-dash-navrail{top:auto;left:0;right:0;bottom:0;width:auto;height:66px;flex-direction:row;justify-content:space-around;
-    border-right:0;border-top:1px solid var(--hair);padding:0 8px}
-  .sr-dash-navrailmark,.sr-dash-navrailfoot{display:none}
-  .sr-dash-navrailbtn.on:before{left:12px;right:12px;top:-1px;bottom:auto;width:auto;height:2px;border-radius:0 0 2px 2px}
-  .sr-dash-navrailbtn span{display:none}
-}
+/* SR-335 · the 760px rail-becomes-bottom-bar block (body{padding-left:0;
+   padding-bottom:66px} plus every .sr-dash-navrail* override) moved to
+   css/saferise-rail.css along with the rest of the rail. */
 
 /* ============ responsive ============ */
 @media(max-width:1000px){
@@ -676,7 +656,8 @@ body.reading #srLibrary{margin-top:22px}
 /* ── sunrise: same tokens the reader uses ── */
 body.rd-soft{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card:#54648C;--hair:#8492B4;
   --text:#FFFDF8;--text2:#DDE3F0;--text3:#AEB7CE}
-body.rd-soft .sr-dash-navrail{background:#3C4B78}
+/* SR-335 · body.rd-soft .sr-dash-navrail{background:#3C4B78} moved to
+   css/saferise-rail.css. */
 /* every surface eases together, and at the same rate as the embedded pages */
 body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
 .sr-dash-archmain,.sr-begin-row,.sr-begin-card--panel,.sr-dash-idcard,.sr-sum,
@@ -1023,10 +1004,11 @@ body.shifting .sr-dash-top{opacity:0;transition:opacity .42s ease}
 .sr-proto{animation:srRise .6s cubic-bezier(.22,.61,.36,1) both}
 @keyframes srRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
-/* ── Cue Card ── */
-.sr-dash-navrailbtn--crisis svg{stroke:var(--gold)}
-.sr-dash-navrailbtn--crisis:hover{background:rgba(212,168,67,.12)}
-.sr-dash-navrailbtn--crisis:hover svg{stroke:var(--gold-lt)}
+/* ── Cue Card ──
+   SR-335 · .sr-dash-navrailbtn--crisis (three rules, a rail-button variant
+   for the Cue Card's own rail entry) dropped rather than moved — SR-086
+   removed that rail entry when the Cue Card became protocol.html-only, and
+   a repo-wide grep for the class found no remaining reference anywhere. */
 .sr-crisis{max-width:820px;display:grid;grid-template-columns:280px 1fr;overflow:hidden}
 .sr-crisis-art{position:relative;min-height:100%;background:#12121C}
 .sr-crisis-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 32%}

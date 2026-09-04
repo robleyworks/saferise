@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-334.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-335.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6829,7 +6829,8 @@ the same transient issue on record earlier this session, worked around the same 
 free, and used **SR-332**. This run checked `git log --grep` for SR-333 before allocating
 (background + `sleep`), found it free, and used **SR-333**. The member-coming-soon run checked
 `git log --grep` for SR-334 before allocating (same method), found it free, and used
-**SR-334**. Next run: allocate from **SR-335**.
+**SR-334**. The rail-extraction run checked `git log --grep` for SR-335 before allocating
+(background + `sleep`), found it free, and used **SR-335**. Next run: allocate from **SR-336**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
 
@@ -6983,5 +6984,94 @@ navigated `dashboard.html` → clicked "What's coming" → landed on `member-com
 confirmed, not assumed); clicked "Dashboard" from there → landed back on `dashboard.html`. Zero
 console errors across the full round trip. esprima-clean (1 inline script block per page),
 zero `tinycss2` errors in `css/saferise-method.css`, HTML tag-balanced.
+
+*Status:* closed · *Raised and fixed:* 3 Sep 2026
+
+---
+
+**SR-335 · `js/saferise-rail.js` — one shared nav rail, extracted from nine copies.**
+Prompted by the report two runs back: the rail (markup, `PAGES` map, click delegation, theme
+toggle) was duplicated verbatim across `dashboard.html`, `member-frameworks.html`,
+`member-coming-soon.html` and the six `member-*.html` framework pages, and had already caught
+drifting once — SR-333's Log-out divider rule landed in `css/saferise-dashboard.css` only,
+so patching the six framework pages by hand next would have shipped Log out without it.
+
+**Same pattern as `SafeRiseTrack.render()`/`SafeRiseCover.art()`.** `SafeRiseRail.render(activeRoute,
+opts)` owns the icon data, the five routes plus Log out, the `PAGES` map, click delegation and
+(opt-out) the theme-toggle wiring; the host page keeps one empty mount
+(`<nav class="sr-dash-navrail" id="srRail" aria-label="Sections"></nav>`) and a two-line call.
+`opts.onRoute` is the one seam: `dashboard.html` passes its own `openRoute` (the only place
+`LAYERS`' in-shell modals and `ROUTES`' "not built yet" placeholder actually resolve, plus
+`goHome()` for clicking Dashboard while already there) so the module's click handler behaves
+exactly as its old inline one did; every other page needs nothing and gets the SR-104 "leave
+for the dashboard and let it answer" default. `opts.theme:false` on `dashboard.html` only — it
+already wires its own `[data-theme]` buttons and also broadcasts the mode via `postMessage` for
+embedded iframes; without the opt-out the module would attach a second click listener to the
+same buttons and run `setTheme()` twice per click.
+
+**`PAGES` now has one canonical copy** (`SafeRiseRail.PAGES`), not nine. `dashboard.html`'s own
+`openRoute()` keeps its own separate `PAGES` map — it has two other callers this module doesn't
+touch (the `#route=` hash resolver on arrival, and in-page `[data-route-link]` elements
+elsewhere on the dashboard) — but now reads `SafeRiseRail.PAGES` instead of retyping the same
+three lines a third time.
+
+**CSS consolidated into a new `css/saferise-rail.css`, not into either existing file.**
+`.sr-dash-navrail*` was independently duplicated in `css/saferise-dashboard.css` (dashboard.html
+only) and `css/saferise-method.css` (the other eight pages) — merging into whichever already had
+more pages would have meant either loading `saferise-method.css`'s unrelated `.sr-mi-*`/`.sr-fw-*`
+rules into `dashboard.html`, or the reverse. A dedicated file, loaded by all nine, needed neither.
+Also moved in: the bare `body{padding-left:74px}` rule (identical in both source files, and really
+part of the rail's own layout contract rather than either page family's base styling) and its
+`@media` mobile reset. Confirmed the SR-333 divider rule survives — `.sr-dash-navrailfoot:before`
+is in the new file and verified live rendering a 1px line on `member-porges.html`, which never had
+it before this run. **Not moved:** each source file's own long "every surface eases together"
+transition-selector list — `.sr-dash-navrail` is one entry among many dashboard- or method-family
+classes in each, both already include it, so the shared file doesn't need to repeat it.
+**Dropped, not moved:** `.sr-dash-navrailbtn--crisis` (three rules, `saferise-dashboard.css` only)
+— SR-086 removed its rail entry when the Cue Card became protocol.html-only, and a repo-wide grep
+found no remaining reference. Dead code, not carried forward.
+
+**One real behavior change, flagged rather than hidden:** the mobile rail-becomes-bottom-bar
+breakpoint was **760px** in `saferise-dashboard.css` and **700px** in `saferise-method.css` —
+the same switch, two different trigger widths, never noticed because nothing compared them
+side by side before. Resolved to 760px, `dashboard.html`'s original value, since the rail was
+built there first. The eight pages that previously switched at 700px now switch 60px later.
+
+**Nine pages swapped**, each losing its own copy of the rail markup + inline script (theme +
+`PAGES` + click handler) in favor of `<script src="js/saferise-access.js">` (added — Log out
+needs it; only `dashboard.html` and `member-coming-soon.html` already had it),
+`<script src="js/saferise-rail.js">`, and one `SafeRiseRail.render(...)` call:
+`dashboard.html` (`onRoute: openRoute, theme:false`), `member-frameworks.html`,
+`member-coming-soon.html`, and `member-heartmath.html` / `member-porges.html` / `member-jung.html`
+/ `member-kross.html` / `member-mate.html` / `member-watts.html` (all six confirmed byte-identical
+before editing, so one generated patch applied cleanly to all six). Each of the six framework
+pages gains "What's coming" and "Log out" for the first time — the actual point of the exercise,
+not just de-duplication.
+
+**Left as flagged, pre-existing, unrelated to this fix, not touched:** a custom HTML
+balance-checker (not the real bug-finder — a `html.parser`-based scanner already known from
+earlier this session to mis-track occasionally) reports two mismatched tags at unrelated line
+numbers on all six framework pages, identically, outside every line this run touched, and
+resolves to zero unclosed tags by end of file either way — read by eye at both locations,
+both structurally ordinary HTML, consistent with a parser artifact rather than a real defect,
+and pre-existing regardless (git diff confirms this run's edits are nowhere near those lines).
+
+**Verified live**, Browser pane against the local static server: `dashboard.html` — rail renders
+with Dashboard active; clicking Account opens the "not built yet" modal with the correct title/
+path (confirming `onRoute` delegation reaches `openRoute()` correctly); clicking What's coming
+navigates to `member-coming-soon.html`. `member-coming-soon.html` — rail renders with coming
+active, all 7 cards still present, theme toggle and Log out both confirmed (session cleared,
+landed on `index.html`). `member-porges.html` (previously had NEITHER new button) — rail renders
+with all 6 buttons including What's coming and Log out, divider confirmed rendering (1px,
+`::before`), all 6 icons confirmed 19×19px identically sized once the Browser pane's own
+backgrounded-tab artifact (a documented, recurring harness quirk — `document.hidden`, 0×0
+viewport — not a real defect, confirmed by re-checking foregrounded) was ruled out; Log out
+confirmed working. `member-heartmath.html` — clicked a non-PAGES route (`coaching`), confirmed
+the SR-104 hash-bounce lands on `dashboard.html` and resolves cleanly with zero console errors.
+`member-frameworks.html` — rail renders with method active, gains both new buttons, and its own
+unrelated FRAMEWORKS card-integrity script still finds and patches all 6 `[data-fw]` cards,
+confirming that script (a separate `<script>` block, untouched) still runs correctly alongside
+the new rail script. Zero console errors on every page tested. esprima-clean and zero
+`tinycss2` errors across every touched file (details above).
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026

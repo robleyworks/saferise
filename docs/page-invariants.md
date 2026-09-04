@@ -63,7 +63,15 @@ this is deliberate, not an oversight to "fix" toward the public look.
   `#22222E` hairlines. Sunrise support and `sessionStorage['sr-theme']`
   were never removed and still carry. All seven already used
   `dashboard.html`'s member nav-rail (`.sr-dash-navrail`) — that part of
-  SR-320/321 never touched it, so there was nothing to add.
+  SR-320/321 never touched it, so there was nothing to add. **SR-335 ·
+  the rail is no longer nine separate copies.** `SafeRiseRail.render()`
+  (`js/saferise-rail.js`) now owns the markup, the `PAGES` map, click
+  delegation and the theme toggle; `css/saferise-rail.css` is the one
+  source of `.sr-dash-navrail*`. A page that carries the rail loads both
+  files and calls `SafeRiseRail.render(activeRoute)` — it does not paste
+  the markup or the CSS in again. See that module's own header comment
+  for the `onRoute`/`theme` options `dashboard.html` needs and no other
+  page does.
   **`member-` is now this repo's convention for a member-surface page
   whose name would otherwise collide with, or be confused for, a
   public one** — the rename that prompted it: `method.html` (public) and

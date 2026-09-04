@@ -39,7 +39,9 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.65;
-  -webkit-font-smoothing:antialiased;padding-left:74px}
+  -webkit-font-smoothing:antialiased}
+/* SR-335 · padding-left:74px (room for the fixed rail) moved to
+   css/saferise-rail.css, along with the rest of .sr-dash-navrail*. */
 img,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--gold-lt);outline-offset:3px;border-radius:3px}
@@ -60,25 +62,8 @@ h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
   padding:14px 22px;border-radius:3px;transition:top .2s}
 .skip:focus{top:16px}
 
-/* ── icon rail, verbatim from the dashboard ── */
-.sr-dash-navrail{position:fixed;left:0;top:0;bottom:0;width:74px;z-index:50;background:#0B0B12;
-  border-right:1px solid var(--hair);display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 0}
-.sr-dash-navrailmark{width:34px;height:34px;border-radius:50%;border:1px solid var(--gold);display:grid;
-  place-items:center;color:var(--gold);font-size:14px;margin-bottom:16px;flex:0 0 auto}
-.sr-dash-navrailbtn{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:transparent;
-  border:0;cursor:pointer;position:relative;transition:background .18s}
-.sr-dash-navrailbtn svg{width:19px;height:19px;stroke:var(--text3);fill:none;stroke-width:1.35;transition:stroke .18s}
-.sr-dash-navrailbtn:hover{background:rgba(255,255,255,.04)}
-.sr-dash-navrailbtn:hover svg{stroke:var(--text2)}
-.sr-dash-navrailbtn.on{background:rgba(212,168,67,.12)}
-.sr-dash-navrailbtn.on svg{stroke:var(--gold)}
-.sr-dash-navrailbtn.on:before{content:"";position:absolute;left:-15px;top:12px;bottom:12px;width:2px;
-  background:var(--gold);border-radius:0 2px 2px 0}
-.sr-dash-navrailbtn span{position:absolute;left:56px;white-space:nowrap;background:#1C1C21;border:1px solid var(--hair);
-  border-radius:5px;padding:7px 11px;font-size:11.5px;letter-spacing:.06em;color:var(--text2);opacity:0;
-  pointer-events:none;transition:opacity .16s;z-index:3}
-.sr-dash-navrailbtn:hover span{opacity:1}
-.sr-dash-navrailfoot{margin-top:auto}
+/* SR-335 · the icon rail (.sr-dash-navrail*) moved to css/saferise-rail.css,
+   the one file every rail-carrying page now loads. */
 
 /* ── theme toggle, shared shape with the reader ── */
 .sr-theme{display:inline-flex;border:1px solid rgba(255,255,255,.22);border-radius:24px;overflow:hidden;
@@ -92,7 +77,8 @@ h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
    SR-320's gradient fills now that this file is confirmed MEMBER. */
 body.rd-soft{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card:#54648C;--hair:#8492B4;
   --text:#FFFDF8;--text2:#DDE3F0;--text3:#AEB7CE}
-body.rd-soft .sr-dash-navrail{background:#3C4B78}
+/* SR-335 · body.rd-soft .sr-dash-navrail{background:#3C4B78} moved to
+   css/saferise-rail.css. */
 body,.sr-dash-navrail,.sr-fw-panel,.sr-fw-limit,.sr-fw-disc,.sr-fw-card,.sr-fw-step,.sr-fw-src,
 .sr-fw-pager a,.sr-fw-tile,.sr-fw-diagram{transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
 
@@ -262,12 +248,9 @@ a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
   /* the mark leads on tablet, the name leads on a phone */
   .sr-fw-tile{order:0;width:150px;height:150px}
   .sr-fw-tileart{width:112px;height:112px;padding:12px;font-size:8px}
-  body{padding-left:0;padding-bottom:66px}
-  .sr-dash-navrail{top:auto;left:0;right:0;bottom:0;width:auto;height:66px;flex-direction:row;
-    justify-content:space-around;padding:0 6px;border-right:0;border-top:1px solid var(--hair)}
-  .sr-dash-navrailmark,.sr-dash-navrailfoot{display:none}
-  .sr-dash-navrailbtn.on:before{left:12px;right:12px;top:-1px;bottom:auto;width:auto;height:2px;border-radius:0 0 2px 2px}
-  .sr-dash-navrailbtn span{display:none}
+  /* SR-335 · the rail's own 700px mobile block (body{padding-left:0;…} plus
+     every .sr-dash-navrail* override) moved to css/saferise-rail.css, which
+     now switches at 760px — see that file's header comment. */
 }
 @media(max-width:640px){
   :root{--pad:20px}
