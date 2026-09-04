@@ -2438,6 +2438,10 @@ body.sr-breath .sr-player.is-next .audio-play{
 .sr-tp{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
 .sr-tp img, .sr-tp svg{display:block;max-width:100%}
 .sr-tp .sr-tp-shell{max-width:1180px;margin:0 auto;padding:0 24px}
+/* SR-341 · the shared public .nav is position:fixed (~97px tall) and, unlike
+   the .sr-tp-nav it replaces, contributes nothing to document flow — without
+   this, page content starts under the nav instead of below it. */
+.sr-tp #main{padding-top:110px}
 .sr-tp .sr-tp-band{background:linear-gradient(145deg,rgba(255,255,255,.012),transparent 46%),var(--band);border:1px solid rgba(255,255,255,.035);border-radius:18px;padding:80px 56px;margin:24px 0;overflow:hidden}
 .sr-tp .sr-tp-band--alt{background:var(--band2)}
 .sr-tp .sr-tp-band--flush{padding-left:0;padding-right:0}
@@ -3193,6 +3197,23 @@ body.sr-breath .sr-player.is-next .audio-play{
 .nm.free .nmk{color:var(--gold)}
 .nm.soon{opacity:.62}
 .nav,.navcta,.nmenu{transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
+/* SR-341 · bridge the gap so the cursor can travel to the menu — this block
+   already existed for index.html (SR-332) but never carried method.html's
+   and live-sessions.html's own later fix, which each still supply locally
+   in their own inline <style>. Adding it here (rather than a third time)
+   means a page with no inline nav CSS of its own — the three track pages —
+   gets the fix too, for free, the moment it loads this stylesheet. */
+.ndrop::after{content:'';position:absolute;top:100%;left:-22px;width:330px;height:20px;
+  display:none}
+.ndrop:hover::after,.ndrop.open::after{display:block}
+.nmenu{margin-top:0}
+.ndrop:hover .nmenu,.ndrop:focus-within .nmenu{opacity:1;visibility:visible;transform:none}
+/* SR-341 · current-page marking in the Protocols dropdown, reusing the
+   existing hover accent-bar mechanism (.nm::before) rather than a new
+   visual language. Set by the host page as aria-current="page" on the
+   matching .nm — never assumed from the URL by CSS alone. */
+.nm[aria-current="page"]{background:var(--bg3)}
+.nm[aria-current="page"]::before{opacity:1}
 
 .foot{
   --bg:#0A0A0F; --bg2:#0E0E15; --bg3:#13131C;

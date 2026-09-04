@@ -115,6 +115,20 @@ this is deliberate, not an oversight to "fix" toward the public look.
   and `member-frameworks.html` (member, the full attribution/credits
   register) are DIFFERENT PAGES and must not be conflated** — this is the
   exact confusion the rename exists to prevent.
+
+  **SR-341 · the public nav is no longer copied per page either, though
+  only the three track pages have been moved onto the shared module yet.**
+  `SafeRiseNav.render(current)` (`js/saferise-nav.js`) owns the markup and
+  the dropdown open/close/theme script; `css/saferise-system.css`'s
+  `.nav`/`.ndrop`/`.nmenu` block (SR-332, completed by SR-341's gap-bridge
+  fix and current-page marker) is the one CSS source. The six
+  self-contained public pages (`about.html`, `anxiety-reset.html`,
+  `coming-soon.html`, `live-sessions.html`, `method.html`, `plans.html`)
+  still hand-carry their own copy of this same nav rather than calling the
+  module — that consolidation is a later step, not yet done. A hand-
+  delivered drop of any of those six should still be checked for nav drift
+  against `method.html`'s own copy (the one with the gap-bridge fix
+  already inline) until they're migrated too.
 - The resource reader inside `index.html` (`openReader`/`READER_PROTOCOLS`
   and everything `docs/INTEGRATION.md` and `CLAUDE.md`'s platform-landmines
   section describe).

@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-340.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-341.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6837,8 +6837,12 @@ free, and used **SR-332**. This run checked `git log --grep` for SR-333 before a
 `git log --grep` for SR-338 and SR-339 before allocating (same method), found both free, and
 used **SR-338** for the asset/orphan work and **SR-339** for the token migration (separate
 commits, per instruction). The dashboard-images run checked `git log --grep` for SR-340 before
-allocating (same method), found it free, and used **SR-340**. Next run: allocate from
-**SR-341**.
+allocating (same method), found it free, and used **SR-340**. The track-nav run's own
+`git log --all --grep` call hung (the recurring transient issue on record earlier this
+session, attributed to a concurrent GitHub Desktop process); rather than retry indefinitely,
+it cross-checked this register's own two pointers instead — the "Highest ID issued" note
+above and this paragraph's own trailing "Next run" sentence — both agreeing on **SR-341**,
+and used it. Next run: allocate from **SR-342**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
 
@@ -7437,5 +7441,95 @@ clean, esprima-clean, HTML tag-balanced.
 | The Clearing card art (dead, overridden rule) | unnamed, 1100×900 named vs. 900×600 supplied | see above |
 | Frameworks tile ("Understanding") | unnamed | unspecified — typographic tile stands in |
 | Hero corridor | `assets/dashboard/hero-corridor.jpg` | 2400×900 — **file not actually replaced**, see above |
+
+*Status:* closed · *Raised and fixed:* 4 Sep 2026
+
+---
+
+**SR-341 · regression · the three track pages had no public nav at all.** `js/saferise-track.js`'s
+`renderNav()` built `#navlinks` from a `ROUTES` map that SR-325 correctly stripped down to the
+three track pages themselves (removing "The Journey", "About" → `member-frameworks.html`, and
+"Dashboard" → `dashboard.html`, all member-page links a public page must never carry). Nothing
+replaced the removed entries, and the three track pages were never migrated onto the public nav
+pattern every other public page already used — so `personal-transformation.html`,
+`relationship-healing.html` and `professional-performance.html` rendered only a three-pill
+strip: no Method, Plans, Live sessions, About, Log in, or Protocols dropdown.
+
+**Where the existing source lived, and what was reused rather than copied a fourth time.**
+`method.html`'s inline `<style>`/markup/script was the canonical reference (confirmed via
+`grep -c "bridge the gap"`: `method.html` and `live-sessions.html` both carry the dropdown
+"gap bridge" hover fix; `about.html`, `anxiety-reset.html`, `coming-soon.html` and `plans.html`
+do not — a latent gap-bug on those four, unrelated to this fix, reported not touched). Before
+writing anything, `css/saferise-system.css` turned out to already carry almost this entire
+`.nav`/`.navin`/`.brand`/`.ndrop`/`.ntop`/`.nmenu`/`.nm`/`.nm.t1`/`.t2`/`.t3`/`.free`/`.soon`
+block (from SR-332, for `index.html`'s own nav) — missing only the gap-bridge fix itself
+(`.ndrop::after` and the `:hover`/`:focus-within` open rule) and a current-page marker. Rather
+than a third CSS copy, SR-341 added exactly those two missing pieces to the existing block, so
+`css/saferise-system.css` is now the one complete CSS source — and `index.html`'s own nav,
+which never had the gap-bridge fix either, gets it for free as a side effect. The markup and the
+open/close/theme script had no shared home: extracted into a new `js/saferise-nav.js`,
+`SafeRiseNav.render(current)`, following the exact shape `js/saferise-rail.js` and
+`js/saferise-footer.js` already established (module owns markup + behavior, host page keeps an
+empty mount and calls render — see that file's own header comment for the usage contract).
+
+**Current-track marking, behavior preserved from the old nav.** The old `renderNav()` marked
+the active track with `class="sr-tp-on" aria-current="page"` on its flat pill. There is no
+flat pill anymore — the equivalent item now lives inside the Protocols dropdown — so
+`SafeRiseNav.render()` sets `aria-current="page"` on the matching `.nm` there instead, and the
+new CSS rule (`.nm[aria-current="page"]`) reuses the dropdown's own existing hover accent-bar
+mechanism (`.nm::before`) rather than inventing a second visual language for "current." Method/
+Plans/Live sessions/About never marked themselves current before (confirmed against
+`method.html`'s own nav, which does not self-highlight when visited) and still don't — only the
+track set does, matching the old nav's own scope exactly.
+
+**Fixed-nav layout consequence, not previously present.** The old `.sr-tp-nav` was
+`position:sticky`, which occupies real space in document flow; the new `.nav` is
+`position:fixed` (matching every other public page), which does not. Without compensation the
+fixed nav (measured ~97px tall live) would sit over the top of the hero. Added
+`.sr-tp #main{padding-top:110px}` to `css/saferise-system.css`'s existing `.sr-tp` block —
+verified live against the nav's actual measured height rather than guessed.
+
+**`js/saferise-track.js` cleanup.** `renderNav()` and the `ROUTES` map it alone consumed are
+deleted (confirmed nothing else in the codebase reads `SafeRiseTrack.routes` before removing
+its export too); `SafeRiseTrack.render` now points directly at `renderTrack`, dropping the
+wrapper that used to also call `renderNav`. The SR-289 mobile scroll-strip fix that lived inside
+the old `renderNav()` (keeping the active pill from clipping mid-word in the `<=480px`
+horizontal scroll strip) does not carry forward — it was a fix for the pill-strip shape
+specifically, which no longer exists; the dropdown has no equivalent clipping failure mode.
+
+**Not done, reported instead of silently expanded:** the six self-contained public pages
+(`about.html`, `anxiety-reset.html`, `coming-soon.html`, `live-sessions.html`, `method.html`,
+`plans.html`) still hand-carry their own copy of this same nav markup and script rather than
+calling `SafeRiseNav.render()` — folding them onto the new module is a further, later
+consolidation (the SR-335/SR-336 pattern's next step), not part of this regression fix, and
+not requested. The orphaned `.sr-tp-nav`/`.sr-tp-navtop`/`.sr-tp-brand*`/`.sr-tp-navlinks`/
+`.sr-tp-on` CSS rules (`css/saferise-system.css`, the `.sr-tp` block) are now dead — nothing on
+any page renders those classes anymore — and were left in place rather than deleted, to keep
+this commit to the nav swap itself; flagged here as a cleanup candidate. **The three track
+pages have no Sunrise support of their own** — `.sr-tp` defines exactly one token set, with no
+`[data-theme="sunrise"] .sr-tp{…}` override anywhere in the codebase, and no theme toggle
+existed on these pages before this fix at all. The new nav's toggle genuinely works — it sets
+`data-theme`, persists via `sessionStorage['sr-theme']`, and correctly re-colors the nav itself
+(which does carry Sunrise tokens) — but the `.sr-tp`-scoped page body underneath (hero, bands,
+cards, pricing) stays its fixed Midnight palette regardless, confirmed live: switching to
+Sunrise on `relationship-healing.html` produces a blue nav bar over an unchanged dark hero.
+Building full Sunrise support for the track-page body is a substantially larger, unrequested
+piece of work and was not attempted here.
+
+**Verified live**, Browser pane against the local static server, all three track pages: nav
+renders identically to `method.html`'s (brand, Protocols dropdown, Method/Plans/Live sessions/
+About, theme toggle, Log in); the dropdown opens on click (`aria-expanded` flips true/false)
+and via hover; `Escape` and an outside click both close it; the gap-bridge `::after` element
+is present and sized (`content:""`, `width:330px`, shown on `.open`); every nav link resolves
+to a real file, and a link sweep of `.navlinks a, .nm` confirmed zero member-page hrefs (the
+one documented exception, "Log in" → `dashboard.html`, sits outside `.navlinks` by design and
+was excluded from that check on purpose); the correct track carries `aria-current="page"` on
+its own page (`t1` on `personal-transformation.html`, `t2` on `relationship-healing.html`, `t3`
+on `professional-performance.html`) and only that one; toggling to Sunrise on one track page
+and navigating to another confirmed the choice persists (`sessionStorage['sr-theme']`) and the
+nav re-themes correctly on arrival. `main#main`'s `padding-top:110px` confirmed against the
+nav's own live-measured height (~97–98px) at both mobile and desktop widths — no overlap, no
+gap. `tinycss2`-clean, esprima-clean (`js/saferise-nav.js` and the edited `js/saferise-track.js`),
+HTML tag-balanced on all three track pages.
 
 *Status:* closed · *Raised and fixed:* 4 Sep 2026
