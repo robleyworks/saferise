@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-342.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-343.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -6846,7 +6846,12 @@ and used it. The framework-images run checked `git log --oneline` for the true H
 pass's own rule: allocate from `git log --grep='SR-'`, never from this register's own note —
 `git status`/`git add`/`git commit` were locked out for an extended period by a stuck
 GitHub Desktop fetch, but `git log` itself still answered, confirmed SR-341 as the highest
-commit tag with no SR-342 anywhere, and used **SR-342**. Next run: allocate from **SR-343**.
+commit tag with no SR-342 anywhere, and used **SR-342**. The track-diagram run hit the same
+`git status`/`git add`/`git commit` lockout, this time for the entire run — `git log
+--oneline` kept answering throughout and showed no SR-342 or SR-343 in any commit (including
+two further "updates" commits landing mid-run from GitHub Desktop), so it used **SR-343**
+and could not commit it before this entry was written; see that entry's own note on what
+is and isn't landed. Next run: allocate from **SR-344**.
 
 *Status:* closed · *Raised and fixed:* 3 Sep 2026
 
@@ -7633,3 +7638,150 @@ construction. Reported, not fixed — out of this pass's scope.
 real slot to wire, as above.
 
 *Status:* closed · *Raised and fixed:* 4 Sep 2026
+
+---
+
+**SR-343 · all four track diagrams animate, on all three tracks — two promoted as shared,
+two rebuilt per track.** Report first, per instruction: all four (`GRAPHICS.trigger`,
+`.breath`, `.spiral`, `.progress` in `js/saferise-track.js`) were already inline SVG, not
+images, so the halt condition never applied. The bigger finding: `rInsight()`,
+`rFourSteps()` and `rProgress()` were each already marked `(shared)` and already ran
+unconditionally for all three tracks — every track already rendered all four diagrams, just
+with Track 01's literal hex colors regardless of which track was open. A real prior pass
+exists in code, not only in git log: a comment at the top of `initReveal()` explicitly
+declined to animate these diagrams, riding the section fade-in instead. This run reverses
+that decision.
+
+**Section 2 — the two shared diagrams, promoted with a real per-track accent.**
+`css/saferise-system.css`'s `.sr-tp` block gains `--t1:#C97B5A; --t2:#7A8FA8; --t3:#6E9080`
+— the exact triplet the nav dropdown and footer already use, not a new palette — and
+`--tp-accent`, defaulting to `--gold` until a `.sr-tp-t1`/`.sr-tp-t2`/`.sr-tp-t3` body class
+overrides it. `renderTrack(id)` now sets that class (`document.body.classList.add('sr-tp-t'
++ id)`) — the renderer emits the class, the stylesheet owns what it means, per CLAUDE.md.
+`.sr-tp-glabel`'s color and `.sr-tp-graphic`'s border/glow (both duplicated twice in this
+file, both fixed) move from `var(--gold)`/hardcoded `rgba(212,168,67,…)` to `var(--tp-accent)`
+via `color-mix()`, already an established pattern in this file (`.nav`'s own background).
+**`--gold`/`--gold-lt`/`--teal` themselves are untouched** — page-invariants.md documents
+those as identical across every theme and surface, and this introduces a new, separate token
+rather than repurposing a protected one. The internal SVG content of `breath`/`spiral` is
+byte-identical across all three tracks; only the frame around it now reads by track.
+
+**Section 3 — two new track-specific diagrams, one reading of each brief recorded here.**
+`GRAPHICS.trigger` and `GRAPHICS.progress` became per-track objects (`{1:…,2:…,3:…}`),
+selected internally via the existing `CURRENT_TRACK` module variable — `rInsight()` and
+`rProgress()` keep their zero-argument shape, just read `GRAPHICS.trigger[CURRENT_TRACK]`
+now. Same section position on all three tracks, confirmed live (T2/T3 both show the four
+`.sr-tp-glabel` captions in the identical order T1 does).
+
+- **T2 · "Your half"** (replaces Two Timelines): read as — a form's own responsiveness ends
+  at the midpoint; the far half is drawn but inert. Built as a solid `var(--tp-accent)` line
+  from the near form to a midpoint marker, a dashed neutral-grey line from there to the far
+  form, and a pulse that travels only the solid segment and stops — it never reaches, let
+  alone crosses, the dashed side.
+- **T3 · "Before the room"** (replaces Two Timelines): read as — the visitor is one constant
+  form; what changes is which of two possible states is lit on arrival. Built as one form,
+  one threshold, two stacked state-glyphs on the far side (braced: three short flat strokes;
+  steady: one soft curve), a light that travels form→threshold, arriving in sync with a
+  crossfade that dims braced and lights steady.
+- **T2 · "The loop slows"** (replaces The Floor Rises): read as — the *pattern* (pursue and
+  withdraw) doesn't disappear, its amplitude does; the end-state is a steady constant
+  distance, not a collapse to zero. Built as two concentric orbits, a wide dashed "before"
+  and a narrow solid "after," crossfading once on arrival — deliberately not a
+  `transform:scale()` "shrink," which the animation constraints rule out (see Section 4) and
+  which would have read as the orbit collapsing rather than settling.
+- **T3 · "The load carries"** (replaces The Floor Rises): read as — closest of the four to a
+  literal read of its own brief. Eight session marks, two lines from the same start point,
+  one descending (no intervention), one level (with it), both drawn left to right once.
+
+**Section 4 — the animation, all four, all three tracks. SVG stroke-dasharray/dashoffset and
+CSS keyframes only; no JS animation loop, nothing scales or parallaxes.**
+- **Breath rhythm** — one curve, `stroke-dasharray:820` (its own measured length), 10s loop,
+  `0%→40%` draws (dashoffset 820→0, the 4s expand), `40%→100%` retreats (0→820, the 6s
+  contract). Built first, per instruction.
+- **Four-step** — a duplicate of the spiral path as a bright overlay
+  (`stroke-dasharray:16 3000`), dashoffset keyframed through the *measured* cumulative
+  length to each of the four nodes (`SVGPathElement.getTotalLength()`/`getPointAtLength()`
+  against the real path, not estimated: name 0, heart 229, release 465, expand 826,
+  choice 1033 of 1033 total), resting at each before continuing. One pass, 8s.
+- **Two-timeline family** — t1 keeps its original two paths and gets a fast pulse
+  (arrives 35% of a 7s cycle) and a slower pulse (arrives 55%); both depart together, the
+  ~20%-of-cycle gap between arrivals is the argument, per the brief in Section 4. t2's single
+  pulse and t3's light+crossfade both run the same 7s cycle so no track reads as faster or
+  slower. All four hold at arrival until 88%, then reset — "loop with a pause."
+- **Floor family** — one shared keyframe pair (`stroke-dasharray:600`, `600→0` over 1.4s)
+  covers every "draw the line" path in the family (t1's own curve at 555 measured units, t3's
+  two lines at 490/476) — 600 only needs to be *at least* as long as the real path for a full
+  reveal at dashoffset 0, so one definition serves three different real lengths without
+  matching each. t2's orbit crossfade uses the same 1.4s duration via opacity keyframes
+  instead, since its brief is a settle, not a line reveal. All three trigger once, on first
+  viewport entry, never replay.
+- **Pause off-screen, not a scroll listener.** `initDiagramMotion()`
+  (`js/saferise-track.js`) is a second, purpose-built `IntersectionObserver` — `initReveal()`
+  already runs one, but it's one-shot (`unobserve` after the first hit), the wrong shape for
+  a loop that must resume every time its card re-enters view. `.sr-tp-graphic--loop` gets
+  `.sr-tp-graphic--off` (`animation-play-state:paused`) toggled continuously;
+  `.sr-tp-graphic--once` gets `.sr-tp-graphic--play` added on its first intersection only,
+  then this observer stops watching it.
+- **`prefers-reduced-motion`.** Every new rule lives inside this file's one existing central
+  `@media(prefers-reduced-motion:reduce)` block (line ~1840), not a new per-component block —
+  freezing each animated element at whichever frame reads as a deliberate still image rather
+  than a rendering fault: fully-drawn for the two line-draw families, hidden for every
+  traveling pulse, each crossfade pair held at its pre-arrival state. **Flagged, not a
+  question left open:** `css/saferise-system.css` carries a deliberate SR-303 Phase E policy
+  — "motion suppression removed site-wide; animations now run for every visitor regardless
+  of prefers-reduced-motion" — and this is a direct, explicit exception to it, made because
+  this brief asked for real reduced-motion handling on these four diagrams by name, not
+  because SR-303's own reasoning changed.
+
+**Section 5 — measured, not asserted.** `getAnimations()` with `currentTime` set directly
+(immune to this session's own recurring backgrounded-pane throttling, which stalls real
+wall-clock animation progress but not programmatic time-seeking) against all twelve
+diagrams — four per track, three tracks:
+
+| Track | Diagram | animation-name | duration | dashoffset/opacity at two points | off-screen play-state |
+|---|---|---|---|---|---|
+| t1/t2/t3 (identical) | Breath | `srTpBreathDraw` | 10000ms | 820px → 46.03px (t=0 / t=5s) | paused |
+| t1/t2/t3 (identical) | Four-step | `srTpFourLight` | 8000ms | 40px → -585.33px (t=0 / t=4s) | paused |
+| t1 | Two Timelines — fast | `srTpFastPulse` | 7000ms | 30px → **-588px** (t=0 / t=3.5s) | paused |
+| t1 | Two Timelines — slow | `srTpSlowPulse` | 7000ms | 30px → **-529px** (t=0 / t=3.5s) | paused |
+| t2 | Your Half | `srTpHalfPulse` | 7000ms | 20px → -140px (t=0 / t=3.5s) | paused |
+| t3 | Before the Room — light | `srTpRoomPulse` | 7000ms | 20px → -160px (t=0 / t=3.5s) | paused |
+| t3 | Before the Room — braced | `srTpBracedDim` | 7000ms | opacity .9 → .35 (t=0 / t=3.5s) | n/a (paired with light, see off above) |
+| t3 | Before the Room — steady | `srTpSteadyLight` | 7000ms | opacity .35 → 1 (t=0 / t=3.5s) | n/a |
+| t1 | Floor Rises | `srTpLoadDraw` | 1400ms | 600px → 0px (t=0 / t=1.4s) | plays once, not paused |
+| t2 | Loop Slows — wide orbit | `srTpOrbitOut` | 1400ms | opacity 1 → 0 (t=0 / t=1.4s) | plays once |
+| t2 | Loop Slows — narrow orbit | `srTpOrbitIn` | 1400ms | opacity 0 → 0.998 (t=0 / t=1.4s) | plays once |
+| t3 | Load Carries — both lines | `srTpLoadDraw` ×2 | 1400ms | 600px → 0px, both | plays once |
+
+**The one number worth reading closely:** at the identical wall-clock instant (t=3.5s, half
+the 7s cycle), t1's fast pulse has already arrived and holds at -588px while the slow pulse
+is still mid-journey at -529px (arrival isn't until -585px at 55%) — the gap between arrivals
+the brief calls the argument, present in the numbers, not just the description.
+
+**One measurement not taken, stated rather than assumed working:** `prefers-reduced-motion`
+itself could not be toggled live in this Browser pane tool — no emulation control for that
+media feature was available, only `resize_window`'s `colorScheme`. What's reported above for
+that row is the exact rule text confirmed present at the right selectors
+(`css/saferise-system.css` line ~1857–1865), not a live-toggled computed value.
+
+**Section 6 — consistency, confirmed from the same measurements rather than a fresh visual
+pass:** breath and four-step return byte-identical `animation-name`/`duration`/dashoffset
+pairs on all three tracks (rows one and two of the table), proving the shared pair is
+genuinely shared, not re-authored per track. Every track's own two-timeline diagram runs the
+same 7000ms cycle and every track's own floor diagram runs the same 1400ms duration, so the
+STRUCTURE of "how animated" a track feels — two loops + one 7s loop + one 1.4s one-shot,
+per track — is identical across all three; only the fourth diagram's specific content and
+accent differ.
+
+**Section 7 — commit, blocked.** `git status`/`git add`/`git commit` have been locked out for
+this entire run — the same failure mode reported in this register's own SR-342 entry, now
+persisting across two consecutive runs rather than resolving between them. `git log` kept
+answering the whole time and is what confirmed SR-343 was free. **Nothing from this entry is
+committed.** All of Section 2/3/4's changes exist only in the working tree
+(`css/saferise-system.css`, `js/saferise-track.js`, this file) — sequenced as three logical
+stages in the code and in this entry's own section breaks, ready to commit as three separate
+commits (Section 2, Section 3, Section 4) the moment git responds, per instruction. `tinycss2`
+and `esprima` both clean throughout; live-verified via the Browser pane and the measurements
+above rather than by reading source.
+
+*Status:* open — verified and measured, not yet committed · *Raised:* 4 Sep 2026
