@@ -4175,4 +4175,5 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home .heroin.filmcopy .herolead{margin-left:auto;margin-right:auto;max-width:66ch}
 @media(max-width:820px){
 .sr-home .heroin.filmcopy h1{max-width:none}
+.sr-home .heroin.filmcopy{padding-left:30px;padding-right:30px}
 }
