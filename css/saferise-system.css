@@ -3806,6 +3806,8 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home .filmcopy h1{max-width:13ch;font-size:clamp(44px,5.5vw,72px)}
 .sr-home .filmlead{max-width:62ch!important;font-family:'DM Sans',sans-serif!important;font-size:15.5px!important;line-height:1.7!important}
 .sr-home .filmlead strong{color:var(--gold-lt);font-weight:600}
+.sr-home .filmdesc{max-width:62ch;margin:14px auto 0;font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.6;color:var(--text3)}
+.sr-home .filmdesc strong{color:var(--gold-lt);font-weight:600}
 .sr-home .filmfooter-solo{position:relative;z-index:3;display:flex;justify-content:center;padding-top:0}
 .sr-home .filmplay{
   position:relative;left:auto;top:auto;bottom:auto;transform:none;z-index:3;
@@ -3864,6 +3866,7 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home .filmhero{min-height:700px}
 .sr-home .filmcopy{padding-top:128px;padding-bottom:0}
 .sr-home .filmlead{font-size:14px!important}
+.sr-home .filmdesc{font-size:12.5px}
 .sr-home .filmchapters{grid-template-columns:1fr}
 .sr-home .filmchapters>div{border-right:0;border-bottom:1px solid var(--hair)}
 }

@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-348.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-349.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -8040,3 +8040,47 @@ defects are independent — fixing this one doesn't touch the gate, and the gate
 Not fixed per instruction — capture came first. Files: none changed, investigation only.
 
 *Status:* reported, not fixed · *Raised:* 5 Sep 2026
+
+**SR-349 · hero descriptor line restored.** SR-345 removed the old `<strong>SafeRise</strong> —
+powerful, curated protocols...` paragraph outright when the hero copy was rewritten, with nothing
+put back in its place. A replacement was requested for the same position (below the hero body).
+
+**Recovered, not invented, the original treatment.** Confirmed via `git show 7fa4cd9` (the SR-345
+commit) rather than memory: the removed line was `<p class="herolead filmlead"><strong>SafeRise
+</strong> — powerful, curated protocols...</p>` — emphasis was a plain `<strong>` tag, not a `.gold`
+span, and its class (`herolead filmlead`) was the *same* class the body paragraph uses today. Used
+`<strong>` for the new line too, matching what was actually there.
+
+**New copy, new class rather than reusing the body's verbatim.** Added directly beneath the hero
+body: `<p class="filmdesc"><strong>SafeRise</strong> — guided protocols for regulating the states
+that are hardest to get through, available in the moment you need them.</p>`. Since the recovered
+original shared its class with the body (making the two visually identical), and the brief asked for
+the descriptor to read as secondary rather than equal, this is a new class rather than a second
+`herolead filmlead`: `.filmdesc{font-size:13.5px;line-height:1.6;color:var(--text3);max-width:62ch;
+margin:14px auto 0}` (12.5px at ≤620px) against the body's `15.5px`/`14px` and `var(--text)`
+default colour — same family, same 62ch column, one step down in both size and colour so the
+hierarchy reads body → descriptor. `.filmdesc strong{color:var(--gold-lt);font-weight:600}`
+copied verbatim from `.filmlead strong` so "SafeRise" keeps the exact gold treatment it had before.
+
+**"SafeRise" now appears twice in one hero block — reported, not changed, per instruction.** Eyebrow
+("SAFERISE": all-caps, letter-spaced, a category label sitting alone above the headline) and the new
+descriptor's inline "SafeRise" (title case, gold, inside a sentence, ~200px lower, separated by the
+full headline and body paragraph) are different enough in size/case/role that neither reads as a
+copy-paste mistake at a glance. But a reader scanning top-to-bottom hits the brand name twice within
+five lines of copy, both at the very top of the page, which is a real, noticeable repetition on a
+closer read — this is a judgement call for whoever owns the copy, not something this pass adjudicated.
+
+**Checks.** No quantum/rewire/streak/badge/graduate/practice/manifest in the new line. No outcome
+promise, no duration claim. Confirmed the dash is a true em dash (U+2014, checked byte-for-byte, not
+by eye) and no straight apostrophes (none in this particular sentence).
+
+**Verified live**, both themes, 1440/1024/390px, no console errors: hero height went from 763px
+(post-SR-345, before this line existed) to 820px with the descriptor added — +57px for one more
+line, as expected. Play control still sits 98px below the descriptor's bottom edge with zero overlap
+on the headline at any width (structural, from SR-344's flex-flow fix, not dependent on hero content
+length). The SR-346 mobile 30px gutter still holds at 390px with this additional line in place.
+
+Files: `index.html`, `css/saferise-system.css`.
+
+*Status:* fixed, verified live in both themes and at three widths · not yet committed (reported
+here first, per instruction) · *Raised:* 5 Sep 2026
