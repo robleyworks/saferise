@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-343.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-344.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -7785,3 +7785,62 @@ and `esprima` both clean throughout; live-verified via the Browser pane and the 
 above rather than by reading source.
 
 *Status:* open — verified and measured, not yet committed · *Raised:* 4 Sep 2026
+
+**SR-344 · the homepage hero play control overlapped the headline; the hero image was not
+full-bleed.** Both were live in `css/saferise-system.css`. Four previous fix attempts existed
+only in downloadable files that never reached the repo, which is why this survived: fixing one
+conflicting rule while another still applied.
+
+**Overlap — multiple conflicting `.filmplay` position rules.** `.filmplay` was `position:absolute;
+left:64%;top:47%` (line ~3809), sized for an earlier left-aligned hero copy layout. A later
+change centred `.heroin.filmcopy` (line ~4169) and added a scoped override,
+`.heroin.filmcopy ~ .filmplay{left:50%;transform:translateX(-50%)}` (line ~4177), but that override
+only touched `left`/`transform` — `top:47%` still applied unchanged, so the button kept landing
+on the now-centred headline. A third, mobile-only rule at `@media(max-width:900px)` (line ~3859)
+repositioned it a third way (`bottom:118px`). All three are removed. `.filmplay` is now
+`position:relative` (in normal flow), placed by the existing `.filmhero{display:flex;
+flex-direction:column;justify-content:flex-end}` column — it already sits after `.filmcopy` and
+before the (empty) `.filmfooter-solo` div in source order — and centred with `align-self:center`
+plus its own `margin-top` (38px desktop, 28px ≤820px) rather than the absolute math. The markup
+was assumed to nest the button inside `.filmfooter` (a sibling of the copy block per the original
+brief); live DOM inspection showed it is actually a sibling of `.filmfooter`, not a child, so
+`.filmfooter-solo{justify-content:center}` was kept as specified but the centring is done via
+`.filmplay`'s own `align-self` instead, since it has no effect on an element that isn't its flex
+child. `.filmfooter`'s `position:absolute;bottom:0` block — which existed only to anchor the old
+button — is removed; two further dead overrides were also removed: `.filmfooter-solo{justify-content:
+flex-end}` + `.herorule{margin-left:auto}` (line ~3897, for a two-item variant no longer in the
+markup) and the mobile `.playring`/`.playmeta{display:none}` pair (superseded by a new consolidated
+`@media(max-width:820px)` block).
+
+**Not full-bleed — an unrelated legacy rule, not one of the four hero classes.** `getComputedStyle`
+on `.filmhero` showed `max-width:1100px;margin:0 auto` applied with no matching rule in
+`css/saferise-system.css` for any `.hero`-related selector. Traced to `index.html:72`, an inline
+`<style>` block predating the film-hero redesign: `.hero{min-height:100vh;display:grid;
+grid-template-columns:1fr 1fr;...max-width:1100px;margin:0 auto;...}` — a two-column layout rule
+for an older hero design. `.sr-home .hero`/`.sr-home .filmhero` (specificity 0,2,0) already
+override every property the two rules share, but `max-width` and `margin` are never touched by
+either, so they leaked straight through onto today's `.filmhero` (which still carries the bare
+`hero` class). Confirmed via full-page grep that no other element on any page carries plain
+`class="hero"` today — the rule is otherwise dead. Fixed from the system-CSS side rather than
+editing the page-level legacy block: added `max-width:none;margin:0` to the existing
+`.sr-home .hero{...}` rule (line ~3412), which wins on specificity regardless of source order.
+
+**Spacing follow-on.** With the button back in normal flow, `.filmcopy`'s `padding-bottom:195px`
+(195/250/230 across breakpoints) — sized only to reserve clearance under the old absolutely
+positioned button — was reduced to 0 everywhere, and `.filmhero` gained `padding-bottom:72px`
+(56px ≤900px) so the button isn't crowded against `.postfilm-recognition` below it.
+
+**Verified live** (Browser pane, `tools/serve.py`, both themes): 1440px, 1024px and 390px all show
+the button centred below the lead paragraph with no overlap, and the hero image spanning full
+viewport width at all three. Click (`ref` and coordinate) opens `.filmmodal`; the button is a
+plain `<button type="button">` with a standard `click` listener and no `tabindex`/`preventDefault`
+tampering, so keyboard focus reaches it and Enter-activation is native, unaffected browser
+behaviour — confirmed focus reaches it (visible focus ring, `document.activeElement` correct), but
+this Browser pane's synthetic "Return" key event carries `keyCode:0` and empty `key`/`code`
+(confirmed via a `keydown` listener), so a trusted end-to-end Enter → click confirmation could not
+be captured through this tool; this is a tooling limitation, not a claim of unverified behaviour.
+
+Files: `css/saferise-system.css` only. `index.html`'s legacy `.hero` block was read, not edited.
+
+*Status:* fixed, verified live in both themes and at three widths · not committed (per instruction,
+reported here first) · *Raised:* 5 Sep 2026
