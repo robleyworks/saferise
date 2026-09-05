@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-344.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-345.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -7842,5 +7842,66 @@ be captured through this tool; this is a tooling limitation, not a claim of unve
 
 Files: `css/saferise-system.css` only. `index.html`'s legacy `.hero` block was read, not edited.
 
-*Status:* fixed, verified live in both themes and at three widths · not committed (per instruction,
-reported here first) · *Raised:* 5 Sep 2026
+*Status:* fixed, verified live in both themes and at three widths · committed (`0708f4d`), not
+pushed · *Raised:* 5 Sep 2026
+
+**SR-345 · homepage copy rewrite — hero, "where a bad hour goes" section, and the tracks
+section.** `index.html` only. All copy supplied final/approved; no rewriting, only markup mapping.
+
+**Hero.** Eyebrow dropped "· Emotional Regulation Protocols" (now just "SafeRise", same class/
+treatment). Headline replaced, no `<em>`. Lead paragraph replaced (one sentence → four; the old
+`<strong>SafeRise</strong> —` opening is gone, this paragraph no longer names the product). Film
+caption collapsed from a `<strong>`+`<small>` two-line pair ("Watch the film" / "Four lived-
+experience vignettes · about 60 sec") to a single `<strong>` line ("Watch the film — four people,
+four moments.") — the `<small>` element is removed rather than left empty, since the new copy is
+one sentence, not a label+detail pair.
+
+**"Where a bad hour goes"** (`postfilm-recognition`, previously untitled in this register). Eyebrow,
+headline (kept the existing `<em>` around the second sentence — only the word "can" was dropped,
+matching the brief's "same wording as live, minus 'can'"), both body paragraphs, and the pull quote
+all replaced verbatim.
+
+**Tracks section** (`routersec`). Eyebrow and headline replaced. Two new elements added between the
+headline and `.doors` — `<p class="sr-router-body">` (the new "This doesn't install itself..."
+paragraph) and `<p class="sr-router-lead">` (the "Start where it's loudest." line, styled as an
+italic serif lead-in via the same treatment as `.routernote`, not a heading — no `<h2>`/`<h3>`
+anywhere near it). Both are new classes, added to `css/saferise-system.css` per the project's `sr-`
+prefix rule, not inlined on the page. `.routernote` gained "Free to start." on its second line,
+same element/position/treatment, no markup change.
+
+**Card kicker/title — checked before touching, not swapped.** The brief described the current cards
+as inverted ("On my own" as title, "Inside me." beneath) and asked for the short phrase to become
+the kicker. Live computed styles showed the opposite of that premise: `.dkick` ("On my own") was
+already 12px/uppercase/bold — kicker styling — and `.dh` ("Inside me.") was already 38px serif —
+title styling — in that DOM order. The hierarchy was already correct; only the text needed
+updating (new kicker/title/body per card, trailing periods dropped from titles per the new copy,
+kicker source text left lowercase since `.dkick` already has `text-transform:uppercase` applied by
+CSS). No element was swapped — doing so against the actual DOM would have inverted a hierarchy that
+was already right. Card 3's kicker changed content, not just case: "At work" → "where it's watched".
+`dgo` link text ("Explore Personal Transformation →" etc.) was not part of the supplied copy and was
+left untouched on all three cards.
+
+**Checks.** No instance of quantum/rewire/streak/badge/graduate/manifest in the new copy (a
+site-wide grep for "badge" only matches the pre-existing `jprog-tier-badge` class name, not rendered
+prose — unrelated to this change). No duration claim in the hero (the old "about 60 sec" is gone).
+Every contraction in the new copy uses a typographic apostrophe (’), confirmed by grepping the
+literal curly-quote forms of each one after editing, not just visually.
+
+**Verified live**, both themes, no console errors: hero height with the current (post-SR-344) CSS
+measured 913px for the old one-sentence copy vs 763px for the new four-sentence copy, same
+container — the shorter two-line headline outweighs the longer body. Button still centred below
+the lead with no overlap at 1440/1024/390px (structural, not copy-length-dependent, since `.filmplay`
+is a normal-flow flex item regardless of how tall `.filmcopy` is). The three door cards measured
+identical top offset and height (1600.05px / 411.05px) after the copy swap — no ragged alignment.
+
+**Flagged, not fixed — out of scope for this change.** At ≤820px, `.heroin.filmcopy` has 0px
+horizontal padding and its `h1` gets `max-width:none` (an existing rule from the copy-centering
+patch, not something this change touched), so the headline text now runs edge-to-edge with no
+side margin on mobile. This is pre-existing — it would reproduce with the old copy too — and unrelated
+to today's brief, so it was left as found and is reported here rather than fixed silently.
+
+Files: `index.html`, `css/saferise-system.css` (two new classes only: `.sr-router-body`,
+`.sr-router-lead`).
+
+*Status:* fixed, verified live in both themes and at three widths · not yet committed (reported
+here first, per instruction) · *Raised:* 5 Sep 2026
