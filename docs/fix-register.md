@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-347.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-348.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -7986,3 +7986,57 @@ values on the fixed cards read correctly, no console errors.
 Files: `index.html` only.
 
 *Status:* fixed, verified live · *Raised:* 5 Sep 2026
+
+**SR-348 · `protocol.html` cannot open its own resources standalone — logged, not fixed.**
+Investigation only, requested while capturing walkthrough screenshots (`cap-10`/`cap-11` were
+redirected to index.html's own protocol overlay for t1-p01 instead — see that capture report).
+
+**Is `protocol.html` reachable directly today, and from where?** Yes, and not just by bookmark or a
+typed URL. It's linked live from the product itself: `index.html`'s own `.pcname` nav ticker is a
+real anchor per protocol — `<a class="pc" href="protocol.html?track=1&amp;protocol=01">` (confirmed
+for all 30 protocols, both homepage passes of the ticker) — and `dashboard.html` carries at least
+five of its own CTAs pointing at `protocol.html` (`PROTOCOL_PAGE = 'protocol.html'` at line ~2262,
+plus the "Run a protocol" / "Go to a protocol" / "Choose a protocol" buttons at lines ~1513, 1561,
+2360, and the object literals at ~1846/1850/1857). Every one of these is a normal same-tab
+navigation, landing a real visitor on `protocol.html` fully standalone — this is not an edge case,
+it's the page's normal entry point from two different parts of the product.
+
+**What's actually broken.** `protocol.html`'s own click handler (line ~1448) intercepts resource
+clicks and calls `post('open-resource', {name: ...})` — a `postMessage` addressed to a parent
+window, on the assumption the page is embedded in an iframe shell that listens for it and opens the
+Reader on `protocol.html`'s behalf. Grepped every `.html` and `.js` file in the repo for an iframe
+that embeds `protocol.html` or a listener for `'open-resource'`: **none exists.** So today,
+`protocol.html` is never actually embedded anywhere — every real visitor reaches it as a top-level
+page — and clicking any resource link (`.res .go`, `.resource-item`, `[data-resource]`) silently does
+nothing: no navigation, no error, no visible feedback. Confirmed live: clicked the "Protocol Guide"
+resource on `t1-p01` standalone, `#reader-overlay` never appears, `location.href` is unchanged
+(aside from the `#` the anchor itself adds).
+
+**What it would take to open the Reader itself.** The Reader is a real, working subsystem, just not
+one `protocol.html` carries: `#reader-overlay` (markup, `index.html` line ~2698), the
+`READER_PROTOCOLS` map (line ~3783) and a much larger `RESOURCE_CONTENT` data object (referenced
+line ~8379) holding every protocol's actual written resource bodies across all three tracks, and the
+`openReader()`/`closeReader()` functions (~100 lines) that switch between them. None of this is
+`protocol.html`-specific — the CSS is already shared (`css/saferise-system.css`, loaded on both
+pages), but the markup, the two data objects, and the open/close functions currently exist only
+inline in `index.html`. Making `protocol.html` self-sufficient means one of: (a) duplicating all of
+it into `protocol.html` too — real drift risk, two copies of a large data object to keep in sync on
+every future resource edit; or (b) extracting the Reader (markup + data + functions) into a shared
+module both pages load, the same pattern already used for nav/rail/footer
+(`js/saferise-nav.js`/`js/saferise-rail.js`/`js/saferise-footer.js` — a page keeps an empty mount,
+the module owns markup and behaviour, see SR-341's own reasoning for choosing that shape). (b) is the
+one consistent with how every other cross-page UI piece in this codebase has been handled, and is
+what this repo's own conventions point to — a rewrite of the postMessage handler alone would just be
+a bigger dead end without a real listener to receive it.
+
+**Whether the soft gate's "URL-stays-valid" behaviour depends on this working.** No — checked SR-326
+directly (`protocol.html` line ~1265 onward). The gate runs once, right after `PAGE_PROTOCOL`
+resolves, and only decides whether to hide the page and show `#sr-gate-wall` based on
+`SafeRiseAccess.hasAccess(protocolId)`; it never touches `open-resource`, `postMessage`, or the
+Reader in any form. A signed-in visitor with access sees the page's normal (broken) resource links;
+a signed-out visitor sees the wall instead and never reaches the broken links at all. The two
+defects are independent — fixing this one doesn't touch the gate, and the gate was never masking it.
+
+Not fixed per instruction — capture came first. Files: none changed, investigation only.
+
+*Status:* reported, not fixed · *Raised:* 5 Sep 2026
