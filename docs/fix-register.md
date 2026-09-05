@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-345.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-347.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -7903,5 +7903,86 @@ to today's brief, so it was left as found and is reported here rather than fixed
 Files: `index.html`, `css/saferise-system.css` (two new classes only: `.sr-router-body`,
 `.sr-router-lead`).
 
-*Status:* fixed, verified live in both themes and at three widths · not yet committed (reported
-here first, per instruction) · *Raised:* 5 Sep 2026
+*Status:* fixed, verified live in both themes and at three widths · committed (`7fa4cd9`), not
+pushed · *Raised:* 5 Sep 2026
+
+**SR-346 · mobile hero headline ran edge-to-edge, no side margin, at ≤820px.** Root cause:
+`.sr-home .heroin{padding:78px 0 54px}` (`css/saferise-system.css:3422`) zeroes horizontal padding
+for every `.heroin` variant unconditionally. At wider viewports this was masked by
+`.heroin.filmcopy h1{max-width:22ch}`/`.herolead{max-width:66ch}` (line ~4174-4175) keeping the text
+narrower than the container regardless of padding; the mask comes off at ≤820px where an existing
+rule (`.heroin.filmcopy h1{max-width:none}`, line ~4177, predates this fix) removes that width cap
+so the text runs to the container's true edge — which has no padding.
+
+Fixed with the gutter every other section on the page uses: **30px**, from `.wrap{padding:0 30px}`
+(`css/saferise-system.css:3267`) — not invented, read off the one place the value is actually
+defined. `.filmcopy` already carries the `wrap` class, so `.wrap`'s 30px was already being
+overridden by the higher-specificity `.heroin` rule; added `.sr-home .heroin.filmcopy{padding-left:
+30px;padding-right:30px}` inside the existing `@media(max-width:820px)` block (next to the
+`max-width:none` rule that exposes the issue) rather than touching the base `.heroin` rule, which
+other hero variants still rely on staying at 0. Verified live at 390px and 360px: 30px gutter both
+sides at both widths, no console errors.
+
+Files: `css/saferise-system.css` only.
+
+*Status:* fixed, verified live at 390px/360px · *Raised:* 5 Sep 2026
+
+**SR-347 · Track 3 naming sweep — the overlay banner, and eighteen stale-name echoes from an
+incomplete earlier rename.** `index.html` only.
+
+**Full 30-name carousel audit, as asked, not just the two already known.** Extracted every rendered
+`<h3 class="proto-name">` from all three homepage carousels (30 total) and diffed 1:1, in order,
+against `content/tracks.js`'s three `protocols` arrays (the only canonical source). Track 1
+(Personal Transformation, 10/10) and Track 2 (Relationship Healing, 10/10) match their canonical
+titles exactly — zero mismatches. Track 3 (Professional Performance) matches 8 of 10; the two
+mismatches are the same two already found: row 08 read "The Decision Fatigue & Isolation Protocol"
+against canonical "The Decision Fatigue Protocol" (`content/tracks.js:515`), and row 09 read "The
+Burnout & Chronic Overload Protocol" against canonical "The Burnout & Overload Protocol"
+(`content/tracks.js:519`). **This count is 2, not 11** — verified twice now (this pass and the prior
+session's), by direct extraction rather than sampling, so it stands as reported rather than adjusted
+to match the expected number. Also checked while there: the separate `.pcname` nav-ticker (a second,
+independent list of all 30 names, `css`-scrolled) already reads correctly for both — "Decision
+Fatigue" and "Burnout & Overload" — so the ticker was never wrong; only the carousel cards were.
+
+**Where "eleven" likely comes from, reported since it explains the gap rather than closes it.**
+These two protocols were renamed in `content/tracks.js` at some point (dropping "& Isolation" and
+"Chronic") without the sweep CLAUDE.md's renaming-protocol section requires — "a rename is complete
+only when a sweep for the old name across every tracked file... returns nothing." Grepping the old
+names surfaced far more than the two carousel headings: **9 stale sites each, 18 total** — per
+protocol: the carousel `proto-name` h3, the card's `aria-label`, the `jprog-section`
+`data-jprog-title`, the `jprog-consult-prefill` auto-summary text, a `READER`/resource-object
+`title` field, the resource-rail `res-title`, the `audio-placeholder` label, and the `video-title`.
+All 18 corrected to the canonical short/full forms via a literal, verified-count string replacement
+(not a blind regex) — 9+9 replacements made, then re-grepped to confirm 0 stale instances remain of
+either old name anywhere in the file.
+
+**The stale "ambition" description, on the Belonging Gap card.** `content/tracks.js` itself was
+already fixed (SR-258, per its own comment at line ~500) when the protocol was renamed from
+Ambition Recovery to Belonging Gap — the canonical trigger/thought strings are Belonging Gap's own.
+Only the homepage carousel's advisory copy (`proto-landing-desc`, the new-copy field this project's
+card-description convention adds *alongside* the original data, never overwriting it) still read
+Ambition Recovery's line: "Reconnect to what originally drove you, and recover momentum when
+ambition has gone flat." Replaced with new, track-specific advisory copy matching this card
+convention's tone (one sentence, verb-led, not copied from a sibling card): "Say what you actually
+think, and stop editing yourself down to feel like you belong." — reflecting the protocol's own
+data (`I revise it before I say it` / `I do not know if I belong in this room` / `I say the safe
+version and then resent it`).
+
+**The overlay banner — fixed — and the compare-table header, checked and left alone.** The Track 3
+portal overlay's `<h1>` read `Career<em>&amp; Performance</em>`, matching neither the canonical
+track name ("Professional Performance") nor its own sibling banners' markup convention (Track 2's
+is `Relationship<em>Healing</em>` — full name, split word/emphasized-word, no ampersand). Fixed to
+`Professional<em>Performance</em>` to match that convention. Separately checked the plans-comparison
+table's column header (`Personal` / `Couples` / `Career`, line ~6358) that a prior pass flagged
+alongside this — left it alone: `Couples` is not a literal derivation of "Relationship Healing"
+either, so this table already uses its own bespoke one-word informal label per track, and `Career`
+fits that same convention rather than quoting a stale full name the way the banner did. Reported as
+a judgement call, not fixed silently.
+
+**Verified live**: banner reads "ProfessionalPerformance" (CSS supplies the space/styling between
+the plain and emphasized runs, per the sibling pattern), card 6/8/9 read correctly, both `aria-label`
+values on the fixed cards read correctly, no console errors.
+
+Files: `index.html` only.
+
+*Status:* fixed, verified live · *Raised:* 5 Sep 2026
