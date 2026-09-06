@@ -1,0 +1,13 @@
+    (t.bandArt
+      ? '<div class="jband"><picture>' +
+          '<source type="image/webp" srcset="assets/journey/t' + t.id + '-band.webp 1400w, ' +
+                                            'assets/journey/t' + t.id + '-band@2x.webp 1941w" ' +
+                  'sizes="(max-width:1180px) 100vw, 1132px">' +
+          '<img src="assets/journey/t' + t.id + '-band.jpg" ' +
+               'srcset="assets/journey/t' + t.id + '-band.jpg 1400w, ' +
+                       'assets/journey/t' + t.id + '-band@2x.jpg 1941w" ' +
+               'sizes="(max-width:1180px) 100vw, 1132px" ' +
+               'width="1400" height="380" loading="lazy" decoding="async" ' +
+               'onerror="this.style.opacity=0" ' +
+               'alt="' + art(t,'band') + '"></picture></div>'
+      : ph('NEEDS ART \u00B7 assets/journey/t' + t.id + '-band.jpg \u00B7 1400\u00D7380 \u00B7 ' + art(t,'band'), '1400/380')) +

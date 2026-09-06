@@ -1,0 +1,11 @@
+  var dd=document.querySelector('.ndrop'), dt=document.getElementById('ptrig');
+  function close(){dd.classList.remove('open');dt.setAttribute('aria-expanded','false');}
+  dt.addEventListener('click',function(e){
+    e.stopPropagation();
+    var open=dd.classList.toggle('open');
+    dt.setAttribute('aria-expanded',open?'true':'false');
+  });
+  dd.addEventListener('mouseenter',function(){dd.classList.add('open');dt.setAttribute('aria-expanded','true');});
+  dd.addEventListener('mouseleave',close);
+  document.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});

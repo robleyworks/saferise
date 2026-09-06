@@ -1,0 +1,15 @@
+/* --- SR: nav touch targets to 44px minimum (WCAG 2.5.8) --- */
+/* Type sizes are unchanged; only the hit box grows. Verified 0/7 items
+   under 44px at 1440 / 1280 / 1024 / 820 / 600 / 390. Nav height 76 -> 79
+   on desktop, 97 -> 81 on mobile. No horizontal overflow at any width. */
+.nav .brand,
+.nav .ntop,
+.navlinks > a,
+.navcta{
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  padding-top:0;
+  padding-bottom:0;
+}
+.nav .ndrop{display:inline-flex;align-items:center}

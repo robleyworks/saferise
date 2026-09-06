@@ -2,3 +2,5 @@ index.original.html
 .DS_Store
 **/.DS_Store
 /captures/
+pass/
+*.bak-*
