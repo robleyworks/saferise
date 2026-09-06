@@ -709,11 +709,19 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
 <script>
 (function(){
   var dd=document.querySelector('.ndrop'), dt=document.getElementById('ptrig');
-  function close(){dd.classList.remove('open');dt.setAttribute('aria-expanded','false');}
+  /* SR · one setter owns class and aria so they cannot disagree. mouseenter
+     used to add .open without touching aria-expanded, so aria read false while
+     the menu was visible; the next click then toggled the open class shut. */
+  var hoverOpened=false;
+  function setOpen(v){dd.classList.toggle('open',v);dt.setAttribute('aria-expanded',v?'true':'false');}
+  function close(){hoverOpened=false;setOpen(false);}
   dt.addEventListener('click',function(e){e.stopPropagation();
-    var o=dd.classList.toggle('open');dt.setAttribute('aria-expanded',o?'true':'false');});
-  dd.addEventListener('mouseenter',function(){dd.classList.add('open');});
+    if(hoverOpened){hoverOpened=false;return;}
+    setOpen(!dd.classList.contains('open'));});
+  dd.addEventListener('mouseenter',function(){hoverOpened=true;setOpen(true);});
   dd.addEventListener('mouseleave',close);
+  dd.addEventListener('focusin',function(){setOpen(true);});
+  dd.addEventListener('focusout',function(e){if(!dd.contains(e.relatedTarget))close();});
   document.addEventListener('click',close);
   document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
   var t=document.getElementById('tog'), l=document.getElementById('togl');

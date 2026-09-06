@@ -3803,7 +3803,7 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E")
 }
 .sr-home .filmcopy{position:relative;z-index:3;width:100%;padding-top:155px;padding-bottom:0}
-.sr-home .filmcopy h1{max-width:13ch;font-size:clamp(44px,5.5vw,72px)}
+.sr-home .filmcopy h1{max-width:13ch;font-size:clamp(32px,3.7vw,52px)}
 .sr-home .filmlead{max-width:62ch!important;font-family:'DM Sans',sans-serif!important;font-size:15.5px!important;line-height:1.7!important}
 .sr-home .filmlead strong{color:var(--gold-lt);font-weight:600}
 .sr-home .filmdesc{max-width:62ch;margin:14px auto 0;font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.6;color:var(--text3)}
@@ -3914,7 +3914,7 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
   font-weight:300;
   line-height:1.06;
   letter-spacing:-.022em;
-  max-width:15ch;
+  max-width:24ch;
   margin:18px 0 18px
 }
 .sr-home .postfilm-copy h2 em{font-style:italic;color:var(--gold-lt)}
@@ -4174,9 +4174,21 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home .heroin.filmcopy{text-align:center;max-width:none}
 .sr-home .heroin.filmcopy .eyebrow{justify-content:center}
 .sr-home .heroin.filmcopy .eyebrow::before{display:none}
-.sr-home .heroin.filmcopy h1{margin-left:auto;margin-right:auto;max-width:22ch}
+.sr-home .heroin.filmcopy h1{margin-left:auto;margin-right:auto;max-width:30ch}
 .sr-home .heroin.filmcopy .herolead{margin-left:auto;margin-right:auto;max-width:66ch}
 @media(max-width:820px){
-.sr-home .heroin.filmcopy h1{max-width:none}
+.sr-home .heroin.filmcopy h1{max-width:30ch}
 .sr-home .heroin.filmcopy{padding-left:30px;padding-right:30px}
 }
+
+
+/* --- SR: nav touch targets to 44px minimum (WCAG 2.5.8) --- */
+/* Type sizes unchanged; only the hit box grows. 7/7 items were under 44px. */
+.nav .brand, .sr-home .nav .brand,
+.nav .ntop, .sr-home .nav .ntop,
+.navlinks > a, .sr-home .navlinks > a,
+.navcta, .sr-home .navcta{
+  display:inline-flex; align-items:center;
+  min-height:44px; padding-top:0; padding-bottom:0;
+}
+.nav .ndrop, .sr-home .nav .ndrop{display:inline-flex;align-items:center}

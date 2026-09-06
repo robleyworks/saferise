@@ -92,16 +92,27 @@
 
   function bind(root) {
     var dd = root.querySelector('.ndrop'), dt = root.querySelector('#ptrig');
-    function close() { dd.classList.remove('open'); dt.setAttribute('aria-expanded', 'false'); }
+    /* SR · one setter for both class and aria so they cannot disagree.
+       Previously mouseenter added .open without touching aria-expanded, so
+       aria read false while the menu was visible; the next click then toggled
+       the already-open class shut. */
+    var hoverOpened = false;
+    function setOpen(v) {
+      dd.classList.toggle('open', v);
+      dt.setAttribute('aria-expanded', v ? 'true' : 'false');
+    }
+    function close() { hoverOpened = false; setOpen(false); }
     dt.addEventListener('click', function (e) {
       e.stopPropagation();
-      var o = dd.classList.toggle('open');
-      dt.setAttribute('aria-expanded', o ? 'true' : 'false');
+      if (hoverOpened) { hoverOpened = false; return; }
+      setOpen(!dd.classList.contains('open'));
     });
-    dd.addEventListener('mouseenter', function () { dd.classList.add('open'); });
+    dd.addEventListener('mouseenter', function () { hoverOpened = true; setOpen(true); });
     dd.addEventListener('mouseleave', close);
+    dd.addEventListener('focusin', function () { setOpen(true); });
+    dd.addEventListener('focusout', function (e) { if (!dd.contains(e.relatedTarget)) close(); });
     document.addEventListener('click', close);
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { dt.focus(); close(); } });
 
     var t = root.querySelector('#tog'), l = root.querySelector('#togl');
     function applyTheme(n) {
