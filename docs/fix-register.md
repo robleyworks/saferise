@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-349.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-350.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -8084,3 +8084,46 @@ Files: `index.html`, `css/saferise-system.css`.
 
 *Status:* fixed, verified live in both themes and at three widths · not yet committed (reported
 here first, per instruction) · *Raised:* 5 Sep 2026
+
+**SR-350 · the second half of SR-347's Belonging Gap sweep — the deeper `.simple-expand` body
+text, and door card three's matching "arriving" leftover.** `index.html` only.
+
+SR-347 fixed the Belonging Gap card's `proto-landing-desc` (the short advisory line, replaced with
+"Say what you actually think, and stop editing yourself down to feel like you belong.") but did not
+reach the same card's `.simple-expand` panel, which still opened to a full paragraph of withdrawn
+Ambition Recovery copy: "What you may notice in your body: Low-arousal flattening — motivation
+present in memory but absent in the body, sometimes masking exhaustion or grief for work that used
+to feel alive." Confirmed via `grep -rn "Low-arousal flattening"` that this was the only live
+occurrence anywhere (excluding `archive/`).
+
+Replaced with the SR-258 string already sitting in `content/tracks.js:508` for this protocol
+row — copied verbatim, not composed: "The sentence edited before it leaves. Reading the room for
+whether you count in it." This string is thematically a mechanism/tagline sentence rather than a
+literal body-sensation description like its sibling cards use, since `tracks.js`'s SR-258 rewrite
+only ever supplied that register for Belonging Gap — no closer verbatim match exists in the
+canonical record. Flagged rather than silently smoothed over.
+
+Same root cause, second location: door card three (`.dbody`, "In my work") read "Pressure,
+visibility, judgement, arriving" — one word (`arriving`) held over from Ambition Recovery, while
+the Track 3 panel two sections below (`Visibility, conflict, belonging, burnout.`) already used the
+correct word. Changed the single word to `belonging`; nothing else in any door card touched.
+
+**Divergence scope assessment (SR-084), report only.** Compared all 30 protocol cards' rendered
+copy against `content/tracks.js`. Track 1's ten cards use a dynamic, JS-populated `.proto-expand`
+with no hardcoded body copy at all — structurally immune to this specific divergence. Track 2's ten
+use a `"Who this serves:"` / `"Science frameworks:"` pair; Track 3's ten use `"What you may notice
+in your body:"` / `"Subject matter voices:"` — three different static/dynamic template conventions
+for what `tracks.js` treats as one consistent per-track record shape. Read all 20 static (Track
+2 + Track 3) body paragraphs against their titles for thematic consistency (not literal string
+equality — `tracks.js`'s own short tagline/mechanism strings were never meant to match this
+longer prose verbatim, on any row). Found no other mismatch: this was the only protocol whose
+static copy named a different, withdrawn identity. Not fixed: the three-way template
+inconsistency itself, out of scope for this pass.
+
+Verified live via `Range.getClientRects()` line-grouping at both 1440 and 390: card renders and
+expands correctly at both widths, `.door.t3 .dbody`'s last line holds 4 words at 1440 and 2 at 390
+(no `&nbsp;` needed), `sessionStorage['sr-theme']` still toggles.
+
+Files: `index.html`.
+
+*Status:* fixed, verified live at both widths · *Raised:* 7 Sep 2026
