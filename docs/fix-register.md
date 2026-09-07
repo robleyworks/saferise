@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-350.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-351.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -8125,5 +8125,50 @@ expands correctly at both widths, `.door.t3 .dbody`'s last line holds 4 words at
 (no `&nbsp;` needed), `sessionStorage['sr-theme']` still toggles.
 
 Files: `index.html`.
+
+*Status:* fixed, verified live at both widths · *Raised:* 7 Sep 2026
+
+**SR-351 · footer consolidation, corrected — SR-350's own reversal.** `index.html` only.
+
+SR-350 found `index.html` rendering two footers on `#main-content` at once (the footer-template
+clone plus a hand-written `<footer class="foot">`) and, finding neither footer a strict subset of
+the other, removed `#main-content` from the clone list rather than deleting `.foot`. That left the
+homepage's own primary view with a plainer footer (`.foot`'s seven links) than every one of its ten
+overlay panels (`.sr-foot`'s full grid, including the `showProg()` routes to Compare Plans,
+Services and About SafeRise) — backwards, and reported as the wrong instruction rather than a
+wrong execution.
+
+Corrected the other way: restored `#main-content` to the clone target list
+(`querySelectorAll('#main-content, .prog-overlay')` again), so every view — main and all ten
+overlays — renders exactly one footer, and it is `.sr-foot`. Before deleting `.foot`, inventoried
+its seven links against `.sr-foot`: Terms/Privacy/Refund already existed; Contact, Billing and
+Support did not, so those three moved in first — Contact and Support into the About column
+(alongside About SafeRise / Terms / Privacy / Refund Policy), Billing into Explore (alongside
+Compare Plans / Services) — reusing the existing `<li><a>` pattern, no new column, no new class.
+FAQ was not carried across (SR-351 leaves that to the Help-column removal below).
+
+Compared the two footers' scope-and-safety text word for word before dropping either. `.sr-foot`'s
+was already longer and covered everything `.foot`'s did, with one exception: `.foot` stated "it has
+not been through a clinical trial," a substantive compliance claim `.sr-foot`'s paragraph did not
+make. Folded that clause into `.sr-foot`'s own scope paragraph, verbatim, before `.foot` was
+deleted, rather than let it get silently dropped as this pass moved everything onto `.sr-foot`.
+
+Same pass — reported here as a related fifteen-page instance of the same "dead link" problem,
+not itself a footer defect — removed the `method.html#faq` entry from the Help column in
+`js/saferise-footer.js`. `method.html` carries no `id="faq"`, and real FAQ content only exists as
+three track-scoped `.sr-faq-cols` blocks inside `index.html`'s own overlay panels — there was never
+a general FAQ destination for this link to reach on any of the fifteen pages that share this
+module. A dead link is worse than an absent one; reversible in one line once an FAQ page exists.
+Help now reads Contact / Billing / Support — three items, not a lone orphan.
+
+**Verified live at 1440 and 390**: `#main-content` renders exactly one footer (`.sr-foot`); the
+`showProg('compare')` / `showProg('services')` / `showProg('about')` routes and `showMain()` (The
+Journey) all fire correctly from the restored footer; at least three overlay panels
+(`prog-personal`, `prog-couples`, `prog-workshops`) still render exactly one footer each. Noted,
+not fixed (pre-existing, unrelated to this pass): "The Journey" calls `showMain()` correctly but its
+`href="#journey"` fragment has no matching `id="journey"` anywhere on the page — confirmed absent
+in backups predating this pass too.
+
+Files: `index.html`, `js/saferise-footer.js`.
 
 *Status:* fixed, verified live at both widths · *Raised:* 7 Sep 2026

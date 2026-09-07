@@ -507,7 +507,16 @@ var TRACKS = {
           mechanism is related; the resentment tail is what makes it Track 03. */
        'Say the thing in the room you were going to keep to yourself.',
        'The sentence edited before it leaves. Reading the room for whether you count in it.',
-       ['I revise it before I say it','I do not know if I belong in this room','I say the safe version and then resent it']],
+       ['I revise it before I say it','I do not know if I belong in this room','I say the safe version and then resent it'],
+       /* Footer-correction pass · a 6th element, index [6]. No Track 03 row
+          carries the index.html "What you may notice in your body" sentence
+          in this array at all — that copy lives as static prose directly in
+          index.html's .simple-expand markup for every Track 03 protocol, not
+          here. Added here for t3-06 only, on request, so the canonical
+          record and the rendered card agree for this one row; the other
+          nine rows are deliberately not backfilled — this is a schema
+          difference for t3-06 alone, not a new convention. */
+       'Sustained low-grade vigilance — the body reading a safe room for whether you count in it, and the sentence rewritten in your throat before it leaves.'],
       ['07','Cross',   'The Career Transition Protocol',
        'Move from one role to the next without losing your footing in between.',
        'The old role gone, the new one unproven, no ground underneath either.',

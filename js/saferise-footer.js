@@ -58,7 +58,6 @@
       head: 'Help',
       links: [
         ['mailto:contact@thesaferiseprotocol.com', 'Contact'],
-        ['method.html#faq', 'FAQ'],
         ['plans.html', 'Billing'],
         ['mailto:contact@thesaferiseprotocol.com', 'Support']
       ]
