@@ -4147,14 +4147,11 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
   margin:0 auto 16px;filter:drop-shadow(0 2px 12px rgba(0,0,0,.8))}
 .sr-home .dglyph svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5;
   stroke-linecap:round;stroke-linejoin:round}
-.sr-home .dkick{position:relative;z-index:2;font-family:'DM Sans',sans-serif;font-size:9.5px;
-  font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);
-  margin-bottom:12px;text-shadow:0 1px 10px rgba(0,0,0,.8)}
 .sr-home .door h2, .sr-home .door .dh{position:relative;z-index:2;font-family:'Cormorant Garamond',serif;
   font-weight:300;font-size:38px;line-height:1.05;letter-spacing:-.02em;color:var(--text);
   text-shadow:0 2px 18px rgba(0,0,0,.85);margin-bottom:12px}
 .sr-home .door .dbody{position:relative;z-index:2;font-family:'DM Sans',sans-serif;font-size:14.5px;
-  line-height:1.6;color:var(--text2);max-width:26ch;margin:0 auto;
+  line-height:1.6;color:var(--text2);max-width:26ch;margin:0 auto;min-height:7.68em;
   text-shadow:0 1px 12px rgba(0,0,0,.8)}
 .sr-home .door .dgo{position:relative;z-index:2;justify-content:center;margin-top:20px;padding-top:0;
   font-family:'DM Sans',sans-serif;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;

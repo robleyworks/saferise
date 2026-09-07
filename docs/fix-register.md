@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-351.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-352.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -8172,3 +8172,73 @@ in backups predating this pass too.
 Files: `index.html`, `js/saferise-footer.js`.
 
 *Status:* fixed, verified live at both widths · *Raised:* 7 Sep 2026
+
+---
+
+**SR-352 · homepage router copy, door-card kickers removed, scope paragraph trimmed
+of "education and training" and the clinical-trial clause.** Register's own "Next
+run" pointer read SR-344 — eight numbers stale, the last of many confirmations that
+`git log --grep` is the only trustworthy source here. `git log --oneline` showed
+SR-351 as the true highest.
+
+**Router (index.html).** `h2.router-question`'s and `.sr-router-body`'s CURRENT
+text ("A state that keeps repeating…" / "And it doesn't stay in one place…") had
+already drifted from the strings a prior brief supplied as "old" — each class was
+still the sole candidate in its role, so both were replaced on that basis
+(EQUIVALENT), not a verbatim match. `.routernote` matched verbatim (MATCH).
+
+**Door cards.** All three `.dkick` lines removed from markup; `.sr-home .dkick` was
+the only CSS rule for the class anywhere in the repo (confirmed via a sitewide
+grep before deleting — the other `*dkick` hits, `.sr-book-dkick`/`.modkick`/
+`.sr-fw-cardkick`, are unrelated classes that merely share the substring), so it
+came out clean. Track 3's `h2.dh` changed from "In my work" to "At work" (MATCH,
+same string measured in Step 1 of this pass's own report-first pass).
+
+**`.dbody{min-height:7.68em}` added.** The instruction to "keep margin-bottom:auto"
+was checked against the actual rule rather than assumed: `.sr-home .door .dbody`
+carries `margin:0 auto` (a shorthand setting margin-bottom to `0`, not `auto`) —
+there was no `margin-bottom:auto` declaration to preserve, and none was added,
+since only `min-height` was in scope. Measured rather than asserted: at 1440px the
+three `.dbody` elements are NOT equal height (116px / 111px / 116px — the shorter
+"Between us" text doesn't reach the 111.36px floor's rendered rounding, the other
+two exceed it since their own copy wraps to more lines) — the min-height reserves
+a floor, it does not force equality when content already exceeds it. What the
+brief actually asked to be verified — "the three `.dgo` elements sit at the same
+y" — **is** true, measured precisely at 1969.703125px for all three at 1440px:
+every `.dbody`'s own *bottom* edge lands on the identical y (1949.703125px)
+regardless of its top, which is what pins `.dgo` level — the existing layout
+already did this before `min-height` was added; `min-height` only stops a
+very short body from collapsing the reserved floor on some future shorter copy.
+Same 116/111/116 pattern, same `min-height:111.36px`, confirmed again at 390px
+(where the three doors stack in one column, so "same y" across doors doesn't
+apply at that width — checked kicker-count and heading text there instead, both
+correct).
+
+**Scope/disclaimer paragraph — two authored copies found and changed, not one.**
+`js/saferise-footer.js`'s `SCOPE_HTML` (nine public pages) had both the
+"self-guided education and training in nervous-system regulation" phrase and the
+full clinical-trial clause — replaced with the brief's exact "Result" text,
+`&#8212;` per instruction, verified live on method.html
+(`.sr-pf-scope`'s rendered text matches character for character, em dash
+included). `index.html`'s own `.sr-foot` scope paragraph is a **structurally
+different** authored copy — its own header comment already noted SR-351 folded a
+clinical-trial clause in here rather than sharing footer.js's text, so this was
+never one shared source. It never contained "education and training" (its own
+wording is "self-guided nervous-system tool," not that phrase), so only its
+"It has not been through a clinical trial." sentence was removed, leaving its
+surrounding wording — otherwise different from footer.js's paragraph — untouched.
+**Not touched, and reported rather than assumed in scope:** two FAQ answers on
+Track 2 and Track 3 ("Is any of this based on real science?") also say "SafeRise
+has not been through a clinical trial" — these are FAQ content, not the scope/
+disclaimer paragraph, and weren't named in the eight edits.
+
+**Verified live**, Browser pane against the local static server, 1440 and 390:
+router heading/body/note render the new text; `.dkick` count is 0; door headings
+read Inside me / Between us / At work; `.dbody` min-height and offset heights
+measured as above; `.dgo` y-position measured equal; the scope paragraph on
+`index.html` (main view and the `about` overlay, same template) and on
+`method.html` (via `js/saferise-footer.js`) both confirmed free of "education and
+training" and "clinical trial," both retain a crisis sentence. `tinycss2`-clean,
+esprima-clean, HTML tag-balanced.
+
+*Status:* closed · *Raised and fixed:* 7 Sep 2026

@@ -73,9 +73,10 @@
   ];
 
   var SCOPE_HTML = '<strong>Scope &amp; safety.</strong> SafeRise Protocol is ' +
-    'self-guided education and training in nervous-system regulation. It is not ' +
-    'therapy, medical treatment, or a substitute for professional care, and it has not ' +
-    'been through a clinical trial. If you are in crisis, contact your local emergency ' +
+    'self-guided nervous-system regulation &#8212; available in the moment, and ' +
+    'built to develop resilience, coherence and a steadier internal sense of ' +
+    'safety. It is not therapy, medical treatment, or a substitute for ' +
+    'professional care. If you are in crisis, contact your local emergency ' +
     'service.';
 
   function colHTML(col) {
