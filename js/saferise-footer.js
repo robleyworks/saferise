@@ -73,11 +73,11 @@
   ];
 
   var SCOPE_HTML = '<strong>Scope &amp; safety.</strong> SafeRise Protocol is ' +
-    'self-guided nervous-system regulation &#8212; available in the moment, and ' +
-    'built to develop resilience, coherence and a steadier internal sense of ' +
-    'safety. It is not therapy, medical treatment, or a substitute for ' +
-    'professional care. If you are in crisis, contact your local emergency ' +
-    'service.';
+    'self-guided nervous-system regulation, grounded in peer-reviewed research ' +
+    'on the autonomic nervous system, and built to develop resilience, ' +
+    'coherence and a steadier internal sense of safety. It is not therapy, ' +
+    'medical treatment, or a substitute for professional care. If you are in ' +
+    'crisis, contact your local emergency service.';
 
   function colHTML(col) {
     var html = '<div class="sr-pf-col"><p class="sr-pf-colhead">' + col.head + '</p>';
