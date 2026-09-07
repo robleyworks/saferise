@@ -4192,3 +4192,14 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
   min-height:44px; padding-top:0; padding-bottom:0;
 }
 .nav .ndrop, .sr-home .nav .ndrop{display:inline-flex;align-items:center}
+
+/* --- SR: legal-page tables (terms/privacy/refunds) --- */
+/* No table styling existed anywhere in this stylesheet before this — flagged
+   per pass/legal/LEGAL-PAGES-BRIEF.md Task 1, which explicitly sanctions
+   adding a minimal scoped rule for exactly this case. Colours reuse the
+   existing --hair/--text/--text2/--band tokens rather than new values, so
+   this follows the same theme (Midnight/Sunrise) as everything else. */
+.sr-legal-table{width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6}
+.sr-legal-table th,.sr-legal-table td{text-align:left;padding:10px 16px 10px 0;border-bottom:1px solid var(--hair);vertical-align:top}
+.sr-legal-table th{color:var(--text);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.sr-legal-table td{color:var(--text2)}

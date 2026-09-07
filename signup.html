@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first, ahead of every stylesheet.
+     Copied verbatim from personal-transformation.html, per
+     pass/AUTH-PAYMENTS-BRIEF.md Phase 2: copy head/nav/footer chrome from an
+     existing live page rather than inventing new chrome. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Create an account</title>
+<meta name="description" content="Create a free SafeRise account. Personal Transformation is open to everyone, no card required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-system.css">
+<link rel="stylesheet" href="css/saferise-footer.css">
+</head>
+<body class="sr-tp">
+
+<a href="#main" class="sr-tp-skiplink">Skip to content</a>
+
+<div id="srNav"></div>
+<script src="js/saferise-nav.js"></script>
+<script>SafeRiseNav.render('signup.html');</script>
+
+<main class="sr-tp-shell" id="main">
+  <div style="max-width:420px;margin:0 auto;padding:120px 20px 100px">
+    <div class="sr-tp-band" style="text-align:center">
+      <h1 style="margin-bottom:10px">Create an account</h1>
+      <p class="sr-tp-body" style="margin-bottom:28px">Personal Transformation is free, no card. Everything else needs a plan — see it from your account once you're in.</p>
+
+      <form id="srSignupForm" novalidate>
+        <label for="srEmail" style="display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;text-align:left">Email</label>
+        <input type="email" id="srEmail" required autocomplete="email" placeholder="you@example.com"
+          style="width:100%;min-height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--hair);background:var(--band);color:var(--text);font:15px 'DM Sans',sans-serif;margin-bottom:14px;box-sizing:border-box">
+
+        <label for="srPassword" style="display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;text-align:left">Password</label>
+        <input type="password" id="srPassword" required autocomplete="new-password" minlength="8" placeholder="At least 8 characters"
+          style="width:100%;min-height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--hair);background:var(--band);color:var(--text);font:15px 'DM Sans',sans-serif;margin-bottom:20px;box-sizing:border-box">
+
+        <button type="submit" class="sr-tp-pill" id="srSignupSubmit" style="width:100%;justify-content:center">Create account</button>
+        <p id="srSignupError" class="sr-tp-body" style="color:#E0716B;margin-top:14px;display:none"></p>
+      </form>
+
+      <p class="sr-tp-body" style="margin-top:22px">Already a member? <a href="login.html" id="srToLogin">Sign in</a></p>
+    </div>
+  </div>
+</main>
+
+<div id="srFooter"></div>
+<script src="js/saferise-footer.js"></script>
+<script>SafeRiseFooter.render();</script>
+
+<script src="js/saferise-auth.js"></script>
+<script src="js/saferise-access.js"></script>
+<script>
+(function () {
+  function nextParam() {
+    var m = /[?&]next=([^&]+)/.exec(location.search);
+    return m ? decodeURIComponent(m[1]) : 'dashboard.html';
+  }
+  var login = document.getElementById('srToLogin');
+  if (login) login.href = 'login.html?next=' + encodeURIComponent(nextParam());
+
+  var form = document.getElementById('srSignupForm');
+  var errEl = document.getElementById('srSignupError');
+  var submitBtn = document.getElementById('srSignupSubmit');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    errEl.style.display = 'none';
+    submitBtn.disabled = true;
+    var email = document.getElementById('srEmail').value.trim();
+    var password = document.getElementById('srPassword').value;
+    srAuth.signUp(email, password).then(function (user) {
+      if (!user) throw new Error('Check your email to confirm your account, then sign in.');
+      location.href = nextParam();
+    }).catch(function (err) {
+      errEl.textContent = (err && err.message) || 'Something went wrong. Try again.';
+      errEl.style.display = 'block';
+      submitBtn.disabled = false;
+    });
+  });
+})();
+</script>
+</body>
+</html>

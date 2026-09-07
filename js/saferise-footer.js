@@ -66,8 +66,9 @@
     {
       head: 'Legal',
       links: [
-        ['#', 'Terms'],
-        ['#', 'Privacy']
+        ['terms.html', 'Terms'],
+        ['privacy.html', 'Privacy'],
+        ['refunds.html', 'Refund Policy']
       ]
     }
   ];

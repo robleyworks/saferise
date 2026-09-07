@@ -369,7 +369,7 @@ textarea{min-height:100px}
 
 /* ---------- v7 integrated experience ---------- */
 .experience-box{border:1px solid var(--hair);border-radius:14px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.012),transparent 42%)}
-#experience .sechead--lead{margin:0;padding:34px 36px 32px;border:0;border-bottom:1px solid var(--hair);border-radius:0;background-image:linear-gradient(90deg,rgba(8,8,12,.98) 0%,rgba(8,8,12,.88) 43%,rgba(8,8,12,.36) 72%,rgba(208,220,216,.12) 100%),url('assets/extracted/8848c09a5f747191.png');background-size:cover;background-position:center 46%}
+#experience .sechead--lead{margin:0;padding:34px 36px 32px;border:0;border-bottom:1px solid var(--hair);border-radius:0;background-image:linear-gradient(90deg,rgba(8,8,12,.98) 0%,rgba(8,8,12,.88) 43%,rgba(8,8,12,.36) 72%,rgba(208,220,216,.12) 100%),url('assets/extracted/8848c09a5f747191.webp');background-size:cover;background-position:center 46%}
 #experience .sechead--lead .lede--lead{color:#D8D0C0}
 #experience .sechead--lead .subline{color:#A7A5AA}
 .experience-box .player{border:0;border-radius:0;background:transparent}
@@ -641,6 +641,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
 <script src="content/t3-resources.js"></script>
 <!-- SR-326 · the access gate. Loaded before the resolution IIFE below, which
      calls SafeRiseAccess.hasAccess() once PAGE_PROTOCOL has resolved. -->
+<script src="js/saferise-auth.js"></script>
 <script src="js/saferise-access.js"></script>
 
 <!-- SR-182 · shown only when a protocol was ASKED FOR and could not be found.
@@ -1060,6 +1061,10 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
         <h4>About</h4>
         <a href="#">About SafeRise</a>
       </nav>
+      <nav class="footer-col" aria-label="Legal">
+        <h4>Legal</h4>
+        <a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refund Policy</a>
+      </nav>
     </div>
     <div class="footer-bottom">
       <span>© 2026 SafeRise Protocol · an independent practice created by Andre Robley</span>
@@ -1269,9 +1274,16 @@ var PAGE_PROTOCOL = (function () {
    reaches here regardless. IN PLACE, never a redirect: the query string
    that brought a member here is untouched, so the same link opens the
    content the moment they have access. */
-(function () {
+(async function () {
   if (!PAGE_PROTOCOL.resolved) return;
-  if (!window.SafeRiseAccess || SafeRiseAccess.hasAccess(PAGE_PROTOCOL.protocolId)) return;
+  if (!window.SafeRiseAccess) return;
+  /* AUTH-PAYMENTS-BRIEF Phase 3: hasAccess() now asks a real, network-backed
+     entitlement cache (js/saferise-auth.js) instead of a synchronous
+     placeholder. Awaiting .ready first means this runs against the real
+     answer instead of the "not yet checked" default every page load would
+     otherwise see for the first instant. */
+  try { await SafeRiseAccess.ready; } catch (e) {}
+  if (SafeRiseAccess.hasAccess(PAGE_PROTOCOL.protocolId)) return;
 
   var wall = document.getElementById('sr-gate-wall');
   if (!wall) return;
@@ -1302,12 +1314,28 @@ var PAGE_PROTOCOL = (function () {
     e.preventDefault();
     var email = document.getElementById('sr-gate-email');
     if (!email || !email.value.trim()) return;
-    SafeRiseAccess.signIn(email.value.trim());
-    /* access granted \u2014 restore the page exactly as the not-found branch
-       never had to, since that case has nothing to restore to */
-    wall.hidden = true;
-    hidden.forEach(function (k) { k.hidden = false; });
-    document.title = 'SafeRise \u2014 ' + PAGE_PROTOCOL.protocol;
+    /* AUTH-PAYMENTS-BRIEF Phase 3: this form only ever collected an email,
+       no password, and used to call the placeholder's synchronous signIn()
+       then immediately reveal the gated page \u2014 fine when "signed in"
+       just meant "a fake session exists", a real bypass now that signing
+       up does not by itself mean entitled (Track 02/03 needs payment,
+       Phase 4, not built yet). An email-only form can't sign a real
+       session in synchronously either way, so this now sends a magic
+       link and says so, instead of unhiding content nothing has actually
+       granted access to. */
+    var submitBtn = signup.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+    srAuth.sendMagicLink(email.value.trim()).then(function () {
+      signup.innerHTML = '<p class="sr-gate-note">Check ' +
+        email.value.trim().replace(/</g, '&lt;') +
+        ' for a sign-in link. Track 02/03 protocols also need a plan once you\u2019re in.</p>';
+    }).catch(function (err) {
+      if (submitBtn) submitBtn.disabled = false;
+      var note = signup.querySelector('.sr-gate-note') || document.createElement('p');
+      note.className = 'sr-gate-note';
+      note.textContent = (err && err.message) || 'Could not send a link. Try again.';
+      signup.appendChild(note);
+    });
   });
 })();
 

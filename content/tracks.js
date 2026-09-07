@@ -121,7 +121,7 @@ var SHARED = {
   /* SR-213 · the one image slot that is not per-track. Four moments in
      sequence with no track cues, rendered identically on all three pages,
      so it is held once here rather than three times in TRACKS. */
-  art: { fourSteps: { src: 'assets/shared/four-steps.jpg',
+  art: { fourSteps: { src: 'assets/shared/four-steps.webp',
                       ratio: '16/5',
                       brief: 'shared \u2014 four moments, no track cues' } },
   scope: 'SafeRise is a self-guided nervous-system tool, not a replacement for therapy or crisis care \u2014 many members use both together. It is a practical nervous-system tool you can use in daily life, alongside any other support you are receiving.'
@@ -185,21 +185,21 @@ var TRACKS = {
          sampled and the stops set so the worst case clears 4.5:1 against
          --text #F5EDD8. Re-measure if the image is replaced; a new photograph
          invalidates these numbers. */
-      hero:   { src: 'assets/t1/hero.jpg',
+      hero:   { src: 'assets/t1/hero.webp',
                 ratio: '2400/1000',
                 brief: 'one person, right third \u2014 soft dark left half for type',
                 scrim: 'linear-gradient(96deg, rgba(11,11,18,.92) 0%, rgba(11,11,18,.84) 34%, rgba(11,11,18,.56) 62%, rgba(11,11,18,.22) 80%, transparent 94%)' },
 
-      band:   { src: 'assets/journey/t1-band.jpg',
+      band:   { src: 'assets/journey/t1-band.webp',
                 ratio: '1400/380',
                 brief: 'one person alone: listening with headphones, writing, reading' },
-      cost:   { src: 'assets/t1/cost.jpg',
+      cost:   { src: 'assets/t1/cost.webp',
                 ratio: '16/7',
                 brief: 'one person, same room \u2014 evening, three in the morning, next morning' },
-      range:  { src: 'assets/t1/range.jpg',
+      range:  { src: 'assets/t1/range.webp',
                 ratio: '16/6',
                 brief: 'the same person three times \u2014 braced, settled, absent' },
-      change: { src: 'assets/t1/change.jpg',
+      change: { src: 'assets/t1/change.webp',
                 ratio: '16/7',
                 brief: 'one person moving easily through an ordinary day at home' }
     },
@@ -304,21 +304,21 @@ var TRACKS = {
          sampled and the stops set so the worst case clears 4.5:1 against
          --text #F5EDD8. Re-measure if the image is replaced; a new photograph
          invalidates these numbers. */
-      hero:   { src: 'assets/t2/hero.jpg',
+      hero:   { src: 'assets/t2/hero.webp',
                 ratio: '2400/1000',
                 brief: 'two people, right third \u2014 soft dark left half for type',
                 scrim: 'linear-gradient(96deg, rgba(11,11,18,.88) 0%, rgba(11,11,18,.78) 36%, rgba(11,11,18,.48) 64%, rgba(11,11,18,.16) 82%, transparent 94%)' },
 
-      band:   { src: 'assets/journey/t2-band.jpg',
+      band:   { src: 'assets/journey/t2-band.webp',
                 ratio: '1400/380',
                 brief: 'two people: one listening alone, one writing, both reading together' },
-      cost:   { src: 'assets/t2/cost.jpg',
+      cost:   { src: 'assets/t2/cost.webp',
                 ratio: '16/7',
                 brief: 'two people in one room not looking at each other \u2014 evening, night, morning' },
-      range:  { src: 'assets/t2/range.jpg',
+      range:  { src: 'assets/t2/range.webp',
                 ratio: '16/6',
                 brief: 'the same pair three times \u2014 one pressing, both settled, one gone' },
-      change: { src: 'assets/t2/change.jpg',
+      change: { src: 'assets/t2/change.webp',
                 ratio: '16/7',
                 brief: 'two people at ease in a shared space, facing each other' }
       },
@@ -442,7 +442,7 @@ var TRACKS = {
          sampled and the stops set so the worst case clears 4.5:1 against
          --text #F5EDD8. Re-measure if the image is replaced; a new photograph
          invalidates these numbers. */
-      hero:   { src: 'assets/t3/hero.jpg',
+      hero:   { src: 'assets/t3/hero.webp',
                 ratio: '2400/1000',
                 brief: 'one professional, right third \u2014 soft dark left half for type',
                 scrim: 'linear-gradient(96deg, rgba(11,11,18,.90) 0%, rgba(11,11,18,.84) 38%, rgba(11,11,18,.58) 66%, rgba(11,11,18,.22) 84%, transparent 94%)' },
@@ -458,13 +458,13 @@ var TRACKS = {
          its two siblings. Reported, not resolved — SR-224. */
       band:   { ratio: '1400/380',
                 brief: 'corridor moments before the room, desk log, reading at day\u2019s end' },
-      cost:   { src: 'assets/t3/cost.jpg',
+      cost:   { src: 'assets/t3/cost.webp',
                 ratio: '16/7',
                 brief: 'one person at work \u2014 early, midday, still there late' },
-      range:  { src: 'assets/t3/range.jpg',
+      range:  { src: 'assets/t3/range.webp',
                 ratio: '16/6',
                 brief: 'the same professional before a meeting \u2014 braced, settled, absent' },
-      change: { src: 'assets/t3/change.jpg',
+      change: { src: 'assets/t3/change.webp',
                 ratio: '16/7',
                 brief: 'someone leaving work at a reasonable hour, unhurried' }
       },

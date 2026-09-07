@@ -457,9 +457,9 @@ body.reading #srLibrary{margin-top:22px}
    (b1: Workshops, b2: Premium 1:1, b3: Next available / calendar) — real CSS
    rules, not an inline style attribute, so there is no HTML-attribute quote to
    escape (see SR-338's write-up for what that trap looks like). */
-.sr-dash-bookpanel.b1{background:url('../assets/sessions/workshops.jpg') center/cover no-repeat,radial-gradient(56% 90% at 40% 60%,rgba(236,201,106,.26),transparent 66%),linear-gradient(120deg,#0B0B12,#1C1509 62%,#2A1E10)}
-.sr-dash-bookpanel.b2{background:url('../assets/sessions/premium-1on1.jpg') center/cover no-repeat,radial-gradient(56% 90% at 46% 55%,rgba(155,127,212,.22),transparent 66%),linear-gradient(120deg,#0C0B13,#1A1526 62%,#241C36)}
-.sr-dash-bookpanel.b3{background:url('../assets/sessions/calendar.jpg') center/cover no-repeat,radial-gradient(56% 90% at 52% 58%,rgba(78,154,166,.2),transparent 66%),linear-gradient(120deg,#0A0F12,#132228 62%,#1B2F35)}
+.sr-dash-bookpanel.b1{background:url('../assets/sessions/workshops.webp') center/cover no-repeat,radial-gradient(56% 90% at 40% 60%,rgba(236,201,106,.26),transparent 66%),linear-gradient(120deg,#0B0B12,#1C1509 62%,#2A1E10)}
+.sr-dash-bookpanel.b2{background:url('../assets/sessions/premium-1on1.webp') center/cover no-repeat,radial-gradient(56% 90% at 46% 55%,rgba(155,127,212,.22),transparent 66%),linear-gradient(120deg,#0C0B13,#1A1526 62%,#241C36)}
+.sr-dash-bookpanel.b3{background:url('../assets/sessions/calendar.webp') center/cover no-repeat,radial-gradient(56% 90% at 52% 58%,rgba(78,154,166,.2),transparent 66%),linear-gradient(120deg,#0A0F12,#132228 62%,#1B2F35)}
 .sr-dash-booklabel{position:relative;z-index:3;padding:0 0 14px;width:100%}
 .sr-dash-booklabel span{display:block;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
   color:rgba(245,237,216,.72);font-weight:700}
@@ -1055,7 +1055,7 @@ body .sr-cover{min-height:340px}  /* same 0,1,1 as the base rule above — order
      than the one above at line ~964, same specificity) — the earlier rule's
      own NEEDS-ART comment named 1100x900; the file actually supplied is
      900x600, flagged in the SR-340 write-up, not resolved here. */
-  background:url('../assets/dashboard/clearing-tile.jpg') center/cover no-repeat,
+  background:url('../assets/dashboard/clearing-tile.webp') center/cover no-repeat,
              radial-gradient(48% 58% at 44% 60%,rgba(236,201,106,.4),transparent 72%),
              linear-gradient(150deg,#0A0A10 0%,#1B1206 50%,#33240F 100%)}
 .sr-cover-scrim{background:linear-gradient(180deg,rgba(8,8,12,.24) 0%,transparent 32%,rgba(8,8,12,.78) 100%)}
@@ -1082,7 +1082,7 @@ body .sr-cover{min-height:340px}  /* same 0,1,1 as the base rule above — order
    is always the BOTTOM layer, never a top wash, so a same-stop gradient
    stands in for one) to keep the text as legible as the plain-ground
    version had it. */
-.sr-begin-card--resume{background:linear-gradient(rgba(10,10,16,.62),rgba(10,10,16,.62)),url('../assets/dashboard/left-off-tile.jpg') center/cover no-repeat}
+.sr-begin-card--resume{background:linear-gradient(rgba(10,10,16,.62),rgba(10,10,16,.62)),url('../assets/dashboard/left-off-tile.webp') center/cover no-repeat}
 .sr-begin-card--panel + .sr-begin-card--panel{margin-left:0}
 .sr-begin-card--panel .sr-begin-act{border-top-color:rgba(255,255,255,.1)}
 .sr-begin-card--panel .sr-dash-input,

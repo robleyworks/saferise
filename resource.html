@@ -360,7 +360,7 @@ textarea{min-height:100px}
 
 /* ---------- v7 integrated experience ---------- */
 .experience-box{border:1px solid var(--hair);border-radius:14px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.012),transparent 42%)}
-#experience .sechead--lead{margin:0;padding:34px 36px 32px;border:0;border-bottom:1px solid var(--hair);border-radius:0;background-image:linear-gradient(90deg,rgba(8,8,12,.98) 0%,rgba(8,8,12,.88) 43%,rgba(8,8,12,.36) 72%,rgba(208,220,216,.12) 100%),url('assets/extracted/45774db62956cedb.jpg');background-size:cover;background-position:center 46%}
+#experience .sechead--lead{margin:0;padding:34px 36px 32px;border:0;border-bottom:1px solid var(--hair);border-radius:0;background-image:linear-gradient(90deg,rgba(8,8,12,.98) 0%,rgba(8,8,12,.88) 43%,rgba(8,8,12,.36) 72%,rgba(208,220,216,.12) 100%),url('assets/extracted/45774db62956cedb.webp');background-size:cover;background-position:center 46%}
 #experience .sechead--lead .lede--lead{color:#D8D0C0}
 #experience .sechead--lead .subline{color:#A7A5AA}
 .experience-box .player{border:0;border-radius:0;background:transparent}
@@ -1180,7 +1180,7 @@ guideAudio.addEventListener('ended', function(){
 
 /* cover inherits the protocol cover, same treatment as the section header */
 document.getElementById('cover').style.backgroundImage=
-  'linear-gradient(90deg,rgba(8,8,12,.97) 0%,rgba(8,8,12,.82) 42%,rgba(8,8,12,.3) 72%,rgba(8,8,12,.5) 100%),url("assets/extracted/45774db62956cedb.jpg")';
+  'linear-gradient(90deg,rgba(8,8,12,.97) 0%,rgba(8,8,12,.82) 42%,rgba(8,8,12,.3) 72%,rgba(8,8,12,.5) 100%),url("assets/extracted/45774db62956cedb.webp")';
 
 /* SR-077 · position on the opening resource by name, not by index. */
 (function(){
@@ -1273,10 +1273,16 @@ renderRail();renderMain();
       return;
     }
     var back = e.target.closest('.sr-backbar a, .sr-backbar button');
-    if(back){ e.preventDefault(); post('back-to-protocol'); }
+    if(back && (!back.getAttribute('href') || back.getAttribute('href') === '#')){ e.preventDefault(); post('back-to-protocol'); }
   }, true);
 })();
 </script>
+
+<div class="sr-backbar" style="margin-top:24px">
+  <a href="terms.html" class="resource-back">Terms</a>
+  <a href="privacy.html" class="resource-back">Privacy</a>
+  <a href="refunds.html" class="resource-back">Refund Policy</a>
+</div>
 
 </body>
 </html>

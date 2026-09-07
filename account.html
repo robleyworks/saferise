@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 pattern; chrome copied verbatim from personal-transformation.html —
+     see pass/AUTH-PAYMENTS-BRIEF.md Phase 2. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Your account</title>
+<meta name="description" content="Your SafeRise account and plan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-system.css">
+<link rel="stylesheet" href="css/saferise-footer.css">
+</head>
+<body class="sr-tp">
+
+<a href="#main" class="sr-tp-skiplink">Skip to content</a>
+
+<div id="srNav"></div>
+<script src="js/saferise-nav.js"></script>
+<script>SafeRiseNav.render('account.html');</script>
+
+<main class="sr-tp-shell" id="main">
+  <div id="srAccountRoot" style="max-width:520px;margin:0 auto;padding:120px 20px 100px">
+    <p class="sr-tp-body">Loading your account&hellip;</p>
+  </div>
+</main>
+
+<div id="srFooter"></div>
+<script src="js/saferise-footer.js"></script>
+<script>SafeRiseFooter.render();</script>
+
+<script src="js/saferise-auth.js"></script>
+<script src="js/saferise-access.js"></script>
+<script>
+(async function () {
+  var root = document.getElementById('srAccountRoot');
+  try { await SafeRiseAccess.ready; } catch (e) {}
+  var user = SafeRiseAccess.currentUser();
+
+  if (!user) {
+    root.innerHTML =
+      '<div class="sr-tp-band" style="text-align:center">' +
+        '<h1 style="margin-bottom:10px">Sign in to see your account</h1>' +
+        '<p style="margin-top:24px"><a class="sr-tp-pill" href="login.html?next=account.html">Sign in</a></p>' +
+      '</div>';
+    return;
+  }
+
+  var status = srAuth.status(); // {subscription_status, entitled_until} or null
+  var entitled = srAuth.entitled();
+  var planLine = entitled
+    ? 'Full plan &mdash; status: ' + esc((status && status.subscription_status) || 'active')
+    : 'Personal Transformation only (free). No paid plan yet.';
+  var untilLine = (status && status.entitled_until)
+    ? '<p class="sr-tp-body" style="margin-top:6px">Renews or ends: ' + esc(new Date(status.entitled_until).toLocaleDateString()) + '</p>'
+    : '';
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  root.innerHTML =
+    '<div class="sr-tp-band">' +
+      '<h1 style="margin-bottom:6px">Your account</h1>' +
+      '<p class="sr-tp-body">' + esc(user.email || '') + '</p>' +
+      '<div style="margin:26px 0;padding-top:20px;border-top:1px solid var(--hair)">' +
+        '<p class="sr-tp-body"><strong style="color:var(--text)">Plan:</strong> ' + planLine + '</p>' +
+        untilLine +
+      '</div>' +
+      '<p style="margin-top:20px">' +
+        '<a class="sr-tp-pill" id="srManageLink" href="#" style="opacity:.5;pointer-events:none" aria-disabled="true">Manage subscription</a>' +
+      '</p>' +
+      '<p class="sr-tp-body" style="margin-top:10px">' +
+        (entitled
+          ? 'Manage subscription opens once payments (Phase 4) are wired up &mdash; not yet.'
+          : 'Upgrading opens once payments (Phase 4) are wired up &mdash; not yet.') +
+      '</p>' +
+      '<p style="margin-top:30px;padding-top:20px;border-top:1px solid var(--hair)">' +
+        '<button type="button" class="sr-tp-pill" id="srSignOut">Sign out</button>' +
+      '</p>' +
+    '</div>';
+
+  document.getElementById('srSignOut').addEventListener('click', function () {
+    srAuth.signOut().then(function () { location.href = 'index.html'; });
+  });
+})();
+</script>
+</body>
+</html>
