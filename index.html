@@ -1768,10 +1768,21 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
   }
 })();
 </script>
-<!-- sr-footer-template: the single reusable footer partial. Cloned into
-     #main-content and every .prog-overlay by the script below — see
-     docs/INTEGRATION.md "Footer + scope notice". Do not duplicate this
-     markup by hand elsewhere; add another clone target instead. -->
+<!-- sr-footer-template: the single reusable footer partial. Cloned into every
+     .prog-overlay by the script below — see docs/INTEGRATION.md "Footer +
+     scope notice". Do not duplicate this markup by hand elsewhere; add
+     another clone target instead.
+     SR-350 · was also cloned into #main-content, stacking under the
+     hand-written <footer class="foot"> already there — a real double footer,
+     confirmed live. Removed #main-content from the clone target list rather
+     than removing .foot, since .sr-foot carries the showProg() SPA links
+     (Compare Plans / Services / About SafeRise / The Journey) that .foot
+     does not — dropping .sr-foot there would have silently removed those
+     from the homepage's own footer. .foot keeps its own links (FAQ, Billing,
+     Support, Contact) that .sr-foot does not carry either; neither footer is
+     a strict subset of the other, so this was a genuine either/or, not a
+     safe default — flagged, not just fixed. -->
+
 <template id="sr-footer-template">
 <footer class="sr-foot">
   <div class="sr-foot-in">
@@ -1844,7 +1855,7 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
 document.addEventListener('DOMContentLoaded', function () {
   var tpl = document.getElementById('sr-footer-template');
   if (!tpl) return;
-  document.querySelectorAll('#main-content, .prog-overlay').forEach(function (host) {
+  document.querySelectorAll('.prog-overlay').forEach(function (host) {
     host.appendChild(tpl.content.cloneNode(true));
   });
 });
