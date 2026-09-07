@@ -3803,6 +3803,8 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E")
 }
 .sr-home .filmcopy{position:relative;z-index:3;width:100%;padding-top:155px;padding-bottom:0}
+.sr-home .filmcopy h1 em{display:block}
+.sr-home .router-question em{display:block}
 .sr-home .filmcopy h1{max-width:13ch;font-size:clamp(32px,3.7vw,52px)}
 .sr-home .filmlead{max-width:62ch!important;font-family:'DM Sans',sans-serif!important;font-size:15.5px!important;line-height:1.7!important}
 .sr-home .filmlead strong{color:var(--gold-lt);font-weight:600}
