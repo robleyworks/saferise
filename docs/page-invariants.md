@@ -201,6 +201,32 @@ either removing or merging the paragraph after it.** A future pass that
 reconciles the site's footer copy against `js/saferise-footer.js`'s wording
 should treat this omission as intentional, not as drift to correct.
 
+### `SHARED.resources` (`content/tracks.js`) carries four pending resource types
+
+`Why I Built This One`, `Source Insights`, `Reference Case`, and — added
+during PASS-full-resource-access, not present before it — `The Decision`.
+Each row ends in a sixth array element, `true`, marking it pending; every
+reader of `SHARED.resources` in `content/tracks.js`
+(`resourceByType`/`trackResources`/`protocolResources`) and in
+`js/saferise-track.js` (`libSize`'s fallback) filters pending rows out, so
+none of the four can render or be counted anywhere on the live site.
+
+**Why each is hidden:** none has content authored on any protocol in any of
+`content/t1-resources.js`, `t2-resources.js` or `t3-resources.js` — checked
+directly against all three files, not assumed. `Source Insights` was
+deliberately merged into `How This Works` by SR-077 and is not coming back
+under its own name; the merge stands. `The Decision` was found undeclared
+in `SHARED.resources` during this pass (Step 6) — the brief that requested
+adding it did not know it also has no content anywhere, which the
+acceptance test (no resource opens empty) would have failed had it been
+added live rather than pending.
+
+**Restoring one is one flag, not a re-authoring job, once content exists:**
+flip the row's sixth element from `true` to `false` (or drop it). `LG-13`
+restores `Why I Built This One`. No launch gate is recorded against
+`Source Insights`, `Reference Case` or `The Decision` at the time of this
+entry — confirm before assuming one applies.
+
 ## No public page links to a member page (SR-325)
 
 **No public page links to a member page.** The only exception is the

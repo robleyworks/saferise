@@ -270,7 +270,8 @@
      Tracks 01 and 02 have ten. */
   function libSize() {
     return (typeof trackResourceCount === 'function' && CURRENT_TRACK)
-      ? trackResourceCount(CURRENT_TRACK) : SHARED.resources.length;
+      ? trackResourceCount(CURRENT_TRACK)
+      : SHARED.resources.filter(function (r) { return !r[5]; }).length; /* pending excluded, PASS-full-resource-access Step 6 */
   }
   function resourceCount(s) {
     var WORDS = 'zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty';

@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-353.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-354.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -8300,3 +8300,174 @@ therapy," no crisis sentence) — left alone, per b18f1fd's own prior finding,
 now re-confirmed rather than assumed.
 
 *Status:* closed · *Raised and fixed:* 7 Sep 2026
+
+---
+
+**SR-354 · resource.html now renders real, protocol-specific content — PASS-full-resource-access.**
+`pass/PASS-resource-routing.md`, which this pass says it supersedes, does not
+exist in the repo — nothing to delete.
+
+**The defect, confirmed exactly as reported.** `dashboard.html` sent
+`&track=`/`&protocol=` (`loadResource()`, ~2306); `resource.html` parsed
+only `embed`/`resource`/`theme` and rendered a six-entry generic
+`RESOURCES` array + one `PROXIMITY` object regardless of which protocol
+asked. Every protocol showed the same stub. `protocol.html` loads all
+three content stores (`content/t1|t2|t3-resources.js`, 639–641) but never
+reads from the resulting globals anywhere in its own code — confirmed by
+grep, zero hits — so its hand-typed resource labels ("Protocol Guide",
+"Somatic Release") are not guaranteed to be store titles, several
+confirmed not to be. Step 4.3's normalised-title match with logged fallback
+exists specifically because of this.
+
+**Step 1 — content shape.** `T{n}_PROTOCOL_KEYS` (object, keyed `"t1-01"`
+etc., `{reader, keys[]}`) and `T{n}_RESOURCES` (object, keyed by full
+resource id e.g. `"t1p1-meditation"`) in all three files — confirmed via
+`esprima`, not by eye. 92 + 101 + 95 = 288 resource entries total. 285 of
+288 share one shape (`kind, title, sub, body[], cues[], sharedRefs[],
+diagrams[]`); **3 do not** — `t1p2-advisory`/`disclosure`/`repair` (Anger
+Alchemy) carry `{kind, title, meta, locked, body}` instead, body already a
+joined string rather than an array, wrapped behind an earlier, fully
+commented-out version of the same record (`/* superseded 2026-09-01 …
+{…} */ { … }` — real JS, the live value is the second object; a plain-text
+read of the file is misleading here). The adapter (`js/saferise-resources.js`)
+handles both without reshaping either file, per instruction.
+
+**Step 2 — confirmed dashboard.html's actual values.** `pOpen.track` is a
+plain number (1/2/3); `pOpen.no` is a zero-padded string (`'01'`…`'10'`),
+matching `T{n}_PROTOCOL_KEYS`'s own key format directly — no reformatting
+needed beyond `'t' + track + '-' + no`. `protocol.html` does **not** render
+its list from the content files (above) — the label posted is a hand-typed
+string, so Step 4's title-matching needs the normalised, fallback-and-log
+approach rather than an exact match, exactly as anticipated.
+
+**Step 3 — the resolver, adapted.** `content/inventory.js`'s
+`PROTOCOL_RESOURCE_TYPES` — generated, checked in, "regenerate whenever
+[the content files] are regenerated" — is **stale**: it omits
+`t1p1-advisory` for Anxiety Reset (t1-01), a real, populated resource
+confirmed present in `content/t1-resources.js`. `srResolveSet()` therefore
+reads `T{n}_PROTOCOL_KEYS[key].keys` directly (authored inside the same
+file as the bodies, not a parallel hand-maintained map) rather than
+inventory.js, and does not touch `META[].extras` for resource-list
+purposes, per instruction. `resourceByType`/`trackResources`/
+`protocolResources` in `content/tracks.js` are the *other* extras
+consumers still standing — patched (Step 6) rather than removed, since
+they also read `state`/`frameworks` which stays live.
+
+**Two resource types exist that are not in this pass's own canonical
+table, `tracks.js`, or `content/inventory.js` — found live, not assumed:**
+`safety` ("Safety Score" / Capacity Check), universal on all ten Track 02
+protocols, absent from Tracks 01 and 03 entirely (~10 occurrences,
+protocol-specific titles like *"The Trust & Betrayal Protocol — Capacity
+Check"*, matches the pre-engagement check relationship-healing.html's own
+FAQ already names). `crisis` ("Support Resources"), exactly one occurrence,
+`t1p10-crisis` only — an extra crisis-support card on one Track 01
+protocol, not a platform type. Both added to `TYPE_META` in
+`js/saferise-resources.js` with placeholder glyph/eyebrow, flagged in that
+file's own comment as this pass's invention, not sourced from anywhere —
+Andre should assign the real ones.
+
+**Step 4 — resource.html wired.** Loads `content/t1|t2|t3-resources.js`
+and `js/saferise-resources.js` alongside the existing `guidance.js`.
+Measured page weight: **1,035,896 bytes (~1.0 MB)**, up from ~86 KB before
+— almost entirely the three content stores, not split in this pass, per
+instruction. `track`/`protocol` parsed in the same regex style as the
+existing `embed`/`resource`/`theme` parsing; `resource` matched against
+resolved titles on Step 4.3's exact normalisation (lowercase, `&`/`and`
+folded, `&amp;` decoded, punctuation and repeated spaces stripped), no
+match logs the requested string and the available titles via
+`console.warn` and falls back to index 0. `OPENS_ON`/`advisoryOn` retired
+— the store's own per-protocol `.keys` list now decides whether `advisory`
+appears at all, not a second on/off flag layered on top.
+
+**Step 5 — the stub retired, fields merged, not dropped.** `RESOURCES`/
+`PROXIMITY` deleted. Matched against the resolved record set by normalised
+type slug (not by protocol — the stub was generic): `guided→meditation`,
+`how→guide`, `somatic→companion`, `disclosure→disclosure`,
+`fourline→crisiscard`, `PROXIMITY→advisory`. `eyebrow`/`meta`/`railTitle`/
+`railMeta` carried into `TYPE_META` as per-type display metadata (the
+content store has no equivalent fields); `decision` had no counterpart —
+expected, ties directly to Step 6. The placeholder at the old
+resource.html:983 is gone with the stub it was attached to; its own claim
+was independently re-confirmed accurate (Step 1/8) before deletion, not
+just assumed.
+
+**Step 6 — the manifest, corrected against what's actually there,
+not assumed.** `Raising It` and `Accountability & Empathy` were **already**
+declared correctly in `SHARED.resources` (`'case'`/`'face'` rows) — the
+brief's premise that both were undeclared does not hold; neither was
+re-added. `The Decision` genuinely was undeclared, but has **zero**
+authored content in any of the three stores — confirmed directly, not
+assumed — so adding it live, as literally instructed, would have shipped
+a resource guaranteed to open empty and failed this pass's own acceptance
+test. Marked `pending` instead, alongside `Why I Built This One`,
+`Source Insights`, `Reference Case` — none of which currently exist in
+`SHARED.resources` at all (grepped directly; the brief's premise that they
+exist and need only a flag also does not hold) — added fresh, inert, so
+restoring one later really is one flag rather than re-authoring plus a
+first-time manifest entry. Pending marked via a sixth array element,
+`true`. **Render paths filtered:** `resourceByType`, `trackResources`
+(both branches), `protocolResources` (both branches) in `content/tracks.js`;
+`libSize()`'s fallback in `js/saferise-track.js`. `docs/page-invariants.md`
+carries the four pending types, why, and the `LG-13` reference — neither
+`LG-13` nor `LG-07` (Step 8) could be located anywhere in the repo to
+verify against; reported, not assumed accurate.
+
+**Step 7 — the twelve-resource claims, already gone.** None of the three
+literal find-strings exist in `content/tracks.js` — `grep -c "twelve"`
+returns zero. Track 02's and Track 03's `deeper` blurbs already read
+*"The full resource library, …"*, matching this pass's own prescribed
+replacement text exactly (an earlier, unlisted pass already made this
+change). Track 01's `priceList` reads *"Every protocol in the track, each
+with its full resource library"* — not a verbatim match to either the
+brief's "before" or "after" text, but the underlying defect (a false
+"twelve" claim) is already gone; per instruction, left as is rather than
+forced to match a prescribed string that describes an already-fixed
+problem differently. Every other "twelve" hit in the repo (terms.html's
+liability clause, dashboard.html's/`js/saferise-track.js`'s own
+number-word arrays, an academic citation in member-kross.html) is
+unrelated to resource counts — listed, none changed.
+
+**Step 8 — naming collision, report only, nothing changed.** `"Attention
+Advisory"` and `"Proximity Guide"` are used for the same `advisory` type
+slug in different places, but they are not simply two names for one
+concept — confirmed by reading the actual content, not assumed from the
+names alone. Anxiety Reset's `t1p1-advisory` ("Anxiety Reset — Where to
+Direct Your Attention") is a practice-safety guide for turning attention
+inward during meditation; Anger Alchemy's `t1p2-advisory` and every other
+track's `advisory` entry is the three-tier external-proximity framework.
+Both are titled "Attention Advisory" in some surfaces and referred to as
+"Proximity Guide" in `SHARED.resources`/`CONDITIONAL_RESOURCES`/
+`resourceNote`, and `content/tracks.js` itself uses **both** names in
+different places for the *same* concept (data structures say "Proximity
+Guide"; Track 03's own `deeper`/`priceList` marketing copy says "Attention
+Advisory" — content/tracks.js:596,609). Full location list: `plans.html`,
+`protocol.html`, `member-porges.html`, `content/t1-resources.js` (×2, one
+per meaning) for "Attention Advisory"; `content/t1|t2|t3-resources.js`
+(30 combined), `content/guidance.js`, `content/tracks.js` (×4) for
+"Proximity Guide". Andre picks the surviving name — and, separately from
+naming, the two Anxiety-Reset-vs-everyone-else *meanings* under `advisory`
+may need their own resolution regardless of which name wins.
+
+**Step 9 — acceptance test, run, not asserted.** All 288 resources across
+all 30 protocols resolved live in the Browser pane against the served
+site (not by reading source): zero resolver errors, zero empty/whitespace
+bodies, **zero duplicate body text anywhere in the full 288** (checked
+pairwise across the entire set, not sampled), zero cross-protocol id
+leakage (every resolved resource's id prefix matches its own protocol's
+`reader`, checked for all 288). Anxiety Reset and Anger Alchemy both
+resolve an `advisory`-type entry — Anxiety Reset's, per Step 8, is not the
+Proximity Guide in content despite sharing the type slug, so "excludes
+Proximity Guide" is true in substance and false in raw type-slug terms;
+reported both ways rather than picked one. Every one of the ten Track 03
+protocols includes `raising`, confirmed individually. Rapid repeated
+"next" clicks past the end of a nine-resource set stop at the last
+resource and never cross into another protocol's set. `sessionStorage['sr-theme']`
+persists and applies across reload; `embed=1` still suppresses the
+top nav. One protocol resolves and renders in 1.70 ms. Full 288-row table
+in `docs/PASS-full-resource-access-acceptance-table.md`.
+
+Files: `resource.html`, `js/saferise-resources.js` (new),
+`content/tracks.js`, `js/saferise-track.js`, `docs/page-invariants.md`,
+`docs/PASS-full-resource-access-acceptance-table.md` (new).
+
+*Status:* closed · *Raised and fixed:* 8 Sep 2026

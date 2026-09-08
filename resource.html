@@ -921,71 +921,27 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
 <!-- SR-247 · the guidance record. The src comes from here, never from
      markup — Rule 24, a path is a claim the asset exists and is usable. -->
 <script src="content/guidance.js"></script>
+<!-- PASS-full-resource-access, Step 4 · the written content, loaded for
+     real. Order matters: saferise-resources.js reads the three globals
+     these declare. -->
+<script src="content/t1-resources.js"></script>
+<script src="content/t2-resources.js"></script>
+<script src="content/t3-resources.js"></script>
+<script src="js/saferise-resources.js"></script>
 <script>
-var RESOURCES=[
- {key:'guided',eyebrow:'Practise',title:'The guided protocol',
-  sub:'The full Four-Step sequence, guided end to end.',
-  meta:'Guided practice · Video',read:'',type:'core',glyph:'◫',
-  audio:true,dur:'',pdf:true,railTitle:'Guided Protocol',railMeta:'',
-  body:'<p>Recognise what is running. Regulate with a slower breath. Release what you are gripping. Rise into the wider view.</p><p>The sequence pairs a slow breath rhythm near six breaths a minute with a deliberate shift of attention. The breath rate is the part with the most evidence behind it; the attention shift is what makes it repeatable without the audio.</p>'},
+/* PASS-full-resource-access, Step 4.2 · track/protocol parsed in the same
+   regex style already used for resource/theme/embed below, then normalised
+   to T{n}_PROTOCOL_KEYS's own key format ('1' + zero-padded 'no'). Falls
+   back to Track 01 / protocol 01 (Anxiety Reset) -- this page's own
+   long-standing default -- when the params are absent or resolve to
+   nothing, rather than failing to render at all. */
+var qTrack = /[?&]track=(\d)/.exec(location.search);
+var qProto = /[?&]protocol=(\d{1,2})/.exec(location.search);
+var ACTIVE_TRACK = qTrack ? qTrack[1] : '1';
+var ACTIVE_PROTOCOL = qProto ? ('0' + qProto[1]).slice(-2) : '01';
+var RESOURCES = window.SafeRiseResources.resolveSet(ACTIVE_TRACK, ACTIVE_PROTOCOL);
+if (!RESOURCES) { ACTIVE_TRACK = '1'; ACTIVE_PROTOCOL = '01'; RESOURCES = window.SafeRiseResources.resolveSet('1', '01') || []; }
 
- /* SR-077 · was the Source Insights record. Merged into How This Works: the
-    framework attribution it carried is the body of this resource now. */
- {key:'how',gtype:'guide',eyebrow:'Understand',title:'How this works',
-  sub:'Why it works.',
-  meta:'Mechanism &amp; sources',read:'',type:'evidence',glyph:'◑',
-  audio:true,dur:'',pdf:true,railTitle:'How This Works',railMeta:'',
-  body:'<p>Porges gives the clearest account of why a body braced for threat cannot simply be reasoned into calm, and why breath and attention reach it when argument does not. HeartMath supplies the measurable part: a slow, even breath rhythm produces a more ordered heart rhythm, and that pattern is well documented.</p><p>Watching a state from outside it is the third measured part: self-distanced reflection settles a reaction more durably than distraction does, and mentally rehearsing the self who has already come through lifts mood and outlook by a margin the studies can see. Jung sits further out, as a way of thinking about the parts of a pattern you did not choose. Useful as framing. Not the evidence base, and this guide does not present it as such.</p><p>Maté on what the response was protecting. Watts on what happens when you stop fighting the sensation. Six views of one pattern — take what is useful.</p>'},
-
- {key:'somatic',gtype:'companion',eyebrow:'Release',title:'Between sessions',
-  sub:'Small physical practices that hold the work between sittings.',
-  meta:'Somatic Release Guide',read:'7 options',type:'relational',glyph:'⊘',
-  audio:true,dur:'',pdf:true,railTitle:'Somatic Release',railMeta:'7 options',
-  body:'<p>Rhythmic walking. Weight across the chest. A stone in the pocket you can find without looking. Cold water on the wrists.</p><p>None of these replace the protocol. They give the body somewhere to put the charge on a day you cannot sit down for a full session.</p>'},
-
- {key:'disclosure',gtype:'disclosure',eyebrow:'Tell',title:'Telling someone what this is',
-  sub:'A script for a partner, a friend, or family.',
-  meta:'Disclosure &amp; Support Guide',read:'',type:'relational',glyph:'⚿',
-  audio:true,dur:'',pdf:true,railTitle:'Disclosure &amp; Support',railMeta:'',
-  body:'<p>People close to you will notice the change before you explain it. Explaining it badly tends to end in a conversation about whether it works.</p><p>This is a short script for saying what you are doing, what you would like from them, and what you are not asking them to do.</p>'},
-
- {key:'decision',eyebrow:'Choose',title:'The Decision',
-  sub:'Choose who handles this pattern next.',
-  meta:'Identity &amp; Embodiment',read:'',type:'identity',glyph:'↺',
-  audio:true,dur:'',pdf:true,railTitle:'The Decision',railMeta:'',
-  body:'<p>The protocol helps you interrupt the pattern. This page asks what happens after that interruption: who do you choose to become when the old response is no longer making the decision for you?</p>'
-   +'<p>The survival identity is not the enemy. It formed around something it was trying to protect. Working with it means understanding it, keeping what was useful, and deliberately practising a different way of responding.</p>'
-   +'<div class="sr-prog">'
-   +'<div class="st"><span class="sn">The Constant Forecaster</span><span class="sd">Predicts danger and prepares</span></div><div class="hl"></div>'
-   +'<div class="st"><span class="sn">The Grounded Navigator</span><span class="sd">Reads reality with wisdom</span></div><div class="hl"></div>'
-   +'<div class="st"><span class="sn">The Practised Human</span><span class="sd">Chooses response with intention</span></div>'
-   +'</div>'
-   +'<div class="sr-chapter"><span class="eyebrow">Chapter 1</span><h3>Understand who protected you</h3>'
-   +'<p class="sr-tight">Name the survival identity that has been running the show.</p>'
-   +'<p class="sr-tight">Be specific. What was its job? What was it trying to prevent?</p>'
-   +'<p>Give it credit for what it did well.</p></div>'
-   +'<div class="sr-chapter"><span class="eyebrow">Chapter 2</span><h3>Name who you are practising into</h3>'
-   +'<p>Not an aspiration. A description of how you want to respond the next time the pattern starts — specific enough that you would recognise it happening.</p>'
-   +'<div class="integration" style="margin-top:22px"><p class="q">“Who am I choosing to become?”</p>'
-   +'<p class="ip" style="margin-bottom:0">Write the answer somewhere you will see it before the next session. The decision is made once and practised many times.</p></div></div>'},
-
- {key:'fourline',gtype:'crisiscard',eyebrow:'Carry',title:'Anxiety Reset — the four-line version',
-  sub:'The whole protocol, short enough to use standing up.',
-  meta:'Portable version',read:'',type:'meta',glyph:'◇',
-  audio:true,dur:'',pdf:true,railTitle:'Anxiety Reset — 4-Line Version',railMeta:'',
-  body:'<p class="sr-tight">Name it. “This is fear, and it is here now.”</p><p class="sr-tight">Drop attention to the centre of the chest and lengthen the breath.</p><p class="sr-tight">Let the sensation be there without arguing with it.</p><p>Find one thing that is genuinely fine right now, and stay with it for three breaths.</p>'}
-];
-
-var PROXIMITY={key:'proximity',gtype:'advisory',eyebrow:'Locate',title:'Where to direct your attention',
-  sub:'How close to stay to the sources of the distress — and who is safe to have near you while you work.',
-  meta:'Proximity Guide · Three tiers',read:'',type:'relational',glyph:'!',advisory:true,
-  audio:true,dur:'',pdf:true,railTitle:'Where to Direct Your Attention',railMeta:'',
-  body:'<p><em>Draft — this resource exists for six protocols (Anger Alchemy, Overwhelm Threshold, Abandonment Wound, Jealousy Release, Insecurity Anchor, Powerlessness &amp; Despair). Anxiety Reset does not have one yet. Shown here in the live format so the slot can be judged.</em></p>'
-   +'<p>A framework for deciding how close to stay to the sources of your distress — without assuming the answer is always to cut them off.</p>'
-   +'<div class="sr-chapter"><span class="eyebrow">Tier One</span><h3>Reduce exposure, stay engaged</h3><p>The situation causes real activation, but there is evidence of capacity for accountability or repair. What is needed is distance from the conditions that make it worse, not from the person.</p></div>'
-   +'<div class="sr-chapter"><span class="eyebrow">Tier Two</span><h3>Protective distance</h3><p>The pattern repeats with no real acknowledgment, and the cost to your regulation consistently outweighs the value of staying close.</p></div>'
-   +'<div class="sr-chapter"><span class="eyebrow">Tier Three</span><h3>Beyond self-regulation</h3><p>What is happening is ongoing harm, not a regulation problem to work through alone. If this is where you are, reach out to a licensed professional, a crisis helpline, or emergency services.</p></div>'
-   +'<p style="margin-top:26px">None of these tiers are permanent addresses. People move between them as circumstances change — the work is checking in honestly, especially after using the Four-Step protocol.</p>'};
 
 var HEART='<svg viewBox="0 0 24 24"><path d="M12 20.5S3 14.9 3 8.9A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 9 2.9c0 6-9 11.6-9 11.6z"/></svg>';
 /* pangolin — curled, scales along the back */
@@ -997,24 +953,19 @@ var PANGOLIN='<svg viewBox="0 0 24 24">'
 
 var FEEDBACK=[{key:'resonate',icon:HEART,label:'It resonates'},{key:'integrate',icon:PANGOLIN,label:'I will integrate'}];
 
-/* SR-077 · the reader opened on a hardcoded index 6, which was The Decision
-   when there were eight records. Cutting two put it past the end of the list,
-   so visible()[current] came back undefined and renderMain() threw on
-   r.eyebrow before it could paint anything. The opening resource is named,
-   and the index is looked up. */
-var OPENS_ON = 'decision';
-/* SR-155 · do not tidy. `advisoryOn` is dormant, not dead: visible() below
-   splices the PROXIMITY resource into the rail when it is true, so the flag
-   controls what the reader's rail contains. The only thing that ever set it was
-   the mockup "Open decisions" switcher, which is gone — false is the shipped
-   behaviour, and the branch is what a real toggle would drive. */
-var advisoryOn = false;
+/* PASS-full-resource-access, Step 5 · RESOURCES is now the resolved,
+   already-in-store-order set for ACTIVE_TRACK/ACTIVE_PROTOCOL -- 'advisory'
+   (Proximity Guide) appears exactly where the store includes it for this
+   protocol, decided by the content itself via T{n}_PROTOCOL_KEYS[key].keys,
+   never by a second on/off flag layered on top. OPENS_ON's old default,
+   'decision', retired with it: The Decision has no authored content in any
+   of the three stores (Step 6/7 of this pass), so nothing can open on it.
+   The reader now opens on index 0 unless ?resource= names something else,
+   resolved below. */
 var current = 0;
 
 function visible(){
-  var v=RESOURCES.slice();
-  if(advisoryOn){var i=v.findIndex(function(r){return r.key==='disclosure'});v.splice(i,0,PROXIMITY);}
-  return v.map(function(r,i){return Object.assign({},r,{n:('0'+(i+1)).slice(-2)});});
+  return RESOURCES.map(function(r,i){return Object.assign({},r,{n:('0'+(i+1)).slice(-2)});});
 }
 
 /* SR-077 · the position in the list is the number. It used to be a hardcoded
@@ -1182,10 +1133,27 @@ guideAudio.addEventListener('ended', function(){
 document.getElementById('cover').style.backgroundImage=
   'linear-gradient(90deg,rgba(8,8,12,.97) 0%,rgba(8,8,12,.82) 42%,rgba(8,8,12,.3) 72%,rgba(8,8,12,.5) 100%),url("assets/extracted/45774db62956cedb.webp")';
 
-/* SR-077 · position on the opening resource by name, not by index. */
+/* PASS-full-resource-access, Step 4.3 · ?resource= matched against this
+   protocol's own record titles on a normalised form (lowercased, &/and
+   folded, &amp; decoded, punctuation and repeated spaces stripped) --
+   protocol.html's resource links are hand-authored labels, not guaranteed
+   to be a store title verbatim (Step 2 of this pass found several that
+   are not: "Protocol Guide", "Somatic Release", "Attention Advisory"), so
+   an exact-string match would silently miss most of them. No match falls
+   back to the first record and logs what was asked for against what is
+   actually available, per instruction, rather than failing silently. */
 (function(){
-  var i = visible().findIndex(function(r){ return r.key === OPENS_ON; });
-  current = i > -1 ? i : 0;
+  var qr = /[?&]resource=([^&]*)/.exec(location.search);
+  current = 0;
+  if (qr) {
+    var want = window.SafeRiseResources.normTitle(decodeURIComponent(qr[1]));
+    var set = visible();
+    var i = set.findIndex(function(r){ return window.SafeRiseResources.normTitle(r.title) === want; });
+    if (i > -1) { current = i; }
+    else if (want) {
+      console.warn('resource.html: no title match for "' + decodeURIComponent(qr[1]) + '" (normalised "' + want + '") in track ' + ACTIVE_TRACK + ' protocol ' + ACTIVE_PROTOCOL + '. Available titles:', set.map(function(r){ return r.title; }));
+    }
+  }
 })();
 renderRail();renderMain();
 </script>
@@ -1221,16 +1189,23 @@ renderRail();renderMain();
     post('height', {height:h});
   }
   // deep link — open straight onto a resource when the shell asks for one
+  /* PASS-full-resource-access, Step 4.4 · the boot script above (before
+     this embed bridge loads) already selected the right resource by the
+     same normalised-title match, so this mostly re-confirms it -- its real
+     job is the 'resource-opened' postMessage back to the dashboard shell,
+     which the boot script has no reason to send on its own. Kept using
+     normalised matching, not the exact-lowercase compare it used to, so
+     this and the boot-time selection can never disagree. */
   function openRequestedResource(){
     var q = /[?&]resource=([^&]*)/.exec(location.search);
     if(!q) return;
-    var want = decodeURIComponent(q[1]).trim().toLowerCase();
+    var want = window.SafeRiseResources.normTitle(decodeURIComponent(q[1]));
     if(!want) return;
     var items = document.querySelectorAll('.sr-item');
     for(var i = 0; i < items.length; i++){
       var num  = (items[i].querySelector('.sr-n') || {}).textContent || '';
       var name = (items[i].querySelector('.sr-t') || {}).textContent || '';
-      if(num.trim() === want || name.trim().toLowerCase() === want){
+      if(num.trim() === want || window.SafeRiseResources.normTitle(name) === want){
         items[i].click();
         post('resource-opened', {name:name.trim()});
         return;
