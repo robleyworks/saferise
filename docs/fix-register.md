@@ -17,11 +17,15 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-357** (this pass — PASS-COMING-SOON-AND-FINALISE —
-  verified via `git log --oneline -i --grep="SR-35[6-9]\|SR-36[0-9]" -E`, which
-  found SR-356 as the last issued and nothing between it and this pass's own
-  HEAD; per this note's own documented history of going stale, do not trust this
+- **Highest ID issued: SR-358** (this pass — PASS-auth-and-contact — verified
+  via `git log --oneline -i --grep="SR-35[7-9]\|SR-36[0-9]" -E`, which found
+  SR-357 as the last issued and nothing between it and this pass's own HEAD;
+  per this note's own documented history of going stale, do not trust this
   line either — re-verify with the same grep before the next allocation.)
+- **Previously: Highest ID issued: SR-357** (PASS-COMING-SOON-AND-FINALISE —
+  verified via `git log --oneline -i --grep="SR-35[6-9]\|SR-36[0-9]" -E`, which
+  found SR-356 as the last issued and nothing between it and that pass's own
+  HEAD.)
 - **Previously: Highest ID issued: SR-356** (PASS-SR355-FOLLOWUPS — verified via
   `git log --oneline -i --grep="SR-35[5-9]\|SR-36[0-9]" -E`, which found SR-355 as
   the last issued and nothing between it and that pass's own HEAD.)
@@ -9129,5 +9133,186 @@ before this brief arrived. Re-verified rather than redone:
 **Files touched:** `coming-soon.html`, `member-coming-soon.html` (Part A2
 only). Nothing touched in Part B — everything it asked for was already
 correct. Nothing touched for A1/A3–A7 — report only, blocked, or both.
+
+*Status:* closed · *Raised and fixed:* 8 Sep 2026
+
+**SR-358 · PASS-auth-and-contact — support address canonicalised, Supabase
+readiness audited (no project created), `docs/SUPABASE-SETUP.md` runbook
+written.** Boundary respected throughout: no Supabase account created, no
+credentials entered, no service-role key handled.
+
+## Section 1 — support address, DIFFERS on scope count, applied
+
+Repo-wide grep for email addresses, 83 raw hits. Categorised:
+
+- **`saferise@kenorinternational.com`, member-facing, in scope — replaced.**
+  Found in three files, not the "legal documents" the brief described in
+  general terms: `terms.html` (×3: the "you can reach us at," the dispute
+  "write to us first at," and the closing "questions about anything here"
+  lines), `privacy.html` (×3: the responsible-party contact line, the
+  data-rights-request line, and the closing "anything at all" line),
+  `refunds.html` (×2: the Paddle-dispute-escalation line and the closing
+  "questions" line). All eight replaced verbatim with
+  `contact@thesaferiseprotocol.com`, both the `mailto:` href and the
+  visible text on each.
+- **`contact@thesaferiseprotocol.com`, already canonical, no change
+  needed** — confirmed already in place on `live-sessions.html`,
+  `index.html`, `protocol.html`, `dashboard.html`, `getting-help.html`,
+  `member-coming-soon.html`, and all seven `member-*.html` framework
+  pages, plus **the shared footer partial itself**,
+  `js/saferise-footer.js:60,62` — the footer was never the source of the
+  drift; the three legal pages' own hand-written boilerplate paragraphs
+  were.
+- **`you@example.com` — not a real address, correctly left alone.** Three
+  hits (`signup.html:37`, `login.html:35`, `protocol.html:683`), all
+  `placeholder="you@example.com"` on an `<input type="email">` — generic
+  UX hint text, not a contact address a tester could email the wrong
+  thing to. Not in scope, not touched.
+- **Out of scope, reported only, not rewritten:** `docs/tracker-v11.html`
+  (the LG-88 tracker entry that first named this exact defect — now
+  historically accurate, since the fix described there has landed, but
+  the entry itself is left as the brief instructed), `docs/fix-register.md`
+  (this file's own history), `docs/SAFERISE-HANDOVER-2026-09-07.md` and
+  its `docs/handover/` duplicate, `docs/pre-live-audit.md`'s own
+  `audit@example.com` placeholder, and every occurrence inside `pass/`
+  (the brief itself, `pass/legal/PRIVACY.md`/`TERMS.md`/`REFUNDS.md`/
+  `OPEN-ITEMS.md` — draft legal-copy staging files, not the live pages —
+  and `pass/home-v97-reference.html`, an old reference snapshot).
+
+**Verify: zero non-canonical member-facing addresses remain.** Re-grepped
+`terms.html`, `privacy.html`, `refunds.html` directly for
+`saferise@kenorinternational.com` after the edit: 0 hits. HTML tag
+balance re-checked on all three edited files: clean.
+
+## Section 2 — Supabase readiness audit, report only, nothing changed
+
+1. **`supabase/` contents:** one file —
+   `supabase/migrations/0001_auth_entitlements.sql`, 6,704 bytes, last
+   modified 6 Sep 2026 17:48. Nothing else under `supabase/` (no
+   `config.toml`, no CLI state, no second migration).
+2. **What the migration creates**, read in full: table `public.members`
+   (`id` uuid PK → `auth.users(id)` on delete cascade, `email`,
+   `created_at`, `entitled` boolean default false, `paddle_customer_id`,
+   `paddle_subscription_id`, `subscription_status`, `entitled_until`) and
+   table `public.usage_events` (`id` bigserial PK, `member_id` →
+   `members(id)` on delete cascade, `event`, `track`, `ref`,
+   `created_at`, plus an index on `(member_id, created_at desc)`).
+   Functions: `handle_new_user()` (security definer, trigger
+   `on_auth_user_created` after insert on `auth.users` — creates the
+   `members` row server-side, never client-side) and
+   `protect_member_entitlement_columns()` (security definer, trigger
+   before update on `members` — raises an exception if a non-`service_role`
+   session tries to change `entitled`/`subscription_status`/
+   `entitled_until`/`paddle_customer_id`/`paddle_subscription_id`). **RLS
+   is enabled on both tables that hold member data** — confirmed by
+   reading the `alter table ... enable row level security` statement for
+   each, not inferred. Policies: `members_select_own` (SELECT, `id =
+   auth.uid()`), `members_update_own` (UPDATE, `id = auth.uid()`, no
+   INSERT/DELETE policy — insert is trigger-only, delete cascades from
+   `auth.users`); `usage_events_insert_own` (INSERT only, `member_id =
+   auth.uid()`, no SELECT/UPDATE/DELETE for members — admin reads are a
+   later, unbuilt phase via the service role). The paywall is genuinely
+   enforced at the column level via the trigger, independent of the
+   row-level policy, exactly as the migration's own header comment
+   describes.
+3. **SQL lint, no syntax errors found.** Read the full file; checked
+   programmatically for balance — `$$` delimiters: 4 (2 matched function
+   bodies), parens: 33 open / 33 close. No unterminated string, no
+   missing semicolon, no unbalanced block found.
+4. **Every place the code reads Supabase configuration: one file.**
+   `js/saferise-auth.js:29` (`SUPABASE_URL`) and `:30`
+   (`SUPABASE_ANON_KEY`) — both still the literal placeholders
+   `'https://YOUR-PROJECT-REF.supabase.co'` and `'YOUR-ANON-KEY'`. No
+   `.env` file anywhere in the repo (checked directly), no second
+   hardcoded reference anywhere else.
+5. **Security check — no `service_role` key committed.** Grepped the
+   whole repo for `service_role`/`service-role`/`SERVICE_ROLE`: one hit,
+   `js/saferise-auth.js:16`, and it is the comment stating the key "must
+   NEVER appear here or in any other browser-loaded file" — not a leaked
+   value. No key found anywhere.
+6. **What `signup.html`, `login.html`, `account.html` and
+   `js/saferise-auth.js` expect:**
+   - Endpoints: Supabase's GoTrue REST API directly via `fetch()` — no
+     `supabase-js` SDK is loaded anywhere in this repo, by design (the
+     module's own header comment explains why) — `/auth/v1/signup`,
+     `/auth/v1/token?grant_type=password`, `/auth/v1/token?grant_type=
+     refresh_token`, `/auth/v1/otp` (magic link), `/auth/v1/logout`; and
+     PostgREST directly for `/rest/v1/members` and `/rest/v1/usage_events`.
+   - `account.html` also loads `js/saferise-access.js`, a thin adapter
+     over `srAuth` that keeps `protocol.html`'s gate and `dashboard.html`'s
+     CTAs working unchanged — both scripts load in the correct order
+     (`saferise-auth.js` before `saferise-access.js`), confirmed live in
+     `account.html`'s own `<script>` tags.
+   - **Redirect/site-URL dependency, a real gap, not previously
+     documented anywhere in this repo:** neither `signUp()` nor
+     `sendMagicLink()` passes an explicit `redirectTo`, so Supabase falls
+     back to its dashboard-configured Site URL for the confirmation and
+     magic-link emails. **No page anywhere in this repo — checked
+     `login.html`, `signup.html`, every other page — reads the
+     `#access_token=…&type=…` hash fragment Supabase appends to that
+     redirect.** A member who clicks the email link lands on a real page
+     but is not automatically signed in; they would need to sign in
+     manually afterward (which then works, since the account is
+     confirmed by that point). Written up in full in
+     `docs/SUPABASE-SETUP.md` §5 rather than silently assumed to work.
+   - **No password-reset flow exists anywhere in the built pages or in
+     `js/saferise-auth.js`** — no "forgot password" link on `login.html`,
+     no `recover`/`reset` GoTrue call anywhere. This is a missing feature,
+     not a configuration gap — flagged, not fixed (out of this pass's own
+     scope, which is audit and runbook, not new auth code).
+   - What happens when the client cannot reach a project (true today,
+     since the URL is still a placeholder): every `fetch()` call rejects;
+     `signUp()`/`signIn()`'s `.catch()` surfaces the raw error message
+     into the form's error element (a `TypeError`'s default browser
+     message, not a friendly "service unavailable" string —
+     cosmetically rough but not a crash); `checkEntitlement()`,
+     `ensureLiveSession()` and `tryRefresh()` all fail closed silently,
+     leaving the member reading as signed-out rather than throwing into a
+     page's render path.
+7. **Email dependency.** Three flows send or would send mail: signup
+   confirmation (required — `signUp()` explicitly expects no session back
+   from a fresh signup and shows "Check your email to confirm your
+   account, then sign in."), magic-link sign-in (`sendMagicLink()`, wired
+   and reachable from `login.html`), and password reset (**not built —
+   see above**). Supabase's own built-in SMTP only delivers to the
+   project's team addresses, confirmed via Supabase's own documented
+   behaviour and repeated in this pass's own brief — a real transactional
+   provider is required before confirmation or magic-link mail reaches an
+   actual member, and no provider is named or configured anywhere in this
+   repo. This is Andre's decision, not this pass's — the runbook names
+   the dashboard setting and leaves the vendor choice open.
+
+## Section 3 — the runbook, written
+
+`docs/SUPABASE-SETUP.md` (new). Six ordered sections: create the project
+(Frankfurt/eu-central-1, name left as the one open value with no
+repo-derived answer); exactly where the project URL and anon key go
+(`js/saferise-auth.js:29`/`:30`); the exact migration command
+(**SQL Editor paste, not the CLI** — no `supabase/config.toml` or CLI
+state exists in this repo, and initialising the CLI against a real
+project would mean either creating project state this pass's boundary
+puts off-limits or asking Andre to run CLI commands himself, which is a
+worse handoff than one paste for a single migration); where to add SMTP
+credentials and which auth setting must stay at its default (email
+confirmation ON, since `signup.html`'s own code depends on it); the
+concrete Site URL/Redirect URL values (`https://thesaferiseprotocol.com`,
+taken from `terms.html`'s own stated domain) with the hash-handling gap
+above flagged inline rather than glossed over; and a "how you'll know it
+worked" section tied to observable dashboard/UI state at each step. No
+placeholder values anywhere in it — every value is either taken directly
+from the repo or explicitly named as an open decision with what it
+depends on.
+
+## Section 4 — post-creation verification, SKIPPED
+
+**The project does not exist.** `js/saferise-auth.js:29` still reads the
+literal placeholder `'https://YOUR-PROJECT-REF.supabase.co'`, confirmed
+at the start of this pass and again just before writing this entry. Per
+the section's own instruction, skipped rather than simulated. Re-run once
+`docs/SUPABASE-SETUP.md` has been followed.
+
+**Files touched:** `terms.html`, `privacy.html`, `refunds.html` (Section
+1). New: `docs/SUPABASE-SETUP.md` (Section 3). Nothing else changed —
+Section 2 is report-only by its own instruction, Section 4 did not run.
 
 *Status:* closed · *Raised and fixed:* 8 Sep 2026
