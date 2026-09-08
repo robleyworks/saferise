@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>SafeRise — Invested Work Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--page:#0A0A0D;--card:#16161B;--raise:#131317;--hair:#2A2A33;--head:#F2EDE3;
+ --body:#95929A;--label:#77747C;--gold:#C9A03C;--prod:#9B86D6;--web:#7BA3CC;--biz:#D4A843}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--body);font:16px/1.7 'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+.head{padding:56px 0 28px}
+.eyebrow{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;color:var(--label);margin:0 0 12px}
+h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(34px,5vw,46px);line-height:1.06;color:var(--head);margin:0 0 10px}
+h1 em{font-style:italic;color:var(--gold)}
+.sub{margin:0;max-width:46rem;font-size:15px}
+.note{margin:18px 0 0;padding:14px 17px;background:var(--raise);border-left:2px solid var(--gold);border-radius:3px;font-size:13.5px;line-height:1.62;color:var(--label)}
+.note b{color:var(--gold);font-weight:500}
+
+.tot{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:30px 0 26px}
+.t{background:var(--card);border-radius:6px;padding:20px 22px}
+.t .k{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.24em;color:var(--label);margin:0 0 8px}
+.t .v{font-family:'Cormorant Garamond',serif;font-size:38px;line-height:1;color:var(--head);margin:0}
+.t .m{margin:6px 0 0;font-size:12.5px;color:var(--label)}
+.t.gold .v{color:var(--gold)}
+
+.bar{display:flex;height:9px;border-radius:5px;overflow:hidden;margin:0 0 8px}
+.bar i{display:block}
+.key{display:flex;gap:20px;flex-wrap:wrap;font-size:12.5px;color:var(--label);margin:0 0 30px}
+.key span{display:inline-flex;align-items:center;gap:7px}
+.key b{width:9px;height:9px;border-radius:2px;display:block}
+
+table{width:100%;border-collapse:collapse;margin-bottom:14px}
+th{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.2em;color:var(--label);text-align:left;padding:0 10px 10px;font-weight:400}
+th.n,td.n{text-align:right}
+td{padding:13px 10px;vertical-align:top;font-size:14px}
+tbody tr{background:var(--card)}
+tbody tr td:first-child{border-radius:5px 0 0 5px}
+tbody tr td:last-child{border-radius:0 5px 5px 0}
+tbody tr+tr td{box-shadow:0 -1px 0 var(--hair)}
+.id{font-family:'Cinzel',serif;font-size:9.5px;color:var(--label);letter-spacing:.1em}
+.cat{display:inline-block;font-size:10px;letter-spacing:.14em;padding:3px 8px;border-radius:3px}
+.nm{color:var(--head);display:block;margin-bottom:3px}
+.nt{font-size:12px;color:var(--label);line-height:1.5}
+input{width:74px;background:#20202A;border:1px solid var(--hair);border-radius:3px;color:var(--head);
+ font:inherit;font-size:14px;padding:6px 8px;text-align:right}
+input:focus{outline:none;border-color:var(--gold)}
+.cost{color:var(--head);font-variant-numeric:tabular-nums}
+.foot{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:20px 0 80px;font-size:12.5px;color:var(--label)}
+button{background:none;border:1px solid var(--hair);color:var(--body);border-radius:3px;padding:8px 13px;font:inherit;font-size:12.5px;cursor:pointer}
+button:hover{border-color:var(--gold);color:var(--head)}
+#saved{margin-left:auto}
+h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:26px;color:var(--head);margin:34px 0 14px}
+@media(max-width:760px){.nt{display:none}td,th{padding-left:6px;padding-right:6px}}
+</style></head><body>
+<div class="wrap">
+  <div class="head">
+    <p class="eyebrow">INVESTED WORK</p>
+    <h1>What has gone in, <em>and what it is worth.</em></h1>
+    <p class="sub">A continuous record of the work invested in SafeRise Protocol, by lane, at market
+    contractor rates. Hours are derived from measured output, not recalled from memory. Edit any
+    figure and it saves to this browser.</p>
+    <div class="note"><b>How to read this.</b> This measures <b>replacement cost</b> — what it would
+    cost to commission this work from contractors today. It is not a company valuation, and it is not
+    a claim about market value. Founder time carries no invoice; this is the number that would have
+    appeared on one. Every rate is editable because every rate is arguable.</div>
+  </div>
+
+  <div class="tot" id="tot"></div>
+  <div class="bar" id="bar"></div>
+  <div class="key">
+    <span><b style="background:var(--prod)"></b>Product &amp; content</span>
+    <span><b style="background:var(--web)"></b>Web &amp; engineering</span>
+    <span><b style="background:var(--biz)"></b>Business &amp; commercial</span>
+  </div>
+
+  <table>
+    <thead><tr><th style="width:62px">ID</th><th style="width:104px">LANE</th><th>WORK</th>
+    <th class="n" style="width:104px">HOURS</th><th class="n" style="width:96px">RATE</th>
+    <th class="n" style="width:118px">COST</th></tr></thead>
+    <tbody id="body"></tbody>
+  </table>
+
+  <div class="foot">
+    <button id="add">Add a line</button>
+    <button id="exp">Export state</button>
+    <button id="imp">Import state</button>
+    <button id="rst">Reset to baseline</button>
+    <span id="saved"></span>
+  </div>
+</div>
+
+<script>
+(function(){
+  var KEY='saferise-invested-work';
+  var BASE=[
+      ['IV-01','Product','Protocol content — 31 protocols, 308 resources',342,85,'136,758 measured words at 400 finished words/hour'],
+      ['IV-02','Product','Meditation & recording scripts',137,85,'75,560 words across 14 script documents'],
+      ['IV-03','Product','Framework & philosophy corpus',131,95,'71,877 words — philosophy, market intel, founder account, handovers'],
+      ['IV-04','Product','Three new track prospectuses — 30 protocols scoped',72,95,'Territory, overlap control, scoring, provisioning matrices, safety rules'],
+      ['IV-05','Product','Resource architecture & taxonomy',40,95,'Twelve-resource system, conditional logic, cross-track boundaries'],
+      ['IV-06','Web','Platform build — public and member surfaces',320,75,'Vanilla JS, no build step; track, protocol, resource and dashboard pages'],
+      ['IV-07','Web','Defect and integrity passes — SR-001..SR-359',197,75,'359 tracked interventions at ~33 min average'],
+      ['IV-08','Web','Design system, mockups and iterations',110,80,'Brand tokens, card systems, reader, poster and coming-soon designs'],
+      ['IV-09','Web','Infrastructure & integrations',55,85,'Supabase (EU), Brevo + DNS authentication, Netlify, Porkbun, auth schema'],
+      ['IV-10','Web','Media pipeline',70,70,'Covers, posters, banners, audio mastering chain, image specs'],
+      ['IV-11','Business','Positioning, pricing and market intelligence',90,120,'Competitor ledger, credibility architecture, segment definition'],
+      ['IV-12','Business','Legal, privacy and compliance',65,120,'Terms, privacy, Article 30 record, GDPR posture, scope boundaries'],
+      ['IV-13','Business','Launch programme management',58,100,'145 scoped work items, tracker maintenance, sequencing'],
+      ['IV-14','Business','Clinical and framework validation',45,120,'Six-framework grounding, peer-reviewed tiering, collaborator engagement'],
+      ['IV-15','Business','Partnerships and go-to-market prep',40,120,'Corporate offer, workshop formats, alpha cohort design']
+  ];
+  var state=null, saveTimer=null, MEM=null;
+
+  function load(){
+    try{ var raw=localStorage.getItem(KEY); state = raw? JSON.parse(raw) : JSON.parse(JSON.stringify(BASE)); }
+    catch(e){ state = JSON.parse(JSON.stringify(BASE)); }
+    if(!Array.isArray(state)||!state.length) state=JSON.parse(JSON.stringify(BASE));
+  }
+  function save(){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(function(){
+      var t=JSON.stringify(state);
+      try{ localStorage.setItem(KEY,t); document.getElementById('saved').textContent='Saved '+new Date().toLocaleTimeString(); }
+      catch(e){ MEM=t; document.getElementById('saved').textContent='Session only — export before closing'; }
+    },200);
+  }
+  var money=function(n){ return '$'+Math.round(n).toLocaleString(); };
+  var COL={Product:'var(--prod)',Web:'var(--web)',Business:'var(--biz)'};
+
+  function render(){
+    var tb=document.getElementById('body'); tb.innerHTML='';
+    state.forEach(function(r,i){
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td class="id">'+r[0]+'</td>'
+        +'<td><span class="cat" style="color:'+COL[r[1]]+';background:color-mix(in srgb,'+COL[r[1]]+' 14%, transparent)">'+r[1]+'</span></td>'
+        +'<td><span class="nm">'+r[2]+'</span><span class="nt">'+r[5]+'</span></td>'
+        +'<td class="n"><input data-i="'+i+'" data-f="3" value="'+r[3]+'"></td>'
+        +'<td class="n"><input data-i="'+i+'" data-f="4" value="'+r[4]+'"></td>'
+        +'<td class="n cost">'+money(r[3]*r[4])+'</td>';
+      tb.appendChild(tr);
+    });
+    [].forEach.call(tb.querySelectorAll('input'),function(inp){
+      inp.addEventListener('input',function(){
+        var v=parseFloat(inp.value)||0;
+        state[+inp.dataset.i][+inp.dataset.f]=v;
+        save(); totals();
+        inp.closest('tr').querySelector('.cost').textContent=
+          money(state[+inp.dataset.i][3]*state[+inp.dataset.i][4]);
+      });
+    });
+    totals();
+  }
+
+  function totals(){
+    var h=0,c=0,by={Product:{h:0,c:0},Web:{h:0,c:0},Business:{h:0,c:0}};
+    state.forEach(function(r){ var cc=r[3]*r[4]; h+=r[3]; c+=cc;
+      if(by[r[1]]){ by[r[1]].h+=r[3]; by[r[1]].c+=cc; } });
+    document.getElementById('tot').innerHTML=
+       card('TOTAL HOURS', Math.round(h).toLocaleString(), (h/40).toFixed(1)+' full-time weeks')
+      +card('REPLACEMENT COST', money(c), 'at the rates below', true)
+      +card('PRODUCT &amp; CONTENT', money(by.Product.c), Math.round(by.Product.h)+' hours')
+      +card('WEB &amp; ENGINEERING', money(by.Web.c), Math.round(by.Web.h)+' hours')
+      +card('BUSINESS', money(by.Business.c), Math.round(by.Business.h)+' hours');
+    var bar=document.getElementById('bar'); bar.innerHTML='';
+    ['Product','Web','Business'].forEach(function(k){
+      var i=document.createElement('i');
+      i.style.width=(c? by[k].c/c*100:0)+'%';
+      i.style.background=COL[k]; bar.appendChild(i);
+    });
+  }
+  function card(k,v,m,gold){
+    return '<div class="t'+(gold?' gold':'')+'"><p class="k">'+k+'</p><p class="v">'+v+'</p><p class="m">'+m+'</p></div>';
+  }
+
+  document.getElementById('add').onclick=function(){
+    var n=prompt('Description of the work?'); if(!n) return;
+    var cat=prompt('Lane — Product, Web or Business?','Product');
+    if(['Product','Web','Business'].indexOf(cat)<0) cat='Product';
+    var h=parseFloat(prompt('Hours?','0'))||0;
+    var r=parseFloat(prompt('Rate per hour?','85'))||0;
+    state.push(['IV-'+String(state.length+1).padStart(2,'0'),cat,n,h,r,'Added '+new Date().toLocaleDateString()]);
+    save(); render();
+  };
+  document.getElementById('exp').onclick=function(){
+    var b=new Blob([JSON.stringify({key:KEY,savedAt:new Date().toISOString(),state:state},null,1)],{type:'application/json'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(b);
+    a.download='saferise-invested-work.json'; a.click(); URL.revokeObjectURL(a.href);
+  };
+  document.getElementById('imp').onclick=function(){
+    var t=prompt('Paste exported JSON.'); if(!t) return;
+    try{ var o=JSON.parse(t); state=o.state||o; save(); render(); }catch(e){ alert('Not valid JSON.'); }
+  };
+  document.getElementById('rst').onclick=function(){
+    if(!confirm('Reset every line to the baseline? Your edits are lost.')) return;
+    state=JSON.parse(JSON.stringify(BASE)); save(); render();
+  };
+
+  load(); render();
+})();
+</script></body></html>
