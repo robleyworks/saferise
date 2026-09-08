@@ -17,7 +17,7 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-352.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-353.** Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -8240,5 +8240,63 @@ measured as above; `.dgo` y-position measured equal; the scope paragraph on
 `method.html` (via `js/saferise-footer.js`) both confirmed free of "education and
 training" and "clinical trial," both retain a crisis sentence. `tinycss2`-clean,
 esprima-clean, HTML tag-balanced.
+
+*Status:* closed · *Raised and fixed:* 7 Sep 2026
+
+---
+
+**SR-353 · fix pass on b18f1fd — two duplications it introduced.** Measured
+before editing, per instruction; both find-strings existed exactly once.
+
+**1. The router H2/body duplication, from b18f1fd's own report.** b18f1fd's
+Stage D had overwritten `.router-question` with the exact sentence
+`.sr-router-body` already carried (from SR-352), producing an identical
+sentence in both elements. Restored `.router-question` to its approved text
+("Discover how much your life can grow...") verbatim; `.sr-router-body` left
+untouched. Live-measured: the two elements' `textContent` now differ
+(confirmed `!==`), at both 1440 and 390.
+
+**`.router-question em` — reported, not restored.** Carries `display:block`
+(confirmed) but **no color property** — `getComputedStyle` returns
+`rgb(245, 237, 216)`, this file's plain `--text`, not `--gold-lt`. Sibling
+rules on the same page (`.step h2 em`, `.costcopy h2 em, .homeclose h2 em`,
+the now-orphaned `.postfilm-copy h2 em`) all carry
+`font-style:italic;color:var(--gold-lt)`; `.router-question em` never has, in
+any of this session's own CSS backups going back to 6 Sep — the rule with
+`display:block` didn't exist at all in the three backups from that day, only
+appearing (already colorless) in the backup taken at the start of the
+previous pass. No evidence a color rule was ever removed from this specific
+selector; more likely it was added without one. Not restored, per
+instruction — reported for Andre to decide the actual intended color, if any.
+
+**2. Two crisis messages on `index.html`, from b18f1fd's own report.**
+`index.html`'s `.sr-scope` scope paragraph ended in "If you are in crisis,
+contact your local emergency service." immediately followed, in the same
+block, by a second paragraph with a real findahelpline.com link — redundant
+messaging, in the paragraph that has a more useful successor right after it.
+Removed the trailing sentence from `index.html`'s copy only, verified
+`js/saferise-footer.js` and `dashboard.html` both still carry theirs
+(`grep`/live check on method.html, both showed the sentence intact). Added a
+new subsection to `docs/page-invariants.md` ("`index.html`'s scope paragraph
+deliberately omits the crisis sentence") recording why, so a future footer-
+reconciliation pass doesn't read the omission as drift and re-add it.
+
+**Verified live**, Browser pane against the local static server, 1440 and
+390: main view's `.sr-scope` now has exactly 2 paragraphs, the first with no
+"crisis" mention, the second carrying the `findahelpline.com` link — and the
+same true across **all ten** `.prog-overlay` panels checked (compare,
+services, about, personal, couples, corporate, premium1on1, workshops,
+retreats, foundation), each cloned from the same template, so none lost
+crisis signposting. `method.html` (via `js/saferise-footer.js`) and
+`dashboard.html`'s own copy both still contain "crisis" — untouched, as
+instructed. HTML tag-balanced.
+
+**Report-only, quoted verbatim:** `getting-help.html:84` — *"SafeRise is
+self-guided education and training in nervous-system regulation. It is a
+resource you can reach for on your own, at the moment you need it, without an
+appointment or a referral. For a lot of people that is the thing that was
+missing."* Structurally distinct from the scope/disclaimer paragraph (no "not
+therapy," no crisis sentence) — left alone, per b18f1fd's own prior finding,
+now re-confirmed rather than assumed.
 
 *Status:* closed · *Raised and fixed:* 7 Sep 2026

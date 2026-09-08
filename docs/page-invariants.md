@@ -179,6 +179,28 @@ another page's CSS or JS into a `.sr-home`/`.sr-tp`-scoped block should check ev
 and every `querySelector` call against where the referenced element actually lives in *this*
 page's DOM, not assume the source page's flat structure carries over.
 
+### `index.html`'s scope paragraph deliberately omits the crisis sentence
+
+`index.html`'s own `<template id="sr-footer-template">` scope paragraph
+(`.sr-scope p`, inside `.sr-foot`) does **not** end in a crisis sentence, unlike
+every other copy of this paragraph on the site (`js/saferise-footer.js`'s
+`SCOPE_HTML`, used by fifteen pages, and `dashboard.html`'s own inline copy —
+both keep "If you are in crisis, contact your local emergency service.").
+
+This is not an oversight. On `index.html` the scope paragraph is immediately
+followed, in the same `.sr-scope` block, by a second, more specific paragraph:
+`<b>If you are in immediate danger, contact your local emergency number.</b>`
+plus a real link to findahelpline.com. A generic crisis sentence at the end of
+the first paragraph and a more detailed one at the start of the second read as
+two crisis messages back to back, which is worse than one — so the redundant
+one comes off the paragraph that has an immediate, more useful successor,
+never the one that stands alone.
+
+**Do not add the crisis sentence back to this one paragraph without also
+either removing or merging the paragraph after it.** A future pass that
+reconciles the site's footer copy against `js/saferise-footer.js`'s wording
+should treat this omission as intentional, not as drift to correct.
+
 ## No public page links to a member page (SR-325)
 
 **No public page links to a member page.** The only exception is the
