@@ -17,7 +17,12 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-355** (this pass — PASS-CONSOLIDATED-2026-09-08 — verified
+- **Highest ID issued: SR-356** (this pass — PASS-SR355-FOLLOWUPS — verified via
+  `git log --oneline -i --grep="SR-35[5-9]\|SR-36[0-9]" -E`, which found SR-355 as
+  the last issued and nothing between it and this pass's own HEAD; per this note's
+  own documented history of going stale, do not trust this line either — re-verify
+  with the same grep before the next allocation.)
+- **Previously: Highest ID issued: SR-355** (PASS-CONSOLIDATED-2026-09-08 — verified
   via `git log --oneline -i --grep="SR-3[0-9][0-9]" -E`, which found SR-354 as the last
   issued and nothing between it and this pass's own HEAD; per this note's own documented
   history of going stale, do not trust this line either — re-verify with the same grep
@@ -8759,5 +8764,188 @@ Section 8b did not run, so its own sub-checklist does not apply.
 `pass/the-decision-recovered.js` (Section 1b, superseded, unread).
 Untouched but reported: `pass/saferise-track01-reader.html`,
 `pass/saferise-carousel-drift.js`, `content/inventory.js`.
+
+*Status:* closed · *Raised and fixed:* 8 Sep 2026
+
+**SR-356 · PASS-SR355-FOLLOWUPS — dead download control fixed, audio audited,
+handover bundle diffed, inventory.js regenerated, wording fixed, pass/
+cleaned up.** Six items from the SR-355 report.
+
+**Item 1 — dead download control, DIFFERS, fixed.** The brief's own framing
+("if the only signal is the pdf flag in the content store... correct the
+flag rather than the renderer") assumed a per-record flag living in
+`content/t1|t2|t3-resources.js`. There isn't one — grepped directly, 0
+occurrences of an `audio`/`pdf` field anywhere in any of the three files;
+the standard record shape is `kind/title/sub/body/cues/sharedRefs/
+diagrams`. The actual wrong signal is `js/saferise-resources.js`'s
+`normaliseOne()`, which hardcoded `pdf: true` for every resource
+regardless of type or record. Fixed there: `pdf: false`, since zero PDF
+files exist anywhere in this repo (`find . -iname "*.pdf"`, still 0) and
+there is no per-type manifest to check against the way `content/
+guidance.js` supplies one for `audio` — `false` is the honest, correct,
+render-time-checkable answer given what's actually on disk. Verified live:
+`resource.html`'s download control (`#download`) now carries `.hidden` on
+every one of the 318 resources; `r.pdf` is `false` for all 318, checked via
+`resolveSet()` across all 30 protocols, not sampled.
+
+**Item 2 — audio, report only, nothing changed.** No live defect: every
+guidance-bearing type's file exists. Resolved per TYPE, not per protocol —
+`content/guidance.js`'s `guidanceFor(type)` ignores the protocol entirely,
+so a Cue Card's resolved URL (`assets/audio/guidance/rg-01-cue-card.mp3`)
+is identical across Track 01, 02 and 03, confirmed live. 10 distinct types
+carry an entry (`crisiscard, guide, companion, practice, advisory,
+disclosure, raising, repair, record, accountability`), matching the
+resolver's own hardcoded `audio` list exactly, by design (`js/saferise-
+resources.js`'s own comment says so). At the instance level, 247 of 318
+resources resolve `audio:true` (the ten types' combined counts: 30+30+30+
+30+15+30+10+12+30+30). At the file level: 10 distinct files promised, all
+10 present (`assets/audio/guidance/`, verified via `ls`, all non-zero
+size), 0 missing. `meditation` (30), `decision` (30), `safety` (10) and
+`crisis` (1) carry no guidance entry and render no play control — by
+design for `meditation` (its own header comment: a second voice would be
+one too many over the narrated script) and because `decision`/`safety`/
+`crisis` simply aren't `content/guidance.js` types.
+
+**Item 3 — handover bundle diff, report only, nothing merged.** Re-extracted
+`saferise-build-handover-repo-drop.zip`'s `data/resource-content.js` (31
+protocols, 308 resources) and diffed by title against the live stores'
+318 resources, per protocol, via a full `esprima` AST parse of both sides
+(not regex-peeking). **Bundle-only (present in bundle, absent from live):
+zero** — The Decision, SR-355's own merge, closed that gap completely; no
+new absences found. **Live-only (present live, absent from the bundle):
+12** — the 10 Safety Score entries, the 1 Support Resources entry
+(`t1p10-crisis`), and Anxiety Reset's own Attention Advisory
+(`t1p1-advisory`, "Anxiety Reset — Where to Direct Your Attention") — this
+last one genuinely isn't in the bundle's `t1-01` entry at all (its
+resource list there is nine items, no Proximity Guide/Attention Advisory),
+confirming SR-354's original finding that this resource was added to the
+live store through some process other than this bundle. **Present in
+both but differing:** of the 273 title-matched pairs that aren't The
+Decision (which matches exactly, 30/30), differences fall into two
+distinct kinds, not one — checked with a length-ratio + character-similarity
+heuristic (`difflib.SequenceMatcher`), not eyeballed:
+- **Cosmetic (247 of 273):** attributable to two known, already-decided
+  causes — the step-name verb migration (bundle still says "Recognition
+  \[…\] Regulation," live already says "Recognise \[…\] Regulate," an
+  earlier, separate, already-completed change this repo deliberately did
+  NOT re-run against authored markdown) and the bundle repeating its own
+  `sub` field as the body's opening sentence, which the live shape keeps
+  as a separate field instead. Covers all of Cue Card (30), Somatic
+  Release Activities (30), Safe Practice (30), Disclosure & Support (29),
+  Raising It (10), Invitation to Repair (12), Your Record (30),
+  Accountability & Empathy (30), and 25 of 30 How This Works, and 12 of 13
+  Proximity Guide/Attention Advisory instances.
+- **Material (26 of 273):** substantially different content, not wording
+  drift. **Guided Meditation is the standout — 26 of 30 protocols carry a
+  wholesale different script** in the bundle versus live (sampled `t1-01`:
+  live is a short body-scan narration opening "There's something running
+  fast, and it got here before you did"; the bundle is a much longer,
+  different-structure script opening "Do it with me. There's something
+  running fast, and it got here before you did. That's the order it
+  happens in..." then diverging entirely into different content). 5 How
+  This Works entries also differ materially (`t1-04`, `t2-01`, `t2-02`,
+  `t3-01`, `t3-05` — `t2-01`/`t2-02`'s bundle version is ~60% longer). 1
+  Proximity Guide/Attention Advisory differs materially (`t1-03`, same
+  length but only 27% character-similarity — worth a closer look, not
+  done here). **Nothing merged, per instruction** — this is a list for
+  Andre to prioritise, not a queue this pass worked through.
+
+**Item 4 — `content/inventory.js`, MATCH, regenerated.** Ran `tools/
+build-inventory.py`, which refused to run until its `ORDER` constant was
+extended to cover the three types it didn't know about (`decision`,
+`safety`, `crisis`) — exactly the "must be extended deliberately, not
+silently" guard its own header describes. Extended `ORDER` with all three,
+placed last (matching where they actually sit in every `T{n}_PROTOCOL_KEYS
+[key].keys` array that carries them — `decision` is last in literally
+every one of the 30 standard protocols, 0 exceptions, confirmed again this
+pass). Regenerated; `--check` now passes clean. Diff against the pre-
+regeneration file: every one of the 30 `PROTOCOL_RESOURCE_TYPES` rows
+gained `decision`; `t1-10` also gained `crisis`; all ten Track 02 rows
+gained `safety`. One pre-existing bug fixed as a side effect, not sought
+out separately: `t1-01`'s row was missing `advisory` even though
+`t1p1-advisory` is real, live content — this was SR-354's own original
+finding about this exact file, never corrected until this regeneration.
+Library-page total in the regenerated file: 318, matching the live
+resolver's own count exactly. Also updated the generator's own header
+comment (`tools/build-inventory.py`'s `render()`), which hardcoded "Track
+03 carries ELEVEN types" — no longer true now that all three tracks show
+12 — to describe the counts as derived rather than restate a number that
+would go stale again.
+
+**Item 5 — `index.html:8448`, MATCH, applied; grep re-run, report only.**
+Find-string matched exactly. Replaced: "the person you are practising
+being now" → "the person you keep choosing to be" — full sentence now
+reads "The decision names the person you keep choosing to be, in relation
+to this exact pattern," confirmed live, no console errors. Re-grepped the
+repo for the full word-stem `practis` (not just the literal word
+"practising" SR-355's own sweep used, which undercounted) and found a much
+larger set, none changed, all reported: `index.html` alone carries dozens
+more hits across journalling-prompt copy (`Regulate: Did practising
+genuine joy...`), UI category labels (`category:'PRACTISE'`), marketing
+copy ("practised repeatedly, tracked honestly", "practise it once with
+support"), and prompt-store templates ("Tomorrow I practise this identity
+by…") — none of these are the banned construction ("the identity/person
+you are practising into/being"), they're the ordinary verb "practise" used
+correctly. Also found, not caught by SR-355's narrower search:
+`protocol.html` (2), `content/t2-resources.js` (2, "so practised you've
+stopped noticing" — ordinary usage, in-body prose), `content/tracks.js`
+(1), `content/t3-resources.js` (1), `docs/PHILOSOPHY.md` (1),
+`dashboard.html` (2) — all ordinary usage, none matching the banned
+construction, none changed.
+
+**Item 6 — pass/ cleanup, ADAPTED, applied.** Deleted `pass/saferise-
+carousel-drift.js` as instructed. For "any remaining superseded pass
+briefs": grepped every `.md` in `pass/` for self-declared supersession —
+only `pass/PASS-CONSOLIDATED-2026-09-08.md` and `pass/PASS-full-resource-
+access.md` (SR-355's and SR-354's own briefs, both closed in this
+register, both fully executed and committed) qualify with confidence;
+deleted both. The other 13 `.md` files in `pass/` were left alone,
+reported rather than guessed at — **AMBIGUOUS**: two explicitly say they
+are NOT executed (`pass/COPY-frequency-answer.md`: "Not yet built. Do not
+send to Claude Code until the copy is approved"; `pass/BED-RHYTHM-SPEC.md`:
+"Status: proposal, awaiting Andre's decision. Not yet a rule.") and the
+remaining eleven (`AUTH-PAYMENTS-BRIEF.md`, `CLAUDE-CODE-PASS.md`,
+`FINAL-PASS.md`, `FOOTER-CORRECTION-PASS.md`, `FOOTER-SCOPE-COPY-PASS.md`,
+`HOME-v105-FOOTER-PASS.md`, `HOMEPAGE-COPY-v103-FULL.md`, `HOMEPAGE-WEBP-
+PASS.md`, `LEGAL-LINKS-PASS.md`, `RECON.md`, `REMAINING-PASS.md`,
+`STAGE-1-REVISED.md`, `T306-DOORCARD-PASS.md`) have no self-declared
+status at all — confirming each is genuinely done would mean
+cross-referencing its specific claims against git history one brief at a
+time, which this item's own "small" sizing doesn't cover; left in place
+rather than guessed at.
+
+Carousel behaviour, checked against the four the drift module was written
+for, report only, nothing changed: **pause on hover** — yes
+(`mouseenter` on `#srCarViewport` sets `paused=true, target=0, vel=0`).
+**Pause on focus** — yes (`focusin`, same handler). **Permanent stop on
+manual interaction** — effectively yes: pausing does not self-resume on
+`mouseleave`/`focusout` alone (those only clear the `paused` flag);
+`startFlow()` is re-armed only by an explicit arrow click (`step()`, 2.6 s
+later) or the begin-panel's protocol jump (`markInCarousel()`, 6 s later),
+so a hover-and-leave with no further interaction leaves it stopped
+indefinitely. **Respect `prefers-reduced-motion` — no.** Grepped
+`dashboard.html` for `matchMedia`/`reduced-motion`/`reducedMotion`: zero
+hits. This carousel drifts via `requestAnimationFrame` writing `transform`
+directly every frame — a CSS `@media(prefers-reduced-motion:reduce)`
+block cannot suppress that (checked every such block in `css/saferise-
+system.css`; none targets `.sr-dash-car*` at all, they cover homepage/
+track-page reveal animations only). **Does not close all four rows — one
+gap found, not fixed, per this item's own report-only instruction.**
+
+**Acceptance test, re-run after items 1, 4, 5.** All 30 protocols, 318
+resources: 0 empty bodies, 0 duplicate bodies, 0 cross-protocol leakage —
+unchanged from SR-355. `r.pdf` is `false` for all 318 (item 1's fix,
+confirmed at the resolver level and the live DOM's `.hidden` class both).
+`content/inventory.js` loads cleanly on `dashboard.html` (20 cards, 0
+console errors) and `personal-transformation.html` (0 console errors).
+`index.html` loads with the new wording present, the old string absent,
+0 console errors.
+
+**Files touched:** `js/saferise-resources.js` (Item 1), `tools/build-
+inventory.py` + `content/inventory.js` (Item 4), `index.html` (Item 5).
+Deleted: `pass/saferise-carousel-drift.js`, `pass/
+PASS-CONSOLIDATED-2026-09-08.md`, `pass/PASS-full-resource-access.md`
+(Item 6). Nothing changed for Items 2, 3, or the carousel behaviour check
+— report only, as instructed.
 
 *Status:* closed · *Raised and fixed:* 8 Sep 2026

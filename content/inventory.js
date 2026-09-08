@@ -12,55 +12,58 @@
    of resource bodies and no page should load them to learn a type list.
    Regenerate whenever they are regenerated; the standing invariant re-checks it.
 
-   Track 03 carries ELEVEN types — it adds `raising` (Raising It). Tracks 01
-   and 02 carry ten. There is no single library size across the three.
+   Track-level type counts are DERIVED below (see the per-track lists), not
+   fixed here — Track 03 uniquely carries `raising`; Track 01 uniquely carries
+   `crisis` (one protocol only, t1-10); Track 02 uniquely carries `safety` (all
+   ten protocols); `decision` is universal, last in every one of the 30. There
+   is no single library size across the three.
    ====================================================================== */
 
-var RESOURCE_ORDER = ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'repair', 'record', 'accountability'];
+var RESOURCE_ORDER = ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'repair', 'record', 'accountability', 'safety', 'crisis', 'decision'];
 
 var RESOURCE_INVENTORY = {
-  1: ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability'],
-  2: ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability'],
-  3: ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'repair', 'record', 'accountability']
+  1: ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability', 'crisis', 'decision'],
+  2: ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability', 'safety', 'decision'],
+  3: ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'repair', 'record', 'accountability', 'decision']
 };
 
 /* Per-protocol type lists — the conditionals are already resolved here, so a
    consumer never re-derives them from extras and cannot disagree with the
    authored content. */
 var PROTOCOL_RESOURCE_TYPES = {
-  't1-01': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability'],
-  't1-02': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability'],
-  't1-03': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'record', 'accountability'],
-  't1-04': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability'],
-  't1-05': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability'],
-  't1-06': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability'],
-  't1-07': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability'],
-  't1-08': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability'],
-  't1-09': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability'],
-  't1-10': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'record', 'accountability'],
-  't2-01': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'repair', 'record', 'accountability'],
-  't2-02': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'repair', 'record', 'accountability'],
-  't2-03': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability'],
-  't2-04': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability'],
-  't2-05': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'repair', 'record', 'accountability'],
-  't2-06': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'repair', 'record', 'accountability'],
-  't2-07': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability'],
-  't2-08': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability'],
-  't2-09': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability'],
-  't2-10': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'record', 'accountability'],
-  't3-01': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability'],
-  't3-02': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'repair', 'record', 'accountability'],
-  't3-03': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability'],
-  't3-04': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability'],
-  't3-05': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability'],
-  't3-06': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'record', 'accountability'],
-  't3-07': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability'],
-  't3-08': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'record', 'accountability'],
-  't3-09': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'record', 'accountability'],
-  't3-10': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability']
+  't1-01': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'record', 'accountability', 'decision'],
+  't1-02': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability', 'decision'],
+  't1-03': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'record', 'accountability', 'decision'],
+  't1-04': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability', 'decision'],
+  't1-05': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability', 'decision'],
+  't1-06': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability', 'decision'],
+  't1-07': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability', 'decision'],
+  't1-08': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability', 'decision'],
+  't1-09': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability', 'decision'],
+  't1-10': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'record', 'accountability', 'crisis', 'decision'],
+  't2-01': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'repair', 'record', 'accountability', 'safety', 'decision'],
+  't2-02': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'repair', 'record', 'accountability', 'safety', 'decision'],
+  't2-03': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability', 'safety', 'decision'],
+  't2-04': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability', 'safety', 'decision'],
+  't2-05': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'repair', 'record', 'accountability', 'safety', 'decision'],
+  't2-06': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'repair', 'record', 'accountability', 'safety', 'decision'],
+  't2-07': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability', 'safety', 'decision'],
+  't2-08': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'record', 'accountability', 'safety', 'decision'],
+  't2-09': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'repair', 'record', 'accountability', 'safety', 'decision'],
+  't2-10': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'record', 'accountability', 'safety', 'decision'],
+  't3-01': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability', 'decision'],
+  't3-02': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'repair', 'record', 'accountability', 'decision'],
+  't3-03': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability', 'decision'],
+  't3-04': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability', 'decision'],
+  't3-05': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability', 'decision'],
+  't3-06': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'record', 'accountability', 'decision'],
+  't3-07': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability', 'decision'],
+  't3-08': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'record', 'accountability', 'decision'],
+  't3-09': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory', 'disclosure', 'raising', 'record', 'accountability', 'decision'],
+  't3-10': ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'disclosure', 'raising', 'record', 'accountability', 'decision']
 };
 
-/* Counts at generation: track type totals {1: 10, 2: 10, 3: 11}; library 276 pages. */
+/* Counts at generation: track type totals {1: 12, 2: 12, 3: 12}; library 318 pages. */
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { RESOURCE_ORDER: RESOURCE_ORDER,

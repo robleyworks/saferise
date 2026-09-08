@@ -18,10 +18,18 @@ import re, sys, os, collections
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'content', 'inventory.js')
 
-# Canonical display order. Taken from the authored key order on a protocol that
-# carries all eleven (t3-02) — not invented here.
+# Canonical display order. The first eleven are the authored key order on a
+# protocol that carries all eleven (t3-02) — not invented here. The last three
+# were added PASS-SR355-FOLLOWUPS, Item 4: no single protocol carries all of
+# them together, so their order is taken from where each one actually sits in
+# every T{n}_PROTOCOL_KEYS[key].keys array that carries it — 'safety' and
+# 'crisis' both sit right after 'accountability' (T2's ten protocols; t1-10
+# respectively), and 'decision' is last in literally every one of the 30
+# standard protocols (confirmed 0 exceptions, PASS-CONSOLIDATED-2026-09-08
+# Section 1) — never move it off the end.
 ORDER = ['meditation', 'crisiscard', 'guide', 'companion', 'practice', 'advisory',
-         'disclosure', 'raising', 'repair', 'record', 'accountability']
+         'disclosure', 'raising', 'repair', 'record', 'accountability',
+         'safety', 'crisis', 'decision']
 
 
 def read_tracks():
@@ -66,8 +74,11 @@ def render(tracks, per_protocol):
     lines.append('   of resource bodies and no page should load them to learn a type list.')
     lines.append('   Regenerate whenever they are regenerated; the standing invariant re-checks it.')
     lines.append('')
-    lines.append('   Track 03 carries ELEVEN types — it adds `raising` (Raising It). Tracks 01')
-    lines.append('   and 02 carry ten. There is no single library size across the three.')
+    lines.append('   Track-level type counts are DERIVED below (see the per-track lists), not')
+    lines.append('   fixed here — Track 03 uniquely carries `raising`; Track 01 uniquely carries')
+    lines.append('   `crisis` (one protocol only, t1-10); Track 02 uniquely carries `safety` (all')
+    lines.append('   ten protocols); `decision` is universal, last in every one of the 30. There')
+    lines.append('   is no single library size across the three.')
     lines.append('   ' + '=' * 70 + ' */')
     lines.append('')
     lines.append('var RESOURCE_ORDER = ' + repr(ORDER).replace("'", "'") + ';')

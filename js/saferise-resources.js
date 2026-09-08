@@ -110,7 +110,18 @@
          gtype/guidanceFor() directly -- kept accurate anyway, since Step 1
          asked for it in the normalised shape. */
       audio: ['crisiscard','guide','companion','practice','advisory','disclosure','raising','repair','record','accountability'].indexOf(type) > -1,
-      pdf: true,
+      /* PASS-SR355-FOLLOWUPS, Item 1 · was `pdf: true` unconditionally, so the
+         reader's download control rendered on all 318 resources regardless of
+         whether a file existed. Zero PDF files exist anywhere in this repo
+         (`find . -iname "*.pdf"` — checked at the time of this fix, not
+         assumed) — there is no per-type manifest to check against, the way
+         content/guidance.js supplies one for `audio`, so there is nothing
+         true to render at all yet. `false` here is the correct, honest,
+         render-time-checkable answer given what exists on disk right now.
+         When real PDFs are provisioned, add a manifest keyed by type (same
+         shape as content/guidance.js's GUIDANCE table) and read it here —
+         do not flip this back to a bare `true`. */
+      pdf: false,
       order: order,
       type: type,
       gtype: type,
