@@ -1,0 +1,606 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Cormorant+Garamond:ital,wght@1,400&display=swap" rel="stylesheet">
+
+<style>
+  .lt-root {
+    --page:#0A0A0D; --raised:#131317; --card:#1C1C21; --input:#24242A; --hair:#33333B;
+    --head:#F2EDE3; --body:#95929A; --label:#77747C;
+    --gold:#C9A03C; --rose:#C08196; --teal:#4FA3A0; --violet:#8C7BB8; --red:#C0453A;
+    --s-none:#4A4A52;
+    background:var(--page); color:var(--body);
+    font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:14px; line-height:1.55; padding:0; margin:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  .lt-root *{box-sizing:border-box;}
+  .lt-wrap{max-width:940px;margin:0 auto;padding:28px 20px 80px;}
+
+  /* ---- masthead ---- */
+  .lt-eyebrow{font-size:9.5px;letter-spacing:2.6px;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0 0 10px;}
+  .lt-title{font-family:'Cinzel',Georgia,serif;font-size:27px;font-weight:600;color:var(--head);margin:0 0 6px;letter-spacing:0.3px;line-height:1.2;}
+  .lt-sub{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:16px;color:var(--label);margin:0 0 26px;}
+
+  /* ---- gate panel (signature) ---- */
+  .lt-gate{background:var(--raised);border:1px solid var(--hair);padding:22px 22px 18px;margin-bottom:14px;}
+  .lt-gate-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px;}
+  .lt-gate-num{font-family:'Cinzel',Georgia,serif;font-size:40px;line-height:1;color:var(--head);font-weight:600;}
+  .lt-gate-num.clear{color:var(--teal);}
+  .lt-gate-lab{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--label);margin-top:7px;font-weight:600;}
+  .lt-gate-pct{text-align:right;}
+  .lt-gate-pct b{font-family:'Cinzel',Georgia,serif;font-size:40px;line-height:1;color:var(--gold);font-weight:600;}
+
+  .lt-tally{display:flex;flex-wrap:wrap;gap:3px;}
+  .lt-tally i{width:13px;height:26px;background:var(--s-none);display:block;border-radius:1px;}
+  .lt-tally i.done{background:var(--teal);}
+  .lt-tally i.part{background:linear-gradient(to top,var(--teal) 55%,var(--s-none) 55%);}
+  .lt-tally i.prog{background:linear-gradient(to top,var(--gold) 30%,var(--s-none) 30%);}
+  .lt-tally i.block{background:var(--red);}
+  .lt-tally-cap{font-size:10.5px;color:var(--label);margin-top:11px;}
+
+  .lt-bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--hair);border:1px solid var(--hair);margin-bottom:22px;}
+  .lt-bar{background:var(--raised);padding:13px 14px;}
+  .lt-bar-n{font-size:9px;letter-spacing:1.6px;text-transform:uppercase;color:var(--label);font-weight:600;margin-bottom:8px;}
+  .lt-bar-v{font-size:19px;color:var(--head);font-family:'Cinzel',Georgia,serif;line-height:1;margin-bottom:9px;}
+  .lt-bar-t{height:3px;background:var(--input);}
+  .lt-bar-t span{display:block;height:100%;background:var(--gold);transition:width .35s ease;}
+
+  /* ---- controls ---- */
+  .lt-ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:22px;}
+  .lt-btn{background:var(--card);border:1px solid var(--hair);color:var(--body);font:inherit;font-size:11px;
+    letter-spacing:.4px;padding:7px 13px;cursor:pointer;transition:all .18s;font-family:inherit;}
+  .lt-btn:hover{border-color:var(--gold);color:var(--head);}
+  .lt-btn.on{border-color:var(--gold);color:var(--gold);background:rgba(201,160,60,.09);}
+  .lt-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .lt-spacer{flex:1;}
+  .lt-saved{font-size:10.5px;color:var(--label);letter-spacing:.3px;min-height:16px;}
+
+  /* ---- sections ---- */
+  .lt-sec{border:1px solid var(--hair);margin-bottom:12px;background:var(--raised);}
+  .lt-sec-h{display:flex;align-items:center;gap:13px;padding:14px 16px;cursor:pointer;user-select:none;background:none;border:0;width:100%;text-align:left;font-family:inherit;}
+  .lt-sec-h:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+  .lt-chev{color:var(--label);font-size:10px;transition:transform .2s;flex-shrink:0;}
+  .lt-sec.open .lt-chev{transform:rotate(90deg);}
+  .lt-sec-t{font-family:'Cinzel',Georgia,serif;font-size:14.5px;color:var(--head);flex:1;letter-spacing:.3px;}
+  .lt-sec-c{font-size:10.5px;color:var(--label);white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .lt-sec-ring{width:34px;height:4px;background:var(--input);flex-shrink:0;}
+  .lt-sec-ring span{display:block;height:100%;background:var(--gold);}
+  .lt-sec-b{display:none;border-top:1px solid var(--hair);}
+  .lt-sec.open .lt-sec-b{display:block;}
+
+  /* ---- rows ---- */
+  .lt-row{display:flex;align-items:flex-start;gap:12px;padding:9px 16px;border-bottom:1px solid rgba(51,51,59,.5);}
+  .lt-row:last-child{border-bottom:0;}
+  .lt-row:hover{background:rgba(255,255,255,.016);}
+  .lt-row.hide{display:none;}
+  .lt-id{font-size:9.5px;color:var(--label);letter-spacing:.6px;width:52px;flex-shrink:0;padding-top:5px;font-variant-numeric:tabular-nums;}
+  .lt-main{flex:1;min-width:0;padding-top:2px;}
+  .lt-name{font-size:13px;color:var(--head);line-height:1.45;}
+  .lt-meta{font-size:11px;color:var(--label);margin-top:2px;line-height:1.45;}
+  .lt-flag{display:inline-block;font-size:8.5px;letter-spacing:1.3px;text-transform:uppercase;font-weight:700;
+    padding:1px 6px;margin-left:7px;vertical-align:1.5px;border:1px solid;}
+  .lt-flag.gate{color:var(--red);border-color:rgba(192,69,58,.5);}
+  .lt-flag.ext{color:var(--violet);border-color:rgba(140,123,184,.45);}
+  .lt-note{width:100%;background:var(--input);border:1px solid var(--hair);color:var(--body);font:inherit;font-size:12px;
+    padding:6px 9px;margin-top:7px;resize:vertical;min-height:34px;display:none;font-family:inherit;}
+  .lt-note.show{display:block;}
+  .lt-note:focus{outline:none;border-color:var(--gold);}
+  .lt-noteb{background:none;border:0;color:var(--label);font-size:10.5px;cursor:pointer;padding:3px 0 0;font-family:inherit;}
+  .lt-noteb:hover{color:var(--gold);}
+
+  .lt-stat{flex-shrink:0;width:132px;background:var(--card);border:1px solid var(--hair);color:var(--body);
+    font:inherit;font-size:10px;letter-spacing:1.1px;text-transform:uppercase;font-weight:600;
+    padding:7px 4px;cursor:pointer;transition:all .18s;font-family:inherit;text-align:center;}
+  .lt-stat:hover{filter:brightness(1.25);}
+  .lt-stat:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .lt-stat[data-s="none"]{color:var(--label);}
+  .lt-stat[data-s="prog"]{color:var(--gold);border-color:rgba(201,160,60,.5);background:rgba(201,160,60,.08);}
+  .lt-stat[data-s="part"]{color:var(--rose);border-color:rgba(192,129,150,.5);background:rgba(192,129,150,.08);}
+  .lt-stat[data-s="done"]{color:var(--teal);border-color:rgba(79,163,160,.5);background:rgba(79,163,160,.09);}
+  .lt-stat[data-s="block"]{color:var(--red);border-color:rgba(192,69,58,.5);background:rgba(192,69,58,.09);}
+  .lt-stat[data-s="defer"]{color:var(--violet);border-color:rgba(140,123,184,.45);background:rgba(140,123,184,.07);}
+
+  .lt-foot{margin-top:26px;padding-top:18px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--label);line-height:1.7;}
+  .lt-foot b{color:var(--body);font-weight:500;}
+
+  .lt-toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--card);
+    border:1px solid var(--gold);color:var(--head);padding:10px 18px;font-size:12px;z-index:99;
+    opacity:0;pointer-events:none;transition:opacity .25s;}
+  .lt-toast.show{opacity:1;}
+
+  @media(max-width:620px){
+    .lt-row{flex-wrap:wrap;}
+    .lt-id{width:auto;padding-top:0;}
+    .lt-main{flex:1 1 100%;order:3;}
+    .lt-stat{width:auto;flex:1;order:2;}
+    .lt-gate-num,.lt-gate-pct b{font-size:32px;}
+  }
+  @media(prefers-reduced-motion:reduce){.lt-root *{transition:none!important;}}
+</style>
+
+<div class="lt-root">
+<div class="lt-wrap">
+
+  <p class="lt-eyebrow">Launch Readiness</p>
+  <h1 class="lt-title">SafeRise Protocol — Go-Live Register</h1>
+  <p class="lt-sub">Everything the platform needs before it can take a paying customer. <b>v11</b> · 08 Sep 2026</p>
+  <div style="margin:14px 0 0;padding:13px 16px;border:1px solid #33333B;border-left:2px solid #C9A03C;border-radius:3px;background:#131317;font:14px/1.6 system-ui,sans-serif;color:#95929A"><b style="color:#C9A03C;font-weight:500">v11 &middot; Saves locally now. Elevation removed. The rows are current; the percentage is not.</b> v7&ndash;v11 were rebuilt from the v4-era 90-row base plus TRACKER-DELTA-v7, so any status change made in v5 or v6 that the delta did not name is still missing &mdash; which is why this reads 29% against v6&rsquo;s stated 43%. Paste the v6 export and the arithmetic rebases in one step. Until then, read the row text and the gate list rather than the number. <br><b style="color:#F2EDE3;font-weight:500">v11 stores state in this browser under an unversioned key,</b> so future versions of this file inherit whatever you set here. Use Export state before replacing the file. <br><b style="color:#F2EDE3;font-weight:500">Removed in v11:</b> the whole Track 04 &mdash; Elevation Series section (LG-24, LG-25, LG-136, LG-141) and LG-70, the one-time &euro;222 unlock. Elevation is not in the launch, so it cannot gate one. The Elevation prospectus in docs/ still assumes &euro;222 &mdash; that pricing is now unset rather than agreed.</div>
+
+  <div class="lt-gate">
+    <div class="lt-gate-top">
+      <div>
+        <div class="lt-gate-num" id="gateNum">—</div>
+        <div class="lt-gate-lab">Launch gates outstanding</div>
+      </div>
+      <div class="lt-gate-pct">
+        <b id="pctNum">—</b>
+        <div class="lt-gate-lab">Weighted complete</div>
+      </div>
+    </div>
+    <div class="lt-tally" id="tally"></div>
+    <p class="lt-tally-cap" id="tallyCap">Loading…</p>
+  </div>
+
+  <div class="lt-bars" id="bars"></div>
+
+  <div class="lt-ctrl">
+    <button class="lt-btn" id="fGate">Gates only</button>
+    <button class="lt-btn" id="fOpen">Hide completed</button>
+    <button class="lt-btn" id="expAll">Expand all</button>
+    <button class="lt-btn" id="colAll">Collapse all</button>
+    <span class="lt-spacer"></span>
+    <button class="lt-btn" id="copyBtn">Copy status report</button>
+    <button class="lt-btn" id="resetBtn">Reset</button>
+  </div>
+  <p class="lt-saved" id="saved"></p><span style="margin-left:14px;display:inline-flex;gap:8px;vertical-align:middle"><button id="btnExp" style="background:none;border:1px solid #33333B;color:#95929A;border-radius:2px;padding:5px 10px;font:inherit;font-size:11.5px;cursor:pointer">Export state</button><button id="btnCopy" style="background:none;border:1px solid #33333B;color:#95929A;border-radius:2px;padding:5px 10px;font:inherit;font-size:11.5px;cursor:pointer">Copy state</button><button id="btnImp" style="background:none;border:1px solid #33333B;color:#C9A03C;border-radius:2px;padding:5px 10px;font:inherit;font-size:11.5px;cursor:pointer">Import state</button></span>
+
+  <div id="secs"></div>
+
+  <div class="lt-foot">
+    <b>How this counts.</b> Weighted progress treats In progress as a third, Partial as two thirds, Complete as whole. Blocked counts as zero regardless of work done. Deferred items are excluded from the maths entirely — they are not launch scope.<br>
+    <b>Launch gate</b> marks an item the site cannot go live without. <b>External</b> marks an item that depends on someone outside the build.<br>
+    <b>Defects</b> live in the saferise-fix-register artifact under their SR- numbers. LG-40 tracks that register as a whole rather than duplicating it.<br>
+    <b>Provenance — read this.</b> v11 is built from the 90-row base in project files plus TRACKER-DELTA-v7 plus this session. That base is v4-era. Any status change made in v5 or v6 that the delta did not name is <b>not</b> carried here. Check the rows you touched most recently before trusting the percentage.<br>Status and notes save to this file’s own storage in your browser, not to the artifact.
+  </div>
+</div>
+<div class="lt-toast" id="toast"></div>
+</div>
+
+<script>
+(function(){
+  var KEY = 'saferise-launch-tracker';
+
+  var ORDER = ['none','prog','part','done','block','defer'];
+  var LABEL = {none:'Not started',prog:'In progress',part:'Partial',done:'Complete',block:'Blocked',defer:'Deferred'};
+  var WEIGHT = {none:0,prog:0.34,part:0.67,done:1,block:0};
+
+  // g = launch gate, x = external dependency, m = meta/context line
+  var DATA = [
+    ['Track 01 — written content', [
+      ['LG-01','Protocol Guide — all 10 protocols','',0,0,'done'],
+      ['LG-02','Source Insights — all 10 protocols','Retired 8 Sep. How This Works carries framework sourcing across 30 protocols at ~832 words each',0,0,'defer'],
+      ['LG-03','Reference Case — all 10 protocols','Cancelled 8 Sep. Removed from the manifest outright',0,0,'defer'],
+      ['LG-04','Life Companion Guide — all 10 protocols','',0,0,'done'],
+      ['LG-05','Disclosure & Support Guide — all 10 protocols','',0,0,'done'],
+      ['LG-06','Crisis Card — all 10 protocols','',0,0,'done'],
+      ['LG-07','Attention Advisory — protocols 02, 03, 04, 08, 09, 10','CORRECTED: SR-354 found Attention Advisory and Proximity Guide are substantively different, not one resource under two names. Naming decision open — see LG-116',0,0,'done'],
+      ['LG-08','Invitation to Repair — protocols 02, 04, 08, 09','',0,0,'done'],
+      ['LG-09','Workbook — all 10 protocols','',0,0,'done'],
+      ['LG-10','Guided meditation scripts — all 10 protocols','',0,0,'done'],
+      ['LG-11','Production video scripts — all 10 protocols','',0,0,'done'],
+      ['LG-12','Anxiety Reset — replace 6 placeholder resources','Closed on measurement. Zero placeholder text exists anywhere; Anxiety Reset carries 9 resources on the universal spine, not 12',0,0,'done'],
+      ['LG-13','"Why I Built This" — one piece per track (x3)','Rescoped 8 Sep from per-protocol to per-track. 200-250 words each, on the track page. Blocked on the credential route now that Bastien is off member surfaces',1,0,'none'],
+      ['LG-117','The Decision — content absent from the repo store','SR-354: zero content in content/t*-resources.js. 30 protocols / 14,905 words exist in a divergent store. Locate-and-restore in the consolidated pass',1,0,'prog'],
+      ['LG-133','Media provisioning audit','How many audio and pdf files the flags promise, versus what is present on disk. Report-only step in the consolidated pass',1,0,'prog']
+    ]],
+    ['Track 02 — Relationship Healing', [
+      ['LG-14','Resource library — 86 content keys','',0,0,'done'],
+      ['LG-15','Safety Score interactive tool','Your Score / Their Score tabs, live averaging, tier calculation',0,0,'done'],
+      ['LG-16','Recording scripts','',0,0,'done'],
+      ['LG-17','Asset mapping confirmed — assets/t2/','Staged but not verified against the build',0,0,'none'],
+      ['LG-18','Content parity with Track 01','What\u2019s Included, testimonial, services pair, CTA band, FAQ — FAQ rewritten per track, therapy and crisis answers unchanged',0,0,'none']
+    ]],
+    ['Track 03 — Professional & Career', [
+      ['LG-19','Resource suite written','Exists as Word documents',0,0,'done'],
+      ['LG-20','Integrate resources into platform HTML','',0,1,'none'],
+      ['LG-21','Asset mapping confirmed — assets/t3/','',0,0,'none'],
+      ['LG-22','Content parity with Track 01','',0,0,'none'],
+      ['LG-23','Dwight Williams \u2014 The Disciplined Man track and podcast','Relates only to The Disciplined Man and the planned podcast. No role in Tracks 01, 02 or 03. Does not gate Track 03. Move to a Track 07 section when one exists',0,1,'defer']
+    ]],
+    ['Site copy — editorial blocks', [
+      ['LG-26','Three-state naming block','The recognition device. Pure copy, no build',0,0,'none'],
+      ['LG-27','"Why insight hasn\u2019t moved it" block','Understanding and regulation are different systems',0,0,'none'],
+      ['LG-28','Cost-of-inaction block','Sleep, patience, clarity — not crisis',0,0,'none'],
+      ['LG-29','"What we don\u2019t promise" list','Genuine differentiator in this market',0,0,'none'],
+      ['LG-30','Portability promise','The aim is that you stop needing it in full',0,0,'none'],
+      ['LG-31','Outcome list rewritten in observable-change register','',0,0,'none'],
+      ['LG-32','Move somatic description and six-domain meter up the protocol page','Content exists, currently one click too deep',0,0,'none'],
+      ['LG-33','Itemise resource library with stated value','Name before description',0,0,'none'],
+      ['LG-34','Framework citations surfaced inline at each step','',0,0,'none'],
+      ['LG-35','Free entry point defined','One protocol plus one meditation. Every competitor has one; SafeRise has none',1,0,'none'],
+      ['LG-36','Pricing copy reconciled to one source of truth','Three records disagree: tracks.js gives EUR 9/19/29, other records give 19/29/39. Andre deciding the architecture by end of week',1,0,'block'],
+      ['LG-121','Chosen Self — the prohibited product word replaced','Approved 8 Sep: The identity you keep choosing. Two occurrences in dashboard.html',0,0,'prog'],
+      ['LG-131','Resource pages — editorial and design enhancement','Mockup v2 delivered. Numbered movements, pull quotes, prompt cards, section rail. Copy rewritten to a plain supportive register',0,0,'part'],
+      ['LG-116','Attention Advisory / Proximity Guide — naming decision','SR-354: substantively different resources. tracks.js uses both names for one concept elsewhere. Andre decides',0,0,'none'],
+      ['LG-134','Cue Card and Guided Meditation — remove from the resource list','Andre 8 Sep: both duplicated elsewhere. Takes the declared set from twelve to ten across 30 protocols. Not yet approved as a change',0,0,'none']
+    ]],
+    ['Site build & defects', [
+      ['LG-37','Design system site-wide — sr- namespacing','',0,0,'done'],
+      ['LG-38','Footer with Scope & Safety notice on every page','',0,0,'done'],
+      ['LG-39','Track 01 portal — banner, carousel, full-page protocol opening','',0,0,'done'],
+      ['LG-40','Reader rebuilt dark with Dark / Sepia / Light toggle','',0,0,'done'],
+      ['LG-41','Tracks 02 and 03 covers, banners, colour families','',0,0,'done'],
+      ['LG-42','Fix register SR-001 to SR-016 cleared','Tracked in the saferise-fix-register artifact, not duplicated here',1,0,'none'],
+      ['LG-43','Nine protocols describe Source Insights as "work with anger"','Likely already closed by the Source Insights retirement — the resource is pending and filtered from every render path, so the string should no longer reach a member. The string itself may still sit in source. Verify, then delete with the retirement rather than fixing it',1,0,'prog'],
+      ['LG-44','Placeholder testimonial removed from live site','',1,0,'none'],
+      ['LG-45','Protocol banners become crops of the protocol\u2019s own cover','Andre reports complete 8 Sep; verification added to the pass. Depends on Track 01 covers being on spec first — banners cropped from a 900x1200 Track 01 cover inherit the dimension error',0,0,'part'],
+      ['LG-46','Clipped protocol titles on cover cards','Top edge and carousel edges',0,0,'none'],
+      ['LG-47','Loading placeholder unified to one gold family','',0,0,'none'],
+      ['LG-48','Image performance — WebP, srcset, dimensions, LQIP','94 files at q82, 64.5 MB \u2192 5.2 MB, SSIM 0.981 min. Tracks 2 and 3 brought to responsive parity in SR-351: 100 derivative files, 5.86 MB. srcset and LQIP untouched. Cover WebP quality now in question \u2014 see LG-102.',0,0,'part'],
+      ['LG-49','Scroll-lock mechanism that hangs automated browsers','Isolated, confirmed not a regression, still present',0,0,'none'],
+      ['LG-50','Mobile responsive pass across all track pages','',1,0,'none'],
+      ['LG-51','Accessibility pass — keyboard focus, reduced motion, contrast','',0,0,'none'],
+      ['LG-52','Playwright suite green — two protocols, one Reader resource, zero console errors','Run against local HTTP server, not file://',1,0,'none'],
+      ['LG-53','node --check on all JS and JSON.parse on RESOURCE_CONTENT','Definition of done for every merge',0,0,'none'],
+      ['LG-91','Homepage copy v103 landed','Hero quote, survival and authorship sections, gold clauses breaking to their own line. Commit fa5dd4c. Orphan scan clean at 1440 and 390. Not pushed',0,0,'done'],
+      ['LG-92','SR-084 \u2014 index.html is the entire site','968 KB single file rendering Tracks 01/02/03, plans, services, About and the Foundation protocol. Content diverged from content/tracks.js. Divergence count decides patch versus rebuild',1,0,'block'],
+      ['LG-93','t3-06 stale Ambition Recovery description','Approved Belonging Gap copy now verbatim in index.html:6009 and content/tracks.js:519. SR-350. In repo, not in production',0,0,'done'],
+      ['LG-94','Door card three says \u201carriving\u201d','Fixed in repo. Production still serves the old text pending push',0,0,'done'],
+      ['LG-95','Double footer on index.html','Resolved in SR-351, commit c46c1e5. #main-content, .prog-overlay is the clone target; all ten overlays plus main render exactly one .sr-foot',0,0,'done'],
+      ['LG-102','Cover WebP quality band \u2014 decision','35 of 60 new cover WebPs below 0.95 SSIM, lowest 0.928 (t2-07-320w). Track 1 ships 0.945\u20130.975 on the same profile, so inherited not introduced. The other 94 site images sit at 0.981 min. Covers carry an explicit q94 JPEG spec and are now the worst-compressed files on the site. Audit pass queued: SSIM by size band plus probe re-encode',0,0,'none'],
+      ['LG-103','Track 1 covers off-spec at 900\u00d71200','Spec is 1086\u00d71448. Tracks 2 and 3 ship on spec; Track 1 is the outlier. 11 unreferenced PNGs at 1086\u00d71448 may be Track 1 masters \u2014 if so the fix is a re-export, not a re-source. Unlogged, needs an SR ID',0,0,'none'],
+      ['LG-104','Homepage router copy pass','Commits 515ea0e and b18f1fd. Router copy landed but has since regressed \u2014 see LG-110. Door body top-alignment still not achieved; min-height 7.68em was derived from the mockup stylesheet, not css/saferise-system.css',0,0,'part'],
+      ['LG-105','Scope disclaimer aligned across authored copies','Resolved in b18f1fd. Applied character-for-character to index.html\u2019s template, js/saferise-footer.js SCOPE_HTML and dashboard.html, each keeping its own label markup. getting-help.html:84 shares the opening phrase but is a structurally different sentence \u2014 deliberately left alone',1,0,'done'],
+      ['LG-106','\u201cNot been through a clinical trial\u201d scattered across nine locations','Ruling made 8 Sep: canonical statement in the footer SCOPE_HTML, the two FAQ answers stay, the seven framework-page duplicates go. In the consolidated pass',0,0,'prog'],
+      ['LG-107','member-*.html </div> mismatch','Pre-existing across all six templates. Still has no SR ID and must not be logged as a footnote to SR-342',0,0,'none'],
+      ['LG-110','Router H2 duplicates the paragraph beneath it','Stage D of b18f1fd set the authorship H2 to the same sentence 515ea0e had moved into .sr-router-body. The page now reads it twice consecutively, and the approved heading \u2014 Discover how much your life can grow by getting your choices back \u2014 was overwritten. Fix pass needed before push',1,0,'none'],
+      ['LG-111','Two crisis messages back to back on index.html','The new scope text ends in its own crisis sentence; index.html already carried a fuller crisis paragraph with a findahelpline.com link directly after. Recommendation: cut the sentence from index.html only, keep the paragraph with the live link, and record the deliberate divergence in docs/page-invariants.md',1,0,'none'],
+      ['LG-112','Orphaned .postfilm-* CSS','Survival section deleted in b18f1fd, its rules left in place \u2014 .postfilm-recognition, .postfilm-grid, .postfilm-copy h2 and em, .postfilm-copy>p:not(.eyebrow), .postfilm-pull and p, the sibling rule, plus 2 mobile overrides. Zero matching markup confirmed',0,0,'none'],
+      ['LG-113','Spacing reductions not applied \u2014 Stage F skipped','All six assumed CSS values differed from the repo; two properties named did not exist. Correctly skipped rather than guessed. Page height 2437px against a ~1980px target, so the reduction is still outstanding. Rewrite as measure-then-reduce, not assumed values',0,0,'none'],
+      ['LG-114','docs/fix-register.md:3634 stale','References the eleventh .expert-contrib-label, which was Bastien\u2019s and no longer exists',0,0,'none'],
+      ['LG-140','Resource routing — every protocol opens its own resources','SR-354, commit 00d002c. Acceptance test passed: 288 resources, 30 protocols, zero empty, zero duplicates, zero leakage',1,0,'done'],
+      ['LG-119','resource.html page weight 1.0 MB','Loads all three track stores; needs one. Was ~86 KB',0,0,'prog'],
+      ['LG-120','content/inventory.js is stale','Omits a real Anxiety Reset resource. Delete if unread, else report consumers',0,0,'prog'],
+      ['LG-118','Safety Score and Support Resources — undocumented types','Live in the data with placeholder glyphs. Safety Score on 10 Track 02 protocols, Support Resources on 1 Track 01 protocol',0,0,'none'],
+      ['LG-129','Carousel — ambient drift','Module written, behaviour only. Skips wiring if the row is transform-driven rather than scroll-driven',0,0,'prog'],
+      ['LG-130','The Decision — reflection capture','Mockup v2: six prompts, device-local autosave, an assembled summary, save a copy. Not built',1,0,'part'],
+      ['LG-132','Enter the reflection — link target','Currently a dead anchor. Points at resource.html with the Decision resource once LG-130 lands',0,0,'none'],
+      ['LG-126','Journal export control','Now required rather than optional: device-only storage means the member holds the only copy. The privacy disclosure cannot ship its export sentence until this exists',1,0,'none']
+    ]],
+    ['Audio production', [
+      ['LG-54','Foundation Protocol — full audio recorded','Script complete. Unrecorded',1,0,'none'],
+      ['LG-55','Guided practice session scripts ×10','One full walkthrough per protocol',1,0,'none'],
+      ['LG-56','Guided practice session audio ×10 recorded','',1,0,'none'],
+      ['LG-57','Music beds generated and cleared','ElevenLabs Music, not AIVA. Three beds \u2014 Agitated, Unsteady, Numb \u2014 covering all 31 protocols. Suno ruled out after the Munich Regional Court / GEMA ruling, July 2026. Loudness unresolved: platform rule \u221219 LUFS mono, recording chain says \u221216.',0,0,'part'],
+      ['LG-58','Cleanup pass on all audio','Adobe Podcast Enhance',0,0,'none'],
+      ['LG-59','Assembly and captioning','Descript',0,0,'none'],
+      ['LG-101','31 meditation sessions recorded in Andre\u2019s voice','Co-regulation requirement; synthetic voice not suitable for guided sessions. Sprint scoped Tue/Wed/Thu, one track per day. Pre-flight open: t3-06 script must be Belonging Gap not the withdrawn Ambition Recovery, no script may name Dispenza, filenames must match rg-NN-name.mp3, roster gives 32 rows for 31 sessions',1,0,'none']
+    ]],
+    ['Video production', [
+      ['LG-60','Landing page hero video — approx 8 min','Script v4 exists',1,0,'none'],
+      ['LG-61','Track 01 motivation video — 2:15 plus 60-second cut','Scripts exist',0,0,'none'],
+      ['LG-62','Tile sequence videos ×10','Scripts exist. Protocol 07 splits into 07 and 07B',0,0,'none'],
+      ['LG-63','"Why I Built This One" founder videos ×10','Blocked on LG-13',0,0,'none'],
+      ['LG-64','Protocol walkthrough / follow-along videos ×10','Pairs to the guided audio',1,0,'none'],
+      ['LG-65','Video host configured with domain restriction','Vimeo Pro or Wistia. Client-side gating on a single HTML file is not secure',1,0,'none'],
+      ['LG-66','All assets uploaded, named and wired into the build','',1,0,'none']
+    ]],
+    ['Commerce & access', [
+      ['LG-67','Membership vendor decision','Supabase (Frankfurt, eu-central-1) for auth and DB, Paddle as merchant of record. Outseta plus Stripe superseded \u2014 Stripe does not support Sint Maarten. Mollie ruled out. CX Pay / Orco Bank held as a possible second provider behind js/saferise-pay.js.',1,0,'done'],
+      ['LG-68','Authentication live','js/saferise-auth.js, signup.html, login.html, account.html all built. supabase/migrations/0001_auth_entitlements.sql written but un-run \u2014 blocked on the Supabase project existing.',1,0,'prog'],
+      ['LG-69','Paddle billing configured','Was Stripe, four cumulative tiers. Tier structure contested \u2014 see LG-36. Do not restate figures here until that resolves',1,0,'none'],
+      ['LG-71','Real content gating replacing cosmetic CSS locks','Live bypass at protocol.html:1313 closed. FREE_TRACK_PREFIX t1- in js/saferise-access.js gates Track 01 as free. Media gating still open \u2014 see LG-98.',1,0,'prog'],
+      ['LG-72','EU VAT handling confirmed','Who remits, what Andre files',1,0,'none'],
+      ['LG-73','Onboarding and transactional email sequences','',0,0,'none'],
+      ['LG-74','End-to-end test transactions on every tier','Including upgrade, downgrade and cancellation',1,0,'none'],
+      ['LG-96','Supabase project created \u2014 Frankfurt eu-central-1','Everything built for auth is un-run SQL until this exists',1,1,'none'],
+      ['LG-97','Paddle seller account approved','Unblocks the remaining payment phases',1,1,'none'],
+      ['LG-98','Audio gating architecture','No exclusively-paid audio exists today. The 10 guidance clips are keyed by resource type and shared across all three tracks including free Track 01, so they cannot be gated. Track 02/03 meditations must go to Supabase Storage behind signed URLs, not assets/',1,0,'none'],
+      ['LG-123','Transactional email provider selected','Frankfurt preference set. Brevo preferred for all-in-one with CRM and a free tier. Resend ruled out — US storage, no EU option',1,0,'none'],
+      ['LG-124','Paddle seller account','Needs the KvK number, legal address, bank details and a reviewable live site. Underwriting is the long pole',1,0,'none'],
+      ['LG-125','Wistia account and analytics decision','Confirm storage location and whether analytics beyond delivery are enabled — if so, consent is required',1,0,'none']
+    ]],
+    ['Legal & compliance', [
+      ['LG-75','Terms of Service published','terms.html built and in the working tree, footers wired across 28 pages. Production still serves the old build because it has not been pushed.',1,0,'part'],
+      ['LG-76','Privacy Policy published — GDPR','privacy.html built. Six open items block publication: date, email provider, transfer mechanism, email creation, Kenor registration number, checkout consent line.',1,0,'part'],
+      ['LG-77','Cookie policy and consent banner','Scope follows from what is actually set. Theme storage, the device-only journal and auth are all strictly necessary and need no consent. If no analytics run, this is a cookie policy without a banner. Decide LG-87 and LG-125 first — the banner requirement follows from them',1,0,'none'],
+      ['LG-78','Data retention period decided','Mostly answered by the Article 30 record. Journals are device-only so the largest category retains nothing. Four periods left to set: account data after closure, support email, server and CDN logs, and tax records against the statutory period',0,0,'none'],
+      ['LG-79','Not-a-therapist and clinical-trial disclosures consistent site-wide','Partly done — b18f1fd aligned the scope text in four locations. What remains is a sweep of all FAQ answers (12 shared plus 6 per track) against the final policy wording. Depends on LG-106 landing first',1,0,'none'],
+      ['LG-80','Lawyer review of all three documents','',1,1,'none'],
+      ['LG-81','Kenor International BV / category 9299 scope alignment checked','',0,0,'none'],
+      ['LG-82','Crisis resources verified current and correct','Every number and URL checked against the provider’s own current page, not against our copy of it. International audience means a hardcoded national helpline is a hazard; findahelpline.com is the right pattern. NEDA is permanently disconnected — if it appears anywhere, it goes',1,0,'none'],
+      ['LG-99','International transfer mechanism','Frankfurt set as the standing preference. Article 30 record built (LG-122). Scoped lawyer question drafted. Journals device-only removes the Art. 9 layer',0,1,'prog'],
+      ['LG-100','Legal pages deployed','CORRECTED: this does not resolve on push. Deploying with [DATE], [EMAIL PROVIDER] or [TRANSFER MECHANISM] still visible is worse than a dead link. Order is placeholders filled, then push, then the href updated',1,0,'none'],
+      ['LG-115','terms.html states testing and efficacy position','Clause drafted and approved 8 Sep; lands in the consolidated pass',1,0,'prog'],
+      ['LG-122','Article 30 record of processing activities','Built 8 Sep, seven activities including one for the journal, where no processing occurs. Location, transfer and retention rows still marked to verify',1,0,'part'],
+      ['LG-127','Device-only storage disclosure','Approved copy for privacy, protocol page and terms. Export sentence held back until LG-126 ships',1,0,'prog'],
+      ['LG-128','Publication date set','23 October 2026 across Terms, Privacy and Refunds',0,0,'prog']
+    ]],
+    ['Launch readiness', [
+      ['LG-83','thesaferiseprotocol.com resolving to the live site','Netlify, deployed from GitHub main. Currently noindex until launch',1,0,'none'],
+      ['LG-84','Real testimonials from the pilot cohort','All 15 currently read "Built and ready. Not yet reviewed."',0,1,'none'],
+      ['LG-85','Founding cohort pre-sale offer defined','Primary recommended funding route at this stage',0,0,'none'],
+      ['LG-86','Dr. Keny F. Bastien credibility placement on site','Decided 8 Sep: off all member-facing surfaces (b18f1fd), relationship retained for the month-7 investor pack',0,1,'done'],
+      ['LG-87','Analytics installed','',0,0,'none'],
+      ['LG-88','Support and contact route live','Two addresses in play: the footer uses contact@thesaferiseprotocol.com, the legal documents use saferise@kenorinternational.com. Neither exists yet. Pick one',1,0,'none'],
+      ['LG-89','Every statistic on the site carries a citation','',0,0,'none'],
+      ['LG-90','Full credibility-rule sweep of live copy','No frequency, manifest, quantum or rewire. Porges and HeartMath lead',1,0,'none'],
+      ['LG-135','Track — Sex & Intimacy prospectus','Ten protocols, overlap control, provisioning matrix, safety rules. Two new conditional resources. Clinical co-development is a dependency',0,0,'part'],
+      ['LG-137','Track — Executive Presence prospectus','Ten protocols. The pair for Professional Performance. Presence redefined as the state others regulate around, not image',0,0,'part'],
+      ['LG-138','Six new conditional resources scoped','Desire Check, Consent and Boundaries, Others in Your Material, Scope of Claim, The Hard Message, and the referral resource for leaders. The universal nine are unchanged',0,0,'none'],
+      ['LG-108','Six commits pushed to production','Latest pass committed and pushed. Confirm nothing earlier is still sitting local',1,0,'part'],
+      ['LG-109','Handover documents under version control','docs/SAFERISE-HANDOVER-2026-09-07.md, docs/handover/, docs/MARKET-INTEL-sound-frequency-segment.md and tools/check.py are untracked. The documents the next session inherits are outside git',0,0,'none']
+    ]]
+  ];
+
+  var state = {};
+  var openSecs = {};
+  var fGate = false, fOpen = false;
+  var $ = function(id){ return document.getElementById(id); };
+  var saveTimer = null;
+
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  function itemState(id, def){
+    if (state[id] && state[id].s) return state[id].s;
+    return def;
+  }
+
+  /* ---------- persistence ---------- */
+  function save(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      var txt = JSON.stringify(state);
+      try {
+        localStorage.setItem(KEY, txt);
+        $('saved').textContent = 'Saved ' + new Date().toLocaleTimeString();
+      } catch(e){
+        MEM = txt;
+        $('saved').textContent = 'Held for this session only — export before closing';
+      }
+    }, 220);
+  }
+
+  var MEM = null;
+
+  function load(){
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) state = JSON.parse(raw) || {};
+    } catch(e){
+      try { if (MEM) state = JSON.parse(MEM) || {}; } catch(e2){ state = {}; }
+    }
+    render();
+  }
+
+  /* ---------- export / import ---------- */
+  function exportState(){
+    var payload = JSON.stringify({ key: KEY, savedAt: new Date().toISOString(), state: state }, null, 1);
+    var b = new Blob([payload], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'saferise-tracker-state.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  function copyState(){
+    navigator.clipboard.writeText(JSON.stringify(state)).then(function(){
+      $('saved').textContent = 'State copied to clipboard';
+    });
+  }
+  function importState(){
+    var txt = prompt('Paste tracker state JSON. This merges into what is already here — rows not mentioned keep their current status.');
+    if (!txt) return;
+    var incoming;
+    try { incoming = JSON.parse(txt); } catch(e){ alert('That is not valid JSON.'); return; }
+    if (incoming && incoming.state) incoming = incoming.state;
+    var n = 0;
+    for (var k in incoming){ if (Object.prototype.hasOwnProperty.call(incoming,k)){ state[k]=incoming[k]; n++; } }
+    save(); render();
+    $('saved').textContent = 'Merged ' + n + ' rows';
+  }
+
+  /* ---------- render ---------- */
+  function render(){
+    var html = '';
+    DATA.forEach(function(sec, si){
+      var name = sec[0], items = sec[1];
+      var open = openSecs[si] !== undefined ? openSecs[si] : (si === 0);
+      var tot = 0, sum = 0, dn = 0;
+      items.forEach(function(it){
+        var s = itemState(it[0], it[5]);
+        if (s === 'defer') return;
+        tot++; sum += WEIGHT[s];
+        if (s === 'done') dn++;
+      });
+      var pct = tot ? Math.round(sum / tot * 100) : 100;
+
+      html += '<div class="lt-sec' + (open ? ' open' : '') + '" data-sec="' + si + '">';
+      html += '<button class="lt-sec-h" data-toggle="' + si + '"><span class="lt-chev">\u25B6</span>';
+      html += '<span class="lt-sec-t">' + esc(name) + '</span>';
+      html += '<span class="lt-sec-c">' + dn + ' / ' + tot + ' \u00b7 ' + pct + '%</span>';
+      html += '<span class="lt-sec-ring"><span style="width:' + pct + '%"></span></span></button>';
+      html += '<div class="lt-sec-b">';
+
+      items.forEach(function(it){
+        var id = it[0], nm = it[1], mt = it[2], gate = it[3], ext = it[4];
+        var s = itemState(id, it[5]);
+        var note = (state[id] && state[id].n) || '';
+        var hide = (fGate && !gate) || (fOpen && (s === 'done' || s === 'defer'));
+
+        html += '<div class="lt-row' + (hide ? ' hide' : '') + '" data-row="' + id + '">';
+        html += '<span class="lt-id">' + id + '</span>';
+        html += '<button class="lt-stat" data-s="' + s + '" data-cycle="' + id + '" title="Click to change status">' + LABEL[s] + '</button>';
+        html += '<div class="lt-main"><div class="lt-name">' + esc(nm);
+        if (gate) html += '<span class="lt-flag gate">Launch gate</span>';
+        if (ext) html += '<span class="lt-flag ext">External</span>';
+        html += '</div>';
+        if (mt) html += '<div class="lt-meta">' + esc(mt) + '</div>';
+        html += '<button class="lt-noteb" data-note="' + id + '">' + (note ? 'Note \u00b7 ' + esc(note.slice(0,44)) + (note.length > 44 ? '\u2026' : '') : '+ note') + '</button>';
+        html += '<textarea class="lt-note' + '" data-input="' + id + '" placeholder="Working note">' + esc(note) + '</textarea>';
+        html += '</div></div>';
+      });
+
+      html += '</div></div>';
+    });
+    $('secs').innerHTML = html;
+    stats();
+  }
+
+  function stats(){
+    var tot = 0, sum = 0, gatesOpen = 0, counts = {none:0,prog:0,part:0,done:0,block:0,defer:0};
+    var tallyHtml = '';
+    DATA.forEach(function(sec){
+      sec[1].forEach(function(it){
+        var s = itemState(it[0], it[5]);
+        counts[s]++;
+        if (s === 'defer') return;
+        tot++; sum += WEIGHT[s];
+        if (it[3] && s !== 'done') gatesOpen++;
+        var cls = s === 'done' ? 'done' : s === 'part' ? 'part' : s === 'prog' ? 'prog' : s === 'block' ? 'block' : '';
+        tallyHtml += '<i class="' + cls + '"></i>';
+      });
+    });
+    var pct = tot ? Math.round(sum / tot * 100) : 0;
+    $('gateNum').textContent = gatesOpen;
+    $('gateNum').className = 'lt-gate-num' + (gatesOpen === 0 ? ' clear' : '');
+    $('pctNum').textContent = pct + '%';
+    $('tally').innerHTML = tallyHtml;
+    $('tallyCap').textContent = tot + ' items in launch scope \u00b7 ' + counts.done + ' complete \u00b7 ' +
+      counts.part + ' partial \u00b7 ' + counts.prog + ' in progress \u00b7 ' + counts.block + ' blocked \u00b7 ' +
+      counts.none + ' not started' + (counts.defer ? ' \u00b7 ' + counts.defer + ' deferred out of scope' : '');
+
+    var bars = [
+      ['Complete', counts.done, 'done'],
+      ['In flight', counts.prog + counts.part, 'flight'],
+      ['Not started', counts.none, 'none'],
+      ['Blocked', counts.block, 'block']
+    ];
+    $('bars').innerHTML = bars.map(function(b){
+      var w = tot ? Math.round(b[1] / tot * 100) : 0;
+      return '<div class="lt-bar"><div class="lt-bar-n">' + b[0] + '</div><div class="lt-bar-v">' + b[1] +
+             '</div><div class="lt-bar-t"><span style="width:' + w + '%"></span></div></div>';
+    }).join('');
+  }
+
+  /* ---------- interaction ---------- */
+  $('secs').addEventListener('click', function(e){
+    var t = e.target.closest('[data-cycle]');
+    if (t){
+      var id = t.getAttribute('data-cycle');
+      var cur = t.getAttribute('data-s');
+      var next = ORDER[(ORDER.indexOf(cur) + 1) % ORDER.length];
+      if (!state[id]) state[id] = {};
+      state[id].s = next;
+      t.setAttribute('data-s', next);
+      t.textContent = LABEL[next];
+      save();
+      var sec = t.closest('.lt-sec');
+      var openIdx = sec ? sec.getAttribute('data-sec') : null;
+      DATA.forEach(function(_, i){ openSecs[i] = !!document.querySelector('.lt-sec[data-sec="' + i + '"].open'); });
+      render();
+      if (openIdx !== null){
+        var el = document.querySelector('.lt-row[data-row="' + id + '"] .lt-stat');
+        if (el) el.focus();
+      }
+      return;
+    }
+    var n = e.target.closest('[data-note]');
+    if (n){
+      var nid = n.getAttribute('data-note');
+      var ta = document.querySelector('[data-input="' + nid + '"]');
+      if (ta){ ta.classList.toggle('show'); if (ta.classList.contains('show')) ta.focus(); }
+      return;
+    }
+    var h = e.target.closest('[data-toggle]');
+    if (h){
+      var si = h.getAttribute('data-toggle');
+      var sc = document.querySelector('.lt-sec[data-sec="' + si + '"]');
+      sc.classList.toggle('open');
+      openSecs[si] = sc.classList.contains('open');
+    }
+  });
+
+  $('secs').addEventListener('input', function(e){
+    var ta = e.target.closest('[data-input]');
+    if (!ta) return;
+    var id = ta.getAttribute('data-input');
+    if (!state[id]) state[id] = {};
+    state[id].n = ta.value;
+    save();
+  });
+
+  function applyFilters(){
+    DATA.forEach(function(sec){
+      sec[1].forEach(function(it){
+        var s = itemState(it[0], it[5]);
+        var row = document.querySelector('.lt-row[data-row="' + it[0] + '"]');
+        if (!row) return;
+        var hide = (fGate && !it[3]) || (fOpen && (s === 'done' || s === 'defer'));
+        row.classList.toggle('hide', hide);
+      });
+    });
+  }
+
+  $('fGate').addEventListener('click', function(){
+    fGate = !fGate; this.classList.toggle('on', fGate);
+    if (fGate) document.querySelectorAll('.lt-sec').forEach(function(s){ s.classList.add('open'); });
+    applyFilters();
+  });
+  $('fOpen').addEventListener('click', function(){
+    fOpen = !fOpen; this.classList.toggle('on', fOpen);
+    applyFilters();
+  });
+  $('expAll').addEventListener('click', function(){
+    document.querySelectorAll('.lt-sec').forEach(function(s,i){ s.classList.add('open'); openSecs[i]=true; });
+  });
+  $('colAll').addEventListener('click', function(){
+    document.querySelectorAll('.lt-sec').forEach(function(s,i){ s.classList.remove('open'); openSecs[i]=false; });
+  });
+
+  function toast(msg){
+    var t = $('toast'); t.textContent = msg; t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+
+  $('copyBtn').addEventListener('click', function(){
+    var lines = ['# SafeRise — Launch Readiness, ' + new Date().toISOString().slice(0,10), ''];
+    var tot = 0, sum = 0, gates = [];
+    DATA.forEach(function(sec){
+      lines.push('## ' + sec[0]);
+      sec[1].forEach(function(it){
+        var s = itemState(it[0], it[5]);
+        var note = (state[it[0]] && state[it[0]].n) ? '  \u2014 ' + state[it[0]].n : '';
+        lines.push('- [' + LABEL[s] + '] ' + it[0] + ' ' + it[1] + (it[3] ? ' (LAUNCH GATE)' : '') + (it[4] ? ' (EXTERNAL)' : '') + note);
+        if (s === 'defer') return;
+        tot++; sum += WEIGHT[s];
+        if (it[3] && s !== 'done') gates.push(it[0] + ' ' + it[1]);
+      });
+      lines.push('');
+    });
+    lines.unshift('Weighted complete: ' + Math.round(sum/tot*100) + '% \u00b7 Launch gates outstanding: ' + gates.length, '');
+    var out = lines.join('\n');
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(out).then(function(){ toast('Status report copied'); })
+        .catch(function(){ toast('Copy blocked — select the page text instead'); });
+    } else { toast('Clipboard unavailable in this view'); }
+  });
+
+  $('resetBtn').addEventListener('click', function(){
+    if (this.dataset.armed === '1'){
+      state = {}; this.dataset.armed = ''; this.textContent = 'Reset'; this.classList.remove('on');
+      save(); render(); toast('Reset to starting positions');
+    } else {
+      this.dataset.armed = '1'; this.textContent = 'Reset — click again'; this.classList.add('on');
+      var b = this;
+      setTimeout(function(){ if (b.dataset.armed === '1'){ b.dataset.armed=''; b.textContent='Reset'; b.classList.remove('on'); } }, 4000);
+    }
+  });
+
+  var _b;
+  _b=$('btnExp'); if(_b) _b.addEventListener('click', exportState);
+  _b=$('btnCopy'); if(_b) _b.addEventListener('click', copyState);
+  _b=$('btnImp'); if(_b) _b.addEventListener('click', importState);
+  load();
+})();
+</script>
