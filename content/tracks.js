@@ -96,30 +96,24 @@ var SHARED = {
        for. Do not re-add Source Insights above it — SR-077 merged that into
        How This Works and the merge stands. */
     ['face',  'Accountability & Empathy','What it does outside you.', 'Your own state has an exterior you have never observed. Another person\u2019s reaction is data you cannot generate on your own.', 'accountability'],
-    /* PASS-full-resource-access, Step 6 \u00b7 Raising It and Accountability &
-       Empathy were reported as undeclared. Both were already here (above,
-       'case'/'face') when this pass started \u2014 not re-added, since they
-       already existed correctly. The Decision genuinely was undeclared,
-       but adding it as a live, orderable type \u2014 as literally instructed \u2014
-       would fail the acceptance test: no protocol in any of the three
-       content stores authors it (checked directly, not assumed), so a
-       protocol claiming to carry it would open empty. Marked pending
-       instead, alongside the three types already known to have no
-       content, rather than shipping a twelfth resource with nothing
-       behind it. A sixth array slot (true) marks pending; every reader
-       of SHARED.resources in this file and in js/saferise-track.js now
-       filters it out (see resourceByType/trackResources/protocolResources
-       below, and js/saferise-track.js's own trackResourceCount comment). */
-    ['diamond','The Decision',         'Choose who handles this pattern next.', 'Not yet authored on any protocol in any track.', 'decision', true],
-    /* The following three were reported as needing only a pending:true
+    /* PASS-CONSOLIDATED-2026-09-08, Section 1 \u00b7 The Decision is restored.
+       All 30 standard protocols now author "t{n}p{no}-decision" in
+       content/t1|t2|t3-resources.js (last resource in every protocol's
+       keys array, matching the recovered source's own ordering). No
+       longer pending \u2014 the sixth array slot is dropped. */
+    ['diamond','The Decision',         'Choose who handles this pattern next.', 'Write who takes over from the pattern that has been running this, and who runs the next one.', 'decision'],
+    /* The following two were reported as needing only a pending:true
        flag added to an existing entry. None currently exist in this array
        at all \u2014 grepped directly, not assumed \u2014 so restoring them later
        needs authored copy first regardless; adding them now, inert,
        is what makes flipping pending to false later the only step left,
-       per this Step's own stated goal. */
-    ['book',  'Why I Built This One',  'The founder\u2019s own reason for this protocol.', 'Not yet authored on any protocol in any track. LG-13 restores this.', 'why-built', true],
-    ['flask', 'Source Insights',       'Where the mechanism comes from.', 'Merged into How This Works in SR-077 and not authored again since \u2014 the framework attribution this would carry already lives there.', 'source-insights', true],
-    ['scale', 'Reference Case',        'A worked example of the pattern.', 'Not yet authored on any protocol in any track.', 'reference-case', true]
+       per this Step's own stated goal.
+       PASS-CONSOLIDATED-2026-09-08, Section 2 \u00b7 reasons updated: Why I
+       Built This One has moved to a per-track asset rather than a resource
+       here; Source Insights stays retired into How This Works (SR-077).
+       Reference Case removed below \u2014 cancelled outright, not pending. */
+    ['book',  'Why I Built This One',  'The founder\u2019s own reason for this protocol.', 'Moved to a per-track asset, not a resource in this list. Not yet authored on any protocol in any track.', 'why-built', true],
+    ['flask', 'Source Insights',       'Where the mechanism comes from.', 'Retired into How This Works in SR-077 and not authored again since \u2014 the framework attribution this would carry already lives there.', 'source-insights', true]
   ],
   resourceNote: 'The Proximity Guide and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern, rather than on every protocol. The library grows \u2014 anything added to the track while you\u2019re a member is yours.',
   insight: {

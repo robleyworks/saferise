@@ -17,7 +17,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-354.** Reserved block open: **SR-154 to SR-175**, ceiling
+- **Highest ID issued: SR-355** (this pass — PASS-CONSOLIDATED-2026-09-08 — verified
+  via `git log --oneline -i --grep="SR-3[0-9][0-9]" -E`, which found SR-354 as the last
+  issued and nothing between it and this pass's own HEAD; per this note's own documented
+  history of going stale, do not trust this line either — re-verify with the same grep
+  before the next allocation.) Reserved block open: **SR-154 to SR-175**, ceiling
   **SR-175**, reserved 21 Aug 2026 by the pricing-reconcile run. **The block SR-154–SR-175 is exhausted and the framework-pages run ran past its ceiling to SR-179**, extending the reservation rather than renumbering, exactly as the pricing run did at SR-150. **Reserve a fresh block before the next run is scripted.**
   **This ceiling note was stale** — entries through **SR-290** were already written up below it
   without it having been updated in between; per the register's own gap rule this is not tidied
@@ -8469,5 +8473,291 @@ in `docs/PASS-full-resource-access-acceptance-table.md`.
 Files: `resource.html`, `js/saferise-resources.js` (new),
 `content/tracks.js`, `js/saferise-track.js`, `docs/page-invariants.md`,
 `docs/PASS-full-resource-access-acceptance-table.md` (new).
+
+*Status:* closed · *Raised and fixed:* 8 Sep 2026
+
+**SR-355 · PASS-CONSOLIDATED-2026-09-08 — The Decision restored, page weight
+cut, legal copy and wording fixes, carousel classified.** Eleven sections,
+single pass, decision rules (MATCH/DIFFERS/AMBIGUOUS/VERIFY-FAIL) in place of
+stop-and-report. `pass/PASS-store-reconciliation.md` and
+`pass/PASS-carousel-drift.md`, which this brief said it supersedes, do not
+exist in the repo — nothing to delete.
+
+**Section 1 — The Decision, DIFFERS, restored.** The brief's own locate
+checklist was followed in full before restoring anything. `git log -S
+"the-decision" --oneline --all` and the same for `"The Decision"` returned
+nothing — the string was never authored-then-reverted in this repo's commit
+history; every `-S` pickaxe search in this pass ran slow or hung outright,
+consistent with this repo's known contention with GitHub Desktop's own
+concurrent `git log -g` reflog scan (confirmed running concurrently via
+`ps`), so the locate work leaned on non-git evidence instead. Found: a
+git-tracked zip at the repo root, `saferise-build-handover-repo-drop.zip`
+(added in commit `b4795b5` "updates", 4 Sep 2026 — 4 days before this pass,
+no SR number, unrelated to Safety Score/Support Resources which are not in
+this bundle at all — see below), containing the full master bundle
+`content/t1-resources.js`'s own header names but was never actually merged:
+`BUILD-HANDOVER.md`, `data/mk_store.py` (the generator — its `GLYPH`/`SUB`
+tables already carry a complete "The Decision" entry, glyph `◈`, sub "What
+takes over.", so the generator was never missing Decision support; the gap
+was upstream, in what content ever reached it), `specs/RESOURCE-12-THE-DECISION-SPEC.md`,
+and — the operative file — `data/resource-content.js`, a 31-protocol,
+308-resource generated store carrying a complete "The Decision" entry, last
+in the list, for all 30 standard protocols (`t0-00` Clearing excluded, 0
+missing). This is "PRESENT in the repo" per the brief's own first branch.
+`pass/the-decision-recovered.js` (101,273 bytes, a second, independently
+quarantined extraction of the same content — its own header says as much)
+was superseded by the tracked zip and deleted unread, per that branch's
+instruction. A third, independent sighting: `pass/saferise-track01-reader.html`,
+a standalone preview build (not wired into the live site, not part of any
+page's own script tags), was found to carry matching "The Decision" body
+text for `t1-01` through `t1-10` only (confirmed via
+`var T1 = {...}`; no `T2`/`T3` declarations exist in that file) — left in
+place, reported, not used as the merge source. Merged the 30 entries from
+`data/resource-content.js` into `content/t1-resources.js`, `t2-resources.js`
+and `t3-resources.js` as `"t{n}p{no}-decision"`, appended last to every
+protocol's `keys` array in `T{n}_PROTOCOL_KEYS` — confirmed against the
+source's own ordering first: "The Decision" is the final resource in every
+one of the 30 protocols in `data/resource-content.js`, 0 exceptions, so
+appending last was the correct, confirmed placement rather than an
+assumption. All 30 protocol keys (`t1-01`..`t3-10`) resolved cleanly against
+the live `T{n}_PROTOCOL_KEYS`, 0 unresolved. `SHARED.resources`' Decision row
+in `content/tracks.js` had its sixth (`pending`) element dropped. Section
+10's acceptance test (below) found 0 empty bodies, 0 duplicate bodies, and
+exactly +1 resource on every protocol attributable to Decision — the
+VERIFY-FAIL revert condition did not trigger.
+
+**Section 2 — Reference Case / Why I Built This One / Source Insights,
+MATCH, applied.** `Reference Case` removed outright from `SHARED.resources`
+(was pending, is now gone, not merely re-flagged). `Why I Built This One`
+and `Source Insights` stay pending, sixth element `true` retained; their
+display-blurb text and `docs/page-invariants.md` both updated with the
+brief's given reasons (moved to a per-track asset; retired into How This
+Works, SR-077's merge standing). `docs/page-invariants.md`'s "four pending
+resource types" section rewritten to "two", with the full Section 1/2
+reasoning recorded there — including a new finding this rewrite surfaced:
+`content/inventory.js` (Section 5) does not know about The Decision either,
+so anything counting a track's resources through `trackResources()`/
+`protocolResources()` (and therefore `libSize()`'s marketing-copy word) will
+undercount by one per protocol until that file is regenerated — noted, not
+fixed, since Section 5 says leave it.
+
+**Section 3 — page weight, MATCH, applied.** `resource.html` loaded all
+three content stores unconditionally (1,054,274 bytes / ~1030 KB combined,
+post-Decision-merge — up from SR-354's own reported ~86 KB six-entry stub,
+before that pass wired real content in). No build step exists in this repo
+(confirmed — `find` for a bundler config, webpack/vite/rollup, turned up
+nothing), so the fix is a synchronous `document.write()` for the one
+`<script src>` that depends on the parsed `track` param, executed ahead of
+`js/saferise-resources.js` and the resolve call — the classic build-free
+pattern; the browser blocks on it exactly like a static tag. `ACTIVE_TRACK`
+(the page's own unclamped track parse) is checked against the clamped
+value used to pick the script tag before calling `resolveSet`, falling back
+to Track 01/protocol 01 if they disagree, so an out-of-range `?track=` value
+can't silently look up an unloaded store. Verified live for one protocol
+per track (fresh, uncached browser origin, since the same-URL scripts
+across repeated same-session loads hit browser disk cache otherwise — not a
+defect, a testing artifact, worked around by testing on a second port):
+
+| Track | Store size | + resolver + guidance | Only-that-store total | vs. all-three (1,054,274 B) |
+|---|---|---|---|---|
+| 1 | 353,642 B | +11,648 B | 365,290 B | −65.4% |
+| 2 | 328,643 B | +11,648 B | 340,291 B | −67.7% |
+| 3 | 360,341 B | +11,648 B | 371,989 B | −64.7% |
+
+`resolveSet()` execution time measured at 0.3 ms for one protocol in each
+of Track 01 and Track 03 (in-page `performance.now()` deltas — full
+navigation-timing numbers were dominated by ~15 s of Browser-pane/network
+overhead unrelated to this change and were not usable as a signal, so
+resolver time is reported instead, matching SR-354's own measurement
+method). Confirmed only the resolved track's `T{n}_RESOURCES`/
+`T{n}_PROTOCOL_KEYS` globals are defined after load (the other two
+undefined) for `track=1`, `track=2` and `track=3`.
+
+**Section 4 — Safety Score / Support Resources, report only, nothing
+changed.** **Safety Score** (`typeSlug: safety`): all 10 Track 02 protocols
+(`t2p1-safety` .. `t2p10-safety`), none in Track 01 or Track 03. Shape:
+`{kind: "Safety Score", title, sub, body: [...], cues: [], sharedRefs: [],
+diagrams: []}` — the standard shape, not the locked/meta variant. Sampled
+body (t2p3): 175 words, a ten-question numeric self/other pre-engagement
+check with three named tiers. Compared against **Safe Practice** (t2p3:
+367 words, general pacing/when-to-slow-down guidance): different in kind,
+not a duplicate — Safety Score is a specific numeric quiz run *before*
+opening a protocol, Safe Practice is narrative guidance for *during* it.
+**Support Resources** (`typeSlug: crisis`): exactly one instance,
+`t1p10-crisis` (Powerlessness & Despair), title "You don't have to carry
+this alone". Same standard shape. Body: 43 words, a crisis-line referral
+("This protocol is a supplement to professional support, not a substitute
+for it..."). Compared against **Disclosure & Support** (t1p10: 396 words, a
+script for explaining your own experience to someone close): different
+function, not a duplicate — one is an emergency referral, the other is
+interpersonal-disclosure guidance. Neither type appears in the master
+bundle (`data/resource-content.js`, Section 1) at all — both are additions
+to the live store outside that bundle's own generation, corroborating
+SR-354's original finding that these are the live site's own, undocumented
+additions. No glyphs assigned, per instruction; both still carry Section
+1's-predecessor SR-354's placeholder glyphs (`☐`, `✚`) in
+`js/saferise-resources.js`'s `TYPE_META`.
+
+**Section 5 — `content/inventory.js`, MATCH, left in place.** Something
+reads it: five live pages load it via `<script src>`
+(`index.html`, `personal-transformation.html`, `relationship-healing.html`,
+`professional-performance.html`, `dashboard.html`; `docs/tracker-v11.html`
+also references it but is a docs file, not a live page) and
+`content/tracks.js`'s `trackResources()`/`protocolResources()` both read its
+`RESOURCE_INVENTORY`/`PROTOCOL_RESOURCE_TYPES` globals when present
+(guarded `typeof ... !== 'undefined'` checks — `js/saferise-resources.js`
+only *mentions* `PROTOCOL_RESOURCE_TYPES` in a comment, does not read it).
+Left as-is, per instruction. Consequence worth flagging, not fixed here:
+its staleness has grown — it already omitted `t1p1-advisory` (SR-354's
+finding); it now also omits `The Decision` on every protocol, since it
+predates Section 1's merge. Anything counting resources through it
+(`libSize()`'s marketing-copy `resourceCount()` text, any track-page/
+dashboard widget going through `trackResources()`) will undercount by (at
+least) one per protocol until `tools/build-inventory.py` is re-run — a
+regeneration this section's own instruction says to leave for a separate
+pass, not to run here.
+
+**Section 6 — "practising" wording, MATCH, applied.** Both find-strings in
+`dashboard.html` matched exactly, at the brief's own line numbers (505 and
+1264). Replaced verbatim as given. Remaining "practising" hits, reported,
+not changed: `index.html:2220` (×2, journalling-prompt copy, "Did
+practising genuine joy/self-acceptance..."), `index.html:5043` and
+`docs/reference/portal-personal-target.html:715` ("two people practising
+together" — Relationship Healing "in development" note, identical text in
+both), `index.html:8421` ("keeping the wisdom, and deliberately practising a
+different way of being" — general prose), `index.html:8448` ("The decision
+names the person you are practising being now, in relation to this exact
+pattern" — copy describing The Decision itself, the closest analogue to the
+two strings just fixed; worth Andre's attention if the ban is meant to be
+platform-wide rather than dashboard-only), `docs/TRACK-RESOURCES.md:104`
+(planning doc, "SafeRise practising its own doctrine").
+
+**Section 7 — legal copy, DIFFERS on 7a/7c, MATCH on 7b/7d, applied.**
+**7a:** all three pages (`terms.html`, `privacy.html`, `refunds.html`) carry
+only a `Last updated:` field — none has a separate `Effective from` field,
+contrary to the brief's "where a page has both" framing. All three
+`[DATE]` occurrences replaced with `23 October 2026`. **7b:** `terms.html`
+had no testing/efficacy statement — inserted verbatim as the new first
+paragraph of "§4. No outcomes are promised", ahead of the existing
+no-guarantees paragraph, no new heading or chrome added. **7c:** the
+clinical-trial sentence was found in **ten** places, not nine — three FAQ
+answers in `index.html` (not two: `index.html:5030`, plus two more embedded
+in the relationship-healing and professional-performance track panels'
+own "Is any of this based on real science?" FAQ answers, both matching the
+same question/answer pattern as the counted one), plus the seven
+framework-page Standing Disclaimers. All three FAQ instances stay, per the
+brief's own rule for "the FAQ answers" applied to the actual count found.
+The seven framework-page duplicates removed: `member-kross.html`,
+`member-porges.html`, `member-mate.html`, `member-watts.html`,
+`member-jung.html`, `member-heartmath.html` (each: removed the one `<p>`,
+left the sibling crisis-note paragraph and the rest of the `.sr-fw-disc`
+block untouched) and `member-frameworks.html` (had no sibling paragraph —
+removing its only `<p>` would have left an empty glyph-only `.sr-fw-disc`
+box, so the whole now-content-less block was removed instead, an
+adaptation beyond the literal instruction, reported here per the DIFFERS
+rule). **7d:** device-only-storage paragraph added verbatim to
+`privacy.html` (§3, "What we do not collect") and `terms.html` (§10, "What
+you write") — both pages already had a shorter, adjacent sentence saying
+roughly the same thing (`privacy.html`'s "short version" and `terms.html`'s
+"stored on your own device" line); left in place rather than reconciled,
+since the brief asked only to insert the new paragraph, not to deduplicate
+against existing copy. No Export-control sentence added, as instructed —
+grepped for "export" after editing to confirm none was introduced.
+
+**Section 8 — carousel, TRANSFORM, 8b skipped.** Viewport/row are exactly
+`#srCarViewport`/`#srCarRow`, matching the brief's own guess. Computed
+`overflow-x` (`css/saferise-dashboard.css:164`) is `overflow:hidden` — not
+scrollable. `apply()` (`dashboard.html`, the `CAROUSEL MOTION` block) sets
+`row.style.transform = 'translate3d(offset,0,0)'`; the module's own comment
+states this explicitly: "The row is moved with transform (never
+scrollLeft)". This dashboard carousel is *already* a continuous,
+constant-velocity ambient-drift carousel, self-built inline — not the
+stepped mechanism the brief's mockup assumed. It already does most of what
+`pass/saferise-carousel-drift.js` exists to add: doubled card set
+(`data-doubled`) for seamless wraparound, eased pause on
+`mouseenter`/`focusin`/`touchstart`, eased resume on leave, an eased
+`step(dir)` nudge for the prev/next buttons (`.sr-dash-carprev`/
+`.sr-dash-carnext`), a `visibilitychange` listener that halts drift in a
+background tab, and a `SETTLE` timer (13 s) that eases to a stop rather
+than drifting forever. Index derivation for the counter (`#srCarCount`,
+"N / total") comes from `Math.round(-offset / cardStep()) % total`, not
+from a dot indicator — there are no carousel dots in this markup. Row
+rebuild on track change: `render(n)` fully replaces `row.innerHTML` (cards
+doubled when `t.items.length > 3`) and resets `data-doubled` on every
+track switch. **Track 04 does not exist in this carousel at all** —
+`TRACKMETA`/`DASHTRACKS` define only tracks 1–3; the once-existing
+empty-track render branch was deliberately retired (see the `render()`
+comment citing SR-110: "every shipping track carries ten protocols... If a
+future track ever ships with no protocols, restore a guard here") — a
+DIFFERS from the brief's assumption that Track 04 still renders
+`.sr-dash-empty`; no such class exists in the file. Per the brief's own
+rule, TRANSFORM means 8b is skipped entirely: `pass/
+saferise-carousel-drift.js` was not moved, and its own documented
+self-guard (`attach()` returns `mode: 'unsupported'` when the viewport's
+computed `overflow-x` isn't `auto`/`scroll`) independently confirms it
+would have been a no-op even if wired in — corroborating, not just
+asserting, the TRANSFORM classification.
+
+**Section 9 — media provisioning audit, report only, nothing changed.**
+The live per-track stores (`content/t1|t2|t3-resources.js`) carry **zero**
+inline `audio`/`pdf` fields on any of their 318 resource records (the
+standard record shape is `kind/title/sub/body/cues/sharedRefs/diagrams` —
+no audio/pdf field exists in that shape at all, confirmed by grep, 0
+occurrences of either key across all three files). The master bundle
+(`data/resource-content.js`, Section 1) does carry them per-record: 277 of
+308 resources `audio:true` (every type except Guided Meditation, 0/31),
+83/308 `pdf:true` (only Cue Card, Disclosure & Support, Invitation to
+Repair, Raising It — matching `mk_store.py`'s own `pdf: title in (...)`
+line exactly). **Neither field is read at render.** `js/saferise-
+resources.js`'s `normaliseOne()` computes its own `audio` from a hardcoded
+10-type list (matching `content/guidance.js`'s own key list) and sets
+`pdf: true` unconditionally for every resource, regardless of type or the
+underlying record. At render, the audio control (`mountGuidance()`) doesn't
+consult `r.audio` at all — it calls `guidanceFor(r.gtype)` against
+`content/guidance.js`'s fixed, per-TYPE (not per-protocol) table of 10
+entries; resolved URL for a Cue Card is identical across all three tracks
+(`assets/audio/guidance/rg-01-cue-card.mp3`, confirmed live). All 10
+guidance mp3s exist on disk (`assets/audio/guidance/`, verified present).
+**Guided Meditation has no guidance.js entry by design** — its own header
+comment: "The meditation script opens with its own framing and a second
+voice before the first would be one too many." No other audio or video
+player exists anywhere in `resource.html` for meditation-type resources —
+dashboard.html's own marketing copy ("The full session, voiced and paced —
+audio, or follow-along video. Headphones, nothing to read.") currently has
+nothing behind it in the reader; a Guided Meditation resource renders as
+text only. **The download control renders unconditionally** (`r.pdf` is
+always `true`) but **zero PDF files exist anywhere in this repository**
+(`find . -iname "*.pdf"`, 0 results) and its link is a bare `href="#"` with
+no click handler anywhere that sets a real URL or triggers `window.print()`
+— so every one of the 318 resources shows a "Download or print this
+resource" control that does nothing. That is the full list requested by
+this section's own item 5: not a subset, all of them.
+
+**Section 10 — acceptance test, run, not asserted.** Full results and the
+before/after count table in
+`docs/PASS-CONSOLIDATED-2026-09-08-acceptance-table.md`. Headline: 318
+resources across 30 protocols (up from 288), 0 empty bodies, 0 duplicate
+bodies, 0 cross-protocol leakage, every protocol +1 attributable to The
+Decision and nothing else — the Section 1 VERIFY-FAIL condition did not
+fire. Theme and `embed=1` suppression both confirmed live.
+`personal-transformation.html` and `dashboard.html` both render with 0
+console errors after Sections 1/2/6. `terms.html`, `privacy.html` and one
+edited framework page (`member-kross.html`, `member-frameworks.html`) all
+confirmed live with the expected text present/absent and 0 console errors.
+Section 8b did not run, so its own sub-checklist does not apply.
+
+**Files touched:** `content/t1-resources.js`, `content/t2-resources.js`,
+`content/t3-resources.js` (Section 1, +30 Decision entries + keys);
+`content/tracks.js` (Sections 1–2, `SHARED.resources`); `resource.html`
+(Section 3, conditional store load); `dashboard.html` (Section 6, wording);
+`terms.html`, `privacy.html`, `refunds.html` (Section 7a/b/d);
+`member-kross.html`, `member-porges.html`, `member-mate.html`,
+`member-watts.html`, `member-jung.html`, `member-heartmath.html`,
+`member-frameworks.html` (Section 7c); `docs/page-invariants.md` (Sections
+1–2); `docs/fix-register.md` (this entry);
+`docs/PASS-CONSOLIDATED-2026-09-08-acceptance-table.md` (new). Deleted:
+`pass/the-decision-recovered.js` (Section 1b, superseded, unread).
+Untouched but reported: `pass/saferise-track01-reader.html`,
+`pass/saferise-carousel-drift.js`, `content/inventory.js`.
 
 *Status:* closed · *Raised and fixed:* 8 Sep 2026

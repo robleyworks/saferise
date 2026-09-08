@@ -921,12 +921,22 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
 <!-- SR-247 · the guidance record. The src comes from here, never from
      markup — Rule 24, a path is a claim the asset exists and is usable. -->
 <script src="content/guidance.js"></script>
-<!-- PASS-full-resource-access, Step 4 · the written content, loaded for
-     real. Order matters: saferise-resources.js reads the three globals
-     these declare. -->
-<script src="content/t1-resources.js"></script>
-<script src="content/t2-resources.js"></script>
-<script src="content/t3-resources.js"></script>
+<!-- PASS-CONSOLIDATED-2026-09-08, Section 3 · was three unconditional
+     <script> tags loading all three content stores (~1.0 MB) regardless of
+     which track this page actually renders. track/protocol are parsed here,
+     ahead of any content-store load, so only the resolved track's store
+     loads. No build step exists in this repo, so the conditional load is a
+     synchronous document.write() during initial parse — the classic,
+     build-free way to make one <script src> depend on another value computed
+     inline; the browser blocks on it exactly like a static tag would, so
+     the inline block below that calls resolveSet() still runs after the
+     store is present. Falls back to Track 01 when track is absent or not
+     1/2/3, matching this page's own long-standing default. -->
+<script>
+var qTrackEarly = /[?&]track=([123])\b/.exec(location.search);
+var SR_TRACK_NUM = qTrackEarly ? qTrackEarly[1] : '1';
+document.write('<scr' + 'ipt src="content/t' + SR_TRACK_NUM + '-resources.js"></scr' + 'ipt>');
+</script>
 <script src="js/saferise-resources.js"></script>
 <script>
 /* PASS-full-resource-access, Step 4.2 · track/protocol parsed in the same
@@ -939,7 +949,13 @@ var qTrack = /[?&]track=(\d)/.exec(location.search);
 var qProto = /[?&]protocol=(\d{1,2})/.exec(location.search);
 var ACTIVE_TRACK = qTrack ? qTrack[1] : '1';
 var ACTIVE_PROTOCOL = qProto ? ('0' + qProto[1]).slice(-2) : '01';
-var RESOURCES = window.SafeRiseResources.resolveSet(ACTIVE_TRACK, ACTIVE_PROTOCOL);
+/* PASS-CONSOLIDATED-2026-09-08, Section 3 · only SR_TRACK_NUM's store is
+   loaded above. If ACTIVE_TRACK (the full, un-clamped parse used for the
+   rest of this page) disagrees with SR_TRACK_NUM (the clamped 1/2/3 used to
+   pick the <script> tag), the requested track's store was never loaded and
+   resolveSet() would look up an undefined global rather than returning
+   null cleanly — fall back to Track 01 / protocol 01 in that case too. */
+var RESOURCES = (ACTIVE_TRACK === SR_TRACK_NUM) ? window.SafeRiseResources.resolveSet(ACTIVE_TRACK, ACTIVE_PROTOCOL) : null;
 if (!RESOURCES) { ACTIVE_TRACK = '1'; ACTIVE_PROTOCOL = '01'; RESOURCES = window.SafeRiseResources.resolveSet('1', '01') || []; }
 
 

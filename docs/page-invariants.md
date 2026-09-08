@@ -201,31 +201,58 @@ either removing or merging the paragraph after it.** A future pass that
 reconciles the site's footer copy against `js/saferise-footer.js`'s wording
 should treat this omission as intentional, not as drift to correct.
 
-### `SHARED.resources` (`content/tracks.js`) carries four pending resource types
+### `SHARED.resources` (`content/tracks.js`) carries two pending resource types
 
-`Why I Built This One`, `Source Insights`, `Reference Case`, and — added
-during PASS-full-resource-access, not present before it — `The Decision`.
-Each row ends in a sixth array element, `true`, marking it pending; every
-reader of `SHARED.resources` in `content/tracks.js`
+**PASS-CONSOLIDATED-2026-09-08, Sections 1–2** changed this list from four
+pending rows to two, and restored real content behind one of them:
+
+- **`The Decision` is no longer pending.** The master-bundle handover drop
+  (`saferise-build-handover-repo-drop.zip`, tracked at the repo root)
+  carries `data/resource-content.js` — a 31-protocol, 308-resource
+  generated store whose `mk_store.py` generator already had full "The
+  Decision" support (glyph `◈`, sub "What takes over.") and whose data
+  carries a "The Decision" entry, last in its resources list, for all 30
+  standard protocols (`t0-00` Clearing excluded by design). `git log -S`
+  found no commit ever touched a `"the-decision"` or `"The Decision"`
+  literal, so this was never authored-then-reverted in this repo's own
+  history — it arrived complete in the handover drop and was never merged
+  into the three live content stores until this pass. Merged into
+  `content/t1-resources.js`, `t2-resources.js` and `t3-resources.js` as
+  `"t{n}p{no}-decision"`, appended last to every protocol's `keys` array
+  (matching the source's own ordering — confirmed 0 exceptions across all
+  30). `SHARED.resources`' sixth array element is dropped for this row.
+  `pass/the-decision-recovered.js` (a second, independently-quarantined
+  extraction of the same content) was superseded by the handover drop and
+  deleted unread. `pass/saferise-track01-reader.html`, a Track 01–only
+  standalone preview build, was found to carry matching "The Decision"
+  body text for `t1-01` through `t1-10` — left in place, not part of the
+  live site, and not the source used for the merge.
+
+- **`Reference Case` is deleted outright**, not pending — cancelled by
+  Andre. It no longer appears in `SHARED.resources` at all.
+
+- **`Why I Built This One` and `Source Insights` stay pending**, reasons
+  updated: `Why I Built This One` has moved to a per-track asset rather
+  than a resource in this list (still no content authored on any protocol;
+  `LG-13` still restores it). `Source Insights` stays retired into `How
+  This Works` (`SR-077`'s merge stands; not coming back under its own
+  name).
+
+Every reader of `SHARED.resources` in `content/tracks.js`
 (`resourceByType`/`trackResources`/`protocolResources`) and in
-`js/saferise-track.js` (`libSize`'s fallback) filters pending rows out, so
-none of the four can render or be counted anywhere on the live site.
+`js/saferise-track.js` (`libSize`'s fallback) still filters pending rows
+(`r[5]`) out — unchanged by this pass, since the mechanism itself is
+correct and only the entries needed to change.
 
-**Why each is hidden:** none has content authored on any protocol in any of
-`content/t1-resources.js`, `t2-resources.js` or `t3-resources.js` — checked
-directly against all three files, not assumed. `Source Insights` was
-deliberately merged into `How This Works` by SR-077 and is not coming back
-under its own name; the merge stands. `The Decision` was found undeclared
-in `SHARED.resources` during this pass (Step 6) — the brief that requested
-adding it did not know it also has no content anywhere, which the
-acceptance test (no resource opens empty) would have failed had it been
-added live rather than pending.
-
-**Restoring one is one flag, not a re-authoring job, once content exists:**
-flip the row's sixth element from `true` to `false` (or drop it). `LG-13`
-restores `Why I Built This One`. No launch gate is recorded against
-`Source Insights`, `Reference Case` or `The Decision` at the time of this
-entry — confirm before assuming one applies.
+**`content/inventory.js` does not know about `The Decision` yet** (see this
+file's `content/inventory.js` staleness note, PASS-CONSOLIDATED-2026-09-08
+Section 5) — anything that counts a track's resources via
+`trackResources()`/`protocolResources()` (and therefore `libSize()` /
+`resourceCount()`'s marketing copy) undercounts by one per protocol until
+`tools/build-inventory.py` is re-run. `resource.html`'s reader does not go
+through `content/inventory.js` at all (`js/saferise-resources.js`'s
+`srResolveSet` reads `T{n}_PROTOCOL_KEYS` directly) and already shows The
+Decision correctly.
 
 ## No public page links to a member page (SR-325)
 
