@@ -17,11 +17,14 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-356** (this pass — PASS-SR355-FOLLOWUPS — verified via
+- **Highest ID issued: SR-357** (this pass — PASS-COMING-SOON-AND-FINALISE —
+  verified via `git log --oneline -i --grep="SR-35[6-9]\|SR-36[0-9]" -E`, which
+  found SR-356 as the last issued and nothing between it and this pass's own
+  HEAD; per this note's own documented history of going stale, do not trust this
+  line either — re-verify with the same grep before the next allocation.)
+- **Previously: Highest ID issued: SR-356** (PASS-SR355-FOLLOWUPS — verified via
   `git log --oneline -i --grep="SR-35[5-9]\|SR-36[0-9]" -E`, which found SR-355 as
-  the last issued and nothing between it and this pass's own HEAD; per this note's
-  own documented history of going stale, do not trust this line either — re-verify
-  with the same grep before the next allocation.)
+  the last issued and nothing between it and that pass's own HEAD.)
 - **Previously: Highest ID issued: SR-355** (PASS-CONSOLIDATED-2026-09-08 — verified
   via `git log --oneline -i --grep="SR-3[0-9][0-9]" -E`, which found SR-354 as the last
   issued and nothing between it and this pass's own HEAD; per this note's own documented
@@ -8947,5 +8950,184 @@ Deleted: `pass/saferise-carousel-drift.js`, `pass/
 PASS-CONSOLIDATED-2026-09-08.md`, `pass/PASS-full-resource-access.md`
 (Item 6). Nothing changed for Items 2, 3, or the carousel behaviour check
 — report only, as instructed.
+
+*Status:* closed · *Raised and fixed:* 8 Sep 2026
+
+**SR-357 · PASS-COMING-SOON-AND-FINALISE — Part A live-vocabulary fix
+applied, the rest of Part A blocked and reported; Part B re-verified, no
+further changes needed.** `pass/PASS-coming-soon-redesign.md` and
+`pass/PASS-SR355-FOLLOWUPS.md`, which this brief said it supersedes, were
+both already absent — nothing to delete for that instruction.
+
+## Part A · coming-soon section
+
+**The approved design file, `mock/mock-coming-soon-all-v14.html`, does not
+exist anywhere in this repository.** Searched exhaustively: `find . -iname
+"*mock*"`, `-iname "*coming-soon*v14*"`, a `mock/` directory, and the
+tracked handover zip's own manifest (`saferise-build-handover-repo-drop.zip`,
+already fully inventoried in SR-355's own report) — none of it. This is the
+single input A3 through A7 depend on ("take markup and CSS from it"), so
+none of those four could run.
+
+**A1 — discovery, DIFFERS on nearly every point, reported in full.** The
+brief's own preamble warned the project copy of this page "is behind the
+live one, so all of this is REPORTED and may be wrong" — it was more than
+behind, several premises don't match live reality at all:
+- **File and route:** `coming-soon.html` (not `saferise-coming-soon.html`,
+  not inside `index.html`).
+- **`.ct` rule:** does not exist. There is no `.ct` class anywhere in
+  `coming-soon.html`. The real container is `<div class="tstack">`
+  (`display:flex;flex-direction:column;gap:18px`) and the real card class
+  is `.tb` (`article.tb`), not `.ct`.
+- **Card markup for one track:** `.tb > .tbimg > img + .fid` (a filename
+  badge rendered directly on the live image, e.g. "band-01.jpg · 1200 ×
+  640" — printed on production, not a placeholder-only artifact, worth a
+  second look on its own) `+ .tbtxt > h3 + p.ask + div.deep > p`.
+- **Grid or stack:** stack — `.tstack{display:flex;flex-direction:column}`,
+  full width, one column. The brief's own "screenshots show full-width
+  stacked cards" guess was the accurate one; its project-file
+  `repeat(auto-fit,minmax(320px,1fr))` guess does not match anything live.
+- **Images:** all seven tracks already have a real photograph at
+  `assets/coming/band-0N.webp` (plus a `.jpg` sibling of each) — checked
+  actual pixel dimensions with PIL, not assumed: `band-01`–`05` and `07`
+  are all 1200×640 exactly; **`band-06` (Money Mindset) is 1717×916**, a
+  different aspect ratio, sourced from a PNG (1.8 MB `.jpg`, magic-byte
+  checked) rather than the others' JPEG originals — the one real image
+  gap, and it is a wrong-crop problem, not a missing-image problem. The
+  on-image `.fid` badge text still says "…jpg" for every card despite the
+  live `<img>` tag pointing at the `.webp` sibling — a labelling mismatch,
+  reported, not fixed here (out of A2's scope, not requested by this
+  section).
+- **Existing classes:** 45 unique classes in `coming-soon.html`, none
+  prefixed `sr-cs-` (0 hits) — no collision risk was ever real, but also
+  nothing to compare against, since the approved file that would name them
+  is missing.
+
+**Most significant divergence: the live page already has SEVEN tracks**
+(Elevation Series, Sex & Intimacy, Fitness Mindset, Nutrition & Body
+Healing, Entrepreneur's Journey, Money Mindset, Recovery & Compulsion),
+**not six.** A5's own premise ("the live page has six tracks; this is a
+seventh") does not hold — there is no slot for an eighth "Executive
+Presence" card as a seventh addition, and A6's four-tracks-need-
+placeholders premise doesn't hold either, since real images already exist
+for all seven currently live cards (band-06's aspect-ratio problem
+aside). The interaction model also differs fundamentally from what A3
+describes: there is no `IntersectionObserver`-based scroll reveal
+anywhere in this file's script block (checked directly — it holds only
+the nav-dropdown and theme-toggle code) and no `.rv` class exists. What
+the live page actually does is a hover/focus clamp-expand:
+`.deep p{-webkit-line-clamp:3}` at rest, expanding to `-webkit-line-clamp:
+12` on `.tb:hover,.tb:focus-within`. Also worth flagging directly against
+A4's own accessibility requirement: `.tb:hover,.tb:focus-within{
+border-color:var(--ac);transform:translateY(-3px);outline:none}` already
+sets `outline:none` on focus today — removing the border per A4 without
+first replacing this suppressed outline would leave keyboard users with
+no focus affordance at all, exactly the failure mode A4 itself warned
+against, just arrived at from different starting markup than assumed.
+
+**Given all of the above, A3 through A7 are AMBIGUOUS and were skipped, not
+attempted freehand.** The intent (land a specific approved visual design)
+cannot be resolved without the actual approved file, and reverse-
+engineering a new design, a new interaction model (scroll-reveal in place
+of the live hover-clamp), and reconciling a seven-versus-eight track count
+from a stale brief would mean inventing the visual design myself rather
+than shipping the one Andre approved — a materially bigger and riskier
+change than this pass authorises. Reported in full above so the next pass
+has an accurate starting point instead of the stale one this brief
+inherited.
+
+**A2 — the live defect, DIFFERS, adapted and applied.** The exact
+prohibited text was confirmed live, verbatim, in **two** places, not the
+one the brief named: `coming-soon.html` (the public page, inside `.deep`,
+Elevation card) **and `member-coming-soon.html`** (the member-surface
+counterpart the brief never mentions — SR-333 documents it as sharing "same
+seven tracks, same copy for each... reused verbatim" with the public page,
+which is exactly why the same violating paragraph was duplicated there
+too). Since `mock/mock-coming-soon-all-v14.html` doesn't exist, "the
+approved text in the mockup" named by A2 isn't available either — adapted
+by writing a replacement paragraph in the established sibling-card voice
+(opening clause kept, since it isn't itself a violation: "For the inner
+patterns that appear when life begins asking more of you"), with no
+outcome promise and none of the six banned words, applied to both files
+identically (matching SR-333's own "reused verbatim" rule for this page
+pair, rather than leaving them to drift). **This is adapted marketing copy,
+not Andre's own approved text — flagged for his review, same as any other
+DIFFERS.** Confirmed live in both files after the edit: old string absent,
+new string present, 0 console errors on either page.
+
+**Grep for `frequency`, `quantum`, `manifest`, `rewire`, `attracting`,
+`vibration` — run across every `.html`/`.js`/`.md` file, 180 raw hits,
+categorised, not printed raw:**
+- **Zero remaining promotional violations anywhere live**, after the A2
+  fix. Every other hit is one of: a CSS class or JS data-key literally
+  named `manifest`/`id-manifest-*` (the Reader's own resource-key list and
+  an unrelated retired "Manifestation" feature's leftover selectors,
+  never rendered as copy — `index.html`, already ruled on in this
+  register at line 532 and again at 3113/8403); the physiology term
+  "resonance frequency" in `member-heartmath.html` (peer-reviewed HRV
+  coherence research, already carved out in this register's own
+  vocabulary ruling); "frequency"/"attracting" used to explicitly *refute*
+  the banned framing (`member-kross.html:129`, "Neither half is a claim
+  about attracting an outcome"; `member-kross.html:272,345`, "Why nobody
+  here says manifest... the words manifest and attract appear nowhere");
+  a production marker never meant to reach a member (`member-frameworks.
+  html:365`, "⚠ NO PITCH OR FREQUENCY CLAIM"); and historical/meta
+  discussion of the ban itself across `docs/` (fix-register's own past
+  entries, `docs/PHILOSOPHY.md`, `docs/track-sweep-report.md`, handover
+  docs) and `pass/` (this brief and its predecessors quoting the banned
+  words as instructions, `pass/COPY-frequency-answer.md` discussing the
+  policy). None of these render as live copy a visitor reads.
+
+**Containment note.** A2 is a text-only edit inside an existing `<p>`
+already governed by `.deep p{-webkit-line-clamp:3}` — the resting height
+is clamp-fixed at three lines regardless of the underlying string length
+(both the old and new paragraphs overflow three lines), so the edit
+cannot have shifted the section's resting height; the sections immediately
+above and below the tracks section were still measured live for the
+record: above (`.sec2.sec2--alt`, the "different parts of life"
+architecture section) `offsetHeight 1730px`, padding `64px`/`64px`; below
+(`.sec2.sec2--alt.closing`, "Growth has no finish line") `offsetHeight
+1232px`, padding `64px`/`64px`. A3–A7 never ran, so their own containment
+proof (A7.8) doesn't apply this pass.
+
+## Part B · SR-355/356 follow-ups
+
+**Independent of Part A's block, per this brief's own rule — proceeded in
+full.** Every item in Part B is identical to PASS-SR355-FOLLOWUPS.md,
+which this session had already executed and committed as **SR-356**
+before this brief arrived. Re-verified rather than redone:
+
+- **B1 (download control):** `js/saferise-resources.js` still resolves
+  `pdf: false` for all 318 resources — confirmed live again this pass, not
+  assumed from the earlier commit.
+- **B2 (audio):** unchanged from SR-356's report — no live defect, 10
+  guidance files present, resolved per type not per protocol.
+- **B3 (bundle diff):** unchanged from SR-356's report — zero resources
+  missing from the live stores; 26 of 30 Guided Meditation scripts and 5
+  How This Works entries still differ materially from the tracked handover
+  bundle. Nothing in this session touched the content stores or the
+  bundle since that report, so re-running the full diff would reproduce
+  identical numbers — not repeated here.
+- **B4 (`content/inventory.js`):** `tools/build-inventory.py --check`
+  passes clean; the file still reflects `decision`/`safety`/`crisis` and
+  the corrected `t1-01`/`advisory` row from SR-356.
+- **B5 (`index.html:8448`):** still reads "the person you keep choosing to
+  be"; the old string is absent (`grep -c` confirms 0).
+- **B6 (pass/ cleanup):** `pass/saferise-carousel-drift.js`, `pass/
+  PASS-CONSOLIDATED-2026-09-08.md` and `pass/PASS-full-resource-access.md`
+  are still absent from this pass's own start-of-run listing — nothing
+  left to delete for the drift module or those two. **This brief's own
+  "including the two this file replaces" instruction is satisfied without
+  action**, since `pass/PASS-coming-soon-redesign.md` and `pass/
+  PASS-SR355-FOLLOWUPS.md` were both already gone before this pass began
+  (see the top of this entry).
+- **B7 (acceptance test):** re-run fresh this pass, not reused from
+  memory — 318 resources across all 30 protocols, 0 empty bodies, 0
+  duplicate bodies, 0 cross-protocol leakage, `pdf:false` confirmed for
+  all 318, unchanged from SR-355/356.
+
+**Files touched:** `coming-soon.html`, `member-coming-soon.html` (Part A2
+only). Nothing touched in Part B — everything it asked for was already
+correct. Nothing touched for A1/A3–A7 — report only, blocked, or both.
 
 *Status:* closed · *Raised and fixed:* 8 Sep 2026
