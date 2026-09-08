@@ -17,11 +17,15 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-360** (Track 01 protocol-opening fix — verified via
-  `git log --oneline -i --grep="SR-35[9]\|SR-36[0-9]" -E`, which found SR-359
-  as the last issued and nothing between it and this pass's own HEAD; per
-  this note's own documented history of going stale, do not trust this line
+- **Highest ID issued: SR-361** (auth end-to-end verification — verified via
+  `git log --oneline -i --grep="SR-36[0-9]" -E`, which found SR-360 as the
+  last issued and nothing between it and this pass's own HEAD; per this
+  note's own documented history of going stale, do not trust this line
   either — re-verify with the same grep before the next allocation.)
+- **Previously: Highest ID issued: SR-360** (Track 01 protocol-opening fix —
+  verified via `git log --oneline -i --grep="SR-35[9]\|SR-36[0-9]" -E`, which
+  found SR-359 as the last issued and nothing between it and that pass's
+  own HEAD.)
 - **Previously: Highest ID issued: SR-359** (Supabase project live, wiring
   the credentials — verified via `git log --oneline -i --grep="SR-35[8-9]\|
   SR-36[0-9]" -E`, which found SR-358 as the last issued and nothing between
@@ -9496,3 +9500,99 @@ until those pages exist for real.
 **Files touched:** `protocol.html` only.
 
 *Status:* closed · *Raised and fixed:* 8 Sep 2026
+
+**SR-361 · auth end-to-end verification — Section 4 of `pass/
+PASS-auth-and-contact.md` (SR-358's own report), run for real now that the
+project is live.** `pass/PASS-auth-loop.md`, the named brief for this
+pass, does not exist in the repo — checked directly. Ran the original
+Section 4 text instead (`pass/PASS-auth-and-contact.md`, still present,
+never deleted by any prior pass), per the user's own instruction that
+SR-358's entry outranks a missing brief. No changes made — this pass is
+verification only, no files edited.
+
+**4.1 — migrations and RLS, re-confirmed live.** `list_tables` against
+project `mynjjgtjytzyfsuqqlhg`: `public.members` and `public.usage_events`
+both present, both `rls_enabled: true`, both at 0 rows before this pass's
+own test signup — unchanged since SR-359.
+
+**4.2 — signed up for real, through the actual UI, not a direct API
+call.** Filled and submitted `signup.html`'s own form with
+`sr-verify-sr360@thesaferiseprotocol.com` (a clearly-labelled test
+address under the real domain, chosen because a syntactically real domain
+is more representative of what GoTrue actually validates than
+`@example.com`). The client behaved exactly as designed: no session came
+back, and the form showed "Check your email to confirm your account, then
+sign in." — confirmed server-side, not just from the UI message, via
+direct SQL: `auth.users` gained a row for that address with
+`confirmation_sent_at` populated (GoTrue did queue an attempt) and
+`confirmed_at`/`email_confirmed_at` both null (correctly unconfirmed);
+`public.members` gained a matching row via the `handle_new_user()`
+trigger, `entitled: false`, `subscription_status: null` — exactly the
+shape Phase 1's migration was designed to produce. **One real finding
+along the way, not previously documented:** `public.usage_events` has
+**zero** rows for this signup, even though `pass/AUTH-PAYMENTS-BRIEF.md`'s
+Phase 2 spec says a signup should write a `signup` usage event.
+`js/saferise-auth.js`'s `signUp()` only calls `logSignupEvent()` when
+`currentUser()` is truthy, which requires a session — and a
+confirmation-required signup (the default, and the one actually
+configured) never returns one. **The signup usage event is never
+recorded under the flow this project actually runs**, not a rare edge
+case. Reported here, not fixed — Section 4 is verification, and this is a
+real behaviour change to `js/saferise-auth.js`'s own logic, not something
+to slip in unasked.
+
+**Receiving the confirmation email and following it — blocked, could not
+run.** Two separate reasons, not one: first, the reason the user
+anticipated — SMTP delivery may not reach a real inbox until Brevo is
+configured (not verified either way; no tool in this session reads the
+project's SMTP settings, and this pass didn't attempt to guess). Second,
+independent of SMTP: **this session has no real inbox to receive
+anything in**, regardless of whether delivery succeeds — an agent
+cannot click a link that arrives in an email account it does not have
+access to. Attempted the practical workaround (mark the test row
+confirmed directly via `execute_sql`, the same technique any Supabase
+integration test would use, entirely on the row this pass's own test
+created) — **the Claude Code auto-mode permission classifier denied
+it.** Did not retry or attempt another route to the same effect, per the
+denial's own instruction to stop and explain rather than work around it.
+Everything downstream of an actual confirmed sign-in — "reload and stay
+signed in," "sign back in" specifically — could not be exercised this
+pass as a result.
+
+**4.3 — `account.html` renders only the signed-in member's own data, and
+nothing when signed out**, confirmed for the signed-out half (the
+signed-in half needs the confirmed session §4.2 couldn't reach): loaded
+`account.html` while signed out, `#srAccountRoot` rendered exactly "Sign
+in to see your account" plus a sign-in link — no member data, no
+leaked state.
+
+**4.4 — a signed-out visitor cannot reach member content, confirmed on
+two real gated surfaces, not simulated.** `account.html` (above).
+`relationship-healing.html` (Phase 3's own gate): `#page`'s entire
+content replaced with "Sign in to open Relationship Healing... Personal
+Transformation is free for anyone. Relationship Healing needs an
+account," plus sign-in/sign-up links — no protocol content, no track
+data, nothing member-only rendered.
+
+**4.5 — the journal never reaches Supabase, confirmed by reading the
+code and by watching the network live.** `protocol.html`'s `Store` object
+(and `dashboard.html`'s identical copy) is a pure `window.localStorage`
+wrapper — no `fetch`, no reference to `SUPABASE_URL` anywhere in its
+definition — and `js/saferise-auth.js`/`js/saferise-access.js` contain
+zero references to `journal` at all. Live check: wrote a real entry to
+`sr.journal.entries` via `Store.set()` on `protocol.html`, watched network
+traffic for the write — zero requests to `*.supabase.co` — then cleared
+the test entry.
+
+**Open item for Andre, not resolved by this pass:** the test signup row
+(`sr-verify-sr360@thesaferiseprotocol.com`, `auth.users` id
+`2b06a22f-029a-409d-ad4d-c066a15653d0`) is still in the live project,
+unconfirmed. Delete it from **Authentication → Users** in the dashboard,
+or confirm it manually and finish walking §4.2's remaining steps by hand
+— either closes this pass's own open loop.
+
+**Files touched:** none. Report only, as this section's own instruction
+requires.
+
+*Status:* open — §4.2's confirmed-session steps and the `usage_events`
+signup-logging gap are unresolved · *Raised:* 8 Sep 2026
