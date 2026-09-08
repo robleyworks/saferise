@@ -9,13 +9,16 @@
    way — this file only needs to carry a bearer token and a URL, not a
    full client library.
 
-   SUPABASE_URL / SUPABASE_ANON_KEY are placeholders. There is no Supabase
-   project yet (Phase 1's migration has not been run against one) — fill
-   these in once one exists. The anon key is safe in client JS by design
-   (Supabase's anon key is meant to be public; RLS is what actually
+   SUPABASE_URL / SUPABASE_ANON_KEY point at the real project — SafeRise EU,
+   Frankfurt (eu-central-1), ref mynjjgtjytzyfsuqqlhg, wired SR-359 once
+   Phase 1's migration had actually been applied against it. The key here
+   is the modern publishable key (sb_publishable_...), not a legacy JWT
+   anon key — safe in client JS by design either way (Supabase's
+   anon/publishable key is meant to be public; RLS is what actually
    protects data, not keeping this key secret). The service-role key must
    NEVER appear here or in any other browser-loaded file — it belongs only
-   in a Netlify environment variable, read by the Phase 5 webhook function.
+   in a Netlify environment variable, read by the Phase 5 webhook function
+   (not built yet).
 
    THE ENTITLEMENT CACHE IS MEMORY-ONLY, ON PURPOSE. A subscription can
    lapse between page loads; anything durable (localStorage, a cookie) is
@@ -26,8 +29,8 @@
 (function (global) {
   'use strict';
 
-  var SUPABASE_URL = 'https://YOUR-PROJECT-REF.supabase.co';
-  var SUPABASE_ANON_KEY = 'YOUR-ANON-KEY';
+  var SUPABASE_URL = 'https://mynjjgtjytzyfsuqqlhg.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_1SB0yturyH6LRVrz8kjkcg_tGIqEQ4-';
 
   var SESSION_KEY = 'sr.auth.session';
   /* Session tokens DO persist (localStorage) — unlike the entitlement

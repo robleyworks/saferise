@@ -1,10 +1,12 @@
 # Supabase setup — the runbook
 
-One ordered list. Follow it top to bottom. Every value below was taken
-directly from the repo as it stands (`supabase/migrations/0001_auth_entitlements.sql`,
-`js/saferise-auth.js`) — nothing here is a guess or a placeholder. Where
-something genuinely cannot be determined from the repo, that is stated
-explicitly, with what it depends on.
+One ordered list, in order. **§1–3 are done** — recorded below with what
+actually happened, not left as instructions to follow, so this file
+matches reality rather than describing a state that's already passed.
+§4–6 are still Andre's own dashboard steps. Every value below was taken
+directly from the repo or the live project — nothing here is a guess or a
+placeholder. Where something genuinely cannot be determined, that is
+stated explicitly, with what it depends on.
 
 This covers Phase 1 only (the Supabase project and schema) plus the auth
 settings the already-built pages (`signup.html`, `login.html`,
@@ -14,70 +16,85 @@ and are not built yet.
 
 ---
 
-## 1 · Create the project
+## 1 · The project — done
 
-1. Go to [supabase.com](https://supabase.com) and create a new project.
-2. **Region: Frankfurt (`eu-central-1`).** This is a settled stack decision
-   (`pass/AUTH-PAYMENTS-BRIEF.md`, "Stack decisions"), not a default to
-   accept — Supabase's project-creation dropdown lists it as "Frankfurt
-   (eu-central-1)" or "EU (Frankfurt)" depending on the current UI wording.
-3. **Name it.** No name is specified anywhere in the repo. Suggested:
-   `saferise-production` (or your own convention) — this is the one value
-   in this runbook that genuinely has no repo-derived answer; pick
-   anything, it does not appear in any client code or migration.
-4. Set a database password when prompted. Store it wherever you keep
-   other credentials — nothing in this repo needs it directly (the client
-   talks to Supabase over its REST/Auth API, never a direct Postgres
-   connection), but the Supabase CLI will ask for it if you use
-   `supabase link` in step 3 below.
+- **Name:** SafeRise EU.
+- **Region:** Frankfurt (`eu-central-1`) — the settled stack decision
+  (`pass/AUTH-PAYMENTS-BRIEF.md`, "Stack decisions"), confirmed on the
+  live project, not just requested.
+- **Project ref:** `mynjjgtjytzyfsuqqlhg`.
+- **Project URL:** `https://mynjjgtjytzyfsuqqlhg.supabase.co`.
+- **Status:** `ACTIVE_HEALTHY` as of this entry.
 
-## 2 · Project URL and anon key → into the repo
+An earlier project, ref `bsdiqhwkjmnqlwtenzld`, was created and then
+deleted before this one — grepped the repo for that ref: zero hits, so
+nothing here ever pointed at it and nothing needed cleanup.
 
-Both live on the Supabase dashboard's **Settings → API** page, and both go
-into exactly one file:
+The database password was set by Andre when the project was created and
+is not recorded here or anywhere in this repo — nothing in the built
+pages needs it directly (the client talks to Supabase over its REST/Auth
+API, never a direct Postgres connection).
+
+## 2 · Project URL and publishable key — done
+
+Both now live in the one file that reads Supabase configuration anywhere
+in this repo (checked directly — no `.env` file, no other hardcoded
+reference, no build-time environment variable exists):
 
 | Dashboard field | Value goes into | Line |
 |---|---|---|
-| **Project URL** (e.g. `https://abcdefgh.supabase.co`) | `js/saferise-auth.js` | line 29 — replace `'https://YOUR-PROJECT-REF.supabase.co'` |
-| **Project API keys → `anon` `public`** | `js/saferise-auth.js` | line 30 — replace `'YOUR-ANON-KEY'` |
+| **Project URL** | `js/saferise-auth.js` | line 29 — `'https://mynjjgtjytzyfsuqqlhg.supabase.co'` |
+| **Publishable key** (`sb_publishable_…`, not the legacy JWT anon key) | `js/saferise-auth.js` | line 30 — `'sb_publishable_1SB0yturyH6LRVrz8kjkcg_tGIqEQ4-'` |
 
-That is the only file that reads Supabase configuration anywhere in this
-repo (checked directly — no `.env` file, no other hardcoded reference, no
-build-time environment variable exists). The `anon` key is safe to commit
-in client-side JS; it is meant to be public, and Supabase's Row Level
-Security (already written into the migration, see §3) is what actually
-protects the data. **Do not paste the `service_role` key anywhere in this
-repo, in this file or any other.** It belongs only in a server-side
-environment variable (Netlify, once the Phase 5 webhook function exists —
-not built yet) and must never reach a browser-loaded file.
+The publishable key is safe to commit in client-side JS; it is meant to be
+public, and Supabase's Row Level Security (§3) is what actually protects
+the data. **The `service_role` key and the database password are not in
+this repo, this commit, or this file — neither was created, requested, or
+handled at any point in this pass.** The service-role key belongs only in
+a server-side environment variable (Netlify, once the Phase 5 webhook
+function exists — not built yet) and must never reach a browser-loaded
+file.
 
-## 3 · Apply the migration
+## 3 · The migration — applied
 
-The one migration file is `supabase/migrations/0001_auth_entitlements.sql`
-(6.7 KB, written 6 September 2026, never yet applied against a real
-project).
+`supabase/migrations/0001_auth_entitlements.sql` (6.7 KB, written 6
+September 2026) was applied against the live project via the Supabase
+management API — not the CLI, not a manual SQL-editor paste. This repo
+still has no `supabase/config.toml` and no CLI state (no `.supabase/`
+directory), so a future second migration should either go through the
+same route this one did, or — if the CLI is set up properly for a
+sequence of migrations — via `supabase link --project-ref
+mynjjgtjytzyfsuqqlhg` and `supabase db push`, at the point someone sets
+that up. It wasn't needed for one file.
 
-**Use the Supabase Dashboard's SQL Editor, not the CLI.** Paste the full
-contents of `supabase/migrations/0001_auth_entitlements.sql` into
-**SQL Editor → New query** and run it once. This repo has no `supabase/config.toml`
-and the Supabase CLI is not installed or initialised anywhere in it (no
-`.supabase/` directory, no CLI lockfile) — `supabase db push` or
-`supabase migration up` would first require running `supabase init` and
-`supabase link --project-ref <ref>` against the new project, which this
-pass's own boundary (`no project creation, no credentials`) puts outside
-scope. Pasting into the SQL editor needs nothing beyond dashboard access
-you already have from step 1, and is the lower-friction path for a single
-one-off migration on a brand-new project. If a second migration is ever
-added later and the two need to run in sequence with tracked state, that
-is the point to set up the CLI properly — not before.
+**Confirmed on the live project, not assumed from the file:**
+- Tables created: `public.members`, `public.usage_events`.
+- **RLS is enabled on both** — `rls_enabled: true` for each, read directly
+  from the project, not inferred from the migration text.
+- A follow-up security-advisor check (`get_advisors`, type `security`)
+  flagged one item, not something this migration got wrong so much as a
+  Supabase default worth knowing about: `handle_new_user()` and
+  `protect_member_entitlement_columns()` are `SECURITY DEFINER` functions
+  in the `public` schema, which PostgREST auto-exposes as callable RPC
+  endpoints (`/rest/v1/rpc/handle_new_user`, etc.) to `anon` and
+  `authenticated` roles by default. In practice this is low-risk here —
+  both are declared `returns trigger`, and Postgres refuses to execute a
+  trigger-typed function outside an actual trigger context, so a direct
+  RPC call errors rather than running — but it's a real advisor finding,
+  not silently patched in this pass (that would be a schema change beyond
+  "apply the migration and report"). If it's worth closing anyway,
+  `revoke execute on function public.handle_new_user() from anon,
+  authenticated;` (and the same for the other function) in a follow-up
+  migration removes the RPC exposure without touching the trigger
+  behaviour.
 
 ## 4 · Email provider (SMTP)
 
 **Supabase's built-in email sending only delivers to addresses already on
 the project's team** — it does not send real member-facing mail. Every
-flow that depends on email (see §4 of the audit report this runbook
-accompanies) is silently non-functional until a real SMTP provider is
-configured here.
+flow that depends on email (see SR-358's report in `docs/fix-register.md`
+for the full audit) is silently non-functional until a real SMTP provider
+is configured here.
 
 1. **Choose a provider.** Not decided anywhere in this repo or in
    `pass/AUTH-PAYMENTS-BRIEF.md` — this is an open decision for you, not
@@ -131,14 +148,13 @@ configured here.
 
 After each step above, here is what you should see:
 
-- **After §1–2:** `js/saferise-auth.js` no longer contains the literal
-  strings `YOUR-PROJECT-REF` or `YOUR-ANON-KEY`.
-- **After §3:** In the dashboard's **Table Editor**, two new tables exist:
-  `members` and `usage_events`, both under the `public` schema. Click
-  into each table's own **RLS** toggle (top right of the table view) and
-  confirm it reads "RLS enabled" for both — the migration turns this on,
-  but confirming it in the dashboard costs one click and catches a
-  partial paste.
+- **§1–3, already confirmed done:** `js/saferise-auth.js` carries the real
+  project URL and publishable key (no `YOUR-PROJECT-REF`/`YOUR-ANON-KEY`
+  left); the dashboard's **Table Editor** shows `members` and
+  `usage_events` under the `public` schema, each with its **RLS** toggle
+  reading "RLS enabled" — verified directly against the live project for
+  this entry, not left for you to re-check, though it costs one click if
+  you want to see it yourself.
 - **After §4:** the test-send button in **SMTP Settings** delivers to
   your own inbox.
 - **After §5:** open `signup.html` on the live site, create a real

@@ -17,11 +17,15 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-358** (this pass — PASS-auth-and-contact — verified
+- **Highest ID issued: SR-359** (this pass — Supabase project live, wiring
+  the credentials — verified via `git log --oneline -i --grep="SR-35[8-9]\|
+  SR-36[0-9]" -E`, which found SR-358 as the last issued and nothing between
+  it and this pass's own HEAD; per this note's own documented history of
+  going stale, do not trust this line either — re-verify with the same grep
+  before the next allocation.)
+- **Previously: Highest ID issued: SR-358** (PASS-auth-and-contact — verified
   via `git log --oneline -i --grep="SR-35[7-9]\|SR-36[0-9]" -E`, which found
-  SR-357 as the last issued and nothing between it and this pass's own HEAD;
-  per this note's own documented history of going stale, do not trust this
-  line either — re-verify with the same grep before the next allocation.)
+  SR-357 as the last issued and nothing between it and that pass's own HEAD.)
 - **Previously: Highest ID issued: SR-357** (PASS-COMING-SOON-AND-FINALISE —
   verified via `git log --oneline -i --grep="SR-35[6-9]\|SR-36[0-9]" -E`, which
   found SR-356 as the last issued and nothing between it and that pass's own
@@ -9314,5 +9318,102 @@ the section's own instruction, skipped rather than simulated. Re-run once
 **Files touched:** `terms.html`, `privacy.html`, `refunds.html` (Section
 1). New: `docs/SUPABASE-SETUP.md` (Section 3). Nothing else changed —
 Section 2 is report-only by its own instruction, Section 4 did not run.
+
+*Status:* closed · *Raised and fixed:* 8 Sep 2026
+
+**SR-359 · Supabase project live — credentials wired, migration applied,
+runbook updated to match reality.** Direct follow-on to SR-358, using the
+Supabase MCP tools now available in this session rather than the CLI or a
+manual dashboard paste. Boundary respected: no project created (it already
+existed), no `service_role` key or database password entered, requested,
+or committed anywhere.
+
+**1 — credentials into `js/saferise-auth.js`, applied.** Confirmed the
+given project via `list_projects` before touching anything: ref
+`mynjjgtjytzyfsuqqlhg`, name "SafeRise EU", region `eu-central-1`, status
+`ACTIVE_HEALTHY` — matches what was given exactly. `js/saferise-auth.js:32`
+now reads `'https://mynjjgtjytzyfsuqqlhg.supabase.co'` (was
+`'https://YOUR-PROJECT-REF.supabase.co'`); `:33` reads
+`'sb_publishable_1SB0yturyH6LRVrz8kjkcg_tGIqEQ4-'` (was
+`'YOUR-ANON-KEY'`) — cross-checked against `get_publishable_keys`, which
+returned the identical string as the project's `default`/`publishable`
+key, not just trusted from the prompt. The file's own header comment
+(lines 12–19) updated to match — no longer says "there is no Supabase
+project yet."
+
+**2 — migration applied, via the Supabase management API (MCP
+`apply_migration`), not the CLI or a dashboard paste.** `list_migrations`
+first confirmed the project had none applied yet. The one local file,
+`supabase/migrations/0001_auth_entitlements.sql` (the only file under
+`supabase/migrations/`, confirmed by listing the directory before
+applying — filename order is moot with one file), applied cleanly in a
+single call, verbatim, no edits. This route exists because this session
+now has direct Supabase MCP access that SR-358's own runbook didn't have
+when it recommended the SQL editor as the lower-friction path over
+setting up the CLI — the reasoning holds, the tool used to execute it
+changed.
+
+**3 — tables and RLS, confirmed on the live project via `list_tables`, not
+inferred from the file:** `public.members` and `public.usage_events` both
+exist, both report `rls_enabled: true`. **RLS is enabled on every table
+holding member data — both of them, with no exception.** A follow-up
+`get_advisors` (security) call — run because the tool's own description
+recommends it after DDL changes, not because the brief asked for it —
+found one WARN-level item, reported but not silently patched:
+`handle_new_user()` and `protect_member_entitlement_columns()` are
+`SECURITY DEFINER` functions in `public`, which PostgREST auto-exposes as
+callable RPC endpoints to `anon`/`authenticated` by default. Practically
+low-risk — both are `returns trigger`, and Postgres refuses to run a
+trigger-typed function outside trigger context, so a direct RPC call
+errors rather than executing — but it's a real advisor finding, recorded
+in `docs/SUPABASE-SETUP.md` §3 with the exact `revoke execute` statements
+that would close it in a future migration, rather than added to this one
+unasked.
+
+**4 — old ref `bsdiqhwkjmnqlwtenzld`, grepped, zero live hits.** Walked
+the full repository tree (not just tracked extensions, in case the ref
+appeared in a config or data file nothing else would catch) before
+touching the runbook: zero occurrences anywhere. **That project is
+already fully absent from this repo — nothing needed cleanup.** The only
+occurrence that exists now is the one deliberately written into
+`docs/SUPABASE-SETUP.md` §1 recording that fact for the reader, confirmed
+by re-running the same grep after the runbook edit and finding exactly
+that one line and nothing else.
+
+**5 — `docs/SUPABASE-SETUP.md` updated to match reality.** §1–3 rewritten
+from "steps to follow" into "what happened," with the real project name,
+ref, region and URL, and the RLS/advisor findings from §3 above recorded
+directly rather than left as a "confirm this yourself" instruction. §4
+(SMTP) and §5 (auth redirect/site-URL settings, including the
+hash-fragment gap SR-358 already flagged) are unchanged in substance —
+neither has a tool in this session that can set them, so they remain
+Andre's own dashboard steps — only their cross-references to "the audit
+report" were repointed at SR-358's actual entry in this file. §6 updated
+to state §1–3 as already-confirmed rather than a checklist to run.
+
+**Verification, live, not simulated.** Started a local server, loaded
+`login.html`: zero console errors, `srAuth.ready` resolved cleanly with no
+session (`entitled: false`, `user: null` — correct for a fresh page load,
+nothing signed in). Fetched the live project's own
+`/auth/v1/settings` endpoint directly with the wired publishable key
+(side-effect-free — a settings read, not a signup) and got a real
+response back: `disable_signup: false`, email auth enabled — the wiring
+reaches the real project and the project accepts the traffic. Did not
+attempt an actual sign-up in this pass (no real inbox to receive a
+confirmation, and creating test member rows wasn't asked for) — that
+remains SR-358's own §4, still appropriately left for a real end-to-end
+pass with a real address.
+
+**Not committed, checked directly before writing this entry:** no
+`service_role` key, no database password, anywhere in the diff. The only
+Supabase-related file changed besides the migration's application (which
+is a live-project action, not a repo change) is `js/saferise-auth.js`,
+and it carries only the publishable key.
+
+**Files touched:** `js/saferise-auth.js` (credentials + header comment),
+`docs/SUPABASE-SETUP.md` (updated to match the live project),
+`docs/fix-register.md` (this entry). `supabase/migrations/
+0001_auth_entitlements.sql` itself is unchanged — it was applied, not
+edited.
 
 *Status:* closed · *Raised and fixed:* 8 Sep 2026
