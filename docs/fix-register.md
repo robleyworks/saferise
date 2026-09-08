@@ -17,11 +17,15 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-361** (auth end-to-end verification — verified via
-  `git log --oneline -i --grep="SR-36[0-9]" -E`, which found SR-360 as the
-  last issued and nothing between it and this pass's own HEAD; per this
-  note's own documented history of going stale, do not trust this line
-  either — re-verify with the same grep before the next allocation.)
+- **Highest ID issued: SR-362** (coming-soon track-box redesign — verified
+  via `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
+  SR-361 as the last issued and nothing between it and this pass's own HEAD;
+  per this note's own documented history of going stale, do not trust this
+  line either — re-verify with the same grep before the next allocation.)
+- **Previously: Highest ID issued: SR-361** (auth end-to-end verification —
+  verified via `git log --oneline -i --grep="SR-36[0-9]" -E`, which found
+  SR-360 as the last issued and nothing between it and that pass's own
+  HEAD.)
 - **Previously: Highest ID issued: SR-360** (Track 01 protocol-opening fix —
   verified via `git log --oneline -i --grep="SR-35[9]\|SR-36[0-9]" -E`, which
   found SR-359 as the last issued and nothing between it and that pass's
@@ -9596,3 +9600,218 @@ requires.
 
 *Status:* open — §4.2's confirmed-session steps and the `usage_events`
 signup-logging gap are unresolved · *Raised:* 8 Sep 2026
+
+**SR-362 · PASS-track-boxes — the coming-soon card redesign landed, on
+both pages, with a real content gap found and resolved without inventing
+copy.** `mock/mock-coming-soon-all-v14.html` does not exist — the file
+actually provided was `pass/mock-coming-soon-all-v14.html` (no `mock/`
+directory in this repo at all) — found and used from there; noted as a
+DIFFERS from the brief's own stated path, not a blocker.
+
+**Section 0 — SR-357 re-read first, as instructed. All four "known
+corrections" held up under direct re-verification, not just trusted from
+the earlier entry:** `.tb`/`.tstack` (not `.ct`/`.rv`) confirmed still the
+live classes; the hover-clamp interaction (not scroll-reveal) confirmed —
+still no `IntersectionObserver` on this page; seven tracks confirmed live,
+`band-06` confirmed still 1717×916 (wrong aspect ratio, untouched by this
+pass, per instruction); the two-file copy split (`coming-soon.html` /
+`member-coming-soon.html`, SR-333's "reused verbatim" rule) confirmed and
+followed.
+
+**One thing SR-357 didn't have to resolve and this pass did: what "eight"
+actually means.** The mockup provides real content for exactly **seven**
+tracks: Elevation Series, Sex & Intimacy, Executive Presence, and four
+tracks that share a photo and a theme with four of the live seven under
+**new names** — Strength & Return (was Fitness Mindset), Addiction
+Recovery (was Recovery & Compulsion), Embodied Nutrition (was Nutrition &
+Body Healing), Money Shift (was Money Mindset). **The mockup has no
+content for Entrepreneur's Journey at all** — not renamed, not covered,
+not mentioned. Section 3's own decision procedure ("if one of them is
+Executive Presence under another name, say so and update in place") was
+checked and does not apply here in reverse — Executive Presence (a
+manager/leader "responsible for others" angle: first hire, letting
+someone go, the promised number) is not Entrepreneur's Journey (a
+founder-risk angle: uncertainty, visibility, ambition) under another
+name; they're adjacent, not identical. Since the brief never mentions
+Entrepreneur's Journey and Section 6's "content for all eight" can only
+mean the seven the mockup actually defines plus this one gap: **rather
+than invent new copy for the track the approved design doesn't cover,
+Entrepreneur's Journey's card was left completely untouched** — same
+markup (`.tbimg`/`.tbtxt`/`.deep`/`.ask`, not `.sr-cs-*`), same content,
+same image, repositioned only insofar as the other seven cards' insertion
+and reordering moved it from slot 5 to slot 6 of 8. Flagged here plainly:
+**this pass shipped 7 redesigned cards and left 1 old-style card in the
+same list.** That is a visible seam, not a hidden one, and the fix — real
+copy for Entrepreneur's Journey in the new voice, or a decision to retire
+it — needs Andre, not an invented paragraph.
+
+**Section 1 — containment.** Container selector: `.tstack` on
+`coming-soon.html`, `.sr-mi-grid` on `member-coming-soon.html`. Every
+markup change happened inside one of those two. New CSS is `sr-cs-`
+throughout on the public page — copied from the mockup's own class names,
+none renamed. The one exception, and it's sanctioned by the brief's own
+rule 3 ("whatever else the section already uses"): `.tb`'s own existing
+rule was edited directly (border removed, shadow added) since `.tb`
+already belongs exclusively to this section (confirmed: no other page,
+and no other part of this page, uses it). **One deliberate, reported
+global-file touch:** the new reduced-motion coverage for `.tb`/`.sr-cs-*`
+was added to `css/saferise-system.css`, not `coming-soon.html`'s own
+`<style>` block — CLAUDE.md requires reduced motion to be handled
+centrally, not per-component, and since `.tb`/every `.sr-cs-*` class is
+unique to this one section (confirmed, not assumed), the addition cannot
+affect anything outside it despite living in a shared file. No other
+global rule, `:root` value, or typography default was touched.
+`member-coming-soon.html` got **no new CSS at all** — its own existing
+`sr-mi-*` classes and member-surface styling (`css/saferise-method.css`)
+were reused as-is, per `docs/page-invariants.md`'s two-surfaces rule,
+which this brief's own mockup is clearly the PUBLIC surface's design (the
+member page never uses Cormorant Garamond display type or gradient card
+fills) — the copy is shared per SR-333, the visual treatment is not, and
+was never meant to be.
+
+**Section 2 — Elevation copy, MATCH, applied.** SR-357's interim,
+policy-compliant-but-not-approved paragraph replaced with the mockup's
+real text verbatim (hook/stand/lift/turn/land, all five parts) on both
+files. Re-ran the prohibited-vocabulary grep (`frequency`, `quantum`,
+`manifest`, `rewire`, `attracting`, `vibration`) against both finished
+files: 0 hits in each.
+
+**Section 3 — Executive Presence, ADAPTED per Section 0's own finding,
+added as a genuine eighth (not a rename of anything live).** The seven
+that exist, reported in order with accent and image, before inserting:
+Elevation Series (`--ac:var(--gold)`, band-01), Sex & Intimacy
+(`--ac:var(--t2)`, band-02), Fitness Mindset (`--ac:var(--t1)`, band-03),
+Nutrition & Body Healing (`--ac:var(--t3)`, band-04), Entrepreneur's
+Journey (`--ac:var(--t1)`, band-05), Money Mindset (`--ac:var(--t2)`,
+band-06), Recovery & Compulsion (`--ac:var(--t3)`, band-07) — none of them
+is Executive Presence under another name (see Section 0). Image:
+`pass/band-executive-presence.jpg` (1200×640, confirmed with PIL, matching
+the brief's own claim exactly) copied to `assets/coming/band-08.jpg` —
+**`08`, the next free number in the live sequence**, not `03` (Executive
+Presence's own display *position*, third) — position and filename number
+are already two different systems on this page (Money Mindset stays
+`band-06` regardless of its own list position, for one existing example),
+so continuing that convention rather than renumbering anything already
+live was the lower-risk choice. Generated a matching `.webp` via Pillow
+(quality 82, method 6 — chosen to land in the same file-size band as its
+new siblings, and it does: 27.9 KB against band-01–07's 23–83 KB range).
+The original `pass/band-executive-presence.jpg` was left in place, not
+deleted — "rename" was read as "give it the correct name at its live
+destination," not "remove the source," since deleting a source asset is a
+more irreversible action than this section asked for. Position: after Sex
+& Intimacy, matching the mockup exactly, accent `#7BA3CC` as specified.
+
+**Section 4 — the track boxes, MATCH.** Full mockup markup and CSS
+adapted: DO-NOT-SHIP shell block (lines 10–173 of the mockup) excluded
+entirely; base64 images excluded, real files used throughout; `.ct`→`.tb`,
+`--a`→`--ac` throughout, matching the live wrapper the brief said to keep.
+No `.rv` markup and no observer script exist anywhere in the mockup to
+begin with (confirmed again, not just carried from SR-357) — nothing to
+drop.
+
+**Section 5 — borders off, MATCH, scoped.** `border:1px solid var(--hair)`
+removed from `.tb`; replaced with the mockup's own two-stop resting /
+three-stop hover shadow (accent glow at negative spread) verbatim, values
+taken directly from its DO-NOT-SHIP shell rather than re-guessed.
+`:focus-within{outline:none}` replaced with a real 2px accent-tinted
+outline, `outline-offset:3px`. Confirmed `.tb` is not shared with any
+other page (`grep -l` across every `.html` file: only `coming-soon.html`)
+— scoping note recorded for completeness, though there was nothing to
+scope against.
+
+**Section 6 — content for all eight (seven redesigned + Entrepreneur's
+Journey untouched, see Section 0).** All four guard lines carried through
+on both pages, verbatim, not dropped: Strength & Return ("No numbers,
+targets or programmes anywhere. States only."), Addiction Recovery
+("Requires clinical governance and crisis routing before any of it
+ships."), Embodied Nutrition ("Disordered-eating adjacency. No numbers of
+any kind. Clinical review is a gate on this track."), Money Shift ("No
+financial advice, products or strategy anywhere."). `member-coming-
+soon.html` has no dedicated guard-line element in its existing markup —
+rather than add one (new chrome on a page this pass is trying to touch
+minimally), each guard line was appended as the closing sentence of that
+card's own `.sr-mi-holds` paragraph, keeping the words identical across
+both pages per SR-333 while respecting each page's own existing shape.
+`band-06`'s wrong aspect ratio (1717×916, Money Shift) was not re-cropped,
+confirmed via PIL after the pass — dimensions and file hash both
+unchanged.
+
+**Section 7 — verified, measured, in the browser, on both pages:**
+1. **Eight boxes, same order, ten protocols each** — confirmed via
+   `querySelectorAll`, both pages, matching titles in matching order.
+2. **Zero `1px solid` borders** — `getComputedStyle` over all 8 `.tb`
+   elements on `coming-soon.html`: 0 with a real border width, out of 8.
+3. **Hover-clamp interaction, before and after:** unchanged for
+   Entrepreneur's Journey (the one untouched card) — confirmed at 1440px,
+   `-webkit-line-clamp:3` computed, `scrollHeight(109) > clientHeight(66)`
+   proving genuine truncation, same mechanism as before this pass touched
+   anything. The seven redesigned cards use the mockup's own summary
+   layout instead (no clamp — the full `sr-cs-side` text is always
+   visible, matching the approved design, not a regression of the old
+   behaviour since these seven never had it in the new form before).
+4. **Keyboard focus indicator, confirmed by driving it live**, not just
+   reading the CSS: focused the first `.tb` via `element.focus()`,
+   read back `getComputedStyle` — `outline: 2px solid`, accent-tinted,
+   `document.activeElement` confirmed as that element.
+5. **`prefers-reduced-motion:reduce`** — confirmed the rule itself is
+   registered and would apply (read `document.styleSheets` directly:
+   the new block's selectors — `.tb`, `.tb:hover, .tb:focus-within`,
+   `.sr-cs-pane > img, .sr-cs-rule, .sr-cs-cover, .sr-cs-tint,
+   .sr-cs-tint2` — are present in `css/saferise-system.css` exactly as
+   written). Could not toggle the OS-level media feature itself in this
+   session's tooling to observe the applied state directly — the
+   rule's presence and correct selector targeting is the verification
+   available here.
+6. **1440 and 390, both pages:** zero horizontal overflow at either width
+   (`document.body.scrollWidth === window.innerWidth` at both); no
+   `.sr-cs-name` title overflowed its own box at 390px (checked all
+   seven redesigned titles individually).
+7. **Zero prohibited vocabulary** — grepped both finished files for all
+   six banned words: 0 hits in each.
+8. **Containment proof, measured before and after, at both viewports —
+   all eight numbers, not estimated.** First attempt was wrong and
+   corrected rather than reported as-is: an early read (taken before
+   webfonts/images had finished loading and the layout had settled)
+   showed the sections above/below the container at different heights
+   before vs after, which would have meant a real containment failure.
+   Re-measured after waiting for `document.fonts.ready` and a settle
+   delay, and against the actual pre-edit file (`git show HEAD:coming-
+   soon.html`, served from a temporary copy so relative asset paths
+   still resolved, then deleted) rather than trusting the first read:
+   at 390px, above `1068px→1068px`, below `298px→298px`; at 1440px,
+   above `507px→507px`, below `248px→248px` — **identical in all eight
+   readings, padding `64px`/`64px` unchanged in every case.** Only the
+   container itself grew (390px: `4091→8258`; 1440px: `2824→3955`),
+   which is expected — it now holds eight cards instead of seven, most
+   of them taller than before.
+9. **Parity proof.** Diffed the track-box section's text content between
+   both pages programmatically (regex-extracted, HTML-stripped, entities
+   normalised): all eight titles match exactly, in the same order. Body
+   prose is intentionally reformatted per page (the public page's
+   multi-paragraph tiered structure vs. the member page's single flowing
+   paragraph, per each page's own pre-existing convention) but carries
+   the same underlying sentences — this is a deliberate formatting
+   difference, not a content divergence, consistent with SR-333's
+   "same copy... reused verbatim" rule read at the sentence level rather
+   than the markup level.
+10. **Every new CSS rule**, confirmed by re-reading the diff: every
+    selector in `coming-soon.html`'s new block and every selector added
+    to `css/saferise-system.css` begins `.sr-cs-` or is `.tb`/
+    `.tb:hover`/`.tb:focus-within` — the one class rule 3 explicitly
+    permits, already exclusive to this section.
+
+**Files touched:** `coming-soon.html`, `member-coming-soon.html`,
+`css/saferise-system.css` (the isolated reduced-motion addition only).
+New: `assets/coming/band-08.jpg`, `assets/coming/band-08.webp`. Nothing
+else — `pass/PASS-COMING-SOON-AND-FINALISE.md` and `pass/PASS-SR355-
+FOLLOWUPS.md`, which this brief said it supersedes, were already absent
+before this pass began (confirmed at the start, per this entry's own
+Section 0 read of SR-357).
+
+**Open item for Andre:** Entrepreneur's Journey is the one card in the
+redesigned list still in the old style, with no copy written for it in
+the new voice — needs either new copy (this pass's own design source
+didn't provide it) or a decision to retire the track.
+
+*Status:* closed, with one open item (Entrepreneur's Journey, above) ·
+*Raised and fixed:* 8 Sep 2026

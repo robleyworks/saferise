@@ -4202,3 +4202,16 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-legal-table th,.sr-legal-table td{text-align:left;padding:10px 16px 10px 0;border-bottom:1px solid var(--hair);vertical-align:top}
 .sr-legal-table th{color:var(--text);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
 .sr-legal-table td{color:var(--text2)}
+
+/* --- PASS-track-boxes · coming-soon.html's card redesign, reduced motion ---
+   CLAUDE.md: reduced motion is handled centrally here, never as a
+   per-component block on the page itself. .tb and every .sr-cs-* selector
+   below are unique to coming-soon.html's own track-box section (confirmed:
+   neither class exists on any other page) — this block only ever matches
+   there, it is simply filed centrally per that rule. */
+@media(prefers-reduced-motion:reduce){
+.tb{transition:none!important}
+.tb:hover,.tb:focus-within{transform:none}
+.sr-cs-pane>img,.sr-cs-rule,.sr-cs-cover,.sr-cs-tint,.sr-cs-tint2{transition:none!important}
+.tb:hover .sr-cs-pane>img,.tb:focus-within .sr-cs-pane>img{transform:none}
+}
