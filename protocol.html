@@ -1204,6 +1204,19 @@ var K_ENTRIES = 'sr.journal.entries';
 var PAGE_PROTOCOL = (function () {
   var FALLBACK = { protocolId: 't1-p01', protocol: 'The Anxiety Reset Protocol',
                    trackId: 1, resolved: false, requested: null };
+  /* PRIORITY FIX, separate from SR-354 (which fixed resource routing INSIDE a
+     protocol, a different mechanism) — this page itself only has real,
+     authored content for one protocol: the four-step walkthrough, diagrams
+     and body below the title furniture are Anxiety Reset's, hardcoded.
+     TRACKS[].protocols lists all 30 for the CARD catalog (title, description,
+     cover) regardless of whether protocol.html has been built out for them —
+     SR-182's own resolution below conflated "is in the catalog" (true for all
+     30) with "has a page here" (true for exactly one), so every other
+     protocol resolved successfully and silently rendered Anxiety Reset's
+     content under the right title. AUTHORED is the list that actually
+     answers "has a page here" — extend it the moment a new protocol's page
+     content lands, never ahead of it. */
+  var AUTHORED = { 't1-p01': true };
   function param(name) {
     var m = new RegExp('[?&]' + name + '=([^&]+)').exec(location.search);
     return m ? decodeURIComponent(m[1]) : '';
@@ -1230,24 +1243,45 @@ var PAGE_PROTOCOL = (function () {
     return { protocolId: null, protocol: null, trackId: null,
              resolved: false, requested: requested };
   }
-  return { protocolId: 't' + track.id + '-p' + row[0], protocol: row[2],
+  var protocolId = 't' + track.id + '-p' + row[0];
+  if (!AUTHORED[protocolId]) {
+    /* In the catalog, genuinely a real protocol — just not this page's
+       content yet. Distinct from "not in the library" so the shown message
+       can say the honest thing rather than the wrong thing. */
+    return { protocolId: null, protocol: null, trackId: null, resolved: false,
+             requested: requested, notBuilt: true, requestedTitle: row[2] };
+  }
+  return { protocolId: protocolId, protocol: row[2],
            trackId: track.id, label: row[1], resolved: true,
            requested: requested };
 })();
 
-/* SR-182 · apply the resolution. Three outcomes, and only one of them renders
-   the protocol page:
-     resolved      — the record answered; title furniture follows it.
+/* SR-182, extended by the priority fix above · apply the resolution. Four
+   outcomes now, and only one of them renders the protocol page:
+     resolved      — the record answered AND this page has that protocol's
+                      content; title furniture follows it.
      not requested — no ?track=/?protocol= at all, so nothing was asked for and
                      the page keeps its authored Track 01 content.
+     not built     — a real protocol, just not this page's content yet
+                     (PAGE_PROTOCOL.notBuilt). Same not-found section, honest
+                     copy instead of "not in the library", which would be
+                     false — it is in the library, this page just isn't.
      unresolved    — something WAS asked for and the record has no such
-                     protocol. The page does not render; the not-found state
-                     does. This is the case that used to land on Anxiety Reset. */
+                     protocol at all. The page does not render; the not-found
+                     state does, with its original copy. This is the case
+                     that used to land on Anxiety Reset. */
 (function () {
   var nf = document.getElementById('sr-notfound');
   if (PAGE_PROTOCOL.resolved === false && PAGE_PROTOCOL.requested) {
     if (nf) {
       nf.hidden = false;
+      if (PAGE_PROTOCOL.notBuilt) {
+        var h1 = nf.querySelector('h1');
+        var lede = nf.querySelector('p');
+        if (h1) h1.textContent = 'This protocol isn’t open yet.';
+        if (lede) lede.textContent = (PAGE_PROTOCOL.requestedTitle || 'This protocol') +
+          ' is in the library, but its own page hasn’t been built. Nothing has been opened and nothing has been recorded.';
+      }
       var req = document.getElementById('sr-notfound-req');
       if (req) req.textContent = 'Requested: ' + PAGE_PROTOCOL.requested;
     }
@@ -1257,7 +1291,8 @@ var PAGE_PROTOCOL = (function () {
     for (i = 0; i < kids.length; i++) {
       if (kids[i] !== nf && kids[i].tagName !== 'SCRIPT') kids[i].hidden = true;
     }
-    document.title = 'SafeRise \u2014 Protocol not found';
+    document.title = 'SafeRise \u2014 ' +
+      (PAGE_PROTOCOL.notBuilt ? 'Not open yet' : 'Protocol not found');
     return;
   }
   if (!PAGE_PROTOCOL.resolved) return;   /* nothing requested: leave the page */

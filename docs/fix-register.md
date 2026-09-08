@@ -17,10 +17,15 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-359** (this pass — Supabase project live, wiring
+- **Highest ID issued: SR-360** (Track 01 protocol-opening fix — verified via
+  `git log --oneline -i --grep="SR-35[9]\|SR-36[0-9]" -E`, which found SR-359
+  as the last issued and nothing between it and this pass's own HEAD; per
+  this note's own documented history of going stale, do not trust this line
+  either — re-verify with the same grep before the next allocation.)
+- **Previously: Highest ID issued: SR-359** (Supabase project live, wiring
   the credentials — verified via `git log --oneline -i --grep="SR-35[8-9]\|
   SR-36[0-9]" -E`, which found SR-358 as the last issued and nothing between
-  it and this pass's own HEAD; per this note's own documented history of
+  it and that pass's own HEAD; per this note's own documented history of
   going stale, do not trust this line either — re-verify with the same grep
   before the next allocation.)
 - **Previously: Highest ID issued: SR-358** (PASS-auth-and-contact — verified
@@ -9415,5 +9420,79 @@ and it carries only the publishable key.
 `docs/fix-register.md` (this entry). `supabase/migrations/
 0001_auth_entitlements.sql` itself is unchanged — it was applied, not
 edited.
+
+*Status:* closed · *Raised and fixed:* 8 Sep 2026
+
+**SR-360 · PASS-track01-routing — Track 01 protocols would not open;
+`protocol.html` was rendering Anxiety Reset's content under every other
+protocol's title.** `pass/PASS-track01-routing.md`, the named brief for
+this pass, does not exist in the repo — checked directly, not assumed.
+Proceeded on the user's own restated problem instead (a complete, actionable
+report on its own: "Track 01 protocols will not open — only Anxiety Reset")
+plus the explicit Section 0 context that SR-354 is a separate, already-
+deployed mechanism (resource routing inside a protocol) from whatever this
+defect actually was, rather than block the whole pass on a missing file for
+a live, user-facing priority defect.
+
+**Root cause, confirmed live, not inferred from source alone.** SR-182
+added `PAGE_PROTOCOL` resolution to `protocol.html` (parses `?track=`/
+`?protocol=`, looks the pair up in `TRACKS[t].protocols`) specifically to
+stop the page always rendering Anxiety Reset — but it resolves against the
+**card catalog** (`TRACKS[].protocols`, all 30 real title/description rows,
+used for the public track pages' cards), not against whether `protocol.html`
+**itself** has real page content for that protocol. It does — for exactly
+one: Anxiety Reset. Every other protocol/track combination passed
+`PAGE_PROTOCOL.resolved === true` (a genuine catalog match), updated the
+`<title>` tag and an aria-label correctly, and then rendered Anxiety
+Reset's hardcoded body underneath the correct-looking title — confirmed
+directly in the browser: `?track=1&protocol=02` showed `PAGE_PROTOCOL.
+protocolId: "t1-p02"` and a tab title of "The Anger Alchemy Protocol," but
+the visible `<h1>` and all body content still read "The Anxiety Reset
+Protocol." This is exactly the failure mode SR-182's own code comment
+names and rejects — "quietly rendering Anxiety Reset under whatever title
+furniture the page already had... is how a journal entry ends up filed
+against a protocol the member never ran" — SR-182 closed that gap for
+protocols not in the catalog (which never happens; all 30 are real rows)
+but never closed it for protocols that are real but simply don't have a
+page here yet (29 of the 30).
+
+**Fix — a small explicit "has this page been authored" list, `AUTHORED`,
+consulted inside the same `PAGE_PROTOCOL` resolution IIFE.** Currently
+`{ 't1-p01': true }` — the honest, current state, not a guess at what
+should eventually be true. A catalog match whose `protocolId` isn't in
+`AUTHORED` now returns a distinct `resolved: false, notBuilt: true` result
+(carrying the real requested title for the message) instead of the old
+`resolved: true`. The existing `#sr-notfound` section is reused rather than
+duplicated — same hide-every-sibling mechanism, same back-to-dashboard
+link — but its `<h1>`/lede text is swapped at render time when `notBuilt`
+is set, so a genuinely-invalid protocol number still reads "That protocol
+could not be found" (verified: `?track=1&protocol=99` still shows exactly
+that, unchanged) while a real-but-unauthored one reads "This protocol
+isn't open yet... is in the library, but its own page hasn't been built,"
+naming the actual protocol requested. `document.title` follows the same
+branch ("Not open yet" vs "Protocol not found").
+
+**Verified live across every access path, not just the direct URL:**
+`?track=1&protocol=02` (direct) and the same URL loaded inside
+`dashboard.html`'s embedded frame via an actual card click
+(`.sr-dash-card[data-open="The Anger Alchemy Protocol"]`, matching a real
+member's click path) both show the new state correctly, 0 console errors
+in either context. `?track=1&protocol=01` (Anxiety Reset) still renders
+its real content, unchanged. No `?track=`/`?protocol=` at all still falls
+through to the authored default, unchanged. `?track=2&protocol=03` (a
+Track 02 protocol, previously also silently wrong) now correctly shows
+"not open yet" instead of Anxiety Reset's content under a Track 02 title —
+this defect was never actually Track-01-specific, it just presented that
+way because Track 01 is free and never hits the separate paywall gate
+(`#sr-gate-wall`) that masks the same bug for paid tracks when a visitor
+is signed out.
+
+**Scope note.** This does not author the other 29 protocols' page content
+— that is a large, separate content-authoring effort this pass was never
+asked to do and should not improvise. It makes the failure honest instead
+of silently wrong, matching this exact page's own established principle,
+until those pages exist for real.
+
+**Files touched:** `protocol.html` only.
 
 *Status:* closed · *Raised and fixed:* 8 Sep 2026
