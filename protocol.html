@@ -1240,8 +1240,44 @@ var PAGE_PROTOCOL = (function () {
     var m = new RegExp('[?&]' + name + '=([^&]+)').exec(location.search);
     return m ? decodeURIComponent(m[1]) : '';
   }
+  /* SR-372 (PASS-split-portals.md §3) · the canonical route now. /protocols/
+     {slug} rewrites (200, in _redirects) to this file with ?slug=; every
+     protocol's slug is content/tracks.js's own row[6] (added this same
+     pass — SR-367 found no protocol had one before). Slug resolution
+     searches every visible track, since a slug alone doesn't say which
+     one, unlike ?track=&protocol= below. */
+  var slugParam = param('slug');
   var t = param('track'), p = param('protocol');
-  if (!t && !p) return FALLBACK;                    /* no request, no failure */
+  if (!slugParam && !t && !p) return FALLBACK;       /* no request, no failure */
+
+  if (slugParam) {
+    if (typeof TRACKS === 'undefined') {
+      return { protocolId: null, protocol: null, trackId: null,
+               resolved: false, requested: slugParam };
+    }
+    var foundTrack = null, foundRow = null;
+    for (var tid = 1; tid <= 3 && !foundRow; tid++) {
+      var trk = TRACKS[tid];
+      var trows = trk && trk.protocols;
+      if (!trows) continue;
+      for (var si = 0; si < trows.length; si++) {
+        /* The slug is always the row's LAST element, not always index [6] —
+           t3-06 ("Belonging Gap") already carried a 7th field (a
+           Footer-correction-pass sentence, index [6]) before this pass
+           added slugs, so its slug landed at [7] instead. Every other row
+           is a normal 6-element row with the slug at [6]. Checking the
+           last element handles both without a special case here. */
+        if (trows[si][trows[si].length - 1] === slugParam) { foundTrack = trk; foundRow = trows[si]; break; }
+      }
+    }
+    if (!foundRow) {
+      return { protocolId: null, protocol: null, trackId: null,
+               resolved: false, requested: slugParam };
+    }
+    return { protocolId: 't' + foundTrack.id + '-p' + foundRow[0], protocol: foundRow[2],
+             trackId: foundTrack.id, label: foundRow[1], row: foundRow, resolved: true,
+             requested: slugParam, slug: slugParam };
+  }
 
   var requested = 't' + t + '-p' + p;
   if (typeof TRACKS === 'undefined') {

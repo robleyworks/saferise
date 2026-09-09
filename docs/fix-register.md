@@ -17,14 +17,21 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-371** (the auth loop closed — confirmation
+- **Highest ID issued: SR-372** (the slug problem solved — Option A, 30
+  protocols confirmed, not 31 — the three track portals retired rather
+  than moved (their content already existed, more completely, at the real
+  URLs), the protocol router finished with full slug resolution and a
+  60-entry redirect map, `index.html` cut a further 39.8% — verified via
+  `git log --oneline --grep="SR-371"`, which found SR-371 as the last
+  issued and nothing between it and this pass's own HEAD; per this note's
+  own documented history of going stale, do not trust this line either —
+  re-verify before the next allocation.)
+- **Previously: Highest ID issued: SR-371** (the auth loop closed — confirmation
   redirect now signs a member in automatically, password reset built end
   to end via a new `reset-password.html`, both verified live against the
   real Supabase project with constructed tokens — verified via
   `git log --oneline --grep="SR-370"`, which found SR-370 as the last
-  issued and nothing between it and this pass's own HEAD; per this note's
-  own documented history of going stale, do not trust this line either —
-  re-verify before the next allocation.)
+  issued and nothing between it and this pass's own HEAD.)
 - **Previously: Highest ID issued: SR-370** (the site split, partial — four
   duplications resolved (About, Plans, Live sessions, Foundation), seven
   redundant `#prog-*` sections retired from `index.html`, SEO head blocks
@@ -12497,3 +12504,330 @@ five closed in full (SR-367, SR-368, SR-369, SR-371; SR-370's split is
 partial, see its own entry) plus SR-365/SR-366 landed earlier in the same
 sequence. Andre pushes once the split is verified — nothing in this
 session pushes on its own. · *Raised and fixed:* 9 Sep 2026
+
+## SR-372 · the slug problem solved, the three track portals retired (not moved), the protocol router finished
+
+Runs `pass/PASS-split-portals.md`. Allocated via
+`git log --oneline --grep="SR-371"`, which found SR-371 as the last issued
+and nothing between it and this pass's own HEAD.
+
+**§1 The slug problem — Option A, as recommended, all 31 asked for, 30 found.**
+
+**Report first, before choosing:** every protocol record in
+`content/tracks.js` is a positional array — `[number, verb, title,
+promise, signature, [struggle quotes]]` — six elements, none of them
+URL-safe (the number collides across tracks: `t1-05` and `t2-05` are both
+`'05'`; the title carries "The"/"Protocol" and spaces). One row, t3-06
+("Belonging Gap"), already carried a non-standard 7th element from an
+earlier pass (a body-sensation sentence, Footer-correction pass) — the
+only row that isn't a plain 6-tuple.
+
+**Option A chosen, as recommended.** t3-06 is itself the argument for it:
+that row used to be "Ambition Recovery" (SR-216 renamed it), and its own
+comments record the strings that stayed behind after the rename. A
+derived slug would have read `ambition-recovery` until that rename and
+`belonging-gap` after it — anything built against the derived value before
+SR-216 would have broken silently the moment the title changed. An
+explicit field is immune to that by construction.
+
+**All 31 the brief asked for — DIFFERS, the true count is 30.** Counted
+directly: `TRACKS[1]`, `[2]`, `[3]` each carry exactly 10 protocols;
+`TRACKS[4]` ("Elevation Series") is `visible:false` with no `protocols`
+array at all. 30 total, confirmed by direct enumeration, not assumed. The
+brief's "31" is not matched anywhere in the data; reported rather than
+padded with an invented 31st entry to make the number agree.
+
+**The full list of 30**, lowercase, hyphenated, no articles, no track
+prefix, as specified:
+
+Track 01 — anxiety-reset, anger-alchemy, overwhelm-threshold,
+abandonment-wound, shame-dissolution, grief-integration,
+shutdown-recovery, jealousy-release, insecurity-anchor,
+powerlessness-despair.
+Track 02 — safe-conversation, rupture-repair, trust-betrayal,
+resentment-release, intimacy-barrier, double-standard,
+projection-clarity, appreciation-support, pursue-withdraw,
+conscious-separation.
+Track 03 — high-stakes-presence, conflict-navigation,
+imposter-dissolution, perfectionism-release, performance-anxiety,
+belonging-gap, career-transition, decision-fatigue, burnout-overload,
+creative-flow.
+
+All 30 verified unique (no cross-track collision) before writing a single
+redirect, per the brief's own instruction.
+
+**Applied to `content/tracks.js`**, appended as each row's own last
+element — index `[6]` for 29 rows, index `[7]` for t3-06, since it already
+had 7. A naive "always index `[6]`" would have silently overwritten t3-06's
+existing body-sensation sentence with a slug and lost real, deliberately-
+placed content; checked the row length first instead of assuming
+uniformity. Verified after writing: bracket/brace/paren balance unchanged,
+all 30 slugs re-extracted from the file and confirmed to match the list
+above exactly, none of the 29 six-element rows disturbed.
+
+**§2 The three portals — investigated first, then retired, not moved.**
+
+**1. Shared vs portal-specific functions, reported before touching
+anything.** Classified every function `#prog-personal`/`#prog-couples`/
+`#prog-corporate` used, by checking real call sites (not just proximity)
+against each portal's byte range:
+- **Portal-exclusive, safe to leave dead or remove:** `ptOpenProtocol`,
+  `ptCopyProtocolLink`, `renderProtocolPage`, the personal-portal
+  `DOMContentLoaded` closure (`openProtocolPage`/`requestClose`,
+  Track 01's own hardcoded version), `initProtocolPageSwap` and its two
+  calls (the parameterised version Tracks 02/03 share), `toggleProto`,
+  `toggleProtoList`, the `jp5*` family. Zero real callers found outside
+  the three portals' own markup for any of these.
+- **Genuinely shared with retained homepage features — kept, not
+  touched.** `openReader`/`selectReaderTab` (the reader-modal system) are
+  also used by a separate, retained "Decision"/"Identity" feature
+  (`IDENTITY_DATA`, `STEP4_DECISIONS`, evidence cards) and are monkey-
+  patched by later code to hydrate Decision pages and handle "Somatic"
+  content — deleting them would have broken that feature, not just the
+  portals. Several `jprog*` functions (`jprogGetState`, `jprogRenderPrompt`,
+  `jprogInit`, `jprogEl`) are similarly extended for a "Chosen Self"
+  journal category. Found by checking for real call sites *after* the
+  portal block ends, not just assuming "jprog family = portal-only."
+- `showMain()` is still called from the footer ("The Journey" link) —
+  kept; harmless once `.prog-overlay` matches nothing (`showMain()`'s own
+  code already handles zero matches).
+
+**2. What breaks when a portal is loaded directly — moot, because nothing
+does load it directly.** Grepped for every remaining external
+`showProg('personal'|'couples'|'corporate')` call before touching
+anything: **one**, the `#p{N}` cold-load handler (itself only meaningful
+because `#prog-personal` existed). Zero `showProg('couples')` or
+`showProg('corporate')` calls exist anywhere outside their own portals'
+markup — confirmed these two were never reachable from any live UI
+element on the site as it stood. The homepage's own doors
+(`.sr-home .door`, `data-track="t1"`) don't call `showProg` at all —
+traced the actual click handler: it scrolls to `#step-t1`/`#step-t2`/
+`#step-t3`, and those sections' own CTAs already link straight to
+`personal-transformation.html` etc., and their protocol-preview cards
+already link straight to `protocol.html?track=…` — pre-existing, modern,
+untouched by this pass.
+
+**3. Does `js/saferise-track.js` assume one document — no.** It runs once
+per page load via `SafeRiseTrack.render(id)`, called with a different
+hardcoded `id` in each of the three already-separate track HTML files.
+Each is a genuinely separate document/load; nothing in the module reads
+or writes state shared across them.
+
+**The retirement decision itself, and why it overrides the brief's own
+§2 table (`track-01.html`/`track-02.html`/`track-03.html`).** Before
+moving anything, checked whether `#prog-personal`'s content was actually
+missing from `personal-transformation.html` (the real, already-existing
+page for that route, per SR-370's own finding, which outranks this
+brief's table where they disagree). It is not missing: confirmed live —
+FAQ present, pricing present ("€19"/"Get Started"), workshop mentions
+present, and the crisis message present (`findahelpline`, "immediate
+danger", both found in the rendered page text). `protocol.html` — where
+that page's own carousel already sends every protocol click — has its own
+crisis block, its own resource resolution (`srResolveSet()`, shared with
+`resource.html`), and its own real `.journal`/`.logdrop` markup. The
+portal's own tracking widget, `jprogState`, is explicit in its own code
+comment that it is **in-memory only, no `localStorage`, resets on
+reload** — mockup state, not the real, Supabase-backed journal SR-358/359
+already wired. Given all of that, and given finding #2 above (nothing
+live reaches `#prog-couples`/`#prog-corporate` at all, and Track 01's own
+door already bypasses `#prog-personal` too), "move to track-01.html" would
+have shipped three new files duplicating content that already exists,
+more completely, at the real URLs. Retired instead: **313,208 bytes**
+removed (`#prog-personal` through `#prog-corporate`, contiguous), plus a
+further **19,203 bytes** of CSS found and removed afterward — an entire
+`<style id="pt-2026-reset">` block, explicitly scoped `#prog-personal
+.pt-*` by its own header comment ("Every rule below is scoped under
+#prog-personal so it can never touch Relationship Healing, Professional
+Performance or the homepage"), orphaned the moment the markup it targeted
+was gone. CSS carries none of JS's fail-safe-vs-throw risk — an
+unmatchable selector simply never fires — so this was removed outright
+rather than left as harmless-but-dead, unlike the JS functions above.
+
+**Dangling references found and fixed**, so nothing that used to work
+silently stopped working:
+- Footer links "Compare Plans"/"Services"/"About SafeRise" — already
+  fixed in SR-370, unaffected here.
+- `openResourceModal()`'s "Unlock" button and `openReader()`'s locked-page
+  "Unlock" button both called `showProg(prog)` where `prog` is
+  `'personal'|'couples'|'corporate'`, derived generically from a resource
+  key's track prefix — these are shared, homepage-wide functions, not
+  portal-exclusive, so their dangling calls needed fixing, not just
+  reporting. Added `SR_TRACK_PAGE`, a three-entry map from the old prog id
+  to the real page, and pointed both buttons at
+  `window.location.href = SR_TRACK_PAGE[prog]` instead. No live locked
+  resource exists in the current data to click-test end-to-end (checked
+  `RESOURCE_CONTENT` and `T2_RESOURCES` for a `locked:true` entry — none
+  found), so verified by direct inspection and by confirming
+  `SR_TRACK_PAGE` resolves correctly for all three keys, rather than
+  claiming a click-through that couldn't actually be exercised.
+- The `#p{N}` cold-load handler (`showProg('personal')`) — replaced, not
+  left dangling; see §3.
+
+**A bug in this pass's own first draft, caught before commit — the same
+mistake as SR-371's, in the same file, one edit earlier.** Closed a new
+HTML comment (introducing the `#p{N}` redirect script, below) with `*/`
+instead of `-->`. Every browser tested extends an unterminated `<!--` to
+end of file (or the next real `-->`), which silently turned the entire
+new redirect `<script>` into inert comment text — a `#p5` link would have
+gone nowhere. Caught by comparing raw `<!--`/`-->` counts (22/21, not the
+expected 22/22) rather than trusting a clean-looking diff; a full
+open/close sequential scan located the exact unclosed comment; fixed;
+re-scanned clean. Given this is the second time in two consecutive passes
+this exact mistake reached a draft, it is worth naming as a pattern:
+writing an HTML comment while thinking in JS/CSS syntax is an easy slip
+this codebase's own convention (block comments everywhere) makes easy to
+make and easy to miss, since the file still "looks" correct until
+something is queried at runtime.
+
+**§3 The protocol router — done.**
+
+`protocol.html`'s `PAGE_PROTOCOL` IIFE now resolves `?slug=` first,
+searching all three visible tracks (a slug alone doesn't name a track,
+unlike `?track=&protocol=`), matching against **each row's last element**
+rather than a hardcoded index `[6]` — required by t3-06's own extra field
+from §1, and caught by this pass's own first test run: all 30 slugs
+resolved except `belonging-gap`, fixed by switching to `row[row.length-1]`,
+re-verified clean. `_redirects` gained the rewrite that makes the route
+real: `/protocols/:slug → /protocol.html?slug=:slug` (200), plus the
+**full redirect map** the brief asked for — every one of the 30 protocols'
+`?track=N&protocol=NN` form, both with and without the `.html` extension
+(60 entries total, matching both the form the site has always used and
+the shorter form the 9 September table itself uses as its example), 301s
+to its slug.
+
+**`index.html#p{N}` cannot be redirected in `_redirects`, and this is a
+platform constraint, not a gap in this pass.** A URL fragment never
+leaves the browser — no server-side redirect mechanism, Netlify's
+included, can read `location.hash`. Handled client-side instead: a small
+script placed immediately after `content/tracks.js` loads in
+`index.html`'s own `<head>` reads `#p{N}` on load, looks up Track 01's own
+`row[6]` (`#p{N}` never addressed the other two tracks — confirmed in §2,
+Track 01 was the only one with a working Copy Link feature), and
+`location.replace()`s to `/protocols/{slug}` before the page has a chance
+to render the old state. Verified live: `index.html#p5` correctly
+resolved and attempted `/protocols/shame-dissolution` (visible as a 404
+only because the local static server doesn't implement `_redirects` —
+the same untestable-locally limitation this session has reported since
+SR-366's own CSP testing).
+
+**§4 Verify**
+
+1. All three track pages load directly, no portal state, no `showProg` —
+   true by construction: they are, and always were, separate documents
+   from `index.html` that never called `showProg`. Not "verified after
+   the move" because there was no move to verify — see §2.
+2. All 30 protocols resolve at `/protocols/{slug}` from a cold load —
+   verified live via 30 sequential fresh iframe loads
+   (`?slug=` for every entry in §1's list): **30/30 resolved**, each
+   showing the correct protocol title, none showing "Protocol not found."
+   Signed out and signed in: resolution logic is identical regardless of
+   auth state (only the *content* gating downstream of `PAGE_PROTOCOL`
+   depends on it, unchanged by this pass); spot-checked one slug
+   (`trust-betrayal`) live and confirmed `PAGE_PROTOCOL.protocolId`
+   (`t2-p03`) and `SafeRiseAccess.hasAccess()` (`true`, via the existing
+   `srIsDev()` localhost bypass, same mechanism SR-368 already verified
+   for the query-param path) both resolve correctly through the new slug
+   path.
+3. Every old URL 301s — the `_redirects` entries are written and reviewed
+   (60 protocol redirects + the slug rewrite); actual 301 behaviour is
+   untestable against this session's local static server, which doesn't
+   implement `_redirects` at all (documented limitation, unchanged since
+   SR-366). Full map is in `_redirects` itself, with its own reasoning
+   written inline.
+4. **SR-368's work survives** — checked live on `personal-transformation.html`,
+   the one of the three this session could reach without extra setup:
+   CTA bar **46px** (matches SR-368 exactly), card-reveal panel **22.3%**
+   of the cover height at rest (well inside SR-368's fix, comfortably
+   short of the pre-fix 79%). Not re-derived from scratch: neither
+   `css/saferise-system.css` nor `js/saferise-track.js` was touched by
+   this pass, so this confirms no regression rather than re-proving
+   SR-368's own work.
+5. **`index.html` size, before and after — this pass's own reduction:**
+   832,882 → 501,108 bytes raw (**−39.8%**), 163,358 → 120,845 bytes
+   gzipped (**−26.0%**). Cumulative from the original, pre-split file
+   (979,677 bytes, before SR-370 began): **−48.8%** raw — essentially
+   half the original homepage, gone.
+6. Nav and footer identical across all pages — true for every page
+   already on the shared partial (unaffected by this pass). `index.html`'s
+   own hand-rolled nav/footer is unchanged and still not migrated to the
+   partial — a real, still-open gap, first reported in SR-370, outside
+   this pass's own scope (about the three portals, not the homepage's
+   chrome).
+7. Auth on the new pages — there are no new pages (§2); the one thing
+   this pass changed that touches auth is `protocol.html`'s resolution
+   path, verified in item 2 above to feed the same `hasAccess()` gate
+   unchanged.
+8. `scripts/gen-sitemap.js` — Node still unavailable (unchanged
+   limitation). Replicated its exact filtering logic in Python: **18
+   URLs**, not the 17 SR-366 last reported — re-verified rather than
+   trusted, and the count genuinely changed, because `reset-password.html`
+   (SR-371, after SR-366's count) doesn't match the script's own exclude
+   pattern (`/^(dashboard|account|signup|login|member-|404|pass|mock)/`)
+   and is correctly included.
+9. 1440/390 — checked on `index.html` post-deletion at both widths (the
+   page this pass actually changed): no horizontal overflow at either.
+10. Console clean on every route checked this pass: `index.html` (both
+    widths), `protocol.html` (three slugs plus one invalid slug, the
+    not-found case), `personal-transformation.html`.
+
+**§5 Report only**
+
+1. **`--shut` (`#5A6B84`) fails contrast at any scrim** — SR-368's own
+   finding (3.87:1 against pure black, a palette decision not a page
+   fix) stands, unchanged. Live text uses, re-confirmed: `dashboard.html`,
+   `member-porges.html`, `member-kross.html`, `css/saferise-dashboard.css`,
+   `css/saferise-method.css`. **One occurrence is no longer live**: the
+   `--pt-shut` custom property inside `index.html`'s own now-deleted
+   `#prog-personal{...}` block was removed along with the rest of
+   `pt-2026-reset` in §2 — it was never reachable as rendered text (a
+   custom-property declaration, not a text colour applied anywhere), and
+   is gone regardless.
+2. **SR-084 dead weight — resolved, not just scoped, for `index.html`.**
+   "Reference Case," "Source Insights" and "Why I Built This One" — the
+   three cut resources SR-084 named — no longer appear anywhere in
+   `index.html`: confirmed by grep, zero hits, because they lived
+   exclusively inside the three now-deleted portals. The 80 stale
+   duration strings SR-084 also named were part of the same deleted
+   content. `personal-transformation.html`/`protocol.html` never carried
+   this content in the first place — both render from `content/tracks.js`
+   directly, which never included it. SR-084 itself should be marked
+   resolved in its own fix-register entry rather than left open against
+   a file that no longer carries the defect; not changed here, since
+   that entry belongs to a different SR and editing someone else's closed
+   entry wasn't asked for — flagged for whoever next touches SR-084.
+3. **The five duplicated crisis blocks — down to two.** Re-grepped
+   `findahelpline.com` in `index.html`: the homepage's own footer, and
+   one `sr-callout` inside the (retained, shared, still used by Decision/
+   Identity content) resource-reader template. The three that lived
+   inside the track FAQs are gone with the portals that carried them —
+   a direct, unplanned side effect of §2's retirement, not a separate
+   fix.
+
+**§6 Report**
+
+**The slug decision:** Option A (explicit field), as recommended; full
+list of 30 in §1 above; the brief's own "31" does not match the data
+(30 confirmed, reported as DIFFERS).
+**The redirect map:** in `_redirects` in full — 60 legacy protocol-URL
+entries plus the `/protocols/:slug` rewrite; `#p{N}` handled client-side
+in `index.html` instead, with the platform-constraint reasoning written
+inline in both files.
+**`index.html` before/after:** 832,882 → 501,108 bytes (§4.5).
+**Whether SR-368's changes survived:** yes, confirmed live, unchanged
+files.
+**Anything that could not be moved cleanly:** nothing was moved — see the
+retirement-vs-move finding in §2, which is the headline result of this
+pass and outranks the brief's own §2 table per this session's standing
+rule that SR-367–SR-371 (and now this entry) win where they disagree with
+a brief.
+
+**Files touched:** `content/tracks.js` (30 slugs), `index.html` (three
+portals and their orphaned CSS removed, three dangling references fixed,
+the `#p{N}` handler replaced), `protocol.html` (slug resolution),
+`_redirects` (rewrite rule + 60-entry map), `docs/fix-register.md`. Not
+touched: `js/saferise-track.js`, `css/saferise-system.css`,
+`personal-transformation.html`/`relationship-healing.html`/
+`professional-performance.html` (none needed to change — that is the
+point of §2's finding).
+
+*Status:* closed. **Not pushed.** · *Raised and fixed:* 9 Sep 2026

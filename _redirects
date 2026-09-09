@@ -1,46 +1,67 @@
-# SR-370 (PASS-split-execute.md §4). First _redirects file for this site.
+# SR-370 (PASS-split-execute.md §4) started this file. SR-372
+# (PASS-split-portals.md §§1/3) added the slug-based protocol route and
+# its full redirect map, and retired the three track portals below.
 #
-# What this covers: clean-URL rewrites (200, not 301 — the .html file stays
-# the canonical path, this just also serves it at the short one) for every
-# page that already exists standalone, matching the URL structure approved
-# 9 September (PASS-decisions-applied.md §3).
+# What this covers: clean-URL rewrites (200) for every standalone page,
+# the new /protocols/{slug} route, and 301s for every legacy protocol URL
+# — both the query-string form the site has always used
+# (/protocol.html?track=N&protocol=NN) and the shorter form named in the
+# 9 September approved table (/protocol?track=N&protocol=NN) — to its new
+# slug. Nothing that resolved before this pass 404s after it.
 #
 # What this does NOT cover, and why:
 #
 # - /personal-transformation, /relationship-healing, /professional-performance
 #   map to the EXISTING personal-transformation.html / relationship-healing.html
 #   / professional-performance.html, not to new track-01.html/track-02.html/
-#   track-03.html files as that approved table names. Those three pages
-#   already exist, already render every protocol from content/tracks.js,
-#   already use the shared nav/footer, and are already linked by their real
-#   filenames from js/saferise-nav.js and index.html's own nav. Renaming
-#   working, already-linked, already-indexed-nowhere-so-no-loss files to
-#   match an arbitrary table entry — one whose own stated principle is
-#   "track paths stay long and readable, the words carry meaning" — would
-#   trade a readable name for a numbered one for no gain. Reported as
-#   DIFFERS rather than executed; the short path below rewrites straight to
-#   the real file.
+#   track-03.html files as the 9 September table names, and not to
+#   #prog-personal/#prog-couples/#prog-corporate either — see below. Those
+#   three pages already exist, already render every protocol from
+#   content/tracks.js, already use the shared nav/footer, and are already
+#   linked by their real filenames from js/saferise-nav.js and index.html's
+#   own nav. Renaming working, already-linked, already-indexed-nowhere-so-
+#   no-loss files to match an arbitrary table entry — one whose own stated
+#   principle is "track paths stay long and readable, the words carry
+#   meaning" — would trade a readable name for a numbered one for no gain.
+#   Reported as DIFFERS rather than executed; the short paths below rewrite
+#   straight to the real files.
 #
-# - /protocols/{slug} does not exist. SR-367 found zero of 30 protocols in
-#   content/tracks.js carry a slug field — the live identity scheme is
-#   numeric (?track=N&protocol=NN). No slug was invented to make this
-#   route work. Blocked pending Andre supplying real slug strings, or a
-#   decision to keep the numeric form permanently.
+# - #prog-personal, #prog-couples and #prog-corporate are gone, not moved
+#   to track-01/02/03.html as PASS-split-portals.md's own §2 table asked.
+#   Investigating "carry SR-368's changes across" first found their entire
+#   content — protocol carousel, FAQ, pricing, workshop CTAs, crisis
+#   message — already exists, more completely and on real URLs, on
+#   personal-transformation.html/relationship-healing.html/
+#   professional-performance.html (confirmed live: FAQ, pricing, workshop
+#   mentions and the crisis message all present) plus protocol.html (its
+#   own crisis block, its own resource resolution via srResolveSet(), its
+#   own real .journal/.logdrop markup). The portals' own protocol-opening
+#   machinery — the jp5 modal, the DOM-move full-page swap, jprogState's
+#   journey-progress widget — turned out to be in-memory-only demo state
+#   with no persistence of its own (confirmed by its own code comment:
+#   "no localStorage, so a reload resets every protocol back to Stage 1"),
+#   superseded by protocol.html's real, resolved-from-data rendering. No
+#   live click path reached #prog-couples or #prog-corporate at all —
+#   confirmed by grep: zero showProg('couples')/showProg('corporate')
+#   calls existed anywhere outside their own markup, and the homepage's
+#   door clicks already scroll to a preview section (#step-t1/t2/t3) whose
+#   own CTA already links straight to the real track page. Full reasoning
+#   in docs/fix-register.md's SR-372 entry. Functions still genuinely
+#   shared with retained homepage features (openReader, selectReaderTab,
+#   the jprog family's Identity/Chosen-Self extensions) were kept, not
+#   deleted with the markup that used to trigger them.
 #
-# - No legacy URL needs a 301 here. The seven sections retired from
-#   index.html in this same pass (#prog-compare, #prog-services,
-#   #prog-premium1on1, #prog-workshops, #prog-retreats, #prog-foundation,
-#   #prog-about) were never independently addressable — nothing set
-#   location.hash for them and no external link ever pointed at them.
-#   They were reachable only by clicking a showProg() button while already
-#   on index.html, and every one of those buttons was updated in place to
-#   link to the real page instead. Nothing that worked via a URL today can
-#   404 tomorrow, because none of these ever had one.
-#
-# - #prog-personal, #prog-couples, #prog-corporate and the #p{N} protocol
-#   deep-link mechanism inside them are UNCHANGED in this pass — deferred,
-#   not resolved. See docs/fix-register.md's SR-370 entry. No redirect
-#   entries below reference them.
+# - index.html#p{N} (Track 01's old "Copy Link" deep link, and the only
+#   track that ever had one — confirmed by grep, no equivalent existed for
+#   couples/corporate) cannot be redirected here. _redirects, like any
+#   server-side redirect mechanism, only ever sees a request's path and
+#   query string — a URL fragment never leaves the browser, so the server
+#   has no way to read it. Handled client-side instead: a small script
+#   early in index.html's own <head> checks location.hash for #p{N} on
+#   load and replaces the page with the matching /protocols/{slug} before
+#   anything renders.
+
+/protocols/:slug            /protocol.html?slug=:slug  200
 
 /method              /method.html               200
 /about                /about.html                 200
@@ -52,3 +73,67 @@
 /relationship-healing      /relationship-healing.html      200
 /professional-performance  /professional-performance.html  200
 /anxiety-reset         /anxiety-reset.html         200
+
+# Every legacy protocol URL — query-string form, both with and without
+# the .html extension — to its slug. Track 01, then 02, then 03, in
+# protocol order; content/tracks.js's own row order, not alphabetised.
+/protocol.html?track=1&protocol=01  /protocols/anxiety-reset  301
+/protocol?track=1&protocol=01  /protocols/anxiety-reset  301
+/protocol.html?track=1&protocol=02  /protocols/anger-alchemy  301
+/protocol?track=1&protocol=02  /protocols/anger-alchemy  301
+/protocol.html?track=1&protocol=03  /protocols/overwhelm-threshold  301
+/protocol?track=1&protocol=03  /protocols/overwhelm-threshold  301
+/protocol.html?track=1&protocol=04  /protocols/abandonment-wound  301
+/protocol?track=1&protocol=04  /protocols/abandonment-wound  301
+/protocol.html?track=1&protocol=05  /protocols/shame-dissolution  301
+/protocol?track=1&protocol=05  /protocols/shame-dissolution  301
+/protocol.html?track=1&protocol=06  /protocols/grief-integration  301
+/protocol?track=1&protocol=06  /protocols/grief-integration  301
+/protocol.html?track=1&protocol=07  /protocols/shutdown-recovery  301
+/protocol?track=1&protocol=07  /protocols/shutdown-recovery  301
+/protocol.html?track=1&protocol=08  /protocols/jealousy-release  301
+/protocol?track=1&protocol=08  /protocols/jealousy-release  301
+/protocol.html?track=1&protocol=09  /protocols/insecurity-anchor  301
+/protocol?track=1&protocol=09  /protocols/insecurity-anchor  301
+/protocol.html?track=1&protocol=10  /protocols/powerlessness-despair  301
+/protocol?track=1&protocol=10  /protocols/powerlessness-despair  301
+/protocol.html?track=2&protocol=01  /protocols/safe-conversation  301
+/protocol?track=2&protocol=01  /protocols/safe-conversation  301
+/protocol.html?track=2&protocol=02  /protocols/rupture-repair  301
+/protocol?track=2&protocol=02  /protocols/rupture-repair  301
+/protocol.html?track=2&protocol=03  /protocols/trust-betrayal  301
+/protocol?track=2&protocol=03  /protocols/trust-betrayal  301
+/protocol.html?track=2&protocol=04  /protocols/resentment-release  301
+/protocol?track=2&protocol=04  /protocols/resentment-release  301
+/protocol.html?track=2&protocol=05  /protocols/intimacy-barrier  301
+/protocol?track=2&protocol=05  /protocols/intimacy-barrier  301
+/protocol.html?track=2&protocol=06  /protocols/double-standard  301
+/protocol?track=2&protocol=06  /protocols/double-standard  301
+/protocol.html?track=2&protocol=07  /protocols/projection-clarity  301
+/protocol?track=2&protocol=07  /protocols/projection-clarity  301
+/protocol.html?track=2&protocol=08  /protocols/appreciation-support  301
+/protocol?track=2&protocol=08  /protocols/appreciation-support  301
+/protocol.html?track=2&protocol=09  /protocols/pursue-withdraw  301
+/protocol?track=2&protocol=09  /protocols/pursue-withdraw  301
+/protocol.html?track=2&protocol=10  /protocols/conscious-separation  301
+/protocol?track=2&protocol=10  /protocols/conscious-separation  301
+/protocol.html?track=3&protocol=01  /protocols/high-stakes-presence  301
+/protocol?track=3&protocol=01  /protocols/high-stakes-presence  301
+/protocol.html?track=3&protocol=02  /protocols/conflict-navigation  301
+/protocol?track=3&protocol=02  /protocols/conflict-navigation  301
+/protocol.html?track=3&protocol=03  /protocols/imposter-dissolution  301
+/protocol?track=3&protocol=03  /protocols/imposter-dissolution  301
+/protocol.html?track=3&protocol=04  /protocols/perfectionism-release  301
+/protocol?track=3&protocol=04  /protocols/perfectionism-release  301
+/protocol.html?track=3&protocol=05  /protocols/performance-anxiety  301
+/protocol?track=3&protocol=05  /protocols/performance-anxiety  301
+/protocol.html?track=3&protocol=06  /protocols/belonging-gap  301
+/protocol?track=3&protocol=06  /protocols/belonging-gap  301
+/protocol.html?track=3&protocol=07  /protocols/career-transition  301
+/protocol?track=3&protocol=07  /protocols/career-transition  301
+/protocol.html?track=3&protocol=08  /protocols/decision-fatigue  301
+/protocol?track=3&protocol=08  /protocols/decision-fatigue  301
+/protocol.html?track=3&protocol=09  /protocols/burnout-overload  301
+/protocol?track=3&protocol=09  /protocols/burnout-overload  301
+/protocol.html?track=3&protocol=10  /protocols/creative-flow  301
+/protocol?track=3&protocol=10  /protocols/creative-flow  301
