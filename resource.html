@@ -819,6 +819,49 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
 .sr-gate-ghost{font:500 13px/1.4 'DM Sans',sans-serif;color:var(--text3,#6A6874);text-decoration:none;
   border-bottom:1px solid var(--hair,#22222E)}
 .sr-gate-ghost:hover{color:var(--gold,#D4A843);border-color:var(--gold,#D4A843)}
+
+/* ══════════ SR-373 · The Decision, made interactive ══════════
+   Namespaced sr-dc- (claimed in CLAUDE.md's surface-code table). Lives
+   here rather than css/saferise-system.css because the component only
+   ever appears inside this page's own #rbody, the same precedent this
+   file already sets for its own reading-surface CSS above. */
+.sr-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.sr-dc-root h5{font-family:'Cinzel',serif;font-weight:400;font-size:15px;letter-spacing:.04em;
+  color:var(--gold);margin:1.6em 0 .7em}
+.sr-dc-ask{background:var(--card);border:1px solid var(--hair);border-left:2px solid var(--gold);
+  border-radius:4px;padding:20px 20px 16px;margin:1.4em 0 1.6em}
+.sr-dc-askq{font-family:'Cormorant Garamond',Georgia,serif;font-size:21px;line-height:1.3;
+  color:var(--text);margin:0 0 6px}
+.sr-dc-askh{font-size:13.5px;line-height:1.6;color:var(--text2);margin:0 0 14px}
+.sr-dc-field{position:relative}
+.sr-dc-field+.sr-dc-field{margin-top:8px}
+.sr-dc-ask textarea{width:100%;min-height:90px;resize:vertical;background:var(--bg);color:var(--text);
+  border:1px solid var(--hair);border-radius:4px;padding:12px 13px;
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:17px;line-height:1.5}
+.sr-dc-ask textarea::placeholder{color:var(--text3);font-style:italic}
+.sr-dc-ask textarea:focus{outline:none;border-color:var(--gold)}
+.sr-dc-state{display:flex;justify-content:flex-end;margin-top:6px;font-size:11px;color:var(--text2);min-height:14px}
+.sr-dc-saved{color:var(--gold);opacity:0;transition:opacity .2s}
+.sr-dc-saved.sr-dc-on{opacity:1}
+.sr-dc-trio .sr-dc-field textarea{min-height:56px}
+.sr-dc-assembly{margin:52px 0 0;padding:26px 24px 22px;background:var(--band);border:1px solid var(--hair);border-radius:8px}
+.sr-dc-assemblyh{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-style:normal;
+  font-size:26px;color:var(--text);margin:0 0 4px}
+.sr-dc-cap{font-size:13px;color:var(--text2);margin:0 0 18px}
+.sr-dc-compose{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;line-height:1.6;color:var(--text)}
+.sr-dc-compose p{margin:0 0 .9em}
+.sr-dc-ghost{color:var(--text3);font-style:italic}
+.sr-dc-mine{color:var(--gold)}
+.sr-dc-acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)}
+.sr-dc-tool{display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--hair);
+  color:var(--text2);border-radius:4px;padding:9px 14px;font:500 12px/1 'DM Sans',sans-serif;cursor:pointer}
+.sr-dc-tool:hover{border-color:var(--gold);color:var(--text)}
+.sr-dc-privacy{margin-top:28px;padding-top:16px;border-top:1px solid var(--hair);font-size:12.5px;line-height:1.7;color:var(--text3)}
+@media(max-width:560px){
+  .sr-dc-ask{padding:16px 16px 14px}
+  .sr-dc-askq{font-size:19px}
+}
 </style>
 </head>
 <body>
@@ -964,6 +1007,7 @@ var SR_TRACK_NUM = qTrackEarly ? qTrackEarly[1] : '1';
 document.write('<scr' + 'ipt src="content/t' + SR_TRACK_NUM + '-resources.js"></scr' + 'ipt>');
 </script>
 <script src="js/saferise-resources.js"></script>
+<script src="js/saferise-decision.js"></script>
 <script src="js/saferise-auth.js"></script>
 <script src="js/saferise-access.js"></script>
 <script>
@@ -1029,17 +1073,33 @@ var FEEDBACK=[{key:'resonate',icon:HEART,label:'It resonates'},{key:'integrate',
 
 /* PASS-full-resource-access, Step 5 · RESOURCES is now the resolved,
    already-in-store-order set for ACTIVE_TRACK/ACTIVE_PROTOCOL -- 'advisory'
-   (Proximity Guide) appears exactly where the store includes it for this
-   protocol, decided by the content itself via T{n}_PROTOCOL_KEYS[key].keys,
-   never by a second on/off flag layered on top. OPENS_ON's old default,
-   'decision', retired with it: The Decision has no authored content in any
-   of the three stores (Step 6/7 of this pass), so nothing can open on it.
-   The reader now opens on index 0 unless ?resource= names something else,
-   resolved below. */
+   (Attention Advisory, renamed from Proximity Guide — SR-373) appears
+   exactly where the store includes it for this protocol, decided by the
+   content itself via T{n}_PROTOCOL_KEYS[key].keys, never by a second
+   on/off flag layered on top. OPENS_ON's old default, 'decision', retired
+   with it: The Decision had no authored content in any of the three
+   stores when this was written. SR-373 (PASS-resource-list-and-
+   reflection.md §6) gave it real content and a real reflection UI, so it
+   is not excluded from the rail here the way protocol.html's own section
+   2 still excludes it (a separate, pre-existing choice this pass did not
+   touch — see protocol.html's own comment on that filter). The reader now
+   opens on index 0 unless ?resource= names something else, resolved
+   below. */
 var current = 0;
 
+/* SR-373 (PASS-resource-list-and-reflection.md §4) · this is "the reader
+   sidebar" the brief means — confirmed live before changing anything: it
+   showed all ten of RESOURCES, Guided Meditation and Cue Card included,
+   while protocol.html's own section 2 already showed eight (excluding
+   meditation and, as protocol.html's own comment now says, decision —
+   not crisiscard as the brief assumed). Both are delivered elsewhere on
+   the same page already — meditation is the player above, crisiscard
+   opens as its own Cue Card modal — so both come out of this list too,
+   matching protocol.html's crisiscard exclusion added in the same pass. */
 function visible(){
-  return RESOURCES.map(function(r,i){return Object.assign({},r,{n:('0'+(i+1)).slice(-2)});});
+  return RESOURCES
+    .filter(function(r){ return r.type !== 'meditation' && r.type !== 'crisiscard'; })
+    .map(function(r,i){return Object.assign({},r,{n:('0'+(i+1)).slice(-2)});});
 }
 
 /* SR-077 · the position in the list is the number. It used to be a hardcoded
@@ -1069,7 +1129,14 @@ function renderMain(){
   document.getElementById('rsub').textContent=r.sub;
   document.getElementById('rmeta').innerHTML=r.meta;
   document.getElementById('rread').textContent=r.read;
-  document.getElementById('rbody').innerHTML=r.body;
+  /* SR-373 (PASS-resource-list-and-reflection.md §6) · The Decision is the
+     one type with something to write into, not just read -- everything
+     else keeps the plain body render it always had. */
+  if (r.type === 'decision' && window.SafeRiseDecision) {
+    window.SafeRiseDecision.render(document.getElementById('rbody'), r, 't' + ACTIVE_TRACK + '-p' + ACTIVE_PROTOCOL);
+  } else {
+    document.getElementById('rbody').innerHTML=r.body;
+  }
   /* SR-191 · the rail names the resource, it no longer counts it. The test is
      what the string counts: a count of the member's position or progress is
      prohibited on every surface; a count of the library is not. The title stays

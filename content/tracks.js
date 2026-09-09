@@ -79,7 +79,7 @@ var SHARED = {
     ['gear',  'How This Works',       'Why it works.',               'What is happening in your body during this state, why the four steps land in that order, and which framework each step rests on \u2014 in plain language.', 'guide'],
     ['heart', 'Somatic Release Activities', 'Between sessions.',     'Small physical practices that hold the work on the days you will not sit down.', 'companion'],
     ['comp',  'Safe Practice',        'When and how to proceed.',    'Pacing, what to expect, when to slow down, and when this is not the right tool today.', 'practice'],
-    ['pin',   'Proximity Guide',      'How close to stay.',          'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.', 'advisory'],
+    ['pin',   'Attention Advisory',      'How close to stay.',          'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.', 'advisory'],
     ['shield','Disclosure & Support','A script for someone close.','Words for explaining what you are doing and what you need, without over-explaining.', 'disclosure'],
     /* SR-253 · Track 03 only. Subtitle is the authored `sub`, identical on all
        ten Track 03 protocols. SR-258 supplied the description; the
@@ -115,7 +115,7 @@ var SHARED = {
     ['book',  'Why I Built This One',  'The founder\u2019s own reason for this protocol.', 'Moved to a per-track asset, not a resource in this list. Not yet authored on any protocol in any track.', 'why-built', true],
     ['flask', 'Source Insights',       'Where the mechanism comes from.', 'Retired into How This Works in SR-077 and not authored again since \u2014 the framework attribution this would carry already lives there.', 'source-insights', true]
   ],
-  resourceNote: 'The Proximity Guide and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern, rather than on every protocol. The library grows \u2014 anything added to the track while you\u2019re a member is yours.',
+  resourceNote: 'The Attention Advisory and Invitation to Repair appear where an ongoing external source is genuinely part of the pattern, rather than on every protocol. The library grows \u2014 anything added to the track while you\u2019re a member is yours.',
   insight: {
     eyebrow: 'Why naming it isn\u2019t enough',
     h2: 'Understanding and integration<br><span class="gold">are two different events.</span>',
@@ -679,7 +679,7 @@ var STATES = {
    next unverified row silently claim a full library. */
 /* SR-078 · a protocol's library size is derived, never typed.
    SHARED.resources holds every resource. Two of them are conditional: the
-   Proximity Guide and the Invitation to Repair only appear where an ongoing
+   Attention Advisory and the Invitation to Repair only appear where an ongoing
    external source is genuinely part of the pattern, which META[].extras
    records as 'advisory' and 'invitation'.
 
@@ -687,7 +687,7 @@ var STATES = {
    confirmation T1 got. Both null and [] therefore yield the unconditional set,
    which is the honest floor: a protocol carrying neither conditional resource
    shows seven, and a hardcoded number would be wrong on every one of them. */
-var CONDITIONAL_RESOURCES = { 'Proximity Guide': 'advisory', 'Invitation to Repair': 'invitation' };
+var CONDITIONAL_RESOURCES = { 'Attention Advisory': 'advisory', 'Invitation to Repair': 'invitation' };
 
 /* SR-253 · THE SET COMES FROM THE INVENTORY, THE LOOK COMES FROM THE TABLE.
    SHARED.resources was both, and being both is how `raising` went missing from
@@ -850,7 +850,7 @@ SHARED.faq = [
     'Anything promising a feeling will never return is making a claim about you it has no way of making.']],
 
   ['What actually comes with a protocol?',
-   ['A guided audio session, a printable step guide, an explanation of what is happening in your body, body-based practices for between sessions, journalling prompts, and a Cue Card. Some protocols also carry a Proximity Guide or an Invitation to Repair where another person is genuinely part of the pattern.',
+   ['A guided audio session, a printable step guide, an explanation of what is happening in your body, body-based practices for between sessions, journalling prompts, and a Cue Card. Some protocols also carry a Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.',
     'You are not expected to use all of it. Most people use two or three and ignore the rest.']],
 
   ['What if it does not work for me?',
@@ -905,7 +905,7 @@ TRACKS[2].faq = [
     'Several of the others still apply afterwards. Resentment and projection do not end when the relationship does.']],
   ['What if the other person is the problem?',
    ['Sometimes they are, and this track does not ask you to pretend otherwise. It asks a narrower question: what your own system does in response, and what that is costing you.',
-    'The Proximity Guide exists for this. Some patterns have an ongoing external source, and the honest answer is to say so rather than practise around it.']]
+    'The Attention Advisory exists for this. Some patterns have an ongoing external source, and the honest answer is to say so rather than practise around it.']]
 ];
 
 /* ── Track 03 ── */

@@ -24,6 +24,7 @@ component. A generic class name is a defect, not a style preference.**
 | `sr-hb-` | Dashboard hero banner |
 | `sr-mt-` | Public method page |
 | `sr-tp-` | Track and protocol surfaces |
+| `sr-dc-` | The Decision reflection (`resource.html`) — SR-373 |
 
 **Claim a new code in this table before using it.** Two surfaces sharing a code
 is how `.sr-mi-card` ended up governing two pages that must now change

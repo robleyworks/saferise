@@ -3117,8 +3117,15 @@ function renderProtocolPage(pk){
   const advisorySplitAt = d.advisoryLede ? d.advisoryLede.indexOf('. ') : -1;
   const advisoryBold = advisorySplitAt > -1 ? d.advisoryLede.slice(0, advisorySplitAt + 1) : d.advisoryLede;
   const advisoryRest = advisorySplitAt > -1 ? d.advisoryLede.slice(advisorySplitAt + 1) : '';
+  /* SR-373 (PASS-resource-list-and-reflection.md §2) · label text only,
+     matching protocol.html's own edit — this function itself has had no
+     live caller since SR-372 retired #prog-personal, the only place that
+     ever invoked it (confirmed: renderProtocolPage( has zero real call
+     sites left, only its own definition and comments). Updated anyway
+     rather than left stale, since a future reader skimming this file has
+     no way to see "dead" from the text alone. */
   const advisoryHtml = d.advisoryLede ?
-    '<aside class="sr-attention-advisory" aria-label="Attention advisory"><span class="sr-attention-label">Attention advisory</span><p><strong>' + advisoryBold + '</strong>' + advisoryRest + '</p></aside>' : '';
+    '<aside class="sr-attention-advisory" aria-label="Before you begin"><span class="sr-attention-label">Before you begin</span><p><strong>' + advisoryBold + '</strong>' + advisoryRest + '</p></aside>' : '';
 
   // SR-027: "The journey begins" collapsible wrapper around the journey
   // visual, matching the approved mockup — open by default.
@@ -3961,7 +3968,21 @@ function openReader(protocolKey, initialKey){
      step list, Bookmark/Highlight/Listen and the footer quote are not progress
      claims and removing them would be a design change, not a removal. */
 
-  proto.keys.forEach(function(key, idx){
+  /* SR-373 (PASS-resource-list-and-reflection.md §4) · Guided Meditation and
+     Cue Card taken out of the browsable list — the reader used to show all
+     of proto.keys (ten on most protocols), while section 2 of the protocol
+     page already excluded these same two, an unexplained ten-vs-eight
+     mismatch. Both are delivered elsewhere already: the guided meditation
+     is the player above the reader, the Cue Card opens as its own modal —
+     listing them again here as pages to read was duplication, and the
+     resource records themselves (getResourceData(), the player, the Cue
+     Card modal) are untouched, only their presence in this list. Filtered
+     once, used for both the tab list and the step rail below, since both
+     are built from the same loop and both had the same ten-item problem. */
+  const readerKeys = proto.keys.filter(function(key){
+    return key.indexOf('-meditation') === -1 && key.indexOf('-crisiscard') === -1;
+  });
+  readerKeys.forEach(function(key, idx){
     const data = getResourceData(key);
     if (!data) return;
     const style = rmStyleFor(data.kind);

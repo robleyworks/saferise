@@ -29,7 +29,15 @@ var GUIDANCE = {
   guide:          { file: 'rg-02-how-this-works.mp3',         label: 'How This Works' },
   companion:      { file: 'rg-03-somatic-release.mp3',        label: 'Somatic Release Activities' },
   practice:       { file: 'rg-04-safe-practice.mp3',          label: 'Safe Practice' },
-  advisory:       { file: 'rg-05-proximity-guide.mp3',        label: 'Proximity Guide' },
+  /* SR-373 (PASS-resource-list-and-reflection.md §1) · Proximity Guide
+     renamed to Attention Advisory. The label changed; the filename did
+     not — `file` is an asset path (Rule 24: "a src in the record is a
+     claim the asset exists"), and the real file on disk is still
+     rg-05-proximity-guide.mp3. Renaming the file too would need an
+     actual filesystem rename, done deliberately, not as a side effect
+     of a text edit — same caution §1a asks for with resource ids in
+     URLs. Known, deliberate mismatch; not a bug. */
+  advisory:       { file: 'rg-05-proximity-guide.mp3',        label: 'Attention Advisory' },
   disclosure:     { file: 'rg-06-disclosure-support.mp3',     label: 'Disclosure & Support' },
   raising:        { file: 'rg-07-raising-it.mp3',             label: 'Raising It' },
   repair:         { file: 'rg-08-invitation-to-repair.mp3',   label: 'Invitation to Repair' },

@@ -740,8 +740,13 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
     <div class="sr-pp-sig" id="pp-signature" hidden></div>
   </div>
 
-  <aside class="attention-advisory" aria-label="Attention advisory">
-    <span class="attention-label">Attention advisory</span>
+  <!-- SR-373 (PASS-resource-list-and-reflection.md §2) · was "Attention
+       advisory" — that name now belongs to the resource (§1). The
+       paragraph below is untouched here; its own wording substitution
+       ("practice" → "guided meditation experience") is
+       pass/PASS-advisory-and-token.md's, not this pass's. -->
+  <aside class="attention-advisory" aria-label="Before you begin">
+    <span class="attention-label">Before you begin</span>
     <p><strong>Use this practice only when you can safely turn your attention inward.</strong> Do not use it while driving. Keep your eyes open, orient to the room, pause, or choose the shorter reset whenever inward focus feels uncomfortable.</p>
   </aside>
 
@@ -1362,20 +1367,34 @@ function renderProtocolContent(pp) {
   var ledeEl = document.getElementById('pp-lede');
   if (ledeEl) ledeEl.textContent = row[3] || '';
 
-  /* body signature (row[4]) + the three first-person quotes (row[5]) —
-     rendered nowhere on this page before this pass, for any protocol,
-     including Anxiety Reset. */
+  /* SR-373 (PASS-resource-list-and-reflection.md §5) · body signature
+     (row[4]) and the three first-person quotes (row[5]) taken back off
+     the banner — a pass before this one populated #pp-signature from
+     them; this pass removes that population, not the fields themselves.
+     row[4]/row[5] are untouched in content/tracks.js and stay in active
+     use on js/saferise-track.js's own track-page carousel cards
+     (.sr-tp-preveal for the signature, .sr-tp-struggle for the quotes —
+     confirmed live). dashboard.html's HERO_SLIDES banners read similarly
+     but are independently-authored copy, not a live read of these same
+     fields — checked directly (the wording differs from row[4]/row[5]),
+     so not claimed as a second live surface here.
+     #pp-signature stays in the markup, permanently hidden (its own
+     original default, before that pass populated it) rather than
+     removed, so a future pass that wants it back only has to restore
+     this block. */
   var sig = document.getElementById('pp-signature');
-  if (sig) {
-    var sigHtml = '';
-    if (row[4]) sigHtml += '<p class="sr-pp-sigline">' + esc(row[4]) + '</p>';
-    if (row[5] && row[5].length) {
-      sigHtml += '<ul class="sr-pp-quotes">' + row[5].map(function (q) {
-        return '<li>' + esc(q) + '</li>';
-      }).join('') + '</ul>';
-    }
-    sig.innerHTML = sigHtml;
-    sig.hidden = !sigHtml;
+  if (sig) { sig.hidden = true; }
+
+  /* SR-373 (PASS-resource-list-and-reflection.md §6) · "Enter the
+     reflection" was a dead `href="#"` — LG-132 (docs/tracker-v*.html) named
+     the real destination: resource.html with the Decision resource, once
+     it had content. It now does (see resource.html's own SafeRiseDecision
+     component), so this points there for the protocol actually open,
+     matching the ?resource= title-match resource.html already resolves
+     against (js/saferise-resources.js's normTitle). */
+  var decisionLink = document.querySelector('.decision-link');
+  if (decisionLink && row[0]) {
+    decisionLink.href = 'resource.html?track=' + pp.trackId + '&protocol=' + row[0] + '&resource=' + encodeURIComponent('The Decision');
   }
 
   /* the journey figure's image is Anxiety Reset's own commissioned art —
@@ -1421,7 +1440,21 @@ function renderProtocolContent(pp) {
   var lib = document.getElementById('pp-resource-library');
   if (lib && typeof SafeRiseResources !== 'undefined') {
     var set = SafeRiseResources.resolveSet(pp.trackId, row[0]) || [];
-    var rows = set.filter(function (r) { return r.type !== 'meditation' && r.type !== 'decision'; });
+    /* SR-373 (PASS-resource-list-and-reflection.md §4) · added 'crisiscard'
+       to this exclusion. The brief's own premise was that this filter
+       already excluded it ("Section 2 already excludes Guided Meditation
+       and Cue Card") — live-checked before changing anything and found it
+       excluded 'decision' instead, not 'crisiscard'. Cue Card opens as its
+       own modal, same reasoning as Guided Meditation being the player
+       above; both are duplication in a browsable list. 'decision' stays
+       excluded here too — it has its own section on this page (#decision,
+       just above, now wired to resource.html — see the comment on
+       decisionLink) rather than a second entry in this browsable list. It
+       once had a comment here about resource.html finding no content to
+       open on: that was true when this filter was written and is not
+       true any more (§6 above gave every protocol a real Decision body),
+       so the stale claim is removed rather than carried forward. */
+    var rows = set.filter(function (r) { return r.type !== 'meditation' && r.type !== 'decision' && r.type !== 'crisiscard'; });
     if (rows.length) {
       var canon = (typeof resourceByType === 'function') ? function (t) {
         var r = resourceByType(t); return r ? r[1] : '';

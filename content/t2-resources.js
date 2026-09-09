@@ -8,7 +8,7 @@
 
    THE RESOURCE SET IS ELEVEN. Eight are unconditional on Tracks 01 and 02;
    Track 03 has NINE because it adds `Raising It`. Two more are conditional on
-   META[].extras — Proximity Guide on 'advisory', Invitation to Repair on
+   META[].extras — Attention Advisory on 'advisory', Invitation to Repair on
    'invitation'. Counts therefore run 8 to 11 and are DERIVED, never typed.
 
    `cues` are production markers and must never render. `sharedRefs` carries a
@@ -241,7 +241,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p1-record": {
-    kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
+    kind: "Your Record", title: "Your Record", sub: "What happened this time, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it is never measured against anything you wrote before. Because it is only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>",
       "<p>Any of these, or none.</p>",
@@ -453,7 +453,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p2-record": {
-    kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
+    kind: "Your Record", title: "Your Record", sub: "What happened this time, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it is never measured against anything you wrote before. Because it is only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>",
       "<p>Any of these, or none.</p>",
@@ -623,7 +623,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p3-advisory": {
-    kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
+    kind: "Attention Advisory", title: "Attention Advisory", sub: "How close to stay.",
     body: [
       "<p>This state has a live external source, and how much contact you have with it is one of the few variables you hold.</p>",
       "<p>Three tiers. Which one yours belongs in is your read, on information nobody here has.</p>",
@@ -688,7 +688,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p3-record": {
-    kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
+    kind: "Your Record", title: "Your Record", sub: "What happened this time, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>",
       "<p>Any of these, or none.</p>",
@@ -702,7 +702,7 @@ var T2_RESOURCES = {
   "t2p3-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
-      "<p>\u26a0 <strong>Read this first.</strong> This resource asks you to look at your own conduct. That's the right work where both people can move. Where you're being controlled, monitored or made afraid, looking harder at yourself is the mechanism that keeps people in those situations \u2014 the Proximity Guide's third tier is the resource for that, and your safety is a separate question from your regulation.</p>",
+      "<p>\u26a0 <strong>Read this first.</strong> This resource asks you to look at your own conduct. That's the right work where both people can move. Where you're being controlled, monitored or made afraid, looking harder at yourself is the mechanism that keeps people in those situations \u2014 the Attention Advisory's third tier is the resource for that, and your safety is a separate question from your regulation.</p>",
       "<p>Assuming that isn't where you are:</p>",
       "<p>The protocol trains the interior half of the state. The other half exits, and after a betrayal it lands on people who had nothing to do with it.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 the alert doesn't discriminate. The checking, the tone in ordinary questions, the second look at a plausible explanation from someone unrelated. From inside it's caution you've earned. From outside, people who never lied to you are being treated as though they might.</p>",
@@ -862,7 +862,7 @@ var T2_RESOURCES = {
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if the resentment has become constant rather than episodic, if you're using something to manage it, if it's spreading to people who haven't done anything, or if you're having thoughts of harming yourself.</p>",
       "<p><strong>Where the situation is the thing</strong></p>",
-      "<p>If what you're carrying is about something ongoing that hasn't stopped, this settles you and doesn't change it. Where something can be said, asked for or declined, the useful next moves are outside this platform. The Proximity Guide goes further.</p>",
+      "<p>If what you're carrying is about something ongoing that hasn't stopped, this settles you and doesn't change it. Where something can be said, asked for or declined, the useful next moves are outside this platform. The Attention Advisory goes further.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
@@ -871,7 +871,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p4-advisory": {
-    kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
+    kind: "Attention Advisory", title: "Attention Advisory", sub: "How close to stay.",
     body: [
       "<p>Resentment nearly always has a live source that's still supplying it. How much contact you have is a real variable and it's often more available than it feels after this long.</p>",
       "<p>Three tiers. Which one yours belongs in is your read.</p>",
@@ -934,7 +934,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p4-record": {
-    kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
+    kind: "Your Record", title: "Your Record", sub: "What happened this time, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>",
       "<p>Any of these, or none.</p>",
@@ -957,7 +957,7 @@ var T2_RESOURCES = {
       "<p><strong>No self-attack.</strong> <em>\"I'm awful, I've been holding this against you for years\"</em> moves the burden across the table and asks them to manage your guilt about the thing you did to them.</p>",
       "<p><strong>Describe what was observable, ask about the rest.</strong> <em>\"I've been cold with you and I never said why. I'm not going to tell you what that's been like \u2014 I'd rather you told me.\"</em> Then let them answer without producing the list in response.</p>",
       "<p><strong>The checkable change</strong> \u2014 this repairs by saying things at the time rather than by no longer minding. <em>\"I'm going to say it in the week it happens, even badly\"</em> is small, specific and observable.</p>",
-      "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. If the arrangement you're in genuinely depends on your silence, none of this applies and the Proximity Guide's third tier does.</p>"
+      "<p><strong>Where this stops</strong> \u2014 a reaction is information about the exterior of your state, not a verdict on you. If the arrangement you're in genuinely depends on your silence, none of this applies and the Attention Advisory's third tier does.</p>"
     ],
     cues: [],
     sharedRefs: [],
@@ -1149,7 +1149,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p5-record": {
-    kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
+    kind: "Your Record", title: "Your Record", sub: "What happened this time, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>",
       "<p>Any of these, or none.</p>",
@@ -1314,7 +1314,7 @@ var T2_RESOURCES = {
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if the unevenness is constant and you can't raise it without cost, if it's affecting your work or your health, if you're using something to manage it, or if you're having thoughts of harming yourself.</p>",
       "<p><strong>Where the situation is the thing</strong></p>",
-      "<p>If the arrangement is genuinely unequal and hasn't moved when named, this settles you and doesn't change it. The Proximity Guide is not on this protocol \u2014 the tier work here belongs to whichever relationship or workplace it sits in, and where it's a workplace, HR, a union or an employment lawyer are the relevant next moves.</p>",
+      "<p>If the arrangement is genuinely unequal and hasn't moved when named, this settles you and doesn't change it. The Attention Advisory is not on this protocol \u2014 the tier work here belongs to whichever relationship or workplace it sits in, and where it's a workplace, HR, a union or an employment lawyer are the relevant next moves.</p>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
@@ -1363,7 +1363,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p6-record": {
-    kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
+    kind: "Your Record", title: "Your Record", sub: "What happened this time, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>",
       "<p>Any of these, or none.</p>",
@@ -1559,7 +1559,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p7-record": {
-    kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
+    kind: "Your Record", title: "Your Record", sub: "What happened this time, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>",
       "<p>Any of these, or none.</p>",
@@ -1757,7 +1757,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p8-record": {
-    kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
+    kind: "Your Record", title: "Your Record", sub: "What happened this time, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>",
       "<p>One line is a complete entry.</p>",
@@ -1928,7 +1928,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p9-advisory": {
-    kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
+    kind: "Attention Advisory", title: "Attention Advisory", sub: "How close to stay.",
     body: [
       "<p>\u26a0 <strong>Before this section applies at all.</strong> It assumes two people who can both move. If you are being controlled, monitored, punished with silence, or made afraid, the tiers below don't describe your situation and calibrating your own distance is not the right work. Go to the third tier directly, and read the Safe Practice section above.</p>",
       "<p>Three tiers. Which one yours belongs in is your read, on information nobody here has.</p>",
@@ -1976,7 +1976,7 @@ var T2_RESOURCES = {
   "t2p9-repair": {
     kind: "Invitation to Repair", title: "Invitation to Repair", sub: "Reopening it with them.",
     body: [
-      "<p>\u26a0 <strong>This resource assumes a dynamic between two people who can both move.</strong> If you're being controlled or made afraid, this is not the resource for that situation \u2014 see the Proximity Guide's third tier. Telling someone more, in that situation, is not the move.</p>",
+      "<p>\u26a0 <strong>This resource assumes a dynamic between two people who can both move.</strong> If you're being controlled or made afraid, this is not the resource for that situation \u2014 see the Attention Advisory's third tier. Telling someone more, in that situation, is not the move.</p>",
       "<p>Send it from the far side of the protocol. From inside the state, a pursuer's message reads as another approach and a withdrawer's reads as further distance, whatever the words say.</p>",
       "<p><strong>The rule that makes it sendable:</strong> it can't require a response. If a slow reply would count as evidence, or a warm one as success, it's a move rather than an invitation \u2014 and the other person will feel which it is before they've read it properly.</p>",
       "<p><strong>Sendable</strong> &gt; I think we've got into something where I do one thing and you do another and it keeps making the same gap. &gt; &gt; I'm not saying it's your half. I'm saying I've noticed mine, and I'd rather say that than keep doing it quietly. &gt; &gt; No answer needed. I just wanted it said.</p>",
@@ -1991,7 +1991,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p9-record": {
-    kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
+    kind: "Your Record", title: "Your Record", sub: "What happened this time, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>",
       "<p>Any of these, or none.</p>",
@@ -2005,7 +2005,7 @@ var T2_RESOURCES = {
   "t2p9-accountability": {
     kind: "Accountability & Empathy", title: "Accountability & Empathy", sub: "What it does outside you.",
     body: [
-      "<p>\u26a0 <strong>Read this first.</strong> This resource asks you to look at your own conduct. That's the right work where both people can move. Where you're being controlled, monitored or made afraid, looking harder at yourself is the mechanism that keeps people in those situations \u2014 the Proximity Guide's third tier is the resource for that, and your safety is a separate question from your regulation.</p>",
+      "<p>\u26a0 <strong>Read this first.</strong> This resource asks you to look at your own conduct. That's the right work where both people can move. Where you're being controlled, monitored or made afraid, looking harder at yourself is the mechanism that keeps people in those situations \u2014 the Attention Advisory's third tier is the resource for that, and your safety is a separate question from your regulation.</p>",
       "<p>Assuming that isn't where you are:</p>",
       "<p>The protocol trains the interior half of the state. The other half lands directly on the person at the other end of the pattern.</p>",
       "<p><strong>If you pursue</strong> \u2014 from inside, each approach is one message, one question, one attempt to sort it out. From outside it's a sequence arriving faster than it can be answered, and every slow reply raises the cost of the next one. The other person often can't name it either. They just start feeling watched, and then feeling guilty about feeling watched.</p>",
@@ -2177,7 +2177,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p10-advisory": {
-    kind: "Proximity Guide", title: "Proximity Guide", sub: "How close to stay.",
+    kind: "Attention Advisory", title: "Attention Advisory", sub: "How close to stay.",
     body: [
       "<p>An ending rarely ends contact. Where contact continues \u2014 children, shared property, a workplace, mutual friends \u2014 how much of it there is, and of what kind, is one of the few things you hold.</p>",
       "<p>Three tiers. Which one yours belongs in is your read, on information nobody here has.</p>",
@@ -2227,7 +2227,7 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p10-record": {
-    kind: "Your Record", title: "Your Record", sub: "What changed, in your words.",
+    kind: "Your Record", title: "Your Record", sub: "What happened this time, in your words.",
     body: [
       "<p>Written on your device and kept there. Your account, in your language, for you to read back \u2014 nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>",
       "<p>There's no arc here and nothing accumulating toward a good end. Some entries will be much worse than earlier ones and that means nothing about how you're doing.</p>",
@@ -2328,70 +2328,70 @@ var T2_RESOURCES = {
     diagrams: []
   },
   "t2p1-decision": {
-    kind: "The Decision", title: "The Decision", sub: "What takes over.",
+    kind: "The Decision", title: "The Decision", sub: "Who handles it the next time.",
     body: ["<p class=\"sr-lede\">What takes over.</p><p>Something has been running this for a long time. It has a job, it does it well, and it costs you.</p><p>This is where you write what takes over. Not once you're better \u2014 who runs the next one.</p><h5>What's running now</h5><p>Draft it. Have every version ready before you go in.</p><p>Run the conversation. Then run their reply, and your reply to that. Get the whole thing written so you can't be caught without the words.</p><p>It isn't a fault and it isn't irrational. Somewhere it was the right answer to something, and it has been carrying it out ever since.</p><p>Does that sound like yours? If the wording's off, change it. It should read like your own head, not like something written about you.</p><h5>What it's been protecting</h5><p>Say it in one line.</p><p class=\"sr-lede\">Being caught without an answer. Saying it badly and it counting against me. Losing something because I put it wrong.</p><p>Yours may be different. Write the one that's actually true.</p><h5>What it's cost</h5><p>Two things. Not a list \u2014 the list is the old pattern doing its work on this page.</p><p>Most people put something like: <em>the week before every difficult conversation</em>, or <em>the ones I never had because the drafting never finished.</em></p><h5>What it should be attending to instead</h5><p>It isn't going in unprepared. Preparation is fine \u2014 it's the eleventh version that isn't.</p><p>What's available is a different instruction about <strong>how much to write</strong>.</p><p>The old one writes both parts. The successor writes its own first sentence and leaves the rest of the conversation to the conversation.</p><blockquote><p><strong>So: what should it be on?</strong></p><p>Not a value. Something concrete. Write it as an instruction, the way the old one is written.</p></blockquote><p>Something like: <em>know my opening line and nothing after it.</em></p><p>Yours, in your words.</p><h5>What that version does</h5><p>Three things, small enough to see.</p><p>Not qualities \u2014 <em>calm, confident, secure</em> can't be done and won't survive a bad morning. Behaviour.</p><blockquote><p><strong>On an ordinary day, what do they do?</strong></p></blockquote><p>Examples: <em>says the first sentence and then listens. Asks rather than assuming what they'll say. Has it sooner, less prepared.</em></p><p>Three. Yours.</p><h5>Who runs the next one</h5><p>This is the part the whole resource is for.</p><p>The next time it comes \u2014 and it will \u2014 this version is who's in it. Not who you become once it's passed. Who's standing there while it's happening, and not going down.</p><p>The old one couldn't be in it. It could only try to get ahead of it.</p><blockquote><p><strong>So: what do they do in the middle of one?</strong></p><p>During. Not after.</p></blockquote><p class=\"sr-lede\">Opens the throat. Says the opening line as written. Stops rehearsing the moment they start speaking.</p><p>Write yours.</p><h5>Read it back tomorrow</h5><p>This gets rewritten. Nobody arrives at it, and there's no version that's finished.</p><p>The old one took years to write and it won't hand over the job because you asked once. What changes is that there's now something to hand it to.</p><p class=\"sr-lede\">Written on your device and kept there. Nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>"],
     cues: [],
     sharedRefs: [],
     diagrams: []
   },
   "t2p2-decision": {
-    kind: "The Decision", title: "The Decision", sub: "What takes over.",
+    kind: "The Decision", title: "The Decision", sub: "Who handles it the next time.",
     body: ["<p class=\"sr-lede\">What takes over.</p><p>Something has been running this for a long time. It has a job, it does it well, and it costs you.</p><p>This is where you write what takes over. Not once you're better \u2014 who runs the next one.</p><h5>What's running now</h5><p>Keep the account. Establish who owes what.</p><p>Go back over it. Work out the proportions, who started it, what the ratio was. Get the ledger straight so that when it's discussed, the position is defensible.</p><p>It isn't a fault and it isn't irrational. Somewhere it was the right answer to something, and it has been carrying it out ever since.</p><p>Does that sound like yours? If the wording's off, change it. It should read like your own head, not like something written about you.</p><h5>What it's been protecting</h5><p>Say it in one line.</p><p class=\"sr-lede\">Reaching first and finding out it wasn't mutual. Being the one who cared more. Being wrong about where I stood.</p><p>Yours may be different. Write the one that's actually true.</p><h5>What it's cost</h5><p>Two things. Not a list \u2014 the list is the old pattern doing its work on this page.</p><p>Most people put something like: <em>the weeks it stayed open</em>, or <em>the times I waited for them to move and they were waiting too.</em></p><h5>What it should be attending to instead</h5><p>It isn't conceding the account. Your version stays entire and nobody is auditing it.</p><p>What's available is a different instruction about <strong>what to do with it</strong>.</p><p>The old one holds the ledger until it's settled. The successor makes the move that's theirs and lets the ledger stay unbalanced.</p><blockquote><p><strong>So: what should it be on?</strong></p><p>Not a value. Something concrete. Write it as an instruction, the way the old one is written.</p></blockquote><p>Something like: <em>do my half without waiting to see if they'll do theirs.</em></p><p>Yours, in your words.</p><h5>What that version does</h5><p>Three things, small enough to see.</p><p>Not qualities \u2014 <em>calm, confident, secure</em> can't be done and won't survive a bad morning. Behaviour.</p><blockquote><p><strong>On an ordinary day, what do they do?</strong></p></blockquote><p>Examples: <em>sends the short thing rather than the complete one. Says what they did without the surrounding case. Lets a small one go unrecorded.</em></p><p>Three. Yours.</p><h5>Who runs the next one</h5><p>This is the part the whole resource is for.</p><p>The next time it comes \u2014 and it will \u2014 this version is who's in it. Not who you become once it's passed. Who's standing there while it's happening, and not going down.</p><p>The old one couldn't be in it. It could only try to get ahead of it.</p><blockquote><p><strong>So: what do they do in the middle of one?</strong></p><p>During. Not after.</p></blockquote><p class=\"sr-lede\">Puts the phone down. Names their own half. Doesn't run the total.</p><p>Write yours.</p><h5>Read it back tomorrow</h5><p>This gets rewritten. Nobody arrives at it, and there's no version that's finished.</p><p>The old one took years to write and it won't hand over the job because you asked once. What changes is that there's now something to hand it to.</p><p class=\"sr-lede\">Written on your device and kept there. Nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>"],
     cues: [],
     sharedRefs: [],
     diagrams: []
   },
   "t2p3-decision": {
-    kind: "The Decision", title: "The Decision", sub: "What takes over.",
+    kind: "The Decision", title: "The Decision", sub: "Who handles it the next time.",
     body: ["<p class=\"sr-lede\">What takes over.</p><p>Something has been running this for a long time. It has a job, it does it well, and it costs you.</p><p>This is where you write what takes over. Not once you're better \u2014 who runs the next one.</p><h5>What's running now</h5><p>Re-read everything. Never be surprised again.</p><p>Go back through the ordinary weeks. Check what was said, what was meant, what got past you. Store the details. Read the tone. Make sure nothing like that can arrive unannounced twice.</p><p>It isn't a fault and it isn't irrational. Somewhere it was the right answer to something, and it has been carrying it out ever since.</p><p>Does that sound like yours? If the wording's off, change it. It should read like your own head, not like something written about you.</p><h5>What it's been protecting</h5><p>Say it in one line.</p><p class=\"sr-lede\">Being taken in again. Being the one who didn't see it. Not being able to trust my own reading of a room.</p><p>Yours may be different. Write the one that's actually true.</p><h5>What it's cost</h5><p>Two things. Not a list \u2014 the list is the old pattern doing its work on this page.</p><p>Most people put something like: <em>the nights</em>, or <em>the way I now hear people who've done nothing.</em></p><h5>What it should be attending to instead</h5><p>It isn't trusting them again. That's a separate question, it's yours, and nothing here has a view on it.</p><p>What's available is a different instruction about <strong>what to watch</strong>.</p><p>The old one re-reads the past, which has no last page. The successor watches what happens from here \u2014 which is the only evidence that can actually tell you anything.</p><blockquote><p><strong>So: what should it be on?</strong></p><p>Not a value. Something concrete. Write it as an instruction, the way the old one is written.</p></blockquote><p>Something like: <em>watch what they do from now on, not what they did before.</em></p><p>Yours, in your words.</p><h5>What that version does</h5><p>Three things, small enough to see.</p><p>Not qualities \u2014 <em>calm, confident, secure</em> can't be done and won't survive a bad morning. Behaviour.</p><blockquote><p><strong>On an ordinary day, what do they do?</strong></p></blockquote><p>Examples: <em>doesn't go back through old messages. Notices something that happened today. Says what they need rather than testing whether it'll be given.</em></p><p>Three. Yours.</p><h5>Who runs the next one</h5><p>This is the part the whole resource is for.</p><p>The next time it comes \u2014 and it will \u2014 this version is who's in it. Not who you become once it's passed. Who's standing there while it's happening, and not going down.</p><p>The old one couldn't be in it. It could only try to get ahead of it.</p><blockquote><p><strong>So: what do they do in the middle of one?</strong></p><p>During. Not after.</p></blockquote><p class=\"sr-lede\">Names the state. Doesn't open the search. Waits for something that actually happens.</p><p>Write yours.</p><h5>Read it back tomorrow</h5><p>This gets rewritten. Nobody arrives at it, and there's no version that's finished.</p><p>The old one took years to write and it won't hand over the job because you asked once. What changes is that there's now something to hand it to.</p><p class=\"sr-lede\">Written on your device and kept there. Nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>"],
     cues: [],
     sharedRefs: [],
     diagrams: []
   },
   "t2p4-decision": {
-    kind: "The Decision", title: "The Decision", sub: "What takes over.",
+    kind: "The Decision", title: "The Decision", sub: "Who handles it the next time.",
     body: ["<p class=\"sr-lede\">What takes over.</p><p>Something has been running this for a long time. It has a job, it does it well, and it costs you.</p><p>This is where you write what takes over. Not once you're better \u2014 who runs the next one.</p><h5>What's running now</h5><p>Keep the record. Somebody has to.</p><p>Add it to the list. Review it. Check whether the total's moved. If it was never said out loud, the list is the only place it exists \u2014 so it gets kept, carefully, with dates.</p><p>It isn't a fault and it isn't irrational. Somewhere it was the right answer to something, and it has been carrying it out ever since.</p><p>Does that sound like yours? If the wording's off, change it. It should read like your own head, not like something written about you.</p><h5>What it's been protecting</h5><p>Say it in one line.</p><p class=\"sr-lede\">Nobody ever knowing what it was like. Absorbing it and having it count for nothing. Being the reasonable one, forever, unnoticed.</p><p>Yours may be different. Write the one that's actually true.</p><h5>What it's cost</h5><p>Two things. Not a list \u2014 the list is the old pattern doing its work on this page.</p><p>Most people put something like: <em>the years of being polite and not much else</em>, or <em>what it's done to how I am with them now.</em></p><h5>What it should be attending to instead</h5><p>It isn't forgiving anyone. Nobody's asking, and that's a separate decision that stays entirely yours.</p><p>What's available is a different instruction about <strong>when it gets said</strong>.</p><p>The old one collects because saying it at the time wasn't available. The successor says it in the week it happens, which is the only thing that stops the list growing.</p><blockquote><p><strong>So: what should it be on?</strong></p><p>Not a value. Something concrete. Write it as an instruction, the way the old one is written.</p></blockquote><p>Something like: <em>say it in the week, even badly, rather than filing it.</em></p><p>Yours, in your words.</p><h5>What that version does</h5><p>Three things, small enough to see.</p><p>Not qualities \u2014 <em>calm, confident, secure</em> can't be done and won't survive a bad morning. Behaviour.</p><blockquote><p><strong>On an ordinary day, what do they do?</strong></p></blockquote><p>Examples: <em>says the small one at the time. Declines something without a reason attached. Answers an ask with a date rather than a yes.</em></p><p>Three. Yours.</p><h5>Who runs the next one</h5><p>This is the part the whole resource is for.</p><p>The next time it comes \u2014 and it will \u2014 this version is who's in it. Not who you become once it's passed. Who's standing there while it's happening, and not going down.</p><p>The old one couldn't be in it. It could only try to get ahead of it.</p><blockquote><p><strong>So: what do they do in the middle of one?</strong></p><p>During. Not after.</p></blockquote><p class=\"sr-lede\">Notices the item arriving. Says it or lets it go. Doesn't add it.</p><p>Write yours.</p><h5>Read it back tomorrow</h5><p>This gets rewritten. Nobody arrives at it, and there's no version that's finished.</p><p>The old one took years to write and it won't hand over the job because you asked once. What changes is that there's now something to hand it to.</p><p class=\"sr-lede\">Written on your device and kept there. Nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>"],
     cues: [],
     sharedRefs: [],
     diagrams: []
   },
   "t2p5-decision": {
-    kind: "The Decision", title: "The Decision", sub: "What takes over.",
+    kind: "The Decision", title: "The Decision", sub: "Who handles it the next time.",
     body: ["<p class=\"sr-lede\">What takes over.</p><p>Something has been running this for a long time. It has a job, it does it well, and it costs you.</p><p>This is where you write what takes over. Not once you're better \u2014 who runs the next one.</p><h5>What's running now</h5><p>Manage the distance. Adjust it continuously.</p><p>Watch how close it's getting. Make the joke where something else was about to happen. Be busy at exactly the moment it might have gone somewhere. Keep it at the setting that's survivable.</p><p>It isn't a fault and it isn't irrational. Somewhere it was the right answer to something, and it has been carrying it out ever since.</p><p>Does that sound like yours? If the wording's off, change it. It should read like your own head, not like something written about you.</p><h5>What it's been protecting</h5><p>Say it in one line.</p><p class=\"sr-lede\">Being fully known and found ordinary. Being seen properly and having them leave anyway. Losing the say I have over how much anyone gets.</p><p>Yours may be different. Write the one that's actually true.</p><h5>What it's cost</h5><p>Two things. Not a list \u2014 the list is the old pattern doing its work on this page.</p><p>Most people put something like: <em>the tiredness in relationships other people would call easy</em>, or <em>the person who eventually stopped reaching.</em></p><h5>What it should be attending to instead</h5><p>It isn't opening up. Nobody here is asking for that and you'd be right to refuse.</p><p>What's available is a different instruction about <strong>the half-second</strong>.</p><p>The old one redirects before anything can land. The successor stays for one more exchange \u2014 not open, just present for slightly longer than usual.</p><blockquote><p><strong>So: what should it be on?</strong></p><p>Not a value. Something concrete. Write it as an instruction, the way the old one is written.</p></blockquote><p>Something like: <em>stay in it one exchange past the point I'd normally move.</em></p><p>Yours, in your words.</p><h5>What that version does</h5><p>Three things, small enough to see.</p><p>Not qualities \u2014 <em>calm, confident, secure</em> can't be done and won't survive a bad morning. Behaviour.</p><blockquote><p><strong>On an ordinary day, what do they do?</strong></p></blockquote><p>Examples: <em>answers the actual question rather than the near one. Doesn't make the joke. Stays in the room after something serious was said.</em></p><p>Three. Yours.</p><h5>Who runs the next one</h5><p>This is the part the whole resource is for.</p><p>The next time it comes \u2014 and it will \u2014 this version is who's in it. Not who you become once it's passed. Who's standing there while it's happening, and not going down.</p><p>The old one couldn't be in it. It could only try to get ahead of it.</p><blockquote><p><strong>So: what do they do in the middle of one?</strong></p><p>During. Not after.</p></blockquote><p class=\"sr-lede\">Notices the redirect arriving. Doesn't take it. Stays where they are.</p><p>Write yours.</p><h5>Read it back tomorrow</h5><p>This gets rewritten. Nobody arrives at it, and there's no version that's finished.</p><p>The old one took years to write and it won't hand over the job because you asked once. What changes is that there's now something to hand it to.</p><p class=\"sr-lede\">Written on your device and kept there. Nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>"],
     cues: [],
     sharedRefs: [],
     diagrams: []
   },
   "t2p6-decision": {
-    kind: "The Decision", title: "The Decision", sub: "What takes over.",
+    kind: "The Decision", title: "The Decision", sub: "Who handles it the next time.",
     body: ["<p class=\"sr-lede\">What takes over.</p><p>Something has been running this for a long time. It has a job, it does it well, and it costs you.</p><p>This is where you write what takes over. Not once you're better \u2014 who runs the next one.</p><h5>What's running now</h5><p>Collect instances. Build something unanswerable.</p><p>Note it. Add it to the others. Make sure that when it's finally said, it can't be argued with \u2014 because if it can be argued with, it'll be argued with, and then it'll have been for nothing.</p><p>It isn't a fault and it isn't irrational. Somewhere it was the right answer to something, and it has been carrying it out ever since.</p><p>Does that sound like yours? If the wording's off, change it. It should read like your own head, not like something written about you.</p><h5>What it's been protecting</h5><p>Say it in one line.</p><p class=\"sr-lede\">Being taken advantage of without registering it. Being the one it's easier to ask. Not noticing until it's too far gone.</p><p>Yours may be different. Write the one that's actually true.</p><h5>What it's cost</h5><p>Two things. Not a list \u2014 the list is the old pattern doing its work on this page.</p><p>Most people put something like: <em>how long I've been quietly cool with them</em>, or <em>the fact that the case is now too big to raise.</em></p><h5>What it should be attending to instead</h5><p>It isn't deciding you were wrong. The observation is accurate and stays.</p><p>What's available is a different instruction about <strong>evidence</strong>.</p><p>The old one builds a case that needs someone to lose. The successor says the plain observation once, with nothing behind it \u2014 which is the only version that can actually be answered.</p><blockquote><p><strong>So: what should it be on?</strong></p><p>Not a value. Something concrete. Write it as an instruction, the way the old one is written.</p></blockquote><p>Something like: <em>say it once, with no instances attached.</em></p><p>Yours, in your words.</p><h5>What that version does</h5><p>Three things, small enough to see.</p><p>Not qualities \u2014 <em>calm, confident, secure</em> can't be done and won't survive a bad morning. Behaviour.</p><blockquote><p><strong>On an ordinary day, what do they do?</strong></p></blockquote><p>Examples: <em>raises the small one on the day. Says it without the word always. Lets one go without adding it.</em></p><p>Three. Yours.</p><h5>Who runs the next one</h5><p>This is the part the whole resource is for.</p><p>The next time it comes \u2014 and it will \u2014 this version is who's in it. Not who you become once it's passed. Who's standing there while it's happening, and not going down.</p><p>The old one couldn't be in it. It could only try to get ahead of it.</p><blockquote><p><strong>So: what do they do in the middle of one?</strong></p><p>During. Not after.</p></blockquote><p class=\"sr-lede\">Feels it arrive. Says the one sentence or lets it pass. Doesn't file it.</p><p>Write yours.</p><h5>Read it back tomorrow</h5><p>This gets rewritten. Nobody arrives at it, and there's no version that's finished.</p><p>The old one took years to write and it won't hand over the job because you asked once. What changes is that there's now something to hand it to.</p><p class=\"sr-lede\">Written on your device and kept there. Nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>"],
     cues: [],
     sharedRefs: [],
     diagrams: []
   },
   "t2p7-decision": {
-    kind: "The Decision", title: "The Decision", sub: "What takes over.",
+    kind: "The Decision", title: "The Decision", sub: "Who handles it the next time.",
     body: ["<p class=\"sr-lede\">What takes over.</p><p>Something has been running this for a long time. It has a job, it does it well, and it costs you.</p><p>This is where you write what takes over. Not once you're better \u2014 who runs the next one.</p><h5>What's running now</h5><p>Place it. Work out what they're like.</p><p>Something landed hard, so it goes onto them \u2014 what kind of person does that, what they always do, what it says about them. Fast, and it feels like clarity.</p><p>It isn't a fault and it isn't irrational. Somewhere it was the right answer to something, and it has been carrying it out ever since.</p><p>Does that sound like yours? If the wording's off, change it. It should read like your own head, not like something written about you.</p><h5>What it's been protecting</h5><p>Say it in one line.</p><p class=\"sr-lede\">Something that once needed defending quickly, before it could be done again.</p><p>Yours may be different. Write the one that's actually true.</p><h5>What it's cost</h5><p>Two things. Not a list \u2014 the list is the old pattern doing its work on this page.</p><p>Most people put something like: <em>the people I decided about early and never revised</em>, or <em>the arguments that were about something else entirely.</em></p><h5>What it should be attending to instead</h5><p>It isn't absorbing everything. They may well have been out of order, and that can be true at the same time.</p><p>What's available is a different instruction about <strong>where the reaction goes</strong>.</p><p>The old one puts it on them, which never reduces it. The successor keeps it where it can be looked at, and asks what the extra was about.</p><blockquote><p><strong>So: what should it be on?</strong></p><p>Not a value. Something concrete. Write it as an instruction, the way the old one is written.</p></blockquote><p>Something like: <em>hold it long enough to see the size of it before I decide whose it is.</em></p><p>Yours, in your words.</p><h5>What that version does</h5><p>Three things, small enough to see.</p><p>Not qualities \u2014 <em>calm, confident, secure</em> can't be done and won't survive a bad morning. Behaviour.</p><blockquote><p><strong>On an ordinary day, what do they do?</strong></p></blockquote><p>Examples: <em>pauses before the certainty. Asks rather than concluding. Says that landed bigger than it should have, out loud.</em></p><p>Three. Yours.</p><h5>Who runs the next one</h5><p>This is the part the whole resource is for.</p><p>The next time it comes \u2014 and it will \u2014 this version is who's in it. Not who you become once it's passed. Who's standing there while it's happening, and not going down.</p><p>The old one couldn't be in it. It could only try to get ahead of it.</p><blockquote><p><strong>So: what do they do in the middle of one?</strong></p><p>During. Not after.</p></blockquote><p class=\"sr-lede\">Notices the certainty arriving fast. Waits three seconds. Doesn't say the sentence about what they're like.</p><p>Write yours.</p><h5>Read it back tomorrow</h5><p>This gets rewritten. Nobody arrives at it, and there's no version that's finished.</p><p>The old one took years to write and it won't hand over the job because you asked once. What changes is that there's now something to hand it to.</p><p class=\"sr-lede\">Written on your device and kept there. Nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>"],
     cues: [],
     sharedRefs: [],
     diagrams: []
   },
   "t2p8-decision": {
-    kind: "The Decision", title: "The Decision", sub: "What takes over.",
+    kind: "The Decision", title: "The Decision", sub: "Who handles it the next time.",
     body: ["<p class=\"sr-lede\">What takes over.</p><p>Short version today. This one asks very little.</p><h5>What's running now</h5><p>Tell yourself off for not feeling it.</p><p>They went to the effort. Anyone else would be pleased. So the flatness becomes a fault, and the reproach runs underneath everything.</p><p>It isn't a fault. It's been doing a job.</p><h5>What takes over</h5><p>It isn't feeling more. That isn't available on request and never has been.</p><p>What's available is saying the true thing without waiting to feel it.</p><blockquote><p><strong>One line. What should it be doing instead?</strong></p></blockquote><p>Something like: <em>say it because it's true, not because I can feel it.</em></p><p>Yours, if you've got one. If you haven't, leave it and come back \u2014 this one keeps.</p><h5>Who runs the next one</h5><p>Not who you are once this lifts. Who's in it while it's happening.</p><blockquote><p><strong>One thing they do, in the middle of one.</strong></p></blockquote><p class=\"sr-lede\">Names one good thing as a fact. Says it to the person. Doesn't apologise for the flatness while saying it.</p><h5>Come back to it</h5><p>This gets rewritten and nobody arrives at it. On a day like today, having written one line is the whole of it.</p><p class=\"sr-lede\">Written on your device and kept there. Nobody else sees it, and it is never measured against anything you wrote before. Because it is only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>"],
     cues: [],
     sharedRefs: [],
     diagrams: []
   },
   "t2p9-decision": {
-    kind: "The Decision", title: "The Decision", sub: "What takes over.",
+    kind: "The Decision", title: "The Decision", sub: "Who handles it the next time.",
     body: ["<p class=\"sr-lede\">What takes over.</p><p>Something has been running this for a long time. It has a job, it does it well, and it costs you.</p><p>This is where you write what takes over. Not once you're better \u2014 who runs the next one.</p><h5>What's running now</h5><p>Close the gap. Or protect the space.</p><p>One of those, depending on which end you're on. Push harder because they've gone quiet, or go quieter because they've pushed. Either way it's the reasonable response to what they just did.</p><p>It isn't a fault and it isn't irrational. Somewhere it was the right answer to something, and it has been carrying it out ever since.</p><p>Does that sound like yours? If the wording's off, change it. It should read like your own head, not like something written about you.</p><h5>What it's been protecting</h5><p>Say it in one line.</p><p class=\"sr-lede\">Being left. Or being overwhelmed and disappearing inside it. Whichever one is yours, it mattered a great deal at some point.</p><p>Yours may be different. Write the one that's actually true.</p><h5>What it's cost</h5><p>Two things. Not a list \u2014 the list is the old pattern doing its work on this page.</p><p>Most people put something like: <em>the same argument for years</em>, or <em>how far apart we are now compared to when it started.</em></p><h5>What it should be attending to instead</h5><p>It isn't stopping being who you are. Pursuers won't become withdrawers and it wouldn't help.</p><p>What's available is a different instruction about <strong>what to do with the impulse</strong>.</p><p>The old one acts on it. The successor says what's happening instead of moving \u2014 which is the only move that doesn't feed the other person's half.</p><blockquote><p><strong>So: what should it be on?</strong></p><p>Not a value. Something concrete. Write it as an instruction, the way the old one is written.</p></blockquote><p>Something like: <em>say what's happening rather than doing the thing.</em></p><p>Yours, in your words.</p><h5>What that version does</h5><p>Three things, small enough to see.</p><p>Not qualities \u2014 <em>calm, confident, secure</em> can't be done and won't survive a bad morning. Behaviour.</p><blockquote><p><strong>On an ordinary day, what do they do?</strong></p></blockquote><p>Examples, depending which end: <em>doesn't send the third message and says one plain sentence instead</em> \u2014 or \u2014 <em>says I've gone quiet and it isn't about you, and stays in the room.</em></p><p>Three. Yours.</p><h5>Who runs the next one</h5><p>This is the part the whole resource is for.</p><p>The next time it comes \u2014 and it will \u2014 this version is who's in it. Not who you become once it's passed. Who's standing there while it's happening, and not going down.</p><p>The old one couldn't be in it. It could only try to get ahead of it.</p><blockquote><p><strong>So: what do they do in the middle of one?</strong></p><p>During. Not after.</p></blockquote><p class=\"sr-lede\">Notices the pull. Names it out loud rather than acting on it. Doesn't check what they did with that.</p><p>Write yours.</p><h5>Read it back tomorrow</h5><p>This gets rewritten. Nobody arrives at it, and there's no version that's finished.</p><p>The old one took years to write and it won't hand over the job because you asked once. What changes is that there's now something to hand it to.</p><p class=\"sr-lede\">Written on your device and kept there. Nobody else sees it, and it's never measured against anything you wrote before. Because it's only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>"],
     cues: [],
     sharedRefs: [],
     diagrams: []
   },
   "t2p10-decision": {
-    kind: "The Decision", title: "The Decision", sub: "What takes over.",
+    kind: "The Decision", title: "The Decision", sub: "Who handles it the next time.",
     body: ["<p class=\"sr-lede\">What takes over.</p><p>Short version today. This one asks very little.</p><h5>What's running now</h5><p>Go back through it. Find where it turned.</p><p>Run it again. The thing that should have been said, the point it went, the version where you both did something different and it held.</p><p>It isn't a fault. It's been doing a job.</p><h5>What takes over</h5><p>It isn't being at peace with it. It isn't acceptable and nothing here says it is.</p><p>What's available is stopping the argument with something that already happened.</p><blockquote><p><strong>One line. What should it be doing instead?</strong></p></blockquote><p>Something like: <em>stop looking for the version where it held.</em></p><p>Yours, if you've got one. If you haven't, leave it and come back \u2014 this one keeps.</p><h5>Who runs the next one</h5><p>Not who you are once this lifts. Who's in it while it's happening.</p><blockquote><p><strong>One thing they do, in the middle of one.</strong></p></blockquote><p class=\"sr-lede\">Moves one thing. Decides one small thing that's theirs. Doesn't reopen it tonight.</p><h5>Come back to it</h5><p>This gets rewritten and nobody arrives at it. On a day like today, having written one line is the whole of it.</p><p class=\"sr-lede\">Written on your device and kept there. Nobody else sees it, and it is never measured against anything you wrote before. Because it is only on this device, clearing your browser or switching device will remove it. The export button is there whenever you want a copy you keep.</p>"],
     cues: [],
     sharedRefs: [],

@@ -1096,7 +1096,7 @@
       document.getElementById('srJourney').style.setProperty('--accent', DASHTRACKS[n].accent);
       render(n);
       renderJourney(n);
-      paintFoldTitle(n);          /* SR-253 · the library size follows the track */
+      paintFoldTitle();           /* SR-373 · no longer track-dependent — see its own definition */
     });
   });
 
@@ -1441,18 +1441,25 @@
      uniform library that no longer exists. The rail always has a selection
      (track 1 by default), so this surface never has to answer for "no track":
      it resolves against whichever track is showing and re-resolves on switch. */
-  function paintFoldTitle(trackId){
+  /* SR-373 (PASS-resource-list-and-reflection.md §3) · this used to read
+     "{N} resources, one for each kind of moment" — SR-078/SR-253's own
+     fix for the number itself (typed "twelve" once, stale the moment a
+     resource was cut; then per-track, since Track 03 has eleven types
+     and Tracks 01/02 have ten). Not the brief's exact grep terms, but the
+     same category of claim: a single number standing in for something
+     that genuinely varies — per protocol, not just per track, 9 to 12,
+     mean 10.2 (SR-373's own measurement). "Do not substitute a different
+     number" applies here too. Dropped, matching the pattern the static
+     HTML fallback (line ~303) already used before any JS ran:
+     "One resource for each kind of moment." → "Resources, one for each
+     kind of moment." No trackId dependency left, so this no longer needs
+     re-running per track switch either. */
+  function paintFoldTitle(){
     var el = document.getElementById('srFoldTitle');
-    if(!el || typeof trackResourceCount !== 'function') return;
-    var W = ['zero','one','two','three','four','five','six','seven','eight','nine',
-             'ten','eleven','twelve','thirteen','fourteen','fifteen'];
-    var n = trackResourceCount(trackId);
-    if(!n) return;
-    var word = (W[n] || String(n));
-    el.textContent = word.charAt(0).toUpperCase() + word.slice(1) +
-                     ' resources, one for each kind of moment.';
+    if(!el) return;
+    el.textContent = 'Resources, one for each kind of moment.';
   }
-  paintFoldTitle(1);
+  paintFoldTitle();
 
   /* ══════════ SR-292 · DEAD VIEWS ══════════
      Record, Sessions and Resume each have a reader (srBuildRecord, srBuildSessions,

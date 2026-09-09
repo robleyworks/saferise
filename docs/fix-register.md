@@ -12831,3 +12831,259 @@ touched: `js/saferise-track.js`, `css/saferise-system.css`,
 point of §2's finding).
 
 *Status:* closed. **Not pushed.** · *Raised and fixed:* 9 Sep 2026
+
+## SR-373 · the resource renames, the sidebar/section-2 split, the banner stripped, The Decision made interactive
+
+Runs `pass/PASS-resource-list-and-reflection.md`, pass 1 of 3 in
+`docs/RUN-ORDER-2.md`. Allocated via `git log --oneline --grep="SR-372"`,
+which found SR-372 (`d940e3a`) as the last issued and nothing between it
+and this pass's own HEAD — two of Andre's own commits landed in between
+(`7a9260d` "dev work", `3edaa12` "Create tracker-v22.html"), both only
+`docs/tracker-v20/21/22.html` and two new docs, no overlap with anything
+this pass touches.
+
+**§0 — the reversal, reported as asked.** SR-367 renamed toward
+"Proximity Guide"; this brief's own §0 calls that fix redundant, not
+wrong, and asks for the opposite direction. Done. **Flagged, not
+resolved:** `docs/tracker-v20.html` (and v21, and v22 — committed by
+Andre today at 14:03, after this brief existed) still carries LG-116
+"RESOLVED 9 Sep — they are different resources, and only one exists.
+Proximity Guide is real... Attention Advisory appears... in ZERO of the
+318 resources" and LG-163 "Attention Advisory promises a resource that
+does not exist... Andre chooses: remove the promise until it exists, or
+write it as a thirteenth resource." That is the opposite resolution from
+this brief's own §0, dated the same day. This pass followed the brief in
+hand — the more specific, more recent, explicitly self-aware instruction
+("this makes SR-367's fix redundant, not wrong") — over a spreadsheet
+snapshot that was not updated to match it. **Andre: the tracker and the
+brief disagree about which resource is real; worth squaring one way or
+the other so LG-116/LG-163 don't mislead the next person who reads them.**
+
+**§1/§1a — the rename, with the one item that halts.** Collision check
+first, as instructed. "Where to Direct Your Attention" appears only on
+`t1-01` and `t1-02` across all three stores. `t1-01`'s is unrelated
+content (safe-practice guidance, never on the Proximity Guide list).
+`t1-02`'s is not: its active `t1p2-advisory` record is structurally a
+three-tier proximity/distance-judgment tool ("Stay connected" / "Protect
+yourself" / "Get support"), the same shape as Proximity Guide itself,
+just already carrying its own protocol-specific title. **Halted per
+§1a's own instruction — the global rename was still applied to
+`content/tracks.js`'s single shared `SHARED.resources` row** (unavoidable:
+one row serves all 14 protocols that need the rename; there is no
+shared-safe way to exempt one), **but `t1-02`'s own specific resource was
+left completely untouched** — it already read "Attention Advisory" /
+"Anger Alchemy — Where to Direct Your Attention" before this pass, and
+nothing about it changed. Reported here rather than silently merged or
+further disambiguated, per the halt instruction.
+
+The brief's own premise about resource ids ("ids are `t1-02-proximity-
+guide` and similar") — **DIFFERS.** Zero occurrences of "proximity-guide"
+in any resource key anywhere in the repo; real keys are
+`t{track}p{protocol}-advisory`, which never encoded the display name. No
+id/URL risk existed; only `title`/`kind` display strings needed changing.
+
+Renamed: `content/t1-resources.js` (14 occurrences: comment, five
+title/kind pairs, three prose cross-references — the `t1p2-advisory`
+**superseded/commented** block, lines 381–404, deliberately left reading
+"Proximity Guide", since it is historical record, not live content),
+`content/t2-resources.js` (15), `content/t3-resources.js` (13),
+`content/tracks.js` (6: the shared resources row, `resourceNote`, a
+comment, the `CONDITIONAL_RESOURCES` key itself — confirmed looked up
+dynamically via `CONDITIONAL_RESOURCES[r[1]]`, so this one had to move
+with the row — and the two Track 02 FAQ mentions SR-367 had flipped,
+reverted back per §0). `content/guidance.js`'s `advisory` entry: `label`
+renamed, `file: 'rg-05-proximity-guide.mp3'` deliberately **not**
+renamed — a real, on-disk asset path (confirmed via `find`), and
+renaming the string without an actual filesystem rename would break
+playback; commented in place, same caution §1a itself asks for with ids.
+
+**§2 — the safety label.** `protocol.html`'s aside: visible text and
+`aria-label` changed to "Before you begin" (CSS classes unchanged —
+`attention-advisory`/`attention-label`). The paragraph beneath is
+unchanged, as instructed ("practice" → "guided meditation experience"
+belongs to pass 2). `index.html`'s `renderProtocolPage()` also updated
+for text consistency, though confirmed dead (zero live callers — its
+sole historical caller lived inside the portal SR-372 deleted).
+
+**§3 — resource count removed.** The brief's own stated distribution
+(six carry nine, thirteen ten, ten eleven, one twelve — 306 total) —
+**DIFFERS from its own cited "318 verified in SR-355."** Measured
+directly from every protocol's real `keys` array: **3 carry 9, 10 carry
+10, 13 carry 11, 4 carry 12 — 318 total**, matching SR-355, not the
+brief's own arithmetic. `dashboard.html`'s `paintFoldTitle(trackId)`
+(itself SR-078/SR-253's earlier fix of a hardcoded "twelve") rebuilt a
+`"{N} resources..."` string from `trackResourceCount()` on every call —
+changed to a static `'Resources, one for each kind of moment.'`,
+signature dropped to `paintFoldTitle()`; the one other call site
+(track-switch) still works, JS ignores the extra argument it now passes.
+Grepped clean: zero `twelve resources` / `12 resources` / `308
+resources` / `318 resources` / `Twelve resources behind` in any
+member-facing page (the count still appears, correctly, in three
+`docs/tracker-v*.html` snapshots and one code comment — none rendered).
+
+**§4 — sidebar vs section 2, and the brief's premise corrected.**
+"Section 2 already excludes Guided Meditation and Cue Card. The sidebar
+does not" — **DIFFERS.** Live-checked before changing anything:
+`protocol.html`'s section 2 excluded `meditation` and **`decision`**,
+not `crisiscard`; `resource.html`'s rail (confirmed, by testing, to be
+"the reader sidebar" the brief means — not `index.html`'s separate
+`openReader()` system, a different, still-live surface for the
+homepage's own Decision/Identity feature, left alone) excluded nothing
+at all. Fixed: `protocol.html`'s filter gained `&& r.type !==
+'crisiscard'` (`decision`'s exclusion is untouched — predates this
+brief); `resource.html`'s `visible()` gained the same two exclusions.
+Both now hide Guided Meditation (the player above already covers it) and
+Cue Card (its own modal covers it). **Honest result, not silently
+unified: section 2 (7 for `t1-01`) and the rail (8) now differ by exactly
+one item — The Decision, which section 2 has excluded since before this
+brief and this brief was never asked to change, and which the rail now
+correctly includes because §6 below gave it real content to open on.**
+
+**§5 — banner stripped.** `protocol.html`'s body-signature (`row[4]`)
+and three quotes (`row[5]`) removed from the banner; `#pp-signature`
+stays in markup, permanently hidden, rather than deleted, so a future
+pass can restore it without re-deriving the wiring.
+`content/tracks.js`'s data is untouched. Confirmed still live elsewhere:
+`js/saferise-track.js`'s track-page carousel (`.sr-tp-preveal` /
+`.sr-tp-struggle`). Checked and **not** the same copy:
+`dashboard.html`'s `HERO_SLIDES` banners read differently, word for
+word — independently authored, not a second live reader of these
+fields.
+
+**§6a — investigated first, as instructed.** "Enter the reflection" was
+a dead `href="#"`; `docs/tracker-v*.html`'s own `LG-132` names the real
+target — "resource.html with the Decision resource once LG-130 lands."
+The journal's real storage (`protocol.html`'s `Store`: write-probe +
+in-memory fallback, `K_ENTRIES='sr.journal.entries'`, one growing array
+of dated entries) is structurally different from what The Decision
+needs — one persistent, editable, named-field record per protocol, not
+an append-only log — so "match the journal" is read as matching the
+mechanism (same `Store` pattern) and key **convention**
+(`sr.journal.entries` → `sr.decision.<protocolId>`), not the array shape.
+
+**§6c — checked before anything else in §6.** `pass/quarantine/
+the-decision-recovered.js` (30 protocols, marked DO NOT MERGE until
+proven absent from the repo) — **byte-identical, after escape-decoding,
+to the live `-decision` body already in `content/t1|t2|t3-resources.js`
+for all 30 protocols, zero differences.** Confirmed programmatically, not
+by inspection: every body run through `JSON.parse` on both sides and
+diffed. **Not imported — nothing to recover.** The quarantine file stays
+quarantined; whoever finds it next can delete it on sight rather than
+re-check it.
+
+**§6b — the reflection, built.** All 30 live `-decision` bodies were
+already real, protocol-specific, already-shipped prose — not placeholder
+text — written to one of exactly **two** fixed templates, confirmed by
+finding the same connective sentences ("Does that sound like yours?",
+"Three. Yours.", "Write yours.", …) verbatim and in the same order in
+every one:
+
+- **FULL** (23 protocols) — 7 `<h5>` sections, 9 prompts. Matches
+  `pass/mock-decision-reader-v2.html`'s own field set exactly: `running,
+  protecting, cost1, cost2, attend, does1, does2, does3, during`.
+- **SHORT** (7 protocols — the grief/shutdown/rumination pages that open
+  "Short version today. This one asks very little.") — 4 sections, 2
+  prompts: `line, during`. The mockup never designed this case; its own
+  two questions are lifted verbatim from each body's own blockquote text
+  instead.
+
+Built `js/saferise-decision.js`: splits each body at those fixed anchor
+strings (verified against all 30 live bodies, in order, before writing
+the splitter — not assumed), inserting one write-in field per anchor.
+**The narrative prose between anchors is each protocol's own, untouched
+— not rewritten.** The mockup's own body copy is explicitly a proposed
+rewrite ("Reconstructed markup — diff against the live file before
+anything lands," per its own banner) and is not reused. What **is**
+carried across verbatim, per instruction: the ask/helper question text
+for the FULL family (`attend`'s helper drops the mockup's one
+Anxiety-Reset-specific worked example — flagged, not silently kept — the
+rest is unchanged) and the interaction design — one ask box per prompt,
+autosave-as-typed (no save button), a composed "Your version" summary,
+Save-a-copy/Copy-the-text/Start-over.
+
+Wired into `resource.html`'s `renderMain()`: `r.type === 'decision'`
+renders through `SafeRiseDecision.render()` into `#rbody`; every other
+type keeps the plain body render it always had — nothing else changed.
+Storage: `sr.decision.` + `protocolId` (`t1-p01`, the same id
+`js/saferise-access.js` already gates on), same `Store` write-probe/
+in-memory-fallback pattern as `protocol.html`'s journal, own key.
+`protocol.html`'s "Enter the reflection" now points at
+`resource.html?track=<n>&protocol=<nn>&resource=The%20Decision` for the
+protocol actually open (title-matched by `resolveSet()`'s own
+`normTitle()`, the same mechanism every other `?resource=` link already
+uses) — a stale comment nearby, claiming Decision had nothing to open
+on, is corrected rather than carried forward.
+
+**Verified against all 30 protocols, not just `t1-01`:** classify() and
+render() both run clean on every `-decision` record across all three
+track stores (23 → 9 fields, 7 → 2 fields, zero exceptions, zero
+fallback-to-plain-body). Spot-checked live in-browser on `t1-01`(FULL),
+`t1-06`/`t3-08`(SHORT), `t2-01`(FULL): autosave on input, value survives
+a hard reload, storage key correct, "Your version" composes live,
+zero network requests while typing (`read_network_requests` — only
+page-load requests present), console clean on every route checked,
+every textarea has a real `<label for>` plus a resolving
+`aria-describedby`, no character count / completion state / streak
+anywhere. **No export exists yet — LG-126, reported as asked.** The
+Save-a-copy/Copy-the-text buttons built here are small, self-contained,
+client-only (a `Blob` download and a clipboard write, both already part
+of the approved mockup) and are not that larger capability.
+
+CSS namespaced `sr-dc-` (claimed in `CLAUDE.md`'s and `docs/CLAUDE-RULES-
+ADDENDUM.md`'s surface-code table, both updated); lives in
+`resource.html`'s own `<style>` block, matching the precedent this page
+already sets for its own reading-surface CSS, not
+`css/saferise-system.css` — the component only ever appears inside this
+one page's `#rbody`.
+
+**§7 — subtitles, current text reported before changing it.** Both were
+a single field (`sub:`) shared by all 30 protocols of each type, not 30
+separate copies — confirmed by grep (60 exact hits, 30+30, nothing else
+matched). **Your Record** was `"What changed, in your words."` → now
+`"What happened this time, in your words."`. **The Decision** was
+`"What takes over."` → now `"Who handles it the next time."`. Both
+consumed dynamically by `js/saferise-resources.js`'s `normaliseOne()` —
+no hardcoded second copy anywhere (grepped `*.html`, zero hits) — so
+both surfaces that read `r.sub` update from the one change: confirmed
+live on `resource.html` (`#rsub`) and `protocol.html`'s section-2 list
+(`Your Record`'s row) for both new strings.
+
+**§8 — verify checklist.** Zero "Proximity Guide" left in member-facing
+copy (one deliberate exception: the historical superseded comment in
+`content/t1-resources.js`, reported in §1 above). "Before you begin"
+diff confirmed on `protocol.html`. Zero resource-count claims in any
+rendered page. Sidebar (8) / section 2 (7) both confirmed live, the
+one-item gap explained in §4. Guidance player and Cue Card modal
+unchanged — this pass never touched their code paths. Banner surfaces
+reported in §5. All 9 fields / 7 sections render for the 23 FULL
+protocols, 2 fields / 4 sections for the 7 SHORT ones — a disclosed,
+data-driven split from the mockup's literal "nine fields, seven
+sections," not a shortfall (§6b). Autosave + reload survival + storage
+key reported in §6b. Zero network requests while typing, confirmed via
+`read_network_requests`. Keyboard/screen-reader labels confirmed via
+DOM inspection, not assumed. Console clean on every route checked this
+pass: `protocol.html` (tracks 1 and 3), `resource.html` (all three
+tracks, both families, plus the `?resource=The%20Decision` deep link).
+
+**§9 — report, in full above.** Headline items: the SR-367 reversal and
+its live conflict with `docs/tracker-v20/21/22.html`'s LG-116/LG-163
+(§0); `t1-02`'s halted collision (§1a); the brief's own wrong premises
+about resource ids (§1), the section-2 exclusion (§4), and the count
+distribution (§3) — all corrected against what is actually live, not
+assumed from the brief's own text; the FULL/SHORT split discovered in
+the content itself, not invented (§6b); `t1-02`, `noindex` untouched
+everywhere (not part of this pass's surface); nothing pushed.
+
+**Files touched:** `content/t1-resources.js`, `content/t2-resources.js`,
+`content/t3-resources.js`, `content/tracks.js`, `content/guidance.js`,
+`protocol.html`, `index.html`, `dashboard.html`, `resource.html`,
+`js/saferise-decision.js` (new), `CLAUDE.md`, `docs/CLAUDE-RULES-
+ADDENDUM.md`, `docs/fix-register.md`. Not touched: `noindex` anywhere,
+`pass/quarantine/the-decision-recovered.js` (left quarantined, §6c),
+`content/tracks.js`'s `row[4]`/`row[5]` decision data (§5), `js/
+saferise-track.js`.
+
+*Status:* closed. **Not pushed** — pass 2 (`PASS-advisory-and-token.md`)
+and pass 3 (`PASS-indexing-readiness.md`) still to run; `docs/RUN-ORDER-
+2.md`'s own instruction is not to push until all three report clean.
+*Raised and fixed:* 9 Sep 2026
