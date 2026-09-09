@@ -841,7 +841,7 @@ SHARED.faq = [
     'Anything promising a feeling will never return is making a claim about you it has no way of making.']],
 
   ['What actually comes with a protocol?',
-   ['A guided audio session, a printable step guide, an explanation of what is happening in your body, body-based practices for between sessions, journalling prompts, and a Cue Card. Some protocols also carry an Attention Advisory or an Invitation to Repair where another person is genuinely part of the pattern.',
+   ['A guided audio session, a printable step guide, an explanation of what is happening in your body, body-based practices for between sessions, journalling prompts, and a Cue Card. Some protocols also carry a Proximity Guide or an Invitation to Repair where another person is genuinely part of the pattern.',
     'You are not expected to use all of it. Most people use two or three and ignore the rest.']],
 
   ['What if it does not work for me?',
@@ -896,7 +896,7 @@ TRACKS[2].faq = [
     'Several of the others still apply afterwards. Resentment and projection do not end when the relationship does.']],
   ['What if the other person is the problem?',
    ['Sometimes they are, and this track does not ask you to pretend otherwise. It asks a narrower question: what your own system does in response, and what that is costing you.',
-    'The Attention Advisory exists for this. Some patterns have an ongoing external source, and the honest answer is to say so rather than practise around it.']]
+    'The Proximity Guide exists for this. Some patterns have an ongoing external source, and the honest answer is to say so rather than practise around it.']]
 ];
 
 /* ── Track 03 ── */

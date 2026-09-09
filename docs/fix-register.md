@@ -17,14 +17,23 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-366** (site-readiness pass — three copy faults
+- **Highest ID issued: SR-367** (9 September decisions applied — retention
+  written down in both places, Proximity Guide mislabelling fixed, a
+  load-bearing slug gap found blocking the split's `/protocols/{slug}`
+  route — verified via
+  `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
+  SR-366 as the last issued and nothing between it and this pass's own
+  HEAD, including no prior SR-367 despite an earlier session's own
+  in-conversation reservation that was never committed and so never
+  happened as far as this register is concerned; per this note's own
+  documented history of going stale, do not trust this line either —
+  re-verify with the same grep before the next allocation.)
+- **Previously: Highest ID issued: SR-366** (site-readiness pass — three copy faults
   fixed, delivered files placed and verified, four standing rules added to
   CLAUDE.md, a wide set of report-only findings — verified via
   `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
   SR-365 as the last issued and nothing between it and this pass's own
-  HEAD; per this note's own documented history of going stale, do not
-  trust this line either — re-verify with the same grep before the next
-  allocation.)
+  HEAD.)
 - **Previously: Highest ID issued: SR-365** (method page rebuilt from the approved
   mockup, member-coming-soon.html taken onto the public sr-cs- treatment,
   four outstanding items re-checked — verified via
@@ -11386,3 +11395,178 @@ this pass touched (`docs/BACKUP-AND-RECOVERY.md`,
 *Status:* closed, with the open items above (Search Console, Supabase rate
 limits, CSP live verification, the class-audit backlog) · *Raised and
 fixed:* 9 Sep 2026
+
+## SR-367 · 9 September decisions applied — retention written down, Proximity Guide mislabelling fixed, a load-bearing gap found in the split's slug plan
+
+Runs `pass/PASS-decisions-applied.md`, pass 1 of `docs/RUN-ORDER.md`'s six.
+Allocated via `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which
+found SR-366 as the last issued and nothing between it and this pass's own
+HEAD — including no SR-367 or SR-368, despite the prior session's own
+in-conversation note (never committed) provisionally reserving SR-367 for the
+split's report-only map. That reservation was never written to this register,
+so it never happened as far as this file is concerned; SR-367 was still free
+and is issued here, to this pass, on the register's own terms.
+
+**§1 Retention — MATCH, applied in both places.**
+- `docs/article-30-register.md:70-84` — removed the "DECISIONS OUTSTANDING
+  (LG-78)" marker and renamed the "Recommended" column to "Period". The six
+  values were already exactly the approved ones; only the framing changed.
+- `privacy.html`'s "How long we keep things" (§7) — DIFFERS from the brief's
+  premise that this needed drafting from scratch. It already existed and was
+  partially right: Account data (30 days) and Server logs (30 days) already
+  matched. Two defects found and fixed: Usage events said **24 months**, not
+  the approved **13**; Correspondence and Marketing list were absent
+  entirely. Rewrote the list to carry all six periods, retitled "Billing
+  records" to "Billing and financial records" to match the register's
+  language, and added the backup-disclosure sentence the brief asked for,
+  which was not present before. Verified rendered in-browser via
+  `get_page_text` — all six items and the disclosure line render correctly.
+
+**§2 Free entry point — report only, MATCH, nothing changed.**
+`js/saferise-access.js:35,56` — `FREE_TRACK_PREFIX = 't1-'`, compared as
+`id.indexOf(FREE_TRACK_PREFIX) === 0`, a true prefix check (not substring,
+not exact match). Every `t1-*` id evaluates free; every `t2-*`/`t3-*` id does
+not, since none begin with the string `t1-`. No defect — reported and left.
+
+**§3 URL structure — DIFFERS, and this is the significant finding.**
+The route table was added to `pass/PASS-split-index.md` §2, annotated as
+approved and settled, exactly as instructed. But investigating it to report
+"the slug list before the split runs" found the premise does not hold:
+**zero of the 30 protocols in `content/tracks.js` carry a `slug` field.**
+Grepped for `id:\s*'t[0-9]-` (the id format the brief assumed) and for
+`slug` across the whole file — no matches for either. The live identity
+scheme is numeric — `?track={1|2|3}&protocol={01..10}` — resolved against
+each track's per-protocol array at parse time by `protocol.html`'s
+`PAGE_PROTOCOL` (confirmed at `protocol.html:631,1240,1257`). `/protocols/
+{slug}` as written in the route table cannot be built from data that does
+not exist. Per the brief's own instruction, no slug was invented. Noted
+directly in `pass/PASS-split-index.md` §2 (gitignored, not part of this
+commit) as a blocker for pass 5: either add a real `slug` field to every
+protocol object — a data change, and the actual strings are Andre's call,
+not a default to assume — or keep the numeric query form for
+`/protocols/*` and 301 the legacy `#pN` links onto it instead of onto slugs
+that do not exist. This is the same class of finding as SR-368's own
+`#prog-about` correction: a brief's stated premise not holding against the
+live repo, reported rather than silently worked around.
+
+**§4 Wistia — report only, MATCH.** Confirmed via
+`grep -rn "wistia" --include="*.html" --include="*.js" -i .`: no Wistia
+embed anywhere in the member path (dashboard.html, protocol.html,
+resource.html) or the public site. Matches the brief's "not yet in the
+member path" and `docs/article-30-register.md`'s own processor table
+(`Wistia … Provisioned, not yet in the member path`).
+
+**§5 Placeholder testimonial — report only, brief's premise does not
+hold, SR-101 outranks it and is reconfirmed.** `docs/fix-register.md`'s own
+SR-101 (raised 19 Aug 2026) already found no placeholder testimonial block
+exists anywhere in the repo. Re-grepped fresh for this pass —
+`testimonial|Testimonial` across every live `.html` file — and the only
+hits are in `docs/tracker-v*.html`, which are historical tracking
+spreadsheets, not served pages. "Dwight" (named in `docs/FRIDAY-DEMO-PLAN.md`
+as the reason to delete it) is LG-23, an unrelated person tied to a
+different, deferred track — not a testimonial author. Nothing to delete;
+SR-101's finding stands.
+
+**§6a Attention Advisory → Proximity Guide, MATCH, both corrected.**
+- `content/tracks.js:844` (Track 02 FAQ, "What actually comes with a
+  protocol?") — `"an Attention Advisory or an Invitation to Repair"` →
+  `"a Proximity Guide or an Invitation to Repair"`.
+- `content/tracks.js:899` (Track 02 FAQ, "What if the other person is the
+  problem?") — `"The Attention Advisory exists for this."` → `"The Proximity
+  Guide exists for this."`
+- Verified: `Attention Advisory` now appears exactly twice in
+  `content/tracks.js` (the two §6b promises below, deliberately untouched);
+  `Proximity Guide` now appears 6 times (4 original + these 2). Brace/
+  bracket/paren balance checked before and after — unchanged.
+
+**§6b Attention Advisory promised with nothing behind it — report only,
+not fixed, per the brief.**
+- `content/tracks.js:590` (`deeper:` field) — *"The full resource library,
+  with the Attention Advisory doing real work here: where your energy
+  belongs today, and which fights are not yours."*
+- `content/tracks.js:603` (`priceList:` field) — *"Attention Advisory and
+  conflict scripts throughout"*
+- Confirmed zero of 318 resources carry this title. Awaiting Andre's A
+  (remove the promise) or B (write it as a 31st resource, ~31 protocols of
+  new content) per the brief's own framing. Left exactly as found.
+
+**§6c The conflated "What's Included" line — report only, two locations,
+not one.** The brief named one; a second live occurrence was found in the
+same investigation.
+- `index.html:4899-4901` — `<h3>Attention Advisory</h3>` paired with
+  `"Know your limits."` / `"Where to direct your energy right now, and how
+  close to stay."` — the last clause is Proximity Guide's own label
+  (`content/tracks.js`'s `resourceNote`), doing two jobs in one card.
+- `dashboard.html:2195-2197` — the `'alert'` entry in what reads as a
+  resource-kind metadata array carries the identical text: `'Attention<br>
+  Advisory','Attention Advisory','Know your limits.'` /
+  `'Where to direct your energy right now, and how close to stay.'` — same
+  conflation, same file pattern, a second surface that would need the same
+  fix once 6b is decided. Not fixed in this pass, per the brief.
+- A third, non-live occurrence exists at `docs/reference/portal-personal-
+  target.html:564` — inside `docs/reference/`, an archived mockup snapshot,
+  not part of the served site (no route, no link to it found anywhere).
+  Noted for completeness, not counted as a live defect.
+
+**§7 Verify**
+1. Privacy policy carries the six retention periods — confirmed via
+   `get_page_text`, before/after quoted above.
+2. `docs/article-30-register.md` §4 no longer says DECISION OUTSTANDING —
+   confirmed.
+3. `FREE_TRACK_PREFIX` compared as a prefix — confirmed, `indexOf(...) ===
+   0`.
+4. `pass/PASS-split-index.md` §2 carries the approved route table, now
+   annotated approved/settled plus the slug-gap warning — confirmed
+   (gitignored, not part of this commit).
+5. Placeholder testimonial — none exists; SR-101 reconfirmed, nothing to
+   verify removed.
+6. Console — not meaningfully testable for this pass's edits:
+   `privacy.html` and `content/tracks.js` were checked (privacy.html's
+   text renders correctly via `get_page_text`; the two console errors seen
+   opening it directly as a `file://` URL are `SafeRiseNav`/`SafeRiseFooter`
+   not defined, a pre-existing artifact of bypassing `tools/serve.py` and
+   loading relative scripts from a file path, not a regression from this
+   pass's edits — the same limitation SR-366 already reported for CSP
+   testing).
+7. Both mislabelled Proximity Guide references corrected — confirmed
+   above, before/after quoted.
+8. Nothing pushed — `git status --porcelain` before this commit showed only
+   this pass's three modified files (`content/tracks.js`,
+   `docs/article-30-register.md`, `privacy.html`) plus pre-existing
+   untracked paths from Andre's own concurrent commit `ad2f9e9` ("material
+   improvements" — `docs/BACKUP-AND-RECOVERY.md`,
+   `docs/SEO-HEAD-TEMPLATE.md`, `docs/affiliate-terms.md`,
+   `docs/tracker-v18/20.html`, two new `assets/coming/*.jpg`,
+   `docs/RUN-ORDER.md`, `docs/VERTICAL-TRACK-RECOMMENDATIONS.md`), none of
+   which this pass touched or commits. `origin/main` resolves to `ad2f9e9`,
+   confirming SR-365/SR-366 were already pushed by Andre before this pass
+   started — this pass's own commit is the only thing now ahead of
+   `origin/main`, and it is not pushed.
+
+**State plainly:**
+- The protocol slug list: **does not exist.** No protocol in
+  `content/tracks.js` has a `slug` field. This blocks
+  `pass/PASS-split-execute.md`'s `/protocols/{slug}` route until Andre
+  either supplies slugs or the route stays numeric.
+- The full redirect map for existing URLs: not produced in this pass —
+  §3 stopped at the slug-gap finding, which the redirect map depends on.
+  Deferred to whichever pass runs the split, with the gap flagged so it is
+  not rediscovered cold.
+- The privacy policy previously said: 24 months for usage events (wrong,
+  now 13), nothing for correspondence or the marketing list (now both
+  present), nothing about backups holding data briefly beyond these
+  windows (now present).
+- The two Attention Advisory references with nothing behind them,
+  awaiting Andre's A-or-B: `content/tracks.js:590` and `:603`.
+- The unpushed commit count: 1 — this pass's own, once committed.
+  `origin/main` already carries SR-365 and SR-366.
+
+**Files touched (this pass's own commit):** `content/tracks.js`,
+`docs/article-30-register.md`, `privacy.html`, `docs/fix-register.md`.
+`pass/PASS-split-index.md` was also edited (annotation) but `pass/` is
+gitignored, so it is not part of the commit regardless. Nothing from
+Andre's concurrent `ad2f9e9` work is staged.
+
+*Status:* closed for the items this pass could apply; open pending
+Andre's decision on §6b (Attention Advisory A-or-B) and the §3 slug gap ·
+*Raised and fixed:* 9 Sep 2026

@@ -69,9 +69,9 @@ control, not a convention.** If it holds free text, everything above changes.
 
 ## 4 · Retention
 
-⚠ **All four are DECISIONS OUTSTANDING (LG-78).** Recommended defaults below.
+**Approved 9 September 2026 (LG-78).** These are the periods.
 
-| Data | Recommended | Rationale |
+| Data | Period | Rationale |
 |---|---|---|
 | Account data after closure | **30 days, then deleted** | Long enough to reverse an accidental closure |
 | Usage events | **13 months** | Year-on-year comparison, then no reason to keep it |
