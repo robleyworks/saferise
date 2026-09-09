@@ -17,13 +17,20 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-363** (protocol rendering unified across all 30
+- **Highest ID issued: SR-364** (five approved hero banners wired into the
+  dashboard rotator, SR-320's two-surfaces rule reported for Andre's
+  ruling — not applied either way, per this pass's own explicit
+  instruction — verified via
+  `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
+  SR-363 as the last issued and nothing between it and this pass's own
+  HEAD; per this note's own documented history of going stale, do not
+  trust this line either — re-verify with the same grep before the next
+  allocation.)
+- **Previously: Highest ID issued: SR-363** (protocol rendering unified across all 30
   protocols, public/account-required access model, Entrepreneur's Journey
   brought into the redesigned treatment — verified via
   `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
-  SR-362 as the last issued and nothing between it and this pass's own HEAD;
-  per this note's own documented history of going stale, do not trust this
-  line either — re-verify with the same grep before the next allocation.)
+  SR-362 as the last issued and nothing between it and this pass's own HEAD.)
 - **Previously: Highest ID issued: SR-362** (coming-soon track-box redesign —
   verified via `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which
   found SR-361 as the last issued and nothing between it and that pass's own
@@ -10293,3 +10300,364 @@ brief did not explicitly ask for:**
 `member-coming-soon.html`. No new files.
 
 *Status:* closed, with the open items above · *Raised and fixed:* 8 Sep 2026
+
+---
+
+## SR-364 · five approved hero banners wired into the dashboard rotator; SR-320 two-surfaces question put to Andre; SR-363 corrections confirmed
+
+`pass/PASS-hero-banners.md`. Single pass, sections A–F. SR-363 outranks this
+brief where they disagree — no disagreement found; Section 0's three
+corrections were checked, not assumed, and all three hold (below).
+
+### 0 · corrections carried forward from SR-363, re-checked
+
+- **3 `protocols:` blocks in `tracks.js`, not 5** — `grep -n "protocols:"
+  content/tracks.js` still returns exactly three (`:225,344,490`). MATCH.
+- **Zero `&amp;` entities** — `grep -n "&amp;" content/tracks.js` still
+  returns nothing. MATCH.
+- **The `srIsDev()` sample's own `*.netlify.app` contradiction** —
+  `js/saferise-access.js`'s shipped `srIsDev()` still excludes it
+  (`localhost`/`127.0.0.1`/empty/`.local` only). MATCH.
+
+### A · the two-surfaces question — reported, not applied
+
+**1. SR-320 in full, with its reasoning and date.** Commit `d60adf6`,
+**1 September 2026**, `feat: SR-320 — two-surface conversion, Section 1:
+the track-page renderer`:
+
+> Locked decision: public surfaces use the decorated visual language,
+> member surfaces stay restrained — **public pages persuade, member pages
+> get out of the way during a difficult state.**
+
+`docs/page-invariants.md` §"The two surfaces (SR-320)" states the rule
+itself in terms that leave no interpretive room: *"Every page on this site
+belongs to exactly one of two surfaces. A third visual language is not
+permitted — a new page is either public or member, never something in
+between."* And, specifically about the member surface's restraint: *"Member
+pages get out of the way while someone is in a difficult state — this is
+deliberate, not an oversight to 'fix' toward the public look."* This is not
+a branding preference — it is a stated UX safety reason: a member reaching
+`member-coming-soon.html` may be mid-session, and the argument is that
+ornamented persuasion design works against that state, not merely that it
+looks different.
+
+**2. What would actually change** if `member-coming-soon.html` took
+`coming-soon.html`'s presentation:
+- **Typography.** Headings move from Cinzel to Cormorant Garamond 300 with
+  italic gold-lt accents (SR-320's own PUBLIC definition).
+- **Fills.** Card/band backgrounds move from flat (`#15151F`/`#0E0E1A`,
+  `css/saferise-method.css:32`) to the gradient
+  `linear-gradient(145deg,rgba(24,24,34,.86),rgba(14,14,21,.92))`.
+- **Ground and radius.** `#0A0A0F` ground (already close to public's
+  `#0A0A0F`) but band/card radius moves 16px → 18px; hairline
+  `#22222E` → `rgba(245,237,216,.09)`.
+- **Card shape entirely.** `.sr-mi-grid`/`.sr-mi-card` (a CSS grid of flat
+  cards, no cover-strip, no rendered protocol-number list) would become
+  `.tstack`/`.tb`/`sr-cs-*` (a flex-column stack with the cover-strip
+  gradient, tint/tint-2 blend layers, and the hover-reveal rule-width
+  animation SR-362 built).
+
+**3. What would be lost — the member-specific elements this page carries
+that `coming-soon.html` has no equivalent for:**
+- The **Midnight/Sunrise reading-mode toggle**
+  (`.sr-theme`/`sessionStorage['sr-theme']`) — a member-only feature;
+  `coming-soon.html` has no theme toggle at all.
+- The **"‹ Dashboard" back-link** and the member icon rail
+  (`.sr-dash-navrail`, `SafeRiseRail.render('coming')`) — replacing this
+  with the public top nav would mean navigating a signed-in member with
+  the same links used to sell to someone who hasn't joined.
+- `SafeRiseRail.render()` is what wires this page's nav at all; unifying
+  presentation without preserving this call breaks navigation, not just
+  looks.
+
+**What breaks if `sr-mi-` and `sr-cs-` become one system — checked, not
+assumed:**
+`grep -rl "sr-mi-"` returns **three** files: `member-coming-soon.html`,
+`member-frameworks.html`, and `css/saferise-method.css`.
+`grep -rl "sr-cs-"` returns **two**: `coming-soon.html` and
+`css/saferise-system.css`. Critically, `.sr-mi-card`, `.sr-mi-grid`,
+`.sr-mi-cardno`, `.sr-mi-cardtop`, `.sr-mi-band`, `.sr-mi-bandcol`,
+`.sr-mi-bands`, `.sr-mi-claim`, `.sr-mi-holds`, `.sr-mi-mast` and
+`.sr-mi-says` are **shared** between `member-coming-soon.html` and
+`member-frameworks.html` — the same selectors render both pages' card
+grids. Merging `sr-mi-` into `sr-cs-`'s system, or restyling `.sr-mi-card`
+toward the public look, would restyle `member-frameworks.html`'s framework
+cards (Porges, HeartMath, Maté, Jung, Watts, Kross) too — a page this
+brief never named and SR-320/SR-324 already ruled on separately (moved
+back to MEMBER after briefly trying PUBLIC). Unifying the two systems
+is not a two-page decision; it is at minimum a three-page one.
+
+**Stopped here, as instructed.** Not unified, not declined again — reported
+for Andre's ruling with 1–3 in front of him. Continuing with the rest of
+the pass.
+
+### B · hero banners
+
+**1. The live `HERO_SLIDES` array, reported before changing anything.**
+`dashboard.html`'s hero rotator (slide 1, "Welcome back, Andre", is
+hardcoded markup and untouched by this pass) previously appended three
+generic promo slides from `HERO_SLIDES`, shape
+`{tag, kick, art, title, sub, meta, cta, media}`, rendered into the old
+`.sr-dash-hero-art`(CSS-gradient background) / `.sr-dash-hero-body`
+interior. `art` keys resolved through a separate `HERO_ART` gradient map
+— no photographs, CSS gradients standing in.
+
+**Adapted, not reshaped:** `pass/hero-slides-approved.json`'s five objects
+replace the three generic ones verbatim (key/track/theme/layout/kick/
+title/sub/cta/ghost/meta — copy untouched), with one field translated:
+`accent` arrived as `var(--t1)`/`var(--t2)`/`var(--t3)`, the *mock's* own
+token names. This page does not define those tokens.
+`css/saferise-dashboard.css:12-17` is explicit and pre-existing (SR-045):
+*"The four track accents are NOT defined here. They live in
+saferise-system.css as `--sr-track01..04`... never fork it back into this
+file."* `HERO_ACCENT` maps `var(--t1)/(--t2)/(--t3)` → `var(--sr-track01)/
+(--sr-track02)/(--sr-track03)` at render time — confirmed live, all three
+resolve to their real hex (`--sr-track02` → `rgb(232,112,144)` on the
+Relationship Healing CTA and kicker, checked via computed style). `--gold`
+needed no mapping — already defined at this page's own `:root`.
+
+**2. The live shell — kept, not touched.** 18px radius, 0.8s opacity
+crossfade, dots, arrows, 7500ms interval: all read from
+`css/saferise-dashboard.css`/`dashboard.html`'s existing code, none of it
+edited. Only the interior template changed (old `sr-dash-hero-art`/
+`-body` → new `sr-hb-*`, per the brief's own class prefix). One structural
+note: `.sr-dash-hero-slide` itself already carries
+`grid-template-columns:minmax(0,560px) 1fr` — nesting `.sr-hb`'s own
+identical grid inside it without adjustment would have placed the new
+interior in the shell's first column only. Fixed with `.sr-hb{grid-
+column:1/-1}`, confirmed live: `1440px → gridTemplateColumns:"560px
+732px"`, `.sr-hb` spans the full 1292px width, not 560px.
+
+**3. Theme as a data field.** `layout:'bleed'` → `.sr-hb.bleed`, additionally
+`theme:'light'` → `.bleed.light`'s inverted colours; `layout:'panel'` →
+plain `.sr-hb` (the two-column art-panel shape). No per-key branching in
+the render function — a sixth slide with `theme:'light'` needs a JSON
+entry only, confirmed by reading the render code, which switches on
+`b.layout`/`b.theme`, never on `b.key`.
+
+**4. All five images, confirmed by checking the filesystem, not assuming:**
+
+| key | file | status |
+|---|---|---|
+| anxiety-reset | `band-anxiety-reset-wide.jpg` | **MISSING** |
+| relationship-healing | `band-relationship-healing.jpg` | exists, 1200×640 |
+| professional-performance | `band-professional-performance.jpg` | exists, 1200×640 |
+| clearing | `band-clearing.jpg` | exists, 1200×640 |
+| live-session | `band-live-session.jpg` | exists, 1200×640 |
+
+> **⚠ `assets/coming/band-anxiety-reset-wide.jpg` does not exist.** Not
+> substituted, per instruction — wired with the correct intended path and
+> the same `onerror="this.remove()"` degrade every other art slot on this
+> site already uses for a missing file (confirmed live: forcing the load
+> attempt removes the `<img>` and leaves the veil/gradient in place; the
+> real page load defers it via `loading="lazy"`, so nothing appears
+> broken visually — only two 404 console errors, reported in E.5).
+
+**The four images that do exist were found on disk untracked in git**
+(`git status` showed all four as `??` before this pass staged them) —
+added by someone outside this session, dated before this pass began.
+**Committed as part of this pass**: leaving them untracked would mean the
+feature this pass wires does not actually work once pushed, since git
+carries only tracked files. Named here as a change beyond the brief's
+literal ask, per Section F.
+
+**5. Pause on hover and on focus.** Hover already worked
+(`mouseenter`/`mouseleave`, pre-existing). **Focus did not** — added
+`focusin`/`focusout` on `#srHero` (bubbling, unlike `focus`/`blur`, so one
+pair covers the dots, arrows and the new CTA/ghost links without binding
+each individually). Hover pause verified live: dispatched `mouseenter`,
+waited 9s (interval is 7500ms) — active slide index held at 0, zero
+advances. Un-paused and confirmed autoplay resumes (index advanced after
+`mouseleave`). **Focus pause could not be independently verified in this
+session's browser tooling** — `document.hasFocus()` reports `false`
+regardless of tab state in this environment (a background-automation
+limitation, not a page behaviour), so `focusin`/`focusout` never fire
+under test even though `document.activeElement` updates correctly. The
+code is structurally identical to the already-verified hover mechanism
+(same `heroStop`/`heroStart` pair, different trigger events) — correct by
+construction and by the working precedent, not independently observed.
+Andre can confirm by tabbing through the rotator's controls directly.
+
+**6. ⚠ The live-session slide's placeholder date, reported prominently.**
+`pass/hero-slides-approved.json`'s own `meta` field for this slide is not
+a fake date — it is the literal string `"⚠ PLACEHOLDER DATE — replace
+before publishing"`. Rendered exactly as given (copy is settled; not
+rewritten), which means the warning is visible in the shipped UI itself,
+not just in this register. **This must be replaced with the real date
+and time before this reaches production** — currently, anyone reaching
+this slide sees the placeholder warning in place of "Thursday 25
+September · 19:00 CET" (the value shown in the approved reference mock,
+`pass/mock-banners-live-relationship.html`, but not present in the
+approved JSON, so not used here).
+
+**Contrast** — not re-tuned, so not re-checked: the light/bleed slide's
+`.bleed.light` colours (`#12161A` title, `#3A4249` body, `#8A4A2E` accent)
+are copied as literal hex from the approved mock verbatim, not derived
+from this page's own dark-theme tokens (which don't apply to an inverted
+light panel). Confirmed live via computed style on the rendered slide:
+title `rgb(18,22,26)`, accent `rgb(138,74,46)` — match the approved
+values exactly.
+
+### C · the missing prospectus
+
+Checked every filename listed, against `docs/` as it exists now:
+
+| file | status |
+|---|---|
+| `SAFERISE-COLLABORATION-FRAMEWORK.md` | exists |
+| `SAFERISE-TRACK-ROADMAP.md` | exists |
+| `ELEVATION-PROSPECTUS-v3.md` | **missing** |
+| `EXECUTIVE-PRESENCE-PROSPECTUS-v3.md` | **missing** (matches SR-363's report) |
+| `SEX-INTIMACY-PROSPECTUS.md` | **missing** |
+| `FRIDAY-DEMO-PLAN.md` | exists |
+| `INVESTED-WORK-REPORT.md` | **missing** |
+| `TRACK-PROGRAMME-MODEL.md` | **missing** |
+| `SAFERISE-COLLABORATORS-AND-GENDERED-TRACKS.md` | **missing** |
+
+Five of nine named files are absent. One near-miss worth flagging:
+`docs/saferise-invested-work.html` **does** exist (added directly by
+Andre, commit `b61acd3`, during the SR-363 session) — a different file,
+different extension, different casing, from `INVESTED-WORK-REPORT.md`,
+which itself is still absent. Report only, per instruction — not
+recreated.
+
+### D · SR-363's four open items, restated in full
+
+1. **Stray unconfirmed test-signup row.** A test signup
+   (`sr-verify-sr360@thesaferiseprotocol.com`, `auth.users` id
+   `2b06a22f-029a-409d-ad4d-c066a15653d0`) remains in the live Supabase
+   project, unconfirmed — left for Andre to delete or manually confirm.
+   The `usage_events` "signup" event is never actually recorded under the
+   real (confirmation-required) signup flow — a real gap in
+   `js/saferise-auth.js`'s `signUp()`, reported not fixed.
+2. **"What This Protocol Can Shift" repeats within a track.**
+   `protocol.html` sources this block from `TRACKS[t].change.items`
+   (per-track, not per-protocol) since no per-protocol equivalent exists
+   anywhere in `content/tracks.js` — the one block on the page that still
+   repeats identically across a track's ten protocols. Needs either
+   per-protocol authoring or a decision to accept the repetition.
+3. **Executive Presence / Entrepreneur's Journey overlap.** No protocol
+   name appears in both tracks' ten (confirmed again this pass, SR-363's
+   own claim held), but whether both actually ship is Andre's call, not
+   resolved by either pass.
+4. **The two coming-soon pages' presentation.** SR-363 declined to unify
+   `coming-soon.html`/`member-coming-soon.html`'s markup, citing SR-320.
+   **This pass's Section A is the resolution path for this exact item** —
+   reported above with what would change and what would break; Andre
+   rules, not this pass.
+
+### E · verify
+
+1. **All five banners render, in order, correct art and accent** —
+   confirmed live: `data-key` on each `.sr-dash-hero-slide` reads
+   `anxiety-reset, relationship-healing, professional-performance,
+   clearing, live-session` in that order after the welcome slide; each
+   `.sr-hb`'s `--a` custom property resolves to the correct mapped accent
+   (`--sr-track01/02/03` or `--gold`).
+2. **The light slide inverts; the four dark slides do not** — confirmed:
+   `anxiety-reset` carries `class="sr-hb bleed light"` and its computed
+   title/accent colours are the inverted hex values; the other four carry
+   plain `class="sr-hb"` and render the dark-theme tokens.
+3. **Dots/arrows track the active slide; autoplay advances; hover and
+   focus pause; reduced motion does not start it.** Dots/arrows/autoplay/
+   hover confirmed live (measured above). Focus confirmed by code parity
+   only — see B.5. **Reduced motion confirmed by code review, not by
+   toggling the OS media feature** — this session's tooling has no
+   control for `prefers-reduced-motion`, the same limitation SR-362's own
+   entry already recorded for a different section. `reducedMotion()` is
+   called from every path that (re)starts the timer (initial load, dot
+   click, arrow click, hover-leave, focus-out), not just the first call,
+   so a preference change mid-session cannot be fought back on by any of
+   those paths — verified by reading the code, not by observing it.
+4. **1440 and 390: no overflow, no mid-word title breaks, bleed slide
+   stays legible at both.** `document.documentElement.scrollWidth ===
+   window.innerWidth` at both widths: true. All five titles' `scrollWidth
+   === clientWidth` at 390px (the narrower, riskier width): true for
+   every one, `text-wrap:balance` (carried from the approved mock)
+   doing the work. Bleed slide's veil/type contrast unchanged at both
+   widths (layout reflows, colours don't).
+5. **Console clean, every error including pre-existing.** Fresh load:
+   **two errors**, both `Failed to load resource: 404` for the one
+   reported-missing asset (`band-anxiety-reset-wide.jpg`), fired twice
+   (once via the deferred lazy-load path, once via a forced-load probe
+   used to verify the `onerror` degrade — both attributable to the same
+   file, not two different defects). **Pre-existing baseline: zero** —
+   confirmed against `git show HEAD:dashboard.html` served from a
+   temporary copy (deleted after use), which references no path under
+   `assets/coming/` at all and produced no console errors of its own.
+6. **Nothing outside the hero changed — measured, not assumed.**
+   `.sr-begin` (the section immediately below `.sr-dash-hero`)
+   `offsetHeight`, before (`git show HEAD:dashboard.html`, temporary
+   copy) vs after, both waited for `document.fonts.ready`: at 1440px,
+   **378px → 378px**; at 390px, **715px → 715px**. Identical in both
+   readings at both widths.
+
+### F · report
+
+**Per section:**
+- **0 — MATCH.** All three SR-363 corrections re-verified, none had
+  drifted.
+- **A — reported, per instruction, not applied.** SR-320 printed in
+  full with its reasoning and date; what would change and what would
+  break both reported with concrete file/selector evidence. Stopped
+  there; did not unify, did not decline.
+- **B — ADAPTED.** Copy and shell MATCH the brief exactly. `accent`
+  DIFFERS from the JSON's literal token names (mapped to this site's real
+  ones, per SR-045's own standing rule) — reported, not silently applied.
+  One missing asset, reported prominently, not substituted. One
+  structural fix (`grid-column:1/-1`) not explicitly asked for but
+  required for the brief's own "keep the live shell" instruction to be
+  achievable at all.
+- **C — DIFFERS** on five of nine files (missing); MATCHES on four
+  (present), including confirming SR-363's own report on the Executive
+  Presence prospectus.
+- **D — MATCH.** All four items restated in full, one of them (the
+  coming-soon presentation question) directly answered by this pass's
+  own Section A.
+- **E — MATCH**, with two named limits (focus-pause, reduced-motion)
+  that this session's tooling cannot observe directly — both reported
+  as limits, not claimed as verified.
+
+**Section A stopped for Andre's ruling as instructed — stated plainly:**
+yes. SR-320's rule, its reasoning, its date, what would change, and what
+would break are all in this entry. Nothing was unified. Nothing was
+declined again. The two coming-soon pages remain exactly as SR-363 left
+them until Andre rules.
+
+**Named — everything changed that this brief did not explicitly ask
+for:**
+- `.sr-hb{grid-column:1/-1}` — not in the brief or the mock (the mock's
+  own `.sr-hero`/`.sr-hero-track` shell has no equivalent outer grid to
+  fight); required for the live shell's existing grid to not swallow the
+  new interior into its first column.
+- The four existing hero images (`band-clearing.jpg`,
+  `band-live-session.jpg`, `band-professional-performance.jpg`,
+  `band-relationship-healing.jpg`) were found untracked in git and
+  **committed** as part of this pass — otherwise the feature does not
+  work once this commit is pushed.
+- `HERO_ACCENT`'s token mapping (`--t1/--t2/--t3` → `--sr-track01/02/03`)
+  — not asked for by name, but required by SR-045's own standing
+  instruction not to fork track-accent tokens into this file.
+
+**Open items for Andre — all four from SR-363 restated (Section D,
+above), plus:**
+- **New: the SR-320 ruling itself** — Section A's report is ready;
+  Andre decides whether the member coming-soon page adopts the public
+  presentation, and if so, whether `member-frameworks.html`'s shared
+  `sr-mi-` cards move with it or need their own separate treatment.
+- **New: the live-session placeholder date** (B.6) — must be replaced
+  before production; currently visible in the shipped UI as a warning,
+  by design, so it cannot ship unnoticed, but it also cannot ship as is.
+- **New: `assets/coming/band-anxiety-reset-wide.jpg` does not exist** —
+  needed before the light/bleed slide shows its intended photograph
+  instead of a bare veil over the fallback gradient.
+
+**Files touched:** `dashboard.html`, `css/saferise-dashboard.css`,
+`docs/fix-register.md`. New (found, not created, committed this pass):
+`assets/coming/band-clearing.jpg`, `assets/coming/band-live-session.jpg`,
+`assets/coming/band-professional-performance.jpg`,
+`assets/coming/band-relationship-healing.jpg`.
+
+*Status:* closed, with the open items above (including one — SR-320 —
+explicitly awaiting Andre's ruling by this pass's own design) ·
+*Raised and fixed:* 9 Sep 2026

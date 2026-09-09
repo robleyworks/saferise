@@ -2014,51 +2014,76 @@
   // ── hero slider ──
   // Slide 01 is the welcome and is written into the markup. Everything below is
   // appended after it — edit this array to change what runs.
+  //
+  // PASS-hero-banners · the five approved banners from
+  // pass/hero-slides-approved.json, carried verbatim (title/sub/kick/cta/ghost/
+  // meta are settled copy, not rewritten here) with one adaptation: `accent`
+  // arrived as the mock's own token names (--t1/--t2/--t3), which this page
+  // does not define — SR-045 in css/saferise-dashboard.css is explicit that
+  // track accents live once, in css/saferise-system.css, as --sr-track01..04,
+  // and are never forked back into this file. HERO_ACCENT maps the JSON's
+  // token to this site's real one rather than rewriting the JSON file itself.
   var HERO_SLIDES = [
-    {tag:'', kick:'This week', art:'a1',
-     title:'The pattern is not the person.',
-     sub:'A short note on why the route back matters more than whether the state arrives at all.',
-     cta:'Read it'},
-    {tag:'New', kick:'Opening 1 September', art:'a2',
-     title:'Relationship Healing.',
-     sub:'Ten protocols run facing another person — session guides, safety scoring and repair scripts.',
-     meta: TRACKS[2].name + ' \u00B7 ' + TRACKS[2].price.amount + ' ' + TRACKS[2].price.per,
-     cta:'See what is included'},
-    {tag:'Episode 04', kick:'The SafeRise podcast', art:'a3', media:true,
-     title:'Discipline is not the opposite of rest.',
-     sub:'Andre and Dwight Williams on why the men who burn out hardest are usually the most disciplined.',
-     meta:'Released Thursday', cta:'Play episode'}
+    {key:'anxiety-reset', track:'t1-01', theme:'light', layout:'bleed', accent:'var(--t1)',
+     kick:'ANXIETY RESET', art:'assets/coming/band-anxiety-reset-wide.jpg',
+     title:'I brace before <em>anything has happened</em>',
+     sub:'Racing thoughts, shallow breath, the worst version running on a loop. This works the state underneath the thoughts — not the thoughts themselves.',
+     cta:'Begin', ghost:'What this protocol does', meta:''},
+    {key:'relationship-healing', track:'t2', theme:'dark', layout:'panel', accent:'var(--t2)',
+     kick:'BETWEEN US', art:'assets/coming/band-relationship-healing.jpg',
+     title:'The person who can <em>reach you fastest</em>',
+     sub:'Conflict, trust, distance, repair. Ten protocols for what happens in you in the presence of someone who matters — and which version of you turns up when it does.',
+     cta:'Open Relationship Healing', ghost:'See the ten protocols', meta:''},
+    {key:'professional-performance', track:'t3', theme:'dark', layout:'panel', accent:'var(--t3)',
+     kick:'AT WORK', art:'assets/coming/band-professional-performance.jpg',
+     title:'You still have to work with them <em>all week</em>',
+     sub:'Some people leave you feeling overwhelmed and numb at the same time. This track is not about fixing them. It’s about what happens in you, and what you can do about it.',
+     cta:'Open Professional Performance', ghost:'See the ten protocols', meta:''},
+    {key:'clearing', track:'t0-00', theme:'dark', layout:'panel', accent:'var(--gold)',
+     kick:'CLEARING', art:'assets/coming/band-clearing.jpg',
+     title:'Before it <em>all gets started</em>',
+     sub:'The Clearing is a guided meditation that sits underneath the protocols. It centres your attention and grounds your awareness — before the next moment gets intense.',
+     cta:'Begin', ghost:'What Clearing is for', meta:''},
+    {key:'live-session', track:null, theme:'dark', layout:'panel', accent:'var(--gold)',
+     kick:'LIVE SESSION', art:'assets/coming/band-live-session.jpg',
+     title:'The twenty minutes <em>before the conversation</em>',
+     sub:'A live hour on the state that arrives before you say the hard thing — and how to still sound like yourself once you are in it. Bring a question.',
+     /* ⚠ PLACEHOLDER DATE, rendered as given — see pass/hero-slides-approved.json
+        and this pass's own fix-register entry. Must be replaced before production. */
+     cta:'Reserve a place', ghost:'Past sessions', meta:'⚠ PLACEHOLDER DATE — replace before publishing'}
   ];
-  var HERO_ART = {
-    // NEEDS ART — a2 and a3 still take a 1600x520 photograph or poster frame each.
-    // a1 is wired to assets/shared/four-steps.webp (1600x500, ~20px short of the
-    // 520 slot height — object-fit:cover absorbs the difference invisibly). The
-    // gradient stays layered underneath as the same fallback it always was, in
-    // case the file ever moves or 404s.
-    a1:"url('assets/shared/four-steps.webp') center/cover no-repeat,radial-gradient(70% 120% at 68% 46%,rgba(236,201,106,.34),transparent 66%),linear-gradient(110deg,#0B0B12,#241B10 62%,#3A2A12)",
-    a2:'radial-gradient(70% 120% at 68% 46%,rgba(78,154,166,.3),transparent 66%),linear-gradient(110deg,#0B0B12,#14232A 62%,#1D3A42)',
-    a3:'radial-gradient(70% 120% at 68% 46%,rgba(155,127,212,.3),transparent 66%),linear-gradient(110deg,#0B0B12,#1B1630 62%,#2C2350)'
-  };
+  var HERO_ACCENT = {'var(--t1)':'var(--sr-track01)', 'var(--t2)':'var(--sr-track02)', 'var(--t3)':'var(--sr-track03)'};
 
   var heroTrack = document.getElementById('srHeroTrack');
   var heroDots  = document.getElementById('srHeroDots');
   var heroIndex = 0, heroTimer = null;
 
   if(heroTrack){
+    /* PASS-hero-banners · the interior is new (sr-hb-*, per the brief); the
+       outer <article class="sr-dash-hero-slide"> shell — position, opacity
+       crossfade, the grid it establishes — is untouched, so the crossfade,
+       dots and arrows below keep working unchanged. sr-hb declares
+       grid-column:1/-1 (css/saferise-dashboard.css) so its own nested grid
+       fills that shell rather than landing in the shell's first column only. */
     heroTrack.insertAdjacentHTML('beforeend', HERO_SLIDES.map(function(b){
-      return '<article class="sr-dash-hero-slide">' +
-        '<div class="sr-dash-hero-art" style="background:' + HERO_ART[b.art] + '"></div>' +
-        '<div class="sr-dash-hero-scrim"></div>' +
-        (b.tag ? '<span class="sr-dash-hero-tag">' + b.tag + '</span>' : '') +
-        (b.media ? '<button class="sr-dash-hero-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></button>' : '') +
-        '<div class="sr-dash-hero-body">' +
-          '<p class="sr-dash-hero-kick">' + b.kick + '</p>' +
-          '<p class="sr-dash-hero-title">' + b.title + '</p>' +
-          '<p class="sr-dash-hero-sub">' + b.sub + '</p>' +
-          /* SR-080 · guarded. The article slide lost its "2 min read" and this
-             printed the word "undefined" into the hero until it was. */
-          (b.meta ? '<p class="sr-dash-hero-meta">' + b.meta + '</p>' : '') +
-          '<div class="sr-dash-hero-cta"><button class="sr-dash-addbtn">' + b.cta + ' ' + ARROW + '</button></div>' +
+      var accent = HERO_ACCENT[b.accent] || b.accent;
+      var bleed = b.layout === 'bleed';
+      var art = '<img src="' + b.art + '" alt="" loading="lazy" decoding="async" onerror="this.remove()">';
+      var copy =
+        '<div class="sr-hb-copy">' +
+          '<p class="sr-hb-kick">' + b.kick + '</p>' +
+          '<h2 class="sr-hb-t">' + b.title + '</h2>' +
+          '<p class="sr-hb-s">' + b.sub + '</p>' +
+          '<div class="sr-hb-act">' +
+            '<a class="sr-hb-cta" href="#">' + b.cta + '</a>' +
+            (b.ghost ? '<a class="sr-hb-ghost" href="#">' + b.ghost + '</a>' : '') +
+            (b.meta ? '<span class="sr-hb-meta">' + b.meta + '</span>' : '') +
+          '</div>' +
+        '</div>';
+      return '<article class="sr-dash-hero-slide" data-key="' + b.key + '">' +
+        '<div class="sr-hb' + (bleed ? ' bleed ' + b.theme : '') + '" style="--a:' + accent + '">' +
+        (bleed ? '<div class="bg">' + art + '<span class="veil"></span></div>' + copy
+               : copy + '<div class="sr-hb-art">' + art + '</div>') +
         '</div></article>';
     }).join(''));
 
@@ -2073,8 +2098,16 @@
       hSlides.forEach(function(s,n){ s.classList.toggle('on', n === heroIndex); });
       hDots.forEach(function(d,n){ d.classList.toggle('on', n === heroIndex); });
     }
+    /* PASS-hero-banners, Section E.3 · one check, called from every path that
+       (re)starts the timer, so a preference change mid-session is never
+       fought by a hover-leave or focus-out re-arming it. */
+    function reducedMotion(){
+      return !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
     function heroStart(){
-      heroStop(); heroTimer = setInterval(function(){ heroGo(heroIndex + 1); }, 7500);
+      heroStop();
+      if (reducedMotion()) return;
+      heroTimer = setInterval(function(){ heroGo(heroIndex + 1); }, 7500);
     }
     function heroStop(){ if(heroTimer){ clearInterval(heroTimer); heroTimer = null; } }
     hDots.forEach(function(d){ d.addEventListener('click', function(){ heroGo(+d.getAttribute('data-i')); heroStart(); }); });
@@ -2082,6 +2115,14 @@
     document.getElementById('srHeroNext').addEventListener('click', function(){ heroGo(heroIndex + 1); heroStart(); });
     document.getElementById('srHero').addEventListener('mouseenter', heroStop);
     document.getElementById('srHero').addEventListener('mouseleave', heroStart);
+    /* PASS-hero-banners, Section B.5 · hover already paused; focus (dots,
+       arrows, the new CTA/ghost links) did not. focusin/focusout bubble,
+       unlike focus/blur, so one pair on the section covers every
+       descendant control without binding each one individually. */
+    document.getElementById('srHero').addEventListener('focusin', heroStop);
+    document.getElementById('srHero').addEventListener('focusout', function(e){
+      if (!e.currentTarget.contains(e.relatedTarget)) heroStart();
+    });
     heroStart();
   }
 
