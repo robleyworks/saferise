@@ -799,6 +799,26 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
   .sr-reader{border-radius:11px}
   .sr-fb .chip{width:100%;justify-content:flex-start}
 }
+
+/* PASS-protocol-access, Section B · the account gate. Copied verbatim from
+   protocol.html's own .sr-gate* block rather than reinvented — same
+   component, same classes, same look, the two reader pages having no
+   shared stylesheet to hold it once. */
+.sr-gate{max-width:640px;margin:0 auto;padding:120px 30px 80px}
+.sr-gate-in{background:var(--band,#0E0E1A);border:1px solid var(--hair,#22222E);
+  border-radius:14px;padding:40px 36px;text-align:center}
+.sr-gate h1{margin-bottom:14px}
+.sr-gate-in>p{font-size:14.5px;color:var(--text2,#9C9AA4);line-height:1.7;
+  max-width:44ch;margin:0 auto}
+.sr-gate-acts{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:26px}
+.sr-gate-pill{display:inline-flex;align-items:center;justify-content:center;min-height:44px;
+  padding:13px 28px;border-radius:8px;border:0;background:var(--gold,#D4A843);color:#08080C;
+  font:700 11px/1 'DM Sans',sans-serif;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;
+  text-decoration:none}
+.sr-gate-pill:hover{background:var(--gold-lt,#ECC96A)}
+.sr-gate-ghost{font:500 13px/1.4 'DM Sans',sans-serif;color:var(--text3,#6A6874);text-decoration:none;
+  border-bottom:1px solid var(--hair,#22222E)}
+.sr-gate-ghost:hover{color:var(--gold,#D4A843);border-color:var(--gold,#D4A843)}
 </style>
 </head>
 <body>
@@ -822,7 +842,13 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
 
 <div class="sr-sky" aria-hidden="true"></div>
 
-<main class="sr-page">
+<!-- PASS-protocol-access, Section B · resource bodies are account-required,
+     same model as the protocol they belong to — free-with-account on Track
+     01, paid entitlement on Tracks 02/03. main starts hidden so a
+     signed-out visitor never sees a flash of it. -->
+<div id="srResGate" hidden></div>
+
+<main class="sr-page" hidden>
 <div class="shell">
 <div class="sr-backbar">
   <a href="#" class="resource-back">‹ &nbsp;Back to the practice</a>
@@ -938,6 +964,8 @@ var SR_TRACK_NUM = qTrackEarly ? qTrackEarly[1] : '1';
 document.write('<scr' + 'ipt src="content/t' + SR_TRACK_NUM + '-resources.js"></scr' + 'ipt>');
 </script>
 <script src="js/saferise-resources.js"></script>
+<script src="js/saferise-auth.js"></script>
+<script src="js/saferise-access.js"></script>
 <script>
 /* PASS-full-resource-access, Step 4.2 · track/protocol parsed in the same
    regex style already used for resource/theme/embed below, then normalised
@@ -957,6 +985,36 @@ var ACTIVE_PROTOCOL = qProto ? ('0' + qProto[1]).slice(-2) : '01';
    null cleanly — fall back to Track 01 / protocol 01 in that case too. */
 var RESOURCES = (ACTIVE_TRACK === SR_TRACK_NUM) ? window.SafeRiseResources.resolveSet(ACTIVE_TRACK, ACTIVE_PROTOCOL) : null;
 if (!RESOURCES) { ACTIVE_TRACK = '1'; ACTIVE_PROTOCOL = '01'; RESOURCES = window.SafeRiseResources.resolveSet('1', '01') || []; }
+
+/* PASS-protocol-access, Section B · the gate. Same protocolId shape
+   protocol.html already gates on (t{track}-p{protocol}), so Track 01
+   resource bodies are free-with-account and Tracks 02/03 need the paid
+   plan — one access model, not a second one invented for this reader. */
+(async function () {
+  var main = document.querySelector('main.sr-page');
+  var gate = document.getElementById('srResGate');
+  var access = window.SafeRiseAccess;
+  var protocolId = 't' + ACTIVE_TRACK + '-p' + ACTIVE_PROTOCOL;
+  if (access && access.isDev && access.isDev()) { if (main) main.hidden = false; return; }
+  if (access && access.ready) { try { await access.ready; } catch (e) {} }
+  if (access && access.hasAccess(protocolId)) {
+    if (main) main.hidden = false;
+    return;
+  }
+  if (gate) {
+    var next = encodeURIComponent('resource.html?track=' + ACTIVE_TRACK + '&protocol=' + ACTIVE_PROTOCOL);
+    gate.innerHTML =
+      '<div class="sr-gate"><div class="sr-gate-in">' +
+        '<h1>Create an account to open this resource</h1>' +
+        '<p>This resource lives inside a protocol &mdash; opening it needs the same account that protocol needs.</p>' +
+        '<div class="sr-gate-acts">' +
+          '<a class="sr-gate-pill" href="signup.html?next=' + next + '">Create an account</a>' +
+          '<a class="sr-gate-ghost" href="login.html?next=' + next + '">Sign in instead</a>' +
+        '</div>' +
+      '</div></div>';
+    gate.hidden = false;
+  }
+})();
 
 
 var HEART='<svg viewBox="0 0 24 24"><path d="M12 20.5S3 14.9 3 8.9A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 9 2.9c0 6-9 11.6-9 11.6z"/></svg>';

@@ -4215,3 +4215,14 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-cs-pane>img,.sr-cs-rule,.sr-cs-cover,.sr-cs-tint,.sr-cs-tint2{transition:none!important}
 .tb:hover .sr-cs-pane>img,.tb:focus-within .sr-cs-pane>img{transform:none}
 }
+
+/* --- PASS-protocol-access · protocol.html's per-protocol "recognise it"
+   block (body signature + the three first-person quotes, tracks.js row
+   fields [4]/[5]). Filed centrally per CLAUDE.md; .sr-pp-* is unique to
+   protocol.html (confirmed: grepped, exists nowhere else). */
+.sr-pp-sigline{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:15.5px;color:var(--text2,#9C9AA4);line-height:1.6;margin:14px 0 10px;max-width:62ch}
+.sr-pp-quotes{list-style:none;margin:0 0 22px;padding:0;display:flex;flex-wrap:wrap;gap:8px 20px}
+.sr-pp-quotes li{font:italic 14px/1.5 'Cormorant Garamond',Georgia,serif;color:var(--text3,#6A6874)}
+.sr-pp-quotes li::before{content:"\201C"}
+.sr-pp-quotes li::after{content:"\201D"}

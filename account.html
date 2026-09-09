@@ -43,11 +43,11 @@
   var user = SafeRiseAccess.currentUser();
 
   if (!user) {
-    root.innerHTML =
-      '<div class="sr-tp-band" style="text-align:center">' +
-        '<h1 style="margin-bottom:10px">Sign in to see your account</h1>' +
-        '<p style="margin-top:24px"><a class="sr-tp-pill" href="login.html?next=account.html">Sign in</a></p>' +
-      '</div>';
+    root.innerHTML = SafeRiseAccess.gateHTML({
+      title: 'Sign in to see your account',
+      body: 'Your plan, status and renewal date all live behind your account.',
+      next: 'account.html'
+    });
     return;
   }
 

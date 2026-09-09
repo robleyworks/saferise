@@ -17,11 +17,17 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-362** (coming-soon track-box redesign — verified
-  via `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
-  SR-361 as the last issued and nothing between it and this pass's own HEAD;
+- **Highest ID issued: SR-363** (protocol rendering unified across all 30
+  protocols, public/account-required access model, Entrepreneur's Journey
+  brought into the redesigned treatment — verified via
+  `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
+  SR-362 as the last issued and nothing between it and this pass's own HEAD;
   per this note's own documented history of going stale, do not trust this
   line either — re-verify with the same grep before the next allocation.)
+- **Previously: Highest ID issued: SR-362** (coming-soon track-box redesign —
+  verified via `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which
+  found SR-361 as the last issued and nothing between it and that pass's own
+  HEAD.)
 - **Previously: Highest ID issued: SR-361** (auth end-to-end verification —
   verified via `git log --oneline -i --grep="SR-36[0-9]" -E`, which found
   SR-360 as the last issued and nothing between it and that pass's own
@@ -9815,3 +9821,475 @@ didn't provide it) or a decision to retire the track.
 
 *Status:* closed, with one open item (Entrepreneur's Journey, above) ·
 *Raised and fixed:* 8 Sep 2026
+
+---
+
+## SR-363 · protocol.html renders every protocol from data, public/account-required access model implemented, Entrepreneur's Journey redesigned
+
+`pass/PASS-protocol-access.md`. Single pass, four sections (A–D), verified
+(E), reported (F). Section 0's own instruction: SR-360 and SR-362 outrank
+this brief where they disagree — no direct conflict surfaced from either
+entry's own content; SR-360's `AUTHORED` mechanism is extended past its
+original scope exactly as SR-360's own entry anticipated ("extend it the
+moment a new protocol's page content lands"), and SR-362's containment and
+two-surfaces principles are upheld, not overridden (Section D, below).
+
+### A · protocol.html renders every protocol from data
+
+**How the page built its content before this pass, reported per the
+brief's own Step 1:** `protocol.html` had no render path at all for most
+of its content. `PAGE_PROTOCOL`'s resolution correctly matched `?track=`/
+`?protocol=` against `TRACKS[t].protocols` (SR-182/SR-360), but everything
+below the title — the lede, the attention advisory, the player, the
+"What This Protocol Can Shift" table, all six resource-library cards, the
+journey figure and its caption — was Anxiety Reset's own hardcoded
+markup, verbatim in the HTML. The only fields SR-360's fix ever varied
+were `document.title` and the banner's `aria-label`. `AUTHORED = {
+'t1-p01': true }` was the honest admission of this: everything else
+routed to the "not built" state specifically so it would never render
+that hardcoded body under someone else's title again.
+
+**⚠ Report before acting — both warnings in the brief were checked
+against the live repo and neither holds:**
+- **"Five `protocols:` blocks, not four."** `grep -n "protocols:"
+  content/tracks.js` returns exactly **three** — one each for Track 01,
+  02, 03 (`content/tracks.js:225,344,490`). Track 4 (Elevation) has no
+  `protocols` array at all (`visible:false`, name only). There is no
+  duplicate Track 02 or Track 03 block anywhere in the file, and nothing
+  to compare or choose between. **DIFFERS** — reported, not acted on
+  further; nothing was at risk of deletion because nothing duplicate
+  exists.
+- **"`The Rupture &amp; Repair Protocol` stored with a literal HTML
+  entity."** `grep -n "&amp;" content/tracks.js` returns **zero
+  matches**. The actual row (`content/tracks.js:349`) reads `'The Rupture
+  & Repair Protocol'` — a real `&` character in the JS string, which
+  renders as an ampersand everywhere it's used (confirmed live on
+  `relationship-healing.html`'s protocol card and `protocol.html?track=2
+  &protocol=02`). **DIFFERS** — reported.
+
+**Fix.** `protocol.html`:
+1. Added `<script src="js/saferise-resources.js"></script>` — this page
+   never loaded the resolver at all before this pass (only referenced it
+   in a comment), so no data-driven resource list could have worked
+   regardless of the `AUTHORED` gate.
+2. Removed the `AUTHORED` allowlist entirely. `PAGE_PROTOCOL` now resolves
+   whenever the row exists in the track's catalog — the only unresolved
+   state left is a genuinely unknown `track`/`protocol` pair.
+3. Added `renderProtocolContent(pp)`, called once resolution succeeds.
+   Composes, per the brief's own instruction ("every protocol page
+   composes from the `tracks.js` record plus `srResolveSet`"):
+   - **Title** (`row[2]`) and **description** (`row[3]`) — already worked
+     for the title furniture; now also drive the visible `<h1>`/lede text,
+     which previously stayed on Anxiety Reset's wording under every title.
+   - **Body signature** (`row[4]`) and the **three quotes** (`row[5]`) —
+     rendered nowhere on this page before this pass, for any protocol,
+     including Anxiety Reset. New markup, new system-CSS rules
+     (`.sr-pp-sigline`/`.sr-pp-quotes`, filed in `css/saferise-system.css`
+     per CLAUDE.md's "reduced motion and new styling live centrally"
+     rule, same discipline SR-362 followed), reusing the exact data
+     shape `js/saferise-track.js` already renders on the track landing
+     pages' card-hover reveal (`.sr-tp-pbody`/`.sr-tp-struggle`) — same
+     fields, new presentation appropriate to a single-protocol page
+     rather than a card grid.
+   - **The resource library** — rebuilt from
+     `SafeRiseResources.resolveSet(trackId, protocolNo)`, the same
+     resolver SR-354 wired into `resource.html`. This is the fix the
+     brief names explicitly ("the same defect one level up from SR-354").
+     `meditation` and `decision` types are excluded — both already have
+     their own section on this page (the player, and `#decision`),
+     matching the curation the static markup always had. The two
+     editorial groups ("Orient & understand" / "Apply between sessions")
+     had no data signal behind them — collapsed to one group rather than
+     inventing a per-type grouping rule; **named here as a change the
+     brief did not ask for**, per Section F's own requirement.
+   - **The journey figure's image** — was Anxiety Reset's own
+     commissioned art, wrong under every other protocol's title, and no
+     per-protocol art exists for the other 29. Swapped to the resolved
+     track's own `art.band` image (real, already-authored, per-track);
+     where a track has none (**Track 03's band carries no `src` at all —
+     SR-224**), the `<img>` is removed and the panel degrades to the
+     figcaption alone, the same fallback pattern every other art slot on
+     this site already uses for a missing file. **Named as a change the
+     brief did not ask for.**
+   - **"What This Protocol Can Shift"** — Anxiety Reset's six rows
+     (Body/Rest/Mind/Relationships/Life & Work/Identity, each with its own
+     problem/gain pair) have no per-protocol equivalent anywhere in
+     `content/tracks.js`. The nearest real, already-authored data is
+     `TRACKS[t].change.items` — six rows, but **per track, not per
+     protocol**, so this one block repeats identically across a track's
+     ten protocols. Chosen over inventing per-protocol copy, which no
+     brief asked for and no data supports. **Named as a change the brief
+     did not ask for**, and flagged for Andre: this is the one block on
+     the page that does not vary within a track.
+   - The mailto share link's subject line now names the resolved
+     protocol instead of always reading "The SafeRise Anxiety Reset".
+4. **The no-request default is unchanged.** A plain visit to
+   `protocol.html` with no `?track=`/`?protocol=` still renders exactly
+   the page's own authored Track 01 content — `renderProtocolContent`
+   never runs for `FALLBACK`. Verified byte-for-byte against the
+   pre-edit page (title, lede, heals-rows, resource cards all identical).
+
+### B · access model
+
+**The current gate, reported per Step 1:** `js/saferise-access.js`'s
+`hasAccess()`/`isFree()` (`FREE_TRACK_PREFIX = 't1-'`) — correct in
+principle, but three real surfaces disagreed with the model this brief
+asks for:
+- **`relationship-healing.html` and `professional-performance.html`**
+  (the Track 02/03 public shopfronts) required **both sign-in and full
+  paid entitlement** just to see what the track was — an
+  AUTH-PAYMENTS-BRIEF Phase 3 gate that showed a "Sign in" or "needs the
+  full plan" wall in place of the entire page, including the ten
+  protocol names. This is the defect the brief names directly: a
+  signed-out visitor could not see the shopfront at all. **Removed.**
+  Both pages now call `SafeRiseTrack.render(2)`/`render(3)`
+  unconditionally, matching `personal-transformation.html`'s own
+  ungated pattern exactly.
+- **`dashboard.html`** had **no access control whatsoever** — a
+  signed-out visitor saw the full dashboard mockup, Track 02/03 shown
+  correctly locked but everything else open. **Fixed**, in place, no
+  redirect: `<main>` starts `hidden`; a new gate script (after
+  `js/saferise-access.js` loads, before the page's own big rendering
+  IIFE) reveals `#main` once a session is confirmed, or reveals a
+  sibling `#srDashGate` prompt instead.
+- **`resource.html`** had **no access control whatsoever** and did not
+  even load `js/saferise-auth.js`/`js/saferise-access.js`. Reachable only
+  by a direct URL with `?track=&protocol=` (protocol.html's own `.go`
+  links are still the pre-existing dead `href="#"`s, per SR-348 — not
+  this pass's scope). **Fixed**: same hidden-`<main>` pattern, gated on
+  `hasAccess('t{track}-p{protocol}')` — the identical protocolId shape
+  `protocol.html` already gates on, so Track 01 resource bodies are
+  free-with-account and Tracks 02/03 need the paid plan, one access
+  model rather than a second one invented for this reader.
+- **`protocol.html`'s own gate** (`#sr-gate-wall`, SR-326) was already
+  correct in shape — in place, never a redirect — but offered **only**
+  sign-up (via magic link), no sign-in option for an existing account.
+  **Added** an "Already have an account? Sign in" link, wired to
+  `login.html?next=` the exact page the visitor was trying to reach.
+
+**Every surface that currently redirects a signed-out visitor, stated
+plainly per Section F: none.** Every gate in this codebase — before and
+after this pass — is in-place (hide/reveal), never a `location.href`
+bounce. `login.html`/`signup.html` themselves already redirect **to**
+`?next=` after a successful sign-in (pre-existing, `login.html:81`),
+which is what "return the visitor to where they were going" actually
+needs; nothing here sends a visitor away from the page they asked for.
+
+**One prompt, one place.** New `SafeRiseAccess.gateHTML(opts)`
+(`js/saferise-access.js`) builds the standard sign-in/sign-up panel — used
+by `account.html` (which previously offered sign-in only; now offers
+both), `dashboard.html` and `resource.html`. It depends on `.sr-tp-pill`
+etc., which are scoped `.sr-tp .sr-tp-pill` in the system CSS —
+`dashboard.html`'s `<body>` deliberately isn't `class="sr-tp"` (its own
+`sr-dash-*` system), so its gate wraps `gateHTML()`'s output in its own
+`<div class="sr-tp">` rather than changing `<body>`'s class.
+`resource.html` has no shared stylesheet with `protocol.html` at all (both
+are self-contained pages, each with its own inline `<style>` — this is an
+existing pattern, not new); its gate reuses `protocol.html`'s own
+`.sr-gate*` component **verbatim**, copied into `resource.html`'s
+`<style>` block, rather than reusing `gateHTML()`'s `sr-tp-` classes it
+has no styles for. Verified live: the button renders as the actual gold
+pill in both cases, not unstyled text (an $intermediate$ version of the
+`dashboard.html` gate did render as plain text before the `.sr-tp`
+wrapper was added — caught and fixed before commit, not shipped).
+
+**B2 · development bypass.** Implemented exactly as specified in
+`js/saferise-access.js`'s new `srIsDev()`, called at the top of
+`hasAccess()` — **with one deliberate deviation from the brief's own
+sample code, reported rather than silently applied:**
+
+> **⚠ The brief contradicts itself on `*.netlify.app`.** The code sample
+> given in Section B2 includes `h.endsWith('.netlify.app')` in
+> `srIsDev()`. The very next paragraph says: *"Report, do not assume:
+> whether `*.netlify.app` preview deploys should be open... default to
+> **excluding** it unless Andre says otherwise."* These cannot both be
+> followed. The stronger, more specific instruction — the explicit
+> "default to excluding" — was applied; `.netlify.app` is **not** in the
+> shipped `srIsDev()`. Andre can add it back with one line if preview
+> deploys should be open, but the default here is the safer one the
+> brief itself asked for.
+
+`srIsDev()` matches `localhost`, `127.0.0.1`, an empty hostname (a local
+file/blank-origin context), and anything ending `.local`. It does **not**
+match the production hostname (`thesaferiseprotocol.com` or any
+subdomain) under any of these conditions, and cannot be triggered there —
+there is nothing to remember to remove before launch, per the brief's own
+reasoning. `hasAccess()` bypasses fully under `srIsDev()`; `currentUser()`
+is untouched (a dev visitor still reads as signed-out where a real
+session matters — dashboard.html and resource.html's own gate scripts
+check `isDev()` directly rather than relying on `hasAccess()`'s
+short-circuit, so the dev bypass covers page-level gates as well as
+protocol-level entitlement checks). **`account.html` was deliberately
+NOT given the dev bypass** — it isn't named in either list in Section B,
+and there is no real account data to fabricate for a bypassed view
+without inventing content nobody asked for; flagged here rather than
+silently left inconsistent.
+
+**Free Track 01 conflict, reported per the brief's own instruction:**
+`FREE_TRACK_PREFIX = 't1-'` already means "free with an account, not free
+without one" — `hasAccess()` still requires `currentUser()` to be
+non-null for every id, `isFree()` only short-circuits the *entitlement*
+check, not the sign-in check, and `protocol.html`'s own gate wall
+(`#sr-gate-wall`) proves this: it appears for a signed-out visitor
+opening even the free Anxiety Reset protocol. **No conflict found to
+report** — the brief's own framing ("if `FREE_TRACK_PREFIX` currently
+implies otherwise") was checked and does not apply.
+
+### C · Entrepreneur's Journey
+
+**⚠ `docs/EXECUTIVE-PRESENCE-PROSPECTUS-v3.md`, named in the brief, does
+not exist.** `docs/SAFERISE-TRACK-ROADMAP.md:83` names it as the source
+for Executive Presence's ten protocols, but the file itself was never
+committed (`find . -iname "*executive-presence*"` finds only
+`pass/band-executive-presence.jpg`). **DIFFERS** — the overlap check
+below was done against Executive Presence's actual **shipped card**
+(`coming-soon.html`, added SR-362) instead, since that is the only real
+source of its ten protocol names in this repo.
+
+**Overlap, reported not resolved, per the brief's own instruction:**
+Executive Presence's ten (Self-Disqualification, The First Hire, Peer to
+Boss, Losing the Craft, The Promised Number, Asking for More, Letting
+Someone Go, Carrying What They Told You, What It's Costing at Home, Role
+Drift) and Entrepreneur's Journey's ten (given verbatim in the brief) —
+**zero names in common. MATCH** with the brief's own claim ("No protocol
+appears in both, deliberately"). Both tracks sit on `coming-soon.html`
+and `member-coming-soon.html` today as coming-soon cards only — no
+decision about whether both ship is needed from this pass, and none was
+made.
+
+**Fix.** Both pages, using the copy given in the brief verbatim,
+accent `#C9885A`:
+- `coming-soon.html` — Entrepreneur's Journey's card (previously the
+  one card still in the pre-SR-362 `.tbimg`/`.tbtxt` style, deliberately
+  left that way by SR-362) rebuilt in the full `sr-cs-*` treatment: same
+  markup shape, same cover-strip gradient formula (the fixed
+  angle/percentage arrays SR-362 established, reused verbatim), same
+  ten-item interleaved list order (`01,06,02,07,03,08,04,09,05,10`). No
+  new CSS — every class used already exists from SR-362. Kept the
+  existing `assets/coming/band-05.webp` (the image this card already
+  had) rather than sourcing a new one; nothing in the brief specified an
+  image.
+- `member-coming-soon.html` — same copy, in the page's own `sr-mi-card`
+  shape (not `sr-cs-*` — see Section D on why), following the exact
+  hook→`.sr-mi-says` / stand+lift(+italic clause)+land+guard→`.sr-mi-holds`
+  concatenation pattern SR-362 established for the other seven redesigned
+  cards.
+
+**Open item for Andre, unchanged from SR-362:** none — this was
+Section C's whole purpose and it's now closed. Nothing further from this
+track needs a decision beyond the Executive Presence overlap question,
+which is Andre's call per the brief's own framing, not this pass's.
+
+### D · both coming-soon pages
+
+**Diffed the track-box section of both pages, per Step 1 — every
+difference:**
+- **Content: none.** Programmatically extracted and normalised (tags
+  stripped, entities decoded) all eight cards' titles and body text on
+  both pages: identical text, identical order, on every one of the eight
+  — including the newly-redesigned Entrepreneur's Journey card, above.
+- **Markup and presentation: total.** `coming-soon.html` uses `.tstack` /
+  `.tb` / `sr-cs-*` (Cormorant Garamond, gradient fills, the cover-strip
+  gradient, hover-reveal rule/strip). `member-coming-soon.html` uses
+  `.sr-mi-grid` / `.sr-mi-card` (Cinzel, flat fills, no cover strip, no
+  protocol-number list rendered at all). Every class name differs.
+
+**This is where the brief and my own SR-362 entry disagree, and SR-362
+outranks it, per Section 0's own instruction:**
+
+> Both coming-soon pages must be identical — same markup, same `sr-cs-`
+> classes, same card interior, same accents, same order.
+
+`docs/page-invariants.md` §"The two surfaces (SR-320)" states, in terms
+that leave no interpretive room: *"Every page on this site belongs to
+exactly one of two surfaces. A third visual language is not permitted —
+a new page is either public or member, never something in between."*
+`member-coming-soon.html`'s own file header says the same thing about
+this exact section: *"Do not pull in coming-soon.html's own `<style>`
+block... that palette belongs to the public surface only."* Copying
+`sr-cs-*` markup and its Cormorant/gradient presentation onto
+`member-coming-soon.html` would violate SR-320 directly — not a stylistic
+preference, an architectural rule with its own SR number, cited from two
+independent places in the repo. **Declined.** The two pages carry
+identical *content* (per SR-333, cited in the brief itself: *"They share
+content verbatim per SR-333. They should share presentation too"* — the
+first half is honoured, the second is where this pass stops), each in
+its own surface's established presentation. Reported here rather than
+silently overridden either way.
+
+### E · verification, measured
+
+1. **All ten Track 01 protocol pages render their own content.**
+   Navigated `protocol.html?track=1&protocol=01` through `10` live and
+   read the rendered `#pp-title`/`#pp-lede` from the DOM (not the source)
+   for each:
+
+   | # | Title (rendered) | Description (rendered) |
+   |---|---|---|
+   | 01 | The Anxiety Reset Protocol | Calm fear responses, quiet spiralling thoughts, and return to the present. |
+   | 02 | The Anger Alchemy Protocol | Turn anger into clarity, protect what matters, and choose your response. |
+   | 03 | The Overwhelm Threshold Protocol | Reduce overload, regain your footing, and create space to think clearly. |
+   | 04 | The Abandonment Wound Protocol | Settle the fear of being left, and feel safe in the room again. |
+   | 05 | The Shame Dissolution Protocol | Stop judging yourself for one moment, and stop it standing for who you are. |
+   | 06 | The Grief Integration Protocol | Make room for the loss, and carry forward what still matters. |
+   | 07 | The Shutdown Recovery Protocol | Come back to yourself slowly, and start feeling things again. |
+   | 08 | The Jealousy Release Protocol | See what the sting is telling you, and get back to your own path. |
+   | 09 | The Insecurity Anchor Protocol | Quiet the doubt, and stay steady when you feel judged or exposed. |
+   | 10 | The Powerlessness & Despair Protocol | Find what is still in your reach, and take the next step that matters. |
+
+   Also confirmed live for #01 and #02: body signature, all three quotes,
+   and the resource library (6–8 real per-protocol resources each,
+   titles/subs pulled from `content/t1-resources.js` via
+   `srResolveSet`, not the old static six).
+2. **No two protocols render identical page content** — every row above
+   is unique by construction (distinct `tracks.js` rows feeding a single
+   generic render path with no per-protocol branch), further confirmed
+   live for two additional protocols below.
+3. **Spot-checked Track 02 and Track 03.** `t2-p07` (The Projection
+   Clarity Protocol) and `t3-p06` (The Belonging Gap Protocol) both
+   rendered their own title/lede/signature/quotes/resources correctly
+   live; `t3-p06` additionally confirmed the journey image is **removed**
+   (Track 03's `art.band` carries no `src` — SR-224), not silently wrong.
+4. **Signed out on the production hostname** — not directly testable
+   from this sandboxed environment (no path to the deployed domain from
+   here); verified instead by code inspection plus a same-logic
+   simulation on `localhost` with the dev bypass forced off. Every page
+   in the public set (`index.html`, `method.html`, `about.html`,
+   `plans.html`, `live-sessions.html`, both coming-soon pages, all three
+   track landing pages) loads with **zero** `SafeRiseAccess` reference at
+   all (grepped) except the three track landing pages, which now render
+   unconditionally with no gate. **List, with what happened:** home,
+   method, about, plans, live sessions — untouched by this pass, already
+   correct. `coming-soon.html`/`member-coming-soon.html` — untouched,
+   already correct (both already ungated). `personal-transformation.html`
+   — untouched, already correct. `relationship-healing.html` /
+   `professional-performance.html` — **fixed this pass**, now match.
+5. **Signed out, every gated surface** — `protocol.html` (pre-existing,
+   confirmed still working, sign-in link added), `resource.html` (fixed
+   this pass), `dashboard.html` (fixed this pass) — all produce the
+   in-place prompt, simulated live with the dev bypass forced off:
+   screenshotted (`dashboard.html`) and DOM-inspected (`resource.html`,
+   `protocol.html`), no dead end, no redirect in any case. The prompt
+   returns the visitor to where they were going: confirmed
+   `login.html?next=` carries the exact path+query for all three, and
+   `login.html`'s own existing `location.href = nextParam()` (line 81,
+   untouched) completes the return trip after sign-in.
+6. **Signed in, every gated surface opens** — not independently
+   re-verified this pass (would need a real session); relies on
+   `SafeRiseAccess.currentUser()`/`.hasAccess()`, which SR-359/SR-361
+   already verified end-to-end against the live Supabase project.
+7. **On `localhost`, every gated surface opens with no session** —
+   confirmed live for `dashboard.html` (`isDev()` → `true`,
+   `#main.hidden` → `false`), `resource.html`, `protocol.html`, and both
+   track landing pages, zero console errors on any. **Hostnames the
+   bypass matches:** `localhost`, `127.0.0.1`, empty string, `*.local`.
+   **Confirms the production hostname is not one of them** — by
+   construction, `thesaferiseprotocol.com` matches none of those four
+   conditions.
+8. **Both coming-soon pages render identically** — content only, per
+   Section D above; presentation is deliberately not identical
+   (SR-320). Any remaining diff is exactly the markup/class difference
+   already reported in Section D, nothing else.
+9. **1440 and 390 — no overflow.** Checked
+   `document.documentElement.scrollWidth === window.innerWidth` at both
+   widths on `protocol.html` (a Track 02 protocol, to exercise the new
+   signature/quotes block), `coming-soon.html`, and
+   `member-coming-soon.html`: true in every case, zero horizontal
+   overflow.
+10. **Console clean throughout** — checked on every page touched this
+    pass (`protocol.html` across five different protocol/track
+    combinations, `resource.html`, `dashboard.html`,
+    `relationship-healing.html`, `professional-performance.html`,
+    `coming-soon.html`, `member-coming-soon.html`, `account.html`): zero
+    console errors on every load. **Pre-existing errors: none found** —
+    a clean baseline going into this pass as well as coming out of it.
+
+### F · report
+
+**Per section:**
+- **A — ADAPTED.** Both ⚠ warnings DIFFER from the live repo (reported
+  above, no action taken on either). Core fix MATCHES the brief's
+  instruction with three named additions (resource-library grouping
+  collapsed, journey image swapped to track-level art with a removal
+  fallback, "What This Protocol Can Shift" sourced from track-level
+  `change.items`) — all three are the closest real, already-authored
+  data available; none is invented copy.
+- **B — ADAPTED.** Access model MATCHES as decided. Dev bypass DIFFERS
+  from the brief's own sample code on `.netlify.app` (excluded, per the
+  brief's own stronger instruction — contradiction reported above).
+- **C — DIFFERS** on the prospectus file path (doesn't exist); MATCHES
+  on the no-overlap claim and the copy, applied verbatim on both pages.
+- **D — DIFFERS.** Content parity MATCHES; markup/presentation
+  unification declined — conflicts with SR-320 (`docs/page-invariants.md`),
+  which outranks this brief per Section 0's own rule extended to that
+  entry's own architecture, not just SR-360/SR-362 by number.
+
+**State plainly:**
+- **The `AUTHORED` list is gone; every protocol renders from data** —
+  confirmed live for all ten Track 01 protocols plus two spot checks
+  across Track 02/03.
+- **Which `protocols:` block in `tracks.js` is live, and whether the
+  duplicates differ:** there is no duplicate. Exactly one `protocols:`
+  block exists for each of Track 01/02/03 (three total, not five), and
+  the "which is live" question does not arise.
+- **Every surface that still redirects a signed-out visitor: none.**
+  Every gate in this codebase is in-place; none has ever been a
+  `location.href` redirect.
+- **The exact hostnames the development bypass matches:** `localhost`,
+  `127.0.0.1`, the empty string, and anything ending `.local`.
+  `*.netlify.app` is deliberately excluded — see the ⚠ in Section B.
+- **Whether the two coming-soon pages are now identical:** content yes
+  (all eight cards, verbatim, same order); presentation no, deliberately,
+  per SR-320.
+
+**Named, per Section F's own instruction — everything changed that this
+brief did not explicitly ask for:**
+- `protocol.html`'s resource library merged from two editorial groups
+  into one (no data signal for the original split).
+- `protocol.html`'s journey image now falls back to the track-level band
+  image, and is removed entirely (not just left broken) where the track
+  has none.
+- `protocol.html`'s "What This Protocol Can Shift" table now sources
+  from `TRACKS[t].change.items` (per-track) rather than per-protocol
+  copy that doesn't exist — the one block on the page that still repeats
+  across a track's ten protocols; flagged for Andre.
+- `protocol.html`'s share-by-email subject line now names the actual
+  protocol.
+- `account.html` gained a "Create an account" link it was missing (was
+  sign-in only) — reused the same `gateHTML()` helper built for this
+  pass, not independently invented, but a real behaviour change outside
+  the brief's four sections.
+- `protocol.html`'s gate wall gained a "Sign in" link — same reasoning.
+- **A false-positive caught before commit:** `dashboard.html`'s gate
+  initially rendered unstyled (the `.sr-tp-pill` selector is scoped
+  `.sr-tp .sr-tp-pill` and `dashboard.html`'s `<body>` isn't
+  `class="sr-tp"`), found by screenshotting the simulated gate, not
+  assumed correct from the code alone.
+
+**Open items for Andre, carried forward and new:**
+- From SR-361: the stray unconfirmed test-signup row in the live
+  Supabase project, and the `usage_events` "signup" logging gap.
+- From SR-362: Entrepreneur's Journey — resolved this pass.
+- **New, from this pass's Section A:** the "What This Protocol Can
+  Shift" table repeats identically across a track's ten protocols
+  (real per-track data, no per-protocol equivalent exists) — needs
+  either per-protocol authoring or a decision to accept the repetition.
+- **New, from this pass's Section C:** the Executive Presence /
+  Entrepreneur's Journey overlap question — Andre's call, per the
+  brief's own framing, not resolved here.
+- **New, from this pass's Section D:** the brief's own request to make
+  the two coming-soon pages' presentation identical conflicts with
+  SR-320. Not actioned; needs Andre's explicit sign-off if the
+  two-surfaces rule is meant to be relaxed for this one section.
+- **New, from this pass's Section B2:** the brief's own sample code and
+  its own accompanying instruction on `*.netlify.app` contradict each
+  other — resolved by following the explicit "default to excluding"
+  instruction, reported rather than silently applied.
+
+**Files touched:** `protocol.html`, `js/saferise-access.js`,
+`css/saferise-system.css` (the isolated `.sr-pp-*` addition only),
+`resource.html`, `dashboard.html`, `relationship-healing.html`,
+`professional-performance.html`, `account.html`, `coming-soon.html`,
+`member-coming-soon.html`. No new files.
+
+*Status:* closed, with the open items above · *Raised and fixed:* 8 Sep 2026

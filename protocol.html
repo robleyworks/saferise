@@ -639,6 +639,11 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
 <script src="content/t1-resources.js"></script>
 <script src="content/t2-resources.js"></script>
 <script src="content/t3-resources.js"></script>
+<!-- PASS-protocol-access, Section A · srResolveSet(), the same resolver
+     resource.html already uses. Never loaded on this page before this
+     pass, which is why the resource library below was static markup
+     instead of real per-protocol data. -->
+<script src="js/saferise-resources.js"></script>
 <!-- SR-326 · the access gate. Loaded before the resolution IIFE below, which
      calls SafeRiseAccess.hasAccess() once PAGE_PROTOCOL has resolved. -->
 <script src="js/saferise-auth.js"></script>
@@ -674,6 +679,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
          if you would rather see how this works before deciding.</p>
       <div class="sr-gate-acts">
         <button type="button" class="sr-gate-pill" id="sr-gate-signup-open">Get free access</button>
+        <a class="sr-gate-ghost" id="sr-gate-signin" href="login.html">Already have an account? Sign in</a>
         <a class="sr-gate-ghost" id="sr-gate-open-free" href="protocol.html?track=1&amp;protocol=01">Open the Anxiety Reset instead</a>
       </div>
       <p class="sr-gate-note">Email only. No card. Nothing to install.</p>
@@ -723,9 +729,15 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
   <div class="experience-box">
   <div class="sechead sechead--lead">
     <div class="kicker"><span class="knum">1</span><span class="eyebrow">Guided Meditation Experience</span></div>
-    <h1 class="sectitle">The Anxiety Reset Protocol</h1>
-    <p class="lede lede--lead">Calm fear responses, quiet spiralling thoughts, and return to the present.</p>
+    <h1 class="sectitle" id="pp-title">The Anxiety Reset Protocol</h1>
+    <p class="lede lede--lead" id="pp-lede">Calm fear responses, quiet spiralling thoughts, and return to the present.</p>
     <p class="subline">Begin the journey with your guided meditation via audio or video.</p>
+    <!-- PASS-protocol-access, Section A · body signature + the three quotes
+         (tracks.js row fields [4]/[5]) were not rendered anywhere on this
+         page for any protocol, including Anxiety Reset. Populated by
+         renderProtocolContent() below; empty and unhidden by default so
+         there is nothing to show before that runs. -->
+    <div class="sr-pp-sig" id="pp-signature" hidden></div>
   </div>
 
   <aside class="attention-advisory" aria-label="Attention advisory">
@@ -781,8 +793,15 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
       <figure class="journey">
         <figcaption>Settle in exactly as you are. Guided breathing, mindful awareness, heart coherence, and grounding into greater capacity come together in one continuous experience — simply follow and notice what shifts.</figcaption>
         <div class="journey-visual">
-        <img class="journey-new" src="assets/pt/protocols/anxiety-journey.webp" alt="A woman moving through a spacious guided meditation journey from inward stillness to an open, grounded return">
-        
+        <!-- PASS-protocol-access, Section A · this image was Anxiety Reset's
+             own commissioned art, wrong under every other protocol's title.
+             No per-protocol art exists for the other 29 — renderProtocolContent()
+             swaps src/alt to the resolved protocol's own TRACK band image
+             (content/tracks.js TRACKS[t].art.band), the nearest real asset
+             that exists, and removes the image entirely (CSS fallback
+             degrades gracefully) on the one track whose band has no src. -->
+        <img class="journey-new" id="pp-journey-img" src="assets/pt/protocols/anxiety-journey.webp" alt="A woman moving through a spacious guided meditation journey from inward stillness to an open, grounded return">
+
         </div>
       </figure>
       </details>
@@ -799,7 +818,14 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
     </summary>
     <div class="heals">
       <p class="heals-lede">The practice is designed to help the system move from protective activation toward greater safety, clarity, and available capacity.</p>
-      <div class="heals-rows">
+      <!-- PASS-protocol-access, Section A · these six rows were Anxiety
+           Reset's own authored pairs, with no per-protocol equivalent
+           anywhere in content/tracks.js. TRACKS[t].change.items is the
+           nearest real, already-authored data (per-track, not
+           per-protocol) and is what renderProtocolContent() below renders
+           here instead — real copy, not invented, at the cost of these six
+           rows repeating across a track's ten protocols. -->
+      <div class="heals-rows" id="pp-heals-rows">
         <div class="hr"><span class="hd">Body</span><span class="hp">Chronic tension &amp; pain</span><span class="hl"></span><span class="hg">Somatic release</span></div>
         <div class="hr"><span class="hd">Rest</span><span class="hp">Racing mind at night</span><span class="hl"></span><span class="hg">Heart coherence</span></div>
         <div class="hr"><span class="hd">Mind</span><span class="hp">Loops, fog, paralysis</span><span class="hl"></span><span class="hg">Metacognitive clarity</span></div>
@@ -926,15 +952,21 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
     </div>
   </div>
 
-  <div class="resource-library" aria-label="Optional protocol resources">
+  <!-- PASS-protocol-access, Section A · this was Anxiety Reset's own
+       resource set, hand-copied once and static ever since — the same
+       defect SR-354 fixed for resource.html, one level up. Rebuilt by
+       renderProtocolContent() below from srResolveSet(trackId, protocolNo),
+       js/saferise-resources.js's own resolver (meditation and decision
+       excluded — both already have their own section on this page). The
+       two editorial groups below ("Orient & understand" / "Apply between
+       sessions") had no data signal behind them; collapsed to one group
+       rather than inventing a per-type grouping rule. -->
+  <div class="resource-library" aria-label="Optional protocol resources" id="pp-resource-library">
     <div class="resource-group">
-      <div class="resource-group-label"><span>Orient &amp; understand</span></div>
+      <div class="resource-group-label"><span>Go deeper</span></div>
       <div class="res advisory"><div class="ic">!</div><div><p class="rl">Attention Advisory</p><p class="rt">How to use the practice safely and stay oriented to your own capacity</p><p class="rm">Eyes-open options · Pausing · When to choose the shorter reset</p></div><a href="#" class="go">Review ▸</a></div>
       <div class="res"><div class="ic">◫</div><div><p class="rl">Protocol Guide</p><p class="rt">Anxiety Reset — the method, sequence and how it works</p><p class="rm">Step Guide · PDF · Printable</p></div><a href="#" class="go">Read ▸</a></div>
       <div class="res"><div class="ic">◑</div><div><p class="rl">How This Works</p><p class="rt">What is happening in your body during anxiety, and which framework each step rests on</p><p class="rm">Mechanism &amp; sources · Read anytime</p></div><a href="#" class="go">Read ▸</a></div>
-    </div>
-    <div class="resource-group">
-      <div class="resource-group-label"><span>Apply between sessions</span></div>
       <div class="res"><div class="ic">⊘</div><div><p class="rl">Somatic Release</p><p class="rt">Rhythmic walking, a weighted blanket, worry stones — daily companions between sessions</p><p class="rm">Somatic Release Guide · Anxiety Reset section</p></div><a href="#" class="go">Read ▸</a></div>
       <div class="res"><div class="ic">⚿</div><div><p class="rl">Disclosure &amp; Support</p><p class="rt">A script for telling a partner or family what this actually is</p><p class="rm">Disclosure &amp; Support Guide</p></div><a href="#" class="go">Read ▸</a></div>
       <div class="res"><div class="ic">↺</div><div><p class="rl">Invitation to Repair</p><p class="rt">A guided way to acknowledge impact and reopen connection</p><p class="rm">Relational reflection · Conversation guide</p></div><a href="#" class="go">Enter ▸</a></div>
@@ -1029,7 +1061,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
     <p class="share-copy">If this reset met you somewhere real, it might meet someone else the same way.</p>
     <div class="share-actions">
       <button type="button" onclick="copyProtocol(this)">&#128279;&nbsp; <span>Copy link</span></button>
-      <a href="mailto:?subject=The%20SafeRise%20Anxiety%20Reset&amp;body=I%20thought%20this%20guided%20reset%20might%20be%20useful%20to%20you.">&#9993;&nbsp; <span>Email</span></a>
+      <a href="mailto:?subject=The%20SafeRise%20Anxiety%20Reset&amp;body=I%20thought%20this%20guided%20reset%20might%20be%20useful%20to%20you." id="pp-share-email">&#9993;&nbsp; <span>Email</span></a>
       <button type="button" onclick="shareProtocol()">&#10148;&nbsp; <span>Message</span></button>
     </div>
   </div>
@@ -1204,19 +1236,6 @@ var K_ENTRIES = 'sr.journal.entries';
 var PAGE_PROTOCOL = (function () {
   var FALLBACK = { protocolId: 't1-p01', protocol: 'The Anxiety Reset Protocol',
                    trackId: 1, resolved: false, requested: null };
-  /* PRIORITY FIX, separate from SR-354 (which fixed resource routing INSIDE a
-     protocol, a different mechanism) — this page itself only has real,
-     authored content for one protocol: the four-step walkthrough, diagrams
-     and body below the title furniture are Anxiety Reset's, hardcoded.
-     TRACKS[].protocols lists all 30 for the CARD catalog (title, description,
-     cover) regardless of whether protocol.html has been built out for them —
-     SR-182's own resolution below conflated "is in the catalog" (true for all
-     30) with "has a page here" (true for exactly one), so every other
-     protocol resolved successfully and silently rendered Anxiety Reset's
-     content under the right title. AUTHORED is the list that actually
-     answers "has a page here" — extend it the moment a new protocol's page
-     content lands, never ahead of it. */
-  var AUTHORED = { 't1-p01': true };
   function param(name) {
     var m = new RegExp('[?&]' + name + '=([^&]+)').exec(location.search);
     return m ? decodeURIComponent(m[1]) : '';
@@ -1243,45 +1262,33 @@ var PAGE_PROTOCOL = (function () {
     return { protocolId: null, protocol: null, trackId: null,
              resolved: false, requested: requested };
   }
-  var protocolId = 't' + track.id + '-p' + row[0];
-  if (!AUTHORED[protocolId]) {
-    /* In the catalog, genuinely a real protocol — just not this page's
-       content yet. Distinct from "not in the library" so the shown message
-       can say the honest thing rather than the wrong thing. */
-    return { protocolId: null, protocol: null, trackId: null, resolved: false,
-             requested: requested, notBuilt: true, requestedTitle: row[2] };
-  }
-  return { protocolId: protocolId, protocol: row[2],
-           trackId: track.id, label: row[1], resolved: true,
+  /* PASS-protocol-access, Section A · SR-360's AUTHORED allowlist is gone.
+     It answered "has a page here", which was true for exactly one protocol
+     because the page below it was Anxiety Reset's own hardcoded markup.
+     renderProtocolContent() (below, after this IIFE) now composes every
+     section from this row plus srResolveSet(track, protocolNo), so being
+     in the catalog (true for all 30) is the only thing resolution needs to
+     answer — restoring SR-182's original premise on firmer ground than it
+     had it. The only unresolved case left is a genuinely unknown protocol. */
+  return { protocolId: 't' + track.id + '-p' + row[0], protocol: row[2],
+           trackId: track.id, label: row[1], row: row, resolved: true,
            requested: requested };
 })();
 
-/* SR-182, extended by the priority fix above · apply the resolution. Four
-   outcomes now, and only one of them renders the protocol page:
-     resolved      — the record answered AND this page has that protocol's
-                      content; title furniture follows it.
-     not requested — no ?track=/?protocol= at all, so nothing was asked for and
-                     the page keeps its authored Track 01 content.
-     not built     — a real protocol, just not this page's content yet
-                     (PAGE_PROTOCOL.notBuilt). Same not-found section, honest
-                     copy instead of "not in the library", which would be
-                     false — it is in the library, this page just isn't.
+/* SR-182, simplified by the Section A rewrite above · two outcomes now:
+     resolved      — the record answered; renderProtocolContent() below
+                      composes the page from it.
+     not requested — no ?track=/?protocol= at all, so nothing was asked for
+                     and the page keeps its default Track 01 content.
      unresolved    — something WAS asked for and the record has no such
-                     protocol at all. The page does not render; the not-found
-                     state does, with its original copy. This is the case
-                     that used to land on Anxiety Reset. */
+                     protocol at all. The page does not render; the
+                     not-found state does. This is the case that used to
+                     land on Anxiety Reset. */
 (function () {
   var nf = document.getElementById('sr-notfound');
   if (PAGE_PROTOCOL.resolved === false && PAGE_PROTOCOL.requested) {
     if (nf) {
       nf.hidden = false;
-      if (PAGE_PROTOCOL.notBuilt) {
-        var h1 = nf.querySelector('h1');
-        var lede = nf.querySelector('p');
-        if (h1) h1.textContent = 'This protocol isn’t open yet.';
-        if (lede) lede.textContent = (PAGE_PROTOCOL.requestedTitle || 'This protocol') +
-          ' is in the library, but its own page hasn’t been built. Nothing has been opened and nothing has been recorded.';
-      }
       var req = document.getElementById('sr-notfound-req');
       if (req) req.textContent = 'Requested: ' + PAGE_PROTOCOL.requested;
     }
@@ -1291,16 +1298,116 @@ var PAGE_PROTOCOL = (function () {
     for (i = 0; i < kids.length; i++) {
       if (kids[i] !== nf && kids[i].tagName !== 'SCRIPT') kids[i].hidden = true;
     }
-    document.title = 'SafeRise \u2014 ' +
-      (PAGE_PROTOCOL.notBuilt ? 'Not open yet' : 'Protocol not found');
+    document.title = 'SafeRise — Protocol not found';
     return;
   }
   if (!PAGE_PROTOCOL.resolved) return;   /* nothing requested: leave the page */
 
-  document.title = 'SafeRise \u2014 ' + PAGE_PROTOCOL.protocol;
+  document.title = 'SafeRise — ' + PAGE_PROTOCOL.protocol;
   var t = document.querySelector('.bannerimg');
   if (t) t.setAttribute('aria-label', PAGE_PROTOCOL.protocol + ' cover');
+  renderProtocolContent(PAGE_PROTOCOL);
 })();
+
+/* PASS-protocol-access, Section A · composes every per-protocol section of
+   the page from PAGE_PROTOCOL.row (the tracks.js record: number, verb,
+   title, description, body signature, three quotes) plus
+   SafeRiseResources.resolveSet(trackId, protocolNo). Runs only when a
+   protocol was actually requested and resolved — the no-request default
+   leaves the page's own authored Track 01 content exactly as it was, so
+   nothing changes for a plain visit to protocol.html. */
+function renderProtocolContent(pp) {
+  var row = pp.row;
+  if (!row) return;
+  var esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+
+  var titleEl = document.getElementById('pp-title');
+  if (titleEl) titleEl.textContent = row[2];
+  var ledeEl = document.getElementById('pp-lede');
+  if (ledeEl) ledeEl.textContent = row[3] || '';
+
+  /* body signature (row[4]) + the three first-person quotes (row[5]) —
+     rendered nowhere on this page before this pass, for any protocol,
+     including Anxiety Reset. */
+  var sig = document.getElementById('pp-signature');
+  if (sig) {
+    var sigHtml = '';
+    if (row[4]) sigHtml += '<p class="sr-pp-sigline">' + esc(row[4]) + '</p>';
+    if (row[5] && row[5].length) {
+      sigHtml += '<ul class="sr-pp-quotes">' + row[5].map(function (q) {
+        return '<li>' + esc(q) + '</li>';
+      }).join('') + '</ul>';
+    }
+    sig.innerHTML = sigHtml;
+    sig.hidden = !sigHtml;
+  }
+
+  /* the journey figure's image is Anxiety Reset's own commissioned art —
+     wrong under every other protocol's title, and no per-protocol art
+     exists for the other 29. The track's own band image (real, already
+     authored) is the nearest honest substitute; where a track has none
+     (Track 03's band carries no src — SR-224), the image is removed and
+     the panel degrades to the figcaption alone, same as every other art
+     slot on this site with no file behind it. */
+  var track = (typeof TRACKS !== 'undefined') && TRACKS[pp.trackId];
+  var band = track && track.art && track.art.band;
+  var jImg = document.getElementById('pp-journey-img');
+  if (jImg) {
+    if (band && band.src) {
+      jImg.src = band.src;
+      jImg.alt = '';
+    } else {
+      jImg.remove();
+    }
+  }
+
+  /* "What This Protocol Can Shift" — Anxiety Reset's six rows had no
+     per-protocol equivalent anywhere in tracks.js. TRACKS[t].change.items
+     is the nearest real, already-authored data (per-track, not
+     per-protocol), so this block repeats across a track's ten protocols —
+     real copy, not invented, and every other block on this page (title,
+     description, signature, quotes, resources) still differs per protocol. */
+  var healsRows = document.getElementById('pp-heals-rows');
+  if (healsRows && track && track.change && track.change.items) {
+    healsRows.innerHTML = track.change.items.map(function (it) {
+      var from = String(it[3] || '').replace(/^from\s+/i, '');
+      return '<div class="hr"><span class="hd" style="color:' + esc(it[2]) + '">' + esc(it[1]) +
+        '</span><span class="hp">' + esc(from) + '</span><span class="hl"></span><span class="hg">' + esc(it[4]) + '</span></div>';
+    }).join('');
+  }
+
+  /* the resource library — this was Anxiety Reset's own resource set,
+     hand-copied once and static ever since, the same defect SR-354 fixed
+     for resource.html one level up. meditation and decision are excluded:
+     both already have their own section on this page (the player above,
+     and #decision below), matching the curation the static markup always
+     had. */
+  var lib = document.getElementById('pp-resource-library');
+  if (lib && typeof SafeRiseResources !== 'undefined') {
+    var set = SafeRiseResources.resolveSet(pp.trackId, row[0]) || [];
+    var rows = set.filter(function (r) { return r.type !== 'meditation' && r.type !== 'decision'; });
+    if (rows.length) {
+      var canon = (typeof resourceByType === 'function') ? function (t) {
+        var r = resourceByType(t); return r ? r[1] : '';
+      } : function () { return ''; };
+      lib.innerHTML = '<div class="resource-group"><div class="resource-group-label"><span>Go deeper</span></div>' +
+        rows.map(function (r) {
+          var verb = r.type === 'advisory' ? 'Review' : 'Read';
+          return '<div class="res' + (r.advisory ? ' advisory' : '') + '"><div class="ic">' + esc(r.glyph) + '</div><div>' +
+            '<p class="rl">' + esc(canon(r.type) || r.eyebrow) + '</p>' +
+            '<p class="rt">' + esc(r.title) + '</p>' +
+            '<p class="rm">' + esc(r.sub) + '</p>' +
+            '</div><a href="#" class="go">' + verb + ' ▸</a></div>';
+        }).join('') + '</div>';
+    }
+  }
+
+  var shareEmail = document.getElementById('pp-share-email');
+  if (shareEmail) {
+    shareEmail.href = 'mailto:?subject=' + encodeURIComponent('The SafeRise ' + row[2].replace(/^The\s+/, '').replace(/\s+Protocol$/, '')) +
+      '&body=' + encodeURIComponent('I thought this guided reset might be useful to you.');
+  }
+}
 
 /* SR-326 \u00b7 the soft gate. Runs after the resolution IIFE above, so it only
    ever sees a genuinely resolved protocol \u2014 the not-found case already
@@ -1338,6 +1445,10 @@ var PAGE_PROTOCOL = (function () {
   var offer  = document.getElementById('sr-gate-offer');
   var signup = document.getElementById('sr-gate-signup');
   var openBtn = document.getElementById('sr-gate-signup-open');
+  /* PASS-protocol-access, Section B4 · return the visitor to this exact
+     protocol after they sign in — login.html already redirects to `next`. */
+  var signinLink = document.getElementById('sr-gate-signin');
+  if (signinLink) signinLink.href = 'login.html?next=' + encodeURIComponent(location.pathname + location.search);
   if (openBtn) openBtn.addEventListener('click', function () {
     offer.hidden = true;
     signup.hidden = false;

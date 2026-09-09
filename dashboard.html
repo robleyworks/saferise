@@ -83,7 +83,13 @@
   </div>
 </nav>
 
-<main id="main">
+<!-- PASS-protocol-access, Section B · the dashboard is account-required.
+     main starts hidden so a signed-out visitor never sees a flash of it —
+     the gate script below (after js/saferise-access.js loads) decides
+     whether to reveal main or this prompt instead. Never a redirect. -->
+<div id="srDashGate" hidden></div>
+
+<main id="main" hidden>
 
 <!-- ═══ WELCOME + ORIENTATION — one block. The hero is shorter and the
      orientation rail sits at its base, so the height is earned and the page
@@ -790,6 +796,36 @@
      which reads SafeRiseAccess.hasAccess() to build OWNED. -->
 <script src="js/saferise-auth.js"></script>
 <script src="js/saferise-access.js"></script>
+<!-- PASS-protocol-access, Section B · the account gate. Kept separate from
+     the big rendering IIFE below, which keeps building the (hidden) dashboard
+     regardless — this only ever decides which of #main / #srDashGate is
+     shown, so a signed-out visitor's build work is wasted, not broken.
+     srIsDev() lets Andre work on localhost with no session at all. -->
+<script>
+(async function () {
+  var main = document.getElementById('main');
+  var gate = document.getElementById('srDashGate');
+  var access = window.SafeRiseAccess;
+  if (access && access.isDev && access.isDev()) { if (main) main.hidden = false; return; }
+  if (access && access.ready) { try { await access.ready; } catch (e) {} }
+  if (access && access.currentUser()) {
+    if (main) main.hidden = false;
+    return;
+  }
+  if (gate) {
+    /* .sr-tp-pill etc. are scoped ".sr-tp .sr-tp-pill" in the system CSS —
+       dashboard.html's <body> deliberately isn't class="sr-tp" (its own
+       sr-dash-* design system), so gateHTML()'s markup needs its own
+       ancestor here rather than that class going on <body>. */
+    gate.innerHTML = '<div class="sr-tp" style="padding:160px 20px 100px">' + access.gateHTML({
+      title: 'Sign in to see your dashboard',
+      body: 'Your dashboard, progress and plan all live behind your account.',
+      next: 'dashboard.html'
+    }) + '</div>';
+    gate.hidden = false;
+  }
+})();
+</script>
 <script src="js/saferise-rail.js"></script>
 <script>
 (function(){

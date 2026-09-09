@@ -53,44 +53,16 @@
 <script src="js/saferise-access.js"></script>
 <script src="js/saferise-track.js"></script>
 <script>
-/* AUTH-PAYMENTS-BRIEF Phase 3 gate. Reuses .sr-tp-band/.sr-tp-pill/.sr-tp-body
-   (already loaded by this page via css/saferise-system.css) rather than
-   adding any new class — the sign-in/upgrade panels are inline layout only.
-   Fails closed: if SafeRiseAccess never loaded, this shows the sign-in
-   prompt rather than falling through to SafeRiseTrack.render(). */
-(async function () {
-  var page = document.getElementById('page');
-  var access = window.SafeRiseAccess;
-  if (access && access.ready) { try { await access.ready; } catch (e) {} }
-  var sticky = document.querySelector('.sr-tp-stickycta');
-  var signedIn = !!(access && access.currentUser());
-  var entitled = !!(access && access.hasAccess('t2-p01'));
-  if (!signedIn || !entitled) { if (sticky) sticky.style.display = 'none'; }
-  if (!signedIn) {
-    page.innerHTML =
-      '<div class="sr-tp-shell" style="padding:120px 20px">' +
-        '<div class="sr-tp-band" style="max-width:640px;margin:0 auto;text-align:center">' +
-          '<h2>Sign in to open Relationship Healing</h2>' +
-          '<p class="sr-tp-body">Personal Transformation is free for anyone. Relationship Healing needs an account.</p>' +
-          '<p style="margin-top:24px"><a class="sr-tp-pill" href="login.html?next=relationship-healing.html">Sign in</a></p>' +
-          '<p class="sr-tp-body" style="margin-top:16px"><a href="signup.html?next=relationship-healing.html">Create an account</a></p>' +
-        '</div>' +
-      '</div>';
-    return;
-  }
-  if (!entitled) {
-    page.innerHTML =
-      '<div class="sr-tp-shell" style="padding:120px 20px">' +
-        '<div class="sr-tp-band" style="max-width:640px;margin:0 auto;text-align:center">' +
-          '<h2>Relationship Healing needs the full plan</h2>' +
-          '<p class="sr-tp-body">You are signed in &mdash; Personal Transformation stays included either way. Everything else needs an upgrade.</p>' +
-          '<p style="margin-top:24px"><a class="sr-tp-pill" href="account.html">See plans</a></p>' +
-        '</div>' +
-      '</div>';
-    return;
-  }
-  SafeRiseTrack.render(2);
-})();
+/* PASS-protocol-access, Section B · track landing pages are the public
+   shopfront — what the track is, the ten protocol names, who it is for.
+   No account, no prompt, no flash of gated content. This page used to gate
+   the whole shopfront behind sign-in AND full paid entitlement (the
+   AUTH-PAYMENTS-BRIEF Phase 3 gate, removed here) — reported in
+   docs/fix-register.md as a real defect, not a design choice: a visitor
+   could not even see what Relationship Healing was without an account and
+   a plan. Opening a PROTOCOL still requires an account; that gate lives in
+   protocol.html, per protocol, and is untouched by this page. */
+SafeRiseTrack.render(2);
 </script>
 </body>
 </html>

@@ -53,41 +53,11 @@
 <script src="js/saferise-access.js"></script>
 <script src="js/saferise-track.js"></script>
 <script>
-/* AUTH-PAYMENTS-BRIEF Phase 3 gate — see relationship-healing.html for the
-   full comment; identical pattern, this track's copy only. */
-(async function () {
-  var page = document.getElementById('page');
-  var access = window.SafeRiseAccess;
-  if (access && access.ready) { try { await access.ready; } catch (e) {} }
-  var sticky = document.querySelector('.sr-tp-stickycta');
-  var signedIn = !!(access && access.currentUser());
-  var entitled = !!(access && access.hasAccess('t3-p01'));
-  if (!signedIn || !entitled) { if (sticky) sticky.style.display = 'none'; }
-  if (!signedIn) {
-    page.innerHTML =
-      '<div class="sr-tp-shell" style="padding:120px 20px">' +
-        '<div class="sr-tp-band" style="max-width:640px;margin:0 auto;text-align:center">' +
-          '<h2>Sign in to open Professional Performance</h2>' +
-          '<p class="sr-tp-body">Personal Transformation is free for anyone. Professional Performance needs an account.</p>' +
-          '<p style="margin-top:24px"><a class="sr-tp-pill" href="login.html?next=professional-performance.html">Sign in</a></p>' +
-          '<p class="sr-tp-body" style="margin-top:16px"><a href="signup.html?next=professional-performance.html">Create an account</a></p>' +
-        '</div>' +
-      '</div>';
-    return;
-  }
-  if (!entitled) {
-    page.innerHTML =
-      '<div class="sr-tp-shell" style="padding:120px 20px">' +
-        '<div class="sr-tp-band" style="max-width:640px;margin:0 auto;text-align:center">' +
-          '<h2>Professional Performance needs the full plan</h2>' +
-          '<p class="sr-tp-body">You are signed in &mdash; Personal Transformation stays included either way. Everything else needs an upgrade.</p>' +
-          '<p style="margin-top:24px"><a class="sr-tp-pill" href="account.html">See plans</a></p>' +
-        '</div>' +
-      '</div>';
-    return;
-  }
-  SafeRiseTrack.render(3);
-})();
+/* PASS-protocol-access, Section B — see relationship-healing.html for the
+   full comment; identical fix, this track's copy only. The AUTH-PAYMENTS-
+   BRIEF Phase 3 gate that used to hide this entire shopfront behind
+   sign-in and a paid plan is removed. */
+SafeRiseTrack.render(3);
 </script>
 </body>
 </html>
