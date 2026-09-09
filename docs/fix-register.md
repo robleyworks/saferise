@@ -17,14 +17,20 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-368** (protocol page's blank white panel
+- **Highest ID issued: SR-369** (dashboard hero — welcome slide re-shot,
+  repositioned and re-scrimmed; resume slide reverted to dark; a
+  self-introduced grid regression from this pass's own `<picture>` change
+  caught and fixed before commit — verified via
+  `git log --oneline --grep="SR-368"`, which found SR-368 as the last
+  issued and nothing between it and this pass's own HEAD; per this note's
+  own documented history of going stale, do not trust this line either —
+  re-verify before the next allocation.)
+- **Previously: Highest ID issued: SR-368** (protocol page's blank white panel
   root-caused to `_headers`' own `X-Frame-Options: DENY` and fixed;
   track-page card hover, carousel permanence/reduced-motion, three-state
   and cover-label contrast, and the floating CTA bar rebuilt — verified via
   `git log --oneline --grep="SR-367"`, which found SR-367 as the last
-  issued and nothing between it and this pass's own HEAD; per this note's
-  own documented history of going stale, do not trust this line either —
-  re-verify before the next allocation.)
+  issued and nothing between it and this pass's own HEAD.)
 - **Previously: Highest ID issued: SR-367** (9 September decisions applied — retention
   written down in both places, Proximity Guide mislabelling fixed, a
   load-bearing slug gap found blocking the split's `/protocols/{slug}`
@@ -11861,3 +11867,147 @@ none of Andre's own concurrent, unrelated untracked files
 *Status:* closed for every section this pass could apply cleanly; open
 pending Andre's colour decision on `--shut` (§4a) and the three-state
 illustration's art direction (§5) · *Raised and fixed:* 9 Sep 2026
+
+## SR-369 · dashboard hero — welcome slide re-shot and repositioned, resume slide reverted to dark, a self-introduced grid regression caught and fixed
+
+Runs `pass/PASS-hero-v3.md`, pass 3 of `docs/RUN-ORDER.md`'s six. Allocated
+via `git log --oneline --grep="SR-368"`, which found SR-368 as the last
+issued and nothing between it and this pass's own HEAD.
+
+**§1 Welcome slide, MATCH — plus a regression this pass introduced and then
+caught before committing.**
+
+- Artwork swapped: `assets/dashboard/hero-corridor.webp` (someone walking
+  away from camera) → `assets/coming/band-welcome-corridor.jpg` (2360×800,
+  confirmed).
+- Gradient replaced with the brief's own two-layer spec verbatim
+  (`css/saferise-dashboard.css`'s `.sr-dash-hero-scrim`) — was a single
+  92deg layer releasing to `.22` by 62%.
+- CTA removal — **premise did not hold, report only.** Read the live markup
+  before touching anything: this slide has never carried a **Settle in**,
+  **Where you left off**, or any link — those strings belong to the
+  separate "Begin Here" card row beneath the hero, not the hero itself.
+  Confirmed again live: `slide.querySelector('a, button, .sr-dash-hero-cta')`
+  returns nothing. Nothing removed because nothing was there.
+- **Self-introduced bug, caught in verification, fixed before this
+  commit:** wrapping the image in `<picture>` for §3's WebP source (below)
+  gave the hero a new, non-positioned grid child — the plain `<img>` it
+  replaced was `position:absolute` and so invisible to grid auto-placement;
+  `<picture>` has no position of its own and instead consumed a real cell,
+  pushing `.sr-dash-hero-body` into the *second* grid column and
+  `.sr-dash-quote` into the first. Screenshots taken mid-fix genuinely
+  showed the title on the right, over the lit corridor — exactly the
+  defect §1 exists to prevent, self-inflicted by this pass's own §3 work.
+  Root-caused via `getBoundingClientRect()` on both elements (body at
+  x:658 in a 560px/598px grid — the wrong cell), fixed by moving
+  `position:absolute;inset:0` onto `.sr-dash-hero-slide picture` itself
+  (`css/saferise-dashboard.css`), re-verified: body now at x:98, width
+  560 — the left column, as specified.
+- Verified live: no CTA (`hasCta:false`), copy confirmed in the left
+  560px column, corridor image confirmed on the right.
+
+**§2 Resume slide, MATCH.**
+`dashboard.html`'s `HERO_SLIDES[0]` (`key:'anxiety-reset'`): `theme`
+`'light'`→`'dark'`, `art`
+`band-anxiety-reset-wide.jpg`→`band-anxiety-reset-dark.jpg`. Verified
+mean luminance of the two source files directly (canvas/PIL pixel
+sampling, not estimated): wide 158.7, dark 97.4 — the brief's own 157/98
+figures, confirmed within normal measurement variance. Saturation: .219 →
+.198 (≈9.6% relative reduction measured; brief said 14% — same direction,
+measured independently rather than trusted).
+
+**A real gap found closing this out:** no `.bleed.dark .veil` rule existed
+anywhere in `css/saferise-dashboard.css` — every bleed-layout slide until
+now was the one light exception, so `.veil`'s only styled state was
+`.bleed.light`. Switching this slide's `theme` to `'dark'` alone would have
+shipped an unstyled, fully transparent veil — text over raw photograph,
+not "dark, light type over it" as the brief's own table specifies. Added
+`.bleed.dark .veil`, values matched to this file's existing dark-scrim
+pattern (`.sr-hb-art::after`, `.sr-dash-hero-scrim`) rather than invented.
+Verified live: `wrapClass:"sr-hb bleed dark"`, `titleColor:rgb(245,237,216)`
+(light type, correct), veil's `backgroundImage` confirmed non-empty and
+dark.
+
+**Light-inverts rule, retired from the data, left in the stylesheet.**
+`.bleed.light` in `css/saferise-dashboard.css` is not deleted — nothing
+else needs it deleted to work, and it is not the shared-selector case the
+standing rule warns about (nothing else references it). No slide in
+`HERO_SLIDES` requests `theme:'light'` any more, so it is dead CSS as of
+this commit, not active code. The generation logic itself
+(`dashboard.html`'s `bleed ? ' bleed ' + b.theme : ''`) was never
+light-specific — it concatenates whatever string `b.theme` holds — so
+there was no separate code path to remove, only the data value.
+
+**§3 Weight, MATCH.**
+`band-welcome-corridor.jpg`: 282,924 bytes. Produced a WebP at the same
+2360×800 (Pillow, quality 82): 85,194 bytes — **70% smaller**, visually
+checked side by side, no loss under or outside the scrim. The codebase
+does have a `<picture>`/`<source type="image/webp">` pattern already
+(index.html's protocol-cover banners); reused it rather than inventing a
+second one, wiring `assets/coming/band-welcome-corridor.webp` as the
+`<source>` with the existing JPEG as `<img>` fallback.
+`band-anxiety-reset-wide.jpg` — **not deleted.** It is still referenced,
+in this pass's own explanatory comment in `dashboard.html` recording what
+the resume slide used to point to, and Andre's concurrent `ad2f9e9` commit
+added it as a tracked file independently of this pass; deleting a file
+someone else just committed, for a reason outside this brief's own scope,
+was treated as outside a "small pass"'s remit and left for a pass that
+actually owns that decision.
+
+**§4 Verify**
+1. Both slides render, correct artwork, copy left — confirmed above,
+   including after catching and fixing the grid regression.
+2. No interactive element on the welcome slide — confirmed,
+   `hasCta:false`.
+3. Paragraph's rightmost character sits on shadow — confirmed at 34.7%
+   across the image width (well inside the gradient's hold-through-42%
+   zone); raw image pixel beneath it was `rgb(12,37,38)` even before
+   compositing the scrim's own darkening on top, contrast **10.65:1**
+   against the paragraph's text colour — comfortably clears 4.5:1.
+4. Resume slide is dark-type — confirmed, `titleColor:rgb(245,237,216)`.
+5. Dots, arrows, autoplay, hover-pause, reduced-motion — this pass did not
+   touch the rotator's own JS (`heroGo`/`heroTimer`/arrow and dot
+   handlers), only slide **data** and CSS; verified indirectly by the
+   rotator continuing to auto-advance and respond to dot clicks throughout
+   this pass's own testing (repeatedly, and inconveniently — see the note
+   below on how that shaped verification). Not re-derived from first
+   principles, since nothing in this pass's diff touches that code.
+6. 1440/390 — copy stays in shadow at 1440 (§4.3 above, measured at that
+   width); at 390 the scrim confirmed switching to a top-down gradient
+   (`background-image` read back as a plain `linear-gradient(rgba(8,8,12,
+   .96) 0%, ...)` with no angle, i.e. the default top-to-bottom direction)
+   rather than the desktop's left-to-right one.
+7. Console clean at both widths.
+
+**Verification note, for whoever runs this pass's steps again:** the hero
+auto-advances every 7500ms and the interval is not exposed on `window`, so
+it cannot be paused from outside — every screenshot and measurement in
+this pass had to force `.on` onto the target slide and read/screenshot in
+the *same* round trip, or the rotator would tick past the intended slide
+before the check completed. Several early screenshots in this pass's own
+work were mid-crossfade or on the wrong slide entirely for exactly this
+reason, before that pattern was adopted.
+
+**§5 Report**
+- Fields changed: `HERO_SLIDES[0].theme` (`'light'`→`'dark'`),
+  `HERO_SLIDES[0].art` (wide→dark), the welcome slide's `<img>` (now
+  inside a `<picture>`) `src`, and `.sr-dash-hero-scrim`'s background in
+  both `css/saferise-dashboard.css` and its new 900px media-query variant.
+- Removed actions: none — the welcome slide carried no CTAs to remove: see
+  §1.
+- Both image sizes: welcome JPEG 282,924B / WebP 85,194B (§3 above);
+  resume wide/dark mean luminance 158.7/97.4, mean saturation .219/.198
+  (§2 above).
+- Light-inverts rule: gone from the data (no slide requests `theme:
+  'light'`); still present, unused, in the stylesheet (`.bleed.light`) —
+  a deliberate choice, not an oversight, per §2 above.
+
+**Files touched:** `dashboard.html`, `css/saferise-dashboard.css`,
+`assets/coming/band-welcome-corridor.webp` (new), `docs/fix-register.md`.
+`assets/coming/band-welcome-corridor.jpg` and
+`assets/coming/band-anxiety-reset-dark.jpg` were already present,
+untracked, delivered ahead of this pass — now referenced live and staged
+as part of this commit. `assets/coming/band-anxiety-reset-wide.jpg` is
+Andre's own concurrent `ad2f9e9` addition, untouched.
+
+*Status:* closed · *Raised and fixed:* 9 Sep 2026

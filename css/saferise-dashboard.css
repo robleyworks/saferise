@@ -591,9 +591,22 @@ body.reading #srLibrary{margin-top:22px}
 .sr-dash-hero-slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .8s ease;
   display:grid;grid-template-columns:minmax(0,560px) 1fr;align-items:center;min-height:320px}
 .sr-dash-hero-slide.on{position:relative;opacity:1;pointer-events:auto}
-.sr-dash-hero-art{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:64% 42%}
+/* SR-369 (PASS-hero-v3.md §3) · the <picture> wrapper added for the WebP
+   source has no position of its own, so — unlike the plain <img> this
+   replaced — it was a real, in-flow grid item, pushing .sr-dash-hero-body
+   and .sr-dash-quote sideways by one cell into the wrong columns. Taking
+   the wrapper out of flow the same way the image always was. */
+.sr-dash-hero-slide picture{position:absolute;inset:0;z-index:-2}
+.sr-dash-hero-art{width:100%;height:100%;object-fit:cover;object-position:64% 42%}
+/* SR-369 (PASS-hero-v3.md §1) · was a single 92deg gradient releasing to
+   .22 by 62% — the paragraph's last line landed on lit stone at some
+   viewport widths. Replaced with the approved two-layer gradient, which
+   holds through 42% and only starts releasing after 72%. Do not lighten
+   the left end — that was the defect. */
 .sr-dash-hero-scrim{position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(92deg,rgba(8,8,12,.93) 0%,rgba(8,8,12,.86) 38%,rgba(8,8,12,.22) 62%,rgba(8,8,12,.36) 100%)}
+  background:linear-gradient(90deg,rgba(8,8,12,.96) 0%,rgba(8,8,12,.94) 42%,
+    rgba(8,8,12,.86) 58%,rgba(8,8,12,.55) 72%,rgba(8,8,12,.16) 90%,rgba(8,8,12,.04) 100%),
+    linear-gradient(180deg,rgba(8,8,12,.3) 0%,transparent 30%,transparent 70%,rgba(8,8,12,.42) 100%)}
 .sr-dash-hero-body{padding:38px var(--pad);display:flex;flex-direction:column;align-items:flex-start;gap:11px;z-index:2}
 .sr-dash-hero-body h1{font-size:clamp(26px,3.2vw,38px);line-height:1.16;text-shadow:0 2px 24px rgba(0,0,0,.55)}
 .sr-dash-hero-kick{font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--gold)}
@@ -627,6 +640,12 @@ body.reading #srLibrary{margin-top:22px}
   .sr-dash-hero-play{left:auto;right:var(--pad);top:auto;bottom:74px;transform:none;width:52px;height:52px}
   .sr-dash-quote{display:none}
   .sr-dash-hero-nav{bottom:14px}
+  /* SR-369 (PASS-hero-v3.md §4.6) · the copy stacks full-width at this
+     breakpoint rather than sitting in a 560px left column, so a
+     left-to-right gradient no longer tracks where the text actually is.
+     Top-down instead, same hold-then-release shape as the desktop version. */
+  .sr-dash-hero-scrim{background:linear-gradient(180deg,rgba(8,8,12,.96) 0%,
+    rgba(8,8,12,.9) 46%,rgba(8,8,12,.5) 68%,rgba(8,8,12,.14) 88%,rgba(8,8,12,.04) 100%)}
 }
 
 /* ══════════ PASS-hero-banners · sr-hb-*, the hero slide interior ══════════
@@ -670,6 +689,14 @@ body.reading #srLibrary{margin-top:22px}
 .sr-hb.bleed .sr-hb-copy{max-width:560px}
 .bleed.light .veil{position:absolute;inset:0;
   background:linear-gradient(90deg,rgba(226,232,236,.94) 4%,rgba(226,232,236,.74) 36%,rgba(226,232,236,.12) 72%,transparent 100%)}
+/* SR-369 (PASS-hero-v3.md §2) · the dark counterpart. Never needed before —
+   every bleed slide until now was the one light exception — so there was no
+   base .veil rule for a bare .bleed slide to fall back on; a slide with
+   theme:'dark' would have rendered with an unstyled, invisible veil. Values
+   match this file's own dark-scrim pattern (.sr-hb-art::after above,
+   .sr-dash-hero-scrim), not invented fresh. */
+.bleed.dark .veil{position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.72) 38%,rgba(8,8,12,.18) 72%,transparent 100%)}
 .bleed.light .sr-hb-t{color:#12161A;text-shadow:none}
 .bleed.light .sr-hb-t em{color:#8A4A2E}
 .bleed.light .sr-hb-s{color:#3A4249}

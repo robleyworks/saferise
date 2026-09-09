@@ -115,7 +115,17 @@
       <div class="sr-dash-hero-track" id="srHeroTrack">
         <!-- 01 · welcome, always first -->
         <article class="sr-dash-hero-slide on">
-          <img class="sr-dash-hero-art" src="assets/dashboard/hero-corridor.webp" alt="">
+          <!-- SR-369 (PASS-hero-v3.md §1, §3) · was hero-corridor.webp,
+               someone walking away from camera — the wrong note for
+               "welcome back". band-welcome-corridor.jpg is the approved
+               replacement; JPEG 282,924 bytes, this page's own <picture>/
+               <source type="image/webp"> pattern reused from index.html
+               rather than a new one, WebP 85,194 bytes (70% smaller, no
+               visible loss under the scrim). -->
+          <picture>
+            <source type="image/webp" srcset="assets/coming/band-welcome-corridor.webp">
+            <img class="sr-dash-hero-art" src="assets/coming/band-welcome-corridor.jpg" alt="">
+          </picture>
           <div class="sr-dash-hero-scrim"></div>
           <div class="sr-dash-hero-body">
             <h1>Welcome back, Andre.</h1>
@@ -2024,8 +2034,16 @@
   // and are never forked back into this file. HERO_ACCENT maps the JSON's
   // token to this site's real one rather than rewriting the JSON file itself.
   var HERO_SLIDES = [
-    {key:'anxiety-reset', track:'t1-01', theme:'light', layout:'bleed', accent:'var(--t1)',
-     kick:'ANXIETY RESET', art:'assets/coming/band-anxiety-reset-wide.jpg',
+    /* SR-369 (PASS-hero-v3.md §2) · was theme:'light' with
+       band-anxiety-reset-wide.jpg — one bright slide in a rotation of four
+       dark ones, sound in isolation and wrong in context. Reverted to the
+       same dark/light-type treatment the other four slides use, with the
+       darker, less-saturated version of the same photograph. This retires
+       the light-inverts rule set in SR-364: css/saferise-dashboard.css's
+       .bleed.light block is left in place (nothing else needs it deleted
+       to work), but no slide in this array requests it any more. */
+    {key:'anxiety-reset', track:'t1-01', theme:'dark', layout:'bleed', accent:'var(--t1)',
+     kick:'ANXIETY RESET', art:'assets/coming/band-anxiety-reset-dark.jpg',
      title:'I brace before <em>anything has happened</em>',
      sub:'Racing thoughts, shallow breath, the worst version running on a loop. This works the state underneath the thoughts — not the thoughts themselves.',
      cta:'Begin', ghost:'What this protocol does', meta:''},
