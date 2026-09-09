@@ -137,6 +137,10 @@ All visual styling lives in `css/saferise-system.css` and `js/saferise-system.js
   branching on `data.kind`.
 - Fixed nav and resource modals have a history of z-index conflicts.
 - Waveform loop init is tied to audio player IDs.
+- **HTML comments close with `-->`, never `*/`.** A `*/` close silently
+  swallows the rest of the file as comment content and the page renders
+  with no error. Caught twice — SR-371, SR-372. Check tag balance after
+  editing any HTML comment.
 
 ## Standing rules — added by PASS-site-readiness.md
 

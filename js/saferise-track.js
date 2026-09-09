@@ -445,6 +445,27 @@
   }
 
   /* ── 10 · FAQ · 12 shared + 6 track-specific = 18 ────────────────── */
+  /* SR-375 (PASS-indexing-readiness.md §2) · the FAQPage block is built
+     from this exact `items` array, the same one the visible questions and
+     answers below are built from — not retyped, so there is no drift
+     between the visible answer and the structured one for Google to
+     penalise (docs/SEO-HEAD-TEMPLATE.md's own ⚠). Generated here, at
+     render time, rather than once into static HTML, so it can never go
+     stale if a FAQ entry is ever added or edited in content/tracks.js. */
+  function faqJsonLd(items) {
+    var data = {
+      '@context': 'https://schema.org', '@type': 'FAQPage',
+      mainEntity: items.map(function (q) {
+        return { '@type': 'Question', name: q[0],
+          acceptedAnswer: { '@type': 'Answer', text: q[1].join(' ') } };
+      })
+    };
+    /* escape </ so a literal "</script>" can never appear inside the JSON
+       and terminate the tag early -- CLAUDE.md's own landmine, the other
+       direction: not a closing tag IN the source, one assembled from data
+       at runtime. */
+    return '<script type="application/ld+json">' + JSON.stringify(data).replace(/<\//g, '<\\/') + '</script>';
+  }
   function rFaq(t) {
     var items = SHARED.faq.concat(t.faq || []);
     var half = Math.ceil(items.length / 2);
@@ -461,7 +482,7 @@
     return '<div class="sr-tp-band"><div class="sr-tp-wide">' +
       sechead('What’s left to ask', 'Before you start.', 'The things worth knowing, answered plainly.') +
       '<div class="sr-tp-faqcols">' + col(items.slice(0, half)) + col(items.slice(half)) + '</div>' +
-    '</div></div>';
+    '</div></div>' + faqJsonLd(items);
   }
 
   /* ── 11 · scope & safety · legally load-bearing, never omitted ───── */

@@ -633,6 +633,15 @@ body.rd-soft{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card
   --recess:rgba(24,30,60,.2);--lift:rgba(255,226,186,.1)}
 body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
 </style>
+<!-- SR-375 (PASS-indexing-readiness.md §2) · sitewide Organization block,
+     same content as js/saferise-footer.js's own copy — this page keeps its
+     own footer (see that file's header comment) so it isn't covered by the
+     module and gets the block directly instead. The per-protocol Article
+     block is injected by renderProtocolContent() below, once the protocol
+     is known; this one doesn't depend on that and is static. -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"SafeRise Protocol","url":"https://thesaferiseprotocol.com","logo":"https://thesaferiseprotocol.com/assets/brand/logo.png","parentOrganization":{"@type":"Organization","name":"Kenor International B.V."},"contactPoint":{"@type":"ContactPoint","email":"contact@thesaferiseprotocol.com","contactType":"customer support"}}
+</script>
 </head>
 <body>
 
@@ -1390,6 +1399,53 @@ function renderProtocolContent(pp) {
   if (titleEl) titleEl.textContent = row[2];
   var ledeEl = document.getElementById('pp-lede');
   if (ledeEl) ledeEl.textContent = row[3] || '';
+
+  /* SR-375 (PASS-indexing-readiness.md §2) · the per-protocol Article
+     block, plus the canonical link and meta description this page never
+     had at all. Not explicitly asked for by §2 (which names only the
+     three JSON-LD blocks) but added alongside it: this one page resolves
+     through three different URL forms (?slug=, ?track=&protocol=, and the
+     /protocols/{slug} rewrite) for the same content, and shipping
+     structured data with no canonical pointing at which of the three is
+     the real one undercuts the point of adding it. Both the title and
+     description already exist in the data (docs/SEO-HEAD-TEMPLATE.md's
+     own note — no new copy needed); the slug is the row's own last
+     element, same rule protocol.html's own PAGE_PROTOCOL resolver above
+     already follows for the same t3-06 reason. */
+  var slug = row[row.length - 1];
+  var canonicalHref = 'https://thesaferiseprotocol.com/protocols/' + slug;
+  var canonicalEl = document.querySelector('link[rel="canonical"]');
+  if (!canonicalEl) {
+    canonicalEl = document.createElement('link');
+    canonicalEl.rel = 'canonical';
+    document.head.appendChild(canonicalEl);
+  }
+  canonicalEl.href = canonicalHref;
+  var descEl = document.querySelector('meta[name="description"]');
+  if (!descEl) {
+    descEl = document.createElement('meta');
+    descEl.name = 'description';
+    document.head.appendChild(descEl);
+  }
+  if (row[3]) descEl.content = row[3];
+
+  var track = (typeof TRACKS !== 'undefined') && TRACKS[pp.trackId];
+  var stateLabel = String(row[2] || '').replace(/^The\s+/, '').replace(/\s+Protocol$/, '');
+  var articleLd = document.getElementById('srArticleJsonLd');
+  if (!articleLd) {
+    articleLd = document.createElement('script');
+    articleLd.type = 'application/ld+json';
+    articleLd.id = 'srArticleJsonLd';
+    document.head.appendChild(articleLd);
+  }
+  articleLd.textContent = JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'Article',
+    headline: row[2], description: row[3] || '',
+    about: { '@type': 'Thing', name: stateLabel + ' — nervous system regulation' },
+    isPartOf: { '@type': 'CreativeWorkSeries', name: (track && track.name) || '' },
+    publisher: { '@type': 'Organization', name: 'SafeRise Protocol' },
+    inLanguage: 'en'
+  });
 
   /* SR-373 (PASS-resource-list-and-reflection.md §5) · body signature
      (row[4]) and the three first-person quotes (row[5]) taken back off

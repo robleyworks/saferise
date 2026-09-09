@@ -88,6 +88,30 @@
     return html + '</div>';
   }
 
+  /* SR-375 (PASS-indexing-readiness.md §2) · from docs/SEO-HEAD-TEMPLATE.md,
+     "Sitewide, in the footer partial" — this is the one module every public
+     page's footer already goes through, so this is that partial. Injected
+     once per page load, into <head> rather than the mount (JSON-LD has no
+     rendered box and doesn't belong inside the visible footer markup). Does
+     NOT cover index.html or protocol.html, which keep their own separate
+     footers (see the header comment) — both get the same block added
+     directly where they are. */
+  var ORG_JSONLD = '{"@context":"https://schema.org","@type":"Organization",' +
+    '"name":"SafeRise Protocol",' +
+    '"url":"https://thesaferiseprotocol.com",' +
+    '"logo":"https://thesaferiseprotocol.com/assets/brand/logo.png",' +
+    '"parentOrganization":{"@type":"Organization","name":"Kenor International B.V."},' +
+    '"contactPoint":{"@type":"ContactPoint","email":"contact@thesaferiseprotocol.com","contactType":"customer support"}}';
+
+  function addOrgJsonLd() {
+    if (document.getElementById('srOrgJsonLd')) return;
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = 'srOrgJsonLd';
+    s.textContent = ORG_JSONLD;
+    document.head.appendChild(s);
+  }
+
   function render(opts) {
     opts = opts || {};
     var mount = typeof opts.mount === 'string' ? document.getElementById(opts.mount)
@@ -100,7 +124,8 @@
       '</div></footer>';
 
     mount.innerHTML = html;
+    addOrgJsonLd();
   }
 
-  global.SafeRiseFooter = { render: render };
+  global.SafeRiseFooter = { render: render, addOrgJsonLd: addOrgJsonLd, ORG_JSONLD: ORG_JSONLD };
 })(window);

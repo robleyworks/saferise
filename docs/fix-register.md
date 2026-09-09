@@ -13253,3 +13253,222 @@ brief's to reverse.
 *Status:* closed. **Not pushed** — pass 3 (`PASS-indexing-readiness.md`)
 still to run; `docs/RUN-ORDER-2.md`'s own instruction is not to push
 until all three report clean. *Raised and fixed:* 9 Sep 2026
+
+## SR-375 · indexing readiness — structured data, sitemap, CSP enforced, post-split cleanup
+
+Runs `pass/PASS-indexing-readiness.md`, pass 3 of 3 in
+`docs/RUN-ORDER-2.md` — the last of the three. Allocated via
+`git log --oneline --grep="SR-374"`, which found SR-374 as the last
+issued and nothing between it and this pass's own HEAD. **`noindex` is
+untouched everywhere** — that stays Andre's switch, per this brief's own
+§0.
+
+**§1 — the count, re-checked.** Grepped the whole repo for `31
+protocols` / `thirty-one protocols` / `308 resources` / `three hundred
+and eight`. **Zero hits on any live, member- or public-facing page** —
+SR-372 and SR-373 already corrected every one that mattered before this
+pass started. What's left is five internal documents:
+`docs/INVESTED-WORK-REPORT.md`, `docs/saferise-invested-work.html`,
+`docs/handover/REASONING-AND-COMMENTARY.md` (an investor report, its own
+HTML rendering, and a handover note — all describing work as invoiced/
+delivered at a point in time), `docs/fix-register.md`'s own two
+historical entries (this file, describing what was true when those
+passes ran), and `docs/TRACK-RESOURCES.md` (a different count entirely —
+"Cue Card exists in 31 protocols," not a catalogue-size claim; unrelated
+to this defect). **None touched** — rewriting a point-in-time financial
+record or a past register entry to say something else now is
+revisionism, not correction, matching this whole session's standing
+practice of leaving `docs/tracker-v*.html` alone. `t0-00`/Clearing
+untouched, as instructed.
+
+**§2 — structured data.** All three blocks, all generated, none
+hand-typed:
+
+- **Organization**, sitewide: added to `js/saferise-footer.js`'s
+  `render()` (covers all 17 pages that call it — `about.html`,
+  `accessibility.html`, `refunds.html`, `relationship-healing.html`,
+  `live-sessions.html`, `plans.html`, `method.html`, `terms.html`,
+  `reset-password.html`, `login.html`, `anxiety-reset.html`,
+  `account.html`, `coming-soon.html`, `professional-performance.html`,
+  `personal-transformation.html`, `signup.html`, `privacy.html` — more
+  than the module's own "nine pages" comment claims; not corrected, out
+  of scope) — plus `index.html` and `protocol.html` directly, since both
+  keep their own separate footers and are not covered by the module.
+  Verified live (`document.getElementById('srOrgJsonLd')`, parsed).
+- **Article**, per protocol: `protocol.html`'s `renderProtocolContent()`
+  now builds one from `row` — `headline`/`description` already exist in
+  the data, `about.name` derived from the title with "The "/" Protocol"
+  stripped (e.g. "Trust & Betrayal"), `isPartOf.name` from
+  `TRACKS[n].name`. Verified live on `t2-03` and `t3-06` (the 8-element
+  row) — both correct, slug resolved correctly on the irregular row too.
+- **FAQPage**, the three track pages: generated inside
+  `js/saferise-track.js`'s own `rFaq(t)`, from the exact same `items =
+  SHARED.faq.concat(t.faq || [])` array the visible questions and
+  answers are built from two lines later — not retyped, so it cannot
+  drift from the visible copy, per the brief's own ⚠. 18 entries per
+  page (12 shared + 6 track), matching the file's own long-standing
+  comment. `</` escaped to `<\/` inside the JSON so a literal
+  `</script>` can never appear mid-string and terminate the tag early —
+  the same landmine CLAUDE.md already documents, the other direction (an
+  assembled string, not source text). Verified by replicating the exact
+  same construction against the live `SHARED.faq`/`TRACKS[1].faq` data
+  in-browser: 18 entries, correct question and answer text, valid JSON.
+- **Not added:** `Review`, `AggregateRating`, `Product`,
+  `MedicalWebPage` — none exist to add.
+- **Also added, beyond §2's literal ask**: `protocol.html` had **no**
+  `<link rel="canonical">` and **no** `<meta name="description">` at
+  all — a real gap given this one page resolves through three URL forms
+  (`?slug=`, `?track=&protocol=`, and the `/protocols/{slug}` rewrite)
+  for identical content. Both added alongside the Article block, from
+  data that already exists (`docs/SEO-HEAD-TEMPLATE.md`'s own note: "no
+  new copy needed"). Reported as a DIFFERS-adapt, not silently folded
+  in: shipping structured data with no canonical pointing at which of
+  three URLs is the real one undercuts the point of adding it.
+
+**§3 — sitemap.** `node scripts/gen-sitemap.js` — Node still
+unavailable (unchanged limitation, same as SR-372's own report).
+Replicated its exact logic in Python, confirmed against the script's own
+source line by line, then extended it exactly as the brief's own ⚠
+predicted: the original only ever reads `fs.readdirSync('.')` for
+`.html` files, so it has **never** produced a single `/protocols/{slug}`
+entry — confirmed by reading the script, not assumed. **30 protocol
+routes added** from the 30 slugs SR-372 already verified and listed.
+**48 URLs total** — 18 static pages (after the script's own
+`dashboard|account|signup|login|member-|404|pass|mock` exclusion) + 30
+protocol routes. `sitemap.xml` written. Full list in the script's own
+output, reproduced here by category rather than all 48 individually:
+the 18 static pages are `about`, `accessibility`, `anxiety-reset`,
+`coming-soon`, `getting-help`, `/` (index), `live-sessions`, `method`,
+`personal-transformation`, `plans`, `privacy`,
+`professional-performance`, `protocol`, `refunds`,
+`relationship-healing`, `reset-password`, `resource`, `terms`; the 30
+protocol routes are `/protocols/{slug}` for every slug SR-372 listed.
+**Not fixed, flagged**: `anxiety-reset.html` (the free, no-account
+Foundation Protocol, a genuinely different page) and
+`/protocols/anxiety-reset` (Track 1 Protocol 01, the paid/gated
+version) share the exact same slug word for two different pages — not a
+duplicate-content problem (the content differs) but a real naming
+collision a member or Google could read as the same destination twice.
+Also unfixed, inherited from the original script and not asked about:
+`protocol` and `resource` (the bare query-driven templates) are
+included as their own sitemap entries even though they only render
+placeholder content without query parameters — pre-existing script
+behaviour, not introduced here.
+
+**§4 — CSP.** Could not observe real violations locally —
+`tools/serve.py` is a bare `http.server` handler and never reads
+`_headers` at all, so the report-only header was never actually being
+sent to this dev server in the first place. Two independent checks
+instead: (1) a full static audit — every `<script src=`, external
+`<link href=`, `fetch()`/`XMLHttpRequest` call, and `<iframe>` in the
+repo, grepped and checked against each directive by hand. Zero external
+script tags anywhere (`js/saferise-auth.js`'s own header comment: "Talks
+to Supabase over plain fetch() ... Nothing else in this repo loads an
+external <script>" — confirmed, not just quoted); the one `fetch()`
+outside that file is same-origin (`index.html`, `fetch('/', ...)`); the
+one `<iframe>` (`dashboard.html`'s embed frame) is same-origin. (2) Real
+enforcement, tested live: temporarily added the exact policy as a
+blocking (not report-only) `<meta http-equiv="Content-Security-Policy">`
+to five page types — `index.html`, `personal-transformation.html`,
+`protocol.html` (with a real protocol loaded and its tabs/links
+exercised), `dashboard.html` (chips clicked), `login.html` — reverted
+immediately after. **Zero violations on any of the five** — the only
+console line was Chromium's own advisory that `frame-ancestors` is
+ignored via `<meta>`, which doesn't apply to the real header-delivered
+version and isn't a violation. **Nothing needed correcting** in the
+policy itself — Supabase and the font CDN were already there. **Switched
+to enforcing** in `_headers`. Two entries in the policy are currently
+unused (no `<script>` loads from `plausible.io` or `*.supabase.co` —
+nothing integrates Plausible yet, and Supabase is fetch-only) but
+harmless to leave; removing unused grants is a separate decision from
+"does enforcing this break anything today," and wasn't asked.
+
+**§5 — member coming-soon parity.** Landed. `member-coming-soon.html`
+carries 170 `sr-cs-` occurrences; `member-frameworks.html` carries zero
+— confirmed by direct count, not assumed from SR-365's own report.
+
+**§6 — CLAUDE.md.** Added to "Platform landmines" (the closest existing
+section to what this is — a footgun list, not a rule list), matching
+that section's own bullet format rather than inventing a new heading
+for one line.
+
+**§7 — report only, not fixed.**
+
+1. **`--shut` contrast.** Already resolved — SR-374 (pass 2, run before
+   this one) measured it live at 3.64:1 (SR-368's own 3.87:1, same
+   defect, marginally different background reference) and lightened it
+   to `#7288A0` (5.41:1) in all three of its declarations. Not
+   "Andre decides" any more, per this brief's own §7.1 framing — pass
+   2's own brief had already made that call ("Decided: lighten the
+   token") by the time this pass ran.
+2. **Data subject rights**, from `docs/article-30-register.md` §8,
+   quoted rather than re-assessed: Access (export) **not built** —
+   LG-126; Rectification (email change) partial; Erasure (cascading
+   account deletion) **not built**; Portability (JSON export) **not
+   built**; Objection (consent withdrawal, usage-event opt-out)
+   partial; Complaint (to the supervisory authority) ready, named in
+   the privacy policy. **Three of six not built.** The register's own
+   words: "manageable by hand" for two accounts, "stops being
+   manageable the moment the free tier opens," with a one-month
+   statutory deadline once it does.
+3. **Indexing readiness — my assessment: not yet, on two counts that
+   are cheap to close and one that is not.**
+   - **Cheap to close, and the more urgent of the two**:
+     `docs/*.html` files — `saferise-invested-work.html` (an investor
+     financial report, dollar figures and all), the `tracker-v*.html`
+     spreadsheets, `docs/reference/*.html` — are not excluded by
+     `robots.txt` (which has no `/docs` rule) and carry no per-page
+     `noindex` of their own. Nothing links to them from the live site,
+     but "unlinked" is not "unindexable" — a crawler that finds one by
+     any other route (a shared link, a sitemap another tool generates,
+     a search engine that already has it queued) would index an
+     internal financial document. Worth closing before the switch is
+     thrown, not after.
+   - `anxiety-reset.html` vs `/protocols/anxiety-reset` — flagged in §3
+     above — a same-slug collision between two different real pages,
+     not fixed here.
+   - `noindex` **is** present on 29 of the 30 top-level pages —
+     `accessibility.html` is the one exception, carrying no robots meta
+     tag at all, found by checking every file rather than trusting the
+     count. Every other page currently carries the identical blanket
+     tag, due to come off in one motion when Andre throws the switch —
+     this one page is either an intentional exception (accessibility
+     statements are sometimes left public even pre-launch) or a plain
+     omission; not touched either way, since guessing which and acting
+     on it is exactly the kind of unilateral call this pass isn't
+     authorised to make.
+   - **Not cheap, and the real gate**: §7.2's three unbuilt data-subject
+     rights. Indexing brings the traffic that starts the clock on that
+     gap; today, with effectively no public traffic, it costs nothing to
+     leave open.
+   - Smaller, already flagged in SR-374 and not re-litigated here: the
+     Attention Advisory / Proximity Guide naming split across systems.
+
+**§8 — verify.** Zero `31 protocols`/`308 resources` on any live page
+(§1). Every JSON-LD block validated by `JSON.parse` in-browser against
+real page/data output, not eyeballed (§2). Sitemap: 48 URLs, all 30
+protocol routes present (§3). CSP: enforced, zero violations found by
+either method (§4). Coming-soon parity confirmed by direct count (§5).
+Console clean on every route checked this pass: `index.html`,
+`personal-transformation.html`, `relationship-healing.html`,
+`professional-performance.html`, `protocol.html` (two protocols, one
+the 8-element row), `dashboard.html`. `noindex` present on 29 of 30
+pages, the one exception named above, not acted on.
+
+**§9 — report, in full above.**
+
+**Files touched:** `js/saferise-footer.js` (Organization JSON-LD),
+`js/saferise-track.js` (FAQPage JSON-LD), `protocol.html` (Organization
++ Article JSON-LD, canonical, meta description), `_headers` (CSP
+enforced), `CLAUDE.md` (the landmine line), `sitemap.xml` (new),
+`docs/fix-register.md`. Not touched: `noindex` anywhere; the five
+internal documents named in §1; `docs/TRACK-RESOURCES.md`;
+`robots.txt` (the `/docs` gap named in §7.3, not closed);
+`accessibility.html` (the missing `noindex`, named in §8, not closed);
+`content/tracks.js`'s naming split (SR-374's own flag, not this pass's
+to resolve).
+
+*Status:* closed. **Not pushed** — all three passes of
+`docs/RUN-ORDER-2.md` have now run and report clean; whether to push is
+Andre's own call, same as every other pass this session.
+*Raised and fixed:* 9 Sep 2026
