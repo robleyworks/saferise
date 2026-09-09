@@ -17,15 +17,21 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-370** (the site split, partial — four
+- **Highest ID issued: SR-371** (the auth loop closed — confirmation
+  redirect now signs a member in automatically, password reset built end
+  to end via a new `reset-password.html`, both verified live against the
+  real Supabase project with constructed tokens — verified via
+  `git log --oneline --grep="SR-370"`, which found SR-370 as the last
+  issued and nothing between it and this pass's own HEAD; per this note's
+  own documented history of going stale, do not trust this line either —
+  re-verify before the next allocation.)
+- **Previously: Highest ID issued: SR-370** (the site split, partial — four
   duplications resolved (About, Plans, Live sessions, Foundation), seven
   redundant `#prog-*` sections retired from `index.html`, SEO head blocks
   landed on ten pages, `_redirects` created; the three track-portal
   sections and their JS deliberately deferred, not attempted — verified
   via `git log --oneline --grep="SR-369"`, which found SR-369 as the last
-  issued and nothing between it and this pass's own HEAD; per this note's
-  own documented history of going stale, do not trust this line either —
-  re-verify before the next allocation.)
+  issued and nothing between it and this pass's own HEAD.)
 - **Previously: Highest ID issued: SR-369** (dashboard hero — welcome slide re-shot,
   repositioned and re-scrimmed; resume slide reverted to dark; a
   self-introduced grid regression from this pass's own `<picture>` change
@@ -12270,3 +12276,224 @@ complete. `content/tracks.js`, `protocol.html`, `resource.html`,
 this pass actually attempted. **Not pushed.** Andre pushes once the split
 is verified — and this is not yet the full split, so that verification
 still has real work ahead of it. · *Raised and fixed:* 9 Sep 2026
+
+## SR-371 · the auth loop closed — confirmation redirect signs members in, password reset built end to end
+
+Runs `pass/PASS-auth-loop.md`, pass 6 (the last) of `docs/RUN-ORDER.md`'s
+six. Allocated via `git log --oneline --grep="SR-370"`, which found SR-370
+as the last issued and nothing between it and this pass's own HEAD.
+SR-358's own entry read first, as instructed — its findings (both gaps
+below, the redirect/Site-URL mechanics, the "GoTrue via fetch(), no SDK"
+architecture) matched this brief's own framing throughout; no disagreement
+to report.
+
+**§1 Confirmation redirect · LG-150 — built.**
+
+1. **Which page the redirect targets:** the domain root — `index.html`.
+   Neither `signUp()` nor `sendMagicLink()` in `js/saferise-auth.js` passes
+   an explicit `redirectTo`, so Supabase falls back to the dashboard's
+   configured Site URL (`https://thesaferiseprotocol.com`, per
+   `docs/SUPABASE-SETUP.md` §5), which serves `index.html`. Confirmed by
+   reading the code, not assumed from the runbook alone.
+2. **What the landing page did with the fragment before this pass:**
+   nothing — confirmed again fresh (grepped `index.html` for
+   `access_token`/`location.hash`: zero hits before this pass's own edit).
+   Ignored, not mishandled, matching SR-358's own finding exactly.
+3. **Handler built** — `js/saferise-auth.js`'s new `handleAuthRedirect()`:
+   parses `location.hash` into key/value pairs, clears the hash via
+   `history.replaceState` **in every branch**, including failure, before
+   returning — a token is never left sitting in the URL bar, browser
+   history, or a link someone might copy. Establishes the session the same
+   way `signIn()` already does (`session = {...}; writeSession(session)`)
+   when an `access_token` is present. Wired into `index.html` via a new
+   `<script src="js/saferise-auth.js">` (index.html loaded no auth code at
+   all before this pass) and a small inline handler that shows a
+   dismissible banner and redirects to `dashboard.html` after 1.4s on
+   success.
+4. **Failure cases, handled visibly.** An `error`/`error_description` in
+   the fragment (Supabase's own shape for an expired or already-used link)
+   and a fragment with neither `access_token` nor `error` (malformed) both
+   produce the same banner, showing the server's own message where one
+   exists, with **Sign in** and **create an account** links back into the
+   loop — never a blank page, never silence.
+5. **Session storage:** `localStorage`, under the existing `sr.auth.session`
+   key `signIn()`/`signUp()` already use — unchanged, so it survives a
+   reload the same way a normal sign-in already did. Verified live (see
+   §4 below), not just read from the code.
+
+**Not put in a query string, not logged** — confirmed by inspection:
+`handleAuthRedirect()` never touches `location.search`, and no `console.*`
+call in the new code carries `params` or `session`.
+
+**§2 Password reset · LG-151 — built.**
+
+1. **What `login.html` offered before:** nothing. No "forgot password"
+   link, no recovery UI anywhere — confirmed by reading the page, matching
+   SR-358's own finding.
+2. **Request step, built** — new `reset-password.html`, default view: an
+   email field and one button. `js/saferise-auth.js`'s new
+   `requestPasswordReset(email)` calls GoTrue's `/recover` endpoint with
+   an explicit `redirect_to` pointing at `reset-password.html` itself
+   (unlike signup/magic-link above, which keep falling back to the
+   Site URL — this pass owns the reset flow's own redirect, not the
+   other two). **The response note is identical whether or not the
+   address has an account** — "If there's an account for {email}, a
+   reset link is on its way." — shown on both success and on a request
+   failure alike; the only thing that changes the wording is a genuine
+   client-side format issue the browser's own `type="email"` validation
+   catches before submission, which reveals nothing about account
+   existence either.
+3. **Set-new-password step, built**, reached only via the emailed link —
+   `reset-password.html`'s second view, shown when
+   `handleAuthRedirect()` reports `type === 'recovery'`. **Reuses §1's
+   handler directly, not a duplicate** — the brief's own instruction.
+   `updatePassword()` (new) authenticates with the session
+   `handleAuthRedirect()` just established from the recovery token, via
+   GoTrue's `PUT /auth/v1/user`.
+4. **Minimum password rule:** `minlength="8"`, matching `signup.html`'s
+   own `#srPassword` field exactly (same attribute, same placeholder
+   pattern: "At least 8 characters"). No divergence to report.
+5. **On success:** redirects to `dashboard.html`, signed in — `signIn()`
+   itself is not called separately; the session from the recovery token
+   is already the live one, and `updatePassword()` doesn't invalidate it.
+   **On an expired/used link:** `reset-password.html`'s third view, a
+   plain "That link no longer works" message with a **Request a new
+   link** control back to step 2.
+
+**Matches the existing pages.** `reset-password.html` is built from
+`login.html`/`signup.html`'s own markup verbatim — same inline style
+strings, same `sr-tp-band`/`sr-tp-pill`/`sr-tp-body` classes, same label/
+input/button structure, same chrome-loading pattern (`srNav`/`srFooter`
+partials, `js/saferise-nav.js` registers it as `'reset-password.html'`).
+No new design introduced.
+
+**§3 While you are in there — report only, nothing changed**
+1. **Sign-out clears the session everywhere it's stored:** yes —
+   `signOut()`'s existing code (`session = null; writeSession(null);
+   entitledCache = false`) already covered the one storage location
+   (`localStorage`'s `sr.auth.session`); this pass added no second
+   location for it to miss.
+2. **Signed-out access to gated content:** unchanged by this pass.
+   `js/saferise-access.js`'s `hasAccess()` (read in an earlier session,
+   not re-derived here) fails closed for anyone without `srIsDev()`,
+   `isFree()`, or a real entitled session — a direct URL to a gated page
+   returns the locked/gated view, not the content itself. Not touched or
+   re-verified fresh this pass; flagged as its own worthwhile pass rather
+   than assumed unchanged without saying so.
+3. **Placeholder URL/key in `js/saferise-auth.js`:** gone. `:32`/`:33` read
+   the real project (`https://mynjjgtjytzyfsuqqlhg.supabase.co`,
+   `sb_publishable_1SB0yturyH6LRVrz8kjkcg_tGIqEQ4-`) since SR-359 — this
+   pass changed neither line, confirmed by direct read before writing this
+   entry.
+
+**§4 Verify — the project is live, so this ran, not skipped.**
+
+Real email delivery and link-clicking need an inbox this session doesn't
+have, so verification split: the client-side mechanics were exercised
+directly against the **live** project using hand-constructed tokens
+(structurally valid JWTs, not signed by the project's real secret), and
+the exact manual sequence for the email-dependent remainder was written
+into `docs/SUPABASE-SETUP.md` §7 rather than skipped silently.
+
+**Confirmation flow, verified live (fresh port each time, to rule out this
+session's own recurring local-server cache issue rather than trust a
+possibly-stale reload):**
+- A `#access_token=...&type=signup` fragment on `index.html`: banner
+  showed "You're signed in. Taking you to your dashboard…", `location.hash`
+  cleared to `""`, `srAuth.user()` returned the token's own claims
+  (`{id:'test-user-id-123', email:'test@example.com'}`), `localStorage`'s
+  `sr.auth.session` held the token, and the page redirected to
+  `dashboard.html` (confirmed via the tab's own title changing) within the
+  expected ~1.4s.
+- A `#error=access_denied&error_code=otp_expired&error_description=...`
+  fragment: banner showed the server's own description plus both recovery
+  links, hash cleared.
+
+**Recovery flow, verified live, same method:**
+- A `#access_token=...&type=recovery` fragment on `reset-password.html`:
+  request view hidden, set-password view shown, hash cleared,
+  `srAuth.user()` populated from the token.
+- Default load, no fragment: request view shown (confirmed via
+  `getComputedStyle`, not just the inline `style.display` set at parse
+  time).
+- Mismatched passwords on the set-password form: inline "Those two
+  passwords don't match" error, **no network request fired** (checked —
+  submitting resolved in ~100ms, too fast for a round trip).
+- Matching passwords, submitted for real against the **live** project:
+  came back with the live server's own rejection —
+  `invalid JWT: unable to parse or verify signature, token signature is
+  invalid: signature is invalid` — displayed in the form's error element
+  rather than crashing or hanging. This is the strongest evidence
+  available without a real signed token that a genuine recovery link
+  would succeed the same way: the request reached the real server, in the
+  real expected shape, and only failed on the one thing a hand-built
+  token can't fake.
+- The request step, submitted for real against the **live** project with
+  a made-up address (`sr-test-nonexistent-probe@…`): resolved with the
+  neutral note, form disabled — consistent with GoTrue's own
+  non-enumerating behaviour, though this particular network call isn't
+  visible in this session's request inspector (a tooling limitation —
+  only same-origin requests to the local dev server are listed there; the
+  update-password test above already proved cross-origin calls to the
+  live project are reaching it and returning real responses).
+
+**Regression check:** `login.html` still signs in, still offers the
+magic-link trigger; loaded with `localStorage` freshly cleared, console
+showed the same 401/403 pattern as before this pass's own edits — a
+pre-existing background call this pass didn't introduce and didn't
+investigate further, since it reproduces with or without any of this
+pass's changes present. Reported, not chased down — out of this brief's
+own scope.
+
+**Everything that could not be verified without a live inbox:** receiving
+an actual confirmation, magic-link or recovery email; confirming the
+"from" address matches the configured SMTP provider; clicking a real,
+correctly-signed link end to end. All three are `docs/SUPABASE-SETUP.md`
+§7's own reason for existing — the exact numbered sequence for Andre to
+run once he has an inbox in hand.
+
+**§5 Report**
+
+Per section: MATCH throughout — the brief's own two builds were built as
+specified, its three report-only checks confirmed rather than changed.
+§4 **ran**, against the live project, to the extent a real inbox allows;
+the remainder is `docs/SUPABASE-SETUP.md` §7. **No token was written to a
+query string or a log anywhere in this pass's own code** — confirmed by
+reading `handleAuthRedirect()`/`requestPasswordReset()`/`updatePassword()`
+directly, not asserted from memory.
+
+**Named — everything changed beyond the brief's literal ask:**
+- `docs/SUPABASE-SETUP.md` §6's own confirmation-flow description was
+  stale the moment this pass landed (it described the pre-fix "not
+  automatically signed in" behaviour) — updated in place rather than left
+  to contradict the new §7 a few lines below it.
+- The dot-rail-equivalent decision for password reset — whether to build
+  it as a second page or an inline toggle on `login.html`, which the
+  brief didn't specify — resolved as a dedicated `reset-password.html`
+  because the set-new-password step genuinely needs its own view reached
+  from an email link, and folding the request step into the same file
+  avoided a fourth auth page for a two-field form.
+
+**Files touched:** `js/saferise-auth.js`, `index.html`, `login.html`,
+`reset-password.html` (new), `docs/SUPABASE-SETUP.md`,
+`docs/fix-register.md`.
+
+**A real bug in this pass's own first draft, caught before commit:** the
+HTML comment introducing the `index.html` banner was closed with `*/`
+(a JS/CSS comment closer) instead of `-->`. Every browser tested (this
+session's own) treats an unterminated `<!--` as extending to end of file,
+which silently turned the entire banner `<div>` and both new `<script>`
+tags into inert comment text — `document.getElementById('srAuthBanner')`
+returned `null`, `srAuth` was `undefined`, nothing worked, and the raw
+`fetch()`-read source still looked completely correct at a glance, which
+is what made it non-obvious at first. Caught by comparing
+`document.documentElement.outerHTML.includes(...)` (true) against
+`document.getElementById(...)` (null) — the two disagreeing is what gave
+it away — fixed, and confirmed via `<!--`/`-->` count parity across the
+whole file (47/47) before any of the verification above was trusted.
+
+*Status:* closed. **Not pushed.** This closes `docs/RUN-ORDER.md`'s six —
+five closed in full (SR-367, SR-368, SR-369, SR-371; SR-370's split is
+partial, see its own entry) plus SR-365/SR-366 landed earlier in the same
+sequence. Andre pushes once the split is verified — nothing in this
+session pushes on its own. · *Raised and fixed:* 9 Sep 2026

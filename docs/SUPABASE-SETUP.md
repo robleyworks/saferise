@@ -160,13 +160,99 @@ After each step above, here is what you should see:
 - **After §5:** open `signup.html` on the live site, create a real
   account with an address you control. You should receive a confirmation
   email within a minute or two, sent from your configured provider (check
-  the "from" address), landing wherever §5's Redirect URL points — not
-  automatically signed in, per the flagged gap above. Signing in manually
-  afterward on `login.html` should succeed and land on `dashboard.html`
-  (or wherever `?next=` pointed).
+  the "from" address), landing wherever §5's Redirect URL points.
+  **SR-371 closed the gap this used to flag here:** the confirmation
+  redirect now signs the member in automatically — no manual sign-in step
+  needed afterward. See §7 below for the exact sequence.
 - **Full end-to-end verification** — sign-up through sign-out, confirming
   `account.html` renders correctly and a signed-out visitor is actually
   blocked from gated content — is §4 of the audit report this runbook
-  accompanies, and needs the project live to run. It was skipped this
-  pass because the project doesn't exist yet; re-run it once every step
-  above is done.
+  accompanies, and needs the project live to run. It was skipped when
+  this runbook was first written, because the project didn't exist yet.
+  The project is live now (SR-359); §7 below is that sequence, run for
+  the two flows SR-371 built. `account.html`/gated-content behaviour
+  itself is unchanged by SR-371 and still worth a pass of its own.
+
+## 7 · Manual test sequence — confirmation redirect and password reset (SR-371)
+
+Written per `pass/PASS-auth-loop.md` §4's own instruction: the project is
+live, so this is the sequence to run rather than a "once it's live" note.
+This session verified the client-side mechanics (fragment parsing, session
+establishment, hash clearing, error display) against the real project using
+constructed tokens — real signature rejection came back exactly as
+expected, confirming the request format and error handling both work — but
+could not verify receiving and clicking a real email, which needs an inbox
+this session doesn't have. Two sequences below cover that gap.
+
+**A — confirmation / magic-link redirect**
+
+1. On `signup.html`, create an account with an address you control.
+2. Confirm the email arrives (see §6 above for provider/from-address
+   checks) and note where its link points — it should be the domain root
+   (`https://thesaferiseprotocol.com/#access_token=...&type=signup`), since
+   nothing in `js/saferise-auth.js` passes an explicit `redirectTo` for
+   sign-up or magic-link.
+3. Click it. **Expect:** the homepage loads, a banner appears near the top
+   reading "You're signed in. Taking you to your dashboard…", the URL's
+   `#access_token=...` fragment disappears from the address bar within the
+   same instant (check history — it should not be there either), and the
+   page redirects to `dashboard.html` about 1.4 seconds later.
+4. On `dashboard.html`, confirm you are shown as signed in (not the signed-
+   out state) without doing anything further.
+5. Reload `dashboard.html`. **Expect:** still signed in — the session is in
+   `localStorage`, not memory-only (only the entitlement flag is
+   memory-only, by design — see `js/saferise-auth.js`'s own header
+   comment).
+6. Click an already-used copy of the same confirmation link again, or wait
+   for a link to expire and click it. **Expect:** the homepage loads, the
+   same banner area shows a plain message ending in "That link no longer
+   works" (or Supabase's own expiry wording) plus **Sign in** / **create an
+   account** links — not a blank page, not a silent failure.
+
+**B — password reset**
+
+1. On `login.html`, click **Forgot your password?** — lands on
+   `reset-password.html` showing the request form.
+2. Enter an email you control and submit. **Expect:** the same neutral
+   note regardless of whether the address has an account —
+   "If there's an account for {email}, a reset link is on its way." — and
+   the email field then disabled so a second click can't fire a second
+   request.
+3. Confirm the email arrives, and that its link points at
+   `https://thesaferiseprotocol.com/reset-password.html#access_token=
+   ...&type=recovery` — **this one does carry an explicit `redirectTo`**
+   (`requestPasswordReset()` sets it), unlike flow A above, so it should
+   land on the reset page directly rather than the homepage.
+4. Click it. **Expect:** `reset-password.html` loads straight into the
+   "Set a new password" view (not the request form), the URL's fragment is
+   gone immediately.
+5. Enter two different passwords and submit. **Expect:** an inline error,
+   "Those two passwords don't match" — no network request, no page change.
+6. Enter the same password twice (8+ characters) and submit. **Expect:**
+   redirect to `dashboard.html`, signed in as that account, and the new
+   password works on a subsequent `login.html` sign-in while the old one
+   no longer does.
+7. Click an already-used or expired reset link. **Expect:** the "That link
+   no longer works" view, with a **Request a new link** control back to
+   step 1 — not the set-password form, and not a blank page.
+
+**What this session actually verified, and what it could not:** the
+client-side mechanics of both flows (1–4 above, minus the real email step)
+were exercised directly against the live project using hand-built tokens.
+A `type=signup` fragment with a validly-shaped (but unsigned) token
+produced a working sign-in, correct hash clearing and the correct
+redirect; a `type=recovery` fragment did the same, landing on the
+set-password view; an `error=access_denied&error_code=otp_expired`
+fragment produced the plain failure message with both links, on both
+`index.html` and (by the same shared function) `reset-password.html`;
+submitting a genuinely mismatched password pair produced the client-side
+error with no request sent; submitting a matching pair against a real
+(necessarily invalid, since it wasn't signed by this project's own secret)
+token produced a real rejection from the live server —
+`invalid JWT: unable to parse or verify signature, token signature is
+invalid: signature is invalid` — displayed correctly rather than crashing,
+which is the strongest evidence available without a real inbox that a
+genuine, correctly-signed token would succeed the same way. Receiving and
+clicking a real confirmation or reset email, and confirming SMTP delivery
+end to end, needs a real inbox — that is what steps A2/A3 and B3 above are
+for, and Andre is the one who can run them.

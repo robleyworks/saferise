@@ -209,6 +209,87 @@
 
   function onChange(fn) { if (typeof fn === 'function') listeners.push(fn); }
 
+  /* SR-371 (PASS-auth-loop.md §1/§2) · shared hash-fragment handler.
+     Supabase appends #access_token=...&refresh_token=...&type=signup|
+     magiclink|recovery to whichever page the dashboard's Site URL (or an
+     explicit redirect_to) names, after a confirmation, magic-link or
+     password-reset email is followed. Nothing read this before — SR-358's
+     own finding. One function, called from both index.html (signup/
+     magiclink land there, since no redirectTo overrides the Site URL) and
+     reset-password.html (recovery — see requestPasswordReset below, which
+     does set an explicit redirect_to), per this brief's own instruction
+     not to duplicate the handling.
+
+     Returns null when the hash carries nothing of ours, so a caller can
+     tell "no auth fragment" apart from "fragment present but broken."
+     The hash is cleared via history.replaceState in every branch except
+     "nothing here" — a token must never sit in the URL bar, in history,
+     or in a copy-pasted link, whether it was valid or not. */
+  function handleAuthRedirect() {
+    var raw = (global.location.hash || '').replace(/^#/, '');
+    if (!raw) return null;
+    var params = {};
+    raw.split('&').forEach(function (pair) {
+      var i = pair.indexOf('=');
+      if (i === -1) return;
+      params[decodeURIComponent(pair.slice(0, i))] = decodeURIComponent(pair.slice(i + 1).replace(/\+/g, ' '));
+    });
+    if (!params.access_token && !params.error && !params.error_description) return null;
+
+    var clean = global.location.pathname + global.location.search;
+    try { global.history.replaceState(null, '', clean); }
+    catch (e) { global.location.hash = ''; } // older-browser fallback; still leaves it briefly in history
+
+    if (params.error || params.error_description) {
+      return { ok: false, type: params.type || null, error: params.error_description || params.error };
+    }
+    if (!params.access_token) {
+      return { ok: false, type: params.type || null, error: 'That link is malformed. Request a new one.' };
+    }
+    session = { access_token: params.access_token, refresh_token: params.refresh_token || null };
+    writeSession(session);
+    notify();
+    return { ok: true, type: params.type || null };
+  }
+
+  /* Deliberately does not report whether the email exists — GoTrue's own
+     /recover endpoint already answers the same way either way, and this
+     wrapper adds nothing that could leak that distinction back out. A
+     network failure is the only case that reaches .catch(); the caller
+     shows the same neutral message for it as for success (PASS-auth-loop.md
+     §2's own rule, and PASS-auth-loop.md's earlier draft: "the response
+     must be identical whether or not the address exists"). redirect_to
+     points recovery links at reset-password.html specifically — signup and
+     magic-link keep falling back to the dashboard's Site URL (index.html),
+     unchanged, since this pass only owns the reset flow's own redirect. */
+  function requestPasswordReset(email) {
+    var redirectTo = global.location.origin + '/reset-password.html';
+    return fetch(SUPABASE_URL + '/auth/v1/recover?redirect_to=' + encodeURIComponent(redirectTo), {
+      method: 'POST', headers: authHeaders(), body: JSON.stringify({ email: email })
+    }).then(function (r) {
+      if (r.ok) return true;
+      return r.json().catch(function () { return {}; }).then(function (json) {
+        throw new Error((json && (json.error_description || json.msg || json.error)) || ('request failed: ' + r.status));
+      });
+    });
+  }
+
+  /* Only meaningful right after handleAuthRedirect() has established a
+     session from a type=recovery fragment — GoTrue authenticates this call
+     with that session's own bearer token, not a separate recovery secret,
+     which is why order matters: parse the hash, then call this. */
+  function updatePassword(newPassword) {
+    return fetch(SUPABASE_URL + '/auth/v1/user', {
+      method: 'PUT', headers: authHeaders(), body: JSON.stringify({ password: newPassword })
+    }).then(function (r) {
+      return r.json().then(function (json) {
+        if (!r.ok) throw new Error((json && (json.error_description || json.msg || json.error)) || ('update failed: ' + r.status));
+        notify();
+        return json;
+      });
+    });
+  }
+
   /* Runs once, at load: revives the stored session (refreshing it if the
      access token has expired) and, if a member is signed in, fetches
      their real entitlement before anything else touches entitled().
@@ -227,6 +308,9 @@
     signUp: signUp,
     signOut: signOut,
     sendMagicLink: sendMagicLink,
-    onChange: onChange
+    onChange: onChange,
+    handleAuthRedirect: handleAuthRedirect,
+    requestPasswordReset: requestPasswordReset,
+    updatePassword: updatePassword
   };
 })(window);

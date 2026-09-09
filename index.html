@@ -8044,5 +8044,52 @@ window.addEventListener('load', function(){
 })();
 </script>
 
+<!-- SR-371 (PASS-auth-loop.md §1) · confirmation/magic-link redirect
+     landing. No `redirectTo` is set anywhere in js/saferise-auth.js's
+     signUp()/sendMagicLink() calls, so Supabase falls back to the
+     dashboard's configured Site URL for both — the domain root, which
+     serves this page. Before this pass, nothing here read the
+     #access_token=...&type=... fragment that lands with it; a member
+     followed the email, arrived on a real page, and was silently not
+     signed in (SR-358's own finding). srAuth.handleAuthRedirect() —
+     shared with reset-password.html's recovery flow, not duplicated —
+     reads it, establishes the session, and clears the fragment from the
+     URL immediately regardless of outcome, so no token is ever left in
+     history or a copied link. -->
+<div id="srAuthBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;
+  background:var(--bg2,#0D0D18);border-bottom:1px solid rgba(212,168,67,.3);padding:14px 20px;
+  text-align:center;font:14px 'DM Sans',sans-serif;color:var(--text,#F5EDD8)">
+  <span id="srAuthBannerMsg"></span>
+  <button type="button" id="srAuthBannerClose" aria-label="Dismiss"
+    style="background:none;border:0;color:inherit;opacity:.6;cursor:pointer;margin-left:14px;font-size:16px;line-height:1;vertical-align:middle">&times;</button>
+</div>
+<script src="js/saferise-auth.js"></script>
+<script>
+(function () {
+  var result = srAuth.handleAuthRedirect();
+  if (!result) return;
+  var banner = document.getElementById('srAuthBanner');
+  var msg = document.getElementById('srAuthBannerMsg');
+  document.getElementById('srAuthBannerClose').onclick = function () { banner.style.display = 'none'; };
+  if (result.ok && (result.type === 'signup' || result.type === 'magiclink')) {
+    msg.textContent = 'You’re signed in. Taking you to your dashboard…';
+    banner.style.display = 'block';
+    setTimeout(function () { location.href = 'dashboard.html'; }, 1400);
+  } else if (result.ok) {
+    // A recognised type this page doesn't have its own copy for
+    // (recovery normally lands on reset-password.html instead, per its
+    // own explicit redirect_to — this only fires if that redirect_to
+    // was ever missing or a link was hand-copied here).
+    msg.textContent = 'You’re signed in.';
+    banner.style.display = 'block';
+  } else {
+    msg.innerHTML = (result.error || 'That link no longer works.') +
+      ' <a href="login.html" style="color:var(--primary,#D4A843)">Sign in</a> or ' +
+      '<a href="signup.html" style="color:var(--primary,#D4A843)">create an account</a> instead.';
+    banner.style.display = 'block';
+  }
+})();
+</script>
+
 </body>
 </html>
