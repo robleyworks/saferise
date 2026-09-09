@@ -17,15 +17,21 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-364** (five approved hero banners wired into the
+- **Highest ID issued: SR-365** (method page rebuilt from the approved
+  mockup, member-coming-soon.html taken onto the public sr-cs- treatment,
+  four outstanding items re-checked — verified via
+  `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
+  SR-364 as the last issued and nothing between it and this pass's own
+  HEAD; per this note's own documented history of going stale, do not
+  trust this line either — re-verify with the same grep before the next
+  allocation.)
+- **Previously: Highest ID issued: SR-364** (five approved hero banners wired into the
   dashboard rotator, SR-320's two-surfaces rule reported for Andre's
   ruling — not applied either way, per this pass's own explicit
   instruction — verified via
   `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
   SR-363 as the last issued and nothing between it and this pass's own
-  HEAD; per this note's own documented history of going stale, do not
-  trust this line either — re-verify with the same grep before the next
-  allocation.)
+  HEAD.)
 - **Previously: Highest ID issued: SR-363** (protocol rendering unified across all 30
   protocols, public/account-required access model, Entrepreneur's Journey
   brought into the redesigned treatment — verified via
@@ -10661,3 +10667,403 @@ above), plus:**
 *Status:* closed, with the open items above (including one — SR-320 —
 explicitly awaiting Andre's ruling by this pass's own design) ·
 *Raised and fixed:* 9 Sep 2026
+
+---
+
+## SR-365 · method page rebuilt from the approved mockup; member-coming-soon.html takes the public sr-cs- treatment; four outstanding items re-checked
+
+`pass/PASS-method-page.md`, Parts A–E. SR-360–SR-364 outrank this brief where
+they disagree — no direct conflict found; SR-364's own report (the
+`member-coming-soon.html` question) is exactly what Part B resolves, per
+Andre's ruling recorded in `pass/PASS-member-comingsoon-parity.md` §0.
+
+### Part A · the method page
+
+**A1 · reported before changing anything.**
+1. `method.html` serves the public method page. Nav: hand-authored
+   `<nav class="nav">…</nav>`, lines 463–491 (unchanged in this pass — see
+   below). Content: `<main id="main">` opens at line 492, `</main>` closes
+   at line 728 (original). Footer: `<div id="srFooter">` +
+   `SafeRiseFooter.render()` starts line 729, followed by the page's own
+   nav-dropdown/theme-toggle script (untouched, lines 732–765).
+2. **Every existing class on the page checked — none is `sr-mt-`
+   prefixed.** No collision to report.
+3. **The page loads its own inline `<style>` block**, not a shared
+   stylesheet, for everything specific to this page (`.nav`, `.hero`,
+   `.methodhero`, `.gc`, `.reg`, etc.) — `css/saferise-system.css` and
+   `css/saferise-footer.css` are loaded after it for shared/global rules
+   only. The new `sr-mt-` rules went into this same inline block, for the
+   same reason the existing method-page rules are there: this page has
+   never used a separate page-specific stylesheet file.
+4. **Word count of the old page body: 1737** (computed from
+   `<main>…</main>`, tags and entities stripped).
+
+**A2 · the content.** Replaced verbatim from `pass/mock-method-v20.html`,
+excluding the mockup note and the base64 underlay, per instruction. All
+seven sections plus the Pangolin interlude landed in the exact order
+specified, confirmed live (Part D.1). **New word count: 1887** (+150).
+
+**⚠ Three CSS adaptations, not a byte-for-byte copy — required by A4's own
+rule, reported rather than silently applied:**
+The mockup was written as a standalone document with document-level
+resets. Copied verbatim, they would have overridden this page's `:root`
+tokens and typography defaults — exactly what A4 forbids.
+1. The mock's `:root{…}` (11 custom properties, including `--gold` and
+   `--hair` — names this page's own `:root` already uses for different
+   values) is merged into `.sr-mt-wrap` instead. Custom properties cascade
+   only to descendants of where they're declared, so the mock's palette
+   still applies exactly as designed inside `.sr-mt-wrap`, with no global
+   override reaching the nav, footer, or anything else.
+2. The mock's bare `body{…}` reset (a different body font — DM Sans, not
+   this page's site-wide Cormorant Garamond) is merged into `.sr-mt-wrap`
+   for the same reason. `*{box-sizing:border-box}` is dropped outright —
+   already set site-wide by this page's own existing reset.
+3. The mock's bare `h1{…}`/`h1 em{…}` (the page has exactly one h1, inside
+   `.sr-mt-mast`) is scoped to `.sr-mt-mast h1`/`.sr-mt-mast h1 em` rather
+   than left as a page-global element selector — inert today, but exactly
+   the collision class Section 0 itself names for the next h1 this page
+   ever gets.
+
+Every one of the 53 `sr-mt-` class names is otherwise untouched — same
+names, same rules, same values, copied exactly as delivered, including
+`.kick`/`.swatch`/`.n`/`.d`/`.f` (each scoped under a namespaced parent per
+the brief's own description) even though none of the five is actually used
+in v20's content (`.sr-mt-steps`, their parent, isn't in the markup either
+— dead CSS carried over from a v19 layout the timeline SVG replaced;
+grepped, not assumed, and left in place rather than trimmed, since trimming
+wasn't asked for and the file is meant to be copied as delivered).
+
+**A3 · assets.**
+- `assets/method/method-underlay.jpg` — already present (delivered with
+  the brief), 2400×398, confirmed a genuine upscale-risk crop as
+  described.
+- **⚠ `assets/home/film-poster.jpg` exists at exactly 2400×1350** —
+  confirmed via PIL, not assumed. Per instruction, the underlay now points
+  there instead (`method.html:759`), reported here.
+- **Seven image slots, reported precisely rather than forced to match the
+  brief's own count:** only five of the seven possible `METHOD-01`…
+  `METHOD-07` numbers actually carry a figure in the approved mock —
+  sections 04 and 06 have no `.sr-mt-fig` at all (text-only). `METHOD-07`
+  is itself a six-cell collage, not one image. The real filename count is
+  **ten**, not seven:
+  `assets/method/m-attention.jpg` (1200×1500), `m-outward.jpg`
+  (2400×900), `m-built.jpg` (900×900), `m-vessel.jpg` (1200×1500),
+  `m-arena-theatre.jpg`, `m-arena-cockpit.jpg`, `m-arena-startline.jpg`,
+  `m-arena-stage.jpg`, `m-arena-control.jpg`, `m-arena-call.jpg` (six ×
+  800×800). All ten confirmed absent from disk. Rendered as briefed
+  placeholders, visible, not hidden, not collapsed — confirmed live
+  (Part D — all four singular slots and all six collage cells render at
+  full height/visible).
+
+**A4 · what must not change.**
+`about.html` exists (confirmed, 1691 lines) — the call to action's link
+(`method.html`, new content, `<a class="sr-mt-ctabtn" href="about.html">`)
+is valid; not created, per instruction. Nav, footer, theme control, every
+shared partial, every global rule, `:root` tokens and typography defaults
+are all confirmed unchanged — see Part D.2/D.9 for the measured proof, not
+just the claim.
+
+### Part B · member-coming-soon.html parity
+
+Executed `pass/PASS-member-comingsoon-parity.md` as written, per this
+brief's own instruction.
+
+**1 · ground established, reported first.**
+1. The track-box section used `.sr-mi-bands`/`.sr-mi-bandcol`/
+   `.sr-mi-band`/`.sr-mi-grid`/`.sr-mi-card` and its descendants
+   (`.sr-mi-cardart`/`.sr-mi-cardtop`/`.sr-mi-cardno`/`.sr-mi-says`/
+   `.sr-mi-holds`). `grep -rl "sr-mi-"` found exactly three files:
+   `member-coming-soon.html`, `member-frameworks.html`,
+   `css/saferise-method.css` — and critically, `.sr-mi-card`, `.sr-mi-grid`,
+   `.sr-mi-cardno`, `.sr-mi-cardtop`, `.sr-mi-band`, `.sr-mi-bandcol`,
+   `.sr-mi-bands`, `.sr-mi-claim`, `.sr-mi-holds`, `.sr-mi-mast` and
+   `.sr-mi-says` are **shared** between `member-coming-soon.html` and
+   `member-frameworks.html` — the exact SR-364 finding this brief's own §0
+   cites, re-confirmed rather than assumed still true.
+2. **Member-only, no public equivalent** (beyond the two SR-364 already
+   named): none found beyond the Midnight/Sunrise toggle
+   (`.sr-theme`/`#srThemeMid`/`#srThemeSun`) and the dashboard icon rail
+   (`.sr-dash-navrail`/`SafeRiseRail.render('coming')`) — the "‹
+   Dashboard" back-link (`.sr-fw-back`) is part of the same rail
+   component, not a separate element.
+3. **⚠ Reported, not assumed — this needed real investigation, not a
+   grep.** `member-coming-soon.html` did not load the stylesheet carrying
+   the `sr-cs-` rules. Adding `<link rel="stylesheet"
+   href="css/saferise-system.css">` alone was **not sufficient** — the
+   64 `.tb`/`.sr-cs-*` rules that actually give the cards their visual
+   treatment live entirely inside `coming-soon.html`'s own inline
+   `<style>` block (SR-362), never extracted anywhere shared.
+   `css/saferise-system.css` carries only SR-362's reduced-motion
+   supplement for these classes. **Found live, not in the source read**:
+   the first implementation (link only) rendered the card text and
+   accents but with the desktop two-column grid never collapsing at
+   narrow widths — `window.innerWidth` reported 751 against an emulated
+   390px viewport, a genuine horizontal-overflow defect, not a
+   false-positive (confirmed `member-frameworks.html`, untouched by this
+   pass, renders correctly at the same width). **Fixed** by duplicating
+   the 64 rules verbatim (see 2.4 below) — the "duplicated block" option
+   this brief's own §1.3 named as acceptable.
+4. `member-frameworks.html` confirmed using `.sr-mi-card`/`.sr-mi-grid`
+   live (its own cards render with those classes); no other page uses
+   either beyond the two already named.
+
+**2 · the swap.**
+1. `member-coming-soon.html`'s track-box markup replaced with
+   `coming-soon.html`'s own `.tstack` block, copied verbatim — confirmed
+   programmatically byte-for-byte identical after the swap (string
+   comparison of both files' `.tstack` blocks, not a visual approximation).
+2. Every member-only element from 1.2 preserved — none sat inside the
+   replaced markup (the rail, toggle and back-link are all in the
+   `.sr-fw-backbar`/nav-rail above the track-box section), so nothing
+   needed moving.
+3. **Zero `sr-mi-` rules edited** — `css/saferise-method.css` untouched
+   (confirmed via `git diff --stat`, empty). Every `.sr-mi-*` selector
+   member-coming-soon.html no longer uses stays defined, unused on this
+   page now, still serving `member-frameworks.html`.
+4. **The member-context variant this page needed**: `--bg2` and `--ease`,
+   two custom properties the duplicated `.tb`/`.sr-cs-*` rules read that
+   belong to `coming-soon.html`'s own `.sr-public` scope
+   (`css/saferise-system.css`) — a class this page's `<body>` deliberately
+   doesn't carry (member surface, not public). Added as **new**,
+   `.tstack`-scoped properties (`--bg2:#0E0E15;
+   --ease:cubic-bezier(.22,.61,.36,1)`, the exact `.sr-public` values),
+   not a fork of `sr-cs-` itself — confirmed every other token these rules
+   need (`--text`/`--text2`/`--text3`/`--gold`) already matches, value for
+   value, between `css/saferise-method.css`'s `:root` and `.sr-public`.
+
+**3 · verify, measured.**
+1. **`member-frameworks.html` unaffected** — `git diff --stat
+   member-frameworks.html css/saferise-method.css` returns empty; measured
+   live anyway rather than trusting the diff alone: `.sr-mi-card`
+   `offsetHeight` 505px, width 302.609px, background `rgb(14,14,26)`,
+   border-radius 14px, padding `26px 20px`, font-size 16px. Since the
+   source is byte-identical to `HEAD`, this is the "before" and "after"
+   value simultaneously — there is no divergence to have introduced.
+2. **Both coming-soon pages render the same cards with the same
+   treatment** — 8 cards, same order, same names, confirmed live and via
+   the byte-identical markup check above. No remaining visual difference
+   found in the card content itself (chrome — nav, rail, theme toggle —
+   is deliberately different, per SR-320 standing everywhere else on this
+   page).
+3. **Every member-only element present and functional**: rail renders
+   with content, back-link reads "Dashboard", theme toggle confirmed live
+   — clicking it sets `data-theme`/`document.body` state and writes
+   `sessionStorage['sr-theme']` (checked both directions, sunrise → set,
+   midnight → cleared back).
+4. Access model untouched — this pass edited presentation only, no script
+   handling sign-in/entitlement was touched.
+5. **1440 and 390, measured, not assumed**: at 390px, initial
+   implementation showed `docScrollW`/`innerWidth` 751 against `outerWidth`
+   390 — the genuine overflow caught above. After the fix: 390/390/390,
+   all three agree. At 1440px: 1440/1440, two-column card grid
+   (`691.062px 600.922px`), no overflow either width.
+6. **Console clean on both pages** — zero errors on either, fresh loads,
+   confirmed after the fix (the pre-fix state was never shipped, so there
+   is no "pre-existing error" to carry forward from it).
+7. **Every CSS rule added, confirmed against `sr-mi-`/`sr-cs-`:** the
+   duplicated `.tstack`/`.tb`/`.sr-cs-*` block (64 rules copied verbatim
+   from `coming-soon.html`, one new scoped-token declaration on `.tstack`)
+   modifies no existing `sr-mi-` declaration (grepped: zero `sr-mi-` text
+   in the added block) and modifies no existing `sr-cs-` declaration
+   either — it is a duplicate of `coming-soon.html`'s own values, not an
+   edit to them; `coming-soon.html` itself has a `git diff --stat` of
+   zero for this pass.
+
+**State plainly, per this brief's own instruction:** `member-frameworks.html`
+is byte-for-byte unaffected. Every member-only element (Midnight/Sunrise
+toggle, dashboard nav rail, "‹ Dashboard" back-link) is preserved, in
+place, working. No `sr-mi-` rule was edited.
+
+### Part C · outstanding from earlier passes
+
+1. **`assets/coming/band-anxiety-reset-wide.jpg`** — **now exists**
+   (89,415 bytes, 2240×640, confirmed via PIL). SR-364's own report is
+   resolved; the light full-bleed hero slide on `dashboard.html` no longer
+   renders broken — confirmed live (`fetch()` → 200, forced-load test
+   removes the placeholder path entirely once the file loads). This file
+   arrived on disk outside this session (untracked, dated before this pass
+   began, alongside a larger batch of Andre's own concurrent work found in
+   `git status` — see Files touched, below) — **not committed by this
+   pass**, left for Andre.
+2. **The live-session placeholder date** — `dashboard.html:2051–2053`:
+   ```
+   /* ⚠ PLACEHOLDER DATE, rendered as given — see pass/hero-slides-approved.json
+      and this pass's own fix-register entry. Must be replaced before production. */
+   cta:'Reserve a place', ghost:'Past sessions', meta:'⚠ PLACEHOLDER DATE — replace before publishing'}
+   ```
+   Unchanged. No date invented.
+3. **The nine documents, re-checked:**
+
+   | file | SR-364 | now |
+   |---|---|---|
+   | `SAFERISE-COLLABORATION-FRAMEWORK.md` | exists | exists |
+   | `SAFERISE-TRACK-ROADMAP.md` | exists | exists |
+   | `ELEVATION-PROSPECTUS-v3.md` | missing | **still missing** |
+   | `EXECUTIVE-PRESENCE-PROSPECTUS-v3.md` | missing | **still missing** |
+   | `SEX-INTIMACY-PROSPECTUS.md` | missing | **still missing** |
+   | `FRIDAY-DEMO-PLAN.md` | exists | exists |
+   | `INVESTED-WORK-REPORT.md` | missing | **now exists** (committed by Andre directly, `4dc8551`) |
+   | `TRACK-PROGRAMME-MODEL.md` | missing | **still missing** |
+   | `SAFERISE-COLLABORATORS-AND-GENDERED-TRACKS.md` | missing | **still missing** |
+
+   One near-miss, reported not conflated: `docs/saferise-invested-work.html`
+   (added by Andre, `b61acd3`) is a *different* file — different
+   extension, different casing — from `INVESTED-WORK-REPORT.md`, which is
+   itself now a real, separate, existing `.md` file citing the `.html` one
+   as its companion. Not recreated; report only, as instructed.
+4. **Redundancy audit, report only, nothing changed.** Compared the new
+   method page against `about.html` for passages making substantially the
+   same claim:
+   - **Genuine overlap found.** `about.html:1533–1538` ("attention...
+     whatever it rests on for long enough is what grows") and
+     `about.html:1567–1569` ("You do not get more attention. You get to
+     decide where it goes.") make essentially the same central claim as
+     `method.html:756–757` (the standfirst: "Whatever you put it on is
+     what becomes real to you. Keep it there long enough, and it grows")
+     and `method.html:769–770` ("Attention is not a spectator. It
+     builds... the only thing you own that you can spend without
+     noticing"). Both pages open their respective attention-argument from
+     the same premise, in different prose.
+   - **Checked and NOT found elsewhere**: none of Porges, HeartMath, Maté,
+     Jung, Watts, Kross, "polyvagal", "pangolin", "elite sport" or
+     "military" appear anywhere in `about.html` (grepped) — the method
+     page's frameworks register, lineage-across-traditions section, the
+     Pangolin interlude, the four-steps/breathwork mechanics, and the
+     "who else works this way" domains section have no equivalent on
+     `about.html` at all.
+   - **Which side loses a duplicate is Andre's call**, per instruction —
+     not resolved here.
+
+### Part D · verify, measured, in the browser
+
+1. **All seven sections plus the interlude, in order** — confirmed live,
+   read from the rendered DOM: `01 · WHAT ATTENTION ACTUALLY IS`,
+   `02 · WHERE IT GOES INSTEAD`, `03 · WHAT WE BUILT WITH IT`,
+   `THE PANGOLIN`, `04 · WHO GOT HERE FIRST`,
+   `05 · WHAT HAPPENS IN A SESSION`, `06 · WHAT IT ALL RESTS ON`,
+   `07 · WHO ELSE WORKS THIS WAY` — all eight `h2`s matched the mock's
+   copy exactly.
+2. **Nav and footer byte-for-byte unchanged — measured, not the diff
+   alone.** Content-marker extraction (not line numbers, which shifted)
+   comparing `git show HEAD:method.html` against the working file:
+   `<nav class="nav">…</nav>` **identical**; `<div id="srFooter">` through
+   `</html>` (footer include, script, and the trailing nav-dropdown/
+   theme-toggle script) **identical**. `git diff` hunk boundaries confirm
+   the same independently — both hunks start and end strictly inside the
+   CSS block and the `<main>` region respectively.
+3. **No `sr-mt-` class on any other page** — `grep -rl "sr-mt-"` found
+   `method.html` and one other file, `docs/tracker-v16.html` — inspected:
+   a **prose mention**, not a class (`docs/tracker-v16.html:229`, a
+   project-tracker row describing this very pass — "Mockup v20 approved
+   with all 53 classes namespaced sr-mt-"), not a stylesheet or markup
+   consumer. No actual class collision.
+4. **Every CSS rule added to `method.html`, confirmed against
+   `sr-mt-`**: 177 rules parsed from the added block (including media
+   queries); **zero** contain no `sr-mt-` token in their selector — every
+   one is namespaced, directly or via a compound selector rooted in one
+   (`.sr-mt-mast h1`, `.sr-mt-steps .n`, etc.).
+5. **`member-frameworks.html` unaffected** — see Part B.3.1; not repeated
+   here since it's the same file and the same measurement.
+6. **Both coming-soon pages render the same cards, same treatment** — see
+   Part B.3.2.
+7. **1440 and 390 on the method page**: no overflow at either width
+   (`docScrollW === innerWidth`, both cases). Underlay spans full width
+   with no horizontal scrollbar at either width (same check — the
+   full-bleed `100vw` technique is the classic scrollbar-overflow risk,
+   ruled out by the same measurement). The eight-cell lineage grid
+   (Section 04's list of traditions) never leaves an empty cell: 8 items,
+   4 columns at ≥1000px (2 full rows), 1 column at ≤620px (no orphan
+   concept in a single column) — confirmed via `gridTemplateColumns` at
+   both widths, not assumed from the CSS alone. No heading broke mid-word
+   at 390px: every `h2`/`h1` checked for `scrollWidth > clientWidth`,
+   false in all ten cases (`text-wrap:balance`, carried from the mock,
+   doing the work).
+8. **Console clean on every page touched**: `method.html` (fresh load,
+   both theme states), `member-coming-soon.html` (fresh load, both theme
+   states, both viewport widths), `member-frameworks.html`,
+   `coming-soon.html`, `dashboard.html` — **zero errors on every one**.
+   No pre-existing errors found on any of them either.
+9. **Containment proof, measured before and after.** `method.html`:
+   `.nav` `offsetHeight` **79px → 79px**; `#srFooter` `offsetHeight`
+   **1643px → 1643px** (an initial reading of 367px was a race —
+   `SafeRiseFooter.render()` hadn't finished before the measurement;
+   re-measured with a longer wait and it matched the pre-edit value
+   exactly, the same "re-verify a suspicious reading before reporting it"
+   discipline this register has followed before). Both identical.
+
+### Part E · report
+
+**Per section:**
+- **A1 — MATCH.** All four reports delivered as asked.
+- **A2 — MATCH**, with three CSS adaptations required by A4's own rule,
+  named and reasoned above, not silently applied.
+- **A3 — DIFFERS.** Underlay points at `film-poster.jpg`, not
+  `method-underlay.jpg`, per the brief's own conditional (resolution
+  matched). Image-slot count DIFFERS from the brief's "seven" framing —
+  actual count is ten filenames across five populated slots, reported
+  precisely rather than force-fit.
+- **A4 — MATCH.** `about.html` exists, not created. Nothing global
+  touched — measured, not assumed.
+- **Part B — ADAPTED.** The swap itself MATCHES the ruling exactly. The
+  stylesheet question DIFFERS substantially from what a first read of
+  Section 1.3 might suggest (a single `<link>` was not sufficient) —
+  found by testing, not by re-reading the brief more carefully; the
+  "duplicated block" option was the one that actually worked, verified
+  live with a real (and then fixed) overflow bug as the proof it mattered.
+- **Part C — report only**, all four items, as instructed. Nothing fixed
+  because nothing needed fixing that this pass had standing to fix (1 and
+  3 are Andre's own since-arrived changes; 2 is explicitly do-not-touch;
+  4 is explicitly Andre's call).
+- **Part D — MATCH**, all nine checks measured live, not assumed from the
+  source.
+
+**State plainly:**
+- **Nav and footer are unchanged** — confirmed byte-for-byte.
+- **`member-frameworks.html` is unaffected** — confirmed, `git diff`
+  empty and measured live.
+- **No non-`sr-mt-` CSS rule was added to `method.html`** — confirmed,
+  177/177 rules namespaced. (`member-coming-soon.html`'s new CSS is
+  `sr-cs-`-scoped by design, per Part B, not `sr-mt-` — different brief,
+  different namespace, not in scope for this check.)
+- **The ten method image filenames still needed** (not seven — see A3):
+  `assets/method/m-attention.jpg`, `m-outward.jpg`, `m-built.jpg`,
+  `m-vessel.jpg`, `m-arena-theatre.jpg`, `m-arena-cockpit.jpg`,
+  `m-arena-startline.jpg`, `m-arena-stage.jpg`, `m-arena-control.jpg`,
+  `m-arena-call.jpg`.
+- **Live-session placeholder date**: `dashboard.html:2051–2053`.
+- **Documents still missing** (five of nine): `ELEVATION-PROSPECTUS-v3.md`,
+  `EXECUTIVE-PRESENCE-PROSPECTUS-v3.md`, `SEX-INTIMACY-PROSPECTUS.md`,
+  `TRACK-PROGRAMME-MODEL.md`, `SAFERISE-COLLABORATORS-AND-GENDERED-TRACKS.md`.
+
+**Named, per this brief's own instruction — everything changed beyond the
+literal ask:**
+- `member-coming-soon.html`'s top-of-file header comment rewritten to
+  describe Andre's ruling in place of the stale "restrained, not
+  decorated" policy statement it contradicted — a page-local comment, not
+  a shared partial, so within this pass's own remit.
+- The 64-rule `.tb`/`.sr-cs-*` duplicate in `member-coming-soon.html` and
+  the `--bg2`/`--ease` scoped tokens — the real fix this pass needed once
+  the single-`<link>` approach proved insufficient, reasoned through and
+  reported in full above rather than silently expanded in scope.
+- `assets/method/method-underlay.jpg` committed (delivered with this
+  brief; not ultimately referenced by the shipped `<img>`, per the
+  brief's own film-poster instruction, but worth preserving in version
+  control regardless).
+- **Not committed, deliberately**: `assets/coming/band-anxiety-reset-wide.jpg`
+  — confirmed to now exist and work (Part C.1), but it arrived through
+  Andre's own concurrent work in this same working tree (a substantial
+  batch of unrelated new files — SEO/accessibility/backup docs, a Sentry
+  init script, a `scripts/` directory, and a modified `robots.txt` were
+  all found untracked/modified at commit time, none of them touched by
+  this pass or named in this brief). Committing that one image out of
+  that batch would misattribute work that isn't this pass's own; left for
+  Andre.
+
+**Files touched (this pass's own commit):** `method.html`,
+`member-coming-soon.html`, `docs/fix-register.md`. New:
+`assets/method/method-underlay.jpg`. Explicitly not committed:
+`assets/coming/band-anxiety-reset-wide.jpg` and every other untracked/
+modified path found at commit time that this pass did not touch (see
+above).
+
+*Status:* closed, with the open items above · *Raised and fixed:* 9 Sep 2026

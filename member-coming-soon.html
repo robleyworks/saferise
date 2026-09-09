@@ -11,12 +11,17 @@
   "why these belong together" architecture explainer, both written for
   someone who hasn't joined yet.
 
-  Restrained, not decorated — same rule as member-frameworks.html and
-  member-porges.html: Cinzel/DM Sans, css/saferise-method.css, the 74px
-  icon rail, Midnight/Sunrise via body.rd-soft. Do not pull in
-  coming-soon.html's own <style> block (Cormorant Garamond display type,
-  gradient card fills, the public --bg/--gold token values) — that
-  palette belongs to the public surface only. See docs/page-invariants.md.
+  PASS-member-comingsoon-parity · Andre has ruled: the track-box section
+  below takes the public coming-soon.html's sr-cs- card treatment, in
+  full — overriding SR-320's public-persuades/member-recedes split for
+  THIS SECTION of this page only (SR-320 otherwise stands everywhere
+  else). This is a markup swap, not a restyle: .sr-mi-card/.sr-mi-grid
+  are shared with member-frameworks.html and are untouched — the
+  framework pages must come out byte-for-byte unaffected. Everything
+  else on this page — the icon rail, the Midnight/Sunrise toggle, the
+  header, the closing claim, the footer — stays Cinzel/DM Sans/
+  css/saferise-method.css, restrained, exactly as before. See
+  docs/page-invariants.md and this pass's own fix-register entry.
 -->
 <html lang="en">
 <head>
@@ -33,6 +38,135 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/saferise-method.css">
 <link rel="stylesheet" href="css/saferise-rail.css">
+<!-- PASS-member-comingsoon-parity · added, then checked rather than assumed
+     sufficient: css/saferise-system.css does NOT carry the .tb/.sr-cs-*
+     rules the swap below needs — those live entirely inside
+     coming-soon.html's own <style> block (SR-362), never extracted to a
+     shared file. What system.css DOES carry for these classes is only
+     SR-362's prefers-reduced-motion block, which is still worth having
+     here. Kept for that; the actual card CSS is duplicated below instead
+     (see that block's own comment for why). Confirmed before adding: every
+     custom property system.css declares at :root is --sr-…-prefixed
+     (grepped), and it defines no bare element or unscoped class selector
+     (grepped) — nothing in it can touch this page's existing
+     .sr-mi-/.sr-fw-/.sr-dash-/.sr-theme rules or tokens. -->
+<link rel="stylesheet" href="css/saferise-system.css">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS-member-comingsoon-parity · .tb/.sr-cs-* copied verbatim from
+   coming-soon.html's own <style> block (SR-362/364, untouched there) — not
+   moved, not forked, same selectors and values in both files. This is the
+   "duplicated block" option this pass's own Section 1.3 named, chosen over
+   a shared partial to avoid touching coming-soon.html at all.
+
+   Two custom properties these rules read — --bg2 and --ease — belong to
+   coming-soon.html's own .sr-public scope (css/saferise-system.css), which
+   this page's <body> deliberately does not carry (member surface, not
+   public — SR-320 still applies to everything on this page except the
+   card treatment itself). Scoped to .tstack instead of :root, so they
+   reach only these cards and never touch this page's own tokens or
+   anything the framework pages read. Every other token .sr-cs-* needs
+   (--text/--text2/--text3/--gold) already matches, value for value,
+   between css/saferise-method.css's :root and .sr-public — confirmed by
+   reading both, not assumed. .tbimg/.tbtxt/.deep/.fid are NOT copied:
+   dead CSS on coming-soon.html itself since SR-362 (grepped — zero
+   elements use them there), so there is nothing live to keep parity with. */
+.tstack{--bg2:#0E0E15;--ease:cubic-bezier(.22,.61,.36,1);display:flex;flex-direction:column;gap:18px;margin-top:30px}
+.tb{position:relative;border-radius:20px;overflow:hidden;border:0;
+  background:var(--bg2);display:grid;grid-template-columns:1.15fr 1fr;
+  min-height:318px;
+  box-shadow:0 2px 10px rgba(0,0,0,.30), 0 14px 40px rgba(0,0,0,.24);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.tb:hover,.tb:focus-within{transform:translateY(-3px);
+  box-shadow:0 4px 14px rgba(0,0,0,.34), 0 30px 70px rgba(0,0,0,.42),
+             0 0 60px -18px color-mix(in srgb,var(--ac) 55%,transparent)}
+.tb:focus-within{outline:2px solid color-mix(in srgb,var(--ac) 70%,transparent);outline-offset:3px}
+.sr-cs-pane{position:relative;overflow:hidden}
+.sr-cs-pane>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+  transform:scale(1.008);transition:transform 1.1s var(--ease)}
+.tb:hover .sr-cs-pane>img,.tb:focus-within .sr-cs-pane>img{transform:scale(1.035)}
+.sr-cs-tint{position:absolute;inset:0;z-index:1;mix-blend-mode:soft-light;opacity:.72;
+  background:linear-gradient(118deg,
+    color-mix(in srgb,var(--ac) 82%,transparent) 0%,
+    color-mix(in srgb,var(--ac) 34%,transparent) 46%,
+    transparent 78%);
+  transition:opacity .6s var(--ease)}
+.sr-cs-tint2{position:absolute;inset:0;z-index:1;mix-blend-mode:color;opacity:.26;
+  background:linear-gradient(118deg,var(--ac) 0%,transparent 62%);
+  transition:opacity .6s var(--ease)}
+.tb:hover .sr-cs-tint,.tb:focus-within .sr-cs-tint{opacity:.56}
+.tb:hover .sr-cs-tint2,.tb:focus-within .sr-cs-tint2{opacity:.16}
+.sr-cs-scrim{position:absolute;inset:0;z-index:2;
+  background:linear-gradient(0deg, rgba(8,8,12,.96) 0%, rgba(8,8,12,.86) 40%, rgba(8,8,12,.30) 68%, rgba(8,8,12,.04) 100%),
+             linear-gradient(90deg, rgba(8,8,12,.60) 0%, rgba(8,8,12,.14) 58%, rgba(8,8,12,0) 100%)}
+.sr-cs-pane.sr-cs-dark .sr-cs-scrim{background:linear-gradient(0deg, rgba(8,8,12,.90) 0%, rgba(8,8,12,.62) 42%, rgba(8,8,12,.14) 72%, rgba(8,8,12,0) 100%),
+             linear-gradient(90deg, rgba(8,8,12,.42) 0%, rgba(8,8,12,.06) 60%, rgba(8,8,12,0) 100%)}
+.sr-cs-over{position:relative;z-index:3;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:34px 36px 0}
+.sr-cs-kick{font-family:'Cinzel',serif;font-weight:500;font-size:10.5px;letter-spacing:.40em;color:var(--ac);
+  margin:0 0 12px;display:flex;align-items:center;gap:12px}
+.sr-cs-kick::after{content:"";height:1px;flex:1;max-width:120px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 70%,transparent),transparent)}
+.sr-cs-name{font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:clamp(38px,4.4vw,58px);line-height:.92;letter-spacing:-.026em;margin:0;color:#fff;
+  text-shadow:0 3px 30px rgba(0,0,0,.7),0 1px 3px rgba(0,0,0,.5)}
+.sr-cs-name .sr-cs-name2{display:block;font-style:italic;font-weight:300;padding-left:.06em;margin-top:-.04em;
+  background:linear-gradient(96deg,#FFFFFF 4%,var(--ac) 46%,color-mix(in srgb,var(--ac) 55%,#FFFFFF) 92%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 22px rgba(0,0,0,.55))}
+.sr-cs-rule{display:block;width:52px;height:2px;margin:20px 0 18px;
+  background:linear-gradient(90deg,var(--ac),transparent);
+  transition:width .55s var(--ease)}
+.tb:hover .sr-cs-rule,.tb:focus-within .sr-cs-rule{width:92px}
+.sr-cs-list{display:grid;grid-template-columns:1fr 1fr;gap:3px 26px;margin:0 0 22px;padding:0;list-style:none}
+.sr-cs-list li{display:flex;gap:10px;align-items:baseline;font-size:13px;line-height:1.5;color:rgba(245,237,216,.88)}
+.sr-cs-list .sr-cs-num{font-family:'Cinzel',serif;font-size:9.5px;color:var(--ac);flex:none;width:16px;letter-spacing:.1em;opacity:.9}
+.sr-cs-strip{display:flex;gap:7px;padding:0 0 18px;margin:0 -36px 0 0;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 46%,rgba(0,0,0,.35) 76%,transparent 97%);
+  mask-image:linear-gradient(90deg,#000 0%,#000 46%,rgba(0,0,0,.35) 76%,transparent 97%)}
+.sr-cs-cover{flex:none;width:56px;aspect-ratio:3/4;border-radius:4px;position:relative;overflow:hidden;
+  filter:brightness(.62) saturate(.72);
+  transition:filter .55s var(--ease)}
+.tb:hover .sr-cs-cover,.tb:focus-within .sr-cs-cover{filter:brightness(.78) saturate(.92)}
+.sr-cs-cover::after{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(58deg,rgba(245,237,216,.045) 0 1px,transparent 1px 5px)}
+.sr-cs-cover .sr-cs-lock{position:absolute;right:5px;bottom:6px;display:flex;align-items:center;gap:1.5px;z-index:1}
+.sr-cs-cover .sr-cs-lock i{display:block;width:7px;height:1px;background:rgba(245,237,216,.62)}
+.sr-cs-cover .sr-cs-lock b{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:4px;
+  letter-spacing:.16em;color:rgba(245,237,216,.72);line-height:1}
+.sr-cs-side{position:relative;padding:32px 34px 30px;display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(90deg,#101014 0%,#15151A 26%,#17171D 100%)}
+.sr-cs-side::before{content:"";position:absolute;left:0;top:0;bottom:0;width:96px;pointer-events:none;
+  background:linear-gradient(90deg,rgba(8,8,12,.55),transparent)}
+.sr-cs-hook{font-family:'Cormorant Garamond',serif;font-style:normal;font-weight:400;
+  font-size:clamp(22px,1.9vw,26px);line-height:1.14;letter-spacing:-.019em;
+  color:color-mix(in srgb,var(--ac) 88%,var(--text));margin:0 0 14px;text-wrap:balance}
+.sr-cs-side p{font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.62;color:var(--text2);margin:0 0 12px}
+.sr-cs-side p:last-child{margin-bottom:0}
+.sr-cs-stand{display:block;color:#ADAAB1}
+.sr-cs-lift{display:block;font-family:'Cormorant Garamond',serif;font-style:normal;font-weight:500;
+  font-size:18px;line-height:1.3;color:var(--text);margin:0 0 6px;letter-spacing:-.01em;text-wrap:balance}
+.sr-cs-turn{font-style:italic;color:color-mix(in srgb,var(--ac) 76%,var(--text));font-weight:400}
+.sr-cs-land{display:block;font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.42;
+  font-weight:500;color:var(--text);letter-spacing:-.008em;padding-top:4px;text-wrap:balance}
+.sr-cs-guard{position:relative;margin-top:16px;padding-top:12px;
+  font-family:'DM Sans',sans-serif;font-size:11.5px;line-height:1.5;color:var(--text3);font-style:italic}
+.sr-cs-guard::before{content:"";position:absolute;left:0;top:0;width:30px;height:1px;
+  background:color-mix(in srgb,var(--ac) 60%,transparent)}
+@media(max-width:900px){
+  .tb{grid-template-columns:1fr;min-height:0}
+  .sr-cs-side{background:linear-gradient(180deg,#101014 0%,#16161C 40%,#17171D 100%)}
+  .sr-cs-side::before{left:0;right:0;top:0;bottom:auto;width:auto;height:72px;
+    background:linear-gradient(180deg,rgba(8,8,12,.6),transparent)}
+  .sr-cs-pane{min-height:420px}
+  .sr-cs-list{grid-template-columns:1fr;gap:1px}
+  .sr-cs-over{padding:26px 22px 0}
+  .sr-cs-strip{margin-right:-22px}
+  .sr-cs-hook{font-size:21px;line-height:1.18}
+  .sr-cs-name{font-size:clamp(36px,10vw,48px)}
+  .sr-cs-lift{font-size:17px}
+  .sr-cs-land{font-size:15px}
+}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -61,81 +195,167 @@
     your attention. Same method, same four steps, a different room in the same house.</p>
 </header>
 
-<div class="sr-mi-bands" id="srBands">
-<div class="sr-mi-bandcol">
-
-<section class="sr-mi-band">
-  <div class="sr-mi-grid">
-
-    <article class="sr-mi-card">
-      <span class="sr-mi-cardart"><img src="assets/coming/band-01.webp" alt=""></span>
-      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">01</span></div>
-      <h3>Elevation Series</h3>
-      <p class="sr-mi-says">What happens when survival is no longer the only thing asking for your attention?</p>
-      <p class="sr-mi-holds">Most of what is happening around you never reaches you. Not because it is hidden, but because attention spent on staying safe has nothing left over for anything else. The same is true of what is happening inside you. There is more here than you have been able to take in, and more of you than you have met. Attention trained rather than merely held. Stillness kept long enough for something to arrive in it. What was installed in you before you had a say, and what is yours underneath it. Attuning &mdash; to a room, to a person, to yourself &mdash; and staying steady while any of it surfaces, because nobody around you will have a script for this either. Not repair. This is the part that keeps opening, and nobody has found where it stops.</p>
+<!-- PASS-member-comingsoon-parity · Andre’s ruling: this page takes
+     the public sr-cs- card treatment. Markup swap only, per that
+     pass’s own instruction — .sr-mi-card/.sr-mi-grid are shared with
+     member-frameworks.html and are untouched, not restyled. The block
+     below is copied verbatim from coming-soon.html’s own .tstack
+     (same 8 cards, same order, same sr-cs- classes, same accents). -->
+  <div class="tstack">
+    <article class="tb" style="--ac:#9B86D6" tabindex="0">
+      <div class="sr-cs-pane"><img src="assets/coming/band-01.webp" alt="">
+        <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
+        <span class="sr-cs-scrim"></span>
+        <div class="sr-cs-over">
+          <p class="sr-cs-kick">BEYOND SURVIVAL</p>
+          <h2 class="sr-cs-name">Elevation<span class="sr-cs-name2">Series</span></h2>
+          <span class="sr-cs-rule"></span>
+          <ol class="sr-cs-list"><li><span class="sr-cs-num">01</span>Arrival Flatness</li><li><span class="sr-cs-num">06</span>When Belief Collapses</li><li><span class="sr-cs-num">02</span>Attention Capture</li><li><span class="sr-cs-num">07</span>What You Won't Let Go Of</li><li><span class="sr-cs-num">03</span>The Urge to Leave</li><li><span class="sr-cs-num">08</span>What You Cannot Keep</li><li><span class="sr-cs-num">04</span>Inherited Belief</li><li><span class="sr-cs-num">09</span>What You Give Off</li><li><span class="sr-cs-num">05</span>Deferred Life</li><li><span class="sr-cs-num">10</span>Undefended</li></ol>
+          <div class="sr-cs-strip" aria-hidden="true"><span class="sr-cs-cover" style="background:linear-gradient(148deg,color-mix(in srgb,#9B86D6 37%,#15151B),color-mix(in srgb,#9B86D6 15%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(155deg,color-mix(in srgb,#9B86D6 44%,#15151B),color-mix(in srgb,#9B86D6 22%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(162deg,color-mix(in srgb,#9B86D6 51%,#15151B),color-mix(in srgb,#9B86D6 29%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(169deg,color-mix(in srgb,#9B86D6 32%,#15151B),color-mix(in srgb,#9B86D6 10%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(150deg,color-mix(in srgb,#9B86D6 39%,#15151B),color-mix(in srgb,#9B86D6 17%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(157deg,color-mix(in srgb,#9B86D6 46%,#15151B),color-mix(in srgb,#9B86D6 24%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(164deg,color-mix(in srgb,#9B86D6 53%,#15151B),color-mix(in srgb,#9B86D6 31%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(171deg,color-mix(in srgb,#9B86D6 34%,#15151B),color-mix(in srgb,#9B86D6 12%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(152deg,color-mix(in srgb,#9B86D6 41%,#15151B),color-mix(in srgb,#9B86D6 19%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(159deg,color-mix(in srgb,#9B86D6 48%,#15151B),color-mix(in srgb,#9B86D6 26%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span></div>
+        </div>
+      </div>
+      <div class="sr-cs-side">
+        <p class="sr-cs-hook">What happens when survival is no longer the only thing asking for your attention?</p>
+        <p><span class="sr-cs-stand">Most of what is happening around you never reaches you. Not because it is hidden, but because attention spent on staying safe has nothing left over for anything else. The same is true of what is happening inside you.</span></p>
+        <p><span class="sr-cs-lift">There is more here than you have been able to take in, and more of you than you have met.</span> Attention trained rather than merely held. Stillness kept long enough for something to arrive in it. What was installed in you before you had a say, and what is yours underneath it. Attuning &mdash; to a room, to a person, to yourself &mdash; and <em class="sr-cs-turn">staying steady while any of it surfaces</em>, because nobody around you will have a script for this either.</p>
+        <p><span class="sr-cs-land">Not repair. This is the part that keeps opening, and nobody has found where it stops.</span></p>
+              </div>
     </article>
-
-    <article class="sr-mi-card">
-      <span class="sr-mi-cardart"><img src="assets/coming/band-02.webp" alt=""></span>
-      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">02</span></div>
-      <h3>Sex &amp; Intimacy</h3>
-      <p class="sr-mi-says">Sexuality as a domain of self-knowledge, not a performance to improve.</p>
-      <p class="sr-mi-holds">The question you have never said out loud. The thing your body does that you have decided means something is wrong with you. The conversation you rehearse in the car and never have. Two people can love each other and still have no idea how to keep the room safe. One says the wrong thing. The other closes. Both walk away believing the problem is who they are, rather than the state they were in. SafeRise does not decide what you should want. It builds the steadiness to find out.</p>
+    <article class="tb" style="--ac:#D4879A" tabindex="0">
+      <div class="sr-cs-pane sr-cs-dark"><img src="assets/coming/band-02.webp" alt="">
+        <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
+        <span class="sr-cs-scrim"></span>
+        <div class="sr-cs-over">
+          <p class="sr-cs-kick">INTIMACY &amp; EMBODIMENT</p>
+          <h2 class="sr-cs-name">Sex &amp;<span class="sr-cs-name2">Intimacy</span></h2>
+          <span class="sr-cs-rule"></span>
+          <ol class="sr-cs-list"><li><span class="sr-cs-num">01</span>Sexual Self</li><li><span class="sr-cs-num">06</span>Sexual Seasons &amp; Libido</li><li><span class="sr-cs-num">02</span>Sexual Exploration</li><li><span class="sr-cs-num">07</span>Desire Misalignment</li><li><span class="sr-cs-num">03</span>Relationship Structure</li><li><span class="sr-cs-num">08</span>Forbidden Desire &amp; Regret</li><li><span class="sr-cs-num">04</span>History &amp; Inexperience</li><li><span class="sr-cs-num">09</span>Shutdown &amp; Reconnection</li><li><span class="sr-cs-num">05</span>Private Sexuality</li><li><span class="sr-cs-num">10</span>Living With an STI</li></ol>
+          <div class="sr-cs-strip" aria-hidden="true"><span class="sr-cs-cover" style="background:linear-gradient(148deg,color-mix(in srgb,#D4879A 37%,#15151B),color-mix(in srgb,#D4879A 15%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(155deg,color-mix(in srgb,#D4879A 44%,#15151B),color-mix(in srgb,#D4879A 22%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(162deg,color-mix(in srgb,#D4879A 51%,#15151B),color-mix(in srgb,#D4879A 29%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(169deg,color-mix(in srgb,#D4879A 32%,#15151B),color-mix(in srgb,#D4879A 10%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(150deg,color-mix(in srgb,#D4879A 39%,#15151B),color-mix(in srgb,#D4879A 17%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(157deg,color-mix(in srgb,#D4879A 46%,#15151B),color-mix(in srgb,#D4879A 24%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(164deg,color-mix(in srgb,#D4879A 53%,#15151B),color-mix(in srgb,#D4879A 31%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(171deg,color-mix(in srgb,#D4879A 34%,#15151B),color-mix(in srgb,#D4879A 12%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(152deg,color-mix(in srgb,#D4879A 41%,#15151B),color-mix(in srgb,#D4879A 19%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(159deg,color-mix(in srgb,#D4879A 48%,#15151B),color-mix(in srgb,#D4879A 26%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span></div>
+        </div>
+      </div>
+      <div class="sr-cs-side">
+        <p class="sr-cs-hook">Sexuality as a domain of self-knowledge, not a performance to improve.</p>
+        <p><span class="sr-cs-stand">The question you have never said out loud. The thing your body does that you have decided means something is wrong with you. The conversation you rehearse in the car and never have.</span></p>
+        <p><span class="sr-cs-lift">Two people can love each other and still have no idea how to keep the room safe.</span> One says the wrong thing. The other closes. Both walk away believing the problem is <em class="sr-cs-turn">who they are</em>, rather than the state they were in.</p>
+        <p><span class="sr-cs-land">SafeRise does not decide what you should want. It builds the steadiness to find out.</span></p>
+              </div>
     </article>
-
-    <article class="sr-mi-card">
-      <span class="sr-mi-cardart"><img src="assets/coming/band-08.webp" alt=""></span>
-      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">03</span></div>
-      <h3>Executive Presence</h3>
-      <p class="sr-mi-says">The thing that got you here stops being the thing that keeps you here.</p>
-      <p class="sr-mi-holds">The conversation you have rehearsed forty times and still have not had. A number you must promise about a year you cannot see. Someone&rsquo;s rent, resting on a call you make on a Thursday. You are the steady one now, for people who cannot see what it costs. Nobody is holding it for you, and there is nowhere to say so &mdash; not below you, not above you, and increasingly not at home. Holding it for others without losing it yourself is most of the job. Nobody teaches that part.</p>
+    <article class="tb" style="--ac:#7BA3CC" tabindex="0">
+      <div class="sr-cs-pane"><img src="assets/coming/band-08.webp" alt="">
+        <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
+        <span class="sr-cs-scrim"></span>
+        <div class="sr-cs-over">
+          <p class="sr-cs-kick">RESPONSIBLE FOR OTHERS</p>
+          <h2 class="sr-cs-name">Executive<span class="sr-cs-name2">Presence</span></h2>
+          <span class="sr-cs-rule"></span>
+          <ol class="sr-cs-list"><li><span class="sr-cs-num">01</span>Self-Disqualification</li><li><span class="sr-cs-num">06</span>Asking for More</li><li><span class="sr-cs-num">02</span>The First Hire</li><li><span class="sr-cs-num">07</span>Letting Someone Go</li><li><span class="sr-cs-num">03</span>Peer to Boss</li><li><span class="sr-cs-num">08</span>Carrying What They Told You</li><li><span class="sr-cs-num">04</span>Losing the Craft</li><li><span class="sr-cs-num">09</span>What It's Costing at Home</li><li><span class="sr-cs-num">05</span>The Promised Number</li><li><span class="sr-cs-num">10</span>Role Drift</li></ol>
+          <div class="sr-cs-strip" aria-hidden="true"><span class="sr-cs-cover" style="background:linear-gradient(148deg,color-mix(in srgb,#7BA3CC 37%,#15151B),color-mix(in srgb,#7BA3CC 15%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(155deg,color-mix(in srgb,#7BA3CC 44%,#15151B),color-mix(in srgb,#7BA3CC 22%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(162deg,color-mix(in srgb,#7BA3CC 51%,#15151B),color-mix(in srgb,#7BA3CC 29%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(169deg,color-mix(in srgb,#7BA3CC 32%,#15151B),color-mix(in srgb,#7BA3CC 10%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(150deg,color-mix(in srgb,#7BA3CC 39%,#15151B),color-mix(in srgb,#7BA3CC 17%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(157deg,color-mix(in srgb,#7BA3CC 46%,#15151B),color-mix(in srgb,#7BA3CC 24%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(164deg,color-mix(in srgb,#7BA3CC 53%,#15151B),color-mix(in srgb,#7BA3CC 31%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(171deg,color-mix(in srgb,#7BA3CC 34%,#15151B),color-mix(in srgb,#7BA3CC 12%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(152deg,color-mix(in srgb,#7BA3CC 41%,#15151B),color-mix(in srgb,#7BA3CC 19%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(159deg,color-mix(in srgb,#7BA3CC 48%,#15151B),color-mix(in srgb,#7BA3CC 26%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span></div>
+        </div>
+      </div>
+      <div class="sr-cs-side">
+        <p class="sr-cs-hook">The thing that got you here stops being the thing that keeps you here.</p>
+        <p><span class="sr-cs-stand">The conversation you have rehearsed forty times and still have not had. A number you must promise about a year you cannot see. Someone&rsquo;s rent, resting on a call you make on a Thursday.</span></p>
+        <p><span class="sr-cs-lift">You are the steady one now, for people who cannot see what it costs.</span> Nobody is holding it for you, and there is <em class="sr-cs-turn">nowhere to say so</em> &mdash; not below you, not above you, and increasingly not at home.</p>
+        <p><span class="sr-cs-land">Holding it for others without losing it yourself is most of the job. Nobody teaches that part.</span></p>
+              </div>
     </article>
-
-    <article class="sr-mi-card">
-      <span class="sr-mi-cardart"><img src="assets/coming/band-03.webp" alt=""></span>
-      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">04</span></div>
-      <h3>Strength &amp; Return</h3>
-      <p class="sr-mi-says">The hardest part was never the training. It was walking back in.</p>
-      <p class="sr-mi-holds">The gap since last time, and the verdict it delivers before you have laced anything. The mirror. The person on the next machine. A missed week that somehow becomes who you are. Encouragement lands as pressure when the state underneath is shame. So most people stop quietly and tell nobody &mdash; and that is where it becomes permanent. This never tells you what to do with your body. It works the states that decide whether you get to. No numbers, targets or programmes anywhere. States only.</p>
+    <article class="tb" style="--ac:#7FA88C" tabindex="0">
+      <div class="sr-cs-pane"><img src="assets/coming/band-03.webp" alt="">
+        <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
+        <span class="sr-cs-scrim"></span>
+        <div class="sr-cs-over">
+          <p class="sr-cs-kick">TRAINING &amp; THE BODY</p>
+          <h2 class="sr-cs-name">Strength<span class="sr-cs-name2">&amp; Return</span></h2>
+          <span class="sr-cs-rule"></span>
+          <ol class="sr-cs-list"><li><span class="sr-cs-num">01</span>Lapse Shame</li><li><span class="sr-cs-num">06</span>The Missed Week</li><li><span class="sr-cs-num">02</span>The Mirror</li><li><span class="sr-cs-num">07</span>Rest Guilt</li><li><span class="sr-cs-num">03</span>Effort Tolerance</li><li><span class="sr-cs-num">08</span>Being Watched</li><li><span class="sr-cs-num">04</span>Room Comparison</li><li><span class="sr-cs-num">09</span>Body Change Lag</li><li><span class="sr-cs-num">05</span>Injury Fear</li><li><span class="sr-cs-num">10</span>Training Through Load</li></ol>
+          <div class="sr-cs-strip" aria-hidden="true"><span class="sr-cs-cover" style="background:linear-gradient(148deg,color-mix(in srgb,#7FA88C 37%,#15151B),color-mix(in srgb,#7FA88C 15%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(155deg,color-mix(in srgb,#7FA88C 44%,#15151B),color-mix(in srgb,#7FA88C 22%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(162deg,color-mix(in srgb,#7FA88C 51%,#15151B),color-mix(in srgb,#7FA88C 29%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(169deg,color-mix(in srgb,#7FA88C 32%,#15151B),color-mix(in srgb,#7FA88C 10%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(150deg,color-mix(in srgb,#7FA88C 39%,#15151B),color-mix(in srgb,#7FA88C 17%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(157deg,color-mix(in srgb,#7FA88C 46%,#15151B),color-mix(in srgb,#7FA88C 24%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(164deg,color-mix(in srgb,#7FA88C 53%,#15151B),color-mix(in srgb,#7FA88C 31%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(171deg,color-mix(in srgb,#7FA88C 34%,#15151B),color-mix(in srgb,#7FA88C 12%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(152deg,color-mix(in srgb,#7FA88C 41%,#15151B),color-mix(in srgb,#7FA88C 19%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(159deg,color-mix(in srgb,#7FA88C 48%,#15151B),color-mix(in srgb,#7FA88C 26%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span></div>
+        </div>
+      </div>
+      <div class="sr-cs-side">
+        <p class="sr-cs-hook">The hardest part was never the training. It was walking back in.</p>
+        <p><span class="sr-cs-stand">The gap since last time, and the verdict it delivers before you have laced anything. The mirror. The person on the next machine. A missed week that somehow becomes who you are.</span></p>
+        <p><span class="sr-cs-lift">Encouragement lands as pressure when the state underneath is shame.</span> So most people stop quietly and tell nobody &mdash; and <em class="sr-cs-turn">that is where it becomes permanent</em>.</p>
+        <p><span class="sr-cs-land">This never tells you what to do with your body. It works the states that decide whether you get to.</span></p>
+        <p class="sr-cs-guard">No numbers, targets or programmes anywhere. States only.</p>      </div>
     </article>
-
-    <article class="sr-mi-card">
-      <span class="sr-mi-cardart"><img src="assets/coming/band-04.webp" alt=""></span>
-      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">05</span></div>
-      <h3>Embodied Nutrition</h3>
-      <p class="sr-mi-says">Almost nothing about eating is actually about food.</p>
-      <p class="sr-mi-holds">The reach that is not hunger. The hour after the thing you had decided not to eat. A meal read as evidence about who you are. Eating in front of people. The moment control starts to feel safer than appetite. The most advised-upon corner of life, and the least understood. Everyone has a rule for you. Almost nobody has a way of being with the state underneath &mdash; and the rules are frequently what made it worse. No plans, no targets, no numbers. It works what happens in you around eating, and points outward whenever that is the right answer. Disordered-eating adjacency. No numbers of any kind. Clinical review is a gate on this track.</p>
+    <article class="tb" style="--ac:#A8B87A" tabindex="0">
+      <div class="sr-cs-pane"><img src="assets/coming/band-04.webp" alt="">
+        <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
+        <span class="sr-cs-scrim"></span>
+        <div class="sr-cs-over">
+          <p class="sr-cs-kick">FOOD &amp; THE BODY</p>
+          <h2 class="sr-cs-name">Embodied<span class="sr-cs-name2">Nutrition</span></h2>
+          <span class="sr-cs-rule"></span>
+          <ol class="sr-cs-list"><li><span class="sr-cs-num">01</span>Eating Without Hunger</li><li><span class="sr-cs-num">06</span>Eating in Company</li><li><span class="sr-cs-num">02</span>The Hour After</li><li><span class="sr-cs-num">07</span>When Control Feels Safer</li><li><span class="sr-cs-num">03</span>Hunger Signals</li><li><span class="sr-cs-num">08</span>Comfort Reach</li><li><span class="sr-cs-num">04</span>Inherited Food Rules</li><li><span class="sr-cs-num">09</span>The Plan That Broke</li><li><span class="sr-cs-num">05</span>The Body Verdict</li><li><span class="sr-cs-num">10</span>Knowing Enough</li></ol>
+          <div class="sr-cs-strip" aria-hidden="true"><span class="sr-cs-cover" style="background:linear-gradient(148deg,color-mix(in srgb,#A8B87A 37%,#15151B),color-mix(in srgb,#A8B87A 15%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(155deg,color-mix(in srgb,#A8B87A 44%,#15151B),color-mix(in srgb,#A8B87A 22%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(162deg,color-mix(in srgb,#A8B87A 51%,#15151B),color-mix(in srgb,#A8B87A 29%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(169deg,color-mix(in srgb,#A8B87A 32%,#15151B),color-mix(in srgb,#A8B87A 10%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(150deg,color-mix(in srgb,#A8B87A 39%,#15151B),color-mix(in srgb,#A8B87A 17%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(157deg,color-mix(in srgb,#A8B87A 46%,#15151B),color-mix(in srgb,#A8B87A 24%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(164deg,color-mix(in srgb,#A8B87A 53%,#15151B),color-mix(in srgb,#A8B87A 31%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(171deg,color-mix(in srgb,#A8B87A 34%,#15151B),color-mix(in srgb,#A8B87A 12%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(152deg,color-mix(in srgb,#A8B87A 41%,#15151B),color-mix(in srgb,#A8B87A 19%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(159deg,color-mix(in srgb,#A8B87A 48%,#15151B),color-mix(in srgb,#A8B87A 26%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span></div>
+        </div>
+      </div>
+      <div class="sr-cs-side">
+        <p class="sr-cs-hook">Almost nothing about eating is actually about food.</p>
+        <p><span class="sr-cs-stand">The reach that is not hunger. The hour after the thing you had decided not to eat. A meal read as evidence about who you are. Eating in front of people. The moment control starts to feel safer than appetite.</span></p>
+        <p><span class="sr-cs-lift">The most advised-upon corner of life, and the least understood.</span> Everyone has a rule for you. Almost nobody has a way of being with the state underneath &mdash; and <em class="sr-cs-turn">the rules are frequently what made it worse</em>.</p>
+        <p><span class="sr-cs-land">No plans, no targets, no numbers. It works what happens in you around eating, and points outward whenever that is the right answer.</span></p>
+        <p class="sr-cs-guard">Disordered-eating adjacency. No numbers of any kind. Clinical review is a gate on this track.</p>      </div>
     </article>
-
-    <article class="sr-mi-card">
-      <span class="sr-mi-cardart"><img src="assets/coming/band-05.webp" alt=""></span>
-      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">06</span></div>
-      <h3>Entrepreneur&#8217;s Journey</h3>
-      <p class="sr-mi-says">Nobody is coming to tell you whether this is working.</p>
-      <p class="sr-mi-holds">The month the money got thin and you told nobody. The launch that landed to silence. The announcement from someone who started after you did. The Tuesday where the only person who could decide anything was you, and you had no idea. There is no structure holding this up except the one you are standing in. No salary arriving regardless. No manager assigning the work. No performance review to tell you whether the last six months counted. And nobody around you who can honestly say whether to keep going &mdash; because they are not inside it and you cannot fully explain it. Not a business course. The states that decide whether you are still standing in eighteen months. No business advice, funding strategy or growth tactics. States only.</p>
+    <article class="tb" style="--ac:#C9885A" tabindex="0">
+      <div class="sr-cs-pane"><img src="assets/coming/band-05.webp" alt="">
+        <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
+        <span class="sr-cs-scrim"></span>
+        <div class="sr-cs-over">
+          <p class="sr-cs-kick">BUILDING IT YOURSELF</p>
+          <h2 class="sr-cs-name">Entrepreneur&#8217;s<span class="sr-cs-name2">Journey</span></h2>
+          <span class="sr-cs-rule"></span>
+          <ol class="sr-cs-list"><li><span class="sr-cs-num">01</span>The Leap</li><li><span class="sr-cs-num">06</span>Founder Isolation</li><li><span class="sr-cs-num">02</span>No One Is Coming</li><li><span class="sr-cs-num">07</span>The Pivot</li><li><span class="sr-cs-num">03</span>The Runway</li><li><span class="sr-cs-num">08</span>Comparison Feed</li><li><span class="sr-cs-num">04</span>Selling Yourself</li><li><span class="sr-cs-num">09</span>Identity Fusion</li><li><span class="sr-cs-num">05</span>The Quiet Launch</li><li><span class="sr-cs-num">10</span>The Long Middle</li></ol>
+          <div class="sr-cs-strip" aria-hidden="true"><span class="sr-cs-cover" style="background:linear-gradient(148deg,color-mix(in srgb,#C9885A 37%,#15151B),color-mix(in srgb,#C9885A 15%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(155deg,color-mix(in srgb,#C9885A 44%,#15151B),color-mix(in srgb,#C9885A 22%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(162deg,color-mix(in srgb,#C9885A 51%,#15151B),color-mix(in srgb,#C9885A 29%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(169deg,color-mix(in srgb,#C9885A 32%,#15151B),color-mix(in srgb,#C9885A 10%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(150deg,color-mix(in srgb,#C9885A 39%,#15151B),color-mix(in srgb,#C9885A 17%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(157deg,color-mix(in srgb,#C9885A 46%,#15151B),color-mix(in srgb,#C9885A 24%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(164deg,color-mix(in srgb,#C9885A 53%,#15151B),color-mix(in srgb,#C9885A 31%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(171deg,color-mix(in srgb,#C9885A 34%,#15151B),color-mix(in srgb,#C9885A 12%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(152deg,color-mix(in srgb,#C9885A 41%,#15151B),color-mix(in srgb,#C9885A 19%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(159deg,color-mix(in srgb,#C9885A 48%,#15151B),color-mix(in srgb,#C9885A 26%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span></div>
+        </div>
+      </div>
+      <div class="sr-cs-side">
+        <p class="sr-cs-hook">Nobody is coming to tell you whether this is working.</p>
+        <p><span class="sr-cs-stand">The month the money got thin and you told nobody. The launch that landed to silence. The announcement from someone who started after you did. The Tuesday where the only person who could decide anything was you, and you had no idea.</span></p>
+        <p><span class="sr-cs-lift">There is no structure holding this up except the one you are standing in.</span> No salary arriving regardless. No manager assigning the work. No performance review to tell you whether the last six months counted. <em class="sr-cs-turn">And nobody around you who can honestly say whether to keep going</em> &mdash; because they are not inside it and you cannot fully explain it.</p>
+        <p><span class="sr-cs-land">Not a business course. The states that decide whether you are still standing in eighteen months.</span></p>
+        <p class="sr-cs-guard">No business advice, funding strategy or growth tactics. States only.</p>
+      </div>
     </article>
-
-    <article class="sr-mi-card">
-      <span class="sr-mi-cardart"><img src="assets/coming/band-06.webp" alt=""></span>
-      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">07</span></div>
-      <h3>Money Shift</h3>
-      <p class="sr-mi-says">Scarcity is a state, and it does not check your balance first.</p>
-      <p class="sr-mi-holds">The look at the account when you already know the answer. The guilt after something you could afford. The pause before you name your price. What you were taught about money before you had earned any. It is the one thing people will not discuss honestly with anyone. Including the person they live with. So it stays private, compounds, and surfaces as tension in a conversation that appears to be about something else. No advice, no products, no strategy. It works the state that decides how you behave with money. No financial advice, products or strategy anywhere.</p>
+    <article class="tb" style="--ac:#D4A843" tabindex="0">
+      <div class="sr-cs-pane"><img src="assets/coming/band-06.webp" alt="">
+        <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
+        <span class="sr-cs-scrim"></span>
+        <div class="sr-cs-over">
+          <p class="sr-cs-kick">VALUE &amp; FREEDOM</p>
+          <h2 class="sr-cs-name">Money<span class="sr-cs-name2">Shift</span></h2>
+          <span class="sr-cs-rule"></span>
+          <ol class="sr-cs-list"><li><span class="sr-cs-num">01</span>Scarcity State</li><li><span class="sr-cs-num">06</span>Naming a Price</li><li><span class="sr-cs-num">02</span>The Balance Check</li><li><span class="sr-cs-num">07</span>Income Comparison</li><li><span class="sr-cs-num">03</span>Earning Shame</li><li><span class="sr-cs-num">08</span>Windfall Unease</li><li><span class="sr-cs-num">04</span>The Inherited Ledger</li><li><span class="sr-cs-num">09</span>Money in the Room</li><li><span class="sr-cs-num">05</span>Spending Guilt</li><li><span class="sr-cs-num">10</span>What Enough Means</li></ol>
+          <div class="sr-cs-strip" aria-hidden="true"><span class="sr-cs-cover" style="background:linear-gradient(148deg,color-mix(in srgb,#D4A843 37%,#15151B),color-mix(in srgb,#D4A843 15%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(155deg,color-mix(in srgb,#D4A843 44%,#15151B),color-mix(in srgb,#D4A843 22%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(162deg,color-mix(in srgb,#D4A843 51%,#15151B),color-mix(in srgb,#D4A843 29%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(169deg,color-mix(in srgb,#D4A843 32%,#15151B),color-mix(in srgb,#D4A843 10%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(150deg,color-mix(in srgb,#D4A843 39%,#15151B),color-mix(in srgb,#D4A843 17%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(157deg,color-mix(in srgb,#D4A843 46%,#15151B),color-mix(in srgb,#D4A843 24%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(164deg,color-mix(in srgb,#D4A843 53%,#15151B),color-mix(in srgb,#D4A843 31%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(171deg,color-mix(in srgb,#D4A843 34%,#15151B),color-mix(in srgb,#D4A843 12%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(152deg,color-mix(in srgb,#D4A843 41%,#15151B),color-mix(in srgb,#D4A843 19%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(159deg,color-mix(in srgb,#D4A843 48%,#15151B),color-mix(in srgb,#D4A843 26%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span></div>
+        </div>
+      </div>
+      <div class="sr-cs-side">
+        <p class="sr-cs-hook">Scarcity is a state, and it does not check your balance first.</p>
+        <p><span class="sr-cs-stand">The look at the account when you already know the answer. The guilt after something you could afford. The pause before you name your price. What you were taught about money before you had earned any.</span></p>
+        <p><span class="sr-cs-lift">It is the one thing people will not discuss honestly with anyone.</span> Including the person they live with. So it stays private, compounds, and <em class="sr-cs-turn">surfaces as tension in a conversation that appears to be about something else</em>.</p>
+        <p><span class="sr-cs-land">No advice, no products, no strategy. It works the state that decides how you behave with money.</span></p>
+        <p class="sr-cs-guard">No financial advice, products or strategy anywhere.</p>      </div>
     </article>
-
-    <article class="sr-mi-card">
-      <span class="sr-mi-cardart"><img src="assets/coming/band-07.webp" alt=""></span>
-      <div class="sr-mi-cardtop"><span class="sr-mi-cardno">08</span></div>
-      <h3>Addiction Recovery</h3>
-      <p class="sr-mi-says">The urge is a state with a shape and an end. Most people are never shown either.</p>
-      <p class="sr-mi-holds">It is rarely the dramatic hour. It is an ordinary Tuesday with nothing wrong in it. A bargain that sounds entirely reasonable. The flat stretch where the thing used to sit. A good day that turns out to be the risk. The people who love you are often the least able to help. Watching. Hoping. Asking in the way that makes honesty harder. Staying steady when nobody around you can hold it steadily is the skill nobody teaches. This works alongside treatment and never in place of it &mdash; a way through the next twenty minutes, always pointing toward people who can do more. Requires clinical governance and crisis routing before any of it ships.</p>
+    <article class="tb" style="--ac:#4E9AA6" tabindex="0">
+      <div class="sr-cs-pane"><img src="assets/coming/band-07.webp" alt="">
+        <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
+        <span class="sr-cs-scrim"></span>
+        <div class="sr-cs-over">
+          <p class="sr-cs-kick">URGE &amp; REBUILD</p>
+          <h2 class="sr-cs-name">Addiction<span class="sr-cs-name2">Recovery</span></h2>
+          <span class="sr-cs-rule"></span>
+          <ol class="sr-cs-list"><li><span class="sr-cs-num">01</span>The Urge</li><li><span class="sr-cs-num">06</span>Identity After</li><li><span class="sr-cs-num">02</span>The Trigger Room</li><li><span class="sr-cs-num">07</span>Telling People</li><li><span class="sr-cs-num">03</span>The Bargain</li><li><span class="sr-cs-num">08</span>The Repair Debt</li><li><span class="sr-cs-num">04</span>Relapse Shame</li><li><span class="sr-cs-num">09</span>Celebration Risk</li><li><span class="sr-cs-num">05</span>The Boredom Void</li><li><span class="sr-cs-num">10</span>The Long Middle</li></ol>
+          <div class="sr-cs-strip" aria-hidden="true"><span class="sr-cs-cover" style="background:linear-gradient(148deg,color-mix(in srgb,#4E9AA6 37%,#15151B),color-mix(in srgb,#4E9AA6 15%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(155deg,color-mix(in srgb,#4E9AA6 44%,#15151B),color-mix(in srgb,#4E9AA6 22%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(162deg,color-mix(in srgb,#4E9AA6 51%,#15151B),color-mix(in srgb,#4E9AA6 29%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(169deg,color-mix(in srgb,#4E9AA6 32%,#15151B),color-mix(in srgb,#4E9AA6 10%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(150deg,color-mix(in srgb,#4E9AA6 39%,#15151B),color-mix(in srgb,#4E9AA6 17%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(157deg,color-mix(in srgb,#4E9AA6 46%,#15151B),color-mix(in srgb,#4E9AA6 24%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(164deg,color-mix(in srgb,#4E9AA6 53%,#15151B),color-mix(in srgb,#4E9AA6 31%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(171deg,color-mix(in srgb,#4E9AA6 34%,#15151B),color-mix(in srgb,#4E9AA6 12%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(152deg,color-mix(in srgb,#4E9AA6 41%,#15151B),color-mix(in srgb,#4E9AA6 19%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span><span class="sr-cs-cover" style="background:linear-gradient(159deg,color-mix(in srgb,#4E9AA6 48%,#15151B),color-mix(in srgb,#4E9AA6 26%,#0F0F14))"><span class="sr-cs-lock"><i></i><b>SAFERISE</b></span></span></div>
+        </div>
+      </div>
+      <div class="sr-cs-side">
+        <p class="sr-cs-hook">The urge is a state with a shape and an end. Most people are never shown either.</p>
+        <p><span class="sr-cs-stand">It is rarely the dramatic hour. It is an ordinary Tuesday with nothing wrong in it. A bargain that sounds entirely reasonable. The flat stretch where the thing used to sit. A good day that turns out to be the risk.</span></p>
+        <p><span class="sr-cs-lift">The people who love you are often the least able to help.</span> Watching. Hoping. Asking in the way that makes honesty harder. Staying steady when <em class="sr-cs-turn">nobody around you can hold it steadily</em> is the skill nobody teaches.</p>
+        <p><span class="sr-cs-land">This works alongside treatment and never in place of it &mdash; a way through the next twenty minutes, always pointing toward people who can do more.</span></p>
+        <p class="sr-cs-guard">Requires clinical governance and crisis routing before any of it ships.</p>      </div>
     </article>
-
   </div>
-</section>
-
-</div>
-</div>
 
 <div class="sr-mi-claim">
   <p>The subject changes. What remains familiar underneath: notice where attention goes,
