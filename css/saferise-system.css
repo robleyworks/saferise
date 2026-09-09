@@ -2605,35 +2605,66 @@ body.sr-breath .sr-player.is-next .audio-play{
 .sr-tp .sr-tp-pmeta h3{font-size:18px;line-height:1.34}
 .sr-tp .sr-tp-pdesc{font-size:12.5px;color:var(--text2);line-height:1.62}
 
-/* ══ SR-174 · progressive disclosure on the protocol card ══
-   Permanently visible: the title and the promise line. Revealed: the signature
-   line and the struggle chips. 57% of a 733px card was text nobody had asked
-   for yet.
+/* ══ SR-174, redone at SR-368 · progressive disclosure on the protocol card ══
+   Permanently visible: title, promise line, and the struggle chips — moved
+   here from inside the reveal (below). Revealed on hover: one line, the
+   signature, over the foot of the cover.
 
-   The reveal is absolutely positioned over the foot of the cover, and that is
-   forced rather than chosen. Three constraints have to hold at once: the card
-   must get shorter, the strip must not reflow when one card opens, and
-   .sr-tp-carviewport is overflow:hidden so anything extending below the card is
-   clipped. Out-of-flow is the only way to satisfy the first two, and upward
-   over the cover is the only direction with room inside the card box.
+   SR-368 (PASS-track-page-quality.md §2): the previous version of this reveal
+   carried the signature line AND the struggle chips, ~257px over a ~315px
+   cover — measured at 79% of the cover obscured on hover, on a component
+   whose whole point is the cover art. The chips are real content, not part of
+   a hover reveal; they now render in normal flow, always visible, below the
+   promise line. Only the signature line stays in .sr-tp-preveal.
+
+   The reveal is still absolutely positioned over the foot of the cover — that
+   part of SR-174's reasoning holds unchanged. Three constraints have to hold
+   at once: the card must not get taller, the strip must not reflow when one
+   card opens, and .sr-tp-carviewport is overflow:hidden so anything extending
+   below the card is clipped. Out-of-flow is the only way to satisfy the first
+   two, and upward over the cover is the only direction with room inside the
+   card box. What changed is how much of the cover it is allowed to take: one
+   line and its padding, not a panel.
+
+   No background of its own now — legibility comes from .sr-pcover-scrim
+   deepening under it (below), the same layer the label and number already
+   read against, so the art is never veiled by two competing gradients.
 
    Timing is the sheet's existing reveal — .28s var(--sr-ease) on transform and
    opacity, the same pair used at lines 463 and 1739 — not a new curve.
    Reduced motion is handled centrally and is not repeated here (CLAUDE.md). */
 .sr-tp .sr-tp-preveal{
   position:absolute;left:0;right:0;bottom:100%;
-  padding:14px 16px 16px;
-  display:flex;flex-direction:column;gap:8px;
+  padding:0 16px 18px;
   opacity:0;transform:translateY(8px);pointer-events:none;
-  background:linear-gradient(180deg,rgba(8,8,12,0),rgba(8,8,12,.82) 22%,rgba(8,8,12,.94));
   transition:transform .28s var(--sr-ease),opacity .28s}
 .sr-tp .sr-tp-pmeta{position:relative}
 .sr-tp .sr-tp-pcard:hover .sr-tp-preveal,
 .sr-tp .sr-tp-pcard:focus-within .sr-tp-preveal{opacity:1;transform:translateY(0)}
 
-/* Keyboard: the chips are the only focusable things in the reveal, so the card
-   has to be reachable itself for a keyboard user to open it. tabindex="0" with
-   no role and no handler — it is a readable region, not a control (SR-178). */
+/* The cover itself answers hover too, scoped to the track-page card only —
+   .sr-pcover is shared with other surfaces (dashboard rotator among them)
+   and neither of these is touched there (CLAUDE.md — never modify a shared
+   selector to fix one page). Image scale 1.01→1.06 and the scrim deepening
+   are the two motions PASS-track-page-quality.md §2 asked for; the cover
+   stays visible throughout either way. */
+.sr-tp .sr-tp-pcard .sr-pcover-img{transform:scale(1.01);transition:transform 1.1s var(--sr-ease)}
+.sr-tp .sr-tp-pcard:hover .sr-pcover-img{transform:scale(1.06)}
+/* SR-368 (PASS-track-page-quality.md §4b) · the shared .sr-pcover-scrim's own
+   top stop (.62) left two of the ten covers' verb label under 4.5:1 at rest
+   — 4.28:1 on Anger Alchemy, 4.27:1 on Shame Dissolution, measured against
+   the real cover photographs. Nudged to .7 here, scoped to the track-page
+   card only, rather than raising the shared rule's own value for every
+   surface that reuses it. */
+.sr-tp .sr-tp-pcard .sr-pcover-scrim{transition:background .28s var(--sr-ease);
+  background:linear-gradient(180deg,rgba(8,8,12,.7) 0%,rgba(8,8,12,.14) 26%,rgba(8,8,12,.1) 52%,rgba(8,8,12,.76) 100%)}
+.sr-tp .sr-tp-pcard:hover .sr-pcover-scrim{background:
+  linear-gradient(180deg,rgba(8,8,12,.7) 0%,rgba(8,8,12,.16) 22%,rgba(8,8,12,.4) 55%,rgba(8,8,12,.92) 100%)}
+
+/* Keyboard: the card is the only focusable thing tied to the reveal now, so
+   it has to be reachable itself for a keyboard user to see the signature
+   line. tabindex="0" with no role and no handler — it is a readable region,
+   not a control (SR-178). */
 .sr-tp .sr-tp-pcard:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 /* Touch, and anything else with no hover: the reveal is not a reveal at all.
@@ -2646,9 +2677,10 @@ body.sr-breath .sr-player.is-next .audio-play{
     /* no transition here: there is nothing to reveal, so a 0→1 fade would be an
        entrance animation on page load that nobody asked for */
     transition:none;
-    background:none;padding:0;margin-top:2px}
+    padding:0;margin-top:2px}
+  .sr-tp .sr-tp-pcard .sr-pcover-img{transform:none;transition:none}
 }
-.sr-tp .sr-tp-pbody{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:12.5px;color:var(--text3);line-height:1.55;padding-top:8px;border-top:1px solid var(--hair)}
+.sr-tp .sr-tp-pbody{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:13px;color:var(--text);line-height:1.42;text-shadow:0 1px 10px rgba(8,8,12,.9)}
 .sr-tp /* cost of the state */
 .sr-tp-costimg{position:relative;border-radius:14px;overflow:hidden;line-height:0;margin-top:6px;aspect-ratio:16/7}
 .sr-tp .sr-tp-costimg img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
@@ -2812,7 +2844,9 @@ body.sr-breath .sr-player.is-next .audio-play{
 .sr-tp .sr-tp-insight-point p{font-size:13.5px;color:var(--text2);line-height:1.72}
 .sr-tp .sr-tp-graphpair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:24px}
 .sr-tp .sr-tp-graphpair{grid-template-columns:minmax(0,1fr)}
-@media(max-width:480px){.sr-tp .sr-tp-shell{padding:0 14px}.sr-tp .sr-tp-band{padding:46px 19px;margin:18px 0}.sr-tp .sr-tp-hero{min-height:560px;display:flex;align-items:flex-end}.sr-tp .sr-tp-hero:after{opacity:.7}.sr-tp .sr-tp-graphic, .sr-tp .sr-tp-graphic--feature{padding:20px}.sr-tp .sr-tp-stickycta{border-radius:20px;padding:18px 20px}.sr-tp .sr-tp-graphic-caption{align-items:flex-start;flex-direction:column;gap:5px}}
+@media(max-width:480px){.sr-tp .sr-tp-shell{padding:0 14px}.sr-tp .sr-tp-band{padding:46px 19px;margin:18px 0}.sr-tp .sr-tp-hero{min-height:560px;display:flex;align-items:flex-end}.sr-tp .sr-tp-hero:after{opacity:.7}.sr-tp .sr-tp-graphic, .sr-tp .sr-tp-graphic--feature{padding:20px}.sr-tp .sr-tp-graphic-caption{align-items:flex-start;flex-direction:column;gap:5px}}
+/* .sr-tp-stickycta's own 480px override moved to line ~2969 (SR-368), next
+   to the rest of its rebuilt rules rather than in this unrelated batch. */
 .sr-tp .sr-tp-graphpair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:40px}
 .sr-tp /* protocol foundation */
 .sr-tp-pfimg{position:relative;border-radius:14px;overflow:hidden;line-height:0}
@@ -2833,9 +2867,19 @@ body.sr-breath .sr-player.is-next .audio-play{
 .sr-tp .sr-tp-rangeimg img{width:100%;height:auto;display:block}
 .sr-tp .sr-tp-rangeframe{position:absolute;left:31%;right:31%;top:4%;bottom:4%;border:1px solid rgba(212,168,67,.75);
   border-radius:2px;box-shadow:0 0 60px rgba(212,168,67,.14) inset;pointer-events:none}
+/* SR-368 (PASS-track-page-quality.md §4a) · the old stops — transparent at
+   0%, only reaching .72 by 55% — left the label row (which sits near the top
+   of this box, not its middle) under a scrim too weak to read against a
+   light patch of photograph: measured 2.45:1 for Safety, 2.52:1 for
+   Shutdown, both against `#F5EDD8`-family text on `--pt-safe`/`--pt-shut`
+   colour, well under the 4.5:1 line, while Mobilisation happened to clear it
+   at 5.84:1 only because that third of the photo is dark red rather than
+   light. Starting the gradient already dark, not transparent, fixes the
+   labels without darkening the photograph's own bottom edge any further
+   than before. */
 .sr-tp .sr-tp-rangecaps{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   padding:0 30px 22px;line-height:1.5;
-  background:linear-gradient(180deg,transparent,rgba(8,8,12,.72) 55%,rgba(8,8,12,.92))}
+  background:linear-gradient(180deg,rgba(8,8,12,.6),rgba(8,8,12,.82) 45%,rgba(8,8,12,.94))}
 .sr-tp .sr-tp-rcap{padding-right:16px}
 .sr-tp .sr-tp-rcname{font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:5px}
 .sr-tp .sr-tp-rcsub{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3)}
@@ -2916,9 +2960,22 @@ body.sr-breath .sr-player.is-next .audio-play{
 .sr-tp .sr-tp-faqa{display:none;padding:0 0 20px 30px;font-size:13.5px;color:var(--text2);line-height:1.8}
 .sr-tp .sr-tp-faqa p + p{margin-top:12px}
 .sr-tp .sr-tp-faqitem.sr-tp-open .sr-tp-faqa{display:block}
+/* SR-368 (PASS-track-page-quality.md §6) · measured at 106px total, a 74px
+   pill inside it, on a 768px viewport — 14% of the screen, permanently, with
+   no way to dismiss it. Rebuilt to the approved slim bar: 44px, sentence
+   case, dismissible. The base .sr-tp-pill and .sr-tp-stickycta p rules stay
+   untouched — both are shared with other CTAs on the page — so every change
+   below is scoped under .sr-tp-stickycta itself, a smaller instance of the
+   same component rather than a second one. */
 .sr-tp /* sticky cta */
-.sr-tp-stickycta{position:sticky;bottom:16px;z-index:30;backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;border:1px solid var(--hair);border-radius:40px;padding:15px 18px 15px 30px;background:var(--band2);margin:24px 0}
-.sr-tp .sr-tp-stickycta p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:18px;color:var(--text)}
+.sr-tp-stickycta{position:sticky;bottom:16px;z-index:30;backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--hair);border-radius:24px;padding:6px 8px 6px 18px;background:var(--band2);margin:24px 0}
+.sr-tp .sr-tp-stickycta p{margin:0;font-family:'DM Sans',system-ui,sans-serif;font-style:normal;font-size:13px;color:var(--text2);flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sr-tp .sr-tp-stickycta .sr-tp-pill{box-sizing:border-box;font-size:11px;padding:9px 16px;text-transform:none;letter-spacing:.02em;height:32px;min-height:0;flex:0 0 auto}
+.sr-tp .sr-tp-stickyx{flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:0;background:transparent;
+  color:var(--text3);font-size:16px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.sr-tp .sr-tp-stickyx:hover,.sr-tp .sr-tp-stickyx:focus-visible{color:var(--text);background:rgba(255,255,255,.06)}
+.sr-tp .sr-tp-stickycta.sr-tp-dismissed{display:none}
+@media(max-width:480px){.sr-tp .sr-tp-stickycta{border-radius:20px;padding:6px 6px 6px 16px}}
 .sr-tp .sr-tp-scope{border:1px solid var(--hair);border-radius:12px;padding:26px 28px;background:var(--band2);font-size:12.5px;color:var(--text2);line-height:1.85}
 .sr-tp .sr-tp-scope .sr-tp-sk{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
 .sr-tp footer{padding:46px 0 60px;font-size:12.5px;color:var(--text3);text-align:center;line-height:1.9}

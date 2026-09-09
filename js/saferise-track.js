@@ -180,17 +180,22 @@
         ' data-sr-open="protocol.html?track=' + esc(String(t.id)) +
         '&amp;protocol=' + esc(String(p[0])) + '">' +
         SafeRiseCover.art({ src: coverPath(t.id, p[0]), no: p[0], label: p[1], extra: free }) +
-        /* SR-174 · title and promise stay; signature and chips move into
-           .sr-tp-preveal, which is out of flow and revealed on hover or focus.
-           tabindex makes the card reachable so a keyboard user can open the
-           reveal, and now also operate it. */
+        /* SR-368 · title, promise and struggle chips stay in normal flow,
+           always visible. Only the one-line signature moves into
+           .sr-tp-preveal, out of flow and revealed on hover or focus, over
+           the foot of the cover rather than in place of it (PASS-track-
+           page-quality.md §2 — the reveal used to carry the struggle chips
+           too and covered ~79% of the cover on hover; the chips are real
+           content, not part of the hover reveal, so they moved here rather
+           than being deleted). tabindex makes the card reachable so a
+           keyboard user can reveal the signature line too. */
         '<div class="sr-tp-pmeta"><h3>' + esc(p[2]) + '</h3>' +
         '<p class="sr-tp-pdesc">' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
+        '<p class="sr-tp-struggle">' + (has(p[5])
+            ? p[5].map(function (s) { return '<span>“' + esc(s) + '”</span>'; }).join('')
+            : '') + '</p>' +
         '<div class="sr-tp-preveal">' +
           '<p class="sr-tp-pbody">' + esc(val(p[4], 'signature:' + p[2])) + '</p>' +
-          '<p class="sr-tp-struggle">' + (has(p[5])
-              ? p[5].map(function (s) { return '<span>“' + esc(s) + '”</span>'; }).join('')
-              : '') + '</p>' +
         '</div>' +
         '</div></article>';
     }).join('');
@@ -309,9 +314,14 @@
       sechead(r.eyebrow, r.h2, r.lede) +
       '<div class="sr-tp-rangefig"><div class="sr-tp-rangeimg">' +
         slot(t.art && t.art.range, brief(t, 'range'), '16/6') +
+        /* SR-368 (PASS-track-page-quality.md §4a) · Safety's sub-label used
+           to carry "· your regulated range" onto the end, the only one of
+           the three that wrapped to two lines. Trimmed to match the other
+           two: the vagal term alone, one line each, none singled out by
+           length. */
         '<div class="sr-tp-rangecaps">' +
           '<div class="sr-tp-rcap"><p class="sr-tp-rcname" style="color:var(--mob)">Mobilisation</p><p class="sr-tp-rcsub">Sympathetic</p></div>' +
-          '<div class="sr-tp-rcap"><p class="sr-tp-rcname" style="color:var(--safe)">Safety</p><p class="sr-tp-rcsub">Ventral vagal · your regulated range</p></div>' +
+          '<div class="sr-tp-rcap"><p class="sr-tp-rcname" style="color:var(--safe)">Safety</p><p class="sr-tp-rcsub">Ventral vagal</p></div>' +
           '<div class="sr-tp-rcap"><p class="sr-tp-rcname" style="color:var(--shut)">Shutdown</p><p class="sr-tp-rcsub">Dorsal vagal</p></div>' +
         '</div></div>' +
         '<div class="sr-tp-rangecols">' + r.cols.map(function (c) {
@@ -556,11 +566,11 @@
       paintDots();
     }
 
-    if (prev) prev.onclick = function () { go(i - per()); };
-    if (next) next.onclick = function () { go(i + per()); };
+    if (prev) prev.onclick = function () { manualStop(); go(i - per()); };
+    if (next) next.onclick = function () { manualStop(); go(i + per()); };
     if (dots) dots.onclick = function (e) {
       var b = e.target.closest('.sr-tp-cardot');
-      if (b) go(pageStart(+b.getAttribute('data-page')));
+      if (b) { manualStop(); go(pageStart(+b.getAttribute('data-page'))); }
     };
     track.style.transition = 'transform .45s cubic-bezier(.4,0,.2,1)';
 
@@ -599,6 +609,7 @@
 
     vp.addEventListener('pointerdown', function (e) {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
+      manualStop();
       dragging = true; moved = 0;
       startX = e.clientX; startFree = freeX = -i * step();
       vp.setPointerCapture(e.pointerId);
@@ -631,6 +642,7 @@
     vp.addEventListener('wheel', function (e) {
       var dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : 0;
       if (!dx) return;
+      manualStop();
       e.preventDefault();
       /* `wheeling` is what makes a flick accumulate. Without it every event in
          the burst recomputes from the index, which has not moved yet, so a
@@ -645,15 +657,13 @@
     window.addEventListener('resize', function () { go(i); });
     go(0);
 
-    /* ── SR-290 · auto-advance ────────────────────────────────────────
-       No prior implementation for this component: SR-163's own comment
-       above records that this carousel has never had a timer or an
-       animation loop. js/saferise-system.js's marketing carousel does
-       autoplay, but as continuous sub-pixel drift with a cloned-track
-       loop — a different mechanism for a different markup contract, not
-       one this carousel-in-place step model can reuse — and it disables
-       itself under reduced motion, which the brief for this component
-       explicitly forbids. 7000ms chosen fresh, no prior value to match.
+    /* ── SR-290, revised at SR-368 · auto-advance ─────────────────────
+       js/saferise-system.js's marketing carousel does autoplay too, but as
+       continuous sub-pixel drift with a cloned-track loop — a different
+       mechanism for a different markup contract, not one this
+       carousel-in-place step model can reuse. Two carousels, reported as
+       such (PASS-track-page-quality.md §3) rather than merged: the
+       markup and the movement model genuinely differ.
 
        One card at a time, not one page (go(i +/- per()), the arrows'
        stride) — advance() always steps `i` by exactly 1, wrapping to 0
@@ -661,28 +671,44 @@
        end. go()/place() never call .focus(), so a tick can never steal
        keyboard focus, satisfied by construction rather than by a guard.
 
-       Reduced motion changes nothing here: it still ticks on the same
-       interval. SR-303 (Phase E) removed the blanket
-       `*,*::before,*::after{transition-duration:.01ms!important}` rule
-       that used to live in css/saferise-system.css, so the sliding
-       transition (this file's inline `transition:transform .45s…`) now
-       plays at full speed under reduced motion too — the same as every
-       other animation on the site post-Phase E.
+       SR-368 changes two things SR-290 got wrong against this pass's own
+       brief:
 
-       Paused vs resumed only — no permanent stop. Arrow clicks, drag and
-       wheel already pause this the moment the pointer is over the strip
-       (hover) or a button has focus; nothing here needs to also watch
-       for manual navigation. */
+       1. Permanent stop on manual interaction. SR-290 only paused while
+          hovering or focused, resuming the moment the pointer left — an
+          autoplaying strip a member had just told it to stop was true
+          again a second later. manualStop() now latches; nothing turns
+          the timer back on afterward, in this page life. Wired into the
+          three arrow/dot buttons, drag start and wheel — everything that
+          counts as "the member drove this rail themselves."
+
+       2. Reduced motion means no autoplay, full stop. SR-290 deliberately
+          left this ticking under reduced motion, reasoning from Phase E's
+          removal of the blanket transition-killer — but that removal was
+          about transition *speed*, not about whether a carousel is
+          allowed to move itself without being asked. Autoplaying content
+          is its own, separate WCAG concern (2.2.2) from motion speed, and
+          this pass's brief asks for it explicitly. Checked once, at
+          autoOn() — the strip itself and its .45s sliding transition
+          still work exactly as before for member-driven navigation. */
     var AUTO_MS = 7000;
     var carousel = document.getElementById('carousel');
-    var autoTimer = null, hoverPaused = false, focusPaused = false;
+    var autoTimer = null, hoverPaused = false, focusPaused = false, stopped = false;
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function advance() {
       var ni = i + 1;
       if (ni > maxIndex()) ni = 0;
       go(ni);
     }
-    function autoOn() { return !hoverPaused && !focusPaused && !document.hidden && maxIndex() > 0; }
+    function manualStop() {
+      stopped = true;
+      syncAuto();
+    }
+    function autoOn() {
+      return !stopped && !reduceMotion && !hoverPaused && !focusPaused &&
+        !document.hidden && maxIndex() > 0;
+    }
     function syncAuto() {
       if (autoOn()) {
         if (!autoTimer) autoTimer = setInterval(advance, AUTO_MS);
@@ -702,6 +728,26 @@
     }
     document.addEventListener('visibilitychange', syncAuto);
     syncAuto();
+  }
+
+  /* SR-368 (PASS-track-page-quality.md §6) · dismissible sticky CTA.
+     sessionStorage, not localStorage, per the brief and matching
+     js/saferise-nav.js's own sr-theme key (line 121) — it should come back
+     next visit, not vanish forever. Keyed per track: dismissing the bar on
+     Personal Transformation says nothing about whether the member has seen
+     Relationship Healing's own price yet. */
+  function initStickyDismiss(id) {
+    var sc = document.getElementById('stickyCta');
+    var sx = document.getElementById('stickyClose');
+    if (!sc || !sx) return;
+    var key = 'sr-sticky-dismissed-t' + id;
+    var dismissed = false;
+    try { dismissed = sessionStorage.getItem(key) === '1'; } catch (e) {}
+    sc.classList.toggle('sr-tp-dismissed', dismissed);
+    sx.onclick = function () {
+      sc.classList.add('sr-tp-dismissed');
+      try { sessionStorage.setItem(key, '1'); } catch (e) {}
+    };
   }
 
   function initFaq() {
@@ -852,6 +898,7 @@
     var sl = document.getElementById('stickyline');
     if (sl) sl.textContent = t.stickyLine || '';
     document.title = 'SafeRise — ' + t.name;
+    initStickyDismiss(id);
 
     initCarousel();
     initFaq();

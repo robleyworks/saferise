@@ -298,7 +298,11 @@ var TRACKS = {
     /* SR-126 · the introductory line comes first because it qualifies the number
        directly above it. All three segments are conditions of sale. */
     priceNote: 'Introductory rate \u2014 yours for as long as you stay subscribed<br>Cancel anytime \u00B7 keep everything you\u2019ve written<br>Relationship and Professional build on this track \u2014 Track 01 is the prerequisite, not the cheap tier.',
-    stickyLine: 'Your SafeRise is ready when you are.'
+    /* SR-368 (PASS-track-page-quality.md §6) · was 'Your SafeRise is ready
+       when you are.' — a slogan next to a price button already stating the
+       number. Replaced with the number itself, drawn from this track's own
+       priceNote fact ('Cancel anytime') rather than invented. */
+    stickyLine: '€19 a month, cancel anytime.'
   },
 
   2: {
@@ -436,7 +440,10 @@ var TRACKS = {
       'New protocols and resources, included as the tracks grow'
     ],
     priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Access is cumulative \u2014 Relationship Healing includes the whole of Personal Transformation.',
-    stickyLine: 'Your half of it is the half you can reach.'
+    /* SR-368 (PASS-track-page-quality.md §6) · same reasoning as t1's
+       stickyLine above — the cumulative-access fact already in this track's
+       own priceNote, condensed rather than a new slogan. */
+    stickyLine: '€29 a month, cancel anytime — includes Personal Transformation in full.'
   },
 
   3: {
@@ -605,7 +612,9 @@ var TRACKS = {
       'New protocols and resources, included as the tracks grow'
     ],
     priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Access is cumulative \u2014 Professional includes Relationship Healing and Personal Transformation in full.',
-    stickyLine: 'Before the room, not a debrief after it.'
+    /* SR-368 (PASS-track-page-quality.md §6) · same reasoning as t1's
+       stickyLine above. */
+    stickyLine: '€39 a month, cancel anytime — includes both tracks before it.'
   },
 
 

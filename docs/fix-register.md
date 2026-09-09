@@ -17,7 +17,15 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-367** (9 September decisions applied — retention
+- **Highest ID issued: SR-368** (protocol page's blank white panel
+  root-caused to `_headers`' own `X-Frame-Options: DENY` and fixed;
+  track-page card hover, carousel permanence/reduced-motion, three-state
+  and cover-label contrast, and the floating CTA bar rebuilt — verified via
+  `git log --oneline --grep="SR-367"`, which found SR-367 as the last
+  issued and nothing between it and this pass's own HEAD; per this note's
+  own documented history of going stale, do not trust this line either —
+  re-verify before the next allocation.)
+- **Previously: Highest ID issued: SR-367** (9 September decisions applied — retention
   written down in both places, Proximity Guide mislabelling fixed, a
   load-bearing slug gap found blocking the split's `/protocols/{slug}`
   route — verified via
@@ -11570,3 +11578,286 @@ Andre's concurrent `ad2f9e9` work is staged.
 *Status:* closed for the items this pass could apply; open pending
 Andre's decision on §6b (Attention Advisory A-or-B) and the §3 slug gap ·
 *Raised and fixed:* 9 Sep 2026
+
+## SR-368 · protocol page's blank white panel root-caused and fixed, track-page card hover/carousel/contrast/CTA-bar rebuilt
+
+Runs `pass/PASS-track-page-quality.md`, pass 2 (the gate) of `docs/RUN-ORDER.md`'s
+six. Allocated via `git log --oneline --grep="SR-367"`, which found SR-367 as
+the last issued and nothing between it and this pass's own HEAD.
+
+**§1 The blank white panel — root cause found and fixed, MATCH the brief's own
+investigation order.**
+
+The dashboard opens a protocol in a same-origin `<iframe id="srProtoFrame">`
+(`dashboard.html:565`), `src="protocol.html?embed=1&track=N&protocol=NN&theme=…"`
+(`dashboard.html:2379`). Every one of the five report items the brief asked
+for before fixing:
+
+1. Iframe, not inlined — confirmed above.
+2. Direct URL works standalone (verified all 30 protocols render correctly,
+   dark background, full content, via a script driving `frame.src` across
+   every `track`/`protocol` combination).
+3. Console **inside the frame** was the actual diagnosis:
+   `Refused to display 'http://localhost:8643/' in a frame because it set
+   'X-Frame-Options' to 'deny'.` — reproduced by standing up a second local
+   server that actually sends `_headers`' rules (the project's own
+   `tools/serve.py` doesn't — a limitation SR-366 already reported for CSP
+   testing, worked around the same way here). `contentDocument` on the frame
+   was `null`, `offsetHeight` 0 — the exact signature the brief predicted for
+   "an iframe or embed rendering with no stylesheet, or failing before it
+   paints," except the true cause was one step earlier: the browser never
+   rendered the document at all.
+4. `?embed=1` is passed and handled correctly (hides the page's own nav
+   shell, `protocol.html:22`) — not implicated.
+5. Not a missing-stylesheet problem; `protocol.html` is fully self-contained,
+   zero external `<link rel="stylesheet">`, all CSS inline — also not
+   implicated once the real cause was confirmed.
+
+**Root cause:** `_headers` (placed in SR-366) sets `X-Frame-Options: DENY` and
+the CSP's `frame-ancestors 'none'` for every path, including `protocol.html`
+itself. `X-Frame-Options: DENY` blocks framing unconditionally — even
+same-origin, even by the site's own dashboard. SR-366 wrote this header
+without accounting for the platform's own same-origin iframe architecture
+(`protocol.html` and `resource.html` both load this way). The CSP is
+report-only today so it logs rather than blocks, but `X-Frame-Options` has no
+report-only mode — it was live and blocking from the moment `_headers` shipped.
+
+**Fix, smallest change:** `_headers` — `X-Frame-Options: DENY` → `SAMEORIGIN`;
+CSP's `frame-ancestors 'none'` → `'self'`, so flipping the CSP to enforced
+later does not silently reintroduce the same bug. Verified on a fresh port
+(eliminates the test browser's own HTTP cache, which served a stale `DENY`
+response on the first two attempts and had to be worked around): `frame.
+contentDocument` populated, `bodyLen: 55471`, background `rgb(8, 8, 12)`,
+screenshot confirms the protocol renders fully inside the dashboard frame.
+
+**§2 Card hover — MATCH the approved treatment (`pass/mock-cards-and-bar.html`
+§B), adapted onto the live `sr-tp-`/`sr-pcover` namespace rather than the
+mock's own generic class names (`.c`/`.art`/`.scrim`), per
+`docs/CLAUDE-RULES-ADDENDUM.md`'s namespacing rule.**
+
+Measured before fixing: `.sr-tp-preveal` (the hover panel) was 256.9px tall
+against a 314.65px cover — **79% of the cover obscured on hover**, carrying
+both the one-line signature and the struggle-quote chips. Root cause: SR-174
+put both in the same out-of-flow reveal; the chips were never meant to be
+hover-only, they just ended up there.
+
+Fixed in `js/saferise-track.js` (`renderTrack`'s card template) and
+`css/saferise-system.css`:
+- Struggle chips moved to normal flow inside `.sr-tp-pmeta`, always visible,
+  below the promise line — "below the card," the brief's own instruction,
+  using the chip styling that already existed at line ~2926 (built for a
+  hover context, works unchanged in normal flow).
+- `.sr-tp-preveal` now carries only the one-line signature, shrunk to
+  `padding:0 16px 18px` with no background of its own.
+- Image scale 1.01→1.06 over 1.1s and a hover-deepened `.sr-pcover-scrim`
+  added, both scoped `.sr-tp .sr-tp-pcard` — `.sr-pcover` is shared with the
+  dashboard rotator and other surfaces, untouched there.
+
+Verified live (real OS-level hover via the browser tool, not synthetic
+events, which do not set CSS `:hover`): reveal height dropped to 88.2px
+against the same 314.65px cover — **28% obscured, cover visible
+throughout** — `matchesHover:true`, `revealOpacity:1`,
+`imgTransform:matrix(1.06,0,0,1.06,0,0)`, scrim gradient deepened as
+computed. Struggle chips confirmed `display:flex`, always visible, outside
+the reveal element.
+
+**Quote pills — where they lived, per the brief's own question:** inside
+`.sr-tp-preveal`, hover-only, is where SR-174 put them. They now render in
+normal flow in `.sr-tp-pmeta`, per the brief's instruction that they belong
+"below the card or not at all."
+
+**§3 Carousel — two implementations, reported as the brief asked; SR-290's
+own gaps against this brief fixed.**
+
+`js/saferise-track.js`'s own header comment already answers the brief's
+question in writing: `js/saferise-system.js`'s marketing-page carousel
+autoplays as continuous sub-pixel drift with a cloned-track loop; this
+track-page carousel is a discrete step model (`go(i)`/`per()`/`maxIndex()`).
+**Two carousels, not one reused twice** — different markup contract, not
+merged, exactly as the brief anticipated as a live possibility.
+
+SR-290 already built auto-advance (7000ms, one card at a time, pause on
+hover/focus, pause on `document.hidden`) but explicitly chose two things this
+brief's §3 requires the opposite of:
+- *"Paused vs resumed only — no permanent stop."* Fixed: `manualStop()` now
+  latches a `stopped` flag, wired into both arrow buttons, the dot rail,
+  drag start (`pointerdown`) and wheel — every interaction the brief names
+  ("arrow, drag, or swipe") plus the dot navigation, which is equally
+  member-driven. Once set, nothing turns the timer back on for the rest of
+  that page's life.
+- *"Reduced motion changes nothing here: it still ticks."* Fixed:
+  `prefers-reduced-motion: reduce` is read once at init and gates `autoOn()`
+  directly — full stop, not a speed change, since an autoplaying carousel is
+  its own WCAG 2.2.2 concern separate from transition-duration (which stays
+  untouched, per Phase E).
+
+Verified live: with `document.hidden` patched to `false` (this sandboxed
+browser reports a fronted tab as hidden — a known limitation, worked around
+rather than trusted) and no manual interaction yet, the track visibly
+advanced after 7.3s (`translateX(0px)` → `translateX(-252px)`). After one
+manual "next" click, the same 7.3s wait produced no further movement even
+after simulating mouseleave — the permanent-stop path holds.
+`prefers-reduced-motion` emulation is not available in this session's
+browser tool; verified by code inspection instead, using the identical,
+already-verified `!document.hidden` gate pattern.
+
+**§4a Three-state block contrast, MATCH — real numbers, not estimates.**
+
+Located at `content/tracks.js`'s per-track "range" caption
+(`.sr-tp-rangecaps`/`.sr-tp-rcname`/`.sr-tp-rcsub`, built in
+`js/saferise-track.js:317-320`), over `assets/t{1,2,3}/range.webp`
+(1600×600 each). Measured via real canvas pixel-sampling of the live
+photograph composited with the actual CSS gradient at each label's exact
+screen position (not an estimate): **Safety 2.45:1, Shutdown 2.52:1**,
+both well under 4.5:1; Mobilisation 5.84:1 already passed, only because
+that third of the photo is dark.
+
+Fixed: `.sr-tp-rangecaps`'s gradient — was `transparent → .72 @ 55% → .92` —
+now starts already dark (`.6 → .82 @45% → .94`), since the labels sit near
+the *top* of this box (measured at 25% down), not its middle, where the old
+transparent start left them exposed. Re-measured after the fix: Mobilisation
+6.00, Safety 5.25 — both now pass. **Shutdown remained at 3.27**, reported
+rather than forced: `--shut` (`#5A6B84`) is a platform-wide semantic token
+(dashboard.html, member-porges.html, member-kross.html, index.html,
+`css/saferise-dashboard.css`, `css/saferise-method.css` all reuse the exact
+hex) — computed its own ceiling against **pure black** at 3.87:1, which
+never reaches 4.5:1 regardless of scrim strength. This is a colour decision,
+not a scrim one; reported for Andre rather than silently changing a
+brand-wide token from one component.
+
+**Two lines vs one, MATCH.** Safety's sub-label carried `"· your regulated
+range"` onto the end — the only one of the three that wrapped. Trimmed to
+`"Ventral vagal"`, matching `"Sympathetic"` and `"Dorsal vagal"` in shape
+(`js/saferise-track.js:317-320`).
+
+**§4b Cover labels, MATCH — same measurement method, second real defect
+found and fixed.** Sampled all ten Track 01 covers' verb label
+(`.sr-pcover-label`) against the real photograph, composited with the actual
+scrim gradient at each label's position: eight passed already (5.4–15:1);
+**Anger Alchemy 4.28:1 and Shame Dissolution 4.27:1 failed**, narrowly.
+Fixed by nudging the shared `.sr-pcover-scrim`'s top stop from `.62` to `.7`,
+scoped `.sr-tp .sr-tp-pcard .sr-pcover-scrim` — the unscoped, shared rule
+other surfaces use is untouched. Re-measured: all ten now clear 4.5:1,
+minimum 5.21:1. The `.sr-pcover-no` (number) values were already well clear
+(10–17:1) — the bottom scrim was never the weak one.
+
+**§5 Three-state illustration — report only, as instructed.**
+`assets/t1/range.webp` (1600×600), `assets/t2/range.webp` (1600×600, same
+dimensions), `assets/t3/range.webp` (1600×600) — each a single delivered
+file, not three separate photographs, containing three side-by-side panels.
+Viewed directly: Track 01's version is exactly what the brief describes —
+one woman, same curly hair and cream outfit, three rooms; the centre panel
+is a direct-camera smile, distinctly different in register from the two
+candid/behavioural outer panels, reading as a portrait rather than a
+regulated state. Track 02's version shows a couple consistently across the
+first two panels, but the woman is absent from the third, an inconsistency
+of its own the brief did not ask about but is noted here since it surfaced
+during the same check. Not fixed — an art decision, per the brief, put to
+Andre with the same two directions it proposed (one person/three states, or
+no people at all).
+
+**§6 Floating CTA bar — MATCH, rebuilt to the approved slim bar.**
+
+Measured before: 106px total, a 74px pill inside it — worse than the
+brief's own ~86px estimate. Rebuilt in `css/saferise-system.css` (scoped
+`.sr-tp .sr-tp-stickycta` and `.sr-tp .sr-tp-stickycta .sr-tp-pill` — the
+base `.sr-tp-pill`/`.sr-tp-stickycta p` rules are shared with other CTAs on
+the page and stay untouched), `js/saferise-track.js` (new
+`initStickyDismiss()`), and all three track HTML files (added
+`id="stickyCta"` and a `#stickyClose` button to the existing static markup,
+identical in each file as it already was).
+
+Two real bugs found and fixed while getting to 44px, both `box-sizing`/
+sizing-model mistakes rather than one clean edit: `min-height:44px` on the
+outer bar combined with `box-sizing:content-box` added the 44px on top of
+padding rather than including it (58px measured); the `<p>` element's
+default 13px user-agent margin was still adding height inside a
+`align-items:center` flex row. Both fixed. Final measured height: **46px**
+(32px pill/close + 12px padding + 2px border — the 1px border is a real,
+visible element, not slop).
+
+- Sentence case: `text-transform:none` scoped to the bar's own pill,
+  confirmed via `getComputedStyle` (`none`, was `uppercase`).
+- Specific copy, not a slogan: the brief's own example
+  ("Track 01 is free…") was not adopted verbatim — Track 01's protocols are
+  free once signed in (`FREE_TRACK_PREFIX`, confirmed §2 of
+  PASS-decisions-applied.md) but Track 01's own *subscription* still lists
+  €19/mo in `PRICING.t1`, and what that price actually covers if the
+  protocols themselves are free was not something this pass could verify
+  cleanly enough to assert next to a "Get Started" button. Used only
+  already-verified facts instead — each track's own price and its
+  `priceNote`'s "cancel anytime"/cumulative-access language, condensed. All
+  three `stickyLine` values in `content/tracks.js` rewritten accordingly.
+- Dismissible, `sessionStorage`, matches `js/saferise-nav.js`'s own
+  `sr-theme` key pattern (line 121) rather than a new one. Keyed per track
+  (`sr-sticky-dismissed-t{id}`) since dismissing Track 01's bar says nothing
+  about Track 02's different price. Verified: click → `display:none`,
+  `sessionStorage` set; fresh page load in the same session → stays
+  dismissed.
+
+**§7 Review the three track pages — report only, as instructed.**
+1. Image-text contrast: covered exhaustively in §4a/§4b above with real
+   composited numbers, not estimates.
+2. Hover-only content: the struggle chips (§2) were the one real instance
+   and are now always visible. No other hover-only text found on the card
+   or carousel; the FAQ accordion and carousel arrows are click/tap
+   affordances, not hover-reveal content.
+3. Structural drift: none — all three pages share one template
+   (`js/saferise-track.js`'s `renderTrack()`) driven by
+   `content/tracks.js`'s per-track data; there is no per-page markup to
+   drift.
+4. FREE badge: confirmed live on all ten Track 01 cards
+   (`document.querySelectorAll('.sr-tp-free').length === 10`, cards === 10)
+   and on zero cards on both Relationship Healing and Professional
+   Performance.
+5. 390px/1440px: no horizontal overflow on any of the three pages at either
+   width (`document.documentElement.scrollWidth` checked against
+   `window.innerWidth` on each); sticky bar holds 46px and does not wrap at
+   390px either.
+
+**§8 Verify**
+1. Protocol renders from the dashboard — confirmed live, screenshot taken:
+   full dark-themed content, correct title, correct cover image, no white
+   panel.
+2. Same protocol at its direct URL — already confirmed identical in the
+   original investigation (30/30 protocols load with non-white background,
+   substantial body HTML) before the fix; the fix only removed the frame
+   block, it did not touch `protocol.html` itself.
+3. Hover no longer obscures the cover — confirmed on Track 01's first card
+   with real measured numbers (79%→28%); same CSS scope applies to all
+   thirty cards across the three tracks.
+4. Carousel — auto-advances, pauses on hover/focus, permanently stops on
+   manual interaction, does not start under reduced motion (verified/
+   inspected per §3 above).
+5. Every label checked clears 4.5:1 except `--shut`'s cover-caption
+   instance, reported in §4a as a colour-token decision, not fixed.
+6. Bar is 46px (not exactly 44 — accounted for by a real 1px border on each
+   edge), dismissible, returns next session within the same tab.
+7. 1440/390 — no overflow on any of the three pages.
+8. Console — clean on all three track pages, checked after every fix in
+   this pass (no errors logged at any point).
+
+**Named — everything changed beyond the brief's literal ask:**
+- The dot-rail carousel navigation (`#carDots`) was added to `manualStop()`
+  alongside the arrow buttons the brief named explicitly — the brief said
+  "arrow, drag, or swipe," and dots are equally member-driven navigation.
+- `.sr-pcover-scrim`'s resting-state gradient (not just its hover state) is
+  now overridden under `.sr-tp .sr-tp-pcard`, because §4b's fix required
+  darkening the *resting* top stop, not only the hover one.
+- Track 02's third-panel model inconsistency (§5) was noted though the
+  brief's own description only matched Track 01.
+
+**Files touched:** `_headers`, `css/saferise-system.css`,
+`js/saferise-track.js`, `content/tracks.js`, `personal-transformation.html`,
+`relationship-healing.html`, `professional-performance.html`,
+`docs/fix-register.md`. Not touched: `pass/PASS-decisions-applied.md`'s
+sibling briefs for the remaining four passes in `docs/RUN-ORDER.md`, and
+none of Andre's own concurrent, unrelated untracked files
+(`docs/BACKUP-AND-RECOVERY.md`, `docs/SEO-HEAD-TEMPLATE.md`,
+`docs/affiliate-terms.md`, `docs/RUN-ORDER.md`,
+`docs/VERTICAL-TRACK-RECOMMENDATIONS.md`, `docs/tracker-v20.html`, two new
+`assets/coming/*.jpg`).
+
+*Status:* closed for every section this pass could apply cleanly; open
+pending Andre's colour decision on `--shut` (§4a) and the three-state
+illustration's art direction (§5) · *Raised and fixed:* 9 Sep 2026
