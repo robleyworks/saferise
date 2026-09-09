@@ -594,7 +594,14 @@ var TRACKS = {
       sub: 'Three parts, built for a working day rather than a retreat.',
       experience: 'The guided meditation for the protocol you are running, plus a short version for the gap between meetings and a Cue Card sized for the walk down the corridor. Nothing here requires a quiet house.',
       log: 'Log the session against the situation \u2014 the pitch, the review, the conversation you were dreading. The pattern in your own working week becomes readable within a month.',
-      deeper: 'The full resource library, with the Attention Advisory doing real work here: where your energy belongs today, and which fights are not yours.',
+      /* SR-374 (PASS-advisory-and-token.md §1f) · was 'with the Attention
+         Advisory doing real work here: where your energy belongs today,
+         and which fights are not yours' — the advisory is a safety
+         notice, not a resource, and had nothing behind that promise.
+         Before: "The full resource library, with the Attention Advisory
+         doing real work here: where your energy belongs today, and
+         which fights are not yours." */
+      deeper: 'The full resource library.',
       deeperNote: 'Ambition, identity and what you were trained to want sit in this layer \u2014 the questions underneath the performance.'
     },
 
@@ -607,7 +614,10 @@ var TRACKS = {
     priceList: [
       'All thirty protocols \u2014 Professional, Relationship Healing and Personal Transformation',
       'Full sessions plus short versions built for a working day',
-      'Attention Advisory and conflict scripts throughout',
+      /* SR-374 (PASS-advisory-and-token.md \u00a71f) \u00b7 was 'Attention Advisory
+         and conflict scripts throughout' -- same reasoning as deeper:
+         above. */
+      'Conflict scripts throughout',
       'Journal and progress tracking, private to you \u2014 never visible to an employer',
       'New protocols and resources, included as the tracks grow'
     ],

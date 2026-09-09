@@ -32,7 +32,10 @@
   --bg:#08080C; --band:#0E0E1A; --band2:#101020; --card:#15151F; --hair:#22222E;
   --gold:#D4A843; --gold-lt:#ECC96A; --teal:#4E9AA6;
   --text:#F5EDD8; --text2:#9C9AA4; --text3:#6A6874;
-  --mob:#C97A5A; --safe:#7FA88C; --shut:#5A6B84;
+  /* SR-374 (PASS-advisory-and-token.md §2) · same fix as
+     css/saferise-dashboard.css's own copy of this token — see its
+     comment for the measured before/after. */
+  --mob:#C97A5A; --safe:#7FA88C; --shut:#7288A0;
   --accent:var(--gold);
   --pad:30px;
 }

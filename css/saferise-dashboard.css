@@ -19,7 +19,12 @@
   --bg:#08080C; --band:#0E0E1A; --band2:#101020; --card:#15151F; --hair:#22222E;
   --gold:#D4A843; --gold-lt:#ECC96A; --teal:#4E9AA6;
   --text:#F5EDD8; --text2:#9C9AA4; --text3:#6A6874;
-  --mob:#C97A5A; --safe:#7FA88C; --shut:#5A6B84;
+  /* SR-374 (PASS-advisory-and-token.md §2) · --shut was #5A6B84, 3.87:1
+     against --bg — SR-368's finding, below 4.5:1 where it sets text.
+     #7288A0 measures 5.41:1, still the dimmest of the three state
+     colours (mob 6.09, safe 5.62) so the meaning survives; one token
+     lightened, not a design change. */
+  --mob:#C97A5A; --safe:#7FA88C; --shut:#7288A0;
   --accent:var(--sr-track01);
 }
 *{box-sizing:border-box;margin:0;padding:0}

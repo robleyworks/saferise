@@ -13087,3 +13087,169 @@ saferise-track.js`.
 and pass 3 (`PASS-indexing-readiness.md`) still to run; `docs/RUN-ORDER-
 2.md`'s own instruction is not to push until all three report clean.
 *Raised and fixed:* 9 Sep 2026
+
+## SR-374 · the attention advisory fixed, the shutdown token relit, Proximity Guide un-conflated
+
+Runs `pass/PASS-advisory-and-token.md`, pass 2 of 3 in
+`docs/RUN-ORDER-2.md`. Allocated via `git log --oneline --grep="SR-373"`,
+which found SR-373 as the last issued and nothing between it and this
+pass's own HEAD.
+
+**§1a/§1b/§1d — the advisory, measured and fixed.** Measured live
+(`getComputedStyle` + the real WCAG relative-luminance formula, not
+estimated): opening sentence **7.21:1**, driving clause **3.66:1**
+against the page's own rendered background — **DIFFERS from the
+brief's own cited 13.6:1 / 3.3:1** (this pass's own measurement
+methodology reads the actual computed colours against `document.body`'s
+actual background; close enough in shape — bright framing, failing
+warning — to be the same defect, just not the same instrument). Fixed:
+**"practice" → "guided meditation experience"**, matching this page's
+own section-1 label, nothing else in the sentence reworded. **One text
+colour** — `--text2`, already an existing token, 7.21:1, no new colour
+introduced. **Prominence moved, not added**: the existing `<strong>`
+(font-weight, not colour — nothing new) shifted from the opening
+sentence onto *"Do not use it while driving."*, so the sentence that
+prevents harm is now the one set apart, per §1b's own instruction, not
+the one that introduces it. Re-measured after: **7.21:1 on both
+sentences**, single colour confirmed by direct
+`getComputedStyle` equality check, not eyeballed.
+
+**§1c — "the shorter reset" exists.** `content/t1-resources.js`'s own
+Safe Practice body names it directly: *"Choose the shorter reset. If
+the full session feels like too much today, the four-line Cue Card is
+built for exactly that moment."* `index.html`'s own quiet-mode button
+opens `data-resource="{protocol}-crisiscard"` labelled "View short
+reset". **Confirmed real and openable — the Cue Card. The clause
+stays.**
+
+**§1e — report only, as instructed.** No FAQ entry asks "where," but
+one answers it anyway: `SHARED.faq`'s *"What do I need for a
+session?"* — *"Headphones if you have them, somewhere you will not be
+interrupted, and the ability to sit or lie down... There is also a Cue
+Card in every protocol: a four-line version for moments when a full
+session is not realistic."* Nothing anywhere covers the *safety* angle
+specifically (not while driving) — if that needs its own answer, no
+FAQ entry gives one yet. **No new entry written**, per instruction.
+
+**§1f — the two false promises, removed.** `deeper:` (Track 03):
+*"The full resource library, with the Attention Advisory doing real
+work here: where your energy belongs today, and which fights are not
+yours."* → **"The full resource library."** `priceList:` (Track 03):
+*"Attention Advisory and conflict scripts throughout"* → **"Conflict
+scripts throughout"**. Both still read cleanly; neither renamed to
+Proximity Guide, per the brief's own ⚠ — these are removals, not a
+third rename.
+
+**§1g — found on `dashboard.html`, not `tracks.js`.** The brief's own
+quoted conflation ("Attention Advisory — Know your limits. Where to
+direct your energy right now, and how close to stay.") is not in
+`content/tracks.js`'s `SHARED.resources` (that row's own description
+has always been "How close to stay" / the three-tier text, and SR-373
+only touched its *name* field, not this description) — it is
+`dashboard.html`'s own separate `RES` showcase-strip array, a third
+system alongside `tracks.js` and `content/t{n}-resources.js`, found by
+grepping the brief's exact quoted string. **Replaced whole**: name,
+tagline, description and the "why" copy all changed to Proximity Guide
+and its real three-tier description (`content/tracks.js`'s own wording,
+verbatim, not invented); a new icon (`pin`, concentric rings) added
+since `alert` was borrowed from the safety notice this entry was
+conflated with; the `SOURCES` map's key moved with it. Verified live:
+the chip renders "Proximity Guide," opens to the real description and
+the new "why" copy, zero console errors.
+
+**Reported, not resolved — the same tension SR-373 flagged, now
+concrete.** This pass's own instruction (revert `dashboard.html`'s
+conflated entry to Proximity Guide) sits next to `content/tracks.js`'s
+`SHARED.resources` row and the 14 real per-protocol `-advisory`
+records in `content/t1|t2|t3-resources.js`, both still reading
+"Attention Advisory" per SR-373's explicit, founder-ruled rename — none
+of which this brief named or asked to touch. A member who reads
+`dashboard.html`'s showcase ("Proximity Guide") and then opens a
+protocol's own resource list (now "Attention Advisory" again, or "…
+Where to Direct Your Attention" for the specific ones) sees two
+different names for what most people would assume is the same thing.
+**Not fixed here** — outside this brief's named scope, and reversing
+SR-373's own explicit founder decision without being asked crosses the
+same line this session was told to respect. Flagged for Andre to
+settle once, in one place, rather than pass-by-pass.
+
+Also found via the §3-item-5 grep, beyond what this brief named, and
+**reported rather than fixed** for the same reason (none of these three
+pages are named in this brief): `plans.html`'s own `resource-item`
+marketing copy lists "Attention Advisory" as a resource with its own
+bespoke description ("See what has your attention — and what it is
+costing…"), unrelated to either Proximity Guide's real content or the
+safety notice's actual wording — a fourth, independent copy of the same
+conflation. `member-porges.html`'s "Further Reading" grid has an
+"Attention Advisory" card labelled "Resource · scope boundary" linking
+to plain `resource.html` with no query parameters — since the advisory
+only exists as an inline aside on `protocol.html`, never as a
+standalone openable resource, that link cannot show what it promises.
+`dashboard.html`'s own Journey copy ("the Attention Advisory says
+plainly where self-guided practice stops") is descriptive prose, not a
+list entry with a broken link, and was left alone. `index.html`'s own
+`renderProtocolPage()` (confirmed dead in SR-373, zero live callers)
+still carries one "Attention Advisory" kind — inert, not touched.
+`protocol.html`'s own static pre-JS fallback markup inside
+`#pp-resource-library` (overwritten by `renderProtocolContent()` on
+every real page load — confirmed unreachable, same pattern as the
+`index.html` dead code above) also lists it as a resource; left as
+found, since fixing it well would mean touching several other stale
+entries in that same fallback block that this pass never asked about.
+
+**§2 — the shutdown token.** Measured live before changing anything:
+`#5A6B84` (the value in all three declarations) at **3.64:1** against
+the rendered page background on `personal-transformation.html`'s track
+carousel — same defect SR-368 found (3.87:1), close enough to be the
+same measurement made against a marginally different background
+reference, not a new problem. **Declared in three places**, not one —
+`css/saferise-system.css`, `css/saferise-method.css` and
+`css/saferise-dashboard.css` each carry their own copy of the full
+`--mob`/`--safe`/`--shut` triad (loaded independently per page family);
+all three changed to `#7288A0`, not just the one the brief happened to
+quote. **Uses found**: one fill (`.sr-dot--shut`, a small status dot in
+`css/saferise-dashboard.css`) and one text use
+(`js/saferise-track.js`'s inline `style="color:var(--shut)"` on the
+"Shutdown" label in the track-page carousel). Neither is `--shut` used
+as a background with dark text on it anywhere — grepped, confirmed,
+nothing to report in the other direction. Re-measured after: **5.41:1**
+on the text use (matching the brief's own table almost exactly), still
+the dimmest of the three state colours (mobilised 6.09, safety 5.62) so
+the meaning survives. The dot fill confirmed changed
+(`getComputedStyle` on a synthetic `.sr-dot--shut` element) and is a
+small status indicator with no text on it — not "too bright" in any
+sense that matters for a fill.
+
+**§3 — verify.** Advisory: both sentences 7.21:1, single colour,
+confirmed by direct equality check. Wording diff: exactly the one word
+swap, reported in §1a above. Colour: one (`--text2`). Renders above the
+player on **30 of 30** protocols — every one of the three stores has a
+`-meditation` key, and the aside is unconditional markup in
+`protocol.html`'s single template, not a per-protocol conditional.
+"Attention Advisory as a resource": not zero — see the extended report
+above; every remaining instance is either dead code (already unreachable
+before this pass) or explicitly out of this brief's named scope,
+reported rather than silently left unmentioned. "What's Included"
+(`dashboard.html`'s `RES` strip) now names Proximity Guide with its real
+description. `--shut` at 5.41:1 everywhere it sets text; no fill has
+become too light. Console clean on every route checked:
+`protocol.html`, `dashboard.html`, `personal-transformation.html`,
+`member-porges.html`.
+
+**§4 — report, in full above.**
+
+**Files touched:** `protocol.html` (advisory copy, colour, markup +
+CSS), `content/tracks.js` (`deeper:`/`priceList:` false promises),
+`dashboard.html` (the `RES` strip's Proximity Guide entry, new icon,
+`SOURCES` key), `css/saferise-system.css`, `css/saferise-method.css`,
+`css/saferise-dashboard.css` (`--shut` token, all three copies),
+`docs/fix-register.md`. Not touched: `plans.html`, `member-porges.html`,
+`index.html`'s dead code, `protocol.html`'s dead pre-JS fallback markup
+— all reported above, none named by this brief. `content/tracks.js`'s
+`SHARED.resources` row and `content/t1|t2|t3-resources.js`'s 14 real
+per-protocol advisory records — SR-373's own explicit rename, not this
+brief's to reverse.
+
+*Status:* closed. **Not pushed** — pass 3 (`PASS-indexing-readiness.md`)
+still to run; `docs/RUN-ORDER-2.md`'s own instruction is not to push
+until all three report clean. *Raised and fixed:* 9 Sep 2026

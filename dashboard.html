@@ -2187,9 +2187,14 @@
     person:'<circle cx="12" cy="8" r="3.4"/><path d="M4.6 20a7.6 7.6 0 0 1 14.8 0"/>',
     card:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 11h6M6.5 14h4"/>',
     alert:'<path d="M12 3.5L21 19H3z"/><path d="M12 10v4M12 16.6v.1"/>',
-    speak:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>'
+    speak:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
+    /* SR-374 (PASS-advisory-and-token.md §1g) · new, for the Proximity
+       Guide entry below — concentric rings reads as "how close to stay"
+       more directly than 'alert' did, which was borrowed from the
+       safety notice this entry got confused with. */
+    pin:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>'
   };
-  var SOURCES = {"Guided Experience": "Porges · Polyvagal Theory — peer-reviewed", "Breathwork": "HeartMath · cardiac coherence near 0.1 Hz — peer-reviewed", "Somatic Release": "Porges · Polyvagal Theory — peer-reviewed", "Progress Journal": "Maté · Compassionate Inquiry — clinical practice", "Progress Tracking": "SafeRise measurement · not an external claim", "How This Works": "All six frameworks, each with its register named", "Protocol Guide": "SafeRise practice material · no external claim", "Cue Card": "Working-memory narrowing under threat — established", "Attention Advisory": "Scope boundary", "Disclosure &amp; Invitation": "SafeRise practice material · no external claim"};
+  var SOURCES = {"Guided Experience": "Porges · Polyvagal Theory — peer-reviewed", "Breathwork": "HeartMath · cardiac coherence near 0.1 Hz — peer-reviewed", "Somatic Release": "Porges · Polyvagal Theory — peer-reviewed", "Progress Journal": "Maté · Compassionate Inquiry — clinical practice", "Progress Tracking": "SafeRise measurement · not an external claim", "How This Works": "All six frameworks, each with its register named", "Protocol Guide": "SafeRise practice material · no external claim", "Cue Card": "Working-memory narrowing under threat — established", "Proximity Guide": "SafeRise practice material · no external claim", "Disclosure &amp; Invitation": "SafeRise practice material · no external claim"};
   var RES = [
     ['play','Guided<br>Experience','Guided Experience','Step-by-step audio.',
      'The full session, voiced and paced. Headphones, nothing to read.',
@@ -2217,9 +2222,17 @@
     ['card','Cue<br>Card','Cue Card','The four-line version.',
      'For the moment it is actually happening, when reading anything longer is not realistic.',
      'Why four lines','Working memory narrows under threat. Anything longer will not be used, so this is the whole thing.'],
-    ['alert','Attention<br>Advisory','Attention Advisory','Know your limits.',
-     'Where to direct your energy right now, and how close to stay.',
-     'Why a limit','This is self-guided practice, not therapy. The advisory says plainly where that line sits and when to involve someone qualified.'],
+    /* SR-374 (PASS-advisory-and-token.md §1g) · was 'Attention Advisory —
+       Know your limits. Where to direct your energy right now, and how
+       close to stay.' — conflating the safety notice's name with
+       Proximity Guide's own description ("how close to stay" is
+       Proximity Guide's line, not the advisory's). The advisory is not
+       a resource and does not belong in this strip; replaced with
+       Proximity Guide and its real description (content/tracks.js's own
+       SHARED.resources row, verbatim). */
+    ['pin','Proximity<br>Guide','Proximity Guide','How close to stay.',
+     'Three tiers for what to stay engaged with, what to take distance from, and what is beyond self-regulation.',
+     'Why tiers','Not every difficult relationship calls for the same response. Naming which tier you are in is what makes the next step obvious instead of an argument with yourself.'],
     ['speak','Disclosure &<br>Invitation','Disclosure &amp; Invitation','Words for the people around you.',
      'A script for explaining what you are doing, and a structured way to open repair when the pattern involves someone else.',
      'Why scripts','The hardest part is rarely the practice. It is the first sentence to another person.']
