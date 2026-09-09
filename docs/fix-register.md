@@ -17,14 +17,21 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-369** (dashboard hero — welcome slide re-shot,
+- **Highest ID issued: SR-370** (the site split, partial — four
+  duplications resolved (About, Plans, Live sessions, Foundation), seven
+  redundant `#prog-*` sections retired from `index.html`, SEO head blocks
+  landed on ten pages, `_redirects` created; the three track-portal
+  sections and their JS deliberately deferred, not attempted — verified
+  via `git log --oneline --grep="SR-369"`, which found SR-369 as the last
+  issued and nothing between it and this pass's own HEAD; per this note's
+  own documented history of going stale, do not trust this line either —
+  re-verify before the next allocation.)
+- **Previously: Highest ID issued: SR-369** (dashboard hero — welcome slide re-shot,
   repositioned and re-scrimmed; resume slide reverted to dark; a
   self-introduced grid regression from this pass's own `<picture>` change
   caught and fixed before commit — verified via
   `git log --oneline --grep="SR-368"`, which found SR-368 as the last
-  issued and nothing between it and this pass's own HEAD; per this note's
-  own documented history of going stale, do not trust this line either —
-  re-verify before the next allocation.)
+  issued and nothing between it and this pass's own HEAD.)
 - **Previously: Highest ID issued: SR-368** (protocol page's blank white panel
   root-caused to `_headers`' own `X-Frame-Options: DENY` and fixed;
   track-page card hover, carousel permanence/reduced-motion, three-state
@@ -12011,3 +12018,255 @@ as part of this commit. `assets/coming/band-anxiety-reset-wide.jpg` is
 Andre's own concurrent `ad2f9e9` addition, untouched.
 
 *Status:* closed · *Raised and fixed:* 9 Sep 2026
+
+## SR-370 · the site split, partial — four duplications resolved, seven redundant sections retired from index.html, SEO head blocks landed; the three track portals and their JS deferred, not attempted
+
+Runs `pass/PASS-split-execute.md`, pass 5 ("the big one") of
+`docs/RUN-ORDER.md`'s six, following SR-367's map. Allocated via
+`git log --oneline --grep="SR-369"`, which found SR-369 as the last issued
+and nothing between it and this pass's own HEAD.
+
+**This is a partial split, reported as such rather than claimed complete.**
+The brief's own §0 calls this pass one that "needs its own commit, its own
+report, and its own rollback point" and "must not be entangled with
+anything else" — the three track portals (`#prog-personal`, `#prog-couples`,
+`#prog-corporate`) carry a MutationObserver-driven open/close mechanism, a
+cold-load `#p{N}` hash handler, and several hundred lines of tightly coupled
+JS (`showProg`/`showMain`/`openProtocolPage`/`requestClose`, duplicated
+across two closures). Untangling that safely — confirming nothing else
+depends on it, verifying every one of the thirty protocol cards still opens
+correctly afterward — is exactly the kind of large-blast-radius work this
+pass's own warning describes, and rushing it inside an already-large pass
+risked the "entangled with something else" outcome the brief explicitly
+warns against. **Skipped, per the brief's own AMBIGUOUS rule** ("skip that
+item only and continue") rather than attempted and left half-verified.
+Reported in full below so the follow-up has a real starting map, not a
+rediscovery.
+
+**§1 Duplication — four resolved, not one.**
+
+The brief named only the About duplication. Investigating it surfaced three
+more of the same shape — an embedded `#prog-*` fragment against an already-
+existing, more complete standalone page — which the same "resolve
+duplication before splitting" principle covers even though the brief did
+not name them.
+
+1. **About.** `about.html` (125,858 bytes, founder-narrative, git history
+   `0f71f77` 2026-09-06) vs `#prog-about` (45,961 bytes — corrected from an
+   earlier, wrong 152 KB estimate in SR-367's own map, a boundary-detection
+   bug caught and fixed before this pass started). `#prog-about` combines
+   About+Method+Science content now properly separated into `about.html`
+   (founder story) and the SR-365-rebuilt `method.html` (science,
+   frameworks, protocol steps) — the embedded version is fully superseded
+   by the union of the two, not just outcompeted by one. `about.html` wins.
+   `#prog-about` deleted.
+2. **Plans.** `plans.html` (66,928 bytes) vs `#prog-compare` (12,949
+   bytes). `plans.html` committed the same day as `about.html`
+   (`0f71f77`), already uses the shared footer partial, hand-authored nav
+   matching `js/saferise-nav.js`'s own generated markup exactly. Wins.
+   `#prog-compare` deleted.
+3. **Live sessions.** `live-sessions.html` (46,846 bytes) vs four separate
+   embedded sections — `#prog-services` (16,970) + `#prog-premium1on1`
+   (16,793) + `#prog-workshops` (18,222) + `#prog-retreats` (16,351),
+   ~68 KB combined. The brief itself flagged this as an open question —
+   "report whether they combine cleanly or need four routes." They already
+   do: `live-sessions.html` is already structured as "For me" (Premium 1:1
+   · Online workshops) and "For my organisation" (Workshops · Retreats ·
+   Events), a clean 1:1 match to the four embedded sections, built and
+   committed the same day. Wins. All four `#prog-*` sections deleted.
+4. **Foundation.** `anxiety-reset.html` (31,151 bytes, title "SafeRise —
+   The Anxiety Reset, free") vs `#prog-foundation` (22,780 bytes). Both
+   describe the identical product — the same four-step free, no-account
+   protocol, `#prog-foundation`'s own copy reading "Foundation Module ·
+   Free Access · No Registration Required." `anxiety-reset.html` is
+   larger, independently maintained (`0f71f77`), and already named in
+   `js/saferise-nav.js`'s own header comment as one of the pages that
+   hand-authors its matching nav/footer markup rather than needing the
+   partial injected. Wins. `#prog-foundation` deleted. **Not renamed** to
+   `foundation.html` — see §3 below.
+
+**Route-table correction, found closing out §1 and §3 together.** The
+approved 9 September URL table (`PASS-decisions-applied.md` §3, carried
+into this brief's own §3) names `track-01.html`/`track-02.html`/
+`track-03.html` as the files for `/personal-transformation`/
+`/relationship-healing`/`/professional-performance`. **Those files were
+never created, and should not be.** `personal-transformation.html`,
+`relationship-healing.html` and `professional-performance.html` already
+exist, already render every protocol from `content/tracks.js` via
+`SafeRiseTrack.render()`, already use the shared nav/footer, and are
+already the filenames `js/saferise-nav.js`'s own `LINKS` array points at.
+Renaming three working, already-linked, already-indexed-nowhere-so-no-loss
+files to numbered ones would contradict the same table's own stated
+principle — "track paths stay long and readable... the words carry
+meaning" — for no gain. DIFFERS, reported, not executed. Same reasoning
+applied to `anxiety-reset.html` above: its own established name is "The
+Anxiety Reset," and renaming the file to `foundation.html` to match the
+table would detach it from that name for a route (`/foundation`) that
+`_redirects` can alias to `/anxiety-reset` just as easily. Both left for
+Andre's call, not silently renamed.
+
+**§2 Shared chrome — mostly already true, not this pass's own work.**
+`personal-transformation.html`/`relationship-healing.html`/
+`professional-performance.html`/`method.html`/`coming-soon.html`/
+`accessibility.html` already use `js/saferise-nav.js`/`js/saferise-footer.js`.
+`about.html`/`plans.html`/`live-sessions.html`/`anxiety-reset.html` already
+hand-author matching markup (confirmed via `js/saferise-nav.js`'s own
+comment naming them as the exception). **Not done:** `index.html`'s own
+nav (line ~1165) and footer (line ~1759) are still hand-rolled, separate
+markup — migrating the homepage itself onto the partial was not attempted
+this pass, deferred alongside the track-portal JS work above since the
+two are adjacent risk (index.html's own JS reads/writes nav state in
+places the partial does not).
+
+**§3 Create the pages — nothing new created; the table's own gaps
+resolved by report rather than by inventing.**
+Every destination in the approved table already exists as a real file
+except `/protocols/{slug}`, which SR-367 already found blocked — zero of
+30 protocols in `content/tracks.js` carry a `slug` field. No slug
+invented. `protocol.html` keeps its numeric `?track=N&protocol=NN` routing
+until Andre supplies real slugs or confirms the numeric form stays.
+
+**§4 Routing and redirects — done for what changed, honestly scoped for
+what didn't.**
+`showProg()`/`showMain()` were **not removed** — they still govern the
+three deferred portals. What changed: every button and link that used to
+call `showProg('compare'|'services'|'premium1on1'|'workshops'|'about'|
+'foundation')` now links directly to the real page. Found and fixed nine
+call sites across three different quoting contexts in the source
+(`onclick="showProg('x')"`, the same escaped inside a JS template
+string as `showProg(\'x\')`, and one dynamic `showProg('+prog+')` call
+confirmed to only ever resolve to `'personal'|'couples'|'corporate'` —
+unaffected, left alone). `showProg('personal'|'couples'|'corporate')` and
+the `#p{N}` deep-link handler are untouched, deliberately, per the
+deferral above.
+
+`_redirects` created — the first one this site has had. Every existing
+page gets a clean-URL rewrite (200, not 301) matching the approved
+structure. **No 301 entries were needed or added**: the seven retired
+`#prog-*` sections were never independently addressable by URL — nothing
+set `location.hash` for them, nothing linked to them from outside
+`index.html` — so nothing that worked via a URL yesterday can 404 today.
+Full reasoning, including the track-01/02/03 non-rename and the slug
+block, is written directly into `_redirects` itself as comments so the
+next pass does not have to rediscover it.
+
+**§5 Per-page head blocks — landed on ten pages, per
+`docs/SEO-HEAD-TEMPLATE.md`; `noindex` untouched everywhere, as
+instructed.**
+`index.html`, `method.html`, `about.html`, `plans.html`,
+`live-sessions.html`, `coming-soon.html` — title, description, canonical
+and the OG/Twitter block added from the template verbatim, none existed
+before. `personal-transformation.html`/`relationship-healing.html`/
+`professional-performance.html` — title updated to the template's, but
+their **existing** descriptions were kept rather than overwritten with
+the template's more generic ones (DIFFERS, deliberate — the live copy is
+more specific, already-crafted prose). `anxiety-reset.html` — not in the
+template's table at all; wrote a title/description in the same voice from
+the page's own copy, flagged as a template gap rather than silently
+patched over. `accessibility.html` already had its own full head block
+(from SR-366) — untouched. **Not done:** the JSON-LD structured data
+(`Organization`, per-protocol `Article`, per-track `FAQPage`) — a
+materially larger task (30 `Article` blocks, FAQ extraction from three
+different pages' markup without retyping, per the template's own
+warning about drift) that did not fit this pass's remaining scope;
+reported as outstanding, not attempted partially.
+
+**§6 Report, do not fix**
+1. **SR-084 dead weight.** Unchanged by this pass — Reference Case (50
+   literals, 205 references, including named public figures), Source
+   Insights (32 literals) and Why I Built This One (2 literals), plus the
+   80 stale duration strings, all still live inside `#prog-personal`/
+   `#prog-couples`/`#prog-corporate`, which this pass deferred rather than
+   split. Scoping SR-084's cleanup to specific pages is blocked on that
+   same deferred work.
+2. **Five duplicated crisis blocks**, re-confirmed live via
+   `grep -n "findahelpline.com" index.html`: the homepage's own footer
+   (line 1774, sitewide); one `sr-callout` inside a resource-reader
+   template (line 3521); and one FAQ answer inside each of the three
+   still-embedded track portals (Personal ~5072, Relationship ~5702,
+   Professional ~6309). Unchanged — all five still exist because the
+   portals that carry four of them are still embedded.
+3. **Four modal systems** (`.jp5-modal`, `.filmmodal`, `.reader-modal`,
+   `.resource-modal`) — a fresh grep confirms all four still live only in
+   `index.html`. Assigning which of `personal-transformation.html`/
+   `relationship-healing.html`/`professional-performance.html`/
+   `protocol.html`/`resource.html` need which is genuinely blocked on the
+   same deferred portal work — the modals are currently coupled to code
+   inside the sections that were not split out.
+4. **Homepage transfer size, before and after — the number this pass
+   exists for, measured exactly, not estimated.** Before (this pass's own
+   starting `HEAD`): 979,677 bytes raw, 185,771 bytes gzipped. After: 830,219
+   bytes raw (**−15.3%**), 162,285 bytes gzipped (**−12.6%**). Partial: the
+   three deferred portals total 313,441 bytes (`#prog-personal` 75,640 +
+   `#prog-couples` 129,593 + `#prog-corporate` 108,208) still inside
+   `index.html`. Resolving the deferral would bring the reduction to
+   roughly 64% raw from the original 979,677 — reported as the honest
+   remaining number, not folded into today's figure.
+
+**§7 Verify**
+1. Every route resolves — spot-checked `index.html`, `plans.html`,
+   `live-sessions.html`, `about.html` fresh (fresh port, past this
+   session's own repeated browser-cache issue with the local static
+   server); titles confirmed correct on each; the three track pages and
+   `protocol.html` were exhaustively verified in SR-368 and untouched
+   since. `coming-soon.html`/`method.html`/`accessibility.html`/
+   `anxiety-reset.html` head blocks confirmed by direct read of the
+   written HTML, not separately re-loaded live (time-scoped, low risk —
+   head-only edits, no body/script changes on those four).
+2. Every old URL redirects rather than 404s — none needed; see §4.
+3. Unique title/description/canonical — table above; ten pages done, one
+   template gap (`anxiety-reset.html`) filled and flagged.
+4. Homepage transfer size before/after — §6.4 above, exact bytes both raw
+   and gzipped.
+5. All thirty-one protocols render from `tracks.js` — unaffected by this
+   pass (protocol.html untouched); last verified exhaustively in SR-368.
+6. Nav and footer identical on every page — true for the pages already on
+   the shared partial (unchanged by this pass); **not true** for
+   `index.html`, whose own hand-rolled nav/footer was not migrated (§2).
+   Reported as open, not glossed over.
+7. Auth — untouched by this pass, not re-verified fresh.
+8. Console clean on every route touched — confirmed on `index.html` at
+   both 1280 and 390px widths (0 errors) and on `plans.html`/
+   `live-sessions.html`/`about.html` (1 pre-existing, unrelated 404:
+   `assets/pages/plans-hero.jpg` is missing on `plans.html` — present
+   before this pass, not introduced by it, reported rather than silently
+   fixed off-brief).
+9. `node scripts/gen-sitemap.js` — Node still unavailable in this
+   environment (SR-366's own finding, unchanged). No new root-level
+   `.html` file was created or removed by this pass, so the count stands
+   at the 17 SR-366 already reported.
+10. 1440/390 — `index.html` checked at both, no horizontal overflow
+    either width.
+
+**§8 Report**
+
+**Routes created:** none — every destination in the approved table already
+existed except `/protocols/{slug}` (blocked, unchanged).
+**Redirects written:** `_redirects`, ten clean-URL rewrites, zero 301s
+(none needed).
+**Transfer size before/after:** 979,677 → 830,219 bytes raw (−15.3%),
+185,771 → 162,285 bytes gzipped (−12.6%); partial, see §6.4.
+**The About resolution, and the three more found with it:** About,
+Plans, Live sessions and Foundation each resolved by keeping the more
+complete standalone page and deleting the embedded duplicate — 150,246
+bytes removed from `index.html` (`#prog-compare` through `#prog-about`,
+contiguous). **Anything that could not be moved cleanly:** the three
+track portals (`#prog-personal`/`#prog-couples`/`#prog-corporate`) and
+their JS — deferred whole, per §0 above, with the full map (crisis
+blocks, modal systems, SR-084 scope, JS function list) left in this entry
+for whoever picks it up next. `index.html`'s own nav/footer migration —
+deferred alongside it, same reason.
+
+**Files touched:** `index.html`, `about.html`, `method.html`,
+`plans.html`, `live-sessions.html`, `coming-soon.html`,
+`personal-transformation.html`, `relationship-healing.html`,
+`professional-performance.html`, `anxiety-reset.html`, `_redirects` (new),
+`docs/fix-register.md`. `accessibility.html` read, not modified — already
+complete. `content/tracks.js`, `protocol.html`, `resource.html`,
+`js/saferise-track.js` — not touched.
+
+*Status:* open — the three track-portal sections and their JS, and
+`index.html`'s own nav/footer migration, remain. Closed for every section
+this pass actually attempted. **Not pushed.** Andre pushes once the split
+is verified — and this is not yet the full split, so that verification
+still has real work ahead of it. · *Raised and fixed:* 9 Sep 2026

@@ -1,0 +1,54 @@
+# SR-370 (PASS-split-execute.md §4). First _redirects file for this site.
+#
+# What this covers: clean-URL rewrites (200, not 301 — the .html file stays
+# the canonical path, this just also serves it at the short one) for every
+# page that already exists standalone, matching the URL structure approved
+# 9 September (PASS-decisions-applied.md §3).
+#
+# What this does NOT cover, and why:
+#
+# - /personal-transformation, /relationship-healing, /professional-performance
+#   map to the EXISTING personal-transformation.html / relationship-healing.html
+#   / professional-performance.html, not to new track-01.html/track-02.html/
+#   track-03.html files as that approved table names. Those three pages
+#   already exist, already render every protocol from content/tracks.js,
+#   already use the shared nav/footer, and are already linked by their real
+#   filenames from js/saferise-nav.js and index.html's own nav. Renaming
+#   working, already-linked, already-indexed-nowhere-so-no-loss files to
+#   match an arbitrary table entry — one whose own stated principle is
+#   "track paths stay long and readable, the words carry meaning" — would
+#   trade a readable name for a numbered one for no gain. Reported as
+#   DIFFERS rather than executed; the short path below rewrites straight to
+#   the real file.
+#
+# - /protocols/{slug} does not exist. SR-367 found zero of 30 protocols in
+#   content/tracks.js carry a slug field — the live identity scheme is
+#   numeric (?track=N&protocol=NN). No slug was invented to make this
+#   route work. Blocked pending Andre supplying real slug strings, or a
+#   decision to keep the numeric form permanently.
+#
+# - No legacy URL needs a 301 here. The seven sections retired from
+#   index.html in this same pass (#prog-compare, #prog-services,
+#   #prog-premium1on1, #prog-workshops, #prog-retreats, #prog-foundation,
+#   #prog-about) were never independently addressable — nothing set
+#   location.hash for them and no external link ever pointed at them.
+#   They were reachable only by clicking a showProg() button while already
+#   on index.html, and every one of those buttons was updated in place to
+#   link to the real page instead. Nothing that worked via a URL today can
+#   404 tomorrow, because none of these ever had one.
+#
+# - #prog-personal, #prog-couples, #prog-corporate and the #p{N} protocol
+#   deep-link mechanism inside them are UNCHANGED in this pass — deferred,
+#   not resolved. See docs/fix-register.md's SR-370 entry. No redirect
+#   entries below reference them.
+
+/method              /method.html               200
+/about                /about.html                 200
+/plans                /plans.html                 200
+/live-sessions        /live-sessions.html         200
+/coming-soon          /coming-soon.html           200
+/accessibility        /accessibility.html         200
+/personal-transformation   /personal-transformation.html   200
+/relationship-healing      /relationship-healing.html      200
+/professional-performance  /professional-performance.html  200
+/anxiety-reset         /anxiety-reset.html         200
