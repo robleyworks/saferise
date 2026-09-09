@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 pattern; chrome copied verbatim from terms.html — see
+     pass/PASS-site-readiness.md §2. Dropped into the site's standard shell
+     per that brief's own instruction ("do not build it as a bare page");
+     the content below this line is otherwise untouched from what was
+     delivered. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#08080C}</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessibility — SafeRise Protocol</title>
+<meta name="description" content="What SafeRise has done for accessibility, what has not been tested yet, and how to tell us about a barrier.">
+<link rel="canonical" href="https://thesaferiseprotocol.com/accessibility">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-system.css">
+<link rel="stylesheet" href="css/saferise-footer.css">
+</head>
+<body class="sr-tp">
+
+<a href="#main" class="sr-tp-skiplink">Skip to content</a>
+
+<div id="srNav"></div>
+<script src="js/saferise-nav.js"></script>
+<script>SafeRiseNav.render('accessibility.html');</script>
+
+<main class="sr-tp-shell" id="main">
+<div style="max-width:680px;margin:0 auto;padding:120px 20px 100px">
+
+<h1>Accessibility</h1>
+
+<p class="section-body">SafeRise Protocol is a product about nervous system regulation. Somebody
+arriving here may be tired, in pain, or unable to concentrate. Accessibility is
+not a compliance exercise for us — it is the same problem the product is about.</p>
+
+<h2>Where we stand</h2>
+
+<p class="section-body">We are working toward <strong>WCAG 2.2 Level AA</strong>. We have not yet
+completed a full independent audit, so we are not claiming conformance. This page
+will change when that changes, and it will say so plainly.</p>
+
+<h2>What is in place</h2>
+<ul class="section-body">
+  <li>A skip-to-content link on every page</li>
+  <li>Semantic headings and landmark regions</li>
+  <li>Text alternatives on meaningful images; decorative images marked as such</li>
+  <li>A light and a dark theme, both selectable</li>
+  <li>Motion respects <code>prefers-reduced-motion</code> — animation does not start for anyone who has asked their system to reduce it</li>
+  <li>No time limits, no countdowns, no session expiry inside a protocol</li>
+  <li>No content that flashes</li>
+  <li>Written scripts for every guided audio session, so the audio is never the only route to the content</li>
+</ul>
+
+<h2>What we know is not finished</h2>
+<ul class="section-body">
+  <li>Colour contrast has not been verified across every component</li>
+  <li>Keyboard traversal of the protocol router and the audio player has not been fully tested</li>
+  <li>Screen reader testing has not been carried out on the member dashboard</li>
+  <li>Captions are not yet available on video</li>
+</ul>
+
+<p class="section-body">We would rather list these than leave them unsaid.</p>
+
+<h2>Tell us about a barrier</h2>
+
+<p class="section-body">If something here is difficult or impossible to use, please write to
+<a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferiseprotocol.com</a>.
+Tell us the page and what happened. We aim to reply within five working days.</p>
+
+<p class="section-body">If you need something on this site in a different format, ask. We will send it.</p>
+
+<h2>If you are in crisis</h2>
+
+<p class="section-body">SafeRise is not crisis support. If you are in immediate danger, contact your
+local emergency number. <a href="https://findahelpline.com">findahelpline.com</a>
+lists free, confidential helplines by country.</p>
+
+<p class="section-body"><small>Last reviewed 9 September 2026 · SafeRise Protocol is operated by Kenor
+International B.V.</small></p>
+
+</div>
+</main>
+
+<div id="srFooter"></div>
+<script src="js/saferise-footer.js"></script>
+<script>SafeRiseFooter.render();</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+Contact: mailto:contact@thesaferiseprotocol.com
+Expires: 2027-09-09T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://thesaferiseprotocol.com/.well-known/security.txt
+Policy: https://thesaferiseprotocol.com/terms
+
+# SafeRise Protocol is operated by Kenor International B.V.
+# Please report security issues privately before any public disclosure.
+# We will acknowledge within five working days.

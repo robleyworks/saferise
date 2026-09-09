@@ -1,16 +1,25 @@
-# SafeRise Protocol — pre-launch.
-# The site is live and resolving but not ready to be indexed: copy, pricing
-# and the legal pages are still in flux. Removed on soft-launch day, together
-# with the noindex meta in every page <head>.
-
-# Claude-User is Anthropic's user-initiated fetcher: it retrieves a page
-# because someone asked Claude to look at it, and it does not crawl for an
-# index. The carve-out is deliberate — the site is read from the outside
-# while it is being built, which is how the hero background 404 was caught.
-# It is NOT part of the pre-launch block above: leave this group in place
-# when the Disallow below is removed on soft-launch day.
-User-agent: Claude-User
-Allow: /
+# thesaferiseprotocol.com
+# NOTE: the site currently also carries <meta name="robots" content="noindex, nofollow">.
+# Removing this file's restrictions has no effect until that meta tag is removed.
 
 User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /account
+Disallow: /signup
+Disallow: /login
+Disallow: /member-
+Disallow: /*?resource=
+Disallow: /pass/
+Disallow: /mock/
+
+# Crawl the content, not the query-string duplicates
+Disallow: /protocol?
+
+User-agent: GPTBot
 Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+Sitemap: https://thesaferiseprotocol.com/sitemap.xml

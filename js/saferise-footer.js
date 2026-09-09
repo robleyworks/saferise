@@ -67,7 +67,8 @@
       links: [
         ['terms.html', 'Terms'],
         ['privacy.html', 'Privacy'],
-        ['refunds.html', 'Refund Policy']
+        ['refunds.html', 'Refund Policy'],
+        ['accessibility.html', 'Accessibility']
       ]
     }
   ];

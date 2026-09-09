@@ -17,14 +17,20 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-365** (method page rebuilt from the approved
+- **Highest ID issued: SR-366** (site-readiness pass — three copy faults
+  fixed, delivered files placed and verified, four standing rules added to
+  CLAUDE.md, a wide set of report-only findings — verified via
+  `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
+  SR-365 as the last issued and nothing between it and this pass's own
+  HEAD; per this note's own documented history of going stale, do not
+  trust this line either — re-verify with the same grep before the next
+  allocation.)
+- **Previously: Highest ID issued: SR-365** (method page rebuilt from the approved
   mockup, member-coming-soon.html taken onto the public sr-cs- treatment,
   four outstanding items re-checked — verified via
   `git log --oneline -i --grep="SR-36[0-9]\|SR-37[0-9]" -E`, which found
   SR-364 as the last issued and nothing between it and this pass's own
-  HEAD; per this note's own documented history of going stale, do not
-  trust this line either — re-verify with the same grep before the next
-  allocation.)
+  HEAD.)
 - **Previously: Highest ID issued: SR-364** (five approved hero banners wired into the
   dashboard rotator, SR-320's two-surfaces rule reported for Andre's
   ruling — not applied either way, per this pass's own explicit
@@ -11067,3 +11073,316 @@ modified path found at commit time that this pass did not touch (see
 above).
 
 *Status:* closed, with the open items above · *Raised and fixed:* 9 Sep 2026
+
+---
+
+## SR-366 · site readiness — copy faults fixed, delivered files placed, four standing rules added, wide report-only audit
+
+`pass/PASS-site-readiness.md`. SR-360–SR-364 outrank this brief where they
+disagree — no conflict found. This pass does not split `index.html` — that
+remains a separate job.
+
+### 0 · three decisions, reported and left alone
+
+1. **Premium 1:1 pricing.** €129 and €299 found; €79 and €199 do not appear
+   anywhere in the repo (grepped, not assumed absent).
+   - `index.html:6624` — `<span data-sr-price="premium1">€129</span>` (price display)
+   - `index.html:6626` — `Book Single Session — <span data-sr-price="premium1">€129</span>` (button)
+   - `index.html:6630` — `<span data-sr-price="premium3">€299</span>` (price display)
+   - `index.html:6633` — `Book 3-Session Series — <span data-sr-price="premium3">€299</span>` (button)
+   - `protocol.html:992` — `<p class="sr-book-price">€129 / session</p>`
+
+   All five sit on `data-sr-price="premium1"`/`"premium3"` spans or their
+   literal echo — a single edit to `PRICING.premium1`/`premium3` in
+   `content/tracks.js` plus `protocol.html:992`'s own literal covers all of
+   it once Andre settles the number. **Nothing changed.**
+
+2. **Attention Advisory vs Proximity Guide.** Both names are real, and the
+   canonical one is decisively **Proximity Guide** — it is the `kind`/
+   `title` on every advisory-type resource record across
+   `content/t1-resources.js`, `content/t2-resources.js` and
+   `content/t3-resources.js` (grepped: 16 records, all three tracks), it is
+   `SHARED.resources`' own name for the type (`content/tracks.js:82`), and
+   it is `CONDITIONAL_RESOURCES`' key (`content/tracks.js:681`) and
+   `js/saferise-resources.js:48`'s `TYPE_META.advisory.meta`.
+
+   **"Attention Advisory" is the exception, in two distinct places:**
+   - As an actual `kind:` field, only twice — `content/t1-resources.js:169`
+     (t1‑p01, Anxiety Reset) and `content/t1-resources.js:406` (t1‑p02,
+     Anger Alchemy). Every other protocol's advisory resource (all of
+     Tracks 02/03, and eight of Track 01's ten) is `kind: "Proximity
+     Guide"`.
+   - As **self-referential prose inside four `Invitation to Repair`
+     resource bodies** in `index.html`'s embedded resource JSON (`p2-repair`,
+     `p4-repair`, `p8-repair`, `p9-repair` — each body opens "the natural
+     next step from Tier One of **the Attention Advisory**"), even though
+     those same protocols' own advisory resource (`p2-advisory` etc.,
+     same JSON blob) is itself `kind: "Proximity Guide"` — the four repair
+     resources are naming their sibling resource wrong.
+   - `content/tracks.js` also carries Track‑03 marketing prose calling it
+     "the Attention Advisory" four times: lines 590, 603, 844, 899 — while
+     Track 03's own actual advisory resources (`content/t3-resources.js`,
+     four records) are all `kind: "Proximity Guide"`.
+
+   **Nothing changed** — reported per instruction, not chosen.
+
+3. **Track 03 — selling and waitlisting at once.** Both strings, same file:
+   - `index.html:5692` — banner copy: *"Content is in production now — join
+     the waitlist for early access and founder pricing."*
+   - `index.html:6290` — the live Start button: `Start — <span
+     data-sr-price="t3" data-sr-price-form="mo">€39/mo</span>`, inside
+     `<div class="sr-ctabar" data-sr-cta id="corporate-pricing">`.
+   - A third instance of the same contradiction, same line: the FAQ answer
+     "Can my company pay for this instead of me?" also says *"join the
+     waitlist above... once this track is live"* — the track's own FAQ
+     disagrees with the track's own Start button. **Nothing changed.**
+
+### 1 · copy faults — fixed
+
+**1a — the electromagnetic-field claim.** ⚠ **DIFFERS from the brief's own
+framing**: this text is not on `about.html` — `about.html` does not contain
+it at all (grepped). It lives in `index.html:7225`, inside the "Six
+frameworks. One methodology." section (`id="science-backbone-anchor"`) — the
+site's credibility section, currently a section of the single `index.html`
+document rather than a separate About page (consistent with the site not
+yet being split — see `pass/PASS-split-index.md`). Also found: the live
+paragraph carried a **second sentence the brief didn't quote** ("Deliberately
+slowing and smoothing the heart rhythm through paced breathing gives the
+nervous system direct, measurable evidence of safety.") — thematically a
+weaker duplicate of the brief's own replacement. Replaced the whole
+paragraph (both sentences) with the brief's exact given text, since keeping
+the old second sentence alongside the new one would have produced a
+redundant paragraph. `grep -rn "electromagnetic\|magnetic field\|energetic
+field"` across every `.html` file: **zero hits**.
+
+**1b — Track 02 FAQ "in development."** Fixed at `index.html:5043` (the
+trailing clause now reads "...and it is available now."). **Duplicate found
+and reported, not fixed**: `docs/reference/portal-personal-target.html:715`
+carries the identical sentence — a file under `docs/reference/`, read as a
+frozen historical snapshot rather than a live served page, so left alone per
+the brief's own "check... not duplicated elsewhere" (report) rather than
+"fix everywhere."
+
+**1c — Somatic Release Activities, singular verb.** Three occurrences,
+all on `index.html:6290` (the Track 03 FAQ block):
+- "...for each protocol **is** built..." → **are**
+- "...**a** Somatic Release Activities for the small daily version..." →
+  stray article dropped ("a" preceding a plural noun was the actual
+  defect here, not an is/are mismatch)
+- "The Somatic Release Activities **is** the compressed..." → **are**
+
+One form used throughout ("are", never "is"). `grep -o "Somatic Release
+Activities is\|a Somatic Release Activities"` across the whole repo now
+returns nothing outside `docs/reference/`.
+
+### 2 · files delivered with this brief
+
+All five named files were already placed at commit time (found, not
+created, by this pass — Andre's own delivery ahead of the brief):
+`_headers` (root), `robots.txt` (root, already the delivered replacement —
+`git diff` shows the pre-launch note swapped for the real
+`Disallow`/`Sitemap` policy), `.well-known/security.txt` (directory
+preserved), `scripts/gen-sitemap.js`. **`accessibility.html` needed real
+work**: it existed at the repo root but bare — no nav, no footer, its own
+top-of-file note said so explicitly ("drop this content into the site's
+standard page shell"). Rebuilt using `terms.html`'s exact shell pattern
+(`SafeRiseNav.render()`, `.sr-tp-shell`, `SafeRiseFooter.render()`) —
+**text content byte-identical to what was delivered**, only the wrapper
+changed. Verified live: nav renders, `<h1>Accessibility</h1>` renders,
+`/accessibility.html` resolves 200, console clean.
+
+**⚠ CSP report-only, honestly unverifiable in this session.** `tools/serve.py`
+is a bare Python static file server — it does not implement Netlify's
+`_headers` convention at all, so the CSP header (or any header in
+`_headers`) is never sent locally, and the browser therefore never
+evaluates the policy. No Netlify CLI is available in this environment
+either. **No CSP violations were found — because none could be tested for.**
+This needs an actual Netlify preview or deploy to check; not attempted here
+rather than reported as a false "zero violations."
+
+**Footer link.** `js/saferise-footer.js`'s Legal group gained one entry —
+`['accessibility.html', 'Accessibility']` — the one footer change this pass
+makes, exactly as instructed. `git diff js/saferise-footer.js`: one line
+added, nothing else touched.
+
+### 3 · report only — nothing fixed
+
+1. **`noindex` meta** — present and left in place, confirmed on
+   `index.html:22`, `about.html:6`, `method.html:6`, `plans.html:6` (and,
+   by the same pattern, every other page checked).
+2. **Sitemap.** ⚠ **Node.js is not available in this environment** — could
+   not literally run `node scripts/gen-sitemap.js`. Read the script and
+   replicated its exact logic (non-recursive root-level `.html` files,
+   same exclude pattern `^(dashboard|account|signup|login|member-|404|pass|mock)`)
+   in Python instead: **17 URLs**, not "very few" as the brief's own
+   framing anticipated — `about`, `accessibility`, `anxiety-reset`,
+   `coming-soon`, `getting-help`, `index`, `live-sessions`, `method`,
+   `personal-transformation`, `plans`, `privacy`, `professional-performance`,
+   `protocol`, `refunds`, `relationship-healing`, `resource`, `terms`. The
+   site is further along toward being split than the brief's premise
+   assumes — real context for `pass/PASS-split-index.md`. `sitemap.xml`
+   not written or committed (script not actually run; writing one from a
+   re-implementation felt like the wrong thing to commit under the real
+   script's name).
+3. **Titles and descriptions** — titles are already distinct per page
+   (not identical, contrary to what the brief's §3.3 flags as the
+   confirming symptom); roughly half the 17 pages have **no meta
+   description at all**: `index`, `about`, `anxiety-reset`, `coming-soon`,
+   `live-sessions`, `method`, `plans`, `protocol`, `resource`. The other
+   eight (`accessibility`, `getting-help`, `personal-transformation`,
+   `privacy`, `professional-performance`, `refunds`,
+   `relationship-healing`, `terms`) all carry one.
+4. **`assets/og/`** — confirmed absent. The existing band images are
+   1200×640; Open Graph's 1200×630 would crop them, as the brief states.
+5. **Contrast.** Computed directly (WCAG relative luminance, not a rule of
+   thumb): `--gold #D4A843` against `--bg #08080C` (dashboard/protocol) =
+   **9.03:1**; against `--bg #0A0A0F` (`.sr-public`) = **8.92:1**;
+   `--gold-lt #E8C877` against `#0A0A0F` = **12.19:1**. All three clear
+   4.5:1 (body text) and 3:1 (large text) by a wide margin.
+6. **Supabase leaked-password protection** — checked via
+   `get_advisors(type: security)` on the live project: **confirmed
+   disabled** (`auth_leaked_password_protection`, WARN,
+   "Leaked password protection is currently disabled"). Matches the
+   brief's own expectation. Not toggled — Andre's call, per instruction.
+
+### 6 · standing rules
+
+`docs/CLAUDE-RULES-ADDENDUM.md` was already delivered (found at commit
+time). Its four rules appended to `CLAUDE.md` **verbatim, not
+summarised** — `CLAUDE.md:141–223` (new `## Standing rules — added by
+PASS-site-readiness.md` section, inserted before the pre-existing, empty
+`## Definition of done` heading so that heading stays the file's last
+section).
+
+**Class audit, per this pass's own instruction — reported, not fixed.**
+Grepped every `class="..."` attribute across every root-level `.html` file
+plus `docs/reference/*.html`: **1554 unique class tokens total, 923 not
+`sr-`-prefixed.** ⚠ That raw count is an overestimate — the regex also
+caught JS template-literal fragments from inline `class="' + var + '"`
+string-building code (e.g. `"'+(bleed"`, `"active':'')+'"`), which are not
+real static class names. A clean count would need a JS-aware pass this
+session did not build; the true number is lower but still in the hundreds.
+Full raw list saved to
+`/private/tmp/claude-501/.../scratchpad/non_sr_classes.txt` (session
+scratchpad, not committed) for whoever picks up the backlog next.
+
+### 7 · auth hardening
+
+**7a — leaked-password protection.** See §3.6 above: confirmed **off**.
+Reported and stopped, per instruction — this is Andre's toggle.
+
+**7b — rate limiting on password reset.** `pass/PASS-auth-loop.md` **did
+not exist** (confirmed absent in SR-361 and again here). ⚠ **Created it**
+— a minimal file holding only the rate-limiting requirement this section
+asks to preserve, with a header stating plainly that it is not a full pass
+brief, so the real auth-loop pass isn't mistaken for already-written. The
+two-layer requirement (server-side Supabase rate limits, client-side
+60-second cooldown, and the "identical response whether or not the address
+exists" rule carried over from SR-361's own account of
+`PASS-auth-and-contact.md` §4) is recorded there in full.
+
+Could not read the **current live Supabase rate-limit values** — no tool in
+this session's Supabase MCP toolset exposes Authentication → Rate Limits
+config; it appears to be dashboard-only. Recorded the brief's own
+recommended starting point (2/hour/email password recovery, 10/hour/IP
+email sending) in the new file, flagged as a recommendation pending
+Andre's own check of the dashboard, not as a confirmed current value.
+
+### 8 · error monitoring
+
+`js/sentry-init.js` confirmed placed at the correct path (found, not
+created). `grep -rn "sentry-init"` across every `.html` and `.js` file:
+**zero references** outside the file itself — not loaded anywhere, exactly
+as instructed. DSN confirmed unfilled: `js/sentry-init.js:21`,
+`dsn: 'PASTE_EU_REGION_DSN_HERE'`, comment already flags the EU-region
+requirement. Not simplified — file untouched.
+
+### 9 · search tooling
+
+⚠ **Search Console DNS verification not attempted.** Completing it needs a
+verification code issued by Google Search Console against Andre's own
+Google account — this session has no access to that account, so there is
+no code to write into a Porkbun TXT record. Adding a placeholder or
+guessed record would accomplish nothing and could conflict with a real one
+Andre adds later. **Reported as blocked on Andre's own Search Console
+login, not attempted.** No SEO subscription purchased, per the brief's own
+explicit instruction.
+
+### 10 · verify
+
+1. **Headers** — could not verify live delivery (see §2's CSP note above);
+   confirmed the `_headers` file's own contents are well-formed and match
+   the brief's description (CSP report-only, X-Frame-Options, HSTS,
+   Permissions-Policy, etc.), by reading it, not by observing it served.
+2. **File resolution** — `/robots.txt` 200, `/.well-known/security.txt`
+   200, `/accessibility.html` 200 (all confirmed via `curl` against the
+   local static server). `/accessibility` (no extension) 404s on the local
+   server, which does no clean-URL rewriting at all — expected to resolve
+   on the real Netlify deployment via its default pretty-URL behaviour for
+   `.html` files (no `_redirects`/`netlify.toml` exists in the repo to
+   check instead); not independently confirmed.
+3. **`electromagnetic`** — zero hits, confirmed above (§1a).
+4. **Track 02 FAQ** — confirmed fixed, §1b.
+5. **Every page renders, console clean** — checked live: `index.html`,
+   `method.html`, `personal-transformation.html` (track page),
+   `protocol.html?track=1&protocol=01` (protocol page), `dashboard.html`,
+   `accessibility.html` — **zero console errors on all six**, fresh loads.
+   No pre-existing errors found on any of them.
+6. **Nav and footer, except the one accessibility link** — confirmed:
+   `js/saferise-nav.js` untouched (not in `git status` at all);
+   `js/saferise-footer.js`'s diff is the single line reported in §2.
+7. **1440/390, no layout change from this pass** — this pass's only
+   layout-relevant change is the one new footer link, additive to an
+   existing list (`Terms`/`Privacy`/`Refund Policy`/**Accessibility**) —
+   not independently re-tested at both widths across every page, since the
+   change is a single `<a>` appended to an existing, already-responsive
+   list structure already exercised by SR-365's own footer checks.
+8. **`js/sentry-init.js` present, unreferenced** — confirmed, §8.
+9. **`CLAUDE.md` carries the four rules** — `CLAUDE.md:141–223`.
+
+### 11 · report
+
+**State plainly:**
+- **The three decisions** — all reported in full above (§0), nothing
+  resolved.
+- **CSP report-only violations, grouped by directive** — none observed,
+  because this session's local tooling never sends the CSP header at all
+  (no Netlify Dev/CLI available) — reported as untested, not as clean.
+- **Gold accent contrast** — passes both thresholds: 8.92–9.03:1 body,
+  12.19:1 large text with `--gold-lt`.
+- **Sitemap URL count** — 17 (script logic replicated in Python; Node
+  unavailable to run the real script).
+- **Leaked-password protection** — confirmed off.
+- **Supabase rate limits** — could not be read via available tooling;
+  brief's own recommended values recorded in the new
+  `pass/PASS-auth-loop.md` as a recommendation, not a confirmed current
+  setting.
+- **Search Console verification** — not attempted; blocked on Google
+  account access this session does not have.
+- **Non-`sr-xx-` classes** — 923 raw matches, known to include JS
+  template-literal noise; true count lower but still substantial. Full
+  list saved to the session scratchpad, not committed.
+
+**Named — everything changed beyond the brief's literal ask:**
+- `accessibility.html`'s wrapper (nav/footer/stylesheet chrome) is new;
+  its own text content is untouched from what was delivered.
+- `pass/PASS-auth-loop.md` created — `pass/` is gitignored, so this is not
+  part of the commit regardless; noted for completeness.
+- Section 1a's fix replaced a full paragraph (two sentences) rather than
+  the one sentence literally quoted in the brief, because the second,
+  unquoted sentence duplicated the replacement's own content — reasoned
+  through and reported, not silently expanded.
+
+**Files touched (this pass's own commit):** `index.html`, `CLAUDE.md`,
+`js/saferise-footer.js`, `robots.txt`, `accessibility.html`, `_headers`,
+`.well-known/security.txt`, `scripts/gen-sitemap.js`, `js/sentry-init.js`,
+`docs/CLAUDE-RULES-ADDENDUM.md`, `docs/fix-register.md`. Explicitly not
+committed: `assets/coming/band-anxiety-reset-wide.jpg` and every other
+untracked/modified path found at commit time that neither this brief nor
+this pass touched (`docs/BACKUP-AND-RECOVERY.md`,
+`docs/SEO-HEAD-TEMPLATE.md`, `docs/affiliate-terms.md`,
+`docs/article-30-register.md`, `docs/tracker-v16/17/18.html`).
+
+*Status:* closed, with the open items above (Search Console, Supabase rate
+limits, CSP live verification, the class-audit backlog) · *Raised and
+fixed:* 9 Sep 2026
