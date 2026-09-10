@@ -1,3 +1,16 @@
+# SR-377 (PASS-block-docs.md §1) · these three go FIRST, before every
+# other rule in this file, so nothing below can ever shadow them.
+# robots.txt and the X-Robots-Tag blocks (SR-376) stop indexing but not
+# reading — anyone with the URL still got a 200. This makes the path
+# itself unreachable: the ! forces the rule even though the files exist,
+# so Netlify serves 404 instead of the document. No 404.html exists in
+# this repo yet (checked when this was written, not assumed) — Netlify
+# falls back to its own generic 404 until one is built, which is not
+# this pass's job (PASS-block-docs.md §1's own instruction).
+/docs/*     /404.html   404!
+/pass/*     /404.html   404!
+/scripts/*  /404.html   404!
+
 # SR-370 (PASS-split-execute.md §4) started this file. SR-372
 # (PASS-split-portals.md §§1/3) added the slug-based protocol route and
 # its full redirect map, and retired the three track portals below.

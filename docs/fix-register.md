@@ -13642,3 +13642,194 @@ implemented from §3's three options.
 
 *Status:* closed. **Not pushed.**
 *Raised and fixed:* 9 Sep 2026
+
+## SR-377 · internal documents made unreachable — _redirects blocks /docs/, /pass/, /scripts/
+
+Runs `pass/PASS-block-docs.md`. Allocated via
+`git log --oneline --grep="SR-376"`, which found SR-376 as the last
+issued and nothing between it and this pass's own HEAD.
+
+**§0 — why headers weren't enough.** SR-376's own two layers
+(`robots.txt`, `X-Robots-Tag`) stop indexing, not reading — confirmed
+live in that same pass: `docs/saferise-invested-work.html`,
+`docs/tracker-v22.html` and `docs/fix-register.md` all still returned
+200. Andre's decision on the previous brief's §3: block the paths
+outright, so this pass does.
+
+**Correction found while executing this pass, worth surfacing
+plainly: `/pass/` was never actually exposed.** `.gitignore` carries a
+bare `pass/` line — every file under it, all 17 `.html` mocks
+included, is untracked (`git ls-files pass/` returns nothing) and has
+never been part of a git-based deploy. Checked live, the same way
+SR-376 checked `docs/`, rather than assumed from the `.gitignore`
+line alone: `https://thesaferiseprotocol.com/pass/webp-review.html`
+and `.../pass/mock-decision-reader-v2.html` both return **404**, right
+now, before this pass's own `_redirects` rule is even deployed. §0's
+own premise ("Netlify serves the whole repository") is true for
+`docs/` and `scripts/` (both tracked, both confirmed live) but not for
+`pass/` — this is the one path of the three that was never at risk.
+The `/pass/*` rule below is added anyway: harmless, and real insurance
+for the day someone removes that `.gitignore` line and commits the
+directory, which would otherwise need a second pass to catch. But the
+report this brief asks for should say plainly that this one was never
+actually open, rather than let three parallel-looking paths read as
+three equal exposures.
+
+**§1 — three lines, at the actual top of `_redirects`.** `404.html`
+checked first, as instructed: **it does not exist** — `ls 404.html` →
+no such file. **Reported, not built**, per this brief's own explicit
+"do not build one in this pass." Netlify falls back to its own generic
+404 until one is added; that is a real, known cosmetic gap (a 404 that
+doesn't look like this site), not a functional one — the block still
+works.
+
+Added, as the literal first content in the file, before even the
+existing SR-370/SR-372 header comment (not just before the first
+rule — the brief said both "at the top of the file" and "before any
+other rule," and putting them first removes any question):
+
+```
+/docs/*     /404.html   404!
+/pass/*     /404.html   404!
+/scripts/*  /404.html   404!
+```
+
+**`_redirects` head, before** (first 15 lines were the SR-370/SR-372
+header comment; the first actual rule was line 64,
+`/protocols/:slug /protocol.html?slug=:slug 200`) **and after**:
+
+```
+# SR-377 (PASS-block-docs.md §1) · these three go FIRST, before every
+# other rule in this file, so nothing below can ever shadow them.
+# robots.txt and the X-Robots-Tag blocks (SR-376) stop indexing but not
+# reading — anyone with the URL still got a 200. This makes the path
+# itself unreachable: the ! forces the rule even though the files exist,
+# so Netlify serves 404 instead of the document. No 404.html exists in
+# this repo yet (checked when this was written, not assumed) — Netlify
+# falls back to its own generic 404 until one is built, which is not
+# this pass's job (PASS-block-docs.md §1's own instruction).
+/docs/*     /404.html   404!
+/pass/*     /404.html   404!
+/scripts/*  /404.html   404!
+
+# SR-370 (PASS-split-execute.md §4) started this file. SR-372
+# (PASS-split-portals.md §§1/3) added the slug-based protocol route and
+# its full redirect map, and retired the three track portals below.
+```
+
+**No existing redirect was displaced** — confirmed by diff against
+`HEAD`, not by re-reading: zero lines removed, only 12 added (9 new
+comment lines + 3 rules). Non-comment rule-line count: **71 before, 74
+after** — exactly +3, nothing shifted or overwritten.
+
+**§2 — both earlier layers survive, confirmed by diff, not by
+memory.** `git diff HEAD -- robots.txt` and `git diff HEAD --
+_headers` both return **empty** — neither file has changed since
+SR-376. Nothing removed, nothing simplified.
+
+**§3 — the two files without `noindex`, fixed directly.** Both now
+carry `<meta name="robots" content="noindex, nofollow">` immediately
+after `<meta charset>`, matching every other internal document's own
+placement — added anyway, per instruction, even though (per the
+correction above) neither was actually reachable: `pass/webp-review.html`
+because `pass/` was never deployed, `docs/reference/portal-personal-target.html`
+because it sits under `docs/`, now blocked by §1's redirect regardless
+of the tag. Verified both still load cleanly (local dev server,
+console checked) — the tag addition didn't disturb either file's
+markup. **One asymmetry worth being explicit about**:
+`docs/reference/portal-personal-target.html` is tracked and will
+commit and deploy normally with this change. `pass/webp-review.html`
+is not — `pass/` is entirely `.gitignore`d, so this edit is real on
+disk but `git add` refuses it outright (confirmed: "The following
+paths are ignored by one of your .gitignore files") and it cannot be
+part of this or any commit without either forcing it in (`git add -f`,
+not done — fighting an existing, presumably deliberate ignore rule
+wasn't asked for) or removing the `.gitignore` line (also not done,
+same reasoning). The edit stays on disk, harmless, ready if that line
+is ever removed; it just isn't the "one line, committed" the brief's
+own §3 describes for this particular file.
+
+**§4 — what this doesn't solve, reported, not acted on.** The
+documents are still in git history and every clone — a path block is a
+deployment control, not a repository control, exactly as this brief's
+own framing says. **Genuinely sensitive, not merely internal** — where
+exposure costs something specific, not just "looks unfinished":
+
+- **`docs/saferise-invested-work.html` and `docs/INVESTED-WORK-REPORT.md`**
+  — real replacement-cost figures and an hours breakdown. Cost: gives
+  a competitor or investor a number that was never meant to be public,
+  and it's a specific one, not a vague impression.
+- **`docs/tracker-v*.html`** (whichever is currently deployed) —
+  SR-376's own finding: 165 rows including *no licensed clinician
+  contracted* and *zero paying members*. Cost: a prospective member,
+  journalist or investor reading this before Andre chooses to disclose
+  it directly undercuts whatever the live site is presenting at the
+  time.
+- **`docs/fix-register.md`** (this file) — every defect this session
+  has found, including access-control and auth-flow bugs, described in
+  enough detail to be closer to a roadmap for someone probing the site
+  than a changelog. Cost: both reputational (the amount of still-open
+  or recently-fixed rough edges) and, for the still-open items, a
+  literal head start for anyone looking for a way in.
+- **`docs/article-30-register.md`** — records three of six GDPR data
+  subject rights as not built (SR-375's own report), with its own
+  explicit one-month statutory clock once the free tier opens. Cost:
+  regulatory, and the kind a regulator or a determined user would
+  recognise as a real gap, not a rough edge.
+- **`docs/handover/REASONING-AND-COMMENTARY.md`** — session-to-session
+  rationale, rejected approaches and why, and the internal pushback
+  given along the way. Cost: it is written for the next session to
+  read, not for an outside reader — candour about doubts and
+  corrections that would read very differently out of context.
+
+**Not on this list, deliberately** — real, but "merely internal," not
+"costs something": the `pass/mock-*.html` design mockups (pre-launch
+visual drafts, not business data), `docs/TRACK-RESOURCES.md` and
+`docs/SEO-HEAD-TEMPLATE.md`/`docs/INTEGRATION.md`/`docs/CLAUDE-RULES-
+ADDENDUM.md` (process and convention documents, not sensitive if
+read), `docs/reference/portal-personal-target.html` (a design
+reference snapshot). **Not assessed, worth a look**: `pass/about.html`
+("SafeRise — Where this came from") — a founder-story draft; whether
+it contains anything not yet meant to be public is Andre's own call to
+make, not inferred here.
+
+**§5 — verify.** `_redirects` head before/after: §1 above. Entry count
+before/after: §1 above (71 → 74, +3 exactly). `robots.txt`/
+`X-Robots-Tag` unchanged: §2 above, confirmed by diff. Both §3 files
+now carry `noindex`: confirmed by direct grep after editing, not
+assumed from the edit alone. `404.html`: does not exist, reported in
+§1, not built. Every public route still resolves locally: spot-checked
+`index.html`, `protocol.html?track=2&protocol=05`, plus both edited
+`docs/pass` files directly — all load clean, console checked in a
+fresh tab.
+
+**⚠ Live verification is outstanding until deployment**, exactly as
+this brief's own §5 warns — the local dev server reads neither
+`_headers` nor `_redirects` (the same limitation SR-375 and SR-376 both
+hit). **URLs to check once pushed** — the three that returned 200 in
+SR-376, which must now return 404:
+
+- `https://thesaferiseprotocol.com/docs/saferise-invested-work.html`
+- `https://thesaferiseprotocol.com/docs/tracker-v22.html`
+- `https://thesaferiseprotocol.com/docs/fix-register.md`
+
+Not on this list: anything under `/pass/` — already confirmed 404
+live, before deployment, per the correction above. Checking it again
+post-deploy would just reconfirm the same "never exposed" state, not
+verify a fix.
+
+**§6 — report, in full above.**
+
+**Files touched:** `_redirects` (three rules + explanatory comment, at
+the top), `docs/reference/portal-personal-target.html` (`noindex`
+added, tracked, will deploy), `docs/fix-register.md`. **Edited but not
+committable:** `pass/webp-review.html` (`noindex` added on disk;
+`pass/` is `.gitignore`d wholesale, so `git add` refuses the file —
+see the §3 correction above). Not touched: `robots.txt`, `_headers`
+(confirmed unchanged, §2), `404.html` (does not exist, not built,
+§1), `.gitignore` (the `pass/` line itself — not this pass's call to
+make), git history (§4's own point — nothing here removes what's
+already committed).
+
+*Status:* closed. **Not pushed.**
+*Raised and fixed:* 9 Sep 2026

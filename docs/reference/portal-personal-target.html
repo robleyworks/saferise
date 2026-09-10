@@ -3,6 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- SR-377 (PASS-block-docs.md §3) · SR-376 found this one of two
+     internal documents missing the sitewide noindex every other file
+     under docs/ and pass/ carries. Added directly, on top of the
+     robots.txt/X-Robots-Tag/redirect layers, so the file is safe
+     wherever it ends up. -->
+<meta name="robots" content="noindex, nofollow">
 <title>SafeRise — Personal Transformation Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
