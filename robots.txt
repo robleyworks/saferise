@@ -1,25 +1,37 @@
 # thesaferiseprotocol.com
-# NOTE: the site currently also carries <meta name="robots" content="noindex, nofollow">.
-# Removing this file's restrictions has no effect until that meta tag is removed.
+# NOTE: pages still carry <meta name="robots" content="noindex, nofollow">.
+# Removing this file's restrictions has no effect until those are removed.
 
 User-agent: *
 Allow: /
+
+# Member surfaces
 Disallow: /dashboard
 Disallow: /account
 Disallow: /signup
 Disallow: /login
+Disallow: /reset-password
 Disallow: /member-
 Disallow: /*?resource=
+
+# Internal working documents — trackers, registers, valuations, briefs.
+# These are in the repository and therefore served. They must not be indexed.
+Disallow: /docs/
 Disallow: /pass/
 Disallow: /mock/
+Disallow: /scripts/
 
-# Crawl the content, not the query-string duplicates
+# Query-string duplicates of clean protocol URLs
 Disallow: /protocol?
+Disallow: /*?track=
 
 User-agent: GPTBot
 Disallow: /
 
 User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
 Disallow: /
 
 Sitemap: https://thesaferiseprotocol.com/sitemap.xml

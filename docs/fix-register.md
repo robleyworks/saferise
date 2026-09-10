@@ -13472,3 +13472,173 @@ to resolve).
 `docs/RUN-ORDER-2.md` have now run and report clean; whether to push is
 Andre's own call, same as every other pass this session.
 *Raised and fixed:* 9 Sep 2026
+
+## SR-376 · internal documents were publicly served — robots.txt tightened, X-Robots-Tag added
+
+Runs `pass/PASS-doc-exposure.md`. Allocated via
+`git log --oneline --grep="SR-375"`, which found SR-375 as the last
+issued and nothing between it and this pass's own HEAD.
+
+**§1 — reported before anything changed, as instructed.**
+
+**Every `.html` under `docs/`, `pass/` and `scripts/`, with size** —
+27 files, 0 under `scripts/` (it holds only `.js`):
+
+`docs/` (10): `tracker-v11.html` 46,964B · `tracker-v16.html` 53,260B ·
+`tracker-v17.html` 55,382B · `tracker-v18.html` 56,291B ·
+`tracker-v20.html` 59,077B · `tracker-v21.html` 59,841B ·
+`tracker-v22.html` 60,231B · `tracker-v23.html` 61,227B ·
+`saferise-invested-work.html` 11,888B ·
+`reference/portal-personal-target.html` 49,945B.
+
+`pass/` (17): `about.html` 125,368B · `home-v97-reference.html`
+1,493,446B · `mock-banner-clearing-v1.html` 371,703B ·
+`mock-banner-howto-ep02.html` 280,955B ·
+`mock-banner-professional-v1.html` 327,846B ·
+`mock-banners-approved.html` 897,847B ·
+`mock-banners-live-relationship.html` 485,594B ·
+`mock-cards-and-bar.html` 478,926B ·
+`mock-coming-soon-all-v14.html` 457,207B ·
+`mock-decision-reader-v2.html` 18,972B · `mock-hero-v2.html` 587,535B ·
+`mock-hero-v3.html` 467,533B · `mock-method-v19.html` 214,955B ·
+`mock-method-v20.html` 217,127B · `saferise-track01-reader.html`
+316,062B · `track01-qa.html` 14,529B · `webp-review.html` 11,449B.
+
+**Three fetched live**, from `https://thesaferiseprotocol.com`, not
+assumed:
+
+- `docs/saferise-invested-work.html` → **200**. Page title "SafeRise —
+  Invested Work Tracker," opening paragraph readable in full: *"A
+  continuous record of the work invested in SafeRise Protocol, by
+  lane, at market contractor rates... this measures replacement
+  cost..."* — exactly the exposure §1's own warning names.
+- `docs/tracker-v22.html` (the most recent tracker actually **live** —
+  see below) → **200**.
+- The brief's own third target, "any register," doesn't literally
+  exist as an `.html` file under these three directories — nothing
+  there is named or functions as a register. Read as
+  `docs/fix-register.md` instead (the one document this whole session
+  has called "the register," and named directly in this brief's own
+  §1.3: *"The fix register documents every defect found"*) and fetched
+  the same way even though it is `.md`, not `.html` → **also 200**,
+  served as plain text. **DIFFERS, worth flagging on its own**: the
+  exposure is not `.html`-specific — every file under `docs/` resolves
+  regardless of extension, so the fix register (every defect this
+  entire session has found, written in the session's own voice) is
+  exactly as exposed as the three `.html` reports.
+- **`docs/tracker-v23.html` is not actually live** — checked directly
+  (`404`) after `tracker-v22.html` returned 200, rather than assuming
+  the highest version number is deployed. It is untracked on disk
+  (`git status`), Andre's own in-progress local file, not yet committed
+  or deployed — so `v22` is the one currently exposed, not `v23`.
+
+**Whether they carry the sitewide `noindex`**: checked all 27
+directly rather than assuming uniform coverage. **25 of 27 do. Two do
+not**: `docs/reference/portal-personal-target.html` and
+`pass/webp-review.html`. Neither is one of the three most sensitive
+documents named in §1.3, but both are internal working files with no
+robots protection of any kind until this pass's other two layers land.
+
+**§2 — two layers.**
+
+**Layer one, `robots.txt`.** Found already replaced in the working
+tree — not by this pass, and not yet committed. Diffed against `HEAD`
+to confirm: adds exactly what this brief's §2 describes (`/docs/`,
+`/scripts/`, a `Google-Extended` block) plus `/reset-password` under
+member surfaces and `/*?track=` alongside the existing `/protocol?`
+duplicate rule. Matches the brief's own §5.1 checklist
+(`/docs/`, `/pass/`, `/mock/`, `/scripts/` all present) — kept as
+found rather than rewritten, and committed as part of this pass since
+it is squarely this brief's own subject, not unrelated concurrent
+work.
+
+**Layer two, `X-Robots-Tag`.** Appended `pass/_headers-docs-block`'s
+three blocks (`/docs/*`, `/pass/*`, `/scripts/*` — `noindex, nofollow,
+noarchive`, plus `Cache-Control: no-store` on the two that carry the
+sensitive documents) to `_headers`, as new path-scoped blocks after
+the existing ones. **Not added to the `/* block`** — confirmed by
+construction: the `/*` block itself was not touched, only new blocks
+appended after it, per this brief's own ⚠.
+
+**§3 — the real question, reported, not acted on**, per instruction:
+
+- **Leave them, blocked by headers** (what this pass just did). Cheap,
+  no workflow change for Andre, ships today. The exact risk this
+  pass's own §2 names in its own framing: it depends on `_headers`
+  staying correct and being honoured by the host on every deploy — one
+  path added without its own block, one hosting migration, one
+  `_headers` typo, and the same 200 comes back. Detectable (a request
+  to a `docs/` URL either carries the header or it doesn't) but nothing
+  currently checks for that automatically.
+- **Move them outside the publish directory via `netlify.toml`.**
+  Removes the exposure at the root rather than asking every request to
+  be turned away correctly — a `publish` directory that never contains
+  these files can't serve them regardless of `_headers`/`robots.txt`
+  state. Costs a repository reorganisation (a `public/` or `site/`
+  split, or a build step) and changes how every future page is edited
+  and referenced — every relative path, every internal link, every
+  tool in this session that currently assumes the repo root is the
+  site root.
+- **Move them to a separate private repository.** The only option that
+  removes the documents from the deployed history entirely, not just
+  from the current build — a `git log` on the public repo (if it is
+  ever made public, or a deploy log leaks) can't surface a document
+  that was never committed there. Costs the most: two repositories to
+  keep in sync (or one to stop being tracked here at all), a new
+  workflow for anyone editing these files, and — if they are already
+  in this repository's history — the exposure isn't fully closed
+  retroactively without a history rewrite, which is its own separate,
+  higher-risk operation not asked for here.
+
+No recommendation implemented; Andre's call, as instructed.
+
+**§4 — `accessibility.html`, reported only, left as found.** Confirmed
+again (SR-375 found this first): it is the one page of 30 with no
+`noindex` meta tag at all. Arguably correct — public-sector buyers
+expect to find an accessibility statement — but currently that way by
+accident: every other page carries the identical blanket tag due to
+come off in one motion, and this one page already doesn't, meaning it
+is the one page that would be indexed today if a crawler reached it
+before Andre's own decision either way.
+
+**§5 — verify.**
+
+1. `robots.txt` disallows `/docs/`, `/pass/`, `/mock/`, `/scripts/` —
+   confirmed, all four present (§2 above).
+2. **Could not verify the live header directly** — `tools/serve.py`
+   (this session's local preview server) is a bare `http.server`
+   handler and has never read `_headers` at all (the same limitation
+   SR-375 hit testing the CSP header), and this pass does not push, so
+   there is no deployed copy of the new `_headers` blocks to request
+   yet. The blocks were added exactly as delivered in
+   `pass/_headers-docs-block`, in the same directive-per-line syntax
+   the file's own already-working `/*` and `/assets/*` blocks use.
+   Confirming the live header is sent is the one item in this report
+   that needs a real deploy to check.
+3. **The `/* block` is unchanged** — confirmed by diff: nothing in it
+   was edited, only new blocks appended after it. A normal page (not
+   under `/docs/`, `/pass/`, `/scripts/`) carries no `X-Robots-Tag`
+   rule anywhere in the file, so none would be sent for one.
+4. Every public page still resolves — spot-checked
+   `personal-transformation.html`, `protocol.html?track=1&protocol=01`
+   locally after both file changes; both load and render normally.
+   `_headers` changes are additive and path-scoped, so no route
+   resolution logic was touched.
+5. Console clean on both pages checked (a fresh tab, to rule out
+   stale console entries carried over from earlier in this long
+   session).
+
+**§6 — report, in full above.**
+
+**Files touched:** `robots.txt` (kept as found in the working tree,
+verified against this brief's own spec, committed here since it is
+this pass's own subject), `_headers` (the two new layer-two blocks
+appended, `/*` untouched), `docs/fix-register.md`. Not touched:
+`docs/reference/portal-personal-target.html` and `pass/webp-review.html`
+(the two files missing `noindex`, named in §1, not fixed — out of this
+pass's own stated scope, which is the header/robots layer, not
+per-file meta tags), `accessibility.html` (§4, report only), nothing
+implemented from §3's three options.
+
+*Status:* closed. **Not pushed.**
+*Raised and fixed:* 9 Sep 2026
