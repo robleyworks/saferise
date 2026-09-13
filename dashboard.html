@@ -973,6 +973,10 @@
   var LOCK  = '<svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>';
 
   function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  /* PASS-card-titles.md · derived at render time only, on the card label alone.
+     data-open and the CURRENT match above still use the full title from
+     content/tracks.js so navigation and "which protocol is this" keep working. */
+  function cardTitle(s){ return String(s).replace(/^The\s+/, '').replace(/\s+Protocol$/, ''); }
 
   /* SR-161 · the protocol you were last in, derived — never a literal. This
      used to be `var CURRENT = 'The Anxiety Reset Protocol'`, which ringed one
@@ -1057,7 +1061,7 @@
       return '<article class="sr-dash-card'+(t.unlocked?'':' sr-dash-locked')+(cur?' is-current':'')+
         '" data-open="'+(t.unlocked?esc(it[1]):'')+'" data-no="'+no+'" data-src="'+src+'">'+
         SafeRiseCover.art({ src: src, no: no, label: it[0], extra: ribbon })+
-        '<h3 class="sr-dash-cardname">'+esc(it[1])+'</h3>'+action+'</article>';
+        '<h3 class="sr-dash-cardname">'+esc(cardTitle(it[1]))+'</h3>'+action+'</article>';
     }).join('');
     // Two identical sets. The flow runs forward only; when it has travelled the
     // width of one set we subtract that width with no animation, so the loop is

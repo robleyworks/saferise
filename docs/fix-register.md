@@ -13833,3 +13833,188 @@ already committed).
 
 *Status:* closed. **Not pushed.**
 *Raised and fixed:* 9 Sep 2026
+
+## SR-382 · card titles shortened and reserved to two lines; carousel drop-in and founder portrait both reported, not wired in
+
+Runs `pass/PASS-card-titles.md`, plus three items given directly in
+chat alongside it: the carousel consolidation, the founder portrait,
+and an instruction to report rather than change anything asked to be
+reported. Allocated via `git log --all --grep="SR-382"`, which found
+nothing — SR-381 is the last issued.
+
+**1 · title stripping.** `cardTitle()` — strips a leading `The ` and a
+trailing ` Protocol` — added and called at render time only, in two
+places: `js/saferise-track.js`'s `rProtocols()` (the three
+track-landing-page carousels) and `dashboard.html`'s `render()` (the
+Library carousel). That second one is also "the protocol page and
+resource page carousel" from the brief: `protocol.html` only calls
+`SafeRiseCover.coverPath()` from `saferise-track.js`, never
+`SafeRiseTrack.render()` (its own comment says so), and `resource.html`
+has no card-rendering code at all — neither page builds a carousel of
+its own. Both load in an iframe beneath the dashboard's Library
+carousel, which stays visible and unmounted the whole time
+(`dashboard.html`'s `openProtocol()` slides it into place rather than
+removing it). One carousel, three names in the brief.
+
+`content/tracks.js` untouched — `git diff --stat` shows no changes to
+it. Navigation (`data-open`), the current-protocol match
+(`it[1] === CURRENT`), the breadcrumb (`pOpen.name`), the journal's
+group names, the protocol page's own `<h1 id="pp-title">`,
+`document.title`, the meta description and the `application/ld+json`
+`headline` field all read the untouched full title directly — none of
+them call `cardTitle()`, confirmed by reading every use of `it[1]`/
+`p[2]` in both files, and confirmed live (§3).
+
+Checked all 30 live protocol titles (10 per track × 3 tracks) against
+the rule. Every one follows "The X Protocol" or "The X & Y Protocol"
+exactly, and every stripped result reads cleanly as a standalone name.
+**No exceptions found** — nothing needed to be left intact.
+
+Found while reading `protocol.html`, not created by this pass: a
+`stateLabel` variable at line 1478 already strips the identical
+`The `/` Protocol` pattern, for the structured-data `about.name` field
+only. `cardTitle()` is a second, independent implementation of the
+same idea for a different purpose (a visible card label vs. an SEO
+annotation) — not a refactor of it, and not shared with it.
+
+**2 · card sizing.** Two rules, matching the brief's split by surface:
+
+`.sr-tp .sr-tp-pmeta h3` (`css/saferise-system.css`) was 18px/1.34, a
+size SR-174 (2021) set to match what was then the shared `.sr-tp h3`
+system token. That token has since moved to 21px/1.28 (confirmed live;
+the SR-174 comment citing 18px/1.34 was stale) while this rule never
+followed — **the card size was already diverging from the shared token
+before this pass, just not on purpose.** Changed to
+`1.15rem/1.28/-0.005em` letter-spacing, `margin-top:14px`,
+`height:2.56em` (line-height × 2), `overflow:hidden` — at this card
+selector only. The shared `.sr-tp h3` token itself is untouched, still
+21px/1.28, still governing whatever else uses it.
+
+`.sr-dash-cardname` (`css/saferise-dashboard.css`) was already its own
+dedicated class, not a shared token — no reconciliation needed there.
+Was `22px/1.3/min-height:2.8em`. `min-height` only ever set a floor: a
+four-line title grew straight past it, which is the exact reported
+defect (*The Abandonment Wound Protocol* pushing its Begin link below
+the rest of the row). Changed to `1.05rem/1.3`, `letter-spacing:.01em`,
+`margin-top:14px`, and — the load-bearing part — `height` (not
+`min-height`) with `overflow:hidden`, which caps every card at exactly
+two lines regardless of name length.
+
+**3 · verification — browser, local tree, not yet live.** This pass's
+edits are local and uncommitted at the time of checking, so there is
+no live URL that reflects them — checking `thesaferiseprotocol.com`
+would only confirm the old, unstripped behaviour. Consistent with how
+SR-381 reported the same limitation: mirrored the current working tree
+into a scratch directory and served it with the project's own
+`tools/serve.py` (the same local-preview server this repo already
+ships, pointed at a full copy of the current tree, not a different
+environment). Treat this as local verification of the working tree,
+not production verification — it cannot be, until this is pushed.
+
+Checked, with that server:
+- All three track-landing pages: all 30 titles strip correctly, no
+  card shows "Protocol", and script-measured `.sr-tp-pmeta h3` height
+  is exactly 47.09px (`2 × 1.28 × 1.15rem`) on every card, 1-line or 2.
+- Dashboard Library carousel: measured `.sr-dash-cardname` height and
+  the following Begin/Locked link's `getBoundingClientRect().top`
+  across the first six cards (Anxiety Reset through Grief Integration,
+  including the reported worst case, Abandonment Wound) — every title
+  box measured 43.67px (`2 × 1.3 × 1.05rem`) and **every Begin link's
+  top measured 454px**, identically. Screenshots confirm the same
+  visually.
+- `protocol.html?track=1&protocol=04`: `#pp-title`, `document.title`
+  and the `application/ld+json` `headline` all still read "The
+  Abandonment Wound Protocol" in full.
+- 390px width, both surfaces: titles fit, no collision with the cover
+  or the Begin link.
+- Card heights consistent within a row on both surfaces — a mechanical
+  consequence of `height` + `overflow:hidden`, confirmed by the
+  measurements above.
+- Journal grouping and the breadcrumb: not touched by this pass's
+  code, confirmed by reading rather than re-screenshotted.
+
+Not checked: Safari or other browsers, real network conditions, the
+production deploy itself.
+
+**4 · the carousel drop-in — not wired in, reported.**
+`js/saferise-carousel.js` was not added to any page. Two independent
+reasons, either alone sufficient:
+
+Its selector list — `[data-sr-carousel]`, `.sr-carousel`,
+`.protocol-carousel`, `.track-carousel`, `.lt-carousel` — matches
+nothing live anywhere in this repo. The site's actual carousels are
+the track-landing pages' own (`#carousel.sr-tp-carousel`, built by
+`js/saferise-track.js`, with `#carViewport`/`.sr-tp-cartrack`/
+`.sr-tp-pcard` markup and `#carPrev`/`#carNext`/`#carDots` controls)
+and the dashboard's Library carousel (`#srLibrary` →`.sr-dash-lib` →
+`.sr-dash-carrow` → `.sr-dash-card`, `.sr-dash-carprev`/
+`.sr-dash-carnext` controls) — the same one visible on the protocol
+and resource pages per §1. Neither carries any of the five selectors
+the drop-in looks for; wiring it in as delivered would mean rewriting
+each carousel's DOM to match its root→track→item contract, not "one
+script tag, remove the old implementation."
+
+A near-identical, already-existing markup contract in this repo uses
+the same two core attribute names for a different, incompatible
+implementation: `js/saferise-system.js` (loaded only by `index.html`)
+already defines `initCarousel()`, bound to the same
+`[data-sr-carousel]` root / `[data-sr-track]` track pair, but built
+around continuous-scroll drift with clone-based seamless looping
+(`track.scrollTo`), not discrete transform-stepping. It currently
+matches nothing live either, so it's dormant rather than actively
+conflicting — but if `data-sr-carousel`/`data-sr-track` markup is ever
+added (the fix the point above implies), both scripts would bind to
+the same element under two different, unsynchronized guard flags
+(`root.dataset.srInit` vs. `root.__srCarousel`) and run two
+independent transform/scroll engines and autoplay timers on it at
+once — the exact class of collision `CLAUDE.md`'s own namespacing rule
+exists to prevent (its own cited example: `.track` colliding with a
+video scrubber).
+
+Where a carousel does exist, its autoplay policy was a deliberate
+decision this session already preserved once: `js/saferise-track.js`'s
+`manualStop()` is a **permanent** latch (SR-368), explicitly kept
+during SR-379 even when SR-381's own brief asked for "wait a full
+interval before resuming." `js/saferise-carousel.js` implements
+exactly that temporary `RESUME_DELAY`-based resume. Wiring it onto the
+track-landing carousel would silently reverse a decision that has
+already been deliberately kept once.
+
+Per this brief's own standing rule ("your fix-register entries outrank
+this brief — report the disagreement") and the explicit chat
+instruction to report rather than work around a conflict: none of the
+four implementations were touched, and `js/saferise-carousel.js` was
+left on disk, unreferenced, exactly as it arrived. Not committed — it
+does nothing yet, and committing an inert file could read as more
+progress than there is.
+
+**5 · founder portrait — no slot, reported.** `about.html` has no
+`<img>` element anywhere in the file, and no founder-related content
+of any kind — no name, no bio paragraph, no first-person copy —
+despite its own `<title>`/`og:title` claiming to cover "the science,
+the method, the founder." Its nine sections are all metaphor-driven
+("the watchers", "the movers", "whoever put the door in charge"…);
+none names or introduces a person. There is nothing to wire the
+portrait into.
+
+`assets/img-225-founder-dark.jpg` (1,185,297 bytes) and `.webp`
+(369,172 bytes) both confirmed 1600×2000 RGB, as described. Left on
+disk, not committed — adding them without a page section to hold them
+would just be two untracked images with no reference, and building a
+new "the founder" section (portrait + bio copy) is new page content,
+outside what this brief authorises ("small and self-contained").
+Recommend a dedicated pass for that section.
+
+**Files touched:** `js/saferise-track.js`, `dashboard.html`,
+`css/saferise-system.css`, `css/saferise-dashboard.css`,
+`docs/fix-register.md`. **Not committed:** `js/saferise-carousel.js`,
+`assets/img-225-founder-dark.jpg`, `assets/img-225-founder-dark.webp`
+(all three left exactly as received — see §4/§5). **Also noted, not
+fixed:** this register has no entries between SR-377 and this one —
+SR-378 through SR-381 were committed to git but never logged here.
+Reconstructing four historical entries is out of scope for this pass;
+flagging it so the gap isn't mistaken for four passes that never
+happened. `content/tracks.js`: confirmed untouched (§1).
+
+*Status:* closed. **Not pushed.**
+*Raised and fixed:* 13 Sep 2026

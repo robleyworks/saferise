@@ -2734,10 +2734,16 @@ body.sr-breath .sr-player.is-next .audio-play{
   text-transform:uppercase;font-weight:700;color:var(--gold);line-height:1.4}
 .sr-tp .sr-tp-pmeta{padding:16px 16px 20px;text-align:left;display:flex;flex-direction:column;gap:8px}
 /* SR-174 · the title was 13.5px — the same size as the promise line beneath it,
-   so nothing read as a title. It now takes `.sr-tp h3` from the system scale
-   (18px/1.34 Cinzel, line 2390) instead of overriding it down to body size.
-   No new size was invented: this is the scale's own h3. */
-.sr-tp .sr-tp-pmeta h3{font-size:18px;line-height:1.34}
+   so nothing read as a title. It then took `.sr-tp h3` from the system scale
+   (line 2615) instead of overriding it down to body size.
+   PASS-card-titles.md · with "The"/"Protocol" stripped at render time (see
+   js/saferise-track.js's cardTitle()), the title needs less room than the
+   shared .sr-tp h3 token (currently 21px/1.28) provides, so this diverges
+   from it again here — at the card, not by changing the shared token, since
+   .sr-tp h3 is also the system scale's own heading elsewhere. height:2.56em
+   (line-height x 2) reserves two lines regardless of name length, so a
+   one-line and a two-line title produce the same card height. */
+.sr-tp .sr-tp-pmeta h3{font-size:1.15rem;line-height:1.28;letter-spacing:-.005em;margin-top:14px;height:2.56em;overflow:hidden}
 .sr-tp .sr-tp-pdesc{font-size:12.5px;color:var(--text2);line-height:1.62}
 
 /* ══ SR-174, redone at SR-368 · progressive disclosure on the protocol card ══

@@ -198,7 +198,14 @@ body .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color
 /* the protocol the begin panel just chose */
 .sr-dash-card.is-next .sr-pcover{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset,0 0 0 5px rgba(212,168,67,.14)}
 .sr-dash-card.is-next .sr-dash-cardname{color:var(--gold-lt)}
-.sr-dash-cardname{font-size:22px;color:var(--text);line-height:1.3;min-height:2.8em}
+/* PASS-card-titles.md · was 22px/min-height:2.8em. min-height only set a floor —
+   a four-line title ("The Abandonment Wound Protocol") still grew past it and
+   pushed that card's Begin link below every other card in the row. With
+   "The"/"Protocol" stripped at render time (see dashboard.html's cardTitle())
+   most titles now fit one line at this size, and height (not min-height) plus
+   overflow:hidden caps every card at exactly two lines regardless, so Begin
+   always lands on the same baseline. Already its own class, not a shared token. */
+.sr-dash-cardname{font-size:1.05rem;color:var(--text);line-height:1.3;letter-spacing:.01em;margin-top:14px;height:2.6em;overflow:hidden}
 .sr-dash-locked .sr-pcover{filter:saturate(.3) brightness(.62)}
 .sr-dash-lock{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);min-height:32px}
 .sr-dash-lock svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.4}

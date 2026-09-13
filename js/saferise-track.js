@@ -49,6 +49,10 @@
   }
   function has(v) { return !!(v && (v.length === undefined || v.length > 0)); }
   function esc(s) { return String(s).replace(/&(?![a-z#0-9]+;)/gi, '&amp;'); }
+  /* PASS-card-titles.md · derived at render time only — content/tracks.js
+     keeps the full "The X Protocol" title for the protocol page, breadcrumbs,
+     <title>/meta and the journal. Only the carousel card label is shortened. */
+  function cardTitle(s) { return String(s).replace(/^The\s+/, '').replace(/\s+Protocol$/, ''); }
 
   /* ── art · every slot degrades to a labelled brief ─────────────────
      Sixteen illustrations are briefed in track.art and none are produced.
@@ -196,7 +200,7 @@
            content, not part of the hover reveal, so they moved here rather
            than being deleted). tabindex makes the card reachable so a
            keyboard user can reveal the signature line too. */
-        '<div class="sr-tp-pmeta"><h3>' + esc(p[2]) + '</h3>' +
+        '<div class="sr-tp-pmeta"><h3>' + esc(cardTitle(p[2])) + '</h3>' +
         '<p class="sr-tp-pdesc">' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
         '<p class="sr-tp-struggle">' + (has(p[5])
             ? p[5].map(function (s) { return '<span>“' + esc(s) + '”</span>'; }).join('')
