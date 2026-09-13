@@ -14299,3 +14299,194 @@ happened. `content/tracks.js`: confirmed untouched (§1).
 
 *Status:* closed. **Not pushed.**
 *Raised and fixed:* 13 Sep 2026
+
+## SR-383 · all three track landing pages rebuilt from the approved mockups, one shared template
+
+Runs `pass/PASS-track-landing-pages.md`. Built once as a shared template —
+the existing architecture already worked this way (one script,
+`js/saferise-track.js`, rendering all three pages from `content/tracks.js`
+data via three thin HTML shells) — and instantiated three times, rather
+than three divergent pages.
+
+**1 · section order — followed the brief over the mockups.** The three
+mockups place the full-bleed "states band" image between the protocol
+rail and Method; the brief's own §1 numbered list puts it at position 5,
+after Outcomes. The brief is explicit ("Section order, identical across
+all three") and is the more recently stated instruction, so it wins:
+built as hero → protocols → method → outcomes → included → states band →
+proof → price → FAQ. The brief's own 8-item list also doesn't name
+"Included" (guided practice / clear explanations / integration tools) at
+all, though it's present, identically structured, in all three approved
+mockups — kept rather than dropped, since nothing asked for its removal
+and the mismatch reads as the brief summarising major sections rather
+than deliberately omitting one both mockups carry.
+
+**2 · card content — derived from `content/tracks.js`, not copied from
+the mockups.** Title: `cardTitle()` (SR-382's own helper, reused rather
+than reimplemented). Description: `p[3]` — spot-checked against several
+mockup cards and found to already match verbatim; this field is the
+"new advisory description" `CLAUDE.md`'s own PROTOCOL CARD DESCRIPTIONS
+rule asks for, added by an earlier pass, so it's already the field that
+rule protects — not overwritten with the mockups' own near-duplicate
+draft. Quote: `p[5][0]`, the first of the three stored identification
+quotes, chosen uniformly rather than hand-matching which one each
+mockup happened to feature per card. Door label: `p[1]`, even on rows
+where a mockup's own door text drifted from it (e.g. Perfectionism
+Release: mockup says "Release", the record says "Loosen") — the data
+model stays authoritative.
+
+**State tag — new data, one bug found and fixed.** Agitated/Unsteady/
+Numb has no existing field; added as the new last element of all 30
+protocol rows in `content/tracks.js`, sourced from the three mockups.
+First render pass read it at a fixed `p[7]`, which broke on
+`t3-06` (Belonging Gap): that row already carries a documented one-row
+schema exception (an 8th element inserted before the slug, added by an
+earlier pass "on request" per its own comment), so `p[7]` was its slug
+string, not its state, on that row alone. Fixed to `p[p.length-1]`,
+correct regardless of any row's own prior exceptions. Found and caught
+during this pass's own browser verification (§5), not left for
+someone else to find live.
+
+**3 · pricing — no disagreement found.** Cross-checked every figure in
+`content/tracks.js`'s `PRICING` record against `pricing.html` (both
+already read "€19 a month, or €190 a year" for Tracks 02/03, Free for
+Track 01 — SR-381's own fix, still holding). `rPrice()` reads
+`t.price.amount`/`.per`/`.annual` directly rather than writing the
+price as a literal string, which also sidesteps a real bug in the
+mockups themselves: both Track 02 and Track 03's own price boxes read
+"Free <small>a month · or €190 a year</small>" verbatim — literally
+"Free a month" on a paid track, the exact defect the brief's own §5
+warns against. Not reproduced, because nothing here copies mockup
+markup for this box. Also not reproduced: both paid mockups' eyebrow
+reads "Track 01 — Relationship Healing" / "Track 01 — Professional
+Performance" (wrong track number) — `t.kicker` (existing, correct) used
+instead of the mockup's literal text.
+
+**4 · the rail's carousel — revived, not rebuilt, with real gaps
+closed and one deliberate divergence from the brief.**
+`js/saferise-system.js`'s dormant `initCarousel()` (SR-382's own
+finding: bound to `[data-sr-carousel]`/`[data-sr-track]`, matching
+nothing live) is now wired to this rail and is the only carousel these
+three pages carry — `js/saferise-track.js`'s own separate
+`#carViewport`-based implementation is retired along with the markup
+it depended on.
+
+Fixed while reviving it:
+- Its card selector was `.sr-cover`, a class that matches nothing
+  anywhere in this repo (confirmed by the same SR-382 grep). Changed to
+  `track.children` — a carousel's cards are its track's direct
+  children, not one specific class name a future caller would just as
+  easily not carry either.
+- Added an off-screen pause (`IntersectionObserver`, temporary like
+  hover — resumes on return), which this component never needed before
+  since nothing live used it to surface the gap.
+- Added an explicit `cards[0].getBoundingClientRect().width < 2` guard
+  in `tick()`, alongside its existing `realWidth() <= 0` check — the
+  same defect SR-381 found (a carousel whose transform advanced while
+  its bounding rect measured 0), guarded directly against rather than
+  only through the clone-offset math.
+- Added a reduced-motion exception (JS-side `matchMedia` check,
+  disables the interval entirely rather than the SR-303/Phase E
+  site-wide default of running regardless) — the same named-exception
+  pattern as SR-343's diagrams and SR-379's reader entrance, extended
+  to the CSS side too (the central `@media(prefers-reduced-motion:
+  reduce)` block in `css/saferise-system.css` now also stops this
+  rail's card hover-reveal/scale transitions and keeps their content
+  visible without hover).
+
+**DIFFERS, reported per the brief's own explicit instruction** ("if
+auto-advance conflicts with SR-368, report the conflict rather than
+overriding it"): §4 asks that wheel/touch/pointer/keyboard input "win
+for a full interval" — a temporary pause, then automatic resume.
+Implemented instead as a **permanent** stop (`stopAuto()`), matching
+SR-368's own recorded decision for this page's carousel, which this
+session already preserved once before (SR-379, over a near-identical
+request in `PASS-live-site-defects.md`). Concretely: the track's own
+`scroll` handler (which already had to distinguish a genuine user
+scroll from the autoplay's own programmatic one) now calls `stopAuto()`
+on a real scroll rather than only repainting position — this covers
+wheel, trackpad and touch drag uniformly, since all three arrive as the
+same native `scroll` event on this track. The keyboard arrow handler
+and the prev/next buttons already called `stopAuto()` before this pass;
+unchanged.
+
+This component also drifts continuously rather than stepping card-by-
+card — a deliberate, already-commented design ("reads as motion, not a
+slideshow"), not something this pass rewrote. Retuned `LAP_SECONDS`
+from 32 to 70 (a 10-card rail at the brief's own "7s per card" pace)
+rather than rewriting the drift model to discrete steps.
+
+**5 · images — the brief's own premise didn't hold; nothing is
+missing.** §8 states "thirty-nine slots, none of which exist." Checked
+rather than assumed: `content/tracks.js`'s existing `art` objects
+already reference real, already-prepared files for hero (`assets/t{n}/
+hero.webp`, all three exist, 2400×1000), the states-band image
+(`assets/journey/t{n}-band.webp`, all three exist), the outcomes
+image-pair (`assets/t{n}/cost.webp` and `.../change.webp`, all six
+exist), and the Method visual (`assets/shared/four-steps.webp`, one
+image shared across all three tracks, not per-track — an existing
+design choice, not narrowed here). All 30 protocol covers already
+confirmed present (SR-379). **The missing-image list this section asks
+for is empty** — every one of the 39 conceptual slots already resolves,
+just under this repo's own existing naming (`assets/t{n}/…`,
+`assets/journey/…`) rather than the brief's proposed
+`assets/tracks/t{n}-hero.jpg` scheme, which doesn't exist and wasn't
+created — reusing real, already-integrated assets took priority over
+building a parallel naming convention for files that already have one.
+The hatch placeholder (§8's own spec, `repeating-linear-gradient(45deg,
+#141a2a,#141a2a 10px,#182034 10px,#182034 20px)`) is still wired as the
+degrade path (existing `slot()`, `.sr-tp-ph`, restyled to this exact
+pattern) for the day a file is genuinely missing — verified live by
+letting a not-yet-synced asset 404 during this pass's own testing and
+watching it render the hatch, not a broken image.
+
+**6 · progress-tracking language — checked, none reintroduced.**
+Neither the new copy (`LANDING_COPY`) nor the reused `t.priceNote`/
+FAQ content mentions per-member progress metrics. Not investigated
+further: the `resource.html` "7 of 8" counter SR-381 already flagged
+is a different page, out of this pass's scope.
+
+**7 · verification — local mirror, and a caching pitfall worth
+recording.** Same technique as prior passes (`tools/serve.py`,
+`launch.json` repointed at a scratch mirror, restored after). New
+finding this pass: the bare Python static server sends no
+`Cache-Control`/`ETag` headers, and the sandboxed browser's default
+heuristic caching served a stale copy of a page (missing this pass's
+own newly-added `<script src="js/saferise-system.js">` tag) across
+several genuinely fresh tabs and even a server restart — `fetch(url,
+{cache:'no-store'})` always returned the correct, current file the
+whole time. Diagnosed by fetching both the HTML and its script
+subresources with `cache:'no-store'` and reinjecting via
+`document.write()`, which finally showed the real, current behaviour.
+Recorded here so a future pass doesn't waste time re-diagnosing the
+same environment quirk. Confirmed, once actually looking at current
+code: all 30 card titles/states across the three pages, the carousel
+binding and cloning, the permanent-stop-on-scroll behaviour, the
+off-screen pause guard's presence, correct per-track pricing/CTA text
+on both paid tracks (no "free" language), 390px rendering, and the
+hatch-placeholder degrade path.
+
+**8 · what's drafted, not final.** Per the brief's own §9: each
+track's `riseLine` (the fourth Method step's body) and `outcomesLede`
+(the Outcomes section's opening line) are new copy this pass wrote
+into a new `LANDING_COPY` block in `content/tracks.js`, kept separate
+from `TRACKS` itself so reviewing or reverting this pass never risks
+an already-load-bearing field (`heroRule`/`heroBody` stayed untouched
+for the same reason — both are reused verbatim in each page's own
+`<meta name="description">`, so the mockups' own near-duplicate
+redraft of those lines was not substituted in). Flagging per the
+brief's own instruction — these are drafted, not Andre's final wording.
+
+**Files touched:** `content/tracks.js` (new `LANDING_COPY` block, a new
+per-protocol state tag on all 30 rows — no existing field modified),
+`js/saferise-track.js` (hero/protocol-rail/method/outcomes/included/
+states-band/proof/price/FAQ rendering rebuilt; old
+carousel/rCost/rRange/rInsight/rChange/rResources retired, not
+deleted), `js/saferise-system.js` (carousel fixes above),
+`css/saferise-system.css` (new section styles, the central
+reduced-motion block extended, `.sr-tp-ph` restyled to the hatch
+pattern), `personal-transformation.html`, `relationship-healing.html`,
+`professional-performance.html` (one new `<script>` tag each).
+
+*Status:* closed. **Not pushed.**
+*Raised and fixed:* 13 Sep 2026

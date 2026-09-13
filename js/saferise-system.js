@@ -32,7 +32,14 @@
 
     var scope = root.closest('[data-sr-carousel-group]') || document;
     var track = root.querySelector('[data-sr-track]');
-    var cards = track ? [].slice.call(track.querySelectorAll('.sr-cover')) : [];
+    /* PASS-track-landing-pages.md · was track.querySelectorAll('.sr-cover'),
+       a class that matches nothing anywhere in this repo (SR-382's own
+       finding — this markup contract has never had a live consumer, so
+       nothing depended on that specific selector). A carousel's cards are
+       its track's direct children, whatever class each caller's card
+       happens to carry — corrected to that, rather than to one more
+       specific class name a future caller would just as easily not match. */
+    var cards = track ? [].slice.call(track.children) : [];
     if (!track || cards.length < 2) return;
 
     var counter = scope.querySelector('[data-sr-counter]');
@@ -68,6 +75,14 @@
       clearTimeout(timer);
       timer = setTimeout(function () {
         if (Date.now() < lock) return;   /* programmatic scroll, not the user */
+        /* PASS-track-landing-pages.md §4 · a real scroll here can only be a
+           wheel, trackpad or touch drag on this native-scroll track — the
+           one signal that covers all three without three separate listeners
+           duplicating what the browser already reports. Permanent, per
+           SR-368 (see the block comment above initCarousel and the pass
+           report): manual navigation on this component stops it for good,
+           the same as the arrow buttons and the keyboard handler below. */
+        stopAuto();
         pos = nearest(); paint();
       }, 110);
     }, { passive: true });
@@ -137,11 +152,24 @@
 
        SR-303 · Phase E removed this autoplay's old reduced-motion opt-out
        (`if (reduce) return;`) — it now drifts for every visitor, matching
-       every other animation on the site. */
+       every other animation on the site.
 
-    var LAP_SECONDS = 32;      // full traversal of the real 10, within the 25-40s ask
+       PASS-track-landing-pages.md · this ONE component is a named exception
+       to that Phase E default, same pattern as SR-343's diagrams and
+       SR-379's reader entrance: the brief this revival runs under requires
+       reduced motion to disable the rail entirely, not merely drift
+       unslowed, because a track-landing rail auto-advancing an entire card
+       out from under someone is a materially different disruption than a
+       slow background drift on a dashboard tile. See `reduced` below. */
+
+    var LAP_SECONDS = 70;      // PASS-track-landing-pages.md §4 — "advances one
+                               // card every 7s"; this component drifts rather
+                               // than steps (see the block comment above), so
+                               // retuned to the equivalent pace for a 10-card
+                               // rail (10 x 7s) rather than rewritten to step.
     var TICK_MS = 50;          // interval rate; speed is time-based, not tick-count-based
     var RESUME_DELAY = 2000;   // "a couple of seconds" after interaction ends
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     var clones = cards.map(function (card, i) {
       var c = card.cloneNode(true);
@@ -193,6 +221,13 @@
       lastTick = now;
 
       if (stopped || paused) return;
+
+      /* PASS-track-landing-pages.md §4 · SR-381 found a carousel whose
+         transform advanced correctly while its bounding rect measured 0 —
+         nothing visible ever moved. realWidth() below already guards the
+         clone-offset math, but checks this card's own rendered width
+         directly too, the same measurement SR-381's defect was found in. */
+      if (cards[0].getBoundingClientRect().width < 2) return;
 
       var width = realWidth();
       if (width <= 0) return; // portal not visible / not laid out yet
@@ -260,6 +295,27 @@
     track.addEventListener('touchend', scheduleResume, { passive: true });
     track.addEventListener('touchcancel', scheduleResume, { passive: true });
     cards.forEach(function (c) { c.addEventListener('click', stopAuto); });
+
+    /* PASS-track-landing-pages.md §4 · off-screen pause — temporary, like
+       hover, not a permanent stop; scrolling a rail back into view should
+       resume it. Wasn't needed before this revival (nothing live used this
+       component to have surfaced the gap). */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) scheduleResume(); else pause();
+      }, { threshold: 0.1 }).observe(root);
+    }
+
+    /* PASS-track-landing-pages.md §4 · a named exception to SR-303/Phase E's
+       "motion runs regardless" default (see the block comment above) —
+       reduced motion disables this component entirely rather than just
+       leaving it unslowed. change fires if the setting flips mid-visit;
+       stopped stays permanent either way, matching every other manual-stop
+       path above. */
+    if (reduced.matches) { restoreSnap(); return; }
+    reduced.addEventListener('change', function () {
+      if (reduced.matches) { stopAuto(); } else if (!stopped) { disableSnap(); startInterval(); }
+    });
 
     disableSnap();
     startInterval();

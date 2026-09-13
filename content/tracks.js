@@ -200,6 +200,114 @@ var CHANGE_PROPOSALS = {
 /* ── TRACKS · four records. Elevation carries visible:false for launch.
       Tracks 02 and 03 read CHANGE_PROPOSALS above during evaluation — read the
       note there before reordering anything in this file (SR-129). ── */
+/* ── LANDING_COPY · PASS-track-landing-pages.md ──────────────────────
+   New copy for the rebuilt track landing pages, kept separate from
+   TRACKS rather than merged into it: everything here is new for this
+   pass, and keeping it in its own block means reviewing or reverting
+   this pass never risks touching an existing, already-load-bearing
+   field (heroRule/heroBody stay put — they are reused in this page's
+   own <meta name="description">, and the mockup's near-duplicate
+   wording was not substituted in).
+
+   outcomesLede and riseLine are drafted copy, not Andre's final
+   wording, per the brief's own §9 — flagged in the pass report, not
+   resolved here. Everything else here matches its mockup verbatim. */
+var LANDING_COPY = {
+  1: {
+    support: 'All ten protocols. No trial and no card required. Your journal stays private.',
+    protocolsEyebrow: 'Find your starting point',
+    protocolsH2: 'What has hold of<br>you right now?',
+    protocolsIntro: 'Choose the state you recognise. Each protocol includes a guided session, a quick-use cue and practical tools for what comes next.',
+    railCta: 'Open all 10 free',
+    railSupport: 'Guided sessions, cue cards and practical tools included.',
+    storyEyebrow: 'One continuous practice',
+    storyH3: 'Experience it.<br>Record what shifts.<br>Go deeper.',
+    storyBody: 'Use the guided session, capture what changed, then understand the pattern when you are ready.',
+    visualCaption: 'Braced · settled · withdrawn',
+    methodBody: 'A repeatable sequence helps you name what is here, give the body evidence of safety, let the feeling move and practise the response you want to carry forward.',
+    riseLine: 'Rehearse and choose the response you want to carry forward.',
+    outcomesLede: 'The cost shows up in ordinary life: sleep lost to a mind that will not close, patience spent before evening begins, and decisions delayed because clarity is out of reach.',
+    costCaption: ['What the pattern costs', 'The ordinary hours it quietly takes.'],
+    changeCaption: ['What becomes available', 'More room around what is hard.'],
+    shifts: [
+      ['From looping to deciding', 'Your attention returns.', 'Small decisions become small again.'],
+      ['From bracing to recovering', 'Your body lets go sooner.', 'Rest starts doing its job again.'],
+      ['From self-doubt to choice', 'Your state stops choosing for you.', 'The situation can stay hard without taking all of you with it.']
+    ],
+    includedIntro: 'Personal Transformation is the complete SafeRise foundation—not a sample of the paid library. Every protocol includes support for the moment itself and for what comes after.',
+    proofH2: 'Notice the route<br>getting shorter.',
+    proofIntro: 'One session can shift a state. Your private record shows what repetition changes.',
+    proofSteps: ['Record your state before and after', 'See recurring patterns become visible', 'Notice what helps arriving sooner'],
+    priceEyebrow: 'Start Personal Transformation',
+    priceH2: 'All ten protocols.<br>Free, from day one.',
+    upgradeTitle: 'Want to work with relationships and professional pressure too?',
+    upgradeBody: 'One €19 monthly membership opens every other SafeRise track, and every track added after them — at no change to what you already pay.',
+    stickyText: 'All 10 Personal Transformation protocols · free with an account'
+  },
+  2: {
+    support: 'Every track, including the ones still coming. Cancel whenever — your journal stays private.',
+    protocolsEyebrow: 'Find your starting point',
+    protocolsH2: 'What keeps happening<br>between you?',
+    protocolsIntro: 'Choose the pattern you recognise. Each protocol includes a guided session, a quick-use cue and language for the conversation itself.',
+    railCta: 'See all 10 protocols',
+    railSupport: 'Track 01 is free with an account if you would rather begin there.',
+    storyEyebrow: 'One continuous practice',
+    storyH3: 'Steady yourself.<br>Say it plainly.<br>Repair it sooner.',
+    storyBody: 'Use the guided session before the conversation, capture what happened after, then work the pattern when you are ready.',
+    visualCaption: 'Braced · guarded · gone quiet',
+    methodBody: 'A repeatable sequence helps you name the state you are in, settle it enough to listen, stop defending long enough to hear, and say the thing you actually meant.',
+    riseLine: 'Say the true thing, rather than the safe version of it.',
+    outcomesLede: 'It shows up between you: the sentence you swallow to keep the peace, the evening that goes cold without either of you naming it, and the same argument arriving in different clothes.',
+    costCaption: ['What the pattern costs', 'What goes unsaid, and what it costs.'],
+    changeCaption: ['What becomes available', 'Room to say the true thing.'],
+    shifts: [
+      ['From rehearsing to speaking', 'You say the actual thing.', 'Instead of the version you edited on the way in.'],
+      ['From defending to hearing', 'You can listen properly.', 'Without preparing your answer underneath it.'],
+      ['From reacting to choosing', 'The state stops writing your half of the conversation.', 'The situation can stay hard without taking all of you with it.']
+    ],
+    includedIntro: 'Relationship Healing is the complete SafeRise foundation—not a sample of the paid library. Every protocol includes support for the moment itself and for what comes after.',
+    proofH2: 'Notice the repair<br>arriving sooner.',
+    proofIntro: 'One session can change how a conversation goes. Your private record shows what repetition changes between you.',
+    proofSteps: ['Record where the conversation went', 'See the loop you both keep entering', 'Notice repair arriving earlier'],
+    priceEyebrow: 'Start Relationship Healing',
+    priceH2: 'All ten protocols.<br>Inside one membership.',
+    upgradeTitle: 'Want to work with your inner life and professional pressure too?',
+    upgradeBody: 'One €19 monthly membership opens every other SafeRise track—now and as the library grows.',
+    stickyText: 'All 10 Relationship Healing protocols · €19 a month'
+  },
+  3: {
+    support: 'Every track, including the ones still coming. Cancel whenever — your journal stays private.',
+    protocolsEyebrow: 'Find your starting point',
+    protocolsH2: 'What changes when<br>the stakes rise?',
+    protocolsIntro: 'Choose the pressure you recognise. Each protocol includes a guided session, a quick-use cue and something to use before the room.',
+    railCta: 'See all 10 protocols',
+    railSupport: 'Track 01 is free with an account if you would rather begin there.',
+    storyEyebrow: 'One continuous practice',
+    storyH3: 'Settle before it.<br>Record what held.<br>Go in again.',
+    storyBody: 'Use the guided session before the meeting, capture what actually happened, then work the pattern when you are ready.',
+    visualCaption: 'Braced · composed · shut down',
+    methodBody: 'A repeatable sequence helps you name the pressure, settle the body before the room, stop bracing long enough to think, and walk in with your judgement intact.',
+    riseLine: 'Walk in with the response you chose, not the one pressure picked.',
+    outcomesLede: 'It shows up at work: the point you did not make, the decision deferred another week, the Sunday evening that belongs to Monday, and good judgement arriving an hour after the room emptied.',
+    costCaption: ['What the pattern costs', 'The judgement that arrives too late.'],
+    changeCaption: ['What becomes available', 'Your thinking, while it still matters.'],
+    shifts: [
+      ['From rehearsing to present', 'You arrive in the room.', 'Instead of in the version you practised.'],
+      ['From proving to deciding', 'Your judgement is available when the decision is.', 'Not an hour after the room emptied.'],
+      ['From editing to speaking', 'The half-second of self-editing stops costing you the point.', 'The situation can stay hard without taking all of you with it.']
+    ],
+    includedIntro: 'Professional Performance is the complete SafeRise foundation—not a sample of the paid library. Every protocol includes support for the moment itself and for what comes after.',
+    proofH2: 'Notice your judgement<br>arriving on time.',
+    proofIntro: 'One session can change how you walk into a room. Your private record shows what repetition changes under pressure.',
+    proofSteps: ['Record your state before the room', 'See which pressures repeat', 'Notice clarity arriving sooner'],
+    priceEyebrow: 'Start Professional Performance',
+    priceH2: 'All ten protocols.<br>Inside one membership.',
+    upgradeTitle: 'Want to work with your inner life and relationships too?',
+    upgradeBody: 'One €19 monthly membership opens every other SafeRise track—now and as the library grows.',
+    stickyText: 'All 10 Professional Performance protocols · €19 a month'
+  }
+};
+
 var TRACKS = {
 
   1: {
@@ -243,16 +351,16 @@ var TRACKS = {
     },
 
     protocols: [
-      ['01','Regulate',   'The Anxiety Reset Protocol',            'Calm fear responses, quiet spiralling thoughts, and return to the present.',                        'Racing thoughts, shallow breath, chest tightness, scanning for threat.',        ['I cannot switch off','My mind runs the worst case on a loop','I brace before anything has happened'],'anxiety-reset'],
-      ['02','Transmute',  'The Anger Alchemy Protocol',            'Turn anger into clarity, protect what matters, and choose your response.',                          'Adrenaline spike, jaw tension, heat in chest and face, tunnel vision.',         ['I keep snapping','It is out of my mouth before I decide','I go from nothing to furious'],'anger-alchemy'],
-      ['03','Reduce Load','The Overwhelm Threshold Protocol',      'Reduce overload, regain your footing, and create space to think clearly.',                          'Your mind stops working, everything irritates, you just want out.',                 ['There is too much and I cannot start','I want to walk out of my own life','Everything is urgent'],'overwhelm-threshold'],
-      ['04','Repair',     'The Abandonment Wound Protocol',        'Settle the fear of being left, and feel safe in the room again.',                'Braced for bad news, rushing to fix it, asking again if you are okay.',         ['I feel rejected','I need to know we are okay, again','I read silence as leaving'],'abandonment-wound'],
-      ['05','Dissolve',   'The Shame Dissolution Protocol',        'Stop judging yourself for one moment, and stop it standing for who you are.',              'Heat, collapse inward, wanting to disappear from the room.',                    ['I want to disappear','One moment defines me','I cannot look at it directly'],'shame-dissolution'],
-      ['06','Integrate',  'The Grief Integration Protocol',        'Make room for the loss, and carry forward what still matters.',                'Held tension, deep tiredness, waves that arrive without warning.',                   ['It arrives without warning','I do not know where to put it','I am tired in a way sleep does not fix'],'grief-integration'],
-      ['07','Restore',    'The Shutdown Recovery Protocol',        'Come back to yourself slowly, and start feeling things again.',                          'Numb, flat, unreachable. Sleep that doesn\u2019t restore.',                     ['I feel nothing','I am unreachable, including to myself','I cannot make myself care'],'shutdown-recovery'],
-      ['08','Release',    'The Jealousy Release Protocol',         'See what the sting is telling you, and get back to your own path.',       'Tightening at others\u2019 success, a running tally you didn\u2019t choose.',    ['I keep score','Other people\u2019s wins take something from me','I cannot be glad for them'],'jealousy-release'],
-      ['09','Anchor',     'The Insecurity Anchor Protocol',        'Quiet the doubt, and stay steady when you feel judged or exposed.',       'Bracing to be seen. Doubt arriving before any evidence.',                       ['I doubt myself before anyone speaks','Being seen costs me something','I am waiting to be found out'],'insecurity-anchor'],
-      ['10','Reclaim',    'The Powerlessness & Despair Protocol','Find what is still in your reach, and take the next step that matters.',          'No fight left. Sleep as escape. Nothing yours to influence.',                   ['Nothing I do changes anything','I have no fight left','Sleep is the only relief'],'powerlessness-despair']
+      ['01','Regulate',   'The Anxiety Reset Protocol',            'Calm fear responses, quiet spiralling thoughts, and return to the present.',                        'Racing thoughts, shallow breath, chest tightness, scanning for threat.',        ['I cannot switch off','My mind runs the worst case on a loop','I brace before anything has happened'],'anxiety-reset','Agitated'],
+      ['02','Transmute',  'The Anger Alchemy Protocol',            'Turn anger into clarity, protect what matters, and choose your response.',                          'Adrenaline spike, jaw tension, heat in chest and face, tunnel vision.',         ['I keep snapping','It is out of my mouth before I decide','I go from nothing to furious'],'anger-alchemy','Agitated'],
+      ['03','Reduce Load','The Overwhelm Threshold Protocol',      'Reduce overload, regain your footing, and create space to think clearly.',                          'Your mind stops working, everything irritates, you just want out.',                 ['There is too much and I cannot start','I want to walk out of my own life','Everything is urgent'],'overwhelm-threshold','Agitated'],
+      ['04','Repair',     'The Abandonment Wound Protocol',        'Settle the fear of being left, and feel safe in the room again.',                'Braced for bad news, rushing to fix it, asking again if you are okay.',         ['I feel rejected','I need to know we are okay, again','I read silence as leaving'],'abandonment-wound','Agitated'],
+      ['05','Dissolve',   'The Shame Dissolution Protocol',        'Stop judging yourself for one moment, and stop it standing for who you are.',              'Heat, collapse inward, wanting to disappear from the room.',                    ['I want to disappear','One moment defines me','I cannot look at it directly'],'shame-dissolution','Unsteady'],
+      ['06','Integrate',  'The Grief Integration Protocol',        'Make room for the loss, and carry forward what still matters.',                'Held tension, deep tiredness, waves that arrive without warning.',                   ['It arrives without warning','I do not know where to put it','I am tired in a way sleep does not fix'],'grief-integration','Unsteady'],
+      ['07','Restore',    'The Shutdown Recovery Protocol',        'Come back to yourself slowly, and start feeling things again.',                          'Numb, flat, unreachable. Sleep that doesn\u2019t restore.',                     ['I feel nothing','I am unreachable, including to myself','I cannot make myself care'],'shutdown-recovery','Numb'],
+      ['08','Release',    'The Jealousy Release Protocol',         'See what the sting is telling you, and get back to your own path.',       'Tightening at others\u2019 success, a running tally you didn\u2019t choose.',    ['I keep score','Other people\u2019s wins take something from me','I cannot be glad for them'],'jealousy-release','Unsteady'],
+      ['09','Anchor',     'The Insecurity Anchor Protocol',        'Quiet the doubt, and stay steady when you feel judged or exposed.',       'Bracing to be seen. Doubt arriving before any evidence.',                       ['I doubt myself before anyone speaks','Being seen costs me something','I am waiting to be found out'],'insecurity-anchor','Unsteady'],
+      ['10','Reclaim',    'The Powerlessness & Despair Protocol','Find what is still in your reach, and take the next step that matters.',          'No fight left. Sleep as escape. Nothing yours to influence.',                   ['Nothing I do changes anything','I have no fight left','Sleep is the only relief'],'powerlessness-despair','Numb']
     ],
 
     cost: {
@@ -368,43 +476,43 @@ var TRACKS = {
       ['01','Speak',     'The Safe Conversation Protocol',
        'Make it safe enough to say the true thing and be heard.',
        'Rehearsing the sentence, bracing for the reaction, saying the safe version instead.',
-       ['I rehearse conversations before I have them','I say the safe version instead of the true one','It becomes a fight before I finish'],'safe-conversation'],
+       ['I rehearse conversations before I have them','I say the safe version instead of the true one','It becomes a fight before I finish'],'safe-conversation','Agitated'],
       ['02','Repair',    'The Rupture & Repair Protocol',
        'Close the gap after a fight instead of waiting for it to fade.',
        'Days of politeness, the subject stepped around, nothing actually settled.',
-       ['We never finish a fight, we just stop','We go quiet until it passes','I do not know how to come back in'],'rupture-repair'],
+       ['We never finish a fight, we just stop','We go quiet until it passes','I do not know how to come back in'],'rupture-repair','Unsteady'],
       ['03','Rebuild',   'The Trust & Betrayal Protocol',
        'Rebuild ground under a relationship after trust was broken.',
        'Checking, replaying, needing a detail that never quite settles it.',
-       ['I check things I should not check','I keep asking and it never lands','I cannot tell whether I am safe here'],'trust-betrayal'],
+       ['I check things I should not check','I keep asking and it never lands','I cannot tell whether I am safe here'],'trust-betrayal','Agitated'],
       ['04','Release',   'The Resentment Release Protocol',
        'Put down the score you have been keeping, so it stops running the room.',
        'A score you never meant to keep. Warmth that comes late, or not at all.',
-       ['I keep a list I never say out loud','I give, then hold it against them','I am not angry any more, I am done'],'resentment-release'],
+       ['I keep a list I never say out loud','I give, then hold it against them','I am not angry any more, I am done'],'resentment-release','Unsteady'],
       ['05','Open',      'The Intimacy Barrier Protocol',
        'Stay open when someone gets close, instead of pulling away.',
        'Turning away right when they reach you. Distance you did not choose.',
-       ['I go somewhere else when we get close','I want it and I avoid it','Being wanted makes me tense'],'intimacy-barrier'],
+       ['I go somewhere else when we get close','I want it and I avoid it','Being wanted makes me tense'],'intimacy-barrier','Unsteady'],
       ['06','Level',     'The Double Standard Protocol',
        'Name the rule that only one of you has to follow.',
        'One person\u2019s needs read as reasonable, the other\u2019s as too much.',
-       ['There is one rule for me and another for them','My needs feel like too much to ask','I accept things I would never do'],'double-standard'],
+       ['There is one rule for me and another for them','My needs feel like too much to ask','I accept things I would never do'],'double-standard','Unsteady'],
       ['07','Clarify',   'The Projection Clarity Protocol',
        'Tell what they actually did apart from what your past says they meant.',
        'You are sure why they did it, before you have any proof.',
-       ['I know exactly what they meant, and I am often wrong','This feels older than this relationship','I am reacting to someone who is not in the room'],'projection-clarity'],
+       ['I know exactly what they meant, and I am often wrong','This feels older than this relationship','I am reacting to someone who is not in the room'],'projection-clarity','Agitated'],
       ['08','Appreciate','The Appreciation & Support Protocol',
        'Get back the habit of noticing what the other one is carrying.',
        'Everything lands as not enough. Neither of you says thank you any more.',
-       ['I only notice what is missing','We have stopped thanking each other','I feel invisible inside my own effort'],'appreciation-support'],
+       ['I only notice what is missing','We have stopped thanking each other','I feel invisible inside my own effort'],'appreciation-support','Numb'],
       ['09','Meet',      'The Pursue & Withdraw Protocol',
        'Break the chase-and-retreat loop by changing your half of it.',
        'One reaching harder, one moving further. Neither able to stop first.',
-       ['The more I reach, the further they go','I need space and it reads as leaving','We are stuck in the same loop'],'pursue-withdraw'],
+       ['The more I reach, the further they go','I need space and it reads as leaving','We are stuck in the same loop'],'pursue-withdraw','Unsteady'],
       ['10','Close',     'The Conscious Separation Protocol',
        'End it, or step back from it, without destroying what it was.',
        'Prolonged limbo. Sharpness neither of you means. The decision kept just out of reach.',
-       ['We are ending and pretending not to','I want to leave this well','Neither of us will say it first'],'conscious-separation']
+       ['We are ending and pretending not to','I want to leave this well','Neither of us will say it first'],'conscious-separation','Numb']
     ],
 
     cost: {
@@ -517,23 +625,23 @@ var TRACKS = {
       ['01','Steady',  'The High-Stakes Presence Protocol',
        'Settle before you walk in, so you arrive as yourself.',
        'Shallow breath, rehearsed worst cases, the meeting running before the meeting.',
-       ['I rehearse the worst version on the way in','I am not myself in the room that matters','My best thinking arrives afterwards'],'high-stakes-presence'],
+       ['I rehearse the worst version on the way in','I am not myself in the room that matters','My best thinking arrives afterwards'],'high-stakes-presence','Agitated'],
       ['02','Navigate','The Conflict Navigation Protocol',
        'Stay in the disagreement without blowing it up or walking away.',
        'Heat, then either the sharp version of the point or the silent one.',
-       ['I go sharp or I go quiet','I win the exchange and lose the room','I avoid the conversation for weeks'],'conflict-navigation'],
+       ['I go sharp or I go quiet','I win the exchange and lose the room','I avoid the conversation for weeks'],'conflict-navigation','Agitated'],
       ['03','Dissolve','The Imposter Dissolution Protocol',
        'Stop believing you only got here by luck.',
        'Praise slides off. You work twice as hard for the confidence others get free.',
-       ['I am waiting to be found out','Praise does not land, criticism does','I over-prepare for things I already know'],'imposter-dissolution'],
+       ['I am waiting to be found out','Praise does not land, criticism does','I over-prepare for things I already know'],'imposter-dissolution','Unsteady'],
       ['04','Loosen',  'The Perfectionism Release Protocol',
        'Let it be finished when it is good enough.',
        'Final passes that add nothing. Deadlines met, at a private cost nobody sees.',
-       ['I cannot call it done','The last ten percent takes half the time','Good enough feels like failing'],'perfectionism-release'],
+       ['I cannot call it done','The last ten percent takes half the time','Good enough feels like failing'],'perfectionism-release','Agitated'],
       ['05','Perform', 'The Performance Anxiety Protocol',
        'Keep access to what you know while people are watching you use it.',
        'You did the work, and it leaves you the moment people look.',
-       ['I know it until people are watching','My mind goes blank on cue','I dread the thing I am good at'],'performance-anxiety'],
+       ['I know it until people are watching','My mind goes blank on cue','I dread the thing I am good at'],'performance-anxiety','Agitated'],
       /* SR-216 renamed this row and left the four strings below describing Ambition
          Recovery, because the bundle supplied no replacement and writing one would have
          been authoring member-facing copy. SR-258 supplied it. The strings below are
@@ -560,23 +668,23 @@ var TRACKS = {
           record and the rendered card agree for this one row; the other
           nine rows are deliberately not backfilled — this is a schema
           difference for t3-06 alone, not a new convention. */
-       'Sustained low-grade vigilance — the body reading a safe room for whether you count in it, and the sentence rewritten in your throat before it leaves.','belonging-gap'],
+       'Sustained low-grade vigilance — the body reading a safe room for whether you count in it, and the sentence rewritten in your throat before it leaves.','belonging-gap','Unsteady'],
       ['07','Cross',   'The Career Transition Protocol',
        'Move from one role to the next without losing your footing in between.',
        'The old role gone, the new one unproven, no ground underneath either.',
-       ['I do not know who I am without the title','I left and I have not landed','Everything I was good at is behind me'],'career-transition'],
+       ['I do not know who I am without the title','I left and I have not landed','Everything I was good at is behind me'],'career-transition','Unsteady'],
       ['08','Decide',  'The Decision Fatigue Protocol',
        'Make small decisions small again.',
        'Small choices cost as much as big ones. Putting it off, and calling it care.',
-       ['Every decision costs the same now','I keep gathering information instead of deciding','I am exhausted by choices that do not matter'],'decision-fatigue'],
+       ['Every decision costs the same now','I keep gathering information instead of deciding','I am exhausted by choices that do not matter'],'decision-fatigue','Numb'],
       ['09','Refill',  'The Burnout & Overload Protocol',
        'Refill enough to work at the level you are actually being paid for.',
        'You stopped caring about work you used to love. Rest that does not rest.',
-       ['I do not care about work I used to love','The weekend does not touch it','I am running on reserve and have been for months'],'burnout-overload'],
+       ['I do not care about work I used to love','The weekend does not touch it','I am running on reserve and have been for months'],'burnout-overload','Numb'],
       ['10','Unlock',  'The Creative Flow Protocol',
        'Get back to the work that used to come easily.',
        'Starting, stopping, judging it before it even exists.',
-       ['I judge it before it is finished','I cannot start','It used to come easily and now it does not'],'creative-flow']
+       ['I judge it before it is finished','I cannot start','It used to come easily and now it does not'],'creative-flow','Unsteady']
     ],
 
     cost: {

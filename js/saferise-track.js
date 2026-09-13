@@ -119,21 +119,10 @@
      read from the record, never as a hardcoded background. With no `src` the
      element sets neither and the CSS falls through to the abstract shape it has
      always drawn — the fallback is never removed, so a missing file renders the
-     original panel rather than an empty one. Track 03 does this today. */
-  /* SR-261 · THE URL IS ABSOLUTISED HERE, AND ONLY HERE.
-     A relative url() inside a custom property is resolved against the
-     STYLESHEET that consumes it, not the document that declared it. This value
-     is declared in an inline style attribute and consumed by
-     css/saferise-system.css, so `url(assets/t1/hero.jpg)` was fetched as
-     /css/assets/t1/hero.jpg — a 404 on every track page, five per load, with
-     the hero photograph silently replaced by the fallback gradient beneath it.
-     Nothing looked broken, which is why it survived: the fallback is a
-     deliberate design, so a missing photograph renders as a designed panel.
-
-     Resolved against location.href rather than given a leading slash, because a
-     leading slash assumes the site is served from the domain root and this one
-     need not be. THE RECORD STAYS RELATIVE — `hero.src` is untouched, and the
-     <img> and slot() consumers that already resolve correctly are unaffected. */
+     original panel rather than an empty one. */
+  /* SR-261 · THE URL IS ABSOLUTISED HERE, AND ONLY HERE — see the note this
+     replaces, still true: a relative url() inside a custom property resolves
+     against the stylesheet that consumes it, not the document that declared it. */
   function heroVars(t) {
     var h = t.art && t.art.hero;
     if (!h || !h.src) return '';
@@ -143,326 +132,250 @@
            (h.scrim ? ';--sr-hero-scrim:' + h.scrim : '') + '"';
   }
 
+  /* PASS-track-landing-pages.md · rebuilt to the approved mockup's hero:
+     image underlay running beneath the nav (CSS handles the negative
+     margin/overlap), eyebrow, h1, the existing heroRule as the italic lead
+     line, existing heroBody paragraphs, primary/secondary actions and a new
+     support micro-line from LANDING_COPY.
+
+     heroRule/heroBody are UNCHANGED — heroRule is reused verbatim in this
+     page's own <meta name="description"> (see the HTML shell), so the
+     mockup's near-identical redraft of the same line was not substituted in;
+     using the existing, SEO-anchored copy over a fresh near-duplicate is the
+     lower-risk call. Reported in the pass summary. */
   function rHero(t) {
     var h = t.art && t.art.hero;
-    return '<div class="sr-tp-hero' + (h && h.src ? ' sr-tp-hero--photo' : '') + '"' +
-      heroVars(t) + '>' +
+    var L = LANDING_COPY[t.id];
+    var free = t.price === PRICING.t1;
+    return '<div class="sr-tp-hero2"' + heroVars(t) + '>' +
       (h && h.src ? '<img class="sr-tp-herostack" src="' + esc(h.src) +
-                    '" alt="" loading="lazy" decoding="async" onerror="this.remove()">' : '') +
-      '<div class="sr-tp-heroin">' +
-      '<p class="sr-tp-eyebrow" style="margin-bottom:22px">' + t.kicker + '</p>' +
+        '" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()">' : '') +
+      '<div class="sr-tp-heroin2"><div class="sr-tp-eyebrow">' + t.kicker + '</div>' +
       '<h1>' + t.heroTitle + '</h1>' +
-      '<div class="sr-tp-herorule"><p>' + val(t.heroRule, 'heroRule') + '</p></div>' +
-      t.heroBody.map(function (p) { return '<p class="sr-tp-body">' + p + '</p>'; }).join('') +
+      '<p class="sr-tp-lead2">' + val(t.heroRule, 'heroRule') + '</p>' +
+      t.heroBody.map(function (p) { return '<p class="sr-tp-herobody2">' + p + '</p>'; }).join('') +
+      '<div class="sr-tp-actions2">' +
+        '<a class="sr-tp-pill2" href="#start">' + (free ? 'Start free' : 'Start') + '</a>' +
+        '<a class="sr-tp-sec2" href="#protocols">Browse the 10 protocols</a>' +
+      '</div>' +
+      '<p class="sr-tp-support2">' + L.support + '</p>' +
     '</div></div>';
   }
 
-  /* ── 01 · protocol carousel ──────────────────────────────────────── */
-  function rProtocols(t) {
-    var cards = t.protocols.map(function (p) {
-      /* SR-162 · the cover comes from js/saferise-card.js, the one source
-         dashboard.html shares. The number and label are the same record
-         fields they always were — p[0] and p[1] — but the component keeps
-         them over the loaded image rather than under it. */
-      /* SR-182 · the card opens the protocol again. SR-178 stripped the
-         affordance because `protocol.html` ignored ?track= and ?protocol= and
-         every one of the thirty cards could only land on Anxiety Reset — 29
-         silently wrong destinations. The page now resolves both against the
-         record and shows a not-found state rather than a wrong protocol, so
-         there is something to open and role="button" is honest. SR-178's own
-         condition was "the cursor returns when there is something to open".
+  /* ── 01 · protocol rail ───────────────────────────────────────────
+     PASS-track-landing-pages.md §3/§4. Card at rest: cover, door label,
+     number, state tag, title. Description and one identification quote
+     reveal on hover/focus-within. Height is fixed so the rail never
+     reflows when a card opens.
 
-         The href is built from the record, never typed: t.id and p[0] are the
-         same two values the cover path already derives from. */
-      /* SR-326 · a quiet "Free" mark on the one card that opens with nothing
-         asked of you — same corner-label treatment SafeRiseCover.art()
-         already gives the number and the state word, not a pill or a
-         ribbon, so it reads as one more fact about the card rather than a
-         badge, an unlock or a reward. isFree() is a pure static check (no
-         session, no token, no plan), so calling it here doesn't touch the
-         "nothing outside saferise-access.js reads auth state" rule — the
-         alternative was retyping 't1-01' as a track-id/protocol-number
-         match, the same defect class as a price typed into a page instead
-         of read from the record. */
+     Titles: cardTitle(p[2]) — derived, never edited into content/tracks.js
+     (SR-382's own rule, reused here rather than a second implementation).
+     Description: p[3], the protocol's existing advisory-style field
+     (CLAUDE.md's own "PROTOCOL CARD DESCRIPTIONS" rule — already the "new
+     field added alongside the original" that rule asks for, added by an
+     earlier pass; not overwritten with the mockup's own alternate draft).
+     Quote: p[5][0], the first of the three stored identification quotes —
+     one is shown here, chosen uniformly rather than hand-matching which of
+     the three each mockup card happened to feature.
+     Door label: p[1] (the stored verb), even on the few cards where a
+     mockup's own door text drifted from it — the data model stays
+     authoritative.
+     State tag: the LAST array element, not a fixed index — most rows are
+     7 elements (state at [7]), but t3-06 (Belonging Gap) carries a
+     documented one-row schema exception (an 8th element, a body-sentence,
+     inserted before the slug — see its own comment in content/tracks.js),
+     which pushed a fixed p[7] read onto its slug string instead of its
+     state on that one row. p[p.length-1] is correct regardless. New
+     per-protocol classification this pass adds
+     (Agitated / Unsteady / Numb), sourced from the three mockups.
+
+     Rail markup carries data-sr-carousel / data-sr-track so
+     js/saferise-system.js's revived carousel binds to it — see that file
+     and the pass report for what changed there and why. */
+  function rProtocols(t) {
+    var L = LANDING_COPY[t.id];
+    var cards = t.protocols.map(function (p) {
       var protocolId = 't' + t.id + '-p' + p[0];
       var free = (window.SafeRiseAccess && SafeRiseAccess.isFree(protocolId))
-        ? '<span class="sr-tp-free">Free</span>' : '';
-      return '<article class="sr-tp-pcard" tabindex="0" role="button"' +
+        ? '<span class="sr-tp-free2">Free</span>' : '';
+      var title = cardTitle(p[2]);
+      return '<article class="sr-tp-card2" tabindex="0" role="button"' +
         ' data-sr-open="protocol.html?track=' + esc(String(t.id)) +
         '&amp;protocol=' + esc(String(p[0])) + '">' +
-        SafeRiseCover.art({ src: coverPath(t.id, p[0]), no: p[0], label: p[1], extra: free }) +
-        /* SR-368 · title, promise and struggle chips stay in normal flow,
-           always visible. Only the one-line signature moves into
-           .sr-tp-preveal, out of flow and revealed on hover or focus, over
-           the foot of the cover rather than in place of it (PASS-track-
-           page-quality.md §2 — the reveal used to carry the struggle chips
-           too and covered ~79% of the cover on hover; the chips are real
-           content, not part of the hover reveal, so they moved here rather
-           than being deleted). tabindex makes the card reachable so a
-           keyboard user can reveal the signature line too. */
-        '<div class="sr-tp-pmeta"><h3>' + esc(cardTitle(p[2])) + '</h3>' +
-        '<p class="sr-tp-pdesc">' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
-        '<p class="sr-tp-struggle">' + (has(p[5])
-            ? p[5].map(function (s) { return '<span>“' + esc(s) + '”</span>'; }).join('')
-            : '') + '</p>' +
-        '<div class="sr-tp-preveal">' +
-          '<p class="sr-tp-pbody">' + esc(val(p[4], 'signature:' + p[2])) + '</p>' +
+        '<div class="sr-tp-cardcov2">' +
+          '<img class="sr-tp-cardimg2" src="' + esc(coverPath(t.id, p[0])) + '" alt="" loading="lazy" decoding="async" onerror="this.closest(\'.sr-tp-cardcov2\').classList.add(\'sr-tp-ph2\')">' +
+          '<span class="sr-tp-carddoor2">' + esc(p[1]) + '</span>' +
+          '<span class="sr-tp-cardnum2">' + esc(p[0]) + '</span>' +
+          '<span class="sr-tp-cardstate2">' + esc(p[p.length - 1] || '') + '</span>' + free +
         '</div>' +
-        '</div></article>';
+        '<h3>' + esc(title) + '</h3>' +
+        '<p>' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
+        (has(p[5]) ? '<blockquote>“' + esc(p[5][0]) + '”</blockquote>' : '') +
+      '</article>';
     }).join('');
 
-    return '<div class="sr-tp-band sr-tp-band--flush" id="protocols">' +
-      '<div class="sr-tp-sechead sr-tp-sechead--center" style="padding:0 24px">' +
-        '<p class="sr-tp-eyebrow">Where to begin</p>' +
-        '<h2 class="sr-tp-h2--oneline">Start with the state that traps you most.</h2>' +
-        '<p class="sr-tp-lede">Each protocol is a complete guided system — tools for before, during and after, with the research shown at every step.</p>' +
+    return '<div class="sr-tp-band sr-tp-band--flush" id="protocols"><div class="sr-tp-wide">' +
+      sechead(L.protocolsEyebrow, L.protocolsH2, L.protocolsIntro) +
+      '<div class="sr-tp-rail2" data-sr-carousel aria-label="Protocols">' +
+        '<div class="sr-tp-railtrack2" data-sr-track>' + cards + '</div>' +
       '</div>' +
-      /* SR-290 · aria-live="off" wraps only the carhead+viewport, not
-         rJourney below it — a live-region attribute on the whole #protocols
-         band would apply to unrelated content sharing that ancestor. off,
-         not omitted: it states the auto-advancing region is deliberately
-         silent to assistive tech rather than leaving that to each screen
-         reader's default inference. */
-      '<div class="sr-tp-carousel" id="carousel" aria-live="off">' +
-      '<div class="sr-tp-carhead"><span class="sr-tp-carkick">Browse all protocols</span>' +
-        /* SR-163 · dots, not "1 / 10". The rail is built by initCarousel once
-           it knows how many cards fit, because the number of pages depends on
-           the viewport and cannot be written into the markup. */
-        '<div class="sr-tp-carnav"><div class="sr-tp-cardots" id="carDots"></div>' +
-        '<button class="sr-tp-carbtn" id="carPrev" aria-label="Previous protocol"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg></button>' +
-        '<button class="sr-tp-carbtn" id="carNext" aria-label="Next protocol"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button></div>' +
-      '</div>' +
-      '<div class="sr-tp-carviewport" id="carViewport"><div class="sr-tp-cartrack">' + cards + '</div></div>' +
-      '</div>' +
-      rJourney(t) +
-    '</div>';
-  }
-
-  /* ── 01b · journey ───────────────────────────────────────────────── */
-  function rJourney(t) {
-    var j = t.journey || {};
-    return '<div class="sr-tp-journey">' +
-      '<div class="sr-tp-jtop">' +
-        '<p class="sr-tp-jkick">The journey within each protocol</p>' +
-        '<h3 class="sr-tp-jtitle">' + val(j.title, 'journey.title') + '</h3>' +
-        '<p class="sr-tp-jsub">' + val(j.sub, 'journey.sub') + '</p>' +
-      '</div>' +
-      slot(t.art && t.art.band, brief(t, 'band'), '1400/380') +
-      '<div class="sr-tp-jrule"></div>' +
-      '<div class="sr-tp-jcols">' +
-        '<div class="sr-tp-jcol"><p class="sr-tp-jtag" style="color:var(--gold)">01 · Start here</p>' +
-          '<p class="sr-tp-jname">Experience</p><p class="sr-tp-jvalue" style="color:var(--gold-lt)">Change your state, now.</p>' +
-          '<p class="sr-tp-jbody">' + val(j.experience, 'journey.experience') + '</p>' +
-          '<p class="sr-tp-jbody">Use the Cue Card when a full session isn’t realistic.</p></div>' +
-        '<div class="sr-tp-jcol"><p class="sr-tp-jtag" style="color:var(--text2)">02 · Every time</p>' +
-          '<p class="sr-tp-jname">Log &amp; Journal</p><p class="sr-tp-jvalue">Turn change into a record.</p>' +
-          '<p class="sr-tp-jbody">' + val(j.log, 'journey.log') + '</p>' +
-          '<p class="sr-tp-jbody">Over time, the record shows patterns changing and the route back becoming shorter.</p></div>' +
-        '<div class="sr-tp-jcol"><p class="sr-tp-jtag" style="color:var(--teal)">03 · Optional depth</p>' +
-          '<p class="sr-tp-jname">Go Deeper</p><p class="sr-tp-jvalue" style="color:var(--teal)">Understand. Integrate. Choose.</p>' +
-          '<p class="sr-tp-jbody">' + esc(resourceCount(val(j.deeper, 'journey.deeper'))) + '</p>' +
-          '<p class="sr-tp-jnote">' + val(j.deeperNote, 'journey.deeperNote') + '</p></div>' +
-      '</div>' +
-      '<div class="sr-tp-jopt"><div><p class="sr-tp-jopttag">Optional support</p>' +
-        '<p class="sr-tp-jopttitle">When self-guided isn’t enough.</p></div>' +
-        '<p class="sr-tp-joptbody">Two ways to have another person in the room.</p>' +
-        '<div class="sr-tp-joptbtns"><a href="#start" class="sr-tp-jpill">Workshop</a>' +
-        '<a href="#start" class="sr-tp-jpill">Premium 1:1</a></div>' +
-      '</div>' +
-    '</div>';
-  }
-
-  /* SR-054 · the library count is derived, never typed. Copy that names
-     the size of the library gets its numeral from SHARED.resources. */
-  var NUMWORD = ['zero','one','two','three','four','five','six','seven','eight',
-                 'nine','ten','eleven','twelve','thirteen','fourteen','fifteen',
-                 'sixteen','seventeen','eighteen','nineteen','twenty'];
-  function countWord(n) { return NUMWORD[n] || String(n); }
-  /* SR-078 · also matches the spaced form. "twelve-resource library" was
-     rewritten here already; "each with twelve resources" was not, and went
-     stale on its own. Both shapes are covered now. */
-  /* SR-253 · the numeral is the CURRENT TRACK's library size, not a global one.
-     There is no single number across the three: Track 03 has eleven types,
-     Tracks 01 and 02 have ten. */
-  function libSize() {
-    return (typeof trackResourceCount === 'function' && CURRENT_TRACK)
-      ? trackResourceCount(CURRENT_TRACK)
-      : SHARED.resources.filter(function (r) { return !r[5]; }).length; /* pending excluded, PASS-full-resource-access Step 6 */
-  }
-  function resourceCount(s) {
-    var WORDS = 'zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty';
-    return String(s)
-      .replace(new RegExp('\\b(?:' + WORDS + ')(-resource\\b)', 'gi'),
-        function (_, tail) { return countWord(libSize()) + tail; })
-      .replace(new RegExp('\\b(?:' + WORDS + ')(\\s+resources\\b)', 'gi'),
-        function (_, tail) { return countWord(libSize()) + tail; });
-  }
-
-  /* ── 02 · cost ───────────────────────────────────────────────────── */
-  function rCost(t) {
-    var c = t.cost;
-    return '<div class="sr-tp-band sr-tp-band--alt"><div class="sr-tp-wide">' +
-      sechead(c.eyebrow, c.h2, c.lede) +
-      '<div class="sr-tp-costimg">' +
-        slot(t.art && t.art.cost, brief(t, 'cost'), '16/7') +
-        '<div class="sr-tp-costcaps">' + c.caps.map(function (x) {
-          return '<div class="sr-tp-costcap"><p class="sr-tp-cctime">' + x[0] +
-                 '</p><p class="sr-tp-ccname">' + x[1] + '</p></div>';
-        }).join('') + '</div></div>' +
-      '<p class="sr-tp-costnote">' + c.note + '</p>' +
-      '<div class="sr-tp-costgrid">' + c.items.map(function (i) {
-        return '<div class="sr-tp-citem" style="--edge:' + i[2] + '"><p class="sr-tp-cikey">' +
-               i[0] + '</p><p class="sr-tp-cival">' + i[1] + '</p></div>';
-      }).join('') + '</div>' +
-      '<p class="sr-tp-costclose">' + c.close + '</p>' +
+      '<div class="sr-tp-railfoot2"><a class="sr-tp-pill2" href="#start">' + esc(L.railCta) + '</a>' +
+        '<span class="sr-tp-support2">' + esc(L.railSupport) + '</span></div>' +
     '</div></div>';
   }
 
-  /* ── 03 · the range ──────────────────────────────────────────────── */
-  function rRange(t) {
-    var r = t.range;
-    return '<div class="sr-tp-band"><div class="sr-tp-wide">' +
-      sechead(r.eyebrow, r.h2, r.lede) +
-      '<div class="sr-tp-rangefig"><div class="sr-tp-rangeimg">' +
-        slot(t.art && t.art.range, brief(t, 'range'), '16/6') +
-        /* SR-368 (PASS-track-page-quality.md §4a) · Safety's sub-label used
-           to carry "· your regulated range" onto the end, the only one of
-           the three that wrapped to two lines. Trimmed to match the other
-           two: the vagal term alone, one line each, none singled out by
-           length. */
-        '<div class="sr-tp-rangecaps">' +
-          '<div class="sr-tp-rcap"><p class="sr-tp-rcname" style="color:var(--mob)">Mobilisation</p><p class="sr-tp-rcsub">Sympathetic</p></div>' +
-          '<div class="sr-tp-rcap"><p class="sr-tp-rcname" style="color:var(--safe)">Safety</p><p class="sr-tp-rcsub">Ventral vagal</p></div>' +
-          '<div class="sr-tp-rcap"><p class="sr-tp-rcname" style="color:var(--shut)">Shutdown</p><p class="sr-tp-rcsub">Dorsal vagal</p></div>' +
-        '</div></div>' +
-        '<div class="sr-tp-rangecols">' + r.cols.map(function (c) {
-          return '<div class="sr-tp-rcol" style="--edge:' + c[2] + '"><p class="sr-tp-rquote">' +
-                 c[0] + '</p><p class="sr-tp-rbody">' + c[1] + '</p></div>';
+  /* ── 02 · method ──────────────────────────────────────────────────
+     Was rFourSteps() (shared, no track cues at all). The brief's own §9
+     says the fourth step's description differs by track — LANDING_COPY's
+     riseLine overrides SHARED.fourSteps' last step body per track;
+     steps 1-3 stay shared, matching every mockup (their text is identical
+     across all three). The visual is the existing shared
+     assets/shared/four-steps.webp (SHARED.art.fourSteps) — one image,
+     deliberately, not three; see the pass report on the "39 image slots"
+     finding. */
+  function rMethod(t) {
+    var L = LANDING_COPY[t.id];
+    var steps = SHARED.fourSteps.map(function (s, i) {
+      var last = i === SHARED.fourSteps.length - 1;
+      return { name: s.name, cite: s.cite, body: last ? L.riseLine : s.body };
+    });
+    return '<div class="sr-tp-band" id="method"><div class="sr-tp-wide">' +
+      '<figure class="sr-tp-methodvis2">' +
+        slot(SHARED.art && SHARED.art.fourSteps, 'shared — four moments, no track cues', '16/5') +
+        '<figcaption><small>The state beneath the story</small><span>' + esc(L.visualCaption) + '</span></figcaption>' +
+      '</figure>' +
+      '<div class="sr-tp-methodgrid2">' +
+        '<div class="sr-tp-methodcopy2">' +
+          '<p class="sr-tp-eyebrow">How SafeRise works</p>' +
+          '<h2>Work with the state.<br>Then choose.</h2>' +
+          '<p>' + esc(L.methodBody) + '</p>' +
+        '</div>' +
+        '<div class="sr-tp-steps2">' + steps.map(function (s, i) {
+          return '<div class="sr-tp-step2"><b>0' + (i + 1) + '</b><strong>' + s.name + '</strong>' +
+            '<p>' + esc(s.body) + '</p></div>';
         }).join('') + '</div>' +
       '</div>' +
-      '<div class="sr-tp-rangeclose"><p class="sr-tp-rcloseq">' + r.closeQ +
-        '</p><p class="sr-tp-rclosek">' + r.closeK + '</p></div>' +
     '</div></div>';
   }
 
-  /* ── 04 · why insight isn't enough (points shared, diagram per track) ─
-     SR-343 · GRAPHICS.trigger[CURRENT_TRACK] — "Two Timelines" (t1),
-     "Your Half" (t2), "Before the Room" (t3). Same argument shape, same
-     section position, different content; see that entry's own comment. */
-  function rInsight() {
-    var s = SHARED.insight;
+  /* ── 03 · outcomes ────────────────────────────────────────────────
+     Replaces rCost()/rRange()/rInsight()/rChange() — those sections and
+     their diagrams are not in the approved mockup at all. The two images
+     (t.art.cost/t.art.change) and their scrims/briefs are the SAME already-
+     wired assets those retired functions used; nothing new to provision.
+     outcomesLede is drafted copy per the brief's §9, not Andre's final
+     wording — flagged in the pass report. */
+  function rOutcomes(t) {
+    var L = LANDING_COPY[t.id];
     return '<div class="sr-tp-band sr-tp-band--alt"><div class="sr-tp-wide">' +
-      sechead(s.eyebrow, s.h2, s.lede) +
-      '<div class="sr-tp-insight-layout"><div class="sr-tp-insight-points">' +
-        s.points.map(function (p) {
-          return '<div class="sr-tp-insight-point"><p class="sr-tp-mini-kicker">' + p[0] +
-                 '</p><strong>' + p[1] + '</strong><p>' + p[2] + '</p></div>';
-        }).join('') +
-      '</div>' + GRAPHICS.trigger[CURRENT_TRACK] + '</div>' +
-      '<div class="sr-tp-pull"><p>' + s.pull + '</p></div>' +
-    '</div></div>';
-  }
-
-  /* ── 05 · the four steps (shared) ────────────────────────────────── */
-  function rFourSteps() {
-    return '<div class="sr-tp-band sr-tp-band--alt"><div class="sr-tp-wide">' +
-      sechead('What reaches it instead',
-              'The Protocol Foundation.<br><span class="gold">A guided system.</span>',
-              'A repeatable route from recognition to regulation — four actions your own system learns to run.') +
-      '<div class="sr-tp-pfimg">' +
-        slot(SHARED.art && SHARED.art.fourSteps, 'shared — four moments, no track cues', '16/5') +
+      '<p class="sr-tp-eyebrow">What changes</p>' +
+      '<h2>The hard moment passes.<br><span class="gold">Its effects can too.</span></h2>' +
+      '<p class="sr-tp-outlede2">' + esc(L.outcomesLede) + '</p>' +
+      '<div class="sr-tp-outimgs2">' +
+        '<figure>' + slot(t.art && t.art.cost, brief(t, 'cost'), '16/7') +
+          '<figcaption><small>' + esc(L.costCaption[0]) + '</small>' + esc(L.costCaption[1]) + '</figcaption></figure>' +
+        '<figure>' + slot(t.art && t.art.change, brief(t, 'change'), '16/7') +
+          '<figcaption><small>' + esc(L.changeCaption[0]) + '</small>' + esc(L.changeCaption[1]) + '</figcaption></figure>' +
       '</div>' +
-      '<div class="sr-tp-pfcols">' + SHARED.fourSteps.map(function (s, i) {
-        return '<div class="sr-tp-pfcol"><p class="sr-tp-pfstep" style="color:' +
-          (i === SHARED.fourSteps.length - 1 ? 'var(--teal)' : 'var(--gold)') + '">Step 0' + (i + 1) + '</p>' +
-          '<p class="sr-tp-pfname">' + s.name + '</p><p class="sr-tp-pfbody">' + s.body +
-          '</p><p class="sr-tp-pfcite">' + s.cite + '</p></div>';
+      '<div class="sr-tp-shifts2">' + L.shifts.map(function (s) {
+        return '<article class="sr-tp-shift2"><small>' + esc(s[0]) + '</small><h3>' + esc(s[1]) + '</h3><p>' + esc(s[2]) + '</p></article>';
       }).join('') + '</div>' +
-      '<div class="sr-tp-graphpair">' + GRAPHICS.breath + GRAPHICS.spiral + '</div>' +
-      '<p class="sr-tp-pfclose">The same four steps. The same voice. A route your body can recognise.</p>' +
+      '<p class="sr-tp-outclose2">You have not lost yourself. You need a reliable way back.</p>' +
     '</div></div>';
   }
 
-  /* ── 06 · six areas of change ────────────────────────────────────── */
-  function rChange(t) {
-    var c = t.change;
+  /* ── 04 · included ────────────────────────────────────────────────
+     Not one of the brief's own 8 numbered sections, but present,
+     identically structured, in all three approved mockups — kept rather
+     than dropped; see the pass report. The richer, per-resource-type
+     enumeration this replaces (trackResources()/ICONS, the old
+     rResources()) stays defined and unused, not deleted. */
+  function rIncluded(t) {
+    var L = LANDING_COPY[t.id];
     return '<div class="sr-tp-band"><div class="sr-tp-wide">' +
-      sechead(c.eyebrow, c.h2, c.lede) +
-      '<div class="sr-tp-sixwrap">' +
-        slot(t.art && t.art.change, brief(t, 'change'), '16/7') +
-        '<div class="sr-tp-sixinner"><p class="sr-tp-sixkick">Six areas of change</p><div class="sr-tp-sixgrid">' +
-        c.items.map(function (i) {
-          return '<div class="sr-tp-sixitem"><span class="sr-tp-sixi" style="border-color:' + i[2] +
-            ';color:' + i[2] + '">' + i[0] + '</span>' +
-            '<p class="sr-tp-sixname" style="color:' + i[2] + '">' + esc(i[1]) + '</p>' +
-            '<p class="sr-tp-sixfrom">' + esc(i[3]) + '</p><p class="sr-tp-sixbody">' + esc(i[4]) + '</p></div>';
-        }).join('') + '</div><p class="sr-tp-sixkick" style="margin:26px 0 0">More access to choice</p></div>' +
+      sechead('Included with your free account',
+              'Use it.<br>Understand it.<br>Make it stick.',
+              L.includedIntro) +
+      '<div class="sr-tp-incgrid2">' +
+        '<article class="sr-tp-incitem2"><span>01 · Use it now</span><h3>Guided practice</h3>' +
+          '<p>Ten full guided protocols, follow-along video, quick-use versions and printable cue cards.</p></article>' +
+        '<article class="sr-tp-incitem2"><span>02 · Understand the pattern</span><h3>Clear explanations</h3>' +
+          '<p>Plain-language guidance, cited research and support on when to proceed or pause.</p></article>' +
+        '<article class="sr-tp-incitem2"><span>03 · Make it stick</span><h3>Integration tools</h3>' +
+          '<p>Somatic practices, reflection prompts, support scripts and a private journal that stays on your device.</p></article>' +
       '</div>' +
-      '<p class="sr-tp-sixclose">' + c.close + '</p>' +
-      '<p style="text-align:center;margin-top:26px"><a href="#start" class="sr-tp-ghost">Get Started — ' +
-        t.price.amount + t.price.per.replace('/ ', '/') + '</a></p>' +
     '</div></div>';
   }
 
-  /* ── 07 · the resource library (shared) ──────────────────────────── */
-  function rResources(t) {
-    return '<div class="sr-tp-band sr-tp-band--alt"><div class="sr-tp-wide">' +
-      sechead('What you get to work with',
-              'Everything that<br><span class="gold">comes with it.</span>',
-              'The full resource library — everything you need to understand, release, and move beyond specific patterns. This is what the subscription opens.') +
-      /* SR-253 · the SET comes from the inventory, per track — Track 03 has
-         eleven types and Tracks 01/02 have ten, so a flat list was wrong for
-         one of the three. The row still supplies the look. A row with no
-         description renders without the paragraph rather than with an empty
-         one: `raising` is awaiting its marketing string from the content lane
-         and a placeholder would be worse than an omission. */
-      '<div class="sr-tp-inc">' + trackResources(t.id).map(function (r) {
-        return '<div class="sr-tp-incitem"><div class="sr-tp-icon"><svg viewBox="0 0 24 24" aria-hidden="true">' +
-          (ICONS[r[0]] || '') + '</svg></div>' +
-          '<div><h3>' + esc(r[1]) + '</h3><p class="sr-tp-inctag">' + esc(r[2]) + '</p>' +
-          (r[3] ? '<p>' + esc(r[3]) + '</p>' : '') + '</div></div>';
-      }).join('') + '</div>' +
-      '<p class="sr-tp-note sr-tp-footnote">' + resourceCount(SHARED.resourceNote) + '</p>' +
+  /* ── 05 · states band ─────────────────────────────────────────────
+     The brief's own numbered order puts this AFTER outcomes/included,
+     not between protocols and method as the mockups themselves show it
+     — the brief is explicit ("Section order, identical across all
+     three") and its own list is followed here; reported as an adaptation
+     from the mockups' own layout. Full-bleed image is t.art.band, already
+     wired (assets/journey/t{n}-band.webp), reused from the retired
+     rJourney(). */
+  function rStates(t) {
+    var L = LANDING_COPY[t.id];
+    return '<figure class="sr-tp-statesband2">' +
+      slot(t.art && t.art.band, brief(t, 'band'), '1400/380') +
+      '<figcaption><p class="sr-tp-eyebrow">' + esc(L.storyEyebrow) + '</p>' +
+        '<h3>' + L.storyH3 + '</h3><p>' + esc(L.storyBody) + '</p></figcaption>' +
+    '</figure>';
+  }
+
+  /* ── 06 · proof ───────────────────────────────────────────────────
+     Keeps the existing GRAPHICS.progress[CURRENT_TRACK] diagram (three
+     real, already-authored, per-track SVGs — "The Floor Rises" / "The
+     Loop Slows" / "The Load Carries") rather than the mockup's own
+     decorative line-and-dots placeholder chart. h2/intro/list are new,
+     per track, from LANDING_COPY. */
+  function rProof(t) {
+    var L = LANDING_COPY[t.id];
+    return '<div class="sr-tp-band" id="proof"><div class="sr-tp-wide sr-tp-proofgrid2">' +
+      GRAPHICS.progress[CURRENT_TRACK] +
+      '<div><p class="sr-tp-eyebrow">Progress you can see</p><h2>' + L.proofH2 + '</h2>' +
+        '<p class="sr-tp-lede">' + esc(L.proofIntro) + '</p>' +
+        '<ul class="sr-tp-prooflist2">' + L.proofSteps.map(function (s, i) {
+          return '<li><b>0' + (i + 1) + '</b>' + esc(s) + '</li>';
+        }).join('') + '</ul>' +
+      '</div>' +
     '</div></div>';
   }
 
-  /* ── 08 · progress (notices shared, diagram per track) ─────────────
-     SR-343 · GRAPHICS.progress[CURRENT_TRACK] — "The Floor Rises" (t1),
-     "The Loop Slows" (t2), "The Load Carries" (t3). */
-  function rProgress() {
-    var p = SHARED.progress;
-    return '<div class="sr-tp-band"><div class="sr-tp-wide">' +
-      sechead(p.eyebrow, p.h2, p.lede) + GRAPHICS.progress[CURRENT_TRACK] +
-      '<div class="sr-tp-notices" style="margin-top:24px">' + p.notices.map(function (n) {
-        return '<div class="sr-tp-notice"><h3>' + n[0] + '</h3><p>' + n[1] + '</p></div>';
-      }).join('') + '</div>' +
-    '</div></div>';
-  }
-
-  /* ── 09 · price ──────────────────────────────────────────────────── */
+  /* ── 07 · price ───────────────────────────────────────────────────
+     Reads t.price directly (amount/per/annual/words), so a paid track can
+     never render "free" language — the mockups themselves did (both T2 and
+     T3 shipped literal "Free <small>a month · or €190 a year</small>" in
+     the price box, contradicting their own brief's §5); fixed by being
+     data-driven rather than by hand-editing that string, and reported. */
   function rPrice(t) {
-    return '<div class="sr-tp-band" id="start"><div class="sr-tp-inner"><div class="sr-tp-pricewrap">' +
-      '<p class="sr-tp-eyebrow">What it costs to start</p>' +
-      '<h2>The full track.<br><span class="gold">' + t.price.words + '</span></h2>' +
-      '<p class="sr-tp-lede" style="margin:16px auto 26px">Every protocol, every resource, your session history and progress tracking. Cancel anytime, keep what you’ve written.</p>' +
-      '<div class="sr-tp-pricebox"><p class="sr-tp-pricenum">' + t.price.amount +
-        '<span class="sr-tp-priceper"> ' + t.price.per + '</span></p>' +
-      '<div class="sr-tp-pricelist">' +
-        t.priceList.map(function (l) { return '<p>' + resourceCount(l) + '</p>'; }).join('') + '</div>' +
-      '<a href="#start" class="sr-tp-pill">Get Started — ' + t.price.amount +
-        t.price.per.replace('/ ', '/') + '</a>' +
-      '<p class="sr-tp-note" style="margin-top:14px">' + val(t.priceNote, 'priceNote') + '</p>' +
-      '</div></div></div></div>';
+    var L = LANDING_COPY[t.id];
+    var free = t.price === PRICING.t1;
+    var ctaLabel = free ? 'Create a free account' : 'Start membership';
+    var amountLine = free
+      ? t.price.amount + ' <small>' + t.price.per.replace(/^,\s*/, '') + '</small>'
+      : t.price.amount + ' <small>' + t.price.per.replace('/ ', 'a ') + (t.price.annual ? ' · or ' + t.price.annual.replace(' / ', ' a ') : '') + '</small>';
+    return '<div class="sr-tp-band" id="start"><div class="sr-tp-wide">' +
+      '<div class="sr-tp-pricebox2"><div>' +
+        '<p class="sr-tp-eyebrow">' + esc(L.priceEyebrow) + '</p>' +
+        '<h2>' + L.priceH2 + '</h2>' +
+        '<p class="sr-tp-lede">Guided audio and video, quick-use cues, the complete supporting library, a private journal that stays on your device. Nothing expires and there is no trial countdown.</p>' +
+      '</div><div class="sr-tp-priceside2">' +
+        '<p class="sr-tp-amount2">' + amountLine + '</p>' +
+        '<a class="sr-tp-pill2" href="#start">' + ctaLabel + '</a>' +
+        '<p class="sr-tp-terms2">' + val(t.priceNote, 'priceNote') + '</p>' +
+      '</div></div>' +
+      '<div class="sr-tp-upgrade2"><p><b>' + esc(L.upgradeTitle) + '</b>' + esc(L.upgradeBody) + '</p>' +
+        '<a href="pricing.html">See full membership →</a></div>' +
+    '</div></div>';
   }
 
-  /* ── 10 · FAQ · 12 shared + 6 track-specific = 18 ────────────────── */
-  /* SR-375 (PASS-indexing-readiness.md §2) · the FAQPage block is built
-     from this exact `items` array, the same one the visible questions and
-     answers below are built from — not retyped, so there is no drift
-     between the visible answer and the structured one for Google to
-     penalise (docs/SEO-HEAD-TEMPLATE.md's own ⚠). Generated here, at
-     render time, rather than once into static HTML, so it can never go
-     stale if a FAQ entry is ever added or edited in content/tracks.js. */
+  /* ── 08 · FAQ + scope & safety ────────────────────────────────────
+     Content and structure kept from the existing implementation (18
+     questions — 12 shared + 6 per track — with the same FAQPage JSON-LD;
+     richer than the mockup's own 6-question demo list, and already SEO-
+     wired), restyled only to the new two-column look. */
   function faqJsonLd(items) {
     var data = {
       '@context': 'https://schema.org', '@type': 'FAQPage',
@@ -471,308 +384,22 @@
           acceptedAnswer: { '@type': 'Answer', text: q[1].join(' ') } };
       })
     };
-    /* escape </ so a literal "</script>" can never appear inside the JSON
-       and terminate the tag early -- CLAUDE.md's own landmine, the other
-       direction: not a closing tag IN the source, one assembled from data
-       at runtime. */
     return '<script type="application/ld+json">' + JSON.stringify(data).replace(/<\//g, '<\\/') + '</script>';
   }
   function rFaq(t) {
     var items = SHARED.faq.concat(t.faq || []);
-    var half = Math.ceil(items.length / 2);
     var n = 0;
-    function col(list) {
-      return '<div class="sr-tp-faqcol">' + list.map(function (q) {
-        n++;
-        return '<div class="sr-tp-faqitem"><button class="sr-tp-faqq" aria-expanded="false" aria-controls="faqa-' + n +
-          '" id="faqq-' + n + '"><span class="sr-tp-plus" aria-hidden="true">+</span>' + esc(q[0]) + '</button>' +
-          '<div class="sr-tp-faqa" id="faqa-' + n + '" role="region" aria-labelledby="faqq-' + n + '">' +
-          q[1].map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div></div>';
-      }).join('') + '</div>';
+    function item(q) {
+      n++;
+      return '<details><summary id="faqq-' + n + '" aria-controls="faqa-' + n + '">' + esc(q[0]) + '</summary>' +
+        '<div id="faqa-' + n + '">' + q[1].map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div></details>';
     }
-    return '<div class="sr-tp-band"><div class="sr-tp-wide">' +
-      sechead('What’s left to ask', 'Before you start.', 'The things worth knowing, answered plainly.') +
-      '<div class="sr-tp-faqcols">' + col(items.slice(0, half)) + col(items.slice(half)) + '</div>' +
+    return '<div class="sr-tp-band sr-tp-faqband2" id="faq"><div class="sr-tp-wide sr-tp-faqgrid2">' +
+      '<div><p class="sr-tp-eyebrow">Before you start</p><h2>Questions worth<br>answering plainly.</h2>' +
+        '<p class="sr-tp-safety2"><b>Scope &amp; safety.</b> ' + SHARED.scope + ' If you are in immediate danger, contact your local emergency number. ' +
+        '<a href="https://findahelpline.com" rel="noopener">findahelpline.com</a></p></div>' +
+      '<div class="sr-tp-questions2">' + items.map(item).join('') + '</div>' +
     '</div></div>' + faqJsonLd(items);
-  }
-
-  /* ── 11 · scope & safety · legally load-bearing, never omitted ───── */
-  function rScope() {
-    return '<div class="sr-tp-scope">' +
-      '<p class="sr-tp-sk">◇ Scope &amp; Safety</p>' +
-      '<p>' + SHARED.scope + '</p>' +
-      '<p style="color:var(--text);margin-top:10px">If you are in immediate danger, contact your local emergency number. ' +
-      '<a href="https://findahelpline.com" rel="noopener">findahelpline.com</a></p>' +
-    '</div>';
-  }
-
-  /* ── carousel · SR-163 ────────────────────────────────────────────
-     The binding was never the problem — #carViewport, #carPrev and #carNext
-     are all emitted above, go() ran and set the transform every time. Two
-     things were wrong underneath it.
-
-     One: the viewport was ALSO a native scroll container
-     (overflow-x:auto + scroll-snap-type:x mandatory) while this code moved
-     the track with a transform. Two mechanisms, one strip. scrollLeft sat at
-     56 at rest with nobody having touched it — snap had already moved it.
-     The viewport is now a plain clip and the transform is the only mover.
-
-     Two: step() added 18px of gap to the card width. The gap is 14px. Every
-     step overshot by 4px, 40px of drift across ten cards.
-
-     The counter is gone with them. "1 / 10" reported the active index while
-     five cards were on screen — a position asserted, not measured. The dot
-     rail below is built from what actually fits. */
-  function initCarousel() {
-    var vp = document.getElementById('carViewport');
-    if (!vp) return;
-    var track = vp.querySelector('.sr-tp-cartrack');
-    var cards = track.querySelectorAll('.sr-tp-pcard');
-    if (!cards.length) return;
-
-    /* SR-182 · the card is operable again. Delegated on the track rather than
-       bound per card, so it survives a re-render. Keyboard parity is required,
-       not optional: role="button" without Enter and Space is a control that
-       announces itself and then does nothing. Space is preventDefault'ed or the
-       page scrolls under the member. */
-    function openCard(el) {
-      var href = el && el.getAttribute('data-sr-open');
-      if (href) window.location.href = href;
-    }
-    track.addEventListener('click', function (e) {
-      var card = e.target.closest && e.target.closest('.sr-tp-pcard');
-      if (card) openCard(card);
-    });
-    track.addEventListener('keydown', function (e) {
-      if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
-      var card = e.target.closest && e.target.closest('.sr-tp-pcard');
-      if (!card) return;
-      e.preventDefault();
-      openCard(card);
-    });
-    var dots = document.getElementById('carDots');
-    var prev = document.getElementById('carPrev');
-    var next = document.getElementById('carNext');
-    var i = 0;
-
-    /* Read the gap rather than hardcoding it, so this cannot drift out of
-       step with the stylesheet the way the old + 18 did. */
-    function gap() {
-      var g = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap);
-      return isNaN(g) ? 14 : g;
-    }
-    function step() { return cards[0].getBoundingClientRect().width + gap(); }
-    function per()  { return Math.max(1, Math.floor((vp.clientWidth + gap()) / step())); }
-    function maxIndex() { return Math.max(0, cards.length - per()); }
-    function pages() { return Math.ceil(maxIndex() / per()) + 1; }
-    /* The last page is clamped, not a full stride: with ten cards and four
-       visible it starts at card 7, not card 9. The label has to say where the
-       page actually lands, or it is the counter's problem again in words. */
-    function pageStart(d) { return Math.min(d * per(), maxIndex()); }
-
-    function paintDots() {
-      if (!dots) return;
-      var n = pages(), active = 0, best = Infinity, want = [];
-      for (var a = 0; a < n; a++) {
-        var gapTo = Math.abs(pageStart(a) - i);
-        if (gapTo < best) { best = gapTo; active = a; }
-      }
-      for (var d = 0; d < n; d++) {
-        var from = pageStart(d) + 1, to = Math.min(pageStart(d) + per(), cards.length);
-        want.push('<button type="button" class="sr-tp-cardot' +
-          (d === active ? ' sr-tp-on' : '') + '" data-page="' + d +
-          '" aria-label="Protocols ' + from + ' to ' + to + '"' +
-          (d === active ? ' aria-current="true"' : '') + '></button>');
-      }
-      var markup = want.join('');
-      if (dots.innerHTML !== markup) dots.innerHTML = markup;
-    }
-
-    function go(n) {
-      i = Math.min(Math.max(0, n), maxIndex());
-      /* through place() so a press that lands mid-drag or mid-wheel gets the
-         eased transition back rather than inheriting transition:none */
-      place(-i * step(), true);
-      if (prev) prev.disabled = i === 0;
-      if (next) next.disabled = i === maxIndex();
-      paintDots();
-    }
-
-    if (prev) prev.onclick = function () { manualStop(); go(i - per()); };
-    if (next) next.onclick = function () { manualStop(); go(i + per()); };
-    if (dots) dots.onclick = function (e) {
-      var b = e.target.closest('.sr-tp-cardot');
-      if (b) { manualStop(); go(pageStart(+b.getAttribute('data-page'))); }
-    };
-    track.style.transition = 'transform .45s cubic-bezier(.4,0,.2,1)';
-
-    /* ── SR-174b · cursor control, on the same transform ─────────────────
-       SR-163 removed overflow-x:auto and scroll-snap-type because native
-       scroll and the JS transform were two mechanisms driving one strip.
-       They are NOT coming back. Pointer drag and wheel move the same
-       transform this file already owns, so there is still exactly one mover
-       and the dot rail keeps reporting the truth.
-
-       There is no auto-drift here to remove: this file has no
-       requestAnimationFrame, no setInterval and no animation, and the strip
-       was measured stationary for 65 seconds with no input. The drift lives
-       on the dashboard, which is a different surface and stays as it is. */
-    var freeX = 0, dragging = false, startX = 0, startFree = 0, moved = 0;
-
-    function clampFree(x) {
-      return Math.min(0, Math.max(-maxIndex() * step(), x));
-    }
-    function place(x, animate) {
-      track.style.transition = animate ? 'transform .45s cubic-bezier(.4,0,.2,1)' : 'none';
-      track.style.transform = 'translateX(' + x + 'px)';
-    }
-    /* After a free gesture the index has to agree with where the strip
-       actually is, or the next arrow press jumps. Snap the index to the
-       nearest card and let go() take the transform back over. */
-    function settle() {
-      var idx = Math.round(-freeX / step());
-      i = Math.min(Math.max(0, idx), maxIndex());
-      freeX = -i * step();
-      place(freeX, true);
-      if (prev) prev.disabled = i === 0;
-      if (next) next.disabled = i === maxIndex();
-      paintDots();
-    }
-
-    vp.addEventListener('pointerdown', function (e) {
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-      manualStop();
-      dragging = true; moved = 0;
-      startX = e.clientX; startFree = freeX = -i * step();
-      vp.setPointerCapture(e.pointerId);
-      vp.style.cursor = 'grabbing';
-    });
-    vp.addEventListener('pointermove', function (e) {
-      if (!dragging) return;
-      var dx = e.clientX - startX;
-      moved = Math.max(moved, Math.abs(dx));
-      freeX = clampFree(startFree + dx);
-      place(freeX, false);
-    });
-    function endDrag(e) {
-      if (!dragging) return;
-      dragging = false;
-      vp.style.cursor = '';
-      try { vp.releasePointerCapture(e.pointerId); } catch (err) {}
-      settle();
-    }
-    vp.addEventListener('pointerup', endDrag);
-    vp.addEventListener('pointercancel', endDrag);
-    /* A drag that crossed the card is not a click on whatever sat under it. */
-    vp.addEventListener('click', function (e) {
-      if (moved > 6) { e.preventDefault(); e.stopPropagation(); }
-    }, true);
-
-    /* Wheel and trackpad. Horizontal intent only — a vertical wheel over the
-       strip must still scroll the page, or the carousel becomes a trap. */
-    var wheelTimer = null, wheeling = false;
-    vp.addEventListener('wheel', function (e) {
-      var dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : 0;
-      if (!dx) return;
-      manualStop();
-      e.preventDefault();
-      /* `wheeling` is what makes a flick accumulate. Without it every event in
-         the burst recomputes from the index, which has not moved yet, so a
-         hundred events travel exactly as far as one. */
-      if (!wheeling && !dragging) { wheeling = true; freeX = -i * step(); }
-      freeX = clampFree(freeX - dx);
-      place(freeX, false);
-      clearTimeout(wheelTimer);
-      wheelTimer = setTimeout(function () { wheeling = false; settle(); }, 110);
-    }, { passive: false });
-
-    window.addEventListener('resize', function () { go(i); });
-    go(0);
-
-    /* ── SR-290, revised at SR-368 · auto-advance ─────────────────────
-       js/saferise-system.js's marketing carousel does autoplay too, but as
-       continuous sub-pixel drift with a cloned-track loop — a different
-       mechanism for a different markup contract, not one this
-       carousel-in-place step model can reuse. Two carousels, reported as
-       such (PASS-track-page-quality.md §3) rather than merged: the
-       markup and the movement model genuinely differ.
-
-       One card at a time, not one page (go(i +/- per()), the arrows'
-       stride) — advance() always steps `i` by exactly 1, wrapping to 0
-       once maxIndex() is passed so it loops rather than stalling at the
-       end. go()/place() never call .focus(), so a tick can never steal
-       keyboard focus, satisfied by construction rather than by a guard.
-
-       SR-368 changes two things SR-290 got wrong against this pass's own
-       brief:
-
-       1. Permanent stop on manual interaction. SR-290 only paused while
-          hovering or focused, resuming the moment the pointer left — an
-          autoplaying strip a member had just told it to stop was true
-          again a second later. manualStop() now latches; nothing turns
-          the timer back on afterward, in this page life. Wired into the
-          three arrow/dot buttons, drag start and wheel — everything that
-          counts as "the member drove this rail themselves."
-
-       2. Reduced motion means no autoplay, full stop. SR-290 deliberately
-          left this ticking under reduced motion, reasoning from Phase E's
-          removal of the blanket transition-killer — but that removal was
-          about transition *speed*, not about whether a carousel is
-          allowed to move itself without being asked. Autoplaying content
-          is its own, separate WCAG concern (2.2.2) from motion speed, and
-          this pass's brief asks for it explicitly. Checked once, at
-          autoOn() — the strip itself and its .45s sliding transition
-          still work exactly as before for member-driven navigation. */
-    var AUTO_MS = 7000;
-    var carousel = document.getElementById('carousel');
-    var autoTimer = null, hoverPaused = false, focusPaused = false, stopped = false, offPaused = false;
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    function advance() {
-      var ni = i + 1;
-      if (ni > maxIndex()) ni = 0;
-      go(ni);
-    }
-    function manualStop() {
-      stopped = true;
-      syncAuto();
-    }
-    function autoOn() {
-      return !stopped && !reduceMotion && !hoverPaused && !focusPaused && !offPaused &&
-        !document.hidden && maxIndex() > 0;
-    }
-    function syncAuto() {
-      if (autoOn()) {
-        if (!autoTimer) autoTimer = setInterval(advance, AUTO_MS);
-      } else if (autoTimer) {
-        clearInterval(autoTimer);
-        autoTimer = null;
-      }
-    }
-    if (carousel) {
-      carousel.addEventListener('mouseenter', function () { hoverPaused = true; syncAuto(); });
-      carousel.addEventListener('mouseleave', function () { hoverPaused = false; syncAuto(); });
-      carousel.addEventListener('focusin', function () { focusPaused = true; syncAuto(); });
-      carousel.addEventListener('focusout', function (e) {
-        if (carousel.contains(e.relatedTarget)) return;
-        focusPaused = false; syncAuto();
-      });
-      /* SR-379 (PASS-reader-and-protocol-pages.md Part B) · the one real gap
-         against that brief's B2 — nothing here paused while the carousel was
-         scrolled out of view. offPaused starts false (matching hoverPaused/
-         focusPaused's own optimistic default before their first real event)
-         and self-corrects the moment IntersectionObserver's first callback
-         fires, asynchronously, shortly after observe() below. */
-      if ('IntersectionObserver' in window) {
-        var carouselIO = new IntersectionObserver(function (entries) {
-          offPaused = !entries[entries.length - 1].isIntersecting;
-          syncAuto();
-        }, { threshold: 0.1 });
-        carouselIO.observe(carousel);
-      }
-    }
-    document.addEventListener('visibilitychange', syncAuto);
-    syncAuto();
   }
 
   /* SR-368 (PASS-track-page-quality.md §6) · dismissible sticky CTA.
@@ -795,15 +422,8 @@
     };
   }
 
-  function initFaq() {
-    document.querySelectorAll('.sr-tp-faqq').forEach(function (b) {
-      b.onclick = function () {
-        var open = b.getAttribute('aria-expanded') === 'true';
-        b.setAttribute('aria-expanded', open ? 'false' : 'true');
-        b.parentElement.classList.toggle('sr-tp-on', !open);
-      };
-    });
-  }
+  /* PASS-track-landing-pages.md · initFaq() removed — rFaq() now emits
+     native <details>/<summary>, which needs no open/close script at all. */
 
   /* ── SR-277 · section reveal, one system for all three tracks ───────
      Typography timing (eyebrow/heading/body/next-block: 0/100/200/300ms)
@@ -818,10 +438,18 @@
      Card groups get the platform's EXISTING .sr-stagger/.sr-in pair
      (css/saferise-system.css line ~178) rather than a new mechanism —
      the same peer-index stagger index.html's grids already use. This
-     file cannot load js/saferise-system.js to reuse its initStagger()
-     directly (that module also owns the marketing-page auto-carousel and
-     scroll rail, neither of which belongs on a track page), so the small
-     amount of glue is repeated here rather than pulling in the whole file.
+     function still builds its own glue rather than calling
+     js/saferise-system.js's initStagger() directly: that function's own
+     selector list (.sr-covers, .proto-grid, etc.) doesn't match anything
+     on this page, so calling it would just be an inert no-op standing in
+     for real code.
+
+     PASS-track-landing-pages.md · js/saferise-system.js IS now loaded on
+     this page — for its carousel (see initCarousel() there, revived per
+     that pass), not for initStagger()/initRail(). Both of those are
+     confirmed harmless here: initStagger()'s selectors don't match this
+     page's markup, and initRail() only builds when [data-sr-rail] exists,
+     which this page never sets.
 
      SR-343 · this reveal fade is no longer the diagrams' only motion —
      initDiagramMotion() below now runs their own internal animation
@@ -830,13 +458,16 @@
      is reversed, not this comment's original reasoning: nothing here
      still targets an <img> or a hero photograph, which stays the boundary
      between diagram motion and image motion. */
-  var CARD_GROUPS = ['.sr-tp-cartrack', '.sr-tp-costgrid', '.sr-tp-rangecols',
-                      '.sr-tp-sixgrid', '.sr-tp-inc'];
+  /* PASS-track-landing-pages.md · updated for the rebuilt sections — the
+     rail track, the outcomes shift-pairs, the included-grid and the method
+     steps replace the retired cost/range/six-areas grids they listed before. */
+  var CARD_GROUPS = ['.sr-tp-railtrack2', '.sr-tp-shifts2', '.sr-tp-incgrid2', '.sr-tp-steps2'];
   function initReveal() {
     var page = document.getElementById('page');
     if (!page) return;
     var sections = [].slice.call(page.children).filter(function (el) {
-      return el.classList.contains('sr-tp-hero') || el.classList.contains('sr-tp-band');
+      return el.classList.contains('sr-tp-hero') || el.classList.contains('sr-tp-band') ||
+             el.classList.contains('sr-tp-hero2') || el.classList.contains('sr-tp-statesband2');
     });
     if (!sections.length) return;
 
@@ -933,20 +564,28 @@
     /* SR-343 · the renderer emits the class, css/saferise-system.css owns what
        it does — --tp-accent for the two shared diagrams. */
     document.body.classList.add('sr-tp-t' + id);
+    /* PASS-track-landing-pages.md §1 · section order, identical across all
+       three tracks: hero, protocols, method, outcomes, included (present in
+       all three approved mockups though not one of the brief's own 8 named
+       sections — see the pass report), states band, proof, price, FAQ. */
     document.getElementById('page').innerHTML =
-      rHero(t) + rProtocols(t) + rCost(t) + rRange(t) + rInsight() +
-      rFourSteps() + rChange(t) + rResources(t) + rProgress() + rPrice(t) +
-      rFaq(t) + rScope();
+      rHero(t) + rProtocols(t) + rMethod(t) + rOutcomes(t) + rIncluded(t) +
+      rStates(t) + rProof(t) + rPrice(t) + rFaq(t);
 
+    var free = t.price === PRICING.t1;
     var sp = document.getElementById('stickyprice');
-    if (sp) sp.textContent = 'Get Started — ' + t.price.amount + t.price.per.replace('/ ', '/');
+    if (sp) sp.textContent = free ? 'Start free' : 'Start';
     var sl = document.getElementById('stickyline');
-    if (sl) sl.textContent = t.stickyLine || '';
+    if (sl) sl.textContent = LANDING_COPY[id].stickyText;
     document.title = 'SafeRise — ' + t.name;
     initStickyDismiss(id);
 
-    initCarousel();
-    initFaq();
+    /* PASS-track-landing-pages.md §4 · the rail's carousel is
+       js/saferise-system.js's own initCarousel(), revived (see that file)
+       rather than this file's old #carViewport-based implementation, which
+       is retired along with the markup it depended on. That file's boot()
+       runs on its own DOMContentLoaded/MutationObserver, so no call is
+       needed here — the rail already carries data-sr-carousel. */
     initReveal();
     initDiagramMotion();
     window.SR_TRACK_MISSING = MISSING;
