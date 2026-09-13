@@ -589,7 +589,10 @@ body.reading #srLibrary{margin-top:22px}
   color-scheme:dark}
 .sr-proto-backbar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:20px var(--pad) 16px}
 .sr-theme--bar{margin-left:auto}
-.sr-proto-allres{margin-left:18px}
+/* SR-381 (PASS-live-site-defects.md Part F) · Dashboard/Protocol stacked,
+   not opposite ends of one row -- see the HTML comment at this markup. */
+.sr-proto-backstack{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.sr-proto-allres{margin-left:0;padding-bottom:0}
 .sr-proto-allres[hidden]{display:none!important}
 
 /* ══════════ CLEARING + WHAT'S NEXT — one enclosure, two weights ══════════ */

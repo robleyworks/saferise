@@ -613,6 +613,42 @@ textarea{min-height:100px}
 .sr-head .lede{margin:0 0 12px}
 .sr-body p{font-size:15px;line-height:1.78;color:var(--ink);max-width:62ch;margin-bottom:17px}
 .sr-body p.sr-tight{margin-bottom:6px}
+
+/* ══ SR-381 (PASS-live-site-defects.md Part D) · editorial component map ══
+   sr-rr- surface code, claimed in CLAUDE.md's table. This is the real
+   resource reader (see the JS comment above) -- §0 found index.html's
+   sr-rd- version is never reached from any live navigation path. */
+.sr-body>:first-child{margin-top:0!important}
+.sr-body p.sr-rr-opening{font-size:1.5rem;line-height:1.42;font-weight:300;color:var(--text);
+  margin:0 0 8px;letter-spacing:-.005em;position:relative;padding-top:18px;max-width:62ch}
+.sr-body p.sr-rr-opening:before{content:"";position:absolute;top:0;left:0;width:28px;height:1px;
+  background:var(--gold);opacity:.85}
+.sr-body h4.sr-rr-section,.sr-body h5.sr-rr-section{font-weight:400;line-height:1.2;
+  color:var(--text);margin:44px 0 18px;position:relative;padding-top:18px}
+.sr-body h4.sr-rr-section{font-size:1.92rem}
+.sr-body h5.sr-rr-section{font-size:1.4rem;margin-top:30px}
+.sr-body .sr-rr-section:before{content:"";position:absolute;top:0;left:0;width:28px;height:1px;
+  background:var(--gold);opacity:.85}
+.sr-body blockquote.sr-rr-script{border-left:2px solid var(--gold);padding:2px 0 2px 22px;margin:0 0 18px}
+.sr-body blockquote.sr-rr-script p{font-size:1.2rem;font-style:italic;color:var(--text);
+  line-height:1.6;margin:0}
+.sr-body blockquote.sr-rr-script+blockquote.sr-rr-script{margin-top:22px}
+.sr-body ul.sr-rr-signs{list-style:none;padding:0;margin:0 0 17px;display:grid;gap:1px;
+  background:var(--hair);border-block:1px solid var(--hair);max-width:62ch}
+.sr-body ul.sr-rr-signs li{background:var(--bg,#08080C);padding:13px 22px;font-size:15px;
+  line-height:1.5;color:var(--ink)}
+.sr-body p.sr-rr-close{font-size:1.2rem;line-height:1.55;font-style:italic;color:var(--text);
+  margin:44px 0 0;padding-top:26px;border-top:1px solid var(--hair);max-width:62ch}
+
+/* D4 · section rail — horizontal sticky strip, same adaptation as
+   index.html's: no spare side column in this layout either. */
+.sr-rr-rail{position:sticky;top:0;z-index:2;display:flex;align-items:flex-end;gap:9px;
+  height:26px;padding:7px 0 5px;margin:0 0 8px;background:var(--card);border-bottom:1px solid var(--hair)}
+.sr-rr-railitem{appearance:none;-webkit-appearance:none;border:0;padding:0;cursor:pointer;
+  width:13px;height:2px;background:var(--hair);transition:background .3s ease,width .3s ease}
+.sr-rr-railitem--h5{width:8px;margin-left:7px}
+.sr-rr-railitem.on{background:var(--gold);width:22px}
+.sr-rr-railitem:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
 .sr-close{margin-top:38px;padding:26px 28px;border:1px solid rgba(255,255,255,.045);border-radius:9px;
   background:var(--recess)}
 .sr-close .eyebrow{display:block;margin-bottom:11px;font-size:11px}
@@ -1124,6 +1160,79 @@ function renderRail(){
   list.innerHTML=html;
 }
 
+/* SR-381 (PASS-live-site-defects.md Part D) · derive-don't-rewrite editorial
+   renderer, same mapping as SR-379's (index.html), adapted for this page's
+   own single-string r.body (not an array) and its own --ink/--gold/--muted
+   tokens -- no --rd- indirection needed here, this file already has those.
+   Classes only, added to markup r.body already contains; no change to any
+   resource's own text. Surface code sr-rr- (Resource Reader) -- distinct
+   from sr-rd-, which is index.html's separate, unreached reader. */
+function enhanceResourceBody(bodyEl){
+  if (!bodyEl) return [];
+  var kids = Array.prototype.slice.call(bodyEl.children);
+  var ledes = kids.filter(function(el){ return el.tagName === 'P' && el.classList.contains('sr-lede'); });
+  var headings = [];
+  var hCount = 0;
+  kids.forEach(function(el){
+    var tag = el.tagName;
+    if (tag === 'H4' || tag === 'H5') {
+      hCount++;
+      el.classList.add('sr-rr-section');
+      var id = 'rr-h-' + hCount;
+      el.id = id;
+      headings.push({ id: id, level: (tag === 'H4' ? 4 : 5), text: el.textContent });
+    } else if (tag === 'BLOCKQUOTE') {
+      el.classList.add('sr-rr-script');
+    } else if (tag === 'UL') {
+      el.classList.add('sr-rr-signs');
+    } else if (tag === 'P' && el.classList.contains('sr-lede')) {
+      if (el === ledes[0]) el.classList.add('sr-rr-opening');
+      else if (ledes.length > 1 && el === ledes[ledes.length - 1]) el.classList.add('sr-rr-close');
+      else el.classList.add('sr-rr-prose');
+    } else if (el.classList.contains('sr-lead')) {
+      /* real match is a <div class="sr-lead">, this page's own boxed callout
+         (styled elsewhere already) -- left unclassified, same reasoning as
+         index.html's port: adding an indented-hairline look on top would
+         double up two treatments on already-correct content. */
+    } else if (tag === 'P') {
+      el.classList.add('sr-rr-prose');
+    }
+  });
+  var rail = document.getElementById('rrRail');
+  if (rail) rail.remove();
+  var h4Count = headings.filter(function(h){ return h.level === 4; }).length;
+  if (h4Count >= 3) {
+    var nav = document.createElement('nav');
+    nav.className = 'sr-rr-rail';
+    nav.id = 'rrRail';
+    nav.setAttribute('aria-label', 'Sections in this resource');
+    nav.innerHTML = headings.map(function(h){
+      return '<button type="button" class="sr-rr-railitem' + (h.level === 5 ? ' sr-rr-railitem--h5' : '') +
+        '" data-rr-target="' + h.id + '" aria-label="' + h.text.replace(/"/g, '&quot;') + '"></button>';
+    }).join('');
+    bodyEl.parentNode.insertBefore(nav, bodyEl);
+    var items = Array.prototype.slice.call(nav.querySelectorAll('.sr-rr-railitem'));
+    var targets = items.map(function(b){ return document.getElementById(b.getAttribute('data-rr-target')); });
+    items.forEach(function(b, idx){
+      b.addEventListener('click', function(){
+        var t = targets[idx];
+        if (t) t.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      });
+    });
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          var idx = targets.indexOf(entry.target);
+          if (idx === -1) return;
+          items[idx].classList.toggle('on', entry.isIntersecting);
+        });
+      }, { rootMargin: '-15% 0px -70% 0px' });
+      targets.forEach(function(t){ if (t) io.observe(t); });
+    }
+  }
+  return headings;
+}
+
 function renderMain(){
   var v=visible();
   if(current >= v.length) current = v.length - 1;
@@ -1141,6 +1250,14 @@ function renderMain(){
     window.SafeRiseDecision.render(document.getElementById('rbody'), r, 't' + ACTIVE_TRACK + '-p' + ACTIVE_PROTOCOL);
   } else {
     document.getElementById('rbody').innerHTML=r.body;
+    /* SR-381 (PASS-live-site-defects.md Part D) · THIS is the page a member
+       actually reaches -- dashboard.html's loadResource() iframes
+       resource.html, never index.html. SR-379's derive-render
+       (enhanceReaderBody) was built on index.html's #reader-overlay, which
+       no live navigation path ever opens; ported here, onto the real
+       target, per SR-381's own §0 finding. Same technique: classes only,
+       no change to r.body's own markup. */
+    enhanceResourceBody(document.getElementById('rbody'));
   }
   /* SR-191 · the rail names the resource, it no longer counts it. The test is
      what the string counts: a count of the member's position or progress is

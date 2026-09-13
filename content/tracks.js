@@ -34,19 +34,36 @@
    Tracks 01–02 and €39 buys all three — these are not three separate
    products, and a surface that prints the price without the inclusion makes
    the top tier look expensive instead of obvious. */
+/* SR-381 (PASS-live-site-defects.md Part O) \u00B7 13 September 2026 \u2014 the August
+   cumulative ladder above (t1 \u20AC19, t2 \u20AC29 = t1+t2, t3 \u20AC39 = all three) is
+   SUPERSEDED. Confirmed live on Relationship Healing as "\u20AC29 a month" \u2014
+   Part O2's finding. The 13 September decision: Track 01 is free with an
+   account; Tracks 02 and 03 are sold together as one subscription, not as
+   separate per-track tiers, at \u20AC19/month or \u20AC190/year. t1.standard below is
+   left exactly as SR-124/SR-308 left it \u2014 historical evidence of the ended
+   introductory promotion, not the current price. Do not reintroduce a
+   separate price for t2 vs t3; there is one combined price for
+   "everything else," and the next pass that touches this file should read
+   this comment before restoring the ladder. */
 var PRICING = {
-  t1:      { amount: '\u20AC19',  per: '/ month', words: 'Nineteen euros a month.',
+  t1:      { amount: 'Free',  per: ', with an account', words: 'Free, with an account.',
              introductory: false,
              standard: { amount: '\u20AC19', per: '/ month', words: 'Nineteen euros a month.' },
              includes: ['t1'] },
-  t2:      { amount: '\u20AC29',  per: '/ month', words: 'Twenty-nine euros a month.',
-             includes: ['t1', 't2'] },
-  t3:      { amount: '\u20AC39',  per: '/ month', words: 'Thirty-nine euros a month.',
+  t2:      { amount: '\u20AC19',  per: '/ month', annual: '\u20AC190 / year', words: 'Nineteen euros a month, or one hundred and ninety a year.',
+             includes: ['t1', 't2', 't3'] },
+  t3:      { amount: '\u20AC19',  per: '/ month', annual: '\u20AC190 / year', words: 'Nineteen euros a month, or one hundred and ninety a year.',
              includes: ['t1', 't2', 't3'] },
   /* SR-091 · there was one 'workshop' key holding €29 — Track 03's monthly
      price, never a workshop price. Workshops are priced per format, so there
      are two keys and the block reads 'from' the lower one. */
-  workshopPersonal:     { amount: '\u20AC29',  per: 'per person' },
+  /* SR-381 (PASS-live-site-defects.md Part O) -- was '\u20AC29'. O1's price
+     book states "Workshops | \u20AC39 per person," a single figure.
+     workshopRelationship (the couples workshop, \u20AC39/couple, below) is NOT
+     addressed by O1 at all -- left unchanged, reported as ambiguous rather
+     than guessed at. Whether the couples workshop should also collapse into
+     this same \u20AC39/person rate is Andre's call, not assumed here. */
+  workshopPersonal:     { amount: '\u20AC39',  per: 'per person' },
   /* SR-308 · founder-confirmed 28 Aug 2026: €49 -> €39 per couple. */
   workshopRelationship: { amount: '\u20AC39',  per: 'per couple' },
   /* SR-136/SR-137 · there is no `premium` key. It held \u20AC275 / session for the
@@ -60,7 +77,10 @@ var PRICING = {
      the same two figures as literals — sold from copies rather than from the record.
      Both now derive. Keep them. */
   premium1:{ amount: '\u20AC129', per: 'per hour' },
-  premium3:{ amount: '\u20AC299', per: 'for three sessions' }
+  /* SR-381 (PASS-live-site-defects.md Part O) \u00B7 was '\u20AC299' -- live-sessions.html
+     hardcoded the same stale figure (O2's confirmed finding), corrected there
+     too. Settled pack price is \u20AC349 for three. */
+  premium3:{ amount: '\u20AC349', per: 'for three sessions' }
 };
 
 /* ── SHARED · identical on every track. Edited here, never per track. ── */
@@ -297,12 +317,11 @@ var TRACKS = {
     ],
     /* SR-126 · the introductory line comes first because it qualifies the number
        directly above it. All three segments are conditions of sale. */
-    priceNote: 'Introductory rate \u2014 yours for as long as you stay subscribed<br>Cancel anytime \u00B7 keep everything you\u2019ve written<br>Relationship and Professional build on this track \u2014 Track 01 is the prerequisite, not the cheap tier.',
-    /* SR-368 (PASS-track-page-quality.md §6) · was 'Your SafeRise is ready
-       when you are.' — a slogan next to a price button already stating the
-       number. Replaced with the number itself, drawn from this track's own
-       priceNote fact ('Cancel anytime') rather than invented. */
-    stickyLine: '€19 a month, cancel anytime.'
+    priceNote: 'Free for as long as you have an account \u2014 no trial, no countdown<br>Relationship and Professional build on this track \u00B7 \u20AC19 a month, or \u20AC190 a year, for both together.',
+    /* SR-381 (PASS-live-site-defects.md Part O) · was '€19 a month, cancel
+       anytime' -- Track 01 is free, not €19. The SR-126/SR-368 comments
+       above described a paid entry tier that no longer applies. */
+    stickyLine: 'Free, with an account.'
   },
 
   2: {
@@ -433,17 +452,17 @@ var TRACKS = {
       close: 'Fewer fights, faster repair, and time together that stops costing you.' },
 
     priceList: [
-      'All twenty protocols \u2014 Relationship Healing and Personal Transformation',
+      'All thirty protocols \u2014 Relationship Healing, Professional Performance and Personal Transformation',
       'Solo and shared versions of every guided session',
       'Invitation to Repair and Disclosure scripts throughout',
       'Journal and progress tracking, private to you \u2014 not shared with a partner',
       'New protocols and resources, included as the tracks grow'
     ],
-    priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Access is cumulative \u2014 Relationship Healing includes the whole of Personal Transformation.',
-    /* SR-368 (PASS-track-page-quality.md §6) · same reasoning as t1's
-       stickyLine above — the cumulative-access fact already in this track's
-       own priceNote, condensed rather than a new slogan. */
-    stickyLine: '€29 a month, cancel anytime — includes Personal Transformation in full.'
+    priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>One subscription \u2014 Relationship Healing and Professional Performance together, plus Personal Transformation, which is free.',
+    /* SR-381 (PASS-live-site-defects.md Part O) · was '€29 a month' -- the
+       August per-track ladder. Tracks 02 and 03 are now one €19/month
+       subscription, confirmed live-wrong in the brief that raised this. */
+    stickyLine: '€19 a month, cancel anytime — includes Professional Performance too.'
   },
 
   3: {
@@ -622,9 +641,10 @@ var TRACKS = {
       'New protocols and resources, included as the tracks grow'
     ],
     priceNote: 'Cancel anytime \u00B7 keep everything you\u2019ve written<br>Access is cumulative \u2014 Professional includes Relationship Healing and Personal Transformation in full.',
-    /* SR-368 (PASS-track-page-quality.md §6) · same reasoning as t1's
-       stickyLine above. */
-    stickyLine: '€39 a month, cancel anytime — includes both tracks before it.'
+    /* SR-381 (PASS-live-site-defects.md Part O) · was '€39 a month' -- the
+       August per-track ladder, now superseded (see the PRICING comment
+       above). Tracks 02 and 03 are one €19/month subscription. */
+    stickyLine: '€19 a month, cancel anytime — includes Relationship Healing too.'
   },
 
 

@@ -131,10 +131,11 @@
             <h1>Welcome back, Andre.</h1>
             <p class="sr-dash-hero-sub">This is your space to understand your patterns, regulate your system, and become the person you choose to be.</p>
           </div>
-          <div class="sr-dash-quote">
-            <p>Meditation quiets the noise.<br>Mindfulness shows you what was underneath it.<br>
-               What you do with that attention is who you become.</p>
-          </div>
+          <!-- SR-381 (PASS-live-site-defects.md Part H) · text removed, container
+               kept -- .sr-dash-quote's own padding (css/saferise-dashboard.css)
+               holds its space regardless of content, so the banner does not
+               collapse without it. -->
+          <div class="sr-dash-quote"></div>
         </article>
       </div>
 
@@ -558,19 +559,25 @@
 <section class="sr-proto" id="srProto" aria-label="Protocol">
   <div class="shell">
     <div class="sr-proto-backbar">
-      <button class="sr-proto-back" id="srProtoBack">
-        <svg width="15" height="10" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 6H2M7 1L2 6l5 5"/></svg>
-        Back to the dashboard
-      </button>
+      <!-- SR-381 (PASS-live-site-defects.md Part F) · was one flex row with
+           srProtoBack and srProtoAll at opposite ends, read as unrelated
+           controls rather than a stack. Grouped in .sr-proto-backstack,
+           Dashboard first, Protocol beneath, both left-aligned. -->
+      <div class="sr-proto-backstack">
+        <button class="sr-proto-back" id="srProtoBack">
+          <svg width="15" height="10" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 6H2M7 1L2 6l5 5"/></svg>
+          Back to the dashboard
+        </button>
+        <button class="sr-proto-allres" id="srProtoAll" hidden>
+          <svg width="14" height="10" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 6H2M7 1L2 6l5 5"/></svg>
+          Back to the protocol
+        </button>
+      </div>
       <nav class="sr-proto-crumb" id="srProtoCrumb"></nav>
       <div class="sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
         <button data-theme="midnight" class="on">Midnight</button>
         <button data-theme="sunrise">Sunrise</button>
       </div>
-      <button class="sr-proto-allres" id="srProtoAll" hidden>
-        <svg width="14" height="10" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 6H2M7 1L2 6l5 5"/></svg>
-        Back to the protocol
-      </button>
     </div>
     <iframe class="sr-proto-frame" id="srProtoFrame" title="Protocol" src="about:blank" scrolling="no"></iframe>
   </div>

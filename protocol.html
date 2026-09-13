@@ -145,6 +145,13 @@ h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
 .sechead .lede{margin:0}
 .sechead--lead{margin-bottom:30px;max-width:740px}
 .sectitle{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(28px,3.8vw,42px);line-height:1.15;margin-bottom:14px}
+/* SR-381 (PASS-live-site-defects.md Part E) · .sectitle is shared with
+   resource.html's own title -- scoped here to #pp-title only, not changed
+   globally. Was clamp(28px,3.8vw,42px), effectively ~42px on most viewports
+   (3.8vw clears 42px above ~1105px width) inside a banner whose surrounding
+   copy runs 13-19px; now clamp(22px,2.6vw,30px), reading as this page's
+   title rather than a banner headline. */
+#pp-title.sectitle{font-size:clamp(22px,2.6vw,30px)}
 .lede--lead{font-size:19px;color:#CFC7B6;max-width:600px;margin-bottom:16px}
 .subline{font-size:14px;color:var(--text3);letter-spacing:.01em}
 
@@ -1062,12 +1069,12 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
     <div class="sr-book-offer">
       <div class="sr-book-head">
         <p class="sr-book-name">Workshops</p>
-        <p class="sr-book-price">from €29</p>
+        <p class="sr-book-price">from €39</p>
       </div>
       <p class="sr-book-body">Run the protocol in a room with other people, facilitated live.</p>
       <ul class="sr-book-list">
         <li>One hour, online or in person</li>
-        <li>Personal €29 · Relationship €39 per couple</li>
+        <li>Personal €39 · Relationship €39 per couple</li>
         <li>Recording shared with attendees</li>
       </ul>
       <div class="sr-book-act">

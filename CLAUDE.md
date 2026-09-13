@@ -169,6 +169,7 @@ component. A generic class name is a defect, not a style preference.**
 | `sr-dc-` | The Decision reflection (`resource.html`) — SR-373 |
 | `sr-rd-` | The editorial reader (`index.html`'s `#reader-overlay`) — SR-379 |
 | `sr-pr-` | Pricing pages (`pricing.html`, `for-organisations.html`) — SR-380 |
+| `sr-rr-` | The real resource reader (`resource.html`'s `#rbody`) — SR-381. Not `sr-rd-` (`index.html`'s reader), which no live navigation reaches — see §0 of PASS-live-site-defects.md |
 
 **Claim a new code in this table before using it.** Two surfaces sharing a code
 is how `.sr-mi-card` ended up governing two pages that must now change
