@@ -13834,6 +13834,287 @@ already committed).
 *Status:* closed. **Not pushed.**
 *Raised and fixed:* 9 Sep 2026
 
+## SR-378 · loudness target resolved to -16 stereo, fourth bed added
+
+Runs `pass/PASS-audio-spec.md`. Backfilled here from the commit
+(`750330c`, pushed) — this entry was never written at the time.
+
+**Part A** — created `docs/LOUDNESS-SPEC.md`: delivery is stereo,
+-16.0 LUFS integrated / -1.0 dBTP, with the mono/stereo reasoning
+recorded so the -19 figure already in project records isn't
+re-litigated. LUFS cap (9 LU) and bed offset (18 dB) marked
+provisional. Searched every tracked file for "-19 LUFS" — all 12
+occurrences found are protected or historical (this register itself,
+under SR-247's own already-correct reasoning; eight dated
+`docs/tracker-v*.html` snapshots; a dated demo plan describing a
+chain actually used at the time; a superseded handover doc) — none
+edited.
+
+**Part B** — `pass/BED-RHYTHM-SPEC.md` promoted from proposal to rule,
+adopted 12 Sep 2026. Its "Loudness target conflict" section removed,
+replaced with a pointer to `docs/LOUDNESS-SPEC.md`. Fourth bed added
+(Clearing — no breathing cycle, keyed to `t0-00`, no new state name
+introduced given an open Steady/t3-01 naming collision).
+
+**DIFFERS, reported:** the brief expected this file under `docs/`; it
+is actually in `pass/`, which is wholesale `.gitignore`d — edits are
+real on disk but the file can't be committed from that location (the
+same issue SR-377 hit with `pass/webp-review.html`). Not moved, since
+no move was instructed.
+
+**Part C — skipped, AMBIGUOUS.** `specs/check.py` doesn't exist
+anywhere in the repo; the only checker-shaped script
+(`tools/check.py`) is an unrelated line-wrap/widow checker with no
+per-term exemption mechanism to attach to. The exception this part
+would have added is already recorded in
+`docs/PLATFORM-DESCRIPTION.md:240-249`.
+
+Nothing in this pass has a runtime surface; nothing reported as
+browser-verified.
+
+**Files touched:** `docs/LOUDNESS-SPEC.md` (new). Edited on disk, not
+committable: `pass/BED-RHYTHM-SPEC.md` (`.gitignore`d).
+
+*Status:* closed. **Pushed** (confirmed on `main`).
+*Raised and fixed:* 12 Sep 2026
+
+## SR-379 · protocol cover art fixed, carousel off-screen pause, editorial reader built
+
+Runs `pass/PASS-reader-and-protocol-pages.md`. Backfilled here from
+the commit (`ec6f1b1`, pushed) — this entry was never written at the
+time. **This commit also carries part of SR-380's work, swept in by
+accident — see SR-380's entry below for the full account; this entry
+covers only what this pass itself was scoped to do.**
+
+**Part A** — the protocol page's banner and "Go Deeper" header both
+resolved from two separate bugs (a hardcoded CSS `url()`, and a script
+copying the banner's stale computed background onto the header before
+render), not one. Replaced by one function, `applyProtocolCovers()`,
+calling the same cover resolver the carousels already use
+(`SafeRiseCover.coverPath`, exported from `js/saferise-track.js`)
+rather than adding a third copy of the track→cover mapping. Verified
+live across four protocols and two tracks plus the default load — all
+resolve correctly; dashboard's own Library carousel confirmed
+untouched.
+
+**Part B** — checked `js/saferise-track.js`'s existing carousel
+(SR-368) per the brief's own instruction. It already matched the
+brief's spec almost exactly (`AUTO_MS 7000`, hover/focus/tab-hidden
+pause, reduced motion disables it entirely); the one real gap — no
+off-screen pause — was added via `IntersectionObserver`. Verified live:
+advances when idle and in view, stops completely off-screen, resumes
+on return, still pauses on hover.
+
+**DIFFERS, not applied:** the brief asked that manual interaction
+"wait a full interval before resuming" rather than stop permanently.
+SR-368's `manualStop()` latches permanently for the page's life — a
+deliberate, previously recorded correction of the earlier SR-290
+behaviour this brief was asking to partially restore. Left as SR-368
+shipped it, per the standing rule that fix-register entries outrank a
+new brief; flagged rather than silently reversed.
+
+**Part C** — already done by SR-373, an unrelated prior pass;
+confirmed unchanged.
+
+**Part D** — the real target is `index.html`'s inline reader
+(`openReader`, `READER_PROTOCOLS`); the file named in the brief
+doesn't exist. Fixed the actual fault (an extra `<p>` wrapper around
+already-block-level entries, producing invalid nesting) and added
+`enhanceReaderBody()` (classifies rendered content: sections, script
+quotes, signs, opening/prose/close) and `buildSectionRail()`/
+`initSectionRail()` (a rail gated on ≥3 headings, adapted from the
+mockup's vertical column to a horizontal sticky strip — the modal has
+no spare side column). New surface code `sr-rd-` claimed in
+`CLAUDE.md`. No resource text touched — confirmed by diffing
+`content/t1-resources.js`.
+
+**DIFFERS, found while verifying:** "The Decision" is not a prose
+resource at all — it's a separate, fully-built interactive widget that
+replaces the reader body entirely after render, the same category as
+the existing Safety Score/Protocol Guide/Founder Video kinds. Not
+retrofitted with the new rail; flagged rather than guessed at.
+
+**Part E** — three of the four illustrations generated
+(`pass/art.py`) and inlined into `content/t1-resources.js`, at exact
+paragraph-boundary matches; the fourth withheld per instruction. Both
+illustrations' second placement (Cue Card, Safe Practice) not
+duplicated in, for two different reasons (a third rendering pipeline
+never verified against this pass's CSS; a real ~205KB bandwidth cost
+the brief's framing didn't anticipate) — both reported rather than
+guessed past.
+
+**Critical finding, carried forward into SR-381:** `index.html`'s
+reader, however correctly built, sits behind `#reader-overlay`, which
+**no live navigation path ever reaches** — `dashboard.html`'s
+`loadResource()` iframes `resource.html`, never `index.html`. This
+pass's reader work is real and functioning but shipped onto the wrong
+page; SR-381 later ports the same technique onto `resource.html`
+itself.
+
+Verified live via a scratchpad mirror (`launch.json` temporarily
+repointed, restored before commit) — the only route available at the
+time; not yet checked against production.
+
+**Files touched:** `CLAUDE.md`, `content/t1-resources.js`,
+`css/saferise-system.css`, `index.html`, `js/saferise-track.js`,
+`protocol.html`.
+
+*Status:* closed. **Pushed** (confirmed on `main`).
+*Raised and fixed:* 13 Sep 2026
+
+## SR-380 · pricing pages, contact address, type-scale — no clean commit of its own
+
+Runs `pass/PASS-pricing-contact-typescale.md`. Backfilled here from
+git log and diff inspection, not from a commit message, because none
+exists: **this pass's work was never committed as its own commit.**
+Record of the irregular landing, not a rewrite of history — nothing
+below moves or re-commits anything.
+
+**What the pass did:** built `pricing.html` and `for-organisations.html`
+from `pass/PRICING-PAGE-COPY.md` verbatim, as a sequence of blocks (not
+a comparison grid, which the brief's own A3/O5 prohibit), under a
+newly claimed `sr-pr-` surface code. Confirmed the contact address was
+already correct (fixed earlier, SR-358) — reported rather than
+re-fixed. Raised the type scale across `resource.html`, `protocol.html`
+and `css/saferise-dashboard.css` (`--content-copy`/`--micro-label` root
+tokens, and the `--bg`/`--card`/`--hair`/`--gold`/`--text`/`--muted`
+palette tokens, raised together) — a floor of 14px for body copy,
+without overwriting the reader's own type scale SR-379 had just set
+(A3's own instruction).
+
+**A5, reported not resolved, per its own instruction:**
+`for-organisations.html`'s privacy-commitment paragraph ("Nobody sees
+what an employee opens... you never get names") was withheld rather
+than published — a dated comment left in the file explains why
+(`supabase/migrations/0001_auth_entitlements.sql`, not yet applied,
+already designs `usage_events` with a member-identifying foreign key
+and no organisation/seat concept at all; the page cannot currently
+back that promise). The comment is still in the file, unresolved, as
+instructed.
+
+**The irregular landing.** A `.git/index` corruption hit mid-session
+during SR-379's own commit retries (this session's four concurrent git
+operations were the cause, per Andre's own diagnosis at the time).
+Recovering it (`git read-tree HEAD`) meant this pass's own edits, made
+alongside SR-379's, got swept into the next `git add`/commit pass by
+file path rather than by intent:
+
+- `protocol.html` and `css/saferise-system.css`'s share of this pass's
+  type-scale edits landed inside `ec6f1b1`, committed under the
+  message "SR-379 protocol cover art fixed…" — that commit's diff is
+  a genuine mix of two passes' work, not attributable to one.
+- `resource.html`, `css/saferise-dashboard.css`, `pricing.html` and
+  `for-organisations.html` — the rest of this pass's work — landed in
+  `df6eb4c` ("text size updates"), a commit Andre made directly via
+  GitHub Desktop, not this session. That same commit also carries
+  unrelated files (an audio-pipeline drop for the Clearing bed,
+  several docs snapshots) that have nothing to do with this pass.
+
+Both commits are pushed and already part of history; neither is
+rewritten by this entry. This register entry is the record SR-380
+itself never got at the time.
+
+**Files touched (across both commits, not separable by pass):**
+`pricing.html`, `for-organisations.html` (new), `resource.html`,
+`protocol.html`, `css/saferise-dashboard.css`, `css/saferise-system.css`.
+
+*Status:* closed. **Pushed** (both commits confirmed on `main`).
+*Raised and fixed:* 13 Sep 2026
+
+## SR-381 · live pricing corrected, resource reader ported to its real page
+
+Runs `pass/PASS-live-site-defects.md`. Backfilled here from the commit
+(`b5a6f5a`, pushed), which already carries a full report in its own
+message — condensed here into the register's own format.
+
+**§0 — investigation required before any fix.** Confirmed against the
+actual deployed production site (not a mirror): `js/saferise-track.js`
+and `relationship-healing.html` are byte-identical to this working
+tree; `index.html` differs only in Netlify's own HTML
+post-processing. **Part C** ("the carousel does not move") is false as
+a general claim: the track-landing carousel genuinely auto-advances on
+production right now — SR-379's own carousel work is deployed and
+working. What doesn't move is the dashboard's own Library carousel (a
+continuous-drift implementation with no auto-advance ever built for
+it) — a different carousel entirely. **Part D** ("the resource reader
+has no editorial treatment") is true, and the cause is now established:
+SR-379's reader was real, working, and correctly deployed — onto
+`index.html`'s `#reader-overlay`, which no live navigation path ever
+reaches. `dashboard.html`'s `loadResource()` iframes `resource.html`,
+which has its own separate, unstructured rendering path
+(`rbody.innerHTML = r.body`, a direct string assignment).
+
+**Fixed, not just diagnosed:** ported the same derive-render technique
+onto `resource.html`'s own `renderMain()` — new `enhanceResourceBody()`,
+new CSS under a claimed `sr-rr-` surface code, built on this page's own
+tokens rather than `index.html`'s indirection. Section rail included,
+same ≥3-heading gate. Not resource text touched.
+
+**Part O — pricing, fixed first, per its own stated priority.** Fixed
+at the source, `content/tracks.js`'s `PRICING` record, with dated
+comments recording the supersession: `t1` was €19/month with a stale
+"introductory rate" note (the rate itself ended months earlier, SR-308,
+copy never caught up) — now Free, with an account. `t2`/`t3` were €29
+and €39 (an August per-track ladder) — both now €19/month
+(€190/year), `includes` corrected to the three-track bundle rather
+than a cumulative ladder — this is the confirmed live bug
+(Relationship Healing was showing "€29 a month"). `premium3` €299 →
+€349 (also hardcoded independently in `live-sessions.html`, fixed
+there too). `workshopPersonal` €29 → €39 (also hardcoded independently
+in `protocol.html`, fixed there too).
+
+**Reported, not resolved, per O6:** `workshopRelationship` (€39/couple)
+isn't addressed by the brief's own price table — left unchanged,
+founder's call. `plans.html` — a live, noindex page rendering exactly
+the three-tier comparison grid this brief's O5 prohibits, for a pricing
+model O1 has already superseded — not patched, since patching three
+numbers inside an already-wrong structure risks a different kind of
+wrong; needs a decision (retire, redirect, or rebuild), not a number
+swap. "Elevation €222" — searched repo-wide, found nothing live;
+consistent with a prior finding that this branch is dead code.
+
+**Parts A, E, F, H — fixed.** Homepage footer's "Scope & safety" block
+brought in line with dashboard's wording (kept an existing crisis-line
+link the dashboard version lacks — reported as a DIFFERS, not
+resolved either way). Protocol title font scoped down at `#pp-title`
+only (`.sectitle` is shared with `resource.html`'s own title — not
+touched globally). Dashboard back-navigation regrouped into a column
+(Dashboard, then Protocol) rather than opposite ends of one row.
+Dashboard banner's stray "Meditation quiets the noise…" copy removed,
+container kept.
+
+**Parts B, G, I, J, K, L, M, N, P, Q — not completed, reported.** Time
+didn't allow full treatment. Part I/K's cause was investigated (no
+fixed-height/min-height/viewport constraint found anywhere in the
+chain; the iframe height-sync already looked robust) but not
+conclusively identified — reported as genuinely not found rather than
+guessed at. Part P substantially answered by §0: four separate
+carousel implementations confirmed to exist (consolidating them was
+picked up directly in chat alongside SR-382, and reported there rather
+than attempted here).
+
+**Found in passing, flagged not fixed:** `resource.html`'s own
+`.sr-utility` panel renders a "Protocol progress … 7 of 8" counter —
+exactly the individual-progress telemetry `CLAUDE.md`'s standing rule
+prohibits, and which SR-181/185/191 already removed elsewhere. Missed
+then; still live now; worth its own pass.
+
+**Verification:** every live-tree check ran against actual production,
+confirmed content-identical to this working tree for the files
+checked — necessary because the local dev server can't serve this
+repo's own path (SR-055/SR-154) and `file://` loading blocks this
+site's external scripts entirely. This pass's own new edits (the
+`resource.html` port, Parts A/E/F/H) were **not yet verified against
+any tree** at the time of that commit — checked structurally only
+(brace/bracket balance against HEAD).
+
+**Files touched:** `CLAUDE.md`, `content/tracks.js`,
+`css/saferise-dashboard.css`, `dashboard.html`, `index.html`,
+`live-sessions.html`, `protocol.html`, `resource.html`.
+
+*Status:* closed. **Pushed** (confirmed on `main`).
+*Raised and fixed:* 13 Sep 2026
+
 ## SR-382 · card titles shortened and reserved to two lines; carousel drop-in and founder portrait both reported, not wired in
 
 Runs `pass/PASS-card-titles.md`, plus three items given directly in
