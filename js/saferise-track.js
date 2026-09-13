@@ -96,6 +96,13 @@
     return trackId === 1 ? 'assets/covers/' + no + '.jpg'
                          : 'assets/covers/t' + trackId + '-' + no + '.jpg';
   }
+  /* SR-379 (PASS-reader-and-protocol-pages.md Part A) · exported so protocol.html
+     can resolve its own per-protocol cover art from this one place, instead of
+     hardcoding a path or copying another element's computed background-image.
+     Merges onto SafeRiseCover rather than replacing it — saferise-card.js
+     defines that global too, and loads first wherever both are present. */
+  window.SafeRiseCover = window.SafeRiseCover || {};
+  window.SafeRiseCover.coverPath = coverPath;
 
   function sechead(eyebrow, h2, lede) {
     return '<div class="sr-tp-sechead"><p class="sr-tp-eyebrow">' + eyebrow +
@@ -714,7 +721,7 @@
           still work exactly as before for member-driven navigation. */
     var AUTO_MS = 7000;
     var carousel = document.getElementById('carousel');
-    var autoTimer = null, hoverPaused = false, focusPaused = false, stopped = false;
+    var autoTimer = null, hoverPaused = false, focusPaused = false, stopped = false, offPaused = false;
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function advance() {
@@ -727,7 +734,7 @@
       syncAuto();
     }
     function autoOn() {
-      return !stopped && !reduceMotion && !hoverPaused && !focusPaused &&
+      return !stopped && !reduceMotion && !hoverPaused && !focusPaused && !offPaused &&
         !document.hidden && maxIndex() > 0;
     }
     function syncAuto() {
@@ -746,6 +753,19 @@
         if (carousel.contains(e.relatedTarget)) return;
         focusPaused = false; syncAuto();
       });
+      /* SR-379 (PASS-reader-and-protocol-pages.md Part B) · the one real gap
+         against that brief's B2 — nothing here paused while the carousel was
+         scrolled out of view. offPaused starts false (matching hoverPaused/
+         focusPaused's own optimistic default before their first real event)
+         and self-corrects the moment IntersectionObserver's first callback
+         fires, asynchronously, shortly after observe() below. */
+      if ('IntersectionObserver' in window) {
+        var carouselIO = new IntersectionObserver(function (entries) {
+          offPaused = !entries[entries.length - 1].isIntersecting;
+          syncAuto();
+        }, { threshold: 0.1 });
+        carouselIO.observe(carousel);
+      }
     }
     document.addEventListener('visibilitychange', syncAuto);
     syncAuto();

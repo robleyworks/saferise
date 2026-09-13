@@ -3949,6 +3949,92 @@ function founderVideoHTML(title, meta){
     '</div>';
 }
 
+/* SR-379 (PASS-reader-and-protocol-pages.md Part D) · derive-don't-rewrite
+   editorial renderer. Walks the body markup already authored in
+   content/t{1,2,3}-resources.js (h4/h5, blockquote, ul, p.sr-lede, plain p)
+   and adds classes only — no resource text is read, changed, or reordered.
+   `resource-content.js` named in the brief does not exist as one file; the
+   real stores are T1/T2/T3_RESOURCES in content/t{1,2,3}-resources.js, and
+   this runs on the DOM getResourceData() already produced, not on those
+   files. Returns the h4/h5 headings found, in order, for buildSectionRail()
+   below. Claimed CSS surface code: sr-rd- (Reader) — see CLAUDE.md's table. */
+function enhanceReaderBody(bodyEl){
+  if (!bodyEl) return [];
+  var kids = Array.prototype.slice.call(bodyEl.children);
+  var ledes = kids.filter(function(el){ return el.tagName === 'P' && el.classList.contains('sr-lede'); });
+  var headings = [];
+  var hCount = 0;
+  kids.forEach(function(el){
+    var tag = el.tagName;
+    if (tag === 'H4' || tag === 'H5') {
+      hCount++;
+      el.classList.add('sr-rd-section');
+      var id = 'rd-h-' + hCount;
+      el.id = id;
+      headings.push({ id: id, level: (tag === 'H4' ? 4 : 5), text: el.textContent });
+    } else if (tag === 'BLOCKQUOTE') {
+      el.classList.add('sr-rd-script');
+    } else if (tag === 'UL') {
+      el.classList.add('sr-rd-signs');
+    } else if (tag === 'P' && el.classList.contains('sr-lede')) {
+      /* First -> opening, last (if more than one exists) -> close, any
+         middle occurrence -> prose. D2's table only names first/final;
+         a middle sr-lede is real (content/t1-resources.js's "The Decision"
+         has three) and isn't covered by either role. */
+      if (el === ledes[0]) el.classList.add('sr-rd-opening');
+      else if (ledes.length > 1 && el === ledes[ledes.length - 1]) el.classList.add('sr-rd-close');
+      else el.classList.add('sr-rd-prose');
+    } else if (el.classList.contains('sr-lead')) {
+      /* D2's table names p.sr-lead -> sr-observation. The real match is a
+         <div class="sr-lead">, not a <p> (index.html's legacy
+         RESOURCE_CONTENT fallback, 9 uses) — and it already has its own
+         working, intentional treatment in this same reader CSS (a boxed
+         callout, grouped with .sr-note/.sr-callout/.sr-script-card).
+         Adding sr-rd-observation's indented-hairline look on top would
+         double up two conflicting treatments on real, currently-correct
+         content, so this is deliberately left unclassified. This branch
+         only guards against a future <p class="sr-lead"> doing the same. */
+    } else if (tag === 'P') {
+      el.classList.add('sr-rd-prose');
+    }
+  });
+  return headings;
+}
+
+/* D4 · "fewer than three h4 headings" is the stated threshold — h5s nested
+   under them don't count toward it on their own. */
+function buildSectionRail(headings){
+  var h4Count = headings.filter(function(h){ return h.level === 4; }).length;
+  if (h4Count < 3) return '';
+  var items = headings.map(function(h){
+    return '<button type="button" class="sr-rd-railitem' + (h.level === 5 ? ' sr-rd-railitem--h5' : '') +
+      '" data-rd-target="' + h.id + '" aria-label="' + h.text.replace(/"/g, '&quot;') + '"></button>';
+  }).join('');
+  return '<nav class="sr-rd-rail" aria-label="Sections in this resource">' + items + '</nav>';
+}
+
+function initSectionRail(pageEl){
+  var rail = pageEl.querySelector('.sr-rd-rail');
+  if (!rail) return;
+  var items = Array.prototype.slice.call(rail.querySelectorAll('.sr-rd-railitem'));
+  var targets = items.map(function(b){ return document.getElementById(b.getAttribute('data-rd-target')); });
+  items.forEach(function(b, idx){
+    b.addEventListener('click', function(){
+      var t = targets[idx];
+      if (t) t.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+  });
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var idx = targets.indexOf(entry.target);
+      if (idx === -1) return;
+      items[idx].classList.toggle('on', entry.isIntersecting);
+    });
+  }, { root: pageEl.closest('#reader-content'), rootMargin: '-15% 0px -70% 0px' });
+  targets.forEach(function(t){ if (t) io.observe(t); });
+}
+
 function openReader(protocolKey, initialKey){
   const proto = READER_PROTOCOLS[protocolKey];
   if (!proto) return;
@@ -4026,8 +4112,13 @@ function openReader(protocolKey, initialKey){
     page.className = 'reader-page';
     page.dataset.readerPage = key;
     let bodyHtml = '';
+    /* SR-379 (PASS-reader-and-protocol-pages.md Part D) · a body array
+       entry that is already a block element (h4/h5/blockquote/ul/p.sr-lede
+       — every one of these is real, authored markup, never plain text
+       needing a wrapper) no longer gets double-wrapped in an extra <p>.
+       Plain-text entries are wrapped exactly as before. */
     data.body.forEach(function(para){
-      bodyHtml += '<p>' + para + '</p>';
+      bodyHtml += /^\s*</.test(para) ? para : '<p>' + para + '</p>';
     });
     let lockedHtml = '';
     if (data.locked) {
@@ -4044,8 +4135,21 @@ function openReader(protocolKey, initialKey){
     page.innerHTML = '<p class="reader-page-kind"><span class="reader-kind-dot" style="background:' + style.color + '"></span>' + srKindLabel(data.kind) + '</p>' +
       '<p class="reader-page-title">' + data.title + '</p>' +
       tagsHtml + quoteHtml +
+      '<hr class="sr-rd-rule">' +
       '<div class="reader-page-body">' + bodyHtml + '</div>' + lockedHtml;
     contentEl.appendChild(page);
+    /* SR-379 (PASS-reader-and-protocol-pages.md Part D) · classify the body
+       that was just set, then place the section rail (if this body clears
+       the heading threshold) ahead of the widget-kind checks below, so
+       those checks' own insertAdjacentHTML content is never walked or
+       reclassified by enhanceReaderBody(). */
+    var rdHeadings = enhanceReaderBody(page.querySelector('.reader-page-body'));
+    var rdRailHtml = buildSectionRail(rdHeadings);
+    if (rdRailHtml) {
+      var rdRule = page.querySelector('hr.sr-rd-rule');
+      if (rdRule) rdRule.insertAdjacentHTML('afterend', rdRailHtml);
+      initSectionRail(page);
+    }
     if (data.kind === 'Safety Score') {
       const bodyEl = page.querySelector('.reader-page-body');
       if (bodyEl) {
