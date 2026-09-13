@@ -1,0 +1,43 @@
+# Clearing t0-00 — passage manifest
+# format: <file>  <silence_after_in_seconds>
+# render one audio file per passage, name it exactly, drop in this folder
+01-opening-a.mp3      4
+02-name-it.mp3       12
+03-leave-it.mp3       4
+04-four-moves.mp3     6
+05-where-are-you.mp3 12
+06-not-why.mp3        5
+07-body-intro.mp3     3
+08-jaw.mp3            4
+09-shoulders.mp3      4
+10-hands.mp3          4
+11-stomach.mp3        4
+12-breath.mp3         8
+13-no-verdict.mp3    10
+14-attention.mp3     10
+15-circling.mp3      12
+16-one-word.mp3      12
+17-thats-the-skill.mp3 6
+18-four-six.mp3      10
+19-nothing-to-fix.mp3 10
+20-chest-hand.mp3    20
+21-same-count.mp3    10
+22-belongs-ahead.mp3  5
+23-nothing-rid-of.mp3 4
+24-can-stay.mp3      10
+25-let-it-settle.mp3 10
+26-leave-alone.mp3    6
+27-a-question.mp3     4
+28-didnt-choose.mp3  15
+29-old-instructions.mp3 10
+30-answers-slowly.mp3 6
+31-step-outside.mp3   4
+32-someone-on-way.mp3 5
+33-speak-as-you.mp3  10
+34-bring-it-back.mp3  6
+35-first-move.mp3    12
+36-you-decide.mp3     8
+37-one-detail.mp3     8
+38-put-down.mp3       5
+39-go-when-ready.mp3  4
+40-close.mp3          0

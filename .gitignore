@@ -4,3 +4,8 @@ index.original.html
 /captures/
 pass/
 *.bak-*
+
+# generated audio — regenerates from the scripts
+audio/**/.cache/
+audio/**/*.mp3
+audio/**/*.wav

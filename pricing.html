@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- SR-380 (PASS-pricing-contact-typescale.md Part A, docs/SEO-HEAD-TEMPLATE.md) -->
+<title>What it costs — SafeRise Protocol</title>
+<meta name="description" content="Track 01 is free with an account. Everything else is €19 a month or €190 a year, plus one-to-one sessions, guided workshops and retreats.">
+<link rel="canonical" href="https://thesaferiseprotocol.com/pricing">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SafeRise Protocol">
+<meta property="og:title" content="What it costs — SafeRise Protocol">
+<meta property="og:description" content="Track 01 is free with an account. Everything else is €19 a month or €190 a year, plus one-to-one sessions, guided workshops and retreats.">
+<meta property="og:url" content="https://thesaferiseprotocol.com/pricing">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* SR-380 (PASS-pricing-contact-typescale.md Part A) · sr-pr- is this page's
+   own claimed surface code (CLAUDE.md's table) — nav/footer/tokens are the
+   shared public-page pattern (css/saferise-system.css, css/saferise-footer.css),
+   everything below is new and scoped to avoid the generic-name collisions
+   CLAUDE.md warns about (no bare .eyebrow/.cta/.block here). */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:18px;line-height:1.62;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 30px}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:20px;top:20px;z-index:200;background:var(--gold);color:#000;padding:10px 16px;border-radius:6px}
+
+.sr-pr-hero{padding:78px 0 44px;border-bottom:1px solid var(--hair)}
+.sr-pr-eyebrow{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:13px}
+.sr-pr-eyebrow::before{content:'';width:26px;height:1px;background:var(--gold-dim)}
+.sr-pr-hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:clamp(34px,4.6vw,54px);line-height:1.1;letter-spacing:-.018em;margin:22px 0 0;max-width:20ch}
+.sr-pr-hero p{font-size:clamp(17px,1.5vw,19px);line-height:1.62;color:var(--text2);
+  max-width:56ch;margin:20px 0 0}
+
+.sr-pr-seq{padding:54px 0}
+.sr-pr-block{border-top:1px solid var(--hair);padding:44px 0}
+.sr-pr-block:first-child{border-top:0}
+.sr-pr-block h2{font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:clamp(24px,2.6vw,30px);letter-spacing:-.01em;margin:0 0 8px}
+.sr-pr-amt{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(26px,3vw,32px);
+  color:var(--gold-lt);margin:0 0 16px;display:block}
+.sr-pr-block p{font-size:17px;line-height:1.62;color:var(--text2);max-width:62ch;margin:0 0 12px}
+.sr-pr-block p:last-of-type{margin-bottom:20px}
+.sr-pr-note{font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.55;
+  color:var(--text3);max-width:56ch;margin:14px 0 0}
+
+.sr-pr-cta{display:inline-flex;align-items:center;gap:13px;text-decoration:none;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--bg);background:var(--gold);
+  padding:15px 30px;border-radius:999px;transition:all .4s var(--ease)}
+.sr-pr-cta:hover{background:var(--gold-lt);gap:19px;transform:translateY(-2px);
+  box-shadow:0 14px 34px color-mix(in srgb,var(--gold) 24%,transparent)}
+.sr-pr-cta:focus-visible{outline:2px solid var(--text);outline-offset:4px}
+
+.sr-pr-linkblock{border-top:1px solid var(--hair);padding:44px 0;display:flex;
+  align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.sr-pr-linkblock h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:23px;margin:0}
+.sr-pr-linkblock p{font-size:15px;color:var(--text2);margin:6px 0 0;max-width:44ch}
+.sr-pr-linkgo{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-lt);
+  text-decoration:none;border-bottom:1px solid rgba(212,168,67,.34);padding-bottom:3px;
+  white-space:nowrap}
+.sr-pr-linkgo:hover{border-color:var(--gold)}
+
+.sr-pr-close{border-top:1px solid var(--hair);padding:54px 0 70px}
+.sr-pr-close h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:24px;margin:0 0 12px}
+.sr-pr-close p{font-size:16.5px;line-height:1.65;color:var(--text2);max-width:62ch;margin:0 0 12px}
+
+@media(max-width:640px){
+  .sr-pr-hero{padding:56px 0 34px}
+  .sr-pr-seq{padding:34px 0}
+  .sr-pr-block{padding:32px 0}
+  .sr-pr-linkblock{padding:32px 0}
+}
+</style>
+<link rel="stylesheet" href="css/saferise-system.css">
+<link rel="stylesheet" href="css/saferise-footer.css">
+</head>
+<body class="sr-public">
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav">
+  <div class="navin">
+    <a class="brand" href="index.html"><span class="bmark">&#9672;</span><span class="bname">SafeRise Protocol</span></a>
+    <div class="navlinks">
+      <div class="ndrop">
+        <button class="ntop" type="button" aria-expanded="false" aria-haspopup="true" id="ptrig">
+          Protocols <span class="ncar" aria-hidden="true">&#9662;</span></button>
+        <div class="nmenu" role="menu" aria-labelledby="ptrig">
+          <a role="menuitem" href="personal-transformation.html" class="nm t1">
+            <span class="nmk">Track 01</span><span class="nmn">Personal Transformation</span>
+            <span class="nmd">What happens inside me</span></a>
+          <a role="menuitem" href="relationship-healing.html" class="nm t2">
+            <span class="nmk">Track 02</span><span class="nmn">Relationship Healing</span>
+            <span class="nmd">What keeps happening between us</span></a>
+          <a role="menuitem" href="professional-performance.html" class="nm t3">
+            <span class="nmk">Track 03</span><span class="nmn">Professional Performance</span>
+            <span class="nmd">What changes when the stakes rise</span></a>
+          <a role="menuitem" href="coming-soon.html" class="nm soon">
+            <span class="nmk">Not yet open</span><span class="nmn">What&#8217;s coming</span>
+            <span class="nmd">Seven more tracks in development</span></a>
+        </div>
+      </div>
+      <a href="method.html">Method</a><a href="plans.html">Plans</a><a href="live-sessions.html">Live sessions</a><a href="about.html">About</a>
+    </div>
+    <button class="themetog" id="tog" type="button" aria-label="Switch theme">
+      <span class="tdot"></span><span id="togl">Midnight</span></button>
+    <a class="navcta" href="dashboard.html">Log in</a>
+  </div>
+</nav>
+<main id="main">
+
+<section class="sr-pr-hero"><div class="wrap">
+  <p class="sr-pr-eyebrow">Pricing</p>
+  <h1>What it costs</h1>
+  <p>Track 01 is free. You make an account, and the ten protocols in Personal Transformation are yours to use — not a trial, not a sample, not a countdown.</p>
+  <p>Everything below is what funds the rest of it.</p>
+</div></section>
+
+<section class="sr-pr-seq"><div class="wrap">
+
+  <div class="sr-pr-block">
+    <h2>Personal Transformation</h2>
+    <span class="sr-pr-amt">Free, with an account</span>
+    <p>Ten protocols. Anxiety, anger, overwhelm, abandonment, shame, grief, shutdown, jealousy, insecurity, powerlessness.</p>
+    <p>Each one written for the situation you're actually in, with the full resource set — the session, the cue card, the reasoning behind it, and what to do between sessions.</p>
+    <a class="sr-pr-cta" href="signup.html">Create an account</a>
+  </div>
+
+  <div class="sr-pr-block">
+    <h2>Everything else</h2>
+    <span class="sr-pr-amt">€19 a month, or €190 a year</span>
+    <p>Relationship Healing and Professional Performance. Twenty more protocols, on the same four steps, for the situations that involve other people.</p>
+    <p>Cancel whenever. Nothing expires, nothing locks, and nothing gets taken away mid-month.</p>
+    <a class="sr-pr-cta" href="signup.html">Start</a>
+    <p class="sr-pr-note">The annual rate is ten months for twelve. No discount code, no deadline.</p>
+  </div>
+
+  <div class="sr-pr-block">
+    <h2>Work with someone directly</h2>
+    <span class="sr-pr-amt">€129 a session · €349 for three</span>
+    <p>An hour, one to one, on whatever you're actually in. Not a version of the protocols read aloud — the protocols are self-guided by design. This is the thing they can't do.</p>
+    <p>Availability is limited and genuinely so; it is not a device.</p>
+    <a class="sr-pr-cta" href="live-sessions.html">Enquire</a>
+  </div>
+
+  <div class="sr-pr-block">
+    <h2>Guided workshops</h2>
+    <span class="sr-pr-amt">€39 a person</span>
+    <p>Ninety minutes, remote, in a group. Someone takes you through it rather than you taking yourself through it.</p>
+    <p>Worth doing first if you'd rather not start alone.</p>
+    <a class="sr-pr-cta" href="live-sessions.html">See upcoming dates</a>
+  </div>
+
+  <div class="sr-pr-block">
+    <h2>Retreats</h2>
+    <span class="sr-pr-amt">Dates and pricing on enquiry</span>
+    <p>In person, over a few days. Cost depends on where and how long, so there is no useful number to put here.</p>
+    <a class="sr-pr-cta" href="mailto:contact@thesaferiseprotocol.com">Ask about retreats</a>
+  </div>
+
+  <div class="sr-pr-linkblock">
+    <div>
+      <h2>Bringing this into an organisation</h2>
+      <p>Programmes for teams, and platform access for employees.</p>
+    </div>
+    <a class="sr-pr-linkgo" href="for-organisations.html">For teams and organisations &#8594;</a>
+  </div>
+
+  <div class="sr-pr-close">
+    <h2>What the price is for</h2>
+    <p>Research, protocol design, production, hosting, and keeping the whole thing maintained. It is what lets Track 01 stay free and stay good.</p>
+    <p>We don't run sales, streaks, scores or countdowns. If the work is worth paying for it should be worth paying for on an ordinary day.</p>
+  </div>
+
+</div></section>
+
+</main>
+<div id="srFooter"></div>
+<script src="js/saferise-footer.js"></script>
+<script>SafeRiseFooter.render();</script>
+<script>
+(function(){
+  var dd=document.querySelector('.ndrop'), dt=document.getElementById('ptrig');
+  var hoverOpened=false;
+  function setOpen(v){dd.classList.toggle('open',v);dt.setAttribute('aria-expanded',v?'true':'false');}
+  function close(){hoverOpened=false;setOpen(false);}
+  dt.addEventListener('click',function(e){e.stopPropagation();
+    if(hoverOpened){hoverOpened=false;return;}
+    setOpen(!dd.classList.contains('open'));});
+  dd.addEventListener('mouseenter',function(){hoverOpened=true;setOpen(true);});
+  dd.addEventListener('mouseleave',close);
+  dd.addEventListener('focusin',function(){setOpen(true);});
+  dd.addEventListener('focusout',function(e){if(!dd.contains(e.relatedTarget))close();});
+  document.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  var t=document.getElementById('tog'), l=document.getElementById('togl');
+  function applyTheme(n){
+    document.documentElement.setAttribute('data-theme',n);
+    if(l) l.textContent = n==='midnight' ? 'Midnight' : 'Sunrise';
+    try{ sessionStorage.setItem('sr-theme', n); }catch(e){}
+  }
+  try{
+    var saved = sessionStorage.getItem('sr-theme');
+    if(saved==='midnight'||saved==='sunrise') applyTheme(saved);
+  }catch(e){}
+  if(t) t.addEventListener('click',function(){
+    var c=document.documentElement.getAttribute('data-theme');
+    applyTheme(c==='midnight'?'sunrise':'midnight');
+  });
+})();
+</script>
+</body>
+</html>
