@@ -17,7 +17,10 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-387** (the seventeen-item defect sweep itself — allocated per this
+- **Highest ID issued: SR-388** (organisations.html's real pricing waterfall, seats-in-use
+  commitment removed, eight core tracks with imagery/hover, `tools/check-sitemap.py` built —
+  allocated per this pass's own instruction. Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-387** (the seventeen-item defect sweep itself — allocated per this
   pass's own instruction, "one SR ID for the sweep." No `git log` cross-check this time since
   the working tree wasn't yet committed at the moment of allocation; verify against
   `git log -1` once SR-387 lands.)
@@ -15296,3 +15299,135 @@ pre-reported).
 
 *Status:* closed — 12 items fixed and verified, 5 already correct, 1 flagged out of scope for a
 future pass. **Not pushed.** *Raised and fixed:* 14 Sep 2026
+
+## SR-388 · organisations.html — real pricing waterfall, seats-in-use commitment removed, eight core tracks with imagery and hover, sitemap checker built
+
+Runs `pass/PASS-org-pricing-tracks.md`. Follows SR-385 (`8facd7a`).
+
+**§1 — headcount waterfall pricing.** SR-385 published `organisations.html`'s "Annual platform
+access" offer with the actual band numbers reported missing rather than invented (its own comment
+said so). This pass supplies them: a five-band waterfall (€95/€80/€62/€48/€32 per employee/year
+across 1–100/101–300/301–750/751–1,500/1,501+, €6,000/year minimum) plus five worked examples
+(100/250/500/1,000/2,500 headcount → €9,500/€21,500/€37,900/€65,400/€121,400, effective rate
+shown per row), published as a new `.sr-org-waterfall` block — row-based, not a real `<table>`,
+so nothing needs horizontal scroll to stay readable narrow. **No single headline number
+published**, per the brief's own explicit instruction. The featured offer card's old vague
+"never priced per seat" line now points down to the table instead of repeating the claim without
+numbers behind it.
+
+**§2 — seats-in-use commitment removed, not reworded.** SR-385 published a quarterly seats-in-use
+commitment "the platform cannot yet back" (its own words — no organisation/seat concept exists in
+`supabase/migrations/0001_auth_entitlements.sql`). Confirmed by grep it appeared in exactly one
+place sitewide (`organisations.html`'s "No individual reporting" trust article) — not in
+`terms.html`, not in the FAQ, nowhere else. Replaced with the brief's own verbatim sentence: "We
+do not report on individuals. Not their usage, not their activity, not whether they opened
+anything. Not to you, and not on request." Deliverable now, needs no schema. The quarterly figure
+returns once something in the platform can actually produce it, not before.
+
+**§3 — eight core tracks, five marked in development.** SR-385 left the curriculum grid at seven
+(missing Sleep & Recovery) with no in-development markers on any of the five unshipped tracks,
+despite the section's own closing note already saying they should have one. Fixed to the brief's
+specified eight: Personal Transformation, Relationship Healing, Professional Performance
+(shipped, no marker) plus Elevation Series, Embodied Nutrition, Strength & Return, Sleep &
+Recovery, Executive Presence (unshipped, each carrying a visible "In development" tag).
+
+**Found, not fixed — a real naming collision worth flagging plainly.** This brief's "eight core
+tracks" and `coming-soon.html`'s own eight upcoming-track cards are two different lists that
+happen to share four names. `coming-soon.html` lists Elevation Series, Sex & Intimacy, Executive
+Presence, Strength & Return, Embodied Nutrition, Entrepreneur's Journey, Money Shift, Addiction
+Recovery — confirmed by extracting its own `.sr-cs-name` text directly, not assumed. **"Sleep &
+Recovery" exists nowhere else in the codebase** — not on `coming-soon.html`, not in
+`content/tracks.js`, not in the nav-teaser accounting SR-386 just finished (its own comment at
+`plans.html:140` counts the *other* eight, off `coming-soon.html`'s cards, explicitly). Applied
+the brief's literal list to `organisations.html` as instructed — this is a real, direct
+instruction, not ambiguous — but the site now has an organisational-facing page promising a
+"Sleep & Recovery" track that no consumer-facing page mentions and no data record backs. Also
+checked "the plans page" per the brief's own instruction: `plans.html` has no core-library grid
+at all (only the nav-teaser prose, which is SR-386's already-correct, differently-scoped "eight")
+— nothing there to apply this list to.
+
+**§4 — hover treatment.** `saferise-coming-soon.html`, as named in the brief, does not exist
+(confirmed by search) — read `coming-soon.html` instead (DIFFERS, adapted, reported here). Its
+`.tb` rule is the only place this site already does "accent glow + lift" on a card: `transform:
+translateY(-3px)` plus a three-stop `box-shadow` whose outer glow is `color-mix(in srgb,var(--ac)
+55%,transparent)`, `.5s var(--ease)` timing, `:focus-within` identical to `:hover`, an
+accent-tinted focus outline. Applied verbatim as `.sr-org-track`'s hover mechanism. Verified live:
+a real `:hover` and a real `.focus()` both produce `translateY(-3px)` and the glow shadow;
+`:focus-within` confirmed matching via `element.matches(':focus-within')`. `.tb` itself is **not**
+covered by this file's central `@media(prefers-reduced-motion:reduce)` block — SR-303's "motion
+runs regardless" default applies to it same as everything else not explicitly listed there. This
+brief explicitly asks for reduced-motion to disable the transition on this one new component, so
+added `.sr-org-track`/`.sr-org-track-img{transition:none!important}` as its own entry inside that
+same central block, matching the existing `.sr-tp-card2` exception's pattern — not a new
+standalone block, per CLAUDE.md's "handled centrally" rule.
+
+**§5 — image underlay.** Standard construction (image at `cover`, scrim
+`linear-gradient(0deg,rgba(16,16,23,.97),rgba(16,16,23,.72))`, text above). **The brief states the
+five unshipped tracks have no imagery and the hatch is the correct answer for all five** — checked
+`assets/` first, per the stated search order, and found this is only true for one of them.
+`assets/coming/band-01/03/04/08.webp` are Elevation Series/Strength & Return/Embodied
+Nutrition/Executive Presence's own dedicated band photos, already built for `coming-soon.html` —
+not borrowed from a shipped track (the brief's actual prohibition), each is that specific
+unshipped track's own asset. Used them. Only **Sleep & Recovery** — the track with no home
+anywhere else in the codebase (§3 above) — has no image anywhere and gets the hatch,
+`repeating-linear-gradient(45deg,#141a2a,#141a2a 10px,#182034 10px,#182034 20px)`, exactly as
+specified. The three shipped tracks use their existing per-track identity band photos
+(`assets/journey/t1/t2/t3-band.webp`). Did not check `~/Desktop/unused images` (139 generically
+named files, no metadata) once `assets/` supplied a real answer for every track but one, and
+hatch is the brief's own explicit fallback for that one. **Text legible over every image,
+checked**: card text sits on a `.sr-org-track-scrim` at `.97`/`.72` opacity over a
+`saturate(.72)` image, same treatment `.tb` uses. Uniform card height (fixed `230px`, not
+`min-height`) with the description `line-clamp`-ed to 3 lines — grid `align-items:stretch` was
+not equalizing rows on its own (measured 306–500px variance across cards with the same 2-column
+row before this fix), so heights are now genuinely fixed rather than assumed to inherit from CSS
+Grid defaults.
+
+**§6 — sitemap checker.** SR-385 could not run `scripts/gen-sitemap.js` (no `node`) and verified
+by simulation instead — this brief's own position is that simulation is not verification. Built
+`tools/check-sitemap.py`, standard library only: reads the `EXCLUDE` regex directly out of
+`gen-sitemap.js` via `re.search` on its source rather than restating it, lists repo-root `.html`
+files the same non-recursive way `fs.readdirSync('.')` does, computes the URL set the generator
+would produce, parses the committed `sitemap.xml`, and reports missing/unexpected/matching with a
+non-zero exit if either of the first two is non-empty. Never writes `sitemap.xml`. Run against the
+real committed file:
+
+```
+EXCLUDE regex read from gen-sitemap.js: /^(dashboard|account|signup|login|member-|404|pass|mock)|^for-organisations$/
+Expected pages (repo-root .html, exclusion applied): 20
+Committed sitemap.xml <url> entries: 48
+missing (2): /organisations, /pricing
+unexpected (30): every /protocols/{slug} URL currently in the committed sitemap
+matching (18)
+RESULT: sitemap.xml does NOT match the generator's own rules.
+```
+
+**Reported, not regenerated, per the brief's own instruction.** Two real disagreements: (1) the
+30 `/protocols/{slug}` URLs in the committed sitemap could not have come from
+`scripts/gen-sitemap.js` as it exists today — that script only lists literal `.html` files via
+non-recursive `fs.readdirSync('.')`, and no `protocols/*.html` files exist on disk; these routes
+only exist via `_redirects`'s rewrite. The committed sitemap and the current generator script have
+diverged — either the script changed after the sitemap was last generated, or the sitemap was
+hand-extended separately. (2) `/organisations` and `/pricing` are missing even though neither
+matches the current `EXCLUDE` pattern (only the *exact* string `for-organisations` is excluded,
+not `organisations`, and `pricing` was never added to `EXCLUDE` the way `for-organisations` was
+for the same "retired, redirects away" reason SR-385/386 gave `for-organisations`). Andre should
+decide whether `pricing` needs the same exact-match exclusion `for-organisations` got, and whether
+the generator needs to learn about the `/protocols/{slug}` routes or the sitemap should drop them,
+before the next `node`-capable run regenerates `sitemap.xml` and silently resolves this one way or
+the other.
+
+Added the required `CLAUDE.md` line: sitemap changes are verified with `tools/check-sitemap.py`,
+and a pass that cannot run the generator must run the checker instead.
+
+**Verified live, browser not source reading**: waterfall table and all 5 worked examples render
+(1440 and 390px, readable, no overflow at either); "seats in use" confirmed absent, the
+replacement sentence confirmed present (`document.body.textContent`, not grep alone); all 8
+curriculum cards render at a uniform 230px with correct imagery/hatch and correct in-development
+tags on exactly the 5 unshipped tracks; hover and `:focus-within` both produce the accent
+lift/glow with no height change; 390px introduces no horizontal overflow anywhere touched.
+
+Files: `organisations.html`, `css/saferise-system.css`, `CLAUDE.md`, new `tools/check-sitemap.py`.
+
+*Status:* closed — 6 tasks complete, 1 named-file DIFFERS (adapted, reported), 2 real
+scope/data discrepancies found and reported rather than silently resolved (Sleep & Recovery's
+missing home; the sitemap/generator divergence). **Not pushed.** *Raised and fixed:* 14 Sep 2026

@@ -231,6 +231,20 @@ sensitive data the platform holds.
 Use `js/sentry-init.js` as delivered. **Do not simplify it** — every exclusion in
 it is deliberate.
 
+### Rule — sitemap changes are verified, not assumed
+
+`scripts/gen-sitemap.js` regenerates `sitemap.xml` and needs `node`, which this
+environment does not have. **Sitemap changes are verified with
+`tools/check-sitemap.py`** (standard library only, no `node` required) — it
+reads the generator's own exclusion rule out of the file, computes what the
+committed `sitemap.xml` should contain, and reports missing/unexpected/matching
+URLs without writing anything.
+
+**A pass that cannot run the generator must run the checker instead**, and
+report its output rather than simulating what the generator would do. Simulated
+verification is not verification — that is exactly how a route stayed silently
+missing from the sitemap before.
+
 ## Proposed — awaiting Andre's decision, not adopted
 
 Written by SR-385 (`pass/PASS-organisations.md` C2). **Not a standing rule** —

@@ -2018,6 +2018,15 @@ details.sr-q .sr-a a{color:var(--primary2)}
     margin-top:12px!important;transition:none!important}
   .sr-tp-card2:hover .sr-tp-cardimg2,
   .sr-tp-card2:focus-within .sr-tp-cardimg2{transform:none}
+
+  /* PASS-org-pricing-tracks.md §4 · explicit instruction for this one new
+     component, unlike its .tb model above (which this file's SR-303 default
+     leaves running under reduced motion, same as everything else not listed
+     here). The lift/glow and image zoom both stop; the card still lights via
+     the instant colour change already implicit in removing the transition,
+     no separate static treatment needed. */
+  .sr-org-track,
+  .sr-org-track-img{transition:none!important}
 }
 
 /* SR-029 — honest "video not yet available" state for the Watch pane.
@@ -4868,11 +4877,41 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-org-curriculum-core>p{color:var(--text2)!important}
 .sr-org-curriculum-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--hair);
   border:1px solid var(--hair);border-radius:4px;overflow:hidden}
-.sr-org-curriculum-grid article{padding:22px;background:var(--card)}
-.sr-org-curriculum-grid span{font-family:'Cinzel',serif;font-size:.64rem;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--gold)}
-.sr-org-curriculum-grid h3{font-size:1.25rem;margin:10px 0 8px}
-.sr-org-curriculum-grid p{font-size:.84rem;line-height:1.5}
+/* PASS-org-pricing-tracks.md §4/§5 · hover mechanism copied from coming-soon.html's
+   .tb rule (the only place this site already does "accent glow + lift" on a card):
+   translateY(-3px) plus a three-stop shadow whose outer glow is color-mix(in srgb,
+   var(--ac) 55%,transparent), same .5s var(--ease) timing, :focus-within identical
+   to :hover, same accent-tinted outline for keyboard users. --ac is set per card
+   inline, same convention .tb uses, real track colour where one exists (--t1/--t2/
+   --t3, or the coming-soon page's own accent for a name that also appears there),
+   var(--gold) where none does (Sleep & Recovery). No prefers-reduced-motion block
+   here — handled centrally in this file per CLAUDE.md; that block already turns
+   this transition off. Height is fixed (min-height below), not content-driven, so
+   the in-development tag adds no layout shift. */
+.sr-org-track{position:relative;overflow:hidden;height:230px;
+  box-shadow:0 2px 10px rgba(0,0,0,.30), 0 14px 40px rgba(0,0,0,.24);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.sr-org-track:hover,.sr-org-track:focus-within{transform:translateY(-3px);
+  box-shadow:0 4px 14px rgba(0,0,0,.34), 0 30px 70px rgba(0,0,0,.42),
+             0 0 60px -18px color-mix(in srgb,var(--ac) 55%,transparent)}
+.sr-org-track:focus-within{outline:2px solid color-mix(in srgb,var(--ac) 70%,transparent);outline-offset:3px}
+.sr-org-track-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transition:transform 1.2s var(--ease),filter .6s var(--ease);filter:saturate(.72)}
+.sr-org-track:hover .sr-org-track-img,.sr-org-track:focus-within .sr-org-track-img{
+  transform:scale(1.04);filter:saturate(.95)}
+.sr-org-track-scrim{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(0deg, rgba(16,16,23,.97), rgba(16,16,23,.72))}
+.sr-org-track-hatch{background:repeating-linear-gradient(45deg,#141a2a,#141a2a 10px,#182034 10px,#182034 20px)}
+.sr-org-track-body{position:relative;z-index:2;height:100%;padding:22px;box-sizing:border-box;
+  display:flex;flex-direction:column;justify-content:flex-end}
+.sr-org-track-body span{font-family:'Cinzel',serif;font-size:.64rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ac,var(--gold))}
+.sr-org-track-body h3{font-size:1.25rem;margin:10px 0 8px;color:#fff}
+.sr-org-track-body p{font-size:.84rem;line-height:1.5;color:rgba(245,237,216,.88);
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.sr-org-soon-tag{display:inline-block;margin-top:12px;padding:4px 10px;border-radius:3px;
+  font:700 .62rem/1 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;
+  background:color-mix(in srgb,var(--ac) 20%,transparent);color:var(--ac,var(--gold))}
 .sr-org-curriculum-note{margin-top:26px;color:var(--text3)!important;font-size:.82rem;max-width:65ch}
 @media(max-width:900px){.sr-org-curriculum-shell{grid-template-columns:1fr}}
 @media(max-width:600px){.sr-org-curriculum-grid{grid-template-columns:1fr}}
@@ -4923,6 +4962,33 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 @media(max-width:1180px){.sr-org-offers{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:900px){.sr-org-offers{grid-template-columns:1fr}}
 @media(max-width:600px){.sr-org-pilot{grid-template-columns:1fr}}
+
+/* -- waterfall pricing table (PASS-org-pricing-tracks.md §1) --
+   Row-based, not a real <table>, so nothing needs horizontal scroll to
+   stay readable at 390px — each row just wraps its two/three cells onto
+   separate lines below that width instead of scrolling off-screen. */
+.sr-org-waterfall{margin-top:40px;padding:30px;border:1px solid var(--hair);border-radius:4px}
+.sr-org-waterfall h3{font-size:1.3rem;margin:8px 0 12px}
+.sr-org-waterfall-note{color:var(--text2)!important;font-size:.88rem;max-width:70ch;margin-bottom:24px}
+.sr-org-waterfall-examples-kick{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);margin:28px 0 10px}
+.sr-org-band-table{border:1px solid var(--hair);border-radius:4px;overflow:hidden}
+.sr-org-band-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:12px 18px;
+  border-top:1px solid var(--hair);font-size:.9rem}
+.sr-org-band-row:first-child{border-top:0}
+.sr-org-example-table .sr-org-band-row{grid-template-columns:1fr 1fr 1fr}
+.sr-org-band-head{background:var(--card);font-family:'Cinzel',serif;font-size:.66rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.sr-org-band-row span:first-child{color:var(--text2)}
+.sr-org-band-row span:last-child{color:var(--text);font-weight:600;text-align:right}
+.sr-org-example-table .sr-org-band-row span:nth-child(2){text-align:right;color:var(--text)}
+.sr-org-example-table .sr-org-band-row span:last-child{color:var(--gold-lt)}
+.sr-org-band-min{background:color-mix(in srgb,var(--gold) 6%,transparent)}
+@media(max-width:520px){
+  .sr-org-band-row{grid-template-columns:1fr;gap:2px;text-align:left!important}
+  .sr-org-band-row span:last-child,.sr-org-example-table .sr-org-band-row span:nth-child(2){text-align:left!important}
+  .sr-org-example-table .sr-org-band-row{grid-template-columns:1fr}
+}
 
 /* -- trust (6, refusals) -- */
 .sr-org-trust{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
