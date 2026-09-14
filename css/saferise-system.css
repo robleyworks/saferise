@@ -2027,6 +2027,12 @@ details.sr-q .sr-a a{color:var(--primary2)}
      no separate static treatment needed. */
   .sr-org-track,
   .sr-org-track-img{transition:none!important}
+
+  /* PASS-org-tabs.md §3 · explicit requirement for the department/function
+     tablist: selection is a colour + border-colour swap (no movement), but
+     this brief asks reduced motion to disable the transition outright
+     rather than just running it unslowed, same as .sr-org-track above. */
+  .sr-org-tabs button{transition:none!important}
 }
 
 /* SR-029 — honest "video not yet available" state for the Watch pane.

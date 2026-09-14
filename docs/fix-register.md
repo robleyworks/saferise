@@ -17,7 +17,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-389** (organisations.html layout/spacing pass — closing-line
+- **Highest ID issued: SR-390** (organisations.html department/function tablist audit — the
+  brief's named fault did not reproduce (already shipped by SR-385), one other tablist sitewide
+  found and confirmed working, one reduced-motion gap closed — allocated per this pass's own
+  instruction. Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-389** (organisations.html layout/spacing pass — closing-line
   specificity bug found and fixed across six instances, sticky sub-nav overlap fixed, one
   spacing scale applied — allocated per this pass's own instruction. Verify against `git log -1`
   once it lands.)
@@ -15539,3 +15543,66 @@ re-fixed, plus 4 additional closing-line instances (`.sr-org-vertical-note`, `.s
 `.sr-org-curriculum-note`, `.sr-org-measure-note`) found carrying the same margin-specificity and/or
 sub-32px fault beyond what the brief's own three-column check would have surfaced. **Not pushed.**
 *Raised and fixed:* 14 Sep 2026
+
+## SR-390 · organisations.html department/function tablist — audited, already working; reduced motion gap closed
+
+Runs `pass/PASS-org-tabs.md`. Follows SR-389 (`2af2c2b`).
+
+**§1 — the named fault does not reproduce. DIFFERS, reported rather than re-fixed.** The brief
+reports the Leadership/Sales/On-call/Finance/Ops/Care tablist (`data-sr-org-tab`/
+`data-sr-org-panel`) as dead, attributing it to a handler that "lived in the deleted
+`saferise-system.js`." That is not the current state of the file: `organisations.html` already
+carries a complete, self-contained inline handler (lines 121-171), explicitly commented
+`SR-385 (PASS-organisations.md B5)`, with click binding, `aria-selected`/`tabIndex`/`hidden`
+management and arrow-key/Home/End navigation all present. `git log -1 -- organisations.html` and
+`git status` both confirm this file has no uncommitted changes — this is the real, shipped state,
+not a stray in-progress edit. Tested live rather than trusting the brief's diagnosis: clicking
+`finance` correctly sets its `aria-selected="true"`, hides the `leadership` panel, and shows the
+`finance` panel. Arrow-Right, Home and End all move both focus and selection correctly. Per this
+register's own "fix-register entries outrank this brief" rule and SR-385's own entry (which
+records this exact handler as delivered), §1's specific claim is stale — most likely written
+against a pre-SR-385 snapshot, or against a moment between SR-385 landing and this pass being
+drafted. No code change made for §1.
+
+**§2 — full audit, as instructed regardless of §1's outcome.**
+- `organisations.html`: exactly one `role="tablist"` (the department/function one above) and one
+  native `<details>/<summary>` FAQ accordion (six items) — browser-native disclosure, no custom JS
+  to break, not part of this fault pattern. No other toggle, switch or panel-swap control exists on
+  the page; the file's only inline `<script>` block contains just the reveal-on-scroll IIFE and this
+  tablist's own handler — nothing else to audit.
+- **A second `role="tab"` pattern exists sitewide**, on `dashboard.html` (`data-track`, 3 tabs) —
+  a separate, differently-implemented control (its own inline handler, `data-track` not
+  `data-sr-org-tab`), predating and unrelated to SR-385/388/389. Tested live: clicking track 2
+  correctly flips `aria-selected` across all three tabs. Working, and out of this brief's declared
+  scope (`organisations.html`) regardless.
+- Checked every other interactive control the page carries for a silent no-op, per §5's "check the
+  whole page" instruction: the theme toggle (`sessionStorage['sr-theme']`, unmodified — confirmed
+  live, flips `data-theme` and persists) and the `mailto:` action links (plain links, not
+  JS-dependent) both work. Nothing else on the page is interactive beyond standard navigation.
+
+**§3 — requirements checked against the existing handler, one gap found and closed.** `role`
+trio, `aria-selected` movement, `aria-controls`/`id` pairing, `hidden` (not just visual) on
+non-selected panels, arrow-key + Home/End navigation, and a border-bottom reserved in every
+state (`border-bottom:2px solid transparent`, so selection doesn't shift the row) were all already
+correct. Selected vs. hover: already visually distinct in the CSS — hover changes only text colour
+(`--text3` → `--text2`), selection additionally sets a gold border-bottom and `--gold-lt` text; the
+two states do not read the same. **Gap: `prefers-reduced-motion: reduce` did not disable the
+tablist's transition** — `.sr-org-tabs button{transition:color .3s,border-color .3s}` was not
+listed in the file's one central `@media(prefers-reduced-motion:reduce)` block (line 1961), so
+SR-303's "motion runs regardless unless explicitly exempted" default left it running. Brief's §3
+explicitly requires this one disabled, so added `.sr-org-tabs button{transition:none!important}`
+to the existing central block, matching the `.sr-org-track`/`.sr-tp-card2` exception pattern SR-388
+used — not a new standalone block, per CLAUDE.md's rule.
+
+**Verified live**: all six tabs click-tested (not scroll-tested) with `aria-selected` and `hidden`
+checked in the DOM after each; ArrowRight/Home/End move both focus and selection; 390px — the tab
+row wraps to multiple lines (`flex-wrap:wrap`, confirmed no horizontal overflow) rather than
+requiring scroll, and both a wrapped first-row tab and a second-row tab (`finance`) remain clickable
+and correctly update state.
+
+Files: `css/saferise-system.css`.
+
+*Status:* closed — the brief's named fault did not reproduce (reported, not re-fixed); full audit
+found exactly one other tablist sitewide (`dashboard.html`, unrelated and already working) and no
+other broken control on `organisations.html`; one real gap found and closed (reduced motion). **Not
+pushed.** *Raised and fixed:* 14 Sep 2026
