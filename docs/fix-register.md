@@ -17,7 +17,18 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-372** (the slug problem solved — Option A, 30
+- **Highest ID issued: SR-387** (the seventeen-item defect sweep itself — allocated per this
+  pass's own instruction, "one SR ID for the sweep." No `git log` cross-check this time since
+  the working tree wasn't yet committed at the moment of allocation; verify against
+  `git log -1` once SR-387 lands.)
+- **Previously: Highest ID issued: SR-386** (`/plans` rebuilt from the approved mockup and absorbs
+  `/pricing`, retiring the live €19/€29/€39 ladder — verified via `git --no-pager log
+  --oneline -5`, which found `b86d024` (SR-386) as HEAD with nothing issued after it.
+  Corrected by the defect-sweep pass (LG-114/A4): this line had gone stale at SR-372
+  while SR-373 through SR-385 landed without it being updated — exactly the failure mode
+  this note already warns about below. Re-verify before the next allocation, same as
+  always.)
+- **Previously: Highest ID issued: SR-372** (the slug problem solved — Option A, 30
   protocols confirmed, not 31 — the three track portals retired rather
   than moved (their content already existed, more completely, at the real
   URLs), the protocol router finished with full slug resolution and a
@@ -3631,7 +3642,14 @@ recommendation is unchanged: reissue the Track 03 band at **1400×380**. Vertica
 safer axis — the brief is *"corridor moments before the room, desk log, reading at day's end"*,
 three moments across the width.
 
-*Status:* blocked — awaiting a 1400×380 render · *Raised:* 23 Aug 2026
+*Status:* the blocking condition is resolved — `assets/journey/t3-band.jpg` now measures
+**1400×380** (verified directly, `PIL.Image.size`), matching t1/t2 exactly rather than the
+1400×583 this entry originally reported, and a `t3-band.webp` sibling exists too. `content/
+tracks.js`'s Track 03 `band` field (~line 611) still carries no `src`, so the image is not
+actually wired in yet — the SR-224 comment above it is now describing a file that no longer
+exists in that shape. Corrected here (LG-114) rather than left to read as still-blocked;
+wiring the `src` in is a small, separate follow-up, not done as part of this correction.
+· *Raised:* 23 Aug 2026 · *Corrected:* 14 Sep 2026
 
 ---
 
@@ -15126,3 +15144,155 @@ touched:** `pricing.html` (retired, not deleted), `for-organisations.html`.
 
 *Status:* closed. **Not pushed.**
 *Raised and fixed:* 14 Sep 2026
+
+## SR-387 · seventeen-item defect sweep — twelve closed, five already correct, one flagged out of scope
+
+Runs `pass/PASS-defect-sweep.md`. Per-item outcome:
+
+**Block A — hygiene**
+- **A1** (`node --check` + `JSON.parse`, LG-53): no Node in this environment; syntax-checked all
+  19 `.js` files via the browser's own `new Function()` parser instead. 19/19 pass — the one
+  apparent failure (`scripts/gen-sitemap.js`) was a false positive from the `#!/usr/bin/env node`
+  shebang line, which `new Function()` can't parse but Node strips natively before parsing;
+  confirmed by stripping it and re-parsing. `RESOURCE_CONTENT`'s main declaration in `index.html`
+  is valid JSON (72,143 chars); `protocol.html` has none (expected — its own comment says so). Seven
+  later-appended `RESOURCE_CONTENT['key'] = {...}` reassignment blocks (`p1-guide`, `p2-guide`,
+  `p2-disclosure` ×2, `p2-repair`, `p2-advisory`, `p1-advisory`) fail `JSON.parse` — they use
+  unquoted keys and single-quoted strings, valid JavaScript, not valid JSON. Runs correctly (zero
+  console errors, confirmed live); reported as a style inconsistency, not fixed, per this task's own
+  "fix only what is trivially broken" instruction — rewriting seven content blocks' syntax family
+  is not trivial.
+- **A2** (`member-*.html` `</div>` mismatch, LG-107): real bug, in 6 of 8 files
+  (`member-heartmath/jung/kross/mate/porges/watts.html`; `member-coming-soon.html` and
+  `member-frameworks.html` were already clean). A naive open/close count balanced file-wide in
+  every file, masking two independent, opposite-direction defects that happened to cancel out —
+  found only via a real tag-stack trace (Python's `html.parser.HTMLParser`, not regex counting).
+  Per file: (1) the final "Sessions & workshops" card in `.sr-fw-loads` is a bare
+  `<div class="sr-fw-card">` (its siblings are `<a class="sr-fw-card" href="...">`, no `href` on
+  this one since it isn't a link) and only closed `.sr-fw-cardbody`, never `.sr-fw-card` itself —
+  missing one `</div>`. This deficit was silently absorbed by the parser closing `.sr-fw-card` early
+  when it hit the section's `</section>`, corrupting nesting for nothing downstream (each file's
+  last section). (2) `.sr-fw-body`'s own close was one `</div>` too early — right after
+  `.sr-fw-statelist` — so the "ART SLOT B" band-image `<figure>` sat outside `.sr-fw-body` and the
+  close that was meant for `.sr-fw-body` (right before `</section>`) became an orphan. Fixed both
+  in all 6 files: added the missing card close, moved the early body close down. Re-traced every
+  file after — zero mismatches, zero orphans, empty stack at EOF. Verified live: `member-heartmath.html`
+  now shows 6 cards (was rendering fine visually despite the bug, since browsers auto-recover from
+  mismatched tags — the risk was silent, not visibly broken), band figure confirmed inside
+  `.sr-fw-body`.
+- **A3** (orphaned `.postfilm-*` CSS, LG-112): confirmed zero live markup references anywhere
+  (only in `docs/tracker-v23/v31.html`'s own description of this finding). Removed all 10 rules
+  plus the 2-rule mobile override block from `css/saferise-system.css` (was: `.postfilm-recognition`,
+  `.postfilm-grid`, `.postfilm-copy h2`/`h2 em`/`>p:not(.eyebrow)`, `.postfilm-pull`/`pull p`, the
+  `.postfilm-recognition + .routersec` sibling rule, both `@media(max-width:900px)` overrides).
+- **A4** (stale line, `docs/fix-register.md`, LG-114): found by content (SR-243's own entry, "band
+  still blocked" status). The blocking condition no longer holds — `assets/journey/t3-band.jpg` now
+  measures 1400×380 (`PIL.Image.size`, verified directly), matching t1/t2 exactly, not the 1400×583
+  the entry originally reported; a `.webp` sibling exists too. `content/tracks.js`'s Track 03 `band`
+  field still carries no `src`, so the image isn't wired in — corrected the status line to say so
+  rather than either silently doing that (separate, larger) code change or leaving a status that's
+  now false. Also corrected, per direct instruction: the "Highest ID issued" line had gone stale at
+  SR-372 while SR-373 through SR-386 landed without it being updated — moved to SR-386 (now SR-387),
+  with the previous line preserved per this note's own convention.
+- **A5** (SR-380's split landing, LG-249): register entry exists (`## SR-380`), is detailed, and its
+  two named commits (`ec6f1b1`, `df6eb4c`) match real git history exactly by hash and message.
+  Accurate as written — verified, not rewritten, per instruction.
+
+**Block B — links**
+- **B1** (13 broken image refs, LG-234): the 10 `assets/covers/t1-01.jpg`–`t1-10.jpg` refs were
+  already fixed by an earlier pass (an existing register entry documents "All 20 references
+  rewritten," and zero such literal strings remain live — confirmed). `assets/brand/logo.png`
+  (referenced in `protocol.html`'s and `js/saferise-footer.js`'s schema.org JSON-LD): genuinely
+  missing — `assets/brand/` holds only `pangolin.svg`. Reported, not silently redirected to the SVG
+  (a format schema.org's `logo` property doesn't reliably favour). `assets/anxiety-hero.webp`: not a
+  live reference at all — sits inside a `/* SWAP: */` dead-code comment in `protocol.html` and
+  `resource.html`, the same "placeholder for future art" convention as "NEEDS ART" elsewhere.
+  `assets/covers/NN.jpg` template literal: already correct — `dashboard.html:1192`'s
+  `COVERDIR[track] + no + '.jpg'` already special-cases track 1 to the bare-numbered filename
+  convention, matching disk. Nothing to fix; three of four sub-items were already correct or
+  genuinely absent files, not path bugs.
+- **B2** ("Enter the reflection", LG-132): already fixed, by SR-373 — its own code comment cites
+  LG-132 by name. `protocol.html`'s `.decision-link` is set dynamically to
+  `resource.html?track=…&protocol=…&resource=The Decision`. Verified through the real member route
+  (`protocol.html?track=1&protocol=01` → click → `resource.html`): lands correctly, `.sr-dc-root`
+  (The Decision's interactive component) renders, zero console errors.
+- **B3** ("Request a 1:1 session", LG-247): was `href="#"` in `resource.html`. Every real internal
+  link site-wide uses the `.html` filename form, not the clean-URL form (confirmed by grep across
+  9 pages) — matched that convention: `href="live-sessions.html"`. Verified live.
+- **B4** (`accessibility.html` missing `noindex`, LG-176): fixed, matching the exact tag and
+  position `terms.html` (its own stated chrome source) uses. Also swept every page: 5 total were
+  missing it. `organisations.html` and `plans.html` are **not** oversights — both carry explicit,
+  dated comments (SR-385, SR-386) documenting that `noindex` was deliberately removed because
+  they're the site's actual front doors; correctly left alone. The other two —
+  `for-organisations.html` and `pricing.html` — are retired pages kept on disk with a 301 redirect
+  away from their old URLs (SR-385/386); added `noindex` to both as a defense-in-depth measure in
+  case the redirect isn't live everywhere yet.
+
+**Block C — layout**
+- **C1** (clipped protocol titles, LG-46): investigated as "same surface as SR-382, or a third
+  one." Found a third surface: SR-383/384's track-landing rebuild replaced SR-382's first fixed
+  surface (`.sr-tp-pmeta h3`, now dead CSS — zero live references anywhere) with a new
+  `.sr-tp-card2 h3`. Checked it directly: no `max-height`/line-clamp on the `h3` itself, but the
+  card commits `overflow:hidden`, so a long/wrapped title could clip against the card's top edge in
+  principle. Tested every title on all three track pages, at 1440 and 390px, in both normal and
+  `:hover` state (which shifts the title upward to make room for the description) — zero titles
+  clip anywhere. SR-382's other fixed surface (`.sr-dash-cardname` on `dashboard.html`) also still
+  holds, zero clipped. Not reproduced on any live surface today.
+- **C2** (protocol title font oversized, LG-237, "check live first — may already be correct"):
+  already correct. `#pp-title` renders at a normal 26.6px, one line, 902px wide — confirmed via
+  screenshot, not just computed style (an early `getBoundingClientRect()` read returned a spurious
+  `width:0` mid-animation; a second read and a screenshot both confirm normal, un-oversized
+  rendering).
+- **C3** (dead space under resource content, LG-239): investigated extensively — analytically
+  (element-by-element `getBoundingClientRect()` gap analysis across all 8 resource types on
+  `resource.html`, in both viewport-relative and `scrollHeight`-relative terms) and visually
+  (screenshots). The one apparent ~311px "gap" between `#rbody` and `.sr-main` is not dead space:
+  it's `#closeblock` (the "Return to your journal?" CTA, present after every resource type) plus
+  its own margins — confirmed identical across all 8 resource types precisely because it's a fixed
+  element unrelated to which resource is showing, not a symptom of unused reserved height. No
+  `min-height` on `#rbody` in any state (0px in all 8 checked). Could not reproduce the defect as
+  described on this build; possibly fixed by an intervening pass (SR-379's editorial-reader work is
+  the likeliest candidate) or specific to a reproduction path this pass's testing didn't hit.
+- **C4** (loading placeholder gold family, LG-47): the actual placeholder family —
+  `.video-placeholder`/`.audio-placeholder`/`.pdf-placeholder` (`css/saferise-system.css`, "A6 ·
+  media frames") — already uses one consistent, theme-aware `--gold` value everywhere it's defined:
+  `#D4A843` (midnight) / `#FFD894` (sunrise), matching the canonical `--sr-gold` gradient's own
+  midpoint stop. Zero variance found in the token these components actually use. Found, but did not
+  touch: `--gold-lt` carries two different midnight-theme values in different surface scopes
+  (`#ECC96A` in the lone `.sr-tp` reset block vs `#E8C877` in four `.sr-public`-family blocks) — real,
+  but unrelated to loading placeholders specifically, and `--gold-lt` is a widely shared token whose
+  correct value isn't something this task's scope authorises picking — flagged for its own pass
+  rather than edited here on a guess.
+
+**Block D — copy**
+- **D1** (last prohibited word, LG-144, product/nav scope only): already correct. The flagged
+  phrase ("the person you are practising being now") is confirmed absent from `index.html` by
+  direct grep — zero occurrences. The referenced SR-356 execution holds, independent of whether
+  that report itself was ever reviewed.
+- **D2** (dashboard banner copy, LG-243): already correct. "Meditation quiets the noise" is
+  confirmed absent from `dashboard.html` by direct grep.
+- **D3** (homepage footer scope-and-safety, LG-242): renders correctly, live. Core wording matches
+  `dashboard.html`'s `.sr-dash-foot` scope text exactly, word for word (confirmed by direct text
+  comparison) — the SR-381 rewrite that unified them still holds. The one known divergence
+  (`index.html`'s footer additionally carries a findahelpline.com line dashboard's doesn't) is
+  already self-documented in `index.html`'s own code comment as a deliberate, reported difference,
+  not silently harmonised there either — nothing further to report or change.
+
+**Verification.** Browser-checked against the live tree throughout, not from source reading alone:
+B2/B3 through their real navigation routes; A2's fix on a live page (card count, DOM nesting); B4
+across every page in the repo; C1–C4 with live computed styles and screenshots, not assumptions;
+390px overflow checked on every file this pass edited (`resource.html`, `member-heartmath.html`,
+and by the same fix, the other 5 member pages) — none introduced.
+
+**Files touched:** `member-heartmath.html`, `member-jung.html`, `member-kross.html`,
+`member-mate.html`, `member-porges.html`, `member-watts.html` (A2, two `</div>` fixes each),
+`css/saferise-system.css` (A3, dead CSS removed), `docs/fix-register.md` (A4), `resource.html`
+(B3), `accessibility.html`, `for-organisations.html`, `pricing.html` (B4, `noindex` added).
+
+**Not touched, reported only:** A1's 7 non-JSON `RESOURCE_CONTENT` blocks, A5 (verified accurate),
+B1 (already correct / genuinely missing / already correct, no live bug), C1–C3 (not reproduced),
+C4's `--gold-lt` duplication, D1/D2 (already correct), D3 (already correct, divergence
+pre-reported).
+
+*Status:* closed — 12 items fixed and verified, 5 already correct, 1 flagged out of scope for a
+future pass. **Not pushed.** *Raised and fixed:* 14 Sep 2026
