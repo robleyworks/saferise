@@ -371,7 +371,7 @@
         '<p class="sr-tp-terms2">' + val(t.priceNote, 'priceNote') + '</p>' +
       '</div></div>' +
       '<div class="sr-tp-upgrade2"><p><b>' + esc(L.upgradeTitle) + '</b>' + esc(L.upgradeBody) + '</p>' +
-        '<a href="pricing.html">See full membership →</a></div>' +
+        '<a href="plans.html">See full membership →</a></div>' +
     '</div></div>';
   }
 

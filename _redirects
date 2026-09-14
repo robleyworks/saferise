@@ -99,6 +99,19 @@
 /organisations         /organisations.html        200
 /for-organisations      /organisations              301
 
+# SR-386 (PASS-plans-final.md §1) · /plans absorbs /pricing. /pricing had
+# the correct prices but no traffic (nothing linked to it except one
+# comment in for-organisations.html, not a real link); /plans had the
+# traffic (the nav points here) and, until this pass, the retired
+# €19/€29/€39 ladder. pricing.html itself is left on disk, not deleted,
+# same as for-organisations.html above — unlinked, redirected, kept until
+# the redirect is confirmed working. The .html form needs the ! force
+# flag (like /docs, /pass, /scripts up top): the file still exists on
+# disk, and without it Netlify serves the real file instead of redirecting,
+# same reasoning as that block's own comment.
+/pricing                /plans                       301
+/pricing.html            /plans                       301!
+
 # Every legacy protocol URL — query-string form, both with and without
 # the .html extension — to its slug. Track 01, then 02, then 03, in
 # protocol order; content/tracks.js's own row order, not alphabetised.

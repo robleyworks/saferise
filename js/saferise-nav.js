@@ -72,7 +72,7 @@
     items += '<a role="menuitem" href="coming-soon.html" class="nm soon"' +
       (current === 'coming-soon.html' ? ' aria-current="page"' : '') + '>' +
       '<span class="nmk">Not yet open</span><span class="nmn">What&#8217;s coming</span>' +
-      '<span class="nmd">Six more tracks in development</span></a>';
+      '<span class="nmd">Eight more tracks in development</span></a>';
 
     var flat = LINKS.map(function (l) {
       return '<a href="' + l[0] + '">' + l[1] + '</a>';

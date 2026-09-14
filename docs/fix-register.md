@@ -14928,3 +14928,201 @@ rejected drop-in). **Not touched:** `for-organisations.html` (retired, not delet
 
 *Status:* closed. **Not pushed.**
 *Raised and fixed:* 14 Sep 2026
+
+## SR-386 · /plans rebuilt from the approved mockup, absorbing /pricing; the live €19/€29/€39 ladder retired
+
+`PASS-plans-final.md`, first of four queued passes (`PASS-org-pricing-tracks.md`,
+`PASS-org-layout.md` and `PASS-org-tabs.md` do not exist on disk — see the note at the
+end of this entry, not guessed at or written from memory).
+
+**1 · Consolidation.** `/plans` was what the nav pointed at and was serving the
+retired cumulative ladder (€19 Track 01 / €29 Tracks 01+02 / €39 all three) as literal
+text in five places (`.tcprice`/`.nrow .pr` spans) — the exact defect the brief calls
+"the single most visible pricing error on the site," confirmed live before touching
+anything. `/pricing` had the correct model but no inbound links except one HTML
+comment (not a real link) in `for-organisations.html`. `/plans` kept the URL;
+`/pricing` and `/pricing.html` now 301 to it (`pricing.html` itself left on disk,
+unlinked, same as `for-organisations.html` under SR-385 — not deleted until the
+redirect is confirmed working; the `.html` form needed the `!` force flag since the
+file still exists and Netlify would otherwise serve it instead of redirecting).
+`noindex` removed from `/plans` — it was never appropriate for the page the nav
+points at. The one real inbound link to `pricing.html` (`js/saferise-track.js`'s
+"See full membership →" CTA in each track page's upgrade panel) now points to
+`plans.html`.
+
+**2/3 · Rebuild, prices from data.** New `js/saferise-plans.js` (same pattern as
+`js/saferise-track.js`) renders the whole page; `content/tracks.js` is the only
+source for every amount — `PRICING.t1/t2/premium1/premium3/workshopPersonal/
+workshopRelationship`, `TRACKS[1-3].protocols`, `SHARED.resources`. Nothing in the
+markup is a literal price. New `sr-pl-` CSS (css/saferise-system.css, ~380 lines) —
+claimed in CLAUDE.md's surface-code table — translates the mock's generic class names
+(`.plan`/`.price`/`.core`/`.lv`/`.org`/`.close`, several of them exactly the
+collision-prone names CLAUDE.md's own "why" section warns about) rather than reusing
+them verbatim. The old page's entire prior CSS (`.hero`/`.doors`/`.tiers`/`.tcols`/
+`.planhero`/`.resource-section` and several other retired v7/v8 mockup iterations
+accumulated across earlier passes) is removed along with the markup that used it —
+this was a full rebuild, not an patch.
+
+**Cross-checked against `content/tracks.js` and `live-sessions.html` (§3), one real
+disagreement found and NOT reconciled myself, per instruction:**
+`PRICING.workshopPersonal` is **€39/person**, `workshopRelationship` **€39/couple** —
+both read live on `/plans` now. The brief's own §3 table says "€29 single · €39 per
+couple", and `live-sessions.html` currently displays "€29 · Personal · per person" (a
+figure I did not touch — it predates this pass and sits outside `/plans`/`/pricing`,
+the two pages this brief scopes). `content/tracks.js`'s own SR-381 comment on this
+exact field already flagged the same split: "O1's price book states 'Workshops | €39
+per person'... left unchanged, reported as ambiguous rather than guessed at." Three
+sources, two different numbers (tracks.js €39/€39; the brief and live-sessions.html
+both say €29/€39) — `/plans` renders from data as instructed ("no hardcoded prices"),
+so it shows €39/€39, disagreeing with the page that sells the same workshops.
+**Andre needs to pick one figure and fix whichever source is wrong** —
+`content/tracks.js` or `live-sessions.html` — this pass did not choose.
+Separately, **§3's "Launch rate €79 · €199 while the market is tested" for Premium
+1:1 has no basis anywhere in the tree** — not in `content/tracks.js`, not in
+`live-sessions.html`'s live pricing. This is the second time this exact figure has
+been reported missing from every data source this session (the first was under
+`PASS-b2c-b2b-split.md`, SR-385's own entry). Not rendered — the mock's own `.launch`
+line under Premium 1:1 is dropped rather than shipped as an invented number.
+
+**4 · Core-library cards — eight, five in development, per §4/§7.** `Personal
+Transformation`/`Professional Performance`/`Relationship Healing` read their name
+from `TRACKS[id].name` and their accent from the real system `--t1/--t2/--t3` tokens
+(`#C97B5A`/`#7A8FA8`/`#6E9080`) — **not** the mock's own standalone preview colours
+(`--t1:#D4A843` etc), which exist only because the mock is a self-contained static
+file with no access to the live token set and would visibly disagree with how
+t1/t2/t3 are coloured everywhere else on the site (nav dropdown, track pages).
+Reported as a DIFFERS rather than applied literally. The five in-development cards —
+Executive Presence, Embodied Nutrition, Strength & Return, Elevation Series — use
+`coming-soon.html`'s own per-track band photos (`band-08`/`band-04`/`band-03`/
+`band-01.webp`, matched by direct comparison of that page's own kicker/name pairs to
+its image sources, not guessed). **The fifth, "Sleep & Recovery", matches no track
+anywhere** — not in `coming-soon.html`'s eight upcoming tracks (Elevation Series, Sex
+& Intimacy, Executive Presence, Strength & Return, Embodied Nutrition, Entrepreneur's
+Journey, Money Shift, Addiction Recovery), not in `content/tracks.js` (only
+`TRACKS[4]`, Elevation Series, has any record at all), not in any nav. Rendered
+anyway, per the brief's own explicit naming of it, with the hatch placeholder instead
+of a wrong photo — **flagged for Andre to confirm whether this is a genuinely new,
+unbuilt track or a mislabel for one of the four upcoming tracks the brief's list left
+out** (Sex & Intimacy, Entrepreneur's Journey, Money Shift, Addiction Recovery).
+**Accent colours for all five in-development cards are the mock's own inline
+`--ca`/`--cglow` values, carried over unchanged** (`#B9A17A`/`#7B87A8`/`#8FA37B`/
+`#C08A5E`/`#AEB7CE`) — reported per the brief's own instruction, not yet system
+tokens. **Hero image:** no `assets/pages/plans-hero.jpg` exists (the mock's own
+placeholder path was aspirational) and nothing else in `assets/` suited a
+pricing-page mood shot without borrowing meaning from a page it already belongs to
+(`hero-corridor.webp` is dashboard's, `coming-hero.webp` is coming-soon's) — hatch
+placeholder, reported rather than guessed.
+
+**"Inside every protocol" — real resource types, not the mock's own partly-invented
+list.** The mock names twelve resources across its four stages; five of them
+("Guided Experience", "Breathwork", "Perspectives", "Capacity Check", "Protocol
+Guide") match no entry in `SHARED.resources` — grepped directly, not assumed. Since
+this section makes a factual claim about what a paying member's library actually
+contains, it renders the eleven real, universal `SHARED.resources` entries instead
+(regrouped into the same four-stage structure the mock proposes — Regulate/
+Understand/Integrate/Use it in real life — which is sound narrative structure worth
+keeping even though its specific card-by-card contents needed correcting). The
+twelfth resource, "Raising It" (`case`/`raising`), ships on Track 03 only per its own
+code comment and is deliberately left out of this cross-track summary rather than
+implied as something every protocol carries.
+
+**5 · Carousel — audited and verified against the running site, not rebuilt.**
+`js/saferise-system.js`'s `initCarousel()` already implements every behaviour §5
+asks for, confirmed by direct code reading: continuous auto-advance from load
+(`disableSnap();startInterval()`, unconditional once past the reduced-motion gate);
+hover pauses **and resumes** (`mouseenter`→`pause()`, `mouseleave`→
+`scheduleResume()`, a 2s delay, both wired independently of the separate permanent-
+stop path); focus-in/out mirrors hover; an `IntersectionObserver` pauses off-screen
+and resumes back in view; `prefers-reduced-motion` disables the component entirely
+rather than slowing it (`if (reduced.matches) { restoreSnap(); return; }` — never
+starts the interval at all); a zero-width guard inside `tick()` skips a frame if
+`cards[0].getBoundingClientRect().width < 2`. **None of this needed building — it
+was already built this session, during `PASS-track-landing-pages.md`'s carousel
+revival.** §5's own SR-368 warning does not apply here: SR-368 fixed a *different*,
+now-retired carousel implementation (`js/saferise-track.js`'s own discrete
+`go(i)`/`maxIndex()` stepper, confirmed no longer present anywhere in the tree —
+grepped directly) used by the old track-page resource rail, not the continuous-drift
+`initCarousel()` the brief names. SR-368's own register text already establishes
+hover-pause-then-resume as *correct*, pre-existing behaviour on that other component
+too ("SR-290 already built auto-advance... pause on hover/focus" — the two things
+SR-368 changed were adding a *permanent* stop for manual input and making reduced
+motion a full stop, neither of which conflicts with hover-resume). No conflict to
+report; nothing to leave alone.
+**Surfaces confirmed, one by one:** the three track-landing rails — live, `data-sr-
+carousel`/`data-sr-track` (grepped). The dashboard Library carousel — architecturally
+different (a one-time 13-second arrival gesture that deliberately stops permanently,
+by its own code comment, not a perpetual carousel), already reported not touched
+under `PASS-track-reorder.md`; unchanged this pass. `protocol.html`/`resource.html` —
+grepped for `data-sr-carousel`: zero matches, no rail on either page. The new
+`/plans` — the mock's own "the library" section is a static ruled two-column list
+(`ul.pl`), not a carousel; nothing to wire up. Live verification of the interval
+itself was not possible in this sandboxed browser — `document.hidden` reads `true`
+for the fronted tab here, the same limitation SR-368's own entry already documented
+and worked around by code inspection; this entry does the same, plus confirmed the
+`pause()`/`scheduleResume()` *listeners themselves* fire correctly on real
+`mouseenter`/`mouseleave` events (observed via `scroll-snap-type` toggling, a direct
+side effect of those two functions) even though the throttled interval couldn't be
+timed live.
+
+**6 · Navigation — track count, reconciled and reported.** Was "Seven more tracks in
+development" on five hardcoded nav copies, "Six" on `js/saferise-nav.js`'s shared
+module (covering the other twelve pages) and independently on `method.html`, and
+`coming-soon.html`'s own page carried both counts at once — its `<title>` already
+said "eight tracks in development", its `<h2>` said "Seven tracks." **This is prose,
+not derived from data** — `content/tracks.js` has no record at all for seven of the
+eight upcoming tracks (only `TRACKS[4]`, Elevation Series, exists, and it's
+`visible:false`) — so there was nothing to derive it *from*; it's corrected by direct
+count instead, same as `coming-soon.html` itself already hardcodes those eight names.
+Real count, verified by reading `coming-soon.html`'s own eight `.tb` cards directly:
+**eight**. Fixed to "Eight more tracks in development" everywhere it appeared —
+`js/saferise-nav.js`, `method.html`, `live-sessions.html`, `anxiety-reset.html`,
+`coming-soon.html`, `about.html`, `index.html`, `plans.html` (new copy, correct from
+the start) — and `coming-soon.html`'s own `<h2>` ("Seven tracks" → "Eight tracks") so
+the page no longer disagrees with its own `<title>`. `pricing.html` and
+`for-organisations.html` (both retired) were left as they were, same treatment as the
+rest of their content.
+
+**7/8 · Verified live in-browser.** `/plans` renders every price from data (spot-
+checked: Track 01 "Free", membership "€19"→toggle→"€190", Premium 1:1 "€129 a session
+· €349 for three", workshops "€39 per person · €39 per couple" — matching
+`content/tracks.js` exactly). Eight core cards render (three real photos + accent
+tokens, four coming-soon band photos, one hatch placeholder); 30 protocol rows across
+three ruled lists; four resource-stage groups. Keyboard focus reproduces the hover
+state on both the core cards (`:focus-within`) and the library rows (confirmed via
+`.matches(':focus-within')`). **390px:** confirmed via full-page overflow sweep and
+screenshot — nav wraps (the same SR-385 fix, unrelated to this pass), core grid
+stacks to one column, the track index goes single-column with descriptions already
+shown (not hover-gated) per its own `max-width:760px` rule, price toggle usable.
+**Found and fixed during this verification, not a pre-existing site defect:** the
+mock's own `.tsec{margin:0 -9999px;padding:0 9999px}` full-bleed technique — copied
+into `.sr-pl-tsec` at first — measured live as a genuine bug in this page's actual
+DOM: `document.documentElement.scrollWidth` ballooned to ~20,000px and the fixed
+`.nav` (`left:0;right:0`, meant to always span the viewport) rendered **1500px wide
+in a 375px viewport**. `.sr-pl-tsec` never needed the trick at all — it's already a
+plain block-level child of `<main>` with nothing constraining its width — so the
+`-9999px` pair (on both the section and its own `.sr-pl-ph-fill`/`.sr-pl-ph-scrim`
+children) was removed outright rather than patched. Re-verified after the fix: nav
+back to exactly 375px, `scrollWidth` back to 375, zero elements over viewport width
+site-wide. Reduced-motion could not be emulated live in this sandbox (no toggle
+available here, same limitation noted in the SR-385 entry) — verified by code
+inspection instead, using the same `reduced.matches` gate pattern already confirmed
+correct on every other component this session.
+
+**Passes 2-4 do not exist on disk.** The user's instruction named
+`pass/PASS-org-pricing-tracks.md`, `pass/PASS-org-layout.md` and
+`pass/PASS-org-tabs.md` as queued to run immediately after this one, each with its
+own SR ID and commit. `ls pass/` and direct existence checks on all three paths
+confirm only `PASS-plans-final.md` and its mockup are actually present. Not guessed
+at, not written from a description — reported here and to Andre directly, so the
+files can be added before the next three passes run.
+
+**Files touched:** `plans.html` (full rebuild), new `js/saferise-plans.js`, new
+`css/saferise-system.css` `sr-pl-*` rules (~380 lines) plus one bugfix to
+`.sr-pl-tsec`, `js/saferise-track.js` (one link), `js/saferise-nav.js` (LINKS
+already had `plans.html`; track-count copy), `coming-soon.html` (`<h2>` count fix),
+`method.html`/`live-sessions.html`/`anxiety-reset.html`/`about.html`/`index.html`
+(track-count copy only), `_redirects`, `CLAUDE.md` (surface-code table). **Not
+touched:** `pricing.html` (retired, not deleted), `for-organisations.html`.
+
+*Status:* closed. **Not pushed.**
+*Raised and fixed:* 14 Sep 2026
