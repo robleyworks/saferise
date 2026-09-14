@@ -147,9 +147,13 @@
     var h = t.art && t.art.hero;
     var L = LANDING_COPY[t.id];
     var free = t.price === PRICING.t1;
-    return '<div class="sr-tp-hero2"' + heroVars(t) + '>' +
-      (h && h.src ? '<img class="sr-tp-herostack" src="' + esc(h.src) +
-        '" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()">' : '') +
+    /* PASS-track-reorder.md §2 · a missing hero image degrades to the
+       hatch placeholder under the same scrim (background-image simply
+       unset, .sr-tp-hero2--ph paints the hatch in its place) rather than
+       a blank panel. Confirmed not to trigger for any of the three
+       tracks — all three hero images exist (SR-383) — kept as the real
+       degrade path regardless, same stance slot()/val() take elsewhere. */
+    return '<div class="sr-tp-hero2' + (!h || !h.src ? ' sr-tp-hero2--ph' : '') + '"' + heroVars(t) + '>' +
       '<div class="sr-tp-heroin2"><div class="sr-tp-eyebrow">' + t.kicker + '</div>' +
       '<h1>' + t.heroTitle + '</h1>' +
       '<p class="sr-tp-lead2">' + val(t.heroRule, 'heroRule') + '</p>' +
@@ -297,12 +301,12 @@
               'Use it.<br>Understand it.<br>Make it stick.',
               L.includedIntro) +
       '<div class="sr-tp-incgrid2">' +
-        '<article class="sr-tp-incitem2"><span>01 · Use it now</span><h3>Guided practice</h3>' +
+        '<article class="sr-tp-incitem2"><span>01 · Use it now</span><h3>Guided sessions</h3>' +
           '<p>Ten full guided protocols, follow-along video, quick-use versions and printable cue cards.</p></article>' +
         '<article class="sr-tp-incitem2"><span>02 · Understand the pattern</span><h3>Clear explanations</h3>' +
           '<p>Plain-language guidance, cited research and support on when to proceed or pause.</p></article>' +
         '<article class="sr-tp-incitem2"><span>03 · Make it stick</span><h3>Integration tools</h3>' +
-          '<p>Somatic practices, reflection prompts, support scripts and a private journal that stays on your device.</p></article>' +
+          '<p>Somatic release, reflection prompts, support scripts and a private journal that stays on your device.</p></article>' +
       '</div>' +
     '</div></div>';
   }
@@ -564,13 +568,14 @@
     /* SR-343 · the renderer emits the class, css/saferise-system.css owns what
        it does — --tp-accent for the two shared diagrams. */
     document.body.classList.add('sr-tp-t' + id);
-    /* PASS-track-landing-pages.md §1 · section order, identical across all
-       three tracks: hero, protocols, method, outcomes, included (present in
-       all three approved mockups though not one of the brief's own 8 named
-       sections — see the pass report), states band, proof, price, FAQ. */
+    /* PASS-track-reorder.md §1 · reordered from SR-383's own sequence
+       (hero, protocols, method, outcomes, included, states band, proof,
+       price, FAQ) — the four sections between the rail and the chart now
+       run reversed: states band, included, outcomes, method. Hero, the
+       rail, and everything from proof onward hold their place. */
     document.getElementById('page').innerHTML =
-      rHero(t) + rProtocols(t) + rMethod(t) + rOutcomes(t) + rIncluded(t) +
-      rStates(t) + rProof(t) + rPrice(t) + rFaq(t);
+      rHero(t) + rProtocols(t) + rStates(t) + rIncluded(t) + rOutcomes(t) +
+      rMethod(t) + rProof(t) + rPrice(t) + rFaq(t);
 
     var free = t.price === PRICING.t1;
     var sp = document.getElementById('stickyprice');

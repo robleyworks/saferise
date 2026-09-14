@@ -2631,11 +2631,29 @@ body.sr-breath .sr-player.is-next .audio-play{
 .sr-tp{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
 .sr-tp img, .sr-tp svg{display:block;max-width:100%}
 .sr-tp .sr-tp-shell{max-width:1180px;margin:0 auto;padding:0 24px}
-/* SR-341 · the shared public .nav is position:fixed (~97px tall) and, unlike
-   the .sr-tp-nav it replaces, contributes nothing to document flow — without
-   this, page content starts under the nav instead of below it. */
-.sr-tp #main{padding-top:110px}
-.sr-tp .sr-tp-band{background:linear-gradient(145deg,rgba(255,255,255,.012),transparent 46%),var(--band);border:1px solid rgba(255,255,255,.035);border-radius:18px;padding:80px 56px;margin:24px 0;overflow:hidden}
+/* SR-341 · was written for the shared public .nav (position:fixed,
+   ~97px), which contributed nothing to document flow. PASS-track-
+   reorder.md §3 · that's no longer what renders here: .sr-tp .sr-tp-nav
+   is forced position:static (below), so it already occupies real space
+   in flow and needs no compensating padding — this was stacking on top
+   of that, pushing the hero down a second time for a fixed nav that
+   isn't the one these three pages use. #main has no other content
+   before the hero, so removed rather than reduced. Confirmed scoped to
+   only these three pages: #main exists nowhere else under .sr-tp
+   (grepped protocol.html, resource.html — neither has the id). */
+/* PASS-track-reorder.md §3 · was a boxed panel (background gradient,
+   border, 18px radius, 80px/56px padding, 24px margin) — the mockup's
+   sections are plain full-width rows with a top hairline, matching what
+   method.html's own .sr-mt-sec already does (clamp(40px,6vh,66px) 0,
+   border-top only). Read that value and applied it here rather than
+   inventing a new one. Before: 80px vertical (fixed). After:
+   clamp(40px,6vh,66px) — a real reduction at every viewport this was
+   measured against (900px tall laptop viewport: 80px -> ~54px per
+   section, four fewer such sections above the fold's worth of padding
+   before any real content shows). No other .sr-tp page renders
+   .sr-tp-band live (retired functions' dead code aside — see SR-383),
+   so this is not a shared-selector change in practice. */
+.sr-tp .sr-tp-band{padding:clamp(40px,6vh,66px) 0;border-top:1px solid var(--hair)}
 .sr-tp .sr-tp-band--alt{background:var(--band2)}
 .sr-tp .sr-tp-band--flush{padding-left:0;padding-right:0}
 .sr-tp .sr-tp-inner{max-width:900px;margin:0 auto}
@@ -4473,11 +4491,36 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
    ══════════════════════════════════════════════════════════════════ */
 
 /* -- hero -- */
+/* PASS-track-reorder.md §2/§3 · was margin-top:-73px, padding:calc(73px+92px)
+   — written against a wrong assumption that this page's nav is
+   position:static (a leftover .sr-tp .sr-tp-nav rule that, it turns out,
+   targets a class the real rendered nav never carries — js/saferise-nav.js
+   emits <nav class="nav">, not .sr-tp-nav). The real nav is the shared
+   .nav, position:fixed, ~81px measured live (varies a few px by content;
+   not hardcoded elsewhere in this file either, hence the live measurement
+   rather than a guess). Fixed-position elements take no space in flow, so
+   no negative margin is needed to pull the hero under it — the hero
+   already starts at the top of the page on its own; padding-top alone
+   clears its CONTENT past the nav while its BACKGROUND runs underneath,
+   all the way to y:0. The old negative-margin/relative-nav approach was
+   solving for a static nav that was never actually rendered.
+   padding-top is nav height + method.html's own section-padding floor
+   (clamp(40px,6vh,66px), its minimum: 40px) rather than the mockup's own
+   arbitrary 92px.
+   Underlay is now a real background-image, not a separate <img> — the
+   previous <img class="sr-tp-herostack"> was silently caught by the
+   OLD hero design's blanket `.sr-tp-herostack{display:none}` rule
+   (css/saferise-system.css, the .sr-tp-hero--photo block above), which
+   this new class never carries the counterpart class for — the image
+   was rendering, just permanently hidden. Renamed rather than fixed in
+   place, to stop sharing a name with a rule from a retired design. */
 .sr-tp-hero2{position:relative;overflow:hidden;min-height:100svh;display:grid;align-items:center;
-  margin-top:-73px;padding:calc(73px + 92px) 0 74px;background:var(--card)}
+  padding:calc(81px + 40px) 0 74px;
+  background:var(--sr-hero-img,none) center/cover no-repeat,var(--card)}
 .sr-tp-hero2:before{content:"";position:absolute;inset:0;z-index:0;
-  background:var(--sr-hero-scrim,linear-gradient(96deg,rgba(11,11,18,.92) 0%,rgba(11,11,18,.84) 34%,rgba(11,11,18,.56) 62%,rgba(11,11,18,.22) 80%,transparent 94%))}
-.sr-tp-herostack{position:absolute;inset:0;z-index:-1;width:100%;height:100%;object-fit:cover}
+  background:var(--sr-hero-scrim,linear-gradient(96deg,rgba(10,12,20,.96) 0%,rgba(10,12,20,.9) 38%,rgba(10,12,20,.6) 68%,rgba(10,12,20,.3) 100%)),
+    linear-gradient(0deg,var(--bg) 0%,transparent 44%)}
+.sr-tp-hero2--ph{background-image:repeating-linear-gradient(45deg,#141a2a,#141a2a 10px,#182034 10px,#182034 20px)!important}
 .sr-tp-heroin2{position:relative;z-index:1;max-width:610px;margin:0 24px;padding-left:calc(50vw - 590px + 24px)}
 @media(max-width:1180px){.sr-tp-heroin2{padding-left:24px}}
 .sr-tp-heroin2 h1{margin:.8rem 0 1.4rem;font-family:'Cormorant Garamond',Georgia,serif;
@@ -4503,17 +4546,24 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-tp .sr-tp-rail2{overflow:hidden;margin:0 -24px;padding:6px 24px 8px;cursor:grab}
 .sr-tp .sr-tp-railtrack2{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
   scrollbar-width:thin;scrollbar-color:var(--tc) transparent}
-.sr-tp .sr-tp-card2{scroll-snap-align:start;flex:0 0 250px;height:430px;display:flex;flex-direction:column;
+/* PASS-track-reorder.md §4 · option 1 — the cover now fills the whole
+   card (was a fixed 200px band, leaving the lower ~230px as dead space
+   at rest broken only by the title). Text sits over the image on a
+   scrim; card height stays fixed at 430px so the rail never reflows. */
+.sr-tp .sr-tp-card2{scroll-snap-align:start;flex:0 0 250px;height:430px;position:relative;
   border:1px solid var(--hair);border-radius:8px;background:var(--card);overflow:hidden;
   transition:border-color .3s;cursor:pointer}
 .sr-tp .sr-tp-card2:hover,.sr-tp .sr-tp-card2:focus-within{border-color:var(--tc)}
 .sr-tp .sr-tp-card2:focus-visible{outline:2px solid var(--tc);outline-offset:2px}
-.sr-tp-cardcov2{position:relative;height:200px;flex:none;overflow:hidden;background:
+.sr-tp-cardcov2{position:absolute;inset:0;overflow:hidden;background:
   repeating-linear-gradient(45deg,#141a2a,#141a2a 10px,#182034 10px,#182034 20px)}
 .sr-tp-cardimg2{width:100%;height:100%;object-fit:cover;transition:transform 4s cubic-bezier(.4,0,.5,1)}
 .sr-tp .sr-tp-card2:hover .sr-tp-cardimg2,.sr-tp .sr-tp-card2:focus-within .sr-tp-cardimg2{transform:scale(1.06)}
 .sr-tp-cardcov2:after{content:"";position:absolute;inset:0;
-  background:linear-gradient(0deg,var(--bg2,var(--card)) 4%,rgba(13,13,19,.42) 64%,transparent 100%)}
+  background:linear-gradient(0deg,rgba(8,8,12,.94) 0%,rgba(8,8,12,.72) 32%,rgba(8,8,12,.14) 56%,transparent 72%);
+  transition:background .34s ease}
+.sr-tp .sr-tp-card2:hover .sr-tp-cardcov2:after,.sr-tp .sr-tp-card2:focus-within .sr-tp-cardcov2:after{
+  background:linear-gradient(0deg,rgba(8,8,12,.96) 0%,rgba(8,8,12,.9) 48%,rgba(8,8,12,.3) 78%,transparent 100%)}
 .sr-tp-carddoor2{position:absolute;left:16px;top:14px;z-index:2;font:500 9.5px/1 'DM Sans',sans-serif;
   letter-spacing:.2em;text-transform:uppercase;color:var(--tc)}
 .sr-tp-cardnum2{position:absolute;right:16px;top:12px;z-index:2;
@@ -4522,20 +4572,23 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
   letter-spacing:.16em;text-transform:uppercase;color:rgba(242,234,216,.52)}
 .sr-tp-free2{position:absolute;left:16px;bottom:12px;z-index:2;font:700 9px/1 'DM Sans',sans-serif;
   letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
-.sr-tp .sr-tp-card2 h3{margin:20px 26px 0;font-family:'Cormorant Garamond',Georgia,serif;
-  font-size:1.5rem;font-weight:400;line-height:1.08;color:var(--text)}
-.sr-tp .sr-tp-card2 p{margin:0 26px;color:var(--text2);font-size:.88rem;line-height:1.5;
-  max-height:0;opacity:0;overflow:hidden;transition:max-height .42s cubic-bezier(.16,.8,.3,1),opacity .34s ease,margin .42s ease}
-.sr-tp .sr-tp-card2 blockquote{margin:0 26px 26px;padding-top:0;border-top:0;color:var(--text2);
-  font-family:'Cormorant Garamond',Georgia,serif;font-size:1.02rem;font-style:italic;
-  max-height:0;opacity:0;overflow:hidden;transition:max-height .42s cubic-bezier(.16,.8,.3,1),opacity .34s ease,margin .42s ease}
-.sr-tp .sr-tp-card2:hover p,.sr-tp .sr-tp-card2:focus-within p{max-height:6rem;opacity:1;margin-top:10px!important}
-.sr-tp .sr-tp-card2:hover blockquote,.sr-tp .sr-tp-card2:focus-within blockquote{max-height:6rem;opacity:1;
-  margin-top:14px!important;padding-top:14px!important;border-top:1px solid var(--hair)}
+.sr-tp .sr-tp-card2 h3{position:absolute;left:0;right:0;bottom:26px;z-index:2;margin:0;padding:0 26px;
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-weight:400;line-height:1.08;color:var(--text)}
+.sr-tp .sr-tp-card2 p{position:absolute;left:0;right:0;bottom:26px;z-index:2;margin:0;padding:0 26px;
+  color:var(--text2);font-size:.85rem;line-height:1.45;
+  max-height:0;opacity:0;overflow:hidden;transition:max-height .42s cubic-bezier(.16,.8,.3,1),opacity .34s ease,bottom .42s cubic-bezier(.16,.8,.3,1)}
+.sr-tp .sr-tp-card2 blockquote{position:absolute;left:0;right:0;bottom:26px;z-index:2;margin:0;padding:0 26px;
+  color:var(--text2);font-family:'Cormorant Garamond',Georgia,serif;font-size:.98rem;font-style:italic;
+  max-height:0;opacity:0;overflow:hidden;transition:max-height .42s cubic-bezier(.16,.8,.3,1),opacity .34s ease,bottom .42s cubic-bezier(.16,.8,.3,1)}
+.sr-tp .sr-tp-card2:hover h3,.sr-tp .sr-tp-card2:focus-within h3{bottom:calc(26px + 5.2rem)}
+.sr-tp .sr-tp-card2:hover p,.sr-tp .sr-tp-card2:focus-within p{max-height:4.6rem;opacity:1;bottom:calc(26px + 2.4rem)}
+.sr-tp .sr-tp-card2:hover blockquote,.sr-tp .sr-tp-card2:focus-within blockquote{max-height:2.4rem;opacity:1;bottom:26px}
 .sr-tp-railfoot2{display:flex;flex-wrap:wrap;align-items:center;gap:20px;margin-top:22px}
 @media(hover:none){
-  .sr-tp .sr-tp-card2{height:auto}
-  .sr-tp .sr-tp-card2 p,.sr-tp .sr-tp-card2 blockquote{max-height:7rem;opacity:1;margin-top:10px!important}
+  .sr-tp .sr-tp-card2 h3{bottom:calc(26px + 5.2rem)}
+  .sr-tp .sr-tp-card2 p{max-height:4.6rem;opacity:1;bottom:calc(26px + 2.4rem)}
+  .sr-tp .sr-tp-card2 blockquote{max-height:2.4rem;opacity:1;bottom:26px}
+  .sr-tp-cardcov2:after{background:linear-gradient(0deg,rgba(8,8,12,.96) 0%,rgba(8,8,12,.9) 48%,rgba(8,8,12,.3) 78%,transparent 100%)}
 }
 
 /* -- method -- */

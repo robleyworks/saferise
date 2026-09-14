@@ -14490,3 +14490,235 @@ pattern), `personal-transformation.html`, `relationship-healing.html`,
 
 *Status:* closed. **Not pushed.**
 *Raised and fixed:* 13 Sep 2026
+
+## SR-384 · track landing pages reordered, hero underlay fixed, cards fill, vocabulary cleared
+
+Runs `pass/PASS-track-reorder.md`. Follows SR-383's own template — every
+change made in the shared section-builder (`js/saferise-track.js`), not
+per page, per the brief's own instruction.
+
+**1 · section order.** `renderTrack()`'s render sequence changed from
+hero → protocols → method → outcomes → included → states band → proof →
+price → FAQ to hero → protocols → **states band → included → outcomes →
+method** → proof → price → FAQ — the four sections between the rail and
+the chart, reversed. Verified live on all three tracks: DOM order now
+reads hero, rail, story band, included, outcomes, method, proof, price,
+FAQ, on every one.
+
+**2 · hero underlay — one real bug found, one wrong assumption
+corrected.** The brief's own premise ("currently sits on the ground
+with no image behind it") turned out to have a specific, findable
+cause: the hero's `<img class="sr-tp-herostack">` was silently caught
+by a rule left over from SR-383's retired hero design —
+`.sr-tp-herostack{display:none}` — which only un-hides inside an
+ancestor carrying `.sr-tp-hero--photo`, a class SR-383's own new hero
+never carries. The image was rendering; it was just permanently
+hidden. Rebuilt as a real CSS background-image instead of a separate
+`<img>` (removing the collision rather than patching around it), using
+`t.art.hero` exactly as SR-383 already wired it — no new assets, no
+new paths.
+
+Second finding, correcting SR-383's own assumption: the construction
+the brief §2 gives (`nav position:relative`, hero pulled up with a
+negative margin to run its image underneath) is built for a
+static-flow nav. This page's real nav is not that — `js/saferise-
+nav.js` emits `<nav class="nav">`, the shared **`position:fixed`**
+nav (confirmed live: ~81px tall, z-index:100), not `.sr-tp-nav`, a
+different class SR-383's CSS had assumed applied here and forced to
+`static`. A fixed nav takes no space in flow, so no negative margin is
+needed to pull the hero under it — removed; `padding-top` alone now
+clears the hero's *content* past the nav while its *background* runs
+underneath, to y:0, on its own. The stale nav-`static` override
+(`:has(.sr-tp-hero2) .sr-tp-nav{...}`, added to work around the wrong
+assumption) targeted a class that doesn't exist in the rendered DOM
+either — inert, removed rather than left as dead CSS.
+
+**Contrast, checked live on all three tracks — none needed
+adjustment.** Track 01 (warm interior/exterior photo), Track 02
+(coastal portrait), Track 03 (office scene) all read clearly against
+the existing scrim at every checked width; no track's own scrim was
+touched.
+
+**Missing hero image:** none — confirmed all three tracks' hero images
+already resolve (SR-383). The hatch-placeholder degrade path
+(`.sr-tp-hero2--ph`) is still wired for the day one doesn't, same
+stance `slot()` takes elsewhere.
+
+**3 · vertical space — two separate causes, both fixed together with
+§2.** `.sr-tp #main{padding-top:110px}` (SR-341) turned out to be
+solving the exact same wrong-nav-assumption problem as §2's own bug —
+its own comment said so once read closely ("the shared public .nav is
+position:fixed… without this, content starts under the nav") — except
+`.sr-tp .sr-tp-nav{position:static}` (the rule SR-341 was written
+against) is now what's forced on *this* page, doubly compensating for
+a fixed nav via two unrelated rules that both assumed the other
+wasn't there. Removed — `#main` has no content before the hero, and
+the hero now clears the real fixed nav on its own (§2). Confirmed
+scoped to only these three pages before removing it: grepped
+protocol.html and resource.html for `id="main"` under `.sr-tp` — no
+match.
+
+`.sr-tp-band` (every section wrapper below the hero) was a boxed
+panel — gradient background, 1px border, 18px radius, 24px margin,
+**80px/56px fixed padding** — not what the approved mockups show
+(plain full-width rows, a top hairline only). Read `method.html`'s own
+`.sr-mt-sec{padding:clamp(40px,6vh,66px) 0;border-top:1px solid
+var(--hair)}` and applied it verbatim rather than inventing a value.
+
+**Before/after, measured:** hero content used to start at
+`73+92 = 165px` of hero padding **plus** 110px of `#main` padding —
+275px of compensation before any real copy, which is why the eyebrow
+sat roughly half a laptop screen down. Now: `81+40 = 121px`, all of it
+in the hero itself, `#main` contributing nothing. Section padding:
+80px fixed → `clamp(40px,6vh,66px)`, ~54px at a typical 900px-tall
+laptop viewport (real content, e.g. Method's eyebrow, now clears the
+first screen instead of starting below it).
+
+**4 · covers fill the card — option 1.** Chosen over option 2 (cover
+shrinks, title beneath it) because it reads closer to the approved
+mockups' own card language and keeps the rail's visual rhythm — a wall
+of photography with type layered on top, not photography-plus-a-
+caption-strip. Rebuilt: `.sr-tp-cardcov2` now fills the full
+430px-fixed card (`position:absolute;inset:0`) instead of a fixed
+200px band; title sits over the image on a scrim at rest; description
+and one identification quote reveal above it on hover/focus-within,
+pushing the title up rather than appearing in previously-empty space
+below it. Card height stays exactly 430px in every state — verified
+live (hover on one card in a row does not move or resize its
+neighbours), and keyboard focus (`.focus()`) produces the identical
+reveal as `:hover`. At 390px / `hover:none`, description and quote
+show by default per the existing rule, unchanged.
+
+**5 · every carousel auto-advances — two surfaces checked, one
+wired, one reported incompatible.**
+
+The three track-landing rails: unchanged from SR-383 (already on the
+revived `initCarousel()`) — reconfirmed live on all three: binds
+(`dataset.srInit`), clones the card set, and a simulated user scroll
+now leaves it motionless afterward (permanent stop, per SR-368).
+
+**Dashboard's Library carousel — not wired, reported per the brief's
+own "if a surface cannot use it, report why" clause.** Two
+independent, sufficient reasons, both already recorded in the file's
+own comments before this pass touched anything:
+
+- **Architecturally incompatible.** It moves the row with
+  `transform:translate3d`, explicitly *not* `scrollLeft` — its own
+  comment: "so nothing competes with it and there is no scroll
+  quantisation." `initCarousel()` is built entirely around native
+  `scrollLeft`/`scroll` events; there is no track to attach it to
+  without first rewriting the movement mechanism this comment
+  deliberately chose against.
+- **Philosophically opposed.** Its own comment: "The drift is an
+  arrival gesture, not a permanent state. It runs for one settle
+  period… then eases to rest and stays there — a card that never
+  stops moving is a target you cannot hit." `SETTLE = 13000`: the
+  carousel drifts for 13 seconds after load (or after an arrow press),
+  then stops **permanently**, by design. The brief's §5 wants the
+  opposite — advancing indefinitely, held only by hover/focus/
+  off-screen/reduced-motion. Forcing indefinite drift onto this
+  component would reverse a considered, already-documented decision,
+  not close a gap.
+
+Neither reason is a workaround-shaped problem; both are the surface
+declining to fit the contract on its own terms. Left entirely
+untouched.
+
+**No other rail found.** Swept every file mentioning "carousel"
+site-wide (28 matches, mostly comments) for actual carousel markup —
+only the three track rails and the dashboard Library carousel have
+any; nothing else on the site carries a real carousel implementation.
+
+**6 · prohibited vocabulary.** The five named instances, fixed in the
+shared builder (so all three tracks inherit the fix from one edit):
+Track 1's Method lede ("…and practise the response…" → "…and choose
+the response…" — not "…and rehearse…", to avoid repeating the word
+the Rise step already uses immediately below it); the "One continuous
+practice" story-band eyebrow, all three tracks → "One continuous
+sequence"; "Guided practice" → "Guided sessions"; "Somatic practices,
+reflection prompts…" → "Somatic release, reflection prompts…". Method
+step 04 checked for drift as asked: `SHARED.fourSteps`'s own default
+Rise-step body already reads clean ("carrying the state rather than
+the memory of it", cited as "Mental rehearsal · Observer stance") and
+every track's own `riseLine` override is clean too — nothing to fix
+there.
+
+**A sixth instance, found during this pass's own verification, not
+one of the five named:** Track 03's own outcomes "shift" copy —
+`"Instead of in the version you practised."` — is SR-383's own
+authored content (this pass's LANDING_COPY block, not pre-existing
+data), written before this vocabulary rule existed. Fixed to
+"rehearsed" to match its own eyebrow ("From rehearsing to present").
+Confirmed via live DOM inspection, isolating the FAQ/JSON-LD blocks,
+that zero instances remain anywhere else on any of the three rendered
+pages.
+
+**Site-wide sweep, reported per the brief's own instruction — not
+fixed.** "Practice"/"practise" is not a handful of stray instances;
+it is core, load-bearing product vocabulary, concentrated in the
+resource content itself:
+
+| File(s) | Occurrences |
+|---|---|
+| `index.html` | 167 |
+| `content/t1-resources.js` | 84 |
+| `content/t2-resources.js` | 82 |
+| `content/t3-resources.js` | 65 |
+| `content/inventory.js` | 34 |
+| `protocol.html` | 24 |
+| `dashboard.html` | 20 |
+| `content/tracks.js` (FAQ/resource-catalog/framework copy, outside this pass's own new `LANDING_COPY`) | 18 |
+| `member-frameworks.html` | 15 |
+| `member-mate.html` | 12 |
+| seven member-\*.html / resource.html / method.html / anxiety-reset.html / js/saferise-resources.js pages | 4-7 each |
+| four more pages (`getting-help.html`, `terms.html`, `plans.html`, `about.html`, `member-coming-soon.html`) | 1-2 each |
+
+**~608 occurrences across 25 files.** The one recorded exception
+(`docs/PLATFORM-DESCRIPTION.md`'s film-description closing line) is
+not in this count. A full site-wide removal is a substantial content
+pass of its own — not attempted here.
+
+**7 · progress metrics — reported, not touched, per explicit
+instruction.**
+
+**What exists:** `GRAPHICS.progress["1"]`, an inline SVG defined in
+`js/saferise-track.js`'s `GRAPHICS` object literal (near the top of
+the file), containing three panels: *"01 · SCORE — Before & after ·
+two numbers · ten seconds"*, *"02 · TIER — The pattern becomes
+readable"*, *"03 · LEARNING — The route shortens."* Rendered via
+`rProof(t)` → `GRAPHICS.progress[CURRENT_TRACK]`.
+
+**Found while reading it, worth surfacing: this is Track 01 only.**
+`GRAPHICS.progress["2"]` ("The loop slows") and `["3"]` ("The load
+carries") are different diagrams entirely — neither carries a score,
+a tier, or any panel structure. The clearest instance of the
+platform's progress-metric prohibition the brief describes is not
+site-wide across all three tracks; it is specific to Track 01's own
+diagram.
+
+Section 8's *"Progress you can see"* eyebrow (the brief's own
+"PROGRESS YOU CAN SEE", case-transformed by CSS) is a separate,
+literal, track-agnostic string inside `rProof()` itself — not data,
+not per-track.
+
+**What removing or reframing would touch:** `GRAPHICS.progress["1"]`'s
+own SVG string (one of four diagram entries in that object literal);
+`rProof()`'s own eyebrow text; this pass's own `LANDING_COPY` per-
+track `proofH2`/`proofIntro`/`proofSteps` (some of which lean toward
+similar territory even without numbers — "See recurring patterns
+become visible", "Notice clarity arriving sooner"). Contained
+entirely to the Proof section; touches no pricing, FAQ, or other
+content. `initDiagramMotion()`'s generic `.sr-tp-graphic--once`
+targeting is unaffected either way. Andre decides; nothing here was
+changed.
+
+**Files touched:** `content/tracks.js` (vocabulary fixes only — no
+structural field changes), `js/saferise-track.js` (render order,
+`rIncluded()` copy, `rHero()`/hero markup), `css/saferise-system.css`
+(hero, `#main`, `.sr-tp-band`, card cover-fill). **Not touched:**
+`dashboard.html` (§5's own finding), `docs/PLATFORM-DESCRIPTION.md`
+(the recorded exception, correctly untouched), everything named in
+the site-wide vocabulary sweep.
+
+*Status:* closed. **Not pushed.**
+*Raised and fixed:* 14 Sep 2026
