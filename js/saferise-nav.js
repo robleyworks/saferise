@@ -51,6 +51,9 @@
     ['method.html', 'Method'],
     ['plans.html', 'Plans'],
     ['live-sessions.html', 'Live sessions'],
+    /* SR-385 (PASS-b2c-b2b-split.md §7) · consumer nav keeps every existing
+       item and adds exactly one: the B2B front door. */
+    ['organisations.html', 'For organisations'],
     ['about.html', 'About']
   ];
 

@@ -170,6 +170,7 @@ component. A generic class name is a defect, not a style preference.**
 | `sr-rd-` | The editorial reader (`index.html`'s `#reader-overlay`) — SR-379 |
 | `sr-pr-` | Pricing pages (`pricing.html`, `for-organisations.html`) — SR-380 |
 | `sr-rr-` | The real resource reader (`resource.html`'s `#rbody`) — SR-381. Not `sr-rd-` (`index.html`'s reader), which no live navigation reaches — see §0 of PASS-live-site-defects.md |
+| `sr-org-` | `organisations.html` — SR-385. Now the B2B front door (`/organisations`); `for-organisations.html` (`sr-pr-`) 301s here, not deleted — see the SR-385 register entry |
 
 **Claim a new code in this table before using it.** Two surfaces sharing a code
 is how `.sr-mi-card` ended up governing two pages that must now change
@@ -228,5 +229,51 @@ sensitive data the platform holds.
 
 Use `js/sentry-init.js` as delivered. **Do not simplify it** — every exclusion in
 it is deliberate.
+
+## Proposed — awaiting Andre's decision, not adopted
+
+Written by SR-385 (`pass/PASS-organisations.md` C2). **Not a standing rule** —
+nothing below is enforced until Andre says so. Do not treat it as active, and
+do not "correct" copy against it in the meantime.
+
+### Proposal — narrow the practice/practise prohibition
+
+`docs/PLATFORM-DESCRIPTION.md` records *practice/practise* as prohibited
+product vocabulary **platform-wide**, with exactly one deliberate exception
+(that same document, its own closing line). SR-384 swept the codebase for
+compliance and found roughly **608 occurrences across 25 files** — the large
+majority in `content/t1-resources.js`, `content/t2-resources.js`,
+`content/t3-resources.js` and `content/inventory.js` (protocol and resource
+body copy), plus `index.html`, `protocol.html` and `dashboard.html`. This is
+not stray drift; it is how the resource library is written. A platform-wide
+prohibition at this scale cannot be enforced by any single pass, and keeps
+resurfacing as a "finding" in pass after pass without ever being closed.
+
+**Proposed narrower scope.** The prohibition applies to:
+
+- product/navigation chrome — nav labels, card titles, button and CTA text,
+  section eyebrows and headings
+- new or rebuilt marketing/landing pages (the track landing pages, the
+  organisations page, pricing pages, the homepage)
+
+The prohibition does **not** apply to:
+
+- protocol and resource **body copy** — `content/t1/t2/t3-resources.js`,
+  `content/inventory.js`, and the FAQ answers in `content/tracks.js`
+- framework-attribution copy naming a named framework's own technical
+  vocabulary (e.g. Maté's "clinical practice" on `member-mate.html`) — the
+  word is the field's own term there, not SafeRise's
+- `docs/PHILOSOPHY.md`, a long-form essay that already uses the word as
+  ordinary English throughout
+
+**The existing recorded exception** (`docs/PLATFORM-DESCRIPTION.md`'s own
+closing line) would sit inside the narrowed-out territory anyway once this
+lands — worth noting so it isn't read as needing a *second* exception on top
+of the first.
+
+If adopted, this note should move into the Standing rules section above (or
+its own rule block) and the SR-384/385 "sweep and report" findings should be
+re-read against the narrowed scope rather than the platform-wide one, since
+most of the ~608 will already be in-scope-exempt.
 
 ## Definition of done

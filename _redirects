@@ -87,6 +87,18 @@
 /professional-performance  /professional-performance.html  200
 /anxiety-reset         /anxiety-reset.html         200
 
+# SR-385 (PASS-organisations.md) · /organisations is now the B2B front
+# door — Andre's decision, made mid-pass, after Part A found
+# organisations.html unlinked and for-organisations.html already live
+# doing an overlapping, narrower job. /for-organisations 301s here
+# rather than to a 404: it was a real, linked, indexable URL (SR-380)
+# and may still be indexed. for-organisations.html itself is left on
+# disk, not deleted — its pricing/seat content has no reconciled home
+# yet (see the SR-385 register entry) and may still become a child
+# page under this same route.
+/organisations         /organisations.html        200
+/for-organisations      /organisations              301
+
 # Every legacy protocol URL — query-string form, both with and without
 # the .html extension — to its slug. Track 01, then 02, then 03, in
 # protocol order; content/tracks.js's own row order, not alphabetised.

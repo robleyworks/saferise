@@ -3,7 +3,11 @@
    Run AFTER index.html is split. Before that it will produce one URL, correctly. */
 const fs = require('fs'), path = require('path');
 const ORIGIN = 'https://thesaferiseprotocol.com';
-const EXCLUDE = /^(dashboard|account|signup|login|member-|404|pass|mock)/;
+/* SR-385 (PASS-b2c-b2b-split.md §8) · for-organisations excluded (exact
+   match, not a prefix like the rest of this list) — it now only 301s to
+   /organisations (_redirects), so listing it in the sitemap would send
+   crawlers to a page that immediately redirects away. */
+const EXCLUDE = /^(dashboard|account|signup|login|member-|404|pass|mock)|^for-organisations$/;
 
 const pages = fs.readdirSync('.')
   .filter(f => f.endsWith('.html'))

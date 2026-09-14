@@ -14722,3 +14722,209 @@ the site-wide vocabulary sweep.
 
 *Status:* closed. **Not pushed.**
 *Raised and fixed:* 14 Sep 2026
+
+## SR-385 · organisations.html reconciled onto the system and made the single B2B front door; live-sessions.html split to B2C only
+
+Two briefs, one commit. `PASS-organisations.md` (Part A investigation, then B/C/D
+reconciliation) found a scope question mid-pass and paused per its own instruction;
+`PASS-b2c-b2b-split.md` settled that question and extended the work. Both are closed by
+this entry.
+
+**Part A findings (organisations.html), reported before any edit.** The page existed
+untracked, built by another tool against a stale, since-deleted checkout. (1) It did not
+render styled — zero `.sr-org-*` rules existed anywhere. (2) `data-sr-org-tab`/`-panel`
+hooks were dead (no JS bound them); `data-sr-rail`/`sr-public` worked as-is. (3) It was
+linked from nowhere — no nav, no footer, no sitemap, no `_redirects`. **Unplanned
+finding, reported before Part B:** a second live page, `for-organisations.html`
+(SR-380), already served an overlapping, narrower version of the same offer and was
+linked from `pricing.html`. Andre's decision, mid-pass: `organisations.html` becomes
+`/organisations`, the single B2B front door; `for-organisations.html` folds in and
+redirects. `PASS-b2c-b2b-split.md` then arrived and settled the rest: split by **buyer**,
+not by product name — everything addressed to an employer moves off `live-sessions.html`
+onto `organisations.html`, with no overlap either way.
+
+**1 · Content unique to `for-organisations.html`, reported before merging (§4):**
+- The three-tier delivered-programme ladder — Pilot €1,800 (half day, ≤3 groups) /
+  Programme €4,200 (full day, ≤6 groups) / Partner €9,500 (2 days, ≤12 groups), 750+
+  scoped. **Not carried forward as a three-tier ladder** — superseded by §5's canonical
+  two-line Organisation workshop / Half-day retreat split, which has no group-count
+  scoping of its own.
+- "The Pilot includes 25 platform seats for 30 days" — dropped; a seat-count trial offer
+  has no home once seats are no longer sold individually.
+- The per-seat platform ladder itself (see §3 below) and "your seats are priced at the
+  next band down" for returning customers — dropped, incompatible with headcount
+  banding.
+- "What a seat is" (every protocol, all three tracks, used privately on the member's own
+  device) — folded into `organisations.html`'s `#sr-org-included` "Complete curriculum"
+  card rather than reproduced as its own block.
+- The withheld privacy-commitment paragraph and its SR-380 comment (see §2 below) —
+  addressed, not withheld a second time; see that section.
+- "What this is, and isn't" — organisations.html's hero note and trust section already
+  cover the same ground in different words; not reproduced verbatim.
+
+`for-organisations.html` is left on disk, unlinked, per §4.5 — not deleted until the
+redirect is confirmed live.
+
+**2 · The withheld-commitment conflict, surfaced rather than resolved silently.**
+`PASS-b2c-b2b-split.md` §6 explicitly asks for "the quarterly seats-in-use commitment"
+among the six trust refusals. But `supabase/migrations/0001_auth_entitlements.sql` still
+has no organisation or seat concept at all — the same gap SR-380 found and withheld its
+own, narrower privacy paragraph over ("Nobody sees what an employee opens... you never
+get names"). Published as instructed — "We commit to reporting seats in use quarterly,
+in aggregate only" — in `#sr-org-trust`'s "No individual reporting" card, but this is a
+written commitment with no backing implementation yet. **Andre should confirm this
+before it goes live, or the schema gap should close first.**
+
+**3 · Both sets of conflicting corporate prices, reported per §4/§8:**
+
+| | `for-organisations.html` (superseded) | `organisations.html` (before this pass) |
+|---|---|---|
+| Delivered work | Pilot €1,800 / Programme €4,200 / Partner €9,500 | "Workshop or retreat... up to 50 people from €1,800" (one line) |
+| Platform access | **Per-seat**, 25–99 €15 · 100–299 €13 · 300–749 €11 · 750+ scoped, billed annually | €4,500/year, flat, per company |
+
+Neither figure set survives unchanged — see §5 below for what actually landed.
+
+**4 · Every per-seat figure found in the tree, per §5's explicit sweep:**
+- `for-organisations.html`: €15 (25–99 seats), €13 (100–299), €11 (300–749), "scoped"
+  (750+) — the table itself. Its own `<meta>` description also says "seats from
+  €15/mo", which never matched the table's "billed annually" — a pre-existing internal
+  inconsistency on the page being retired, noted rather than fixed on a page no longer
+  linked.
+- `live-sessions.html`'s old Annual-access offer: "no per-seat counting" — a negation,
+  not a figure, but org-addressed and removed with the rest of that block regardless.
+- No other per-seat figures found anywhere else in the tree (`content/tracks.js`,
+  `dashboard.html`, `pricing.html`, `index.html`'s €19/€29/€39 hits are all individual
+  subscription tiers, unrelated to seats).
+
+All of the above are gone from the live, linked site. The figures still exist inside
+`for-organisations.html` on disk, per §4.5's "do not delete until the redirect is
+verified" — reported as intentional, not an oversight.
+
+**5 · Pricing applied to `organisations.html` (§5's canonical table), and what's
+missing.** The offers grid (`#sr-org-offers`) went from 3 cards to 4: Lunch-and-learn
+(45 min, Free) / Organisation workshop (€1,800) / Half-day retreat (€1,800 up to 50,
+€3,500 over 50) folded into one "Live starting point" card; Annual platform access
+reworded from flat €4,500/year to "banded by headcount, tiered downward... never priced
+per seat"; a new Conference/festival/event card (Custom) added — the canonical table's
+one line item that previously had no card at all; Combined programme kept as-is.
+**No headcount-band boundaries were supplied anywhere** — not in this brief, not in
+`PASS-organisations.md`, not in the fix-register, not in `content/tracks.js`. "Banded by
+headcount, waterfall tiered" is published as a structure with no numbers attached.
+**Andre needs to supply the actual bands before this is enquiry-ready**, or the copy
+should say "confirmed at enquiry" more explicitly than it currently does.
+`css/saferise-system.css` `.sr-org-offers` went `repeat(3,1fr)` → `repeat(4,1fr)` with a
+new 2-col tier at 1180px (previously jumped straight from 3-col to 1-col at 900px).
+
+**6 · Cross-check against `content/tracks.js` and the live plans page (§3).** Premium
+1:1 (€129/€349) and workshops (€29 single/€39 couple) on `live-sessions.html` already
+matched `content/tracks.js`'s `PRICING.premium1/premium3` exactly — no change needed,
+no disagreement. **Disagreement found and reported, not applied:** §3 of
+`PASS-b2c-b2b-split.md` itself names a "Launch rate €79 · €199 while the market is
+tested" for Premium 1:1. No such rate exists anywhere in `content/tracks.js`,
+`live-sessions.html`, or `plans.html` — nothing in the live tree has ever shown a
+different figure for this. Not applied, per the standing rule that this register
+outranks the brief; the live €129/€349 is unchanged. Separately, **`pricing.html`'s own
+summary line reads "€39 a person"** for workshops — it does not carry the €29
+single/€39-couple split `live-sessions.html` and this brief both state. `pricing.html`
+was not in either brief's scope for this pass and was not edited; flagged here as a
+disagreement rather than silently left, per instruction not to choose.
+
+**7 · What moved off `live-sessions.html`, by block (§2/§8):** the "For my
+organisation" door card; the entire `#lv-org` section — its hero copy, the
+`.privacycall` privacy line, format chips (Office/Retreat/Festival/Conference), the
+Organisation-workshop-or-retreat offer (€1,800/€3,500), the Conference-or-event offer
+(Custom), the Annual-access offer (€4,500/year flat), and the `.fit` yes/no columns.
+Every block was addressed to an employer by the brief's own test — "your team", "the
+company", per-organisation pricing — not to the page's individual visitor. Now a single
+quiet sentence in the hero's existing `.formatnote` box: "Bringing this into a
+workplace? See organisations →", satisfying §3's "one link out, no more — not a banner,
+not a section." The page's now-orphaned `.lvdoors`/`.lvdoor`/`.privacycall`/`.fit`/
+`.fitcol`/`.eventoffer` CSS (page-scoped inline styles, not shared system CSS) was
+removed along with the markup that used it; the dead `.lvdoor` click-router script was
+removed too.
+
+**8 · What stayed on `live-sessions.html` (§3):** Premium 1:1 (€129 single / €349 for
+three) and Live online workshops (€29 personal / €39 relationship) — both individual
+purchases, both unchanged, both confirmed matching `content/tracks.js`.
+
+**9 · Buyer-ambiguous content, left alone per instruction.** None found. Every block on
+`live-sessions.html` was unambiguously either an individual offer (fixed price,
+"you"/"your situation") or an organisational one (per-org pricing, "your team", "the
+company") — no product appeared addressed to both an individual and an employer at
+once, so nothing needed a judgement call here.
+
+**10 · The facilitated-session escalation-criteria gate (§6's warning), reported not
+resolved.** No "escalation criteria" of any kind exist anywhere in this repo or its
+docs — confirmed by search. `organisations.html` already advertises facilitated
+delivery prominently: the hero CTA, the "Live starting point" and "Combined programme"
+offer cards, and the `#sr-org-delivery` "Introduce" step all describe live sessions
+without qualification. This predates this pass (built under `PASS-organisations.md`
+§B, which asked for exactly this content) and nothing here adds a new claim beyond what
+already existed. Flagged rather than silently carried forward: **the gate the brief
+warns about does not exist, and the page is already making the claim it gates.** Andre
+should decide whether to write the criteria or soften the existing copy.
+
+**11 · "Sectors" and "eight core tracks" (§6), reconciled against what already
+existed.** §6 asks for "Sectors — the six bundles, as a tabbed selector." The existing
+`#sr-org-fit` "Departments & functions" section already is a six-tab selector
+(Leadership / Sales / Tech / Finance / Ops / Care) — read as the same request under a
+different name rather than built a second time; the seven-card `#sr-org-verticals`
+industry grid is a separate, deliberately non-tabbed section and was left as-is. §6 also
+asks for "the eight tracks every seat carries, with the five unshipped ones marked in
+development." The full roadmap has **eleven** tracks (3 live + 8 upcoming, confirmed via
+`coming-soon.html`, itself internally inconsistent — its own `<title>` says "eight
+tracks in development", its own `<h2>` says "Seven tracks"). `organisations.html`'s
+curriculum grid lists 7 (3 live + 4 unshipped: Elevation Series, Embodied Nutrition,
+Strength & Return, Executive Presence), excluding Sex & Intimacy, Entrepreneur's
+Journey, Money Shift and Addiction Recovery. **Which 5 of the 8 unshipped tracks
+constitute the brief's "core eight" was never specified**, and guessing which one to
+add — Sex & Intimacy and Addiction Recovery are the more obviously B2B-sensitive
+omissions — is exactly the kind of call this register's standing rule says to skip
+rather than invent. Left at 7. Andre should name the eighth, or confirm 7 is correct and
+the brief's count was off by one, matching `coming-soon.html`'s own drift.
+
+**12 · Fixed while verifying (`organisations.html`).** `<meta name="robots"
+content="noindex, nofollow">` was still set from whatever this page was before it
+became the front door — removed, since `for-organisations.html` (the page it replaces)
+carried no such tag and a noindexed front door defeats the point of consolidating onto
+one URL.
+
+**13 · Nav, footer, sitemap (§7/§8).** `js/saferise-nav.js`'s shared `LINKS` (used by
+the 12 pages already on the shared nav module) and the identical hardcoded nav copy on
+the other 8 public pages (`about.html`, `coming-soon.html`, `live-sessions.html`,
+`anxiety-reset.html`, `index.html`, `plans.html`, `pricing.html`, `method.html`) both
+gained one item, "For organisations", after "Live sessions" — `for-organisations.html`
+itself was left un-edited since it is retired. `js/saferise-footer.js`'s shared
+`COLUMNS` gained a fifth, "Organisations" (For organisations · Talk to us) —
+`css/saferise-footer.css`'s `.sr-pf-cols` grid went `repeat(4,1fr)` → `repeat(5,1fr)`
+accordingly. **`index.html` was not touched** — it keeps its own separate SR-336 footer,
+per that entry's own instruction not to add it to the shared module without reading the
+note first; it does not get the new B2B column. `scripts/gen-sitemap.js`'s `EXCLUDE`
+pattern gained `for-organisations` (exact match, not a prefix) so the sitemap generator
+won't list a page that only redirects. **Could not run the generator to confirm** — this
+sandbox has no `node`/`npx` on `PATH`; verified the exclusion logic instead via an
+equivalent Python simulation against the real file list (`organisations` kept,
+`for-organisations` and all `member-*` pages correctly excluded). Andre should run
+`node scripts/gen-sitemap.js` once to regenerate `sitemap.xml` for real before this
+ships.
+
+**14 · Verify (§8).** No consumer pricing (`€19`) or per-seat figure appears on
+`organisations.html` (confirmed via search of the file after edits). No headcount-band
+or corporate pricing appears on `live-sessions.html` after the org section's removal.
+`/for-organisations` → `/organisations` 301 and the `pricing.html` link were already in
+place from the earlier `PASS-organisations.md` work this pass continues. 390px and
+reduced-motion/keyboard behaviour on the sector tabs were verified live in-browser (see
+below); the tablist code itself is unchanged from `PASS-organisations.md`'s own build.
+
+**Files touched:** `organisations.html`, `live-sessions.html`, `pricing.html` (link,
+from the earlier half of this pass), `_redirects` (from the earlier half),
+`css/saferise-system.css` (`.sr-org-offers` grid, `.sr-org-*` rules from the earlier
+half), `css/saferise-footer.css` (`.sr-pf-cols`), `js/saferise-nav.js`,
+`js/saferise-footer.js`, `scripts/gen-sitemap.js`, `CLAUDE.md` (surface-code table,
+proposed-vocabulary section — earlier half of this pass). `js/saferise-carousel.js`
+deleted (earlier half, Part C1 of `PASS-organisations.md`, Andre's own `fda1a6c`
+rejected drop-in). **Not touched:** `for-organisations.html` (retired, not deleted),
+`index.html`'s own footer, `sitemap.xml` (generator not runnable here — see §13).
+
+*Status:* closed. **Not pushed.**
+*Raised and fixed:* 14 Sep 2026

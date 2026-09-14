@@ -360,22 +360,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 @media(max-width:860px){.grid3,.grid2{grid-template-columns:1fr}
   .reg{grid-template-columns:1fr}.regl{padding-bottom:0;border-bottom:0}}
 
-.lvdoors{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:34px}
-.lvdoor{display:flex;flex-direction:column;gap:11px;padding:32px 28px 26px;border-radius:20px;
-  text-decoration:none;color:var(--text);background:var(--card);border:1px solid var(--hair);
-  position:relative;overflow:hidden;transition:transform .45s var(--ease),border-color .45s var(--ease)}
-.lvdoor::before{content:'';position:absolute;inset:0 0 auto 0;height:2px;background:var(--accent);opacity:.6}
-.lvdoor:hover{transform:translateY(-4px);border-color:var(--hair2)}
-.lvdoor.me{--accent:var(--t1)} .lvdoor.org{--accent:var(--t3)}
-.sr-only-h{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.lvdoor h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:29px}
-.lvdoor p{font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.6;color:var(--text2)}
-.lvdoor .go{margin-top:8px;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--gold-lt)}
 .lvsec{display:block}
-body[data-lv="me"] #lv-me,body[data-lv="org"] #lv-org{display:block}
-body[data-lv] .lvdoor{opacity:1;transition:opacity .5s var(--ease)}
-body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
 .offer{display:grid;grid-template-columns:1fr 300px;gap:0;border:1px solid var(--hair);
   border-radius:20px;overflow:hidden;margin-top:20px;background:var(--card)}
 .offerin{padding:32px 30px}
@@ -390,16 +375,7 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
 .offerside .amt{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;
   color:var(--gold-lt);line-height:1}
 .offerside .per{font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--text3);margin:6px 0 18px}
-.fit{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:26px}
-.fitcol{background:var(--bg3);border:1px solid var(--hair);border-radius:16px;padding:24px}
-.fitcol h4{font-family:'DM Sans',sans-serif;font-size:9.5px;letter-spacing:.24em;
-  text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px}
-.fitcol li{list-style:none;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;
-  color:var(--text2);padding:7px 0 7px 20px;position:relative}
-.fitcol li::before{position:absolute;left:0;top:7px;font-size:12px}
-.fitcol.yes li::before{content:'\2713';color:var(--t3)}
-.fitcol.no li::before{content:'\2715';color:var(--t1)}
-@media(max-width:900px){.lvdoors,.offer,.fit{grid-template-columns:1fr}
+@media(max-width:900px){.offer{grid-template-columns:1fr}
   .offerside{border-left:0;border-top:1px solid var(--hair)}}
 
 
@@ -490,16 +466,11 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
 .livehero .pghead{position:relative;z-index:2;min-height:560px;display:flex;flex-direction:column;justify-content:center}
 .livehero .pghead h1{max-width:18ch}
 .livehero .pglead{max-width:49ch}
-.lvdoors{position:relative;z-index:3;margin-top:-36px}
-.lvdoor{backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg2) 86%,transparent)}
 .credline{display:flex;justify-content:space-between;gap:22px;align-items:center;padding:16px 20px;margin:18px 0 2px;
   border:1px solid var(--hair2);border-radius:14px;background:var(--bg3)}
 .credline span,.credline strong{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5}
 .credline span{color:var(--gold-lt);letter-spacing:.04em}
 .credline strong{color:var(--text2);font-weight:500;text-align:right}
-.privacycall{margin:20px 0 6px;border-left:2px solid var(--gold);padding:7px 0 7px 22px;max-width:68ch}
-.privacycall p{font-family:'Cormorant Garamond',serif;font-size:27px;font-style:italic;color:var(--text);line-height:1.3}
-.privacycall span{display:block;margin-top:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);line-height:1.6}
 .offer.withart{grid-template-columns:260px minmax(0,1fr) 300px}
 .offerart{position:relative;min-height:100%;overflow:hidden;background:var(--bg3)}
 .offerart img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.78) contrast(1.03)}
@@ -511,7 +482,6 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
 .pricescope{font-family:'DM Sans',sans-serif;font-size:11.5px;color:var(--text3);line-height:1.5;margin:-8px 0 18px}
 .smallamt{font-size:30px!important;margin-top:10px}
 .quoteamt{font-size:34px!important}
-.eventoffer{border-color:color-mix(in srgb,var(--gold) 24%,var(--hair))}
 @media(max-width:1050px){.offer.withart{grid-template-columns:220px minmax(0,1fr)}.offer.withart .offerside{grid-column:1/-1;border-left:0;border-top:1px solid var(--hair)}}
 @media(max-width:760px){.offer.withart{grid-template-columns:1fr}.offerart{min-height:260px}.credline{display:block}.credline strong{display:block;text-align:left;margin-top:6px}.livehero .pghead{min-height:620px}}
 
@@ -558,7 +528,7 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
             <span class="nmd">Seven more tracks in development</span></a>
         </div>
       </div>
-      <a href="method.html">Method</a><a href="plans.html">Plans</a><a href="live-sessions.html">Live sessions</a><a href="about.html">About</a>
+      <a href="method.html">Method</a><a href="plans.html">Plans</a><a href="live-sessions.html">Live sessions</a><a href="organisations.html">For organisations</a><a href="about.html">About</a>
     </div>
     <button class="themetog" id="tog" type="button" aria-label="Switch theme">
       <span class="tdot"></span><span id="togl">Midnight</span></button>
@@ -573,20 +543,13 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
   <p class="eyebrow">Live sessions</p>
   <h1>The protocol is still yours. <em>Sometimes it helps to have someone hold the process with you.</em></h1>
   <p class="pglead">Premium 1:1 and public workshops are always remote. You join from wherever you are, and the same SafeRise process is applied live to the moment you are working through.</p>
+  <!-- SR-385 (PASS-b2c-b2b-split.md §1/§2) · the "For me" / "For my
+       organisation" door pair is gone — this page is B2C only now, so
+       there is no second door to choose. The closing sentence below is
+       the whole of §3's "one link out, no more". -->
   <div class="formatnote">
     <span class="formatdot"></span>
-    <p><strong>Remote by default.</strong> In-person delivery is reserved for organisations, retreats, festivals, conferences and other hosted live events.</p>
-  </div>
-  <h2 class="sr-only-h">Choose how you want to work</h2>
-  <div class="lvdoors">
-    <a class="lvdoor me" href="#lv-me" data-lv="me">
-      <h3>For me</h3>
-      <p>Premium 1:1 with Andre, or a live online workshop alongside others working the same protocol.</p>
-      <span class="go">Premium 1:1 &#183; Online workshops &#8595;</span></a>
-    <a class="lvdoor org" href="#lv-org" data-lv="org">
-      <h3>For my organisation</h3>
-      <p>Hosted workshops, retreats and event sessions for teams, organisations, festivals and conferences — plus ongoing platform access.</p>
-      <span class="go">Workshops &#183; Retreats &#183; Events &#8595;</span></a>
+    <p><strong>Remote by default.</strong> In-person delivery is reserved for retreats, festivals, conferences and other hosted live events. Bringing this into a workplace? <a class="ctaalt" href="organisations.html">See organisations &#8594;</a></p>
   </div>
 </div></section>
 
@@ -644,72 +607,12 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
   </div>
 </div></section>
 
-<section class="sec2 lvsec" id="lv-org"><div class="wrap">
-  <div class="slot slot--wide" style="padding:0"><img src="https://images.pexels.com/photos/7640444/pexels-photo-7640444.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;top:12px;left:14px;z-index:3;font-family:'Cormorant Garamond',serif;font-size:26px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.9)">18</span></div>
-  <div class="sh" style="margin-top:38px"><p class="eyebrow">For my organisation</p>
-    <h2>Bring regulation <em>into the environments where people actually need it.</em></h2>
-    <p>Organisation work is the exception to the remote-first model. SafeRise can be delivered inside an office, at a retreat, festival, conference or hosted live event — and remotely when a distributed team makes that more useful.</p>
-  </div>
-  <div class="privacycall"><p>Nobody has to disclose anything to anyone.</p>
-    <span>The process is shared. Personal material remains personal. Individual SafeRise records are never opened to leadership.</span></div>
-  <div class="formatchips"><span class="formatchip">Office</span><span class="formatchip">Retreat</span><span class="formatchip">Festival</span><span class="formatchip">Conference</span><span class="formatchip remote">Remote team</span></div>
-
-  <div class="offer withart orgoffer">
-    <div class="offerart"><img src="https://images.pexels.com/photos/7640444/pexels-photo-7640444.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Employees taking part in a facilitated organisation workshop"></div>
-    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg></span>Organisation workshop or retreat</h3>
-      <p>A live, facilitated format built around the audience and environment in front of us — from a focused office workshop to a half-day retreat.</p>
-      <ul>
-        <li>In person at your office, venue or retreat location</li>
-        <li>Remote delivery available for distributed teams</li>
-        <li>Focused 60–90 minute sessions or half-day formats</li>
-        <li>A short intake beforehand on the context the group is navigating</li>
-        <li>Founder-led; format and boundaries agreed in advance</li>
-      </ul>
-    </div>
-    <div class="offerside">
-      <p class="amt">&#8364;1,800</p><p class="per">half-day &#183; up to 50</p>
-      <p class="amt smallamt">&#8364;3,500</p><p class="per">half-day &#183; over 50</p>
-      <a class="cta" href="mailto:contact@thesaferiseprotocol.com?subject=Organisation%20workshop%20or%20retreat">Discuss the format &#8594;</a>
-    </div>
-  </div>
-
-  <div class="offer withart eventoffer">
-    <div class="offerart"><img src="https://images.pexels.com/photos/8761323/pexels-photo-8761323.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Speaker and audience at a live conference event"></div>
-    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 19h14M8 16v-5M12 16V7M16 16v-3"/><circle cx="12" cy="4.5" r="1.5"/></svg></span>Conference, festival or hosted live event</h3>
-      <p>From a breakout room to a festival programme or intimate stage session, the experience is shaped to the audience and event rather than forced into the half-day retreat format.</p>
-      <ul>
-        <li>Conference breakout or workshop sessions</li>
-        <li>Festival and cultural-programme formats</li>
-        <li>Hosted live experiences for communities or organisations</li>
-        <li>Scope, audience size and travel agreed case by case</li>
-      </ul>
-    </div>
-    <div class="offerside"><p class="amt quoteamt">Custom</p><p class="per">scoped case by case</p>
-      <a class="cta" href="mailto:contact@thesaferiseprotocol.com?subject=SafeRise%20live%20event">Enquire &#8594;</a></div>
-  </div>
-
-  <div class="offer">
-    <div class="offerin"><h3><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><path d="M12 3v2.6M12 18.4V21M3 12h2.6M18.4 12H21M5.6 5.6l1.9 1.9M16.5 16.5l1.9 1.9M18.4 5.6l-1.9 1.9M7.5 16.5l-1.9 1.9"/></svg></span>Annual access</h3>
-      <p><strong>The event ends. The work does not have to.</strong> A workshop or retreat gives people a shared reference point. Annual SafeRise access gives each person somewhere private to continue afterwards — without turning individual use into employer data.</p>
-      <ul><li>All three tracks, every employee</li>
-        <li>One invoice, flat, no per-seat counting</li>
-        <li>Journals and records never visible to the company</li>
-        <li>No usage reporting by name, ever</li></ul></div>
-    <div class="offerside"><p class="amt">&#8364;4,500</p><p class="per">per year &#183; per company</p>
-      <a class="cta" href="mailto:contact@thesaferiseprotocol.com?subject=Start%20a%20conversation">Start a conversation &#8594;</a></div>
-  </div>
-
-  <div class="fit">
-    <div class="fitcol yes"><h4>Right for you if</h4>
-      <li>Your team has a real, recurring dynamic worth addressing together</li>
-      <li>Leadership will let people take part honestly, unmonitored</li>
-      <li>You want the live event to connect to something people can continue privately afterwards</li></div>
-    <div class="fitcol no"><h4>Not the right fit if</h4>
-      <li>You are looking only for a keynote-style motivational performance or entertainment</li>
-      <li>Findings need to be reported back to leadership by name</li>
-      <li>Someone in the room needs clinical support rather than a facilitated day</li></div>
-  </div>
-</div></section>
+<!-- SR-385 (PASS-b2c-b2b-split.md §1/§2) · the whole "For my organisation"
+     section — organisation workshop/retreat, conference/event, annual
+     access, the fit columns — moved to organisations.html. Every block
+     here was addressed to an employer (per-org pricing, "your team",
+     "the company"), not to the individual visiting this page. See the
+     SR-385 register entry for what specifically landed where. -->
 
 </main>
 <div id="srFooter"></div>
@@ -748,15 +651,6 @@ body[data-lv="me"] .lvdoor.me,body[data-lv="org"] .lvdoor.org{opacity:1}
     applyTheme(c==='midnight'?'sunrise':'midnight');
   });
 })();
-
-
-document.querySelectorAll('.lvdoor').forEach(function(d){
-  d.addEventListener('click',function(e){
-    e.preventDefault();
-    document.body.setAttribute('data-lv',d.getAttribute('data-lv'));
-    var t=document.getElementById('lv-'+d.getAttribute('data-lv'));
-    if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
-  });
-});</script>
+</script>
 </body>
 </html>

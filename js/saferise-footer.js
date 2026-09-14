@@ -62,6 +62,14 @@
         ['mailto:contact@thesaferiseprotocol.com', 'Support']
       ]
     },
+    /* SR-385 (PASS-b2c-b2b-split.md §7) · one B2B column, footer-wide. */
+    {
+      head: 'Organisations',
+      links: [
+        ['organisations.html', 'For organisations'],
+        ['mailto:contact@thesaferiseprotocol.com?subject=SafeRise%20for%20my%20organisation', 'Talk to us']
+      ]
+    },
     {
       head: 'Legal',
       links: [
