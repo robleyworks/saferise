@@ -4707,6 +4707,29 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-org-page p{margin:0;color:var(--text2)}
 .sr-org-page ul{margin:0;padding:0;list-style:none}
 
+/* PASS-org-layout.md §4 · #sr-rail is the shared chapter rail
+   (saferise-system.js, initRail) — also built on track pages and inside
+   the Reader, so its base rule stays untouched; scoped here instead.
+   Fixed nav (79px) + rail (38px, top:70px) together occupy the top 108px
+   of the viewport once the rail is visible — clicking a rail pill calls
+   scrollIntoView({block:'start'}), which lands the section heading right
+   behind that band without scroll-margin-top. id^= keeps this scoped to
+   this page's own sr-org- ids; no other page shares the prefix. */
+section[id^="sr-org-"]{scroll-margin-top:124px}
+/* Below 600px the shared main nav (.nav) wraps to multiple rows — measured
+   181-235px tall at phone widths, versus 79px on one row above ~650px —
+   so the fixed nav alone, before the rail is even added, already exceeds
+   the desktop scroll-margin-top. 256px clears the tallest measured state
+   (235px nav + the rail beneath it) with room to spare. Page's own
+   existing 600px breakpoint (.sr-org-vertical-grid and others), not a new
+   one, and .nav's own wrap point (measured between 600-650px) falls inside it. */
+@media(max-width:600px){section[id^="sr-org-"]{scroll-margin-top:256px}}
+/* The rail's own translucent pill (rgba(17,17,32,.82) + blur) lets a
+   section heading show through mid-scroll before scroll-margin-top settles
+   it below the band — near-solid only on this page, where the rail sits
+   over dense text sections rather than a track page's imagery. */
+.sr-org-page #sr-rail .sr-rail-in{background:rgba(10,10,18,.97)}
+
 /* -- pills (B6) -- */
 .sr-org-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;
   padding:0 26px;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:.78rem;
@@ -4738,7 +4761,12 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-org-hero-note{margin-top:18px;color:var(--text3)!important;font-size:.82rem;max-width:52ch}
 
 /* -- sections -- padding read from method.html's own .sr-mt-sec (SR-384) */
-.sr-org-section{padding:clamp(40px,6vh,66px) 0;border-top:1px solid var(--hair)}
+/* PASS-org-layout.md §5 · was a 6vh-based clamp (40-66px on a real
+   viewport, skewing low) — the only vh-relative section padding on the
+   page. method.html uses a fixed 72px, about.html a fixed 64px; matched
+   to about.html's value as the closer sibling (both alternate a plain/alt
+   section background the same way). */
+.sr-org-section{padding:64px 0;border-top:1px solid var(--hair)}
 .sr-org-section-alt{background:var(--card)}
 .sr-org-head{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:end;margin-bottom:44px}
 .sr-org-head h2{font-size:clamp(1.8rem,3.2vw,2.6rem);line-height:1.08;letter-spacing:-.015em;margin-top:.5rem}
@@ -4751,8 +4779,19 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-org-capacity-grid span{font-family:'Cinzel',serif;color:var(--gold);font-size:.7rem;letter-spacing:.14em}
 .sr-org-capacity-grid h3{font-size:1.5rem;margin:14px 0 10px}
 .sr-org-capacity-grid p{font-size:.92rem;line-height:1.55}
-.sr-org-pull{margin:40px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
-  font-size:1.3rem;color:var(--text)!important;line-height:1.5;max-width:56ch}
+/* PASS-org-layout.md §1 · was max-width:56ch with no visual break from the
+   grid above — narrow enough, and close enough, to read as column 01's own
+   trailing paragraph rather than the section's closing line. Full measure
+   (no cap, same width as the three-column grid it closes) plus a rule and
+   more air make it unambiguously a section-level line.
+   Selector is `p.sr-org-pull`, not `.sr-org-pull` — .sr-org-page p (line 4707)
+   is a class+type selector, one specificity tier above a bare class, so it was
+   silently zeroing this margin outright (rendered gap: 0px, not 44px). Same
+   fix applied below to .sr-org-story-note and .sr-org-vertical-note, the
+   other two closing lines this page renders as <p>. */
+p.sr-org-pull{margin:44px 0 0;padding-top:28px;border-top:1px solid var(--hair);
+  font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
+  font-size:1.3rem;color:var(--text)!important;line-height:1.5}
 
 /* -- story (full-bleed image band) -- */
 .sr-org-story{position:relative;overflow:hidden;padding:110px 0;border-top:1px solid var(--hair)}
@@ -4771,7 +4810,13 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-org-layer-stack h3{font-size:1.7rem;margin:0 0 12px}
 .sr-org-layer-stack p{font-size:.9rem;line-height:1.55}
 .sr-org-layer-stack strong{color:var(--text)}
-.sr-org-story-note{margin-top:30px;color:var(--text3)!important;font-size:.86rem;max-width:60ch}
+/* PASS-org-layout.md §2 · was max-width:60ch, margin-top:30px, no break from
+   the layer-stack grid above — the same fault as .sr-org-pull (§1), and the
+   same root cause (.sr-org-page p outranked the bare class; see §1's note).
+   Matched to .sr-org-story-intro's own 620px lede width rather than a new
+   measure, with the page's established border-top closing treatment. */
+p.sr-org-story-note{margin-top:36px;padding-top:24px;border-top:1px solid var(--hair);
+  color:var(--text3)!important;font-size:.86rem;max-width:620px}
 @media(max-width:820px){.sr-org-layer-stack{grid-template-columns:1fr}}
 
 /* -- gap (image + copy, 2-col) -- */
@@ -4788,7 +4833,10 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-org-gap-list span{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.14em;
   text-transform:uppercase;color:var(--gold)}
 .sr-org-gap-list p{font-size:.9rem;line-height:1.5}
-.sr-org-gold-copy{margin-top:24px;color:var(--gold-lt)!important;font-family:'Cormorant Garamond',Georgia,serif;
+/* PASS-org-layout.md §5 · was margin-top:24px (below the page's ≥32px
+   closing-line floor) and, like .sr-org-pull, a bare class losing to
+   .sr-org-page p (line 4707) — rendered gap was 0px, not 24px. */
+p.sr-org-gold-copy{margin-top:32px;color:var(--gold-lt)!important;font-family:'Cormorant Garamond',Georgia,serif;
   font-style:italic;font-size:1.1rem}
 @media(max-width:820px){.sr-org-image-copy{grid-template-columns:1fr}.sr-org-image-copy figure img{aspect-ratio:16/9}}
 @media(max-width:600px){.sr-org-gap-list article{grid-template-columns:1fr;gap:6px}}
@@ -4813,7 +4861,7 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-org-kpi-card span{display:block;font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--text3)}
 .sr-org-kpi-lead{grid-column:span 2}
 .sr-org-kpi-lead img{aspect-ratio:16/9}
-.sr-org-measure-note{margin-top:26px;padding:24px;border-top:1px solid var(--gold)}
+.sr-org-measure-note{margin-top:32px;padding:24px;border-top:1px solid var(--gold)}
 .sr-org-measure-note h3{font-size:1.35rem;margin:8px 0}
 .sr-org-measure-note>p{color:var(--text2)!important;font-size:.92rem;max-width:70ch}
 @media(max-width:900px){.sr-org-kpi-grid{grid-template-columns:1fr 1fr}.sr-org-kpi-lead{grid-column:span 2}}
@@ -4844,7 +4892,9 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-org-vertical-wide{grid-column:span 3}
 .sr-org-vertical-wide>div{display:grid;grid-template-columns:1fr 1fr}
 .sr-org-vertical-wide img{aspect-ratio:auto;height:100%}
-.sr-org-vertical-note{margin-top:30px;color:var(--text2)!important;font-size:.92rem;max-width:70ch}
+/* PASS-org-layout.md §1 · same root cause as .sr-org-pull's note above:
+   .sr-org-page p outranked this bare class, rendering the gap as 0px. */
+p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.92rem;max-width:70ch}
 .sr-org-vertical-note strong{color:var(--text)}
 @media(max-width:900px){.sr-org-vertical-grid{grid-template-columns:1fr 1fr}.sr-org-vertical-wide{grid-column:span 2}.sr-org-vertical-wide>div{grid-template-columns:1fr}}
 @media(max-width:600px){.sr-org-vertical-grid{grid-template-columns:1fr}.sr-org-vertical-wide{grid-column:span 1}}
@@ -4912,7 +4962,9 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-org-soon-tag{display:inline-block;margin-top:12px;padding:4px 10px;border-radius:3px;
   font:700 .62rem/1 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;
   background:color-mix(in srgb,var(--ac) 20%,transparent);color:var(--ac,var(--gold))}
-.sr-org-curriculum-note{margin-top:26px;color:var(--text3)!important;font-size:.82rem;max-width:65ch}
+/* PASS-org-layout.md §5 · same two faults as .sr-org-pull/.sr-org-gold-copy:
+   below the ≥32px closing-line floor, and losing to .sr-org-page p. */
+p.sr-org-curriculum-note{margin-top:32px;color:var(--text3)!important;font-size:.82rem;max-width:65ch}
 @media(max-width:900px){.sr-org-curriculum-shell{grid-template-columns:1fr}}
 @media(max-width:600px){.sr-org-curriculum-grid{grid-template-columns:1fr}}
 

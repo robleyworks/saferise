@@ -17,7 +17,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-388** (organisations.html's real pricing waterfall, seats-in-use
+- **Highest ID issued: SR-389** (organisations.html layout/spacing pass — closing-line
+  specificity bug found and fixed across six instances, sticky sub-nav overlap fixed, one
+  spacing scale applied — allocated per this pass's own instruction. Verify against `git log -1`
+  once it lands.)
+- **Previously: Highest ID issued: SR-388** (organisations.html's real pricing waterfall, seats-in-use
   commitment removed, eight core tracks with imagery/hover, `tools/check-sitemap.py` built —
   allocated per this pass's own instruction. Verify against `git log -1` once it lands.)
 - **Previously: Highest ID issued: SR-387** (the seventeen-item defect sweep itself — allocated per this
@@ -15431,3 +15435,107 @@ Files: `organisations.html`, `css/saferise-system.css`, `CLAUDE.md`, new `tools/
 *Status:* closed — 6 tasks complete, 1 named-file DIFFERS (adapted, reported), 2 real
 scope/data discrepancies found and reported rather than silently resolved (Sleep & Recovery's
 missing home; the sitemap/generator divergence). **Not pushed.** *Raised and fixed:* 14 Sep 2026
+
+## SR-389 · organisations.html — orphaned closing lines, uneven cards, sticky sub-nav overlap, spacing scale
+
+Runs `pass/PASS-org-layout.md`. Follows SR-388 (`f905608`), per that brief's own instruction to
+run alongside or after the pricing pass.
+
+**§1 — "The operating layer"'s closing line, and the real root cause.** Confirmed live: the italic
+line under the Recognise/Regulate/Recover-choice columns rendered with **zero** visual gap above
+it, reading as column 01's own trailing text. The brief's own diagnosis (narrow `max-width`, no
+visual break) was real but incomplete — investigating why the gap measured `0px` in the live DOM
+despite `.sr-org-pull{margin:44px...}` (after this section's own fix) found a second, more serious
+bug: **`.sr-org-page p{margin:0;color:var(--text2)}` (line 4707) is a class+type selector, one
+specificity tier above a bare class**, so it silently overrode every single-class `margin-top` rule
+on every `<p>` this page renders as a closing line — regardless of the number written in that rule.
+`.sr-org-pull`'s intended margin was never rendering at all, at any value. Fixed by giving each
+affected rule a matching `p.` prefix (`p.sr-org-pull`, same specificity as the page-wide reset, later
+in source order so it wins) rather than editing the shared `.sr-org-page p` rule itself, per
+CLAUDE.md's "never modify a shared selector to fix one page." `.sr-org-pull` also given full measure
+(no `max-width` cap), a `border-top` rule and 44px margin + 28px padding — the section's own new
+closing-line treatment, reused by every other fix below.
+
+**⚠ Checked every other three/four-column block on the page, as instructed.**
+`.sr-org-capacity-grid` (§1, above) and `.sr-org-layer-stack` (§2, below) were the two with a
+literal illusion-of-nesting bug. `.sr-org-kpi-grid` → `.sr-org-measure-note` is a `<div>`, not a
+`<p>`, so the page-wide reset never touched it, and its own border/padding box already reads as a
+distinct unit — not affected, confirmed live. `.sr-org-vertical-grid` (7 industry cards, genuine
+`repeat(3,1fr)`) → `.sr-org-vertical-note` **was** hit by the same zero-margin bug as `.sr-org-pull`
+— not nested, but rendering flush against the grid with no gap is the same fault in substance. Fixed
+with the same `p.` specificity bump. `.sr-org-library`, `.sr-org-offers` and `.sr-org-trust` have no
+closing line at all — nothing to check there. While sweeping for every `<p>` this page uses as a
+closing line, found two more the brief's own three/four-column check wouldn't have surfaced (neither
+follows a 3-column grid) but which have the exact same fault: `.sr-org-gold-copy` (after "The gap"'s
+before/during/after list) and `.sr-org-curriculum-note` (after the 8-track curriculum grid, itself a
+2-column grid). Fixed identically.
+
+**§2 — "The model"'s cramped closing line.** Same root cause as §1. Fixed to the section lede's own
+`.sr-org-story-intro{max-width:620px}` width (the brief's explicit second option, over inventing a
+new measure), margin-top 36px + 24px padding + border-top, matching `.sr-org-pull`'s established
+treatment rather than a bespoke one.
+
+**§3 — uneven trust-card heights: already resolved, both causes.** Cause (a), the seats-in-use text
+inflating the first card, was removed by SR-388 §2 already — confirmed live, the card now reads
+"No individual reporting / No names, session history..." Cause (b), "the grid does not equalise":
+measured all 6 cards live — row 1 (No individual reporting / Journals remain private / No scores or
+streaks) at 138.58px each, row 2 (No diagnosis / Not treatment or crisis care / No outcomes invented)
+at 97.30px each. Already equal within each row; `.sr-org-trust article` is a plain block (no
+`overflow:hidden`/flex conflicting with grid stretch the way `.sr-org-track` needed in SR-388), so
+CSS Grid's default `align-items:stretch` already equalizes once cause (a) stopped distorting row 1.
+No CSS change needed. Reported per the brief's own "already correct" instruction rather than adding
+an unneeded `align-items`/`min-height` rule.
+
+**§4 — sticky sub-nav overlapping content.** The pill bar is `#sr-rail`, a shared component built by
+`saferise-system.js`'s `initRail()` from every page's section eyebrows (also used on track pages and
+inside the Reader) — not an `sr-org-` component, so its base rule stays untouched per the same
+"shared selector" rule as §1. Two fixes, both scoped to this page:
+- **Overlap on scroll.** `#sr-rail button`'s click handler calls `scrollIntoView({block:'start'})`
+  with no `scroll-margin-top` accounted for, landing each section directly behind the fixed nav
+  (79px) + rail (38px, 108px combined at desktop widths). Added
+  `section[id^="sr-org-"]{scroll-margin-top:124px}` — scoped by this page's own id prefix, no other
+  page shares it. **Verified by clicking, not scrolling past**: programmatically fired every rail
+  button's real click handler (not a synthetic scroll) and measured each target section's resulting
+  position against the rail's bottom edge — all 13 land clear. Also measured the shared main nav
+  itself wrapping to 2-3 rows below ~650px (79px → 181px at 600px → 235px at 390px and 375px, stable
+  from there down), which the desktop-derived 124px does not clear — added
+  `@media(max-width:600px){section[id^="sr-org-"]{scroll-margin-top:256px}}`, reusing the page's own
+  existing 600px breakpoint rather than inventing a new one. Verified live at 390px: target section
+  lands at 255.5px, clear of the wrapped nav's 235px bottom edge.
+- **Content showing through.** The rail's pill background is `rgba(17,17,32,.82)` with a blur —
+  deliberately translucent, shared with the Reader and track pages. Raised the opacity to `.97` for
+  this page only (`.sr-org-page #sr-rail .sr-rail-in{background:rgba(10,10,18,.97)}`), since this
+  page's rail sits over dense text sections rather than a track page's imagery.
+
+**§5 — one spacing scale, read off method.html and about.html.**
+- *Content block → closing line, ≥32px everywhere:* the six closing lines fixed in §1/§2 above now
+  read 44px (`.sr-org-pull`), 36px (`.sr-org-story-note`), 32px (`.sr-org-vertical-note`,
+  `.sr-org-gold-copy`, `.sr-org-curriculum-note`, `.sr-org-measure-note` — the last was a `<div>` at
+  26px, unaffected by the page-wide bug but still under the floor, bumped to 32px on its own).
+- *Between sections:* `.sr-org-section{padding:clamp(40px,6vh,66px) 0}` was the page's only
+  viewport-relative section spacing — 40-66px per side depending on window height, biased low on a
+  typical 900px-tall desktop (54px). `method.html`'s `.sr-mt-sec` uses a fixed 72px; `about.html`'s
+  `.sr-mt-sec` (`.sec2`) uses a fixed 64px. **Before: ~108px between sections at 1440×900. After:
+  128px, fixed** — matched to `about.html`'s value, the closer sibling (both alternate a
+  plain/alt section background the same way `.sr-org-section-alt` already does here).
+- *Section head → content* (`.sr-org-head{margin-bottom:44px}`) and *between grid cards* (`gap:20px`
+  /`24px` per grid, already uniform per grid) were already one consistent value each, applied
+  identically everywhere on this page — no change needed.
+- No section where matching the reference pages' spacing made this page read worse.
+
+**Verified live, 1280px, 1440px and 390px** (brief's explicit desktop-plus-mobile list): all six
+closing lines clear of their grids at every width; `.sr-org-trust` rows aligned; every rail pill
+lands its target section below both fixed bars at 1280/1440, and below the wrapped nav at 390px; the
+rail shows no text through it. Reduced motion unaffected — every change here is a static
+margin/padding/background/scroll-margin value, nothing animated, so the central
+`@media(prefers-reduced-motion:reduce)` block needed no new entry. Keyboard focus: `#sr-rail button`
+carries no custom `:focus-visible` rule at all (pre-existing, not introduced or worsened by this
+pass — the background change only darkens the pill, it does not touch outline properties).
+
+Files: `css/saferise-system.css`.
+
+*Status:* closed — 5 tasks fixed, §3 found already resolved and reported as such rather than
+re-fixed, plus 4 additional closing-line instances (`.sr-org-vertical-note`, `.sr-org-gold-copy`,
+`.sr-org-curriculum-note`, `.sr-org-measure-note`) found carrying the same margin-specificity and/or
+sub-32px fault beyond what the brief's own three-column check would have surfaced. **Not pushed.**
+*Raised and fixed:* 14 Sep 2026
