@@ -212,9 +212,11 @@
           '<span class="sr-tp-cardnum2">' + esc(p[0]) + '</span>' +
           '<span class="sr-tp-cardstate2">' + esc(p[p.length - 1] || '') + '</span>' + free +
         '</div>' +
-        '<h3>' + esc(title) + '</h3>' +
-        '<p>' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
-        (has(p[5]) ? '<blockquote>“' + esc(p[5][0]) + '”</blockquote>' : '') +
+        '<div class="sr-tp-cardtext2">' +
+          '<h3>' + esc(title) + '</h3>' +
+          '<p>' + esc(val(p[3], 'promise:' + p[2])) + '</p>' +
+          (has(p[5]) ? '<blockquote>“' + esc(p[5][0]) + '”</blockquote>' : '') +
+        '</div>' +
       '</article>';
     }).join('');
 

@@ -1082,7 +1082,7 @@
         lock.classList.add('show');
       }
     }
-    offset = 0; apply();
+    pos = 0; apply();
     sync();
     if(typeof updateCount === 'function') updateCount();
   }
@@ -2287,19 +2287,25 @@
 
 
   // ══════════ CAROUSEL MOTION ══════════
-  // Continuous constant-velocity drift, not stepped advances. The row is moved
-  // with transform (never scrollLeft) so nothing competes with it and there is
-  // no scroll quantisation. The card set is rendered twice; when the drift has
-  // covered one set's width the offset wraps by exactly that width — the cards
-  // at that point are identical, so the wrap cannot be seen. Speed is slow
-  // enough to read, and it never starts or stops abruptly: hovering eases it to
-  // a halt, leaving eases it back up.
+  // PASS-organisations-full.md A3 · was moved with transform (never scrollLeft)
+  // — confirmed live as the one surface genuinely on the transform bug the
+  // diagnosis predicted. Native scroll now: `pos` is row.scrollLeft, always
+  // >= 0, and `apply()` writes it directly instead of a CSS transform. The
+  // settle-then-drift arrival, the eased arrow nudge and markInCarousel()'s
+  // jump-to-card are UNCHANGED in shape — only the primitive they write
+  // through changed. The card set is still rendered twice so the same
+  // wrap-by-exactly-one-set-width trick keeps the loop seamless; scroll-snap
+  // (set in CSS) is turned off for the duration of any JS-driven motion and
+  // restored the instant it's idle, so a real swipe still snaps to a card
+  // edge and doesn't fight a mid-drift scrollLeft write, the same trade the
+  // shared track-rail carousel (js/saferise-system.js initCarousel) makes.
   var count   = document.getElementById('srCarCount');
   var SPEED   = 22;          // px per second at full drift
-  var offset  = 0;           // current translateX, always <= 0
+  var pos     = 0;           // current scrollLeft, always >= 0
   var vel     = 0;           // eased current speed
   var target  = 0;           // speed we are easing toward
   var raf     = null, last = null, nudge = null;
+  var snapOff = false;
 
   function cardStep(){
     var c = row.querySelector('.sr-dash-card');
@@ -2308,20 +2314,33 @@
   function halfWidth(){
     return row.getAttribute('data-doubled') === '1' ? row.scrollWidth / 2 : 0;
   }
-  function apply(){ row.style.transform = 'translate3d(' + offset + 'px,0,0)'; }
+  function setSnap(off){
+    if(off === snapOff) return;
+    snapOff = off;
+    vp.style.scrollSnapType = off ? 'none' : '';
+  }
+  // vp (#srCarViewport) is the scroll container (overflow-x:auto); row
+  // (#srCarRow) is just the wide flex content inside it — scrollLeft has to
+  // be read/written on vp. Setting it on row was a no-op (row has no
+  // overflow of its own), which is why the very first live check after
+  // converting this off transform found nothing moving at all: not the
+  // transform bug this pass already diagnosed, a second, self-inflicted one
+  // in that diagnosis's own fix. row.scrollWidth is still right for sizing
+  // (cardStep/halfWidth measure the row's own content, not the viewport).
+  function apply(){ vp.scrollLeft = pos; }
   function updateCount(){
     if(!count) return;
     var all   = row.querySelectorAll('.sr-dash-card').length;
     var total = row.getAttribute('data-doubled') === '1' ? all / 2 : all;
     if(!total){ count.textContent = ''; return; }
-    var i = (Math.round(-offset / cardStep()) % total + total) % total + 1;
+    var i = (Math.round(pos / cardStep()) % total + total) % total + 1;
     count.textContent = i + ' / ' + total;
   }
   function wrap(){
     var h = halfWidth();
     if(!h) return;
-    while(offset <= -h) offset += h;
-    while(offset > 0)    offset -= h;
+    while(pos >= h) pos -= h;
+    while(pos < 0)  pos += h;
   }
 
   function tick(ts){
@@ -2329,14 +2348,16 @@
     var dt = Math.min(0.05, (ts - last) / 1000);   // clamp after a tab switch
     last = ts;
     vel += (target - vel) * Math.min(1, dt * 3.2); // ease toward target speed
+    var driving = Math.abs(vel) > 0.01 || !!nudge;
+    setSnap(driving);
     if(Math.abs(vel) > 0.01){
-      offset -= vel * dt;
+      pos += vel * dt;
       wrap(); apply();
     }
     if(nudge){                                     // arrow press, eased
       var k = Math.min(1, (ts - nudge.t0) / nudge.ms);
       var e = 1 - Math.pow(1 - k, 3);               // easeOutCubic
-      offset = nudge.from + nudge.delta * e;
+      pos = nudge.from + nudge.delta * e;
       wrap(); apply();
       if(k >= 1) nudge = null;
     }
@@ -2348,7 +2369,16 @@
   // there — a card that never stops moving is a target you cannot hit, which
   // costs more than the motion gains. Arrows and track changes re-arm it briefly.
   var SETTLE = 13000;
+  var reduceMo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  // PASS-organisations-full.md · "Reduced motion: … no auto-advance" applies
+  // everywhere this pass touches. This carousel had no such check at all
+  // before now — arrows and markInCarousel's own eased jump still work
+  // under reduced motion (a direct response to input, not autoplay), only
+  // the unprompted drift is gated, matching the shared track-rail carousel's
+  // existing stance (js/saferise-system.js initCarousel).
   function startFlow(){
+    if(stopped) return;                            // a manual swipe is permanent, per SR-368
+    if(reduceMo && reduceMo.matches) return;
     if(halfWidth()) target = SPEED;
     if(!raf){ last = null; raf = requestAnimationFrame(tick); }
     clearTimeout(startFlow._t);
@@ -2358,11 +2388,34 @@
 
   function step(dir){
     target = 0;                                    // hand over to the nudge
-    nudge  = {t0: performance.now(), ms: 620, from: offset, delta: -dir * cardStep() * 2};
+    nudge  = {t0: performance.now(), ms: 620, from: pos, delta: dir * cardStep() * 2};
     if(!raf){ last = null; raf = requestAnimationFrame(tick); }
     clearTimeout(step._t);
     step._t = setTimeout(function(){ if(!paused) startFlow(); }, 2600);
   }
+
+  // A real swipe is a native scroll the two functions above never caused —
+  // `lock` marks the window right after a programmatic scrollLeft write
+  // (apply(), on every tick) so this listener can tell "the drift/nudge just
+  // moved this" from "a finger or trackpad just moved this" the same way
+  // js/saferise-system.js's shared carousel already does. Only the second
+  // kind is a manual gesture. Touch only, per SR-368 — desktop hover/leave
+  // already pause and resume via the listeners below, unchanged.
+  var stopped = false, scrollCheck = null, lastTouch = false;
+  vp.addEventListener('touchstart', function(){ lastTouch = true; }, {passive:true});
+  vp.addEventListener('scroll', function(){
+    clearTimeout(scrollCheck);
+    scrollCheck = setTimeout(function(){
+      if(!lastTouch || stopped) return;
+      if(Math.abs(vp.scrollLeft - pos) < 2) return;   // this scroll was apply() itself
+      stopped = true;
+      paused = false;
+      target = 0; vel = 0; nudge = null;
+      clearTimeout(startFlow._t);
+      pos = vp.scrollLeft;
+      setSnap(false);
+    }, 120);
+  }, {passive:true});
 
   var paused = false;
   // Pointer over the carousel stops it dead — a drifting card is a moving
@@ -2371,8 +2424,13 @@
   ['mouseenter','focusin','touchstart'].forEach(function(e){
     vp.addEventListener(e, function(){ paused = true; target = 0; vel = 0; }, {passive:true});
   });
-  ['mouseleave','focusout'].forEach(function(e){
-    vp.addEventListener(e, function(){ paused = false; });
+  // touchend/touchcancel weren't listened for before this pass — a tap that
+  // wasn't also a swipe left `paused` true forever (nothing else clears it
+  // for a touch interaction). Added them alongside the two that already
+  // existed, same effect (just clears `paused`) — not a new resume behaviour,
+  // the same one mouseleave/focusout already had.
+  ['mouseleave','focusout','touchend','touchcancel'].forEach(function(e){
+    vp.addEventListener(e, function(){ paused = false; }, {passive:true});
   });
   document.addEventListener('visibilitychange', function(){
     if(document.hidden) target = 0;
@@ -2393,7 +2451,7 @@
     });
     if(hit){
       target = 0;
-      nudge  = {t0: performance.now(), ms: 780, from: offset, delta: -(hit.offsetLeft - 4) - offset};
+      nudge  = {t0: performance.now(), ms: 780, from: pos, delta: (hit.offsetLeft - 4) - pos};
       if(!raf){ last = null; raf = requestAnimationFrame(tick); }
       clearTimeout(markInCarousel._t);
       markInCarousel._t = setTimeout(function(){ if(!paused) startFlow(); }, 6000);

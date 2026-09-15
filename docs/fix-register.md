@@ -17,7 +17,12 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-390** (organisations.html department/function tablist audit — the
+- **Highest ID issued: SR-391** (carousel swipe fixed — a second, self-inflicted scroll-target
+  bug found converting the dashboard carousel off transform — organisations.html's four sections
+  rebuilt from mock-organisations-sections.html, band table and free lunch-and-learn removed,
+  retreat pricing corrected and four other stale locations reported — allocated per this pass's
+  own instruction. Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-390** (organisations.html department/function tablist audit — the
   brief's named fault did not reproduce (already shipped by SR-385), one other tablist sitewide
   found and confirmed working, one reduced-motion gap closed — allocated per this pass's own
   instruction. Verify against `git log -1` once it lands.)
@@ -15606,3 +15611,209 @@ Files: `css/saferise-system.css`.
 found exactly one other tablist sitewide (`dashboard.html`, unrelated and already working) and no
 other broken control on `organisations.html`; one real gap found and closed (reduced motion). **Not
 pushed.** *Raised and fixed:* 14 Sep 2026
+
+## SR-391 · carousel swipe fixed, organisations.html's four sections rebuilt, band table and free session removed
+
+Runs `pass/PASS-organisations-full.md`. Supersedes `PASS-diagram-and-swipe.md` (deleted from `pass/`
+as instructed). `PASS-org-sections-and-swipe.md` and `PASS-carousel-sizing.md`, also named as
+superseded, were not present in `pass/` at the start of this run — DIFFERS, reported rather than
+assumed deleted-by-someone-else.
+
+### Part A — carousels
+
+**A1, five cards in view.** `.sr-tp-card2`'s width changed from a fixed 250px to
+`calc((100% - var(--peek) - (var(--per) - 1) * var(--gap)) / var(--per))`, exactly the brief's own
+formula (`--gap:14px`, `--peek:26px`, `--per` set per breakpoint: 5 / ≥1200px, 4 / 900–1199, 3 /
+640–899, 2 / <640). Verified live via `getBoundingClientRect`, not eyeballed: **1440px → 5 fully
+visible + a 6th peeking (195.6px measured, matches hand calc exactly); 1000px → 4 + peek (219px);
+700px → 3 + peek (181px); 500px → 2 + peek (178px)**. Height changed from a fixed 430px to
+`aspect-ratio:3/4`, matching the cover files' own ratio (900×1200, checked with `sips` against
+`assets/covers/01.jpg`) rather than a guessed number. SR-382's two-line title reservation carried
+forward as `min-height:2.16em` on the title.
+
+**A2, the hover/click text — diagnosed before fixing, and it was not what the brief's own candidate
+causes suggested.** Confirmed live the text was unreadable, but **not because it was hover-only** —
+a `@media(hover:none)` fallback already existed and was applying the identical reveal values on
+touch. The real cause: `h3`, `p` and `blockquote` were three **independently** absolutely-positioned
+elements, each with a hand-tuned `bottom` offset sized for one assumed line count. Measured with
+`getBoundingClientRect` after the full 420ms reveal transition settled (an initial 50ms-later read
+gave a false "no overlap" — mid-transition, not at rest): `h3`'s revealed bottom (109.2px) does not
+clear the height `p` actually occupies once revealed (up to 138px) — **they overlapped by 14–29px,
+on `:hover` and `:focus-within`, on desktop and under the old touch fallback alike.** Not a
+hover-binding bug; a spacing bug present everywhere, that would only have gotten worse once A1
+narrowed the cards. Fixed by wrapping the three in one flex column (`.sr-tp-cardtext2`, added in
+`js/saferise-track.js`) anchored to the card's own bottom padding, so they stack in normal flow and
+cannot overlap regardless of line count — immune to A1's width change, rather than re-tuning fixed
+offsets that would just break again at the new widths. Re-verified post-fix: `h3` (366.7–418.5),
+`p` (428.5–487.6), `blockquote` (495.6–534.0) on a focused card — clean gaps throughout, zero
+overlap. Below 900px (where A1 also narrows to 3 then 2 cards and hover has nowhere reliable to
+land) the text is permanently visible, tied to viewport width rather than `hover:none` — a
+touch-capable laptop with a mouse reports `hover:hover` and would never have reached the old
+touch-only fallback at all.
+
+**A3, scroll quality, every rail.** `.sr-tp-railtrack2` already had `overflow-x:auto` and
+`scroll-snap-type:x mandatory` — hardened with `touch-action:pan-x`, `overscroll-behavior-x:contain`,
+`-webkit-overflow-scrolling:touch`, and cross-browser scrollbar hiding. The one surface genuinely on
+the transform bug — confirmed live, not assumed — was the **dashboard Library carousel**: converted
+`row.style.transform` to `scrollLeft`/`scrollTo`, keeping the existing settle-then-drift arrival and
+`markInCarousel()` jump-to-card, only the movement primitive changed. **A second, self-inflicted bug
+surfaced converting it**: the rewrite first wrote `scrollLeft` onto `#srCarRow` (the wide flex
+content) instead of `#srCarViewport` (the actual `overflow-x:auto` container) — a direct
+`row.scrollLeft = 100` test read back `0` immediately, proving nothing was scrolling. Fixed by moving
+every scroll read/write (and `scroll-snap-type`) onto the viewport; `row.scrollWidth` stayed correct
+for `cardStep()`/`halfWidth()`, which measure the row's own content, not the viewport. Also added,
+since neither existed before this pass: a `scroll`-event listener (mirroring the shared
+`initCarousel`'s `lock`-timestamp technique) that distinguishes a real user scroll from `apply()`'s
+own writes and sets a **permanent** stop on the first one, per SR-368 — the carousel previously had
+no such distinction, only a temporary `paused` flag; a `touchend`/`touchcancel` listener, since
+`touchstart` set `paused=true` with nothing to ever clear it back for a touch-only interaction (a
+tap that wasn't a swipe left it paused forever); and a `prefers-reduced-motion` gate on `startFlow()`,
+which had none at all, matching the shared track-rail carousel's existing stance. Verified live:
+drift measured advancing `[4,11,20,29,37,46,55,64]` over 8×400ms ticks (~22px/s, matches `SPEED`);
+arrow click moved `scrollLeft` by 381px; a simulated touch+scroll (`scrollLeft` nudged directly, not
+via `apply()`) triggered the permanent stop — six readings over the next 2.4s all held at 760,
+unmoved.
+
+`protocol.html`/`resource.html` (no carousel of their own — both load in an iframe beneath the
+dashboard's one carousel; `resource.html`'s `.sr-rail` is an unrelated vertical nav list), `/plans`,
+and `organisations.html` (static CSS grids, no `overflow-x`/`data-sr-carousel` anywhere) confirmed
+to have no carousel to fix — the earlier diagnosis stands, re-confirmed rather than re-litigated.
+
+### Part B — four sections on `organisations.html`
+
+Real class names read from the live file before any CSS was written, per the brief's own warning.
+Every mockup class renamed `sr-org-` (the mockup's own names — `.pair`, `.flow`, `.cap`, `.stage`
+— are exactly the generic-collision shape CLAUDE.md already warns about). **Colour/type tokens point
+at the site's real `--gold`/`--text`/`--text2`/`--text3`/`--hair`/`--card`**, not the mockup's own
+hardcoded hex — confirmed live under `[data-theme="sunrise"]`: body background and text correctly
+switch to the light palette, all four new sections legible, because nothing here is a fixed colour.
+**Conflict with the mockup, reported rather than silently resolved**: its own 4-tier text scale
+(text/ink/soft/dim) is compressed onto the site's 3 tiers (text/text2/text3) — introducing two new
+themed grey tokens for one shade of secondary copy wasn't worth the token-surface growth.
+
+**Four colour tokens** added under `.sr-org-page` in `css/saferise-system.css` (search
+`--sr-org-gold`): `--sr-org-gold:212,168,67` (= `--gold`, as an rgb triplet for the `rgba(var(--c),x)`
+mixing technique every component uses), `--sr-org-sage:143,163,123`, `--sr-org-slate:110,134,168`,
+`--sr-org-bronze:181,150,102`.
+
+**B1, the model.** Replaces `.sr-org-layer-stack` (three static cards) and, with it, removes
+`assets/home/hero-film.webp` as this section's photo background — resolving, as a side effect, the
+imagery audit's own "subject erased by scrim" finding against that file, since this was the section
+it was found in. SVG paths copied verbatim from the mockup (annular sectors, inner 148/outer 300,
+centred 600,470) — none redrawn. Auto-cycle, hover-hold-resume-on-leave and dot-click-hold all
+ported from the mockup's own script. Two additions the mockup didn't need: `focus`/`blur` listeners
+alongside `mouseenter`/`mouseleave` so `:focus-within`... — an SVG `<g>` has no descendants to be
+"within", so the group itself carries `tabindex="0"` and is listened to directly — reaches the same
+state as hover, verified live (focusing the "application" wedge set `.on` on both the wedge and its
+copy panel); and the dots rebuilt as real `<button>`s with `aria-label`s instead of the mockup's
+inert `<span>`s, since B1 explicitly requires them clickable. Reduced motion added to the file's one
+central `@media(prefers-reduced-motion:reduce)` block (not a new standalone one, per CLAUDE.md):
+hub rotation and loop dashes stop, all three panels render simultaneously in normal flow. The
+substrate qualifier (*no diets, no programmes, no targets, routes outward on deficiency or injury*)
+copied verbatim, not softened.
+
+**B2, the impact pathway.** Replaces `.sr-org-pathway` (four-stage arrow row) and `.sr-org-kpi-grid`
+(five image cards) with the mockup's chain-plus-rail-plus-chips design. Dropping the five KPI-card
+images removes five more duplicate/repeated-image usages the imagery audit had flagged
+(`band-professional-performance.jpg`, `band-live-session.jpg`, `panel-t2.jpg`, `band-05.webp`,
+`film-poster.webp` all stop appearing in this section). The three certainty labels kept verbatim
+(*directly supported · reasonably expected · observed, not promised*). **The sheet-overflow warning
+verified live, not assumed fixed by copying the CSS**: `.sr-org-pathsheet` (`width:min(1240px,
+calc(100% - 52px))`) measured at 1440px viewport renders at x:100–1340, fully inside the viewport;
+`.sr-org-pathgrid` (its `min-width:0` grid children) measured at x:164–1276, fully inside the sheet;
+`document.documentElement.scrollWidth` equalled `innerWidth` exactly (1440) — no horizontal page
+overflow. The old `.sr-org-measure-note` ("Measure the environment, not the individual...") is
+compliance copy from an earlier pass this brief's own mockup doesn't carry an equivalent for —
+kept, appended after the chips as `.sr-org-pathmeasure`, rather than silently dropped.
+
+**B3, what people receive.** Replaces `.sr-org-library` (four plain list items) with the
+containment/nesting layout — the private, sealed layer visually nested inside the organisational
+one, two plates flowing inward with the animated-arrow connectors, one line ("nothing comes out")
+struck through in spirit by the closing note. Built entirely in HTML (`h4`/`p`), never SVG `<text>`
+— the warning about the earlier SVG version that couldn't reflow didn't need active avoidance here,
+since the mockup itself was already HTML throughout, but confirmed by inspection rather than assumed.
+
+**B4, ways to work together.** Replaces `.sr-org-offers` (four plain cards) with the four-column
+equal-height design — angled `.cap` headers, circular medallions, ribbon on the annual-access column.
+**The clip-path warning verified live**: `.sr-org-plan4` computed `overflow:visible` (confirmed —
+only `.sr-org-cap4` clips), and both the ribbon (`top:13442.5`) and medallion (`top:13578.5`, extending
+below the cap into the card body) measured fully rendered, not clipped. **Equal height confirmed**:
+three of four cards measured 728.27px exactly; the featured (`lift`) column measures 754.27px, by
+design (`margin-top:-26px` and a taller cap, matching the mockup) — CTAs measured 26px from each
+card's own bottom edge on all four, "pinned to the foot" via `margin-top:auto`. No borders anywhere
+across all four new components, confirmed live (`border-style:none` on every checked selector) —
+bezel and shadow only, per the system-wide requirement.
+
+### Part C — removals and copy
+
+**C1, the band table removed.** Both `.sr-org-band-table` blocks (the five-band rate table and the
+five-row worked-examples table) deleted along with their `.sr-org-waterfall` wrapper. Swept for
+dependencies: no `href="#"` anchor anywhere on `organisations.html` pointed at the table or its
+section (only two exist on the page, both unrelated — the skip-link and `#sr-org-verticals`); the
+sub-nav pill row (`#sr-rail`) is generated from section eyebrows, not manual anchors, so removing
+the table left no dangling entry there; the FAQ/"Procurement questions" section's six questions
+don't reference pricing bands or a table. The one in-copy pointer found — "Priced by total headcount,
+waterfall banded — see the table below" in the annual-access card — is gone with the table itself,
+replaced by C3's own plain-language sentence.
+
+**C2, the free lunch-and-learn removed.** The only live occurrence sitewide was the one list item
+in this section ("Lunch-and-learn · 45 minutes · Free") — checked column list, medallion, footer
+note, nav and every CTA on `organisations.html`; also grepped the whole repo for "lunch-and-learn" —
+the only other hit is this register's own SR-388 entry (historical, correctly left alone).
+
+**C3, plain language.** "Waterfall"/"banded"/"tiered" no longer appear anywhere in
+`organisations.html`'s visible copy (grepped post-edit — the only remaining matches are this pass's
+own code comments explaining the removal). CTA now **"Ask about your rate →"**, medallion now
+**"By size · of your organisation"**, pricing note now the brief's own verbatim sentence. Not
+checked for internal docs/contracts carrying the old terms — out of this pass's file scope
+(`organisations.html` + the three JS/CSS files touched), and the brief's own instruction is that
+those may keep the old language regardless.
+
+**C4, retreat pricing corrected.** Live figure was €1,800 to 50 / €3,500 over 50; now **€2,400 to
+50 / €3,500 51–120 / scoped above 120**, applied to the first plan column's price list. **Other
+locations found carrying the old €1,800/€3,500 split, reported for reconciliation**:
+- `for-organisations.html` — the pre-SR-385 page, 301-redirects to `/organisations` and was
+  deliberately left un-updated rather than deleted (SR-385's own decision, documented in that
+  commit) — not touched here either, consistent with that standing decision, but it still shows
+  "Pilot €1,800" under its own now-superseded tier names.
+- `RUN-E-REPORT.md` (repo root) — a past session's own report, discusses the €1,800/€3,500 split
+  as "accurate" at the time it was written. A report about a decision, not a live source of it —
+  not edited (would falsify the historical record), flagged for Andre's awareness.
+- `docs/tracker-v31.html` — `LG-199` describes a different, three-tier pricing shape entirely
+  (Pilot/Programme/Partner, not "workshop or retreat") that appears to predate the current model —
+  tracker data, not edited.
+- **"The investor deck" and "the financial model" named in the brief could not be located in this
+  repository** — searched for filenames matching either description and found none; these are most
+  likely documents Andre maintains outside version control. Flagging rather than guessing at a file.
+
+### Known follow-up, not done in this pass
+
+The old CSS for the four replaced components (`.sr-org-layer-stack`, `.sr-org-story-bg/-scrim/-intro`,
+`.sr-org-pathway`, `.sr-org-kpi-*`, `.sr-org-measure-note`, `.sr-org-library`, `.sr-org-offers`,
+`.sr-org-offer-featured`, `.sr-org-waterfall*`, `.sr-org-band-*`, `.sr-org-pilot`) is now dead —
+nothing in `organisations.html` references it after this pass's HTML replacements, but it was not
+swept out of `css/saferise-system.css`. Left in place rather than removed under time pressure at the
+end of an already-large pass; flagging explicitly rather than leaving it to be found later, the way
+`.postfilm-*` was found and removed in SR-387.
+
+### Real device or emulation
+
+**Emulation only** — viewport resizing and simulated touch/scroll events in the Browser pane
+(`dispatchEvent`, direct `scrollLeft` writes to stand in for a finger drag). No access to a physical
+phone in this environment. Per the brief's own warning, this does not reproduce true momentum
+scrolling, rubber-band overscroll feel, or the actual `hover:none`/`pointer:coarse` media-feature
+match a real touchscreen reports (the `@media(max-width:899px)` fix for A2 sidesteps that
+uncertainty by keying off viewport width instead — a signal emulation reproduces faithfully — but
+the scroll *feel* itself is unverified on real hardware). Recommend a real-device pass before this
+ships.
+
+Files: `css/saferise-system.css`, `css/saferise-dashboard.css`, `js/saferise-track.js`,
+`dashboard.html`, `organisations.html`.
+
+*Status:* closed — Part A's diagnosis re-confirmed (one surface genuinely on the transform bug, one
+new self-inflicted scroll-target bug found and fixed while converting it, three named surfaces had
+no carousel to fix); Part B's four sections rebuilt and each explicit overflow/clipping warning
+verified live rather than assumed; Part C's removals swept for dependencies with none found, and
+four other locations carrying the old retreat pricing reported rather than silently reconciled.
+Dead CSS from the replaced components not yet swept — flagged above. **Not pushed.** *Raised and
+fixed:* 15 Sep 2026
