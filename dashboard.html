@@ -1044,7 +1044,10 @@
 
     var CARDS = t.items.map(function(it,i){
       var no  = String(i+1).padStart(2,'0');
-      var src = COVERDIR[n] + no + '.jpg';
+      // PASS-carousel-resume-and-routing.md §4 · -640 derivative, not the
+      // 900x1200 original, for a 176px-wide carousel card (~65KB vs ~120KB
+      // each, confirmed present on disk for every cover, all three tracks).
+      var src = COVERDIR[n] + no + '-640.jpg';
       var cur = t.unlocked && it[1] === CURRENT;
       /* SR-162 · the cover is the shared component in js/saferise-card.js,
          the same one the track pages render. What stood here was a
@@ -1199,7 +1202,9 @@
     document.getElementById('srResultName').textContent = name;
     document.getElementById('srResultWhy').textContent = why;
     var thumb = document.getElementById('srResultThumb');
-    thumb.src = COVERDIR[track] + no + '.jpg';
+    // PASS-carousel-resume-and-routing.md §4 · -320, not the 900x1200
+    // original, for a 40px-wide result thumbnail (.sr-dash-resultthumb).
+    thumb.src = COVERDIR[track] + no + '-320.jpg';
     var act = document.getElementById('srResultAct');
     if(OWNED(track)){
       document.getElementById('srResultKick').textContent = 'Opens next \u00B7 in your plan';
@@ -2291,9 +2296,10 @@
   // — confirmed live as the one surface genuinely on the transform bug the
   // diagnosis predicted. Native scroll now: `pos` is row.scrollLeft, always
   // >= 0, and `apply()` writes it directly instead of a CSS transform. The
-  // settle-then-drift arrival, the eased arrow nudge and markInCarousel()'s
-  // jump-to-card are UNCHANGED in shape — only the primitive they write
-  // through changed. The card set is still rendered twice so the same
+  // settle-then-drift arrival and the eased arrow nudge are UNCHANGED in
+  // shape — only the primitive they write through changed. (markInCarousel's
+  // own jump-to-card is gone — see PASS-carousel-resume-and-routing.md §2,
+  // below.) The card set is still rendered twice so the same
   // wrap-by-exactly-one-set-width trick keeps the loop seamless; scroll-snap
   // (set in CSS) is turned off for the duration of any JS-driven motion and
   // restored the instant it's idle, so a real swipe still snaps to a card
@@ -2372,8 +2378,9 @@
   var reduceMo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
   // PASS-organisations-full.md · "Reduced motion: … no auto-advance" applies
   // everywhere this pass touches. This carousel had no such check at all
-  // before now — arrows and markInCarousel's own eased jump still work
-  // under reduced motion (a direct response to input, not autoplay), only
+  // before now — arrows still work under reduced motion (a direct response
+  // to input, not autoplay; markInCarousel no longer animates anything, see
+  // §2 above), only
   // the unprompted drift is gated, matching the shared track-rail carousel's
   // existing stance (js/saferise-system.js initCarousel).
   function startFlow(){
@@ -2432,30 +2439,38 @@
   ['mouseleave','focusout','touchend','touchcancel'].forEach(function(e){
     vp.addEventListener(e, function(){ paused = false; }, {passive:true});
   });
+  // PASS-carousel-resume-and-routing.md §1 · was a one-way latch — hidden
+  // zeroed target, but the else branch only reset `last`, never restoring
+  // target or re-arming the loop. Once a tab had been hidden even briefly,
+  // drift never resumed on its own again. startFlow() itself already
+  // no-ops when stopped (SR-368's permanent manual stop, which must
+  // survive a tab switch) — guarding on !paused too here so a visibility
+  // change that happens to land mid-hover doesn't override an active pause.
   document.addEventListener('visibilitychange', function(){
-    if(document.hidden) target = 0;
-    else { last = null; }
+    if(document.hidden){
+      target = 0;
+    } else {
+      last = null;
+      if(!stopped && !paused) startFlow();
+    }
   });
 
 
   // ── the begin panel and the carousel are the same decision ──
-  // Answering the two questions scrolls the carousel to that protocol and marks
-  // it, so the recommendation and the library never disagree.
+  // PASS-carousel-resume-and-routing.md §2 · this used to also stop the
+  // drift and nudge-scroll to the matched card (target=0, an eased nudge to
+  // hit.offsetLeft, a 6000ms hold before resuming) — removed per this pass's
+  // explicit instruction ("not providing a good experience"). The `.is-next`
+  // marking is left in place: it's a separate, static highlight (which card
+  // the answered questions point to), not a scroll animation, and nothing
+  // else in the file reads or depends on the removed nudge/stop — grepped
+  // for `.is-next` and for markInCarousel itself, both confirmed to have no
+  // other caller or dependent.
   function markInCarousel(name){
     var cards = row.querySelectorAll('.sr-dash-card');
-    var hit = null;
     cards.forEach(function(c){
-      var is = c.getAttribute('data-open') === name;
-      c.classList.toggle('is-next', is);
-      if(is) hit = c;
+      c.classList.toggle('is-next', c.getAttribute('data-open') === name);
     });
-    if(hit){
-      target = 0;
-      nudge  = {t0: performance.now(), ms: 780, from: pos, delta: (hit.offsetLeft - 4) - pos};
-      if(!raf){ last = null; raf = requestAnimationFrame(tick); }
-      clearTimeout(markInCarousel._t);
-      markInCarousel._t = setTimeout(function(){ if(!paused) startFlow(); }, 6000);
-    }
   }
 
   // ── protocol / resource pane ──
@@ -2519,6 +2534,17 @@
   // arrives beneath it. Slow enough to be read as a shift rather than a jump.
   function openProtocol(name, src, no, track, resource){
     pOpen = {name:name, no:no || '01', track:track || 1};
+    // PASS-carousel-resume-and-routing.md §3 · the rail shows the opened
+    // protocol's track category — context, not a selector, so this is a
+    // plain re-render (render() itself resets pos to 0 with no animation,
+    // same as any other track switch) rather than anything that scrolls or
+    // snaps to the specific card. track is already available on every call
+    // site (the prompt's RECS lookup, the stored resume record, and
+    // CURRENT_TRACK itself for a direct carousel-card click) — no new data
+    // structure needed. Drift's own target/stopped state is untouched by
+    // render(), so autoplay keeps running (or stays off, if a manual stop
+    // was already in effect) exactly as it was before the switch.
+    if(track && +track !== CURRENT_TRACK) render(+track);
     var lib = document.getElementById('srLibrary');
 
     var start = lib ? lib.getBoundingClientRect().top : 0;

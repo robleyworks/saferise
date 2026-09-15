@@ -95,10 +95,20 @@
     return '<div class="sr-tp-ph" style="aspect-ratio:' + ratio + '">' + inner + '</div>';
   }
 
-  /* Covers are path references. No inline base64 anywhere on this page. */
-  function coverPath(trackId, no) {
-    return trackId === 1 ? 'assets/covers/' + no + '.jpg'
-                         : 'assets/covers/t' + trackId + '-' + no + '.jpg';
+  /* Covers are path references. No inline base64 anywhere on this page.
+     PASS-carousel-resume-and-routing.md §4 · `size` is new, optional and
+     additive — every existing caller (protocol.html's full-width banner and
+     GO DEEPER header, both CSS background-images that need the real
+     resolution) keeps getting the full-size original by omitting it. Passed
+     explicitly as '640' only from the card-sized rail contexts below, which
+     were requesting a 900x1200 original (measured ~120KB) to fill a
+     176-250px slot — the -640 derivative (measured ~65KB, already generated
+     by SR-351, just never wired to this path) is still 2-3x the slot's own
+     width for real headroom on a retina display. */
+  function coverPath(trackId, no, size) {
+    var suffix = size ? ('-' + size) : '';
+    return trackId === 1 ? 'assets/covers/' + no + suffix + '.jpg'
+                         : 'assets/covers/t' + trackId + '-' + no + suffix + '.jpg';
   }
   /* SR-379 (PASS-reader-and-protocol-pages.md Part A) · exported so protocol.html
      can resolve its own per-protocol cover art from this one place, instead of
@@ -207,7 +217,7 @@
         ' data-sr-open="protocol.html?track=' + esc(String(t.id)) +
         '&amp;protocol=' + esc(String(p[0])) + '">' +
         '<div class="sr-tp-cardcov2">' +
-          '<img class="sr-tp-cardimg2" src="' + esc(coverPath(t.id, p[0])) + '" alt="" loading="lazy" decoding="async" onerror="this.closest(\'.sr-tp-cardcov2\').classList.add(\'sr-tp-ph2\')">' +
+          '<img class="sr-tp-cardimg2" src="' + esc(coverPath(t.id, p[0], '640')) + '" alt="" loading="lazy" decoding="async" onerror="this.closest(\'.sr-tp-cardcov2\').classList.add(\'sr-tp-ph2\')">' +
           '<span class="sr-tp-carddoor2">' + esc(p[1]) + '</span>' +
           '<span class="sr-tp-cardnum2">' + esc(p[0]) + '</span>' +
           '<span class="sr-tp-cardstate2">' + esc(p[p.length - 1] || '') + '</span>' + free +

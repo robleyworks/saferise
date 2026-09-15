@@ -17,7 +17,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-391** (carousel swipe fixed — a second, self-inflicted scroll-target
+- **Highest ID issued: SR-392** (dashboard carousel `visibilitychange` one-way latch fixed,
+  `markInCarousel()`'s jump-to-card removed, the rail now follows the opened protocol's track,
+  load-speed measured and two safe wins applied, `docs/TYPE-AND-CONTRAST.md` tokens landed and
+  swept — allocated per this pass's own instruction. Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-391** (carousel swipe fixed — a second, self-inflicted scroll-target
   bug found converting the dashboard carousel off transform — organisations.html's four sections
   rebuilt from mock-organisations-sections.html, band table and free lunch-and-learn removed,
   retreat pricing corrected and four other stale locations reported — allocated per this pass's
@@ -15817,3 +15821,235 @@ verified live rather than assumed; Part C's removals swept for dependencies with
 four other locations carrying the old retreat pricing reported rather than silently reconciled.
 Dead CSS from the replaced components not yet swept — flagged above. **Not pushed.** *Raised and
 fixed:* 15 Sep 2026
+
+---
+
+## SR-392 · carousel resume latch fixed, jump-to-card removed, rail follows the opened protocol, load speed measured, type/contrast tokens landed
+
+Runs `pass/PASS-carousel-resume-and-routing.md`, against the standing spec `docs/TYPE-AND-CONTRAST.md`.
+Follows directly from `PASS-carousel-drift.md`'s diagnostic (not re-litigated): the dashboard
+Library carousel's `visibilitychange` handler was a one-way latch, a fifth cause not on that
+brief's own list of four, flagged and held for authorisation before touching. **That authorisation
+is this pass.**
+
+### §1 — the `visibilitychange` latch
+
+`dashboard.html:2435–2436` zeroed `target` on `document.hidden` and, on the `else` branch, only
+reset `last` — nothing ever restored `target` to `SPEED`, so drift never resumed once a tab had
+been hidden even briefly. Fixed:
+
+```js
+document.addEventListener('visibilitychange', function(){
+  if(document.hidden){
+    target = 0;
+  } else {
+    last = null;
+    if(!stopped && !paused) startFlow();
+  }
+});
+```
+
+Guarded on both `!stopped` (SR-368's permanent manual stop must survive a tab switch — the brief's
+own explicit constraint) and `!paused` (so a visibility change landing mid-hover doesn't override
+an active pause). Verified by **dispatching `visibilitychange` directly** rather than relying on
+this environment's own tab state (see environment caveat below) — `Object.defineProperty(document,
+'hidden', {value:true/false, configurable:true})` + `document.dispatchEvent(new
+Event('visibilitychange'))`, read back through a temporary debug hook (stripped before commit, see
+below): `target` reached `0` on hidden and restored to `SPEED` on visible when `stopped:false`; a
+second run first fired a simulated permanent stop (synthetic `touchstart` + `scrollLeft` nudge +
+`scroll` dispatch on `#srCarViewport`, the same sequence a real swipe produces) and then cycled
+hidden→visible — `target` stayed `0` and `stopped` stayed `true` throughout, confirming the guard
+holds.
+
+**`initCarousel()` in `js/saferise-system.js` audited, as asked.** It has no matching bug — it has
+no `visibilitychange`/`document.hidden` handling of any kind (`grep -n
+"visibilitychange\|document.hidden" js/saferise-system.js` returns nothing). Its only pause
+mechanisms are hover/focus/touch (`pause()`/`scheduleResume()`, both temporary) and an
+IntersectionObserver-driven off-screen pause/resume, also temporary. It never engages a
+hidden-tab-specific stop in the first place, so there was nothing to fix there.
+
+### §2 — `markInCarousel()`'s jump removed
+
+**Wiring, reported before removal as asked:** one caller only (`dashboard.html`, the "begin panel"
+prompt-recommendation flow, ~line 1210). It did two things — (a) toggled a static `.is-next`
+highlight class on the matching card (styled in `css/saferise-dashboard.css`:
+`.sr-dash-card.is-next .sr-pcover{border-color:var(--gold)...}` /
+`.sr-dash-card.is-next .sr-dash-cardname{color:var(--gold-lt)}`), and (b) an eased nudge-scroll to
+that card plus a 6000ms drift-hold. Grepped for both `.is-next` and `markInCarousel` itself: nothing
+else in the codebase reads or calls either. Removed (b) entirely, kept (a) — it's a separate,
+static highlight (which card the answered questions point to), not a scroll animation:
+
+```js
+function markInCarousel(name){
+  var cards = row.querySelectorAll('.sr-dash-card');
+  cards.forEach(function(c){
+    c.classList.toggle('is-next', c.getAttribute('data-open') === name);
+  });
+}
+```
+
+### §3 — the rail follows the opened protocol's track
+
+**How it decided before:** it didn't — `render()` only ever fired from the rail's own tablist
+clicks; opening a protocol never touched which track the rail showed. **Track was already available
+at every call site** — the prompt's recommendation lookup, the stored resume record, and
+`CURRENT_TRACK` itself for a direct carousel-card click — so no new data structure was needed, per
+the brief's own caution. Added one line at the top of `openProtocol()`:
+
+```js
+if(track && +track !== CURRENT_TRACK) render(+track);
+```
+
+`render()` already resets `pos` to `0` with no animation on any track switch (the same reset any
+tablist click already produces) — this is a plain re-render, not a scroll or a snap. Verified live:
+opening a Track 2 protocol from a Track-1-showing rail switched `CURRENT_TRACK` correctly, kept
+drift's own `target` unchanged throughout the switch, and `pos` kept advancing continuously
+afterward with no pause or reset in the drift itself. A direct DOM click on a rendered card (the
+third route) produced zero console errors and the same behaviour.
+
+### §4 — load speed, measured before any change
+
+**Corrected finding, flagged because I caught my own error before reporting it:** an early read of
+`read_network_requests` appeared to show `protocol.html?embed=1&track=…` loading immediately on
+dashboard mount — I almost reported that as "the iframe loads eagerly." It doesn't. That log is a
+rolling window across the whole tab session, and the two requests it showed were my own earlier
+manual `openProtocol()` calls from the same tab, not a fresh load. Confirmed on a genuinely
+untouched navigation: `document.getElementById('srProtoFrame').src === "about:blank"`. **The iframe
+is correctly lazy.**
+
+**Measured (direct file sizes, immune to the same log-contamination risk):**
+
+| Asset | Size |
+|---|---|
+| `content/t1-resources.js` | 675,541 B (~660KB) — the single largest asset site-wide |
+| `content/t3-resources.js` | 360,620 B |
+| `css/saferise-system.css` | 362,515 B (~354KB) — render-blocking, loaded on every page |
+| `content/t2-resources.js` | 328,928 B |
+| `content/tracks.js` | 89,903 B |
+| `js/saferise-track.js` | 52,867 B |
+| `dashboard.html` | 148,026 B |
+| `protocol.html` | 116,205 B |
+| 10 track-1 covers, full size | 1,359,872 B (~1.33MB) combined |
+
+`protocol.html` loads all three `content/t{1,2,3}-resources.js` unconditionally on every load — a
+deliberate SR-311 decision, documented in-source ("make data available for whichever track's
+protocol is resolved… ready for that reader to be built") — combined ~1.35MB parsed whole, on every
+protocol view, when only one track's data is ever used per view. **Not applied as a fix this
+pass** — verifying it's safe would mean confirming nothing else cross-references another track's
+resource data, which the brief's own "do not rewrite the asset pipeline" caution and this pass's
+time budget didn't cover. Flagged as the top proposed-but-unapplied win.
+
+**Applied — the two safe, already-precedented fixes:** SR-351's responsive cover derivatives
+(`-320`/`-640` variants) exist on disk for all 30 covers but were never wired into any rendering
+path. `coverPath()` (`js/saferise-track.js`) gained an optional third `size` parameter, additive
+and backward-compatible — every existing caller (`protocol.html`'s full-width CSS-background
+banner) keeps the full-size original by omitting it. Wired `-640` into the dashboard's 176px-wide
+carousel cards (~65KB vs ~120KB+ each) and the track-rail card renderer in the same file; wired
+`-320` into the dashboard's 40px-wide prompt-recommendation thumbnail. Verified live: rendered
+`<img>` `src`s all resolve to the `-640`/`-320` paths, `read_network_requests` shows 200s against
+them, screenshots show no visible quality loss at card size.
+
+### §5 — type and contrast
+
+Added `docs/TYPE-AND-CONTRAST.md` §6's token block verbatim to the global `:root` in
+`css/saferise-system.css`. Additive — `.sr-public` already declares its own `--text`/`--text2`/
+`--text3` at higher specificity, so nothing changes for any page already inside that scope.
+
+**Naming collision, reported rather than silently resolved:** `--ink` already exists, pre-pass, as
+a *page-local* `:root` redeclaration inside `protocol.html` and `resource.html`'s own
+`[data-theme="sunrise"]` overrides (`#FBFAF5` / `#EAE2CE`) — an unrelated light-theme text colour,
+not this spec's dark-ground body tone. Those pages' own declarations still win on their own pages
+regardless of the new global default; not touched.
+
+**A `git grep` for every old hex the spec names (`#77726b`, `#ddd5c3`, `#99938b`, `#8FA37B`,
+`#6E86A8`, `#B59666`) found zero hardcoded occurrences anywhere in the live site** — they only ever
+existed in `pass/mock-*.html`. The real drift found instead: **my own SR-391 work.** `.sr-org-page`
+had shipped the mockup's original, pre-spec, since-failing sage/slate/bronze RGB triplets verbatim
+(`--sr-org-sage:143,163,123` etc. — exactly `#8FA37B`/`#6E86A8`/`#B59666`). Corrected the three
+values to the spec's `--c2`/`--c3`/`--c4` (same variable names, so every consumer across
+`organisations.html`'s B1–B4 picks the fix up with no second edit):
+
+```css
+--sr-org-sage:157,179,136;
+--sr-org-slate:130,152,187;
+--sr-org-bronze:200,168,122;
+```
+
+**Font-size sweep:** a Python regex pass located every old-scale `font-size:.NNrem` declaration
+(`.79 .8 .82 .85 .86 .87 .88 .9rem`) in `css/saferise-system.css` — 34 occurrences, all in
+`.sr-tp-*`/`.sr-org-*`/`.sr-pl-*` selectors, zero in any tracked HTML file's inline styles (swept
+every `.html` file to confirm). Replaced each with `var(--fs-body)`, `var(--fs-caption)`, or (one
+case, `.sr-pl-rlede`, matching the spec's distinct Lead role) `var(--fs-lead)`, decided per-selector
+by semantic role — substantive read copy to Body, note/meta/compact-card text to Caption. Confirmed
+zero old-scale occurrences remain in that file afterward, and a separate sweep of every other
+tracked CSS file (`saferise-dashboard.css`, `saferise-rail.css`, `saferise-method.css`,
+`saferise-footer.css`) found none there either — the drift was confined to `saferise-system.css`.
+
+**Cormorant-below-1.02rem, four fixed:** `.sr-tp .sr-tp-card2 blockquote` (`.98rem`→`1.02rem`),
+`.sr-tp-methodvis2 figcaption` (`1rem`→`1.02rem`), `.sr-org-image-copy figcaption`
+(`1rem`→`1.02rem`), `.sr-pl-list span` (`.93rem`→`1.02rem`).
+
+**Dead CSS, flagged as a follow-up in SR-391's own entry, resolved here:** SR-391's component
+replacements left `.sr-org-story`(+children), `.sr-org-layer-stack`(+children),
+`.sr-org-pathway`(+children), `.sr-org-kpi-*`, `.sr-org-library`(+children), `.sr-org-offers`/
+`.sr-org-offer-featured`/`.sr-org-pilot`, and `.sr-org-waterfall`/`.sr-org-band-*`/
+`.sr-org-example-table`(+`@media` overrides) with zero live references. Each confirmed via `grep -o
+'class="[^"]*"' organisations.html | grep -w "<name>"` returning nothing before deletion, to avoid a
+false-dead-code removal. `p.sr-org-story-note` (reused by the B1 diagram's closing line) and
+`.sr-org-trust`(+children) (a separate, never-replaced section) verified live and left untouched. A
+stray `.sr-org-kpi-grid` reference inside the 390px media query, orphaned by the same removal, also
+fixed. Brace balance checked after every batch — 2340/2340, still balanced.
+
+**Reported rather than resolved:**
+
+- **The colour-token question.** `--dim`/`--ink`/`--soft` don't correspond to any pre-existing
+  hardcoded drift in the live site (only the mockups) and don't map cleanly onto `.sr-public`'s
+  established, theme-aware `--text`/`--text2`/`--text3` system — the site's real equivalent, used
+  everywhere `--dim` might otherwise apply (the various `-note`-suffixed classes resized this pass
+  keep `var(--text3)` unchanged in colour). Swapping `--text3` to the new non-theme-aware `--dim`
+  would break Sunrise-theme support on every surface that uses it — a real regression, not a
+  normalisation. Left alone; this is the "colour, size, line height and measure only, no redesign"
+  boundary the brief itself draws, and reconciling the two systems is bigger than this pass.
+- **Paragraph `max-width` sweep (62ch body / 58ch lead / 38ch card) not performed.** The site
+  already has broad `Nch`-based `max-width` discipline (60 existing rules use some `ch` value), but
+  no systematic per-paragraph audit against these three specific values was done this pass — out of
+  time budget.
+- No hardcoded old-scale hex/font-size found in any CSS file other than `saferise-system.css` (see
+  sweep above), so no other file needed the token swap.
+
+### Cleanup
+
+A temporary `window.__srCarDriftDebug` hook (exposing `target`/`stopped`/`paused`/`pos`, later also
+`openProtocol`/`render`/`currentTrack`) was added to `dashboard.html` to drive the §1/§3 verification
+above and stripped before this commit. Confirmed via `grep -n "__srCarDriftDebug" dashboard.html`
+returning nothing, and a fresh, untouched load producing zero console errors.
+
+### Verify
+
+Dispatched-`visibilitychange` assertions (both directions) done against the debug hook before it was
+removed, as detailed in §1. After stripping the hook: fresh load, zero console errors; a live click
+on a rendered carousel card opened the correct protocol (`iframe` `src` matched track/protocol
+number) with `scrollLeft` unchanged before/after (no jump); the carousel's own drift was independently
+confirmed advancing across two page-lifetime reads (190→380) before this test, and idle afterward —
+traced to the carousel's pre-existing, unrelated `SETTLE` behaviour (`dashboard.html:2377`, a
+13-second arrival drift that eases to rest and stays there by design, predating this pass), not a
+regression. 390px and reduced-motion passes not re-run after the debug-hook strip — the underlying
+logic was unchanged by that removal, only the temporary instrumentation was.
+
+**Emulation only**, same as the prior pass. **The environment caveat still applies**: this Browser
+pane reports `document.visibilityState` as `"hidden"` on every load, even immediately after a
+screenshot proves real rendering occurred — a harness artifact, not a product bug, which is exactly
+why §1 was verified by dispatching `visibilitychange` directly rather than relying on the tab's own
+reported state.
+
+Files: `dashboard.html`, `css/saferise-system.css`, `js/saferise-track.js`,
+`docs/fix-register.md`.
+
+*Status:* closed — §1's latch fixed and verified both directions, `initCarousel()` confirmed to have
+no matching bug; §2's jump removed after confirming its only wiring; §3's rail-follows-track added
+with no new data structure, verified live; §4 measured first (correcting an early false "eager
+iframe" read before reporting it), two safe wins applied, the resource-triple-load left as a
+reported, unapplied opportunity; §5's tokens landed, sage/slate/bronze corrected (my own SR-391
+regression), 34 font-sizes and 4 Cormorant violations swept, dead CSS removed — the colour-token
+reconciliation and the paragraph-measure sweep reported as out of scope for this pass rather than
+silently skipped. **Not pushed.** *Raised and fixed:* 15 Sep 2026
