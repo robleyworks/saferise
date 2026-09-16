@@ -17,7 +17,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-392** (dashboard carousel `visibilitychange` one-way latch fixed,
+- **Highest ID issued: SR-393** (the meditation player integration for T0-00 The Clearing —
+  the old placeholder modal removed, `SRMedPlayer`/`SRClearing` wired in with a new backdrop
+  wrapper the supplied files didn't include, `content/meditation.js` added — allocated per this
+  pass's own instruction. Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-392** (dashboard carousel `visibilitychange` one-way latch fixed,
   `markInCarousel()`'s jump-to-card removed, the rail now follows the opened protocol's track,
   load-speed measured and two safe wins applied, `docs/TYPE-AND-CONTRAST.md` tokens landed and
   swept — allocated per this pass's own instruction. Verify against `git log -1` once it lands.)
@@ -16053,3 +16057,152 @@ reported, unapplied opportunity; §5's tokens landed, sage/slate/bronze correcte
 regression), 34 font-sizes and 4 Cormorant violations swept, dead CSS removed — the colour-token
 reconciliation and the paragraph-measure sweep reported as out of scope for this pass rather than
 silently skipped. **Not pushed.** *Raised and fixed:* 15 Sep 2026
+
+---
+
+## SR-393 · meditation player integration — T0-00 The Clearing
+
+Runs a brief supplied as `CLAUDE-CODE-medplayer.md`. Note on provenance: the file the user
+`@`-attached in chat and the text pasted in the same message did not match — the attached path
+actually held this meditation-player brief, while the pasted text was a different, unrelated
+brief (the resource content pages / editorial reading layout). Flagged and confirmed with the
+user before starting either; this entry covers the meditation player, run first per that
+confirmation.
+
+### §1 — the current Clearing modal, found before anything changed
+
+The "Settle in / The Clearing" card (`dashboard.html` ~line 160, `.sr-begin-card--media`) held a
+`<button class="sr-cover" data-modal="media">`. `data-modal` is a shared attribute read by one
+generic delegated click handler (`dashboard.html`, the `document.addEventListener('click', …)`
+block) that calls `openModal(key)`. `openModal`/`closeModals` is **one shared controller for
+nine layers** (`var MODALS = {workshop, oneone, calendar, route, media, crisis, record, journal,
+sessions}`), not something built for this card alone. `media` mapped to `#mMedia`: a
+`.sr-modal`/`.sr-modalbox` shell containing a placeholder cover, a `#srPlayerPlay` button and a
+`#srPlayerFill` progress rail — `grep`ped for all three ids and found **zero JS anywhere wiring
+them to anything**. The bar's `width:0` was hardcoded and never changed; the whole thing was
+inert markup. **`media` was checked against the other eight `MODALS` keys and found not shared
+with any of them** — it's the only key `grep -rn "'media'|mMedia"` turns up across the repo,
+all three hits inside `dashboard.html` itself. So the brief's "if shared, branch, don't delete"
+caution doesn't apply here: `media` was never shared with anything else in the first place, and
+removing it outright (rather than branching) doesn't touch the other six layers, verified live
+below.
+
+### §2 — includes
+
+```html
+<link rel="stylesheet" href="css/sr-clearing-player.css">
+<script src="content/meditation.js"></script>
+<script src="js/sr-clearing-visual.js"></script>
+<script src="js/sr-medplayer.js"></script>
+```
+
+CSS placed ahead of `saferise-system.css`, same rule as the two sheets already there (CLAUDE.md
+— system CSS loads last and wins by cascade order). The three supplied files
+(`sr-medplayer.js`, `sr-clearing-visual.js`, `sr-clearing-player.css`) copied byte-identical —
+diffed against the originals in `~/Downloads` to confirm, zero changes. The two audio files
+(`t0-00-the-clearing.mp3`, 9,606,891 B; `.m4a`, 7,886,314 B) placed at
+`assets/audio/meditation/`, a new directory.
+
+### §3 — the MEDITATION data block
+
+**DIFFERS from the brief's own snippet, adapted and reported:** the brief's example used
+`export const MEDITATION = {...}` (ES module syntax). This codebase has no build step and loads
+every `content/*.js` file as a bare, non-module `<script src>` — `export` there is a syntax
+error, not a stylistic choice. Followed `content/guidance.js`'s actual, already-shipped
+convention instead: a plain `var MEDITATION = {...}` (implicitly global, since the script has no
+module wrapper), plus the same `module.exports` guard `guidance.js` carries for potential
+non-browser use. New file, `content/meditation.js`, alongside `guidance.js`/`tracks.js`/
+`inventory.js`. One entry, matching the brief's own field names exactly (`key`, `eyebrow`,
+`title`, `sub`, `src`) since `SRMedPlayer.open()` reads those directly.
+
+### §4 — the modal opener replaced
+
+The button lost `data-modal="media"` (now `id="srClearingPlay"`) and gained a direct click
+listener calling a new `srClearingOpen()`, added next to `openModal`/`closeModals` rather than
+inside them. `#mMedia`'s markup deleted outright — the dead player chrome, the wired-to-nothing
+play button, the hardcoded-zero progress rail, all of it. `media:'mMedia'` removed from the
+`MODALS` map; the other eight keys untouched. **Verified live** the shared controller still
+works after that edit: `document.querySelector('[data-modal="workshop"]').click()` still opens
+`#mWorkshop` correctly.
+
+**Conflict with "no wrapper needed", reported:** `sr-clearing-player.css` styles `.sr-medplayer`
+— the card itself — but ships no full-viewport backdrop. `SRMedPlayer.open(cfg, container)`
+appends its markup into `container` (default `document.body`) with no positioning of its own;
+appended directly to `body` it would sit in normal document flow, not read as a pop-up. Added
+one new, small rule — `.sr-medplayer-backdrop` in `css/saferise-dashboard.css` — matching
+`.sr-modal`'s own existing convention (`position:fixed;inset:0;z-index:80;background:rgba(4,4,8,
+.72);backdrop-filter:blur(6px)`, centered here rather than top-aligned since the player is a
+fixed-aspect stage, not a scrolling form) rather than inventing a second visual language for the
+same kind of layer. Neither supplied file was touched to do this — the backdrop is a container
+`srClearingOpen()` creates and passes in, and `sr-medplayer.js`'s own `onClose` callback (already
+part of its public `cfg` shape) tears it down.
+
+`srClearingOpen()` also reuses the page's existing `srInertBehind`/`srReleaseBehind` pair and its
+focus-return convention (SR-109 — "`aria-modal="true"` has to be true"), since `SRMedPlayer`
+itself doesn't inert the page behind it or return focus on close. Verified: opening focuses the
+player's close button; Escape (and the player's own close button) removes the player and the
+backdrop, restores `document.body.style.overflow`, releases `inert`, and returns focus to
+`#srClearingPlay` — all confirmed via direct DOM/attribute checks after each action, not
+assumed.
+
+### §5 — progress bar
+
+Gone with `#mMedia`'s deletion — there was never a second one to remove from the new player,
+which ships with none.
+
+### Verify
+
+- Card play button opens the new player — confirmed, screenshot taken
+- Audio plays on click (`audio.paused` false, no `audio.error`), pauses on second click
+  (`audio.paused` true again) — confirmed via direct property reads, not just visually
+- Esc closes; the `<audio>` element is removed from the DOM along with the rest of
+  `.sr-medplayer` (torn down by the supplied `destroy()`, which clears `src` and calls
+  `audio.load()` first) — cannot continue in the background because it no longer exists.
+  Confirmed via `document.querySelector('.sr-medplayer')` returning null post-Escape
+- Play control fades after playback starts and returns on `mousemove` — confirmed by screenshot
+  (control invisible ~3s into playback, reappears on a hover event over the stage)
+- SafeRise lockup renders lower right, gold rule then wordmark, inline — confirmed by screenshot
+- No progress bar, timer or duration anywhere — confirmed; the only bar on this surface now is
+  cosmetic and pre-existing, outside this pass (see note below)
+- Nothing autoplays — `audio.paused === true` immediately after `SRMedPlayer.open()`, before any
+  click
+- Mobile width: stage measured `327×261.6px` at 375px viewport — ratio `1.250`, matching the
+  `@media(max-width:640px)` rule exactly; `document.documentElement.scrollWidth ===
+  clientWidth`, no horizontal overflow
+- No console errors, checked after every step above (open, play, pause, Escape, mobile reload)
+- **Space to toggle play/pause — DIFFERS, reported.** A dispatched `KeyboardEvent('keydown',
+  {key:' ', code:'Space'})` correctly toggles playback (confirmed: `paused` flips `true→false`),
+  proving `sr-medplayer.js`'s own logic is correct. A real OS-level Space keypress through this
+  Browser pane's own input simulation did not reproduce that — audio stayed paused, player
+  stayed open, no error surfaced either. Same category of environment gap as SR-392's
+  `visibilityState` caveat: the tool's synthetic key input and a genuine keypress aren't
+  guaranteed to match in this harness. Verified the application logic directly instead, per that
+  precedent, rather than trusting the tool's own simulated key.
+
+**Noted, not fixed, out of scope:** the Clearing card's own cover (`.sr-cover-rail`, a static
+`width:34%` bar under the card copy) is a pre-existing, separate element on the card itself, not
+inside the modal/player this pass touches — it predates this brief and isn't part of "the
+progress bar" the brief means (`#srPlayerFill`, deleted). Left alone; flagging in case it's the
+kind of thing the platform's "no durations/progress bars on any practice surface" rule was meant
+to catch. Also noted: the dashboard hero banner's own "Begin" CTA for the Clearing slide
+(`HERO_SLIDES`, `key:'clearing'`) is a plain `href="#"` link with no click handler at all, for
+every hero slide, not only this one — pre-existing, unrelated to the modal this pass replaces,
+out of scope. `sr-clearing-visual.js`'s ambient canvas loop has no `prefers-reduced-motion` gate
+of its own (only the grain overlay's CSS animation is gated); not something this pass can address
+without editing a supplied file, and not in this brief's own verify checklist.
+
+**Emulation only.** Same caveat as every prior pass this session — no physical device available
+in this environment.
+
+Files: `dashboard.html`, `css/saferise-dashboard.css`, `content/meditation.js` (new),
+`css/sr-clearing-player.css` (new, supplied verbatim), `js/sr-clearing-visual.js` (new, supplied
+verbatim), `js/sr-medplayer.js` (new, supplied verbatim),
+`assets/audio/meditation/t0-00-the-clearing.mp3` (new), `assets/audio/meditation/
+t0-00-the-clearing.m4a` (new), `docs/fix-register.md`.
+
+*Status:* closed — the old modal found to be wired to nothing and confirmed not shared before
+deleting it; the new player integrated with a reported, non-supplied backdrop addition to give it
+the pop-up presentation the supplied CSS doesn't on its own; every item on the brief's own verify
+list confirmed live except Space-to-toggle, which was verified by direct event dispatch instead
+of the Browser pane's own key simulation, and reported as such. **Not pushed.** *Raised and
+fixed:* 16 Sep 2026

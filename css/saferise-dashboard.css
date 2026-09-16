@@ -787,6 +787,14 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
 /* ── booking layers ── */
 .sr-modal{position:fixed;inset:0;z-index:80;display:none;align-items:flex-start;justify-content:center;
   padding:56px 24px;overflow-y:auto;background:rgba(4,4,8,.72);backdrop-filter:blur(6px)}
+
+/* SR-393 · the meditation player's backdrop. Not part of the supplied
+   sr-clearing-player.css (which styles only .sr-medplayer, the card itself)
+   — this wrapper is what turns it into a pop-up, matching .sr-modal above
+   rather than inventing a second convention. Centered, not top-aligned like
+   .sr-modal: the player is a fixed-aspect stage, not a scrolling form. */
+.sr-medplayer-backdrop{position:fixed;inset:0;z-index:80;display:flex;align-items:center;
+  justify-content:center;padding:24px;overflow-y:auto;background:rgba(4,4,8,.86);backdrop-filter:blur(6px)}
 .sr-modal.on{display:flex}
 .sr-modalbox{width:100%;max-width:760px;background:var(--band);border:1px solid var(--hair);border-radius:18px;
   overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.6)}

@@ -1,0 +1,123 @@
+/* SafeRise — meditation player
+   Pairs with sr-clearing-visual.js. Uses the sr- prefix throughout. */
+
+.sr-medplayer{
+  width:min(900px,100%);
+  background:#0B0D12;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+/* ---- visual stage ---- */
+.sr-medplayer__stage{
+  position:relative;
+  width:100%;
+  aspect-ratio:1.8/1;
+  background:#06060A;
+  overflow:hidden;
+}
+.sr-medplayer__stage canvas{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  display:block;
+}
+.sr-medplayer__stage .sr-glow{filter:blur(30px);opacity:.9}
+
+.sr-medplayer__vig{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 56%,transparent 30%,rgba(0,0,0,.55) 100%);
+}
+.sr-medplayer__grain{
+  position:absolute;inset:-50%;
+  width:200%;height:200%;
+  pointer-events:none;opacity:.042;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:sr-grain 1.3s steps(1) infinite;
+}
+@keyframes sr-grain{
+  0%{transform:translate(0,0)}   25%{transform:translate(-3%,2%)}
+  50%{transform:translate(2%,-3%)} 75%{transform:translate(-2%,-1%)}
+  100%{transform:translate(0,0)}
+}
+@media (prefers-reduced-motion:reduce){
+  .sr-medplayer__grain{animation:none}
+}
+
+/* ---- close ---- */
+.sr-medplayer__close{
+  position:absolute;top:16px;right:16px;
+  width:32px;height:32px;border-radius:7px;z-index:8;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(12,14,18,.55);
+  color:rgba(255,255,255,.72);
+  display:grid;place-items:center;cursor:pointer;
+  font-size:15px;line-height:1;
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  transition:border-color .35s,color .35s;
+}
+.sr-medplayer__close:hover{border-color:rgba(212,168,67,.7);color:#D4A843}
+
+/* ---- play / pause ---- */
+.sr-medplayer__play{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:70px;height:70px;border-radius:50%;z-index:7;
+  border:1px solid rgba(255,255,255,.52);
+  background:rgba(10,10,14,.26);
+  display:grid;place-items:center;cursor:pointer;
+  transition:opacity .8s ease,border-color .45s,background .45s;
+}
+.sr-medplayer__play:hover{border-color:rgba(212,168,67,.9);background:rgba(212,168,67,.10)}
+.sr-medplayer__play::after{
+  content:"";width:0;height:0;margin-left:5px;
+  border-left:17px solid rgba(255,255,255,.9);
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent;
+}
+/* pause glyph */
+.sr-medplayer__play[data-playing="true"]::after{
+  border:none;margin:0;width:16px;height:18px;
+  border-left:5px solid rgba(255,255,255,.9);
+  border-right:5px solid rgba(255,255,255,.9);
+}
+/* fade the control away during playback, return on movement */
+.sr-medplayer__play[data-playing="true"]{opacity:0;pointer-events:none}
+.sr-medplayer__play[data-playing="true"][data-wake="true"]{opacity:1;pointer-events:auto}
+
+/* ---- SafeRise lockup, lower right ---- */
+.sr-medplayer__lockup{
+  position:absolute;right:22px;bottom:20px;z-index:6;
+  display:flex;align-items:center;gap:14px;
+  pointer-events:none;user-select:none;opacity:.85;
+}
+.sr-medplayer__lockup i{
+  display:block;width:96px;height:1px;
+  background:linear-gradient(to right,rgba(212,168,67,0),#D4A843);
+}
+.sr-medplayer__lockup span{
+  font-family:'Cinzel',Georgia,serif;font-weight:500;
+  font-size:10.5px;letter-spacing:.34em;
+  color:#D4A843;text-transform:uppercase;
+}
+
+/* ---- copy ---- */
+.sr-medplayer__copy{padding:26px 30px 30px}
+.sr-medplayer__eyebrow{
+  font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:#D4A843;margin-bottom:12px;
+}
+.sr-medplayer__title{
+  font-family:'Cinzel',Georgia,serif;font-size:27px;
+  color:#F2EFE8;letter-spacing:.01em;margin:0;
+}
+.sr-medplayer__sub{
+  margin-top:10px;font-size:14px;line-height:1.55;
+  color:rgba(242,239,232,.62);
+}
+
+@media (max-width:640px){
+  .sr-medplayer__stage{aspect-ratio:1.25/1}
+  .sr-medplayer__lockup i{width:64px}
+  .sr-medplayer__copy{padding:20px 20px 24px}
+  .sr-medplayer__title{font-size:22px}
+}

@@ -54,6 +54,9 @@
      saferise-dashboard.css rather than !important. -->
 <link rel="stylesheet" href="css/saferise-dashboard.css">
 <link rel="stylesheet" href="css/saferise-rail.css">
+<!-- SR-393 · the meditation player, supplied verbatim. Loads ahead of the
+     system sheet, same rule as the two above it. -->
+<link rel="stylesheet" href="css/sr-clearing-player.css">
 <link rel="stylesheet" href="css/saferise-system.css">
 </head>
 <body>
@@ -159,7 +162,14 @@
 
         <!-- 01 · the Clearing — the whole card is the media cover -->
         <article class="sr-begin-card sr-begin-card--media">
-          <button class="sr-cover" data-modal="media" aria-label="Play the Clearing">
+          <!-- SR-393 · was data-modal="media", routed through the shared
+               openModal()/MODALS controller below. That controller is still
+               shared by six other layers (workshop/oneone/calendar/route/
+               crisis/record/journal/sessions) — media was never one of the
+               cards it shares markup with, so removing just this key and
+               wiring this one button directly to SRMedPlayer.open() (see
+               srClearingOpen below) doesn't touch anything else that uses it. -->
+          <button class="sr-cover" id="srClearingPlay" aria-label="Play the Clearing">
             <span class="sr-cover-art"></span>
             <span class="sr-cover-scrim"></span>
             <span class="sr-cover-play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></span>
@@ -706,33 +716,13 @@
 </div>
 
 
-<!-- ══════════ MEDIA LAYER ══════════ -->
-<div class="sr-modal" id="mMedia" role="dialog" aria-modal="true" aria-label="The Clearing">
-  <div class="sr-modalbox" style="max-width:900px">
-    <div class="sr-dash-player">
-      <div class="sr-dash-player-stage">
-        <button class="sr-modalclose" data-close aria-label="Close The Clearing"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
-        <button class="sr-dash-player-play" id="srPlayerPlay" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></button>
-      </div>
-      <div class="sr-dash-player-bar">
-        <!-- SR-080 · both readouts fill from the media once the real files
-             exist. The elements stay; no placeholder number goes in them. -->
-        <span class="sr-dash-player-time" id="srPlayerNow"></span>
-        <span class="sr-dash-player-rail"><i id="srPlayerFill" style="width:0"></i></span>
-        <span class="sr-dash-player-time" id="srPlayerTotal"></span>
-      </div>
-    </div>
-    <div class="sr-modalin">
-      <p class="sr-modalkick">Settle in</p>
-      <h3>The Clearing</h3>
-      <p>A guided session to quiet the noise and bring you into a state where the work can land. Nothing is required of you but to listen.</p>
-      <div class="sr-modalfoot">
-        <p>Logged to your record when it finishes. You can stop at any point and it still counts.</p>
-        <button class="sr-dash-addbtn" data-close>Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- SR-393 · the MEDIA LAYER (#mMedia) that used to live here — placeholder
+     cover art, a play control with no audio behind it, and a fake 0%-filled
+     progress rail — is removed. Replaced by SRMedPlayer, mounted directly
+     into document.body by srClearingOpen() below rather than through this
+     modal shell. See the fix-register entry for why: SRMedPlayer builds its
+     own dialog and doesn't ride the openModal()/MODALS/closeModals()
+     controller the other layers below still use. -->
 
 
 <!-- ══════════ CUE CARD ══════════
@@ -806,6 +796,11 @@
 
 <script src="content/inventory.js"></script>
 <script src="content/tracks.js"></script>
+<!-- SR-393 · meditation player data + engine, supplied verbatim. Must load
+     before the inline script below, which calls SRMedPlayer.open(). -->
+<script src="content/meditation.js"></script>
+<script src="js/sr-clearing-visual.js"></script>
+<script src="js/sr-medplayer.js"></script>
 <!-- SR-162 · the protocol cover, shared with the track pages. Must load
      before the inline script below, which calls SafeRiseCover.art(). -->
 <script src="js/saferise-card.js"></script>
@@ -1723,7 +1718,10 @@
      modals are plain ids; the three views share #mLayer and additionally
      carry a VIEWS config that sets kicker, title, lede, art class and footer
      before the layer opens. There is no second modal system on this page. */
-  var MODALS = {workshop:'mWorkshop', oneone:'mOneone', calendar:'mCalendar', route:'mRoute', media:'mMedia', crisis:'mCrisis',
+  /* SR-393 · 'media' removed. It routed to #mMedia, deleted along with the
+     old modal-based Clearing player — see the srClearingOpen() wiring
+     below, which no longer goes through this controller at all. */
+  var MODALS = {workshop:'mWorkshop', oneone:'mOneone', calendar:'mCalendar', route:'mRoute', crisis:'mCrisis',
                 record:'mLayer', journal:'mLayer', sessions:'mLayer'};
 
   var VIEWS = {
@@ -1778,6 +1776,43 @@
     if(wasOpen && srLastFocus && srLastFocus.focus) srLastFocus.focus();
     srLastFocus = null;
   }
+
+  /* ══════════ SR-393 · THE MEDITATION PLAYER ══════════
+     Not one of the MODALS layers above — SRMedPlayer (js/sr-medplayer.js,
+     supplied, not modified) builds its own dialog DOM and already handles
+     Esc, Space and audio teardown on close. What it does not build is a
+     backdrop: sr-clearing-player.css styles .sr-medplayer itself (the card)
+     but ships no full-viewport dimming/centering wrapper, so appending it
+     straight to document.body would render it in normal document flow —
+     not a pop-up. .sr-medplayer-backdrop (css/saferise-dashboard.css) is a
+     small addition on this end, not a change to either supplied file,
+     matching .sr-modal's own fixed/dim/blur convention (SR-070) so the
+     player still reads as the same kind of layer as the six it replaces.
+     srInertBehind/srReleaseBehind and the focus-return convention are
+     reused here too, so this dialog keeps SR-109's aria-modal promise the
+     same way the shared layers do, even though it isn't one of them. */
+  function srClearingOpen(cfg){
+    var backdrop = document.createElement('div');
+    backdrop.className = 'sr-medplayer-backdrop';
+    var returnTo = document.activeElement;
+    document.body.appendChild(backdrop);
+    document.body.style.overflow = 'hidden';
+    srInertBehind(backdrop);
+    SRMedPlayer.open(Object.assign({}, cfg, {
+      onClose: function(){
+        document.body.style.overflow = '';
+        srReleaseBehind();
+        if(backdrop.parentNode) backdrop.parentNode.removeChild(backdrop);
+        if(returnTo && returnTo.focus) returnTo.focus();
+      }
+    }), backdrop);
+    var closeBtn = backdrop.querySelector('.sr-medplayer__close');
+    if(closeBtn) closeBtn.focus();
+  }
+  var srClearingBtn = document.getElementById('srClearingPlay');
+  if(srClearingBtn) srClearingBtn.addEventListener('click', function(){
+    srClearingOpen(MEDITATION['t0-00']);
+  });
 
   /* ══════════ SR-109 · aria-modal="true" HAS TO BE TRUE ══════════
      Every one of these dialogs declares aria-modal="true", which is a promise
