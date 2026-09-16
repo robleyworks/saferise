@@ -1030,7 +1030,16 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
         <p class="eyebrow sr-quiet">When you're ready</p>
         <p class="q">Return to your journal?</p>
         <p class="cp">What has landed that you would like to reflect on, or carry forward into practice?</p>
-        <a href="#log" class="ghost">Open the journal</a>
+        <!-- PASS-CLAUDE-CODE-shapes-and-nav.md, Part B2 · was href="#log" —
+             no element with id="log" exists anywhere on this page (nor does
+             any class="journal"/"logdrop" markup; only their CSS survives,
+             confirmed dead — a removed feature whose entry point was never
+             updated). A real destination now: standalone, this goes straight
+             to the dashboard; embedded, the click-delegate below intercepts
+             it and asks the shell to open the same journal view its own
+             "Read everything you have written" button already opens,
+             rather than duplicating that reading experience here. -->
+        <a href="dashboard.html" class="ghost" id="openJournal">Open the journal</a>
       </div>
     </div>
 
@@ -1075,7 +1084,17 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
       <div class="sr-u sr-upnext sr-lit" id="upnext"></div>
 
       <div class="sr-u sr-oneone">
-        <p>Working a pattern that keeps returning? <a href="live-sessions.html">Request a 1:1 session</a></p>
+        <!-- PASS-CLAUDE-CODE-shapes-and-nav.md, Part B3 · live-sessions.html
+             is a real, complete page (verified — genuine Premium 1:1 content,
+             no placeholder) and correct as-is for a standalone visit. Not
+             correct embedded: it has no ?embed=1 support at all, so inside
+             dashboard.html's iframe this would navigate the frame to a full
+             page with its own nav and footer, cramped into the embed pane
+             with no height reporting. The click-delegate below intercepts it
+             there and opens the same "Book a session" modal
+             (data-modal="oneone" -> #mOneone) the dashboard shell already
+             uses everywhere else, instead. -->
+        <p>Working a pattern that keeps returning? <a href="live-sessions.html" id="oneOneLink">Request a 1:1 session</a></p>
       </div>
 
     </div>
@@ -1644,6 +1663,14 @@ renderRail();renderMain();
       post('open-resource', {name: label ? label.textContent.trim() : ''});
       return;
     }
+    // PASS-CLAUDE-CODE-shapes-and-nav.md, Part B2 · embedded, this asks the
+    // shell to open its own journal view instead of navigating the iframe
+    // to dashboard.html (the href every standalone visit still uses).
+    if(e.target.closest('#openJournal')){ e.preventDefault(); post('open-journal'); return; }
+    // Part B3 · embedded, open the shell's own 1:1 booking modal instead of
+    // navigating the iframe to live-sessions.html, which has no ?embed=1
+    // support and would render full-page inside the embed pane.
+    if(e.target.closest('#oneOneLink')){ e.preventDefault(); post('open-oneone'); return; }
     var back = e.target.closest('.sr-backbar a, .sr-backbar button');
     if(back && (!back.getAttribute('href') || back.getAttribute('href') === '#')){ e.preventDefault(); post('back-to-protocol'); }
   }, true);

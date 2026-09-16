@@ -17,7 +17,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-397** (the overlap shape rolled out across 29 of 30 Accountability
+- **Highest ID issued: SR-398** (Part B of the shapes-and-nav pass — protocol switch now carries
+  resources-vs-overview view state across the switch, resource.html's dead `#log` journal link
+  and its unreachable-when-embedded 1:1 link both re-wired to the dashboard shell's own existing
+  modals — allocated per this pass's own instruction. Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-397** (the overlap shape rolled out across 29 of 30 Accountability
   & Empathy resources — a font-scope measurement bug found and fixed before any label was
   committed, zero genuine skips once the right structural unit was identified, one real defect
   found in SR-395's own already-shipped `t2p9-accountability` mount and reported, not fixed
@@ -16774,3 +16778,116 @@ mid-pass once the wrong signal was identified, landing on zero genuine skips aga
 redirect's own one-third stop threshold; every middle label checked individually against source
 for fidelity. Stopping here, as instructed, to report before starting `guide` → `chain`. **Not
 pushed.** *Raised and fixed:* 16 Sep 2026
+
+---
+
+## SR-398 · Part B — protocol switch view continuity, journal button, 1:1 link
+
+Runs `pass/CLAUDE-CODE-shapes-and-nav.md`, Part B only, per Andre's own instruction to do it
+first and report before starting Part A. All three defects investigated and reported before any
+edit, per the brief's own gate.
+
+### B1 — switching protocol dropped the member back to the overview
+
+**Found:** there is one wired protocol switcher — `dashboard.html`'s own `.sr-dash-card`
+carousel, which drives an `<iframe>` via `openProtocol()` → `loadProtocol()`/`loadResource()`.
+"Resources view" vs "overview" is not a route flag, query param, or fragment anywhere — it's
+simply *which of two separate files* (`protocol.html` vs `resource.html`, each with its own
+independent query-string parsing and its own content store) is currently loaded in the iframe.
+The carousel's click handler called `openProtocol(name, src, no, CURRENT_TRACK)` with no
+`resource` argument, so `resource ? loadResource(resource) : loadProtocol()` always ran
+`loadProtocol()` — landing on the new protocol's overview regardless of what the member was
+reading before. (A second, separate rail — `js/saferise-track.js`'s `.sr-tp-card2` cards on the
+three track-landing pages — carries a `data-sr-open="protocol.html?…"` attribute that looks like
+a switcher but is read by nothing in the live codebase; it's currently inert for navigation,
+noted but out of this defect's scope, which is about the one switcher that actually runs.)
+
+Every one of the 30 protocols has a non-empty resources rail (`T{n}_PROTOCOL_KEYS`'s `keys`
+arrays run 9–12 entries each, checked directly in all three content stores) — no protocol needed
+the "no resources → fall back to overview" case the brief asked me to check for.
+
+**Fix:** a new `inResourceView` flag, set by `loadProtocol()`/`loadResource()` themselves (so it
+always reflects what's actually in the frame, not what the last call intended), read by the
+carousel's click handler and threaded through `openProtocol()` as a new `stayOnResources`
+parameter. When the member switches protocol while reading a resource, the new protocol's
+`resource.html` loads with no specific resource requested — confirmed this is exactly what
+happens when a member opens a resource fresh (`current = 0`, the protocol's first visible
+resource), and confirmed via source that an empty `resource=` param produces no console warning
+(the existing warning only fires when the param is non-empty). `resource` (an explicit request,
+used by the "resume" card) still wins over `stayOnResources` — that behaviour is unchanged.
+
+**Verified live:** opened a protocol, opened a resource inside it (`How This Works`), switched to
+a different protocol — landed on `resource.html?...&resource=` for the new protocol, resolving to
+its own first resource, zero console output. Switching protocol while on the overview still lands
+on the overview (regression-checked). Confirmed at 390/1440. The fix only changes *which URL* is
+assigned to `frame.src`, not *how* the frame navigates, so it introduces no new history-entry
+behaviour beyond what already existed.
+
+### B2 — the journal button
+
+**Three separate controls, not one shared component — verified each individually, as asked:**
+
+- **`dashboard.html`**, `data-modal="journal"` → the shared modal controller's `VIEWS.journal` →
+  reads every stored entry, grouped by protocol. Already correctly wired; confirmed still working.
+- **`protocol.html`**, `<details class="journal">` + `saveJournalResult()` → writes a new entry
+  for the current protocol to `Store`. Already correctly wired (a live entry saved and rendered
+  during verification); untouched by this pass.
+- **`resource.html`**, `<a href="#log">Open the journal</a>` → **broken.** No element with
+  `id="log"` exists anywhere on the page — nor does any `class="journal"`/`class="logdrop"`
+  element; only their CSS survives (a substantial amount of it: `.journal`, `.logdrop`, `.jbody`,
+  `.chips`, `.prompts` and more — confirmed zero live matches in the page and in all three
+  content stores' injected resource bodies). This reads as a removed feature whose entry point
+  was never updated — exactly the "rendered control, zero wiring" pattern SR-393 found once
+  already, present here too. That dead CSS is reported, not removed — well beyond this defect's
+  own scope, and a larger footprint than a three-defect pass should absorb as a side effect.
+
+  A fourth surface checked and ruled out: `index.html` has its own `class="sr-journal"` widget,
+  but it's built inside `renderProtocolPage()`, part of the same `#reader-overlay` that SR-379/
+  381 already established no live navigation path ever opens. Not a live surface; not counted.
+
+**Fix:** the link's `href` is now `dashboard.html` (a real destination for a standalone visit —
+resource.html has no reading UI of its own to open). Embedded, the existing click-delegate now
+intercepts `#openJournal` and posts `open-journal` to the parent shell, which calls
+`openModal('journal')` — the exact same view the dashboard's own "Read everything you have
+written" button opens, not a second one.
+
+**Verified live, both contexts:** embedded, click opens `#mLayer`'s journal view with the iframe
+untouched (`frame.src` unchanged); standalone, click navigates to `dashboard.html`. Zero console
+output in either case.
+
+### B3 — Request a 1:1 session
+
+**Found:** the link (`resource.html`'s resource rail, `<a href="live-sessions.html">`) is the only
+occurrence anywhere in the codebase. `live-sessions.html` is a real, complete page — confirmed
+genuine Premium 1:1 content, not a placeholder — and correct as the destination for a standalone
+visit. It has **no `?embed=1` support at all**. Embedded (dashboard.html's iframe, the surface a
+member actually reaches most often per SR-381's own finding), clicking it would navigate the
+frame to a full page carrying its own nav and footer, cramped into the embed pane's own height
+with no height-reporting handshake — a real, broken experience, not a hypothetical one.
+
+**Fix:** same pattern as B2. Embedded, the click-delegate intercepts `#oneOneLink` and posts
+`open-oneone`, which the dashboard shell answers with `openModal('oneone')` — the exact "Premium
+1:1" booking modal every other "Book a session" control on the dashboard already opens.
+Standalone, the real `href="live-sessions.html"` is untouched and correct as-is.
+
+**Verified live, both contexts:** embedded, click opens `#mOneone` (screenshotted — booking
+slots, price, the real modal) with the iframe untouched; standalone, click navigates to
+`live-sessions.html`. Zero console output in either case.
+
+### Verify
+
+All three re-checked at 390, 1024 (default pane width) and 1440 — no horizontal overflow, no
+console errors at any width. Browser back/duplicate-history: not separately introduced — B1's fix
+changes only which URL `frame.src` receives, not the navigation mechanism itself, so it carries no
+new history-entry risk beyond what already existed on this page.
+
+**Emulation only**, same as every prior pass this session.
+
+Files: `dashboard.html`, `resource.html`, `docs/fix-register.md`.
+
+*Status:* closed — all three defects reported (bindings, differences by surface, and the one
+"control with zero wiring" B2 asked me to check for, found on `resource.html`) before any fix was
+written, per the brief's own gate; each fixed by routing through the dashboard shell's own
+already-existing modal system rather than inventing a new one; `protocol.html`'s and dashboard's
+own journal handling confirmed already correct and left untouched. Stopping here, as instructed,
+to report Part B before starting Part A. **Not pushed.** *Raised and fixed:* 16 Sep 2026

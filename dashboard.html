@@ -2519,6 +2519,14 @@
   var pCrumb = document.getElementById('srProtoCrumb');
   var allBtn = document.getElementById('srProtoAll');
   var pOpen  = {name:'', no:'01', track:1};
+  /* SR-398 (PASS-CLAUDE-CODE-shapes-and-nav.md, Part B1) · whether the frame
+     is currently showing a resource (resource.html) rather than the
+     overview (protocol.html) — set by loadProtocol()/loadResource()
+     themselves, so it always reflects what's actually in the frame right
+     now, not what the last openProtocol() call intended. Read by the
+     carousel's click handler below, before pOpen is overwritten for the
+     protocol being switched to. */
+  var inResourceView = false;
 
   function crumb(resName){
     pCrumb.innerHTML = '<span>/</span><b>' + pOpen.name + '</b>' +
@@ -2535,12 +2543,14 @@
     resetFrame('900px');
     frame.src = PROTOCOL_PAGE + '?embed=1&track=' + pOpen.track + '&protocol=' + pOpen.no + themeParam();
     crumb('');
+    inResourceView = false;
   }
   function loadResource(name){
     resetFrame('700px');
     frame.src = RESOURCE_PAGE + '?embed=1&track=' + pOpen.track +
                 '&protocol=' + pOpen.no + '&resource=' + encodeURIComponent(name || '') + themeParam();
     crumb(name || 'Resource');
+    inResourceView = true;
   }
 
   // the frame tells us how tall it is, so there is never a scrollbar inside it
@@ -2554,6 +2564,14 @@
     if(d.type === 'resource-opened')  crumb(d.name);
     if(d.type === 'back-to-protocol') loadProtocol();
     if(d.type === 'open-cue')          openModal('crisis');
+    // PASS-CLAUDE-CODE-shapes-and-nav.md, Part B2 · resource.html's own
+    // "Open the journal" link, embedded — same view the dashboard's own
+    // "Read everything you have written" button opens (openModal('journal')
+    // below, MODALS.journal -> mLayer -> VIEWS.journal), not a second one.
+    if(d.type === 'open-journal')      openModal('journal');
+    // Part B3 · resource.html's own "Request a 1:1 session" link, embedded —
+    // same modal every "Book a session" button on this page already opens.
+    if(d.type === 'open-oneone')       openModal('oneone');
     if(d.type === 'height' && e.source === frame.contentWindow){
       // keep a freshly loaded page in step with the shell
       try{
@@ -2567,7 +2585,7 @@
   // Opening a protocol is a deliberate, visible move: the page scrolls up, the
   // dashboard sections fade out, the carousel slides to the top, and the protocol
   // arrives beneath it. Slow enough to be read as a shift rather than a jump.
-  function openProtocol(name, src, no, track, resource){
+  function openProtocol(name, src, no, track, resource, stayOnResources){
     pOpen = {name:name, no:no || '01', track:track || 1};
     // PASS-carousel-resume-and-routing.md §3 · the rail shows the opened
     // protocol's track category — context, not a selector, so this is a
@@ -2600,7 +2618,20 @@
           setTimeout(function(){ lib.style.transition = ''; lib.style.transform = ''; }, 900);
         }
       }
-      resource ? loadResource(resource) : loadProtocol();
+      /* PASS-CLAUDE-CODE-shapes-and-nav.md, Part B1 · a member switching
+         protocol from a resources page should land on the NEW protocol's
+         resources page, not silently back on its overview — the view is
+         what the member chose, switching protocol shouldn't change it back.
+         resource still wins when a caller asks for one by name (the resume
+         card); stayOnResources only applies when no specific resource was
+         requested — loadResource() with no name is exactly what happens
+         when a member opens a resource directly, and resource.html's own
+         empty-`resource=` handling already falls back to its first item
+         with no console warning (confirmed in source before relying on it:
+         the warning only fires when the param is non-empty). */
+      if (resource) loadResource(resource);
+      else if (stayOnResources) loadResource();
+      else loadProtocol();
       window.scrollTo({top:0});
       document.body.classList.remove('shifting');
     }, 460);
@@ -2664,7 +2695,11 @@
     var name = card.getAttribute('data-open');
     if(!name) return;       // locked cards do nothing
     e.preventDefault();
-    openProtocol(name, card.getAttribute('data-src'), card.getAttribute('data-no'), CURRENT_TRACK);
+    // PASS-CLAUDE-CODE-shapes-and-nav.md, Part B1 · this is the actual
+    // protocol switcher — carry whatever view the member is in right now
+    // (read before pOpen/frame.src change for the new protocol) across
+    // the switch, rather than always landing on the overview.
+    openProtocol(name, card.getAttribute('data-src'), card.getAttribute('data-no'), CURRENT_TRACK, undefined, inResourceView);
   });
 
   render(1);
