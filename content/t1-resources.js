@@ -160,6 +160,7 @@ var T1_RESOURCES = {
       "<p>If Release opens something much larger than the day's state \u2014 a memory, a grief you weren't looking for \u2014 you can stop there. Surfacing isn't an instruction to follow it.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Some states need another human being, and no self-guided practice substitutes for one. Contact someone today \u2014 a doctor, a crisis line in your country, or a person you trust \u2014 if you're having thoughts of harming yourself, if the fast state doesn't let up over days rather than hours, if you're avoiding leaving the house, or if you're using something to get through it.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t1p1-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're already working with a therapist, doctor or counsellor, this sits alongside that. It replaces nothing and competes with nothing. Tell them you're using it \u2014 most will want to know, and some will have views about the breathing worth hearing.</p>"
     ],
@@ -374,6 +375,7 @@ var T1_RESOURCES = {
       "<p>If someone is being violent toward you, this protocol is a way to steady yourself in it. It is not a way to manage them, and it is not a substitute for getting out of range. Your safety is a separate question from your regulation and it comes first.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you are frightening yourself with the intensity of it, if anger is arriving with no identifiable trigger and staying for days, if you are using something to manage it, or if you are having thoughts of harming yourself.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t1p2-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you are with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. Tell them you are using it.</p>"
     ],
@@ -693,6 +695,7 @@ var T1_RESOURCES = {
       "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if the state isn't letting up over days rather than hours, if you've stopped sleeping, if you're unable to start anything at all rather than merely behind, if you're using something to get through the day, or if you're having thoughts of harming yourself.</p>",
       "<p><strong>When the load itself is the thing to address</strong></p>",
       "<p>A regulation practice helps you think clearly inside an unreasonable situation. It won't make the situation reasonable and wasn't built to. If the volume is beyond what one person can carry, the useful next moves are outside this platform \u2014 a conversation with a manager, a doctor, a union, or whoever holds the authority to change the input. The Attention Advisory goes further into that.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t1p3-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. Tell them you're using it.</p>"
     ],
@@ -917,6 +920,7 @@ var T1_RESOURCES = {
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself, if you can't eat or sleep across days rather than one night, if you're using something to get through it, or if the state is now attached to almost everyone rather than one person.</p>",
       "<p>Grief and abandonment overlap, and a real loss is not a pattern to be worked on. If someone has died or has genuinely gone, that needs a different kind of support and probably a person.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t1p4-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person is worth a great deal, and the practice doesn't substitute for it.</p>"
     ],
@@ -1192,6 +1196,7 @@ var T1_RESOURCES = {
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Some of what this state attaches to needs another person, and no self-guided practice substitutes for that. Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or punishing yourself in any way, if you can't be around people at all, if you're using something to get through it, or if the verdict is now constant rather than episodic.</p>",
       "<p>If what this attaches to is something that was done to you, that is not a pattern to be managed alone. It needs a person, and it isn't a failure of this practice that it needs one.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t1p5-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person is worth a great deal.</p>"
     ],
@@ -1396,6 +1401,7 @@ var T1_RESOURCES = {
       "<p>Grief is not a condition and doesn't need treating. But it isn't meant to be carried alone, and a self-guided practice is not company.</p>",
       "<p>Contact someone \u2014 a doctor, a bereavement service, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or of not being here, if you can't eat or sleep across an extended period, if you're using something to get through the days, if you can't function at all rather than functioning badly, or if the loss was sudden, violent, or a death by suicide. That last one specifically: it carries things ordinary bereavement support isn't built for, and there are services specifically for it in most countries.</p>",
       "<p>If the loss is recent \u2014 days or a few weeks \u2014 a practice is not the priority. People are. Come back to this when you want it.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t1p6-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor, counsellor or bereavement service, this sits alongside that and replaces nothing.</p>"
     ],
@@ -1605,6 +1611,7 @@ var T1_RESOURCES = {
       "<p>That last one particularly. A day like this is ordinary. A month like this is a reason to see a doctor, and going is not an admission of anything.</p>",
       "<p><strong>If you're not sure you can make the call</strong></p>",
       "<p>Ask someone else to make it, or send a message rather than speaking. <em>\"I need to see someone and I can't do the phone today\"</em> sent to one person is enough, and it's a legitimate way to do it.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t1p7-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person matters most.</p>"
     ],
@@ -1807,6 +1814,7 @@ var T1_RESOURCES = {
       "<p><strong>Where this affects someone else</strong></p>",
       "<p>If the state has turned into monitoring another person \u2014 their phone, their movements, their messages, who they're with \u2014 that has crossed from a state you're managing into conduct affecting somebody else, and it's worth telling a professional rather than working on privately. That's a straightforward observation, not a judgement.</p>",
       "<p>If someone is monitoring <em>you</em>, this protocol will help you stay steady and is not a way to manage them. Your safety and your privacy are separate questions from your regulation and they come first.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t1p8-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
@@ -2050,6 +2058,7 @@ var T1_RESOURCES = {
       "<p>If Release opens something much larger \u2014 something old, something you weren't looking for \u2014 you can stop and come back to the breath. Surfacing isn't an instruction to follow it.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or punishing yourself, if you've stopped going to things entirely, if you're using something to get through occasions, or if the opinion is now constant rather than episodic.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t1p9-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person is worth a great deal.</p>"
     ],
@@ -2303,6 +2312,7 @@ var T1_RESOURCES = {
       "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or of not being here, if you feel there's no point continuing, if you haven't been able to eat, wash or leave the house for days, if you're using something to get through it, or if this has been going on for weeks rather than days.</p>",
       "<p><strong>If you can't face making the call</strong></p>",
       "<p>Ask someone else to make it, or send a message rather than speaking. <em>\"I need to see someone and I can't do the phone today\"</em> sent to one person is enough, and it's a legitimate way to do it.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t1p10-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person matters most, and the practice is not a substitute for one.</p>"
     ],

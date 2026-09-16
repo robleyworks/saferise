@@ -167,6 +167,7 @@ var T3_RESOURCES = {
       "<p><strong>When something else is going on</strong></p>",
       "<p>If the state is arriving days rather than minutes ahead, if you've started avoiding things you'd normally do, if you're using something to get through them, or if your hands or voice are affected badly enough to worry you, that's worth taking to a doctor. Some of it responds to treatment, and finding out is not an admission of anything.</p>",
       "<p>If you're preparing for something where the stakes are your livelihood, your registration or your safety, this settles you and it doesn't replace advice from someone qualified in that thing.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t3p1-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
@@ -433,6 +434,7 @@ var T3_RESOURCES = {
       "<p>That needs bodies with actual authority: HR, a union, occupational health, a regulator, or an employment lawyer. Get advice earlier than feels necessary, and keep your own records \u2014 dated, factual, and stored somewhere that isn't a work device.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if this is affecting your sleep or health across weeks, if you're dreading work in a way you can't shake, if you're using something to get through the day, or if you're having thoughts of harming yourself.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t3p2-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor, counsellor or coach, this sits alongside that and replaces nothing.</p>"
     ],
@@ -723,6 +725,7 @@ var T3_RESOURCES = {
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or punishing yourself, if you've started declining things you want because of it, if you're using something to get through occasions, or if the opinion is now constant rather than episodic.</p>",
       "<p><strong>Where the environment is the thing</strong></p>",
       "<p>If you're being undermined, excluded, or consistently told you're not good enough by someone with power over you, this settles you and doesn't change it. Some of what people call imposter feeling is an accurate reading of an environment. That's a matter for HR, a union, or an employment lawyer rather than a regulation practice.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t3p3-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor, counsellor or coach, this sits alongside that and replaces nothing.</p>"
     ],
@@ -971,6 +974,7 @@ var T3_RESOURCES = {
       "<p>If this started with a note or a review, and the note was delivered publicly, repeatedly, or in a way designed to diminish you \u2014 that isn't a perfectionism problem. That's how the feedback was given, and it's a matter for the person's manager, HR, or a union rather than a regulation practice.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you can't finish or submit things at all, if this is costing you sleep across weeks, if you're using something to get through it, if it's spread from work into everything else, or if you're having thoughts of harming yourself or punishing yourself.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t3p4-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor, counsellor or coach, this sits alongside that and replaces nothing.</p>"
     ],
@@ -1202,6 +1206,7 @@ var T3_RESOURCES = {
       "<p>If the tremor, the voice or the blankness are severe enough that you're avoiding things you want to do, if the state is arriving well in advance and staying, if you're using something to get through performances, or if you're being affected in ways that could put your work or licence at risk, that's worth taking to a doctor. Some of this responds to treatment, and finding out is not an admission of anything.</p>",
       "<p><strong>A note on managing it with something</strong></p>",
       "<p>Using alcohol or medication not prescribed to you to get through performances is common and it's worth being honest with yourself about. It works, briefly, and it builds a dependency on being managed rather than being able. If that's where you are, a doctor is the right conversation and it's a very ordinary one for them.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t3p5-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor, counsellor or coach, this sits alongside that and replaces nothing.</p>"
     ],
@@ -1453,6 +1458,7 @@ var T3_RESOURCES = {
       "<p>Nothing on this platform can tell you which of the two you're in. What it can do is settle a system that's better at telling them apart when it isn't scanning.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're dreading work in a way you can't shake, if this is costing you sleep across weeks, if you're using something to get through the day, if you've become isolated outside work as well, or if you're having thoughts of harming yourself.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t3p6-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor, counsellor or coach, this sits alongside that and replaces nothing.</p>"
     ],
@@ -2001,6 +2007,7 @@ var T3_RESOURCES = {
       "<p>If the flatness extends past decisions into everything, if it's been weeks rather than days, or if rest doesn't touch it \u2014 that's closer to Burnout &amp; Overload than to this. The distinction matters because the answers are different: this one responds to closing things and to reducing the input, and that one responds to rest and often to a doctor.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you can't decide anything at all rather than merely struggling, if this has persisted across weeks, if you're using something to get through the day, or if you're having thoughts of harming yourself.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t3p8-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor, counsellor or coach, this sits alongside that and replaces nothing.</p>"
     ],
@@ -2270,6 +2277,7 @@ var T3_RESOURCES = {
       "<p>If the volume is structurally impossible and has been for a long time, this settles you and changes nothing. The useful next moves are outside this platform: occupational health, a union, HR, or a manager with the authority to change the input. Occupational health in particular is designed for exactly this and is under-used.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone today \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're having thoughts of harming yourself or of not being here, if you feel there's no point continuing, if you can't get up, or if you're frightened by how you feel.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t3p9-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor, counsellor or coach, this sits alongside that and replaces nothing. This is one of the protocols where having a person matters most.</p>"
     ],
@@ -2538,6 +2546,7 @@ var T3_RESOURCES = {
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if this has extended to everything rather than one project, if you can't start anything at all rather than merely struggling, if you're using something to work, or if you're having thoughts of harming yourself.</p>",
       "<p>If the work is your livelihood and it hasn't come for a long time, the financial pressure is a real problem in its own right and it needs practical advice rather than a regulation practice.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t3p10-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor, counsellor or coach, this sits alongside that and replaces nothing.</p>"
     ],

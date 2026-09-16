@@ -194,6 +194,7 @@ var T2_RESOURCES = {
       "<p>Some conversations should not be had, or not yet, or not by you alone. This protocol does not assess that and neither does anyone else on this platform.</p>",
       "<p><strong>Where safety is part of it</strong></p>",
       "<p>If you are frightened of how the other person will react \u2014 physically frightened, or frightened of the consequences \u2014 that is not a regulation problem and preparation is not the answer to it. Speak to someone outside the situation before you speak to them: a doctor, a helpline, a lawyer, or a friend who knows the whole picture rather than the version you can bear to tell. Your safety is a separate question from your regulation and it comes first.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t2p1-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you are with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
@@ -406,6 +407,7 @@ var T2_RESOURCES = {
       "<p>Not every rupture is a repair problem. If the same thing has happened repeatedly and nothing has changed after it was named, or if what happened was not a rupture but a harm, then this protocol will settle your state and will not address the situation.</p>",
       "<p><strong>Where safety is part of it</strong></p>",
       "<p>If you are frightened of the other person, if what happened involved violence, or if you are being controlled, this is not a regulation problem. Speak to someone outside the situation: a doctor, a helpline, a lawyer, or a friend who knows the whole picture rather than the version you can bear to tell. Your safety is a separate question from your regulation and it comes first.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t2p2-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you are with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
@@ -615,6 +617,7 @@ var T2_RESOURCES = {
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if you're not sleeping across weeks rather than days, if you're not eating, if you're using something to get through it, if you're checking or monitoring in ways you'd be uncomfortable describing out loud, or if you're having thoughts of harming yourself.</p>",
       "<p><strong>Where safety is part of it</strong></p>",
       "<p>If what happened involved violence, if you're frightened of them, or if you're being controlled or monitored, this is not a regulation problem and no practice addresses it. Speak to someone outside the situation: a doctor, a helpline, a lawyer, or a friend who knows the whole picture rather than the version you can bear to tell. Your safety is a separate question from your regulation and it comes first.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t2p3-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person is worth a great deal.</p>"
     ],
@@ -863,6 +866,7 @@ var T2_RESOURCES = {
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if the resentment has become constant rather than episodic, if you're using something to manage it, if it's spreading to people who haven't done anything, or if you're having thoughts of harming yourself.</p>",
       "<p><strong>Where the situation is the thing</strong></p>",
       "<p>If what you're carrying is about something ongoing that hasn't stopped, this settles you and doesn't change it. Where something can be said, asked for or declined, the useful next moves are outside this platform. The Attention Advisory goes further.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t2p4-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
@@ -1100,6 +1104,7 @@ var T2_RESOURCES = {
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone \u2014 a doctor, a therapist, or a person you trust \u2014 if the distance is costing you relationships you want, if it followed something that happened to you, if you can't be touched or can't be alone with someone without significant distress, or if you're having thoughts of harming yourself.</p>",
       "<p>If what's underneath this is something that was done to you, that isn't a pattern to be managed privately. It needs a person, and needing one isn't a failure of the practice.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t2p5-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person is worth a great deal.</p>"
     ],
@@ -1315,6 +1320,7 @@ var T2_RESOURCES = {
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if the unevenness is constant and you can't raise it without cost, if it's affecting your work or your health, if you're using something to manage it, or if you're having thoughts of harming yourself.</p>",
       "<p><strong>Where the situation is the thing</strong></p>",
       "<p>If the arrangement is genuinely unequal and hasn't moved when named, this settles you and doesn't change it. The Attention Advisory is not on this protocol \u2014 the tier work here belongs to whichever relationship or workplace it sits in, and where it's a workplace, HR, a union or an employment lawyer are the relevant next moves.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t2p6-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
@@ -1527,6 +1533,7 @@ var T2_RESOURCES = {
       "<p>This is the one on the platform most easily turned into a weapon. If you find yourself explaining someone else's psychology to them \u2014 that they're projecting, that it's really about their father, that it's their issue \u2014 you've stopped doing the protocol. You can look at what's running in you. You can't see theirs from where you're standing.</p>",
       "<p><strong>When the reaction is proportionate</strong></p>",
       "<p>Sometimes the reaction fits the event exactly and there is no surplus. Then this is the wrong protocol and nothing here applies. Being angry about something worth being angry about is not a pattern to be examined.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t2p7-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
@@ -1724,6 +1731,7 @@ var T2_RESOURCES = {
       "<p>That last one particularly. A flat week is ordinary. A flat month is worth a doctor's appointment, and going is not an admission of anything.</p>",
       "<p><strong>If the flatness is only around good things</strong></p>",
       "<p>If the rest of your range is intact and it's specifically appreciation, support or affection that won't land, that's worth mentioning to someone. It sometimes points at something the practice isn't built for.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t2p8-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing.</p>"
     ],
@@ -1920,6 +1928,7 @@ var T2_RESOURCES = {
       "<p>If any of that is familiar, this is not the right protocol for the situation. Speak to someone outside it: a doctor, a helpline in your country, a lawyer, or a friend who knows the whole picture rather than the version you can bear to tell. Your safety is a separate question from your regulation and it comes first.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone if the dynamic is affecting your health or your sleep across weeks, if you're using something to manage it, or if you're having thoughts of harming yourself.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t2p9-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor \u2014 individually or together \u2014 this sits alongside that and replaces nothing.</p>"
     ],
@@ -2172,6 +2181,7 @@ var T2_RESOURCES = {
       "<p>If you are frightened of them, being followed or contacted persistently, or being threatened, that is not a separation problem in the sense this protocol addresses. Speak to someone outside it: a doctor, a helpline in your country, a lawyer, or a friend who knows the whole picture. Your safety is a separate question from your regulation and it comes first.</p>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone today \u2014 a doctor, a helpline, or a person you trust \u2014 if you're having thoughts of harming yourself or of not being here, if you feel there's no point continuing, if you haven't been able to eat, wash or leave the house for days, if you're using something to get through it, or if this has been going on for months with no movement at all.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t2p10-practice\"></div>",
       "<p><strong>Alongside other support</strong></p>",
       "<p>If you're with a therapist, doctor or counsellor, this sits alongside that and replaces nothing. This is one of the protocols where having a person matters most.</p>"
     ],

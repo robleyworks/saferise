@@ -17,7 +17,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-395** (the remaining resource-type shapes — chain, floor and overlap —
+- **Highest ID issued: SR-396** (the floor shape rolled out across all 30 Safe Practice
+  resources — every row measured with `getBBox()` against the renderer's own fixed per-row
+  widths before being committed, zero skips, the type genuinely has the shape everywhere —
+  allocated per this pass's own instruction. Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-395** (the remaining resource-type shapes — chain, floor and overlap —
   mounted on their own true-fullest protocols after two length-scan outliers were found and
   excluded; a real content/shape mismatch found and resolved on the overlap mount, reported
   rather than silently shortened — allocated per this pass's own instruction. Verify against
@@ -16584,3 +16588,79 @@ renderer's own geometry, measured precisely, and resolved by splitting the real 
 inventing new copy or silently truncating — reported for a decision rather than assumed; the
 brief's own bare `var(--gold)`/`var(--slate)` examples corrected to the triple-safe
 `rgb(var(--x))` form without being asked. **Not pushed.** *Raised and fixed:* 16 Sep 2026
+
+---
+
+## SR-396 · floor across every Safe Practice resource
+
+Runs `pass/CLAUDE-CODE-shapes-all-types.md`, first type only (`practice` → `floor`), per Andre's
+own instruction to stop and report before starting the second. Depends on SR-394/395.
+`js/sr-resource-shapes.js` confirmed untouched throughout — `git diff --stat` shows no change to
+it at any point in this pass.
+
+### Method
+
+All 30 real ids follow SR-394's `t{track}p{protocol}-practice` scheme. `t3p7-practice` is
+SR-395's own mount, not redone. Read all other 29 in full (extracted via a script bounding each
+record by its own next-key boundary, not a fixed character window — SR-395's own lesson from the
+`-guide` scan, applied here from the start rather than rediscovered). The template holds with
+near-total consistency across the whole type: Pacing / What people commonly notice / **When to
+slow down** (1-2 real, simultaneously-true stop conditions) / one or more protocol-specific "When
+X" / "Where Y" sections / a closing safety-net section (**"When a person in the room is the right
+tool,"** or an equivalent phrasing specific to that protocol) / Alongside other support.
+
+**Every one of the 29 had at least 3 genuine, all-true conditions.** Zero skips this type — stated
+plainly, per the brief's own instruction to say so if the type doesn't have the shape: **it does,
+everywhere.** Rows: 3 where the source only supports 3 (`t1p4`, `t1p6`, `t3p1`, `t3p5`-practice —
+never padded to 4), 4 everywhere else. The closing safety-net condition is always the last, widest
+row, matching t3p7's own precedent. Every row is a compression of that resource's own real
+trigger — never a new claim.
+
+### Label fit — measured, not estimated
+
+SR-395 found one verbatim label overflowing the renderer's fixed geometry. That risk exists on
+every one of these ~110 new rows, so before writing anything to `content/shapes.js` the actual
+per-row rect widths were measured directly against `SHAPES.floor`'s own code (`w = 288 + i·84` of
+a 600-unit viewBox — fixed by row **index**, not by text length): row 0 = 288, row 1 = 372, row 2
+= 456, row 3 = 540 units. Test strings at varying lengths were rendered and measured with
+`getBBox()` to find the real per-row safe character count empirically (~36 / ~49 / ~64 / ~74
+characters, roughly 7.3-7.9 units per character, not documented anywhere in the byte-identical
+renderer) — then **every single row of all 29 records was rendered and measured the same way**
+before being committed, in one batch pass against the live `SHAPES.floor` function itself.
+**Zero overflow across all ~110 rows**, confirmed by that batch measurement, not sampled.
+
+A useful correction to my own SR-395 report: the ~40-character flat ceiling I used there was more
+conservative than the renderer actually allows, especially for the later, wider rows — this pass
+used the real, index-aware budget instead once it was empirically established.
+
+### Consistency (§5)
+
+Same accent (slate) and same caption ("Remove the last row and the other three stop holding.")
+on every one of the 30 mounts, SR-395's `t3p7-practice` included. Same position: every mount sits
+immediately before "Alongside other support" — the one header every record shares, chosen
+specifically because it's the one constant anchor point across all 30, keeping the mount's
+position genuinely identical rather than "roughly the same place." No resource required breaking
+this consistency.
+
+### Verify
+
+All 30 rendered in one live batch pass (not sampled) — a shape and its SVG present on every one,
+zero thrown errors, exactly one `.sr-shape` per resource (no double-mounting), zero console
+output across the whole batch. `decision` and `record` resources on all 30 protocols also checked
+in the same pass (60 renders) — zero shapes, zero errors, both types confirmed genuinely
+untouched. Five resources sampled for Sunrise legibility and `document.documentElement.
+scrollWidth === clientWidth` at 1440/1024/390 (`t1p1`, `t1p10`, `t2p7`, `t3p5`-practice, plus
+SR-395's own `t3p7`) — all legible, zero overflow at any width, screenshotted.
+
+**Emulation only**, same as every prior pass this session.
+
+Files: `content/shapes.js`, `content/t1-resources.js`, `content/t2-resources.js`,
+`content/t3-resources.js`, `docs/fix-register.md`. `js/sr-resource-shapes.js` and
+`css/sr-resource-read.css` untouched.
+
+*Status:* closed — practice → floor genuinely holds across the whole type, zero skips, reported
+as the finding it is; every row measured against the renderer's real geometry before being
+committed rather than trusted to an estimated character ceiling; SR-395's own ceiling corrected
+once the real, index-aware budget was established empirically. Stopping here, as instructed, to
+report before starting `accountability` → `overlap`. **Not pushed.** *Raised and fixed:* 16 Sep
+2026
