@@ -17,7 +17,12 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-394** (the editorial reading layout and shape diagrams for
+- **Highest ID issued: SR-395** (the remaining resource-type shapes — chain, floor and overlap —
+  mounted on their own true-fullest protocols after two length-scan outliers were found and
+  excluded; a real content/shape mismatch found and resolved on the overlap mount, reported
+  rather than silently shortened — allocated per this pass's own instruction. Verify against
+  `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-394** (the editorial reading layout and shape diagrams for
   resource.html — `.sr-read` landed with page-local R,G,B token triples, citation paragraphs
   now detected and rebuilt live (60/60 matched), fan/ladder/dial mounted on Track 3 / Protocol 1
   once the brief's own example key turned out not to exist — allocated per this pass's own
@@ -16424,3 +16429,158 @@ detect-and-rebuild live at 60/60 with zero content migration; all three shapes m
 verified protocol once the brief's own example key was found not to exist; the h4/h5 flattening,
 the unreachable `is-lede`/`.sr-rr-rail` conditions, and the sunrise contrast fork are all reported
 rather than silently absorbed. **Not pushed.** *Raised and fixed:* 16 Sep 2026
+
+---
+
+## SR-395 · remaining resource-type shapes — chain, floor, overlap
+
+Runs `pass/CLAUDE-CODE-remaining-shapes.md`, depending on SR-394. Extends `content/shapes.js`
+only — `js/sr-resource-shapes.js` untouched, confirmed via `git diff --stat` showing no change
+to it at any point in this pass.
+
+### §1 — real ids, reported and corrected before editing
+
+Real ids follow SR-394's own `t{track}p{protocol}-{type}` scheme, one per protocol, across all
+three tracks: `-guide` (30), `-practice` (30), `-accountability` (30). Body-length was the first
+proxy for "fullest copy," per the brief's own instruction — but the first pass at that scan
+excluded 5 of the 30 `-guide` records from its own 6,000-character window, and the original
+report to Andre approximated this as "29 of 30," which undercounted the real gap. Corrected here:
+
+**The two genuinely different-structure records: `t1p1-guide` and `t1p2-guide`.** Both embed a
+large, pre-existing `<figure class="sr-rd-figure"><svg>...</svg></figure>` chart directly in
+their `body` array — `t1p1-guide`'s alone runs to roughly 300,000 characters of inline path data
+("Three bands of activity: agitated, settled, and numb"). Not a data defect — a real, different
+structure, and disqualifying on its own terms: both already carry a rendered diagram, so neither
+was ever a legitimate "no diagram yet" candidate regardless of length.
+
+**The three that are NOT structurally different, just long: `t1p3-guide` (6,788 chars),
+`t3p7-guide` (6,676) and `t3p9-guide` (5,927).** All three parse identically to the other 25 —
+each simply exceeded the first scan's own 6,000-character window before reaching its closing
+`],`. A tooling artifact on this end, not a property of the data. Corrected scan (bounded by each
+record's real next-key boundary, not a fixed window) found the true ranking:
+
+| Type | True fullest (excl. the two diagrammed outliers) | Length |
+|---|---|---|
+| `guide` | **`t1p3-guide`** | 6,788 |
+| `practice` | `t3p7-practice` (unchanged — already correct) | 3,774 |
+| `accountability` | `t2p9-accountability` (unchanged — already correct) | 3,601 |
+
+**§1 revised for `chain`, per redirect.** `t1p10-guide` (the original candidate, 5,860 chars —
+now correctly ranked 6th once the two outliers and the three undercounted records are all
+accounted for) was reconsidered on its own terms regardless of rank: its protocol's own state is
+`numb` — shutdown, a reduced state. `SHAPES.chain`'s geometry narrows toward a smaller, more
+sharply-pointed final link; caught this in the brief's own example caption ("Specificity
+increases left to right. Certainty does not"), which exists specifically to counter that visual
+reading. A diagram that sharpens toward a confident conclusion fights a resource about a state
+defined by reduction, not sharpening. `t1p3-guide` is both the corrected true-fullest guide *and*
+the better fit on its own terms — its protocol's state is `agitated` (mobilised), and its own
+"why the Recognise step" text is literally about the state having *no* target to narrow toward,
+which the chain's narrowing geometry serves rather than contradicts.
+
+**Mounted on:**
+
+| Shape | Type | Real id | Track / Protocol | State |
+|---|---|---|---|---|
+| `chain` | How This Works | `t1p3-guide` | Track 1 / Protocol 3 | agitated (overwhelm) |
+| `floor` | Safe Practice | `t3p7-practice` | Track 3 / Protocol 7 | unsteady (stay-or-go decision) |
+| `overlap` | Accountability & Empathy | `t2p9-accountability` | Track 2 / Protocol 9 | unsteady (pursue/withdraw) |
+
+None overlaps SR-394's `t3p1` mounts or each other; none of the three target resources already
+carried a shapes-system diagram. `type:'decision'` re-confirmed untouched — rendered through its
+own `SafeRiseDecision.render()` path with zero errors, same as every other visible resource on
+all three protocols, checked live after every edit in this pass.
+
+### §2 — the three entries
+
+**`chain` (t1p3-guide).** Links taken from one real sentence — "The system is prepared for
+action and can't identify which action, so the preparation runs continuously without
+discharging" — split at its own three clauses (state / obstacle / consequence), not invented.
+Mounted directly after that sentence's own paragraph.
+
+**`floor` (t3p7-practice).** The four conditions are genuinely scattered across "When to slow
+down," "When the situation is the thing" and "Where staying is doing you harm" — nowhere listed
+together. Pulling them into one stack was the real editorial act the brief named it as. Each row
+is this resource's own wording, compressed to a short line: self-prosecution creep, scope
+escalation, needing qualified advice, and — last, widest, per redirect — actual harm, since a
+harmful situation needs help regardless of what the other three say. Mounted after the harm
+paragraph, the last of the four in reading order.
+
+**`overlap` (t2p9-accountability).** Approved as found. `left`/`right` reuse the resource's own
+repeated "from inside / from outside" framing (used three times in its real text) with subs taken
+from the same sentence's own two halves ("a conclusion drawn from evidence" / "an intention you
+never had"), not paraphrased.
+
+**Found and resolved: the middle label does not fit as one verbatim line, measured live, not
+assumed.** `getBBox()` on the rendered `<text>` showed "the certainty about the other person's
+motives" (48 characters) spanning **x=128.7 to x=471.3 of the shape's 600-unit viewBox** —
+overlapping the left/right labels at x=152/448 regardless of how short *those* are, since the
+middle text alone already covers both positions. No fix was available inside "no renderer
+changes" (`sr-resource-shapes.js` stays byte-identical). Split the real phrase across
+`middle.label` ("The certainty" — its own first three words, verbatim) and `middle.sub` ("about
+their motives" — the rest, compressed from "about the other person's motives" only as much as
+needed to fit) rather than dropping the mount. Re-measured after the split: every label/sub pair
+now clears every other, with one residual near-touch of ~8 of ~200 units between the left and
+middle *sub* lines (12.5px text, the least prominent line in the diagram) — screenshotted at both
+1440px and 390px, legible in both. **If verbatim-as-one-unbroken-line matters more than a legible
+diagram, this is the moment to say so — the mount can be dropped instead; not done unilaterally.**
+
+### §3 — mount points
+
+All three placed after the paragraph that sets them up (`chain` after the mechanism sentence,
+`floor` after the harm paragraph, `overlap` after "The one that belongs to both"), not at the top
+of the body. None takes a `target` — none is interactive, none mounts `.sr-axis` panels; only
+`dial` (SR-394) does that.
+
+### §4 — accents, checked against both grounds
+
+All three reuse SR-394's already-verified `--gold`/`--sage`/`--slate` triples via
+`rgb(var(--gold))` etc. — **the brief's own examples wrote bare `var(--gold)`/`var(--slate)`**,
+which would resolve to an invalid CSS colour given these tokens are stored as bare "R,G,B"
+triples rather than full colour values (SR-394's own reason for scoping them that way at all).
+Corrected without being asked, flagged here. No new accent introduced anywhere in this pass — no
+new contrast ratio to compute; SR-394's dark/sunrise numbers for gold/sage/slate stand unchanged
+and cover every colour used here.
+
+### Recommendation — `arc` for Your Record
+
+**Do not build it, in either form.** A generic/illustrative curve claims to show "your record"
+while showing nobody's real data — exactly the false statement the brief itself warned against,
+and worse for a brand-new member with zero entries, where the curve would show a trajectory that
+doesn't exist yet. A real-data version needs an actual binding from the member's local journal
+entries to a computed trajectory — meaningful new engineering, not a data-and-mounts pass, and it
+runs directly into the platform's own standing rule against measuring or scoring a member's
+pattern (`t1p3-guide`'s own citation commentary states this explicitly: *"There is no measurement
+of coherence anywhere on this platform and no score attached to any breath"* — an arc showing
+"progress" is the same shape of claim). If a visual is wanted on Your Record at all, it should not
+be `arc`'s curve-with-a-marked-point geometry, which inherently implies a trajectory toward
+somewhere — but that is a further design decision for Andre, not something to build now.
+
+### Verify
+
+Every check in the brief's own list confirmed live: each shape renders on its intended resource
+with copy from that resource; no resource carries two diagrams (checked directly — none of the
+three targets had an existing mount, and the two `-guide` outliers with real embedded figures
+were excluded from candidacy for exactly that reason); chain's links step down in height/opacity
+correctly (unmodified renderer, confirmed by inspection); floor reads widest at the bottom
+(screenshotted); overlap's intersection lit against both circles, legible after the label/sub
+split (measured via `getBBox()`, not eyeballed); all three legible in Sunrise (screenshotted:
+chain, floor, overlap); `document.documentElement.scrollWidth === clientWidth` at 1440/1024/390
+for all three; captions render uncut at 390px (screenshotted, chain and floor); `decision`
+resources unaffected (re-confirmed after every edit); zero console errors across every visible
+resource on all three protocols (t1-03, t3-07, t2-09), checked as a batch, not sampled.
+
+**Emulation only**, same as every prior pass this session.
+
+Files: `content/shapes.js`, `content/t1-resources.js`, `content/t2-resources.js`,
+`content/t3-resources.js`, `docs/fix-register.md`. `js/sr-resource-shapes.js` and
+`css/sr-resource-read.css` untouched.
+
+*Status:* closed — the length-scan's own undercount corrected and reported (2 real outliers, not
+1; 3 more that were only a tooling-window artifact); chain moved off the Numb protocol once the
+narrowing geometry was found to fight a shutdown state, onto the corrected true-fullest guide,
+which is also agitated/mobilised rather than numb; floor's four scattered conditions pulled into
+one stack, harm ordered last per redirect; overlap's verbatim instruction found to overflow the
+renderer's own geometry, measured precisely, and resolved by splitting the real phrase rather than
+inventing new copy or silently truncating — reported for a decision rather than assumed; the
+brief's own bare `var(--gold)`/`var(--slate)` examples corrected to the triple-safe
+`rgb(var(--x))` form without being asked. **Not pushed.** *Raised and fixed:* 16 Sep 2026

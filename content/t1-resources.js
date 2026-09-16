@@ -617,6 +617,9 @@ var T1_RESOURCES = {
     body: [
       "<p>Overwhelm is a mobilised state with a particular signature: mobilisation with no single target.</p>",
       "<p>Fear has an object. Anger has an object. Overwhelm has a volume. The system is prepared for action and can't identify which action, so the preparation runs continuously without discharging.</p>",
+      /* SR-395 (PASS-CLAUDE-CODE-remaining-shapes.md §2-3) · chain mount,
+         placed right after the paragraph it diagrams, not at the top. */
+      "<div class=\"sr-shape\" data-sr-shape=\"chain\" data-sr-shape-key=\"t1p3-guide\"></div>",
       "<p>In the body that's fast shallow breathing high in the chest, raised heart rate, and attention that scans rather than settles. Working memory narrows \u2014 the capacity to hold several things at once goes down. That's the part people take personally, and it's a feature of the state rather than a fact about your competence. It reverses when the state does.</p>",
       "<p><strong>Three ways it arrives</strong></p>",
       "<p>Overwhelm isn't one thing with one source. Three fairly different situations produce it.</p>",

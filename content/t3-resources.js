@@ -1747,6 +1747,15 @@ var T3_RESOURCES = {
       "<p>Where money, contracts, immigration status or notice periods are involved, get advice from someone qualified in that thing. Early.</p>",
       "<p><strong>Where staying is doing you harm</strong></p>",
       "<p>If the situation involves bullying, harassment, discrimination, or an environment making you unwell, this isn't a decision protocol \u2014 it's a matter for occupational health, a union, HR or an employment lawyer. Treating harm as a career question keeps people in place while it continues.</p>",
+      /* SR-395 (PASS-CLAUDE-CODE-remaining-shapes.md \u00a72-3) \u00b7 floor mount,
+         placed after the four scattered conditions it stacks (self-
+         prosecution creep, scope escalation, needing qualified advice,
+         and this final one \u2014 harm \u2014 which is why it's last: the floor
+         reads widest at the bottom, and a resource whose situation is
+         actually harmful needs help regardless of what the other three
+         say). Each row is this resource's own wording, compressed, not
+         paraphrased into a new claim. */
+      "<div class=\"sr-shape\" data-sr-shape=\"floor\" data-sr-shape-key=\"t3p7-practice\"></div>",
       "<p><strong>When a person in the room is the right tool</strong></p>",
       "<p>Contact someone \u2014 a doctor, a helpline in your country, or a person you trust \u2014 if the state is affecting your sleep or health across weeks, if you're dreading Mondays in a way you can't shake, if you're using something to get through the week, or if you're having thoughts of harming yourself.</p>",
       "<p><strong>Alongside other support</strong></p>",
