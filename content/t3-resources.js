@@ -135,6 +135,11 @@ var T3_RESOURCES = {
   "t3p1-companion": {
     kind: "Somatic Release Activities", title: "Somatic Release Activities", sub: "Between sessions.",
     body: [
+      /* SR-394 (PASS-CLAUDE-CODE-resource-pages.md §6) · fan mount, this
+         protocol only. Five of the seven real actions below, condensed to
+         short diagram labels in content/shapes.js — furniture, not a
+         retelling; all seven stay below, worded exactly as before. */
+      "<div class=\"sr-shape sr-shape--fan\" data-sr-shape=\"fan\" data-sr-shape-key=\"t3p1-companion\"></div>",
       "<p><strong>Long exhale, no ceremony.</strong> Four in, six out, three or four cycles. In a lift, a corridor, at the table.</p>",
       "<p><strong>Jaw apart, tongue down.</strong> Opens the throat, which is what carries the state into your voice.</p>",
       "<p><strong>Hum, briefly.</strong> Any low note, a few seconds, somewhere private. A voice already in use arrives steadier than a cold one.</p>",
@@ -172,6 +177,11 @@ var T3_RESOURCES = {
   "t3p1-disclosure": {
     kind: "Disclosure & Support", title: "Disclosure & Support", sub: "A script for someone close.",
     body: [
+      /* SR-394 (PASS-CLAUDE-CODE-resource-pages.md \u00a76) \u00b7 ladder mount, this
+         protocol only. Four of the script's real lines, condensed to short
+         diagram labels in content/shapes.js \u2014 furniture, not a retelling;
+         the full script stays below, worded exactly as before. */
+      "<div class=\"sr-shape sr-shape--ladder\" data-sr-shape=\"ladder\" data-sr-shape-key=\"t3p1-disclosure\"></div>",
       "<blockquote><strong>This one is for outside work.</strong> A friend, a partner, someone who isn't in the building. The workplace conversation is a different act with different consequences \u2014 that's <strong>Raising It</strong>, the next resource.</blockquote>",
       "<p>Take these exactly, or change every word.</p>",
       "<p><strong>Saying it</strong> &gt; \"I get keyed up before things that matter. It's physical and it starts early. I'd rather you knew than wondered why I go strange the night before.\"</p>",
@@ -201,20 +211,44 @@ var T3_RESOURCES = {
       "<p>Telling a friend costs you nothing. Telling someone at work may go on a record, may change what you're trusted with, and can't be taken back. Different audience, different calculus, different words.</p>",
       "<p><strong>First: you may not have to say anything.</strong></p>",
       "<p>Not disclosing is a legitimate choice and often the right one. Nothing here pushes you toward telling anyone. What follows is for if you've decided to, or if something needs to change and saying nothing is what's costing you.</p>",
-      "<p><strong>Who you tell changes what happens</strong></p>",
+      /* SR-394 (PASS-CLAUDE-CODE-resource-pages.md \u00a76-7) \u00b7 the dial mount +
+         its three .sr-axis panels, this protocol only. Was six flat
+         "<strong>Label</strong> \u2014 description" paragraphs plus two heading
+         paragraphs; restructured into the shape the dial's axes[].target
+         can scroll to, wording unchanged except each split label/value
+         pair's first letter capitalised where the source's own em-dash
+         construction assumed a lowercase continuation ("Your manager \u2014
+         can change...") \u2014 the mechanical minimum a label+value split
+         needs, not a rewrite. --sr-reg on each panel matches that axis's
+         accent in content/shapes.js's SR_SHAPE_DATA['t3p1-raising']
+         exactly, so the gold/sage/slate dial segments and their panels
+         agree. */
+      "<div class=\"sr-shape sr-shape--dial\" data-sr-shape=\"dial\" data-sr-shape-key=\"t3p1-raising\"></div>",
+      "<div class=\"sr-axis\" id=\"ax-who\" style=\"--sr-reg:224,182,88\">",
+      "<p class=\"sr-axis__k\"><svg viewBox=\"0 0 20 20\" fill=\"none\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"10\" cy=\"7\" r=\"3.2\"/><path d=\"M4 16c1.2-3 3.6-4.4 6-4.4s4.8 1.4 6 4.4\"/></svg>Who to tell</p>",
+      "<h3>Who you tell changes what happens</h3>",
       "<p>These are not interchangeable, and most people don't know the difference.</p>",
-      "<p><strong>Your manager</strong> \u2014 can change the work. Cannot usually keep it confidential, and shouldn't be expected to.</p>",
-      "<p><strong>HR</strong> \u2014 exists to protect the organisation. That doesn't make them hostile, and it does mean they are not neutral and are not your representative. Useful for process; not the place to think out loud.</p>",
-      "<p><strong>Occupational health</strong> \u2014 assesses fitness for work and recommends adjustments. Reports to the employer but usually only on what you consent to release. Frequently the most useful route available and almost nobody uses it.</p>",
-      "<p><strong>A union rep</strong> \u2014 represents you specifically. If you have access, use it before HR rather than after.</p>",
-      "<p><strong>A colleague</strong> \u2014 no power to change anything, and the only one who can be told without it becoming a process.</p>",
-      "<p><strong>Your GP</strong> \u2014 outside the building entirely, and the only one who can put something in writing that an employer has to take seriously.</p>",
-      "<p><strong>How much to say</strong></p>",
+      "<ul>",
+      "<li><b>Your manager</b>Can change the work. Cannot usually keep it confidential, and shouldn't be expected to.</li>",
+      "<li><b>HR</b>Exists to protect the organisation. That doesn't make them hostile, and it does mean they are not neutral and are not your representative. Useful for process; not the place to think out loud.</li>",
+      "<li><b>Occupational health</b>Assesses fitness for work and recommends adjustments. Reports to the employer but usually only on what you consent to release. Frequently the most useful route available and almost nobody uses it.</li>",
+      "<li><b>A union rep</b>Represents you specifically. If you have access, use it before HR rather than after.</li>",
+      "<li><b>A colleague</b>No power to change anything, and the only one who can be told without it becoming a process.</li>",
+      "<li><b>Your GP</b>Outside the building entirely, and the only one who can put something in writing that an employer has to take seriously.</li>",
+      "</ul>",
+      "</div>",
+      "<div class=\"sr-axis\" id=\"ax-much\" style=\"--sr-reg:157,179,136\">",
+      "<p class=\"sr-axis__k\"><svg viewBox=\"0 0 20 20\" fill=\"none\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 5.5h12v7H8l-3 3v-3H4z\"/></svg>How much to say</p>",
+      "<h3>How much to say</h3>",
       "<p><em>I'm dealing with something and it's affecting my sleep</em> is a different act from naming a condition. Both are honest. The first is almost always enough for a workplace conversation, and it's the version you can't be held to later.</p>",
       "<p>Say what's affecting the work. You are not obliged to explain why.</p>",
-      "<p><strong>Make it a request, not a confession</strong></p>",
+      "</div>",
+      "<div class=\"sr-axis\" id=\"ax-ask\" style=\"--sr-reg:130,152,187\">",
+      "<p class=\"sr-axis__k\"><svg viewBox=\"0 0 20 20\" fill=\"none\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3.5\" y=\"3.5\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M6.5 10.2l2.3 2.3 4.7-5\"/></svg>What to ask for</p>",
+      "<h3>Make it a request, not a confession</h3>",
       "<p>This is the move that works at work, and it's the one most people miss.</p>",
       "<p>A specific ask travels. It's actionable, it's answerable, and it puts the conversation on ground the other person knows how to stand on.</p>",
+      "</div>",
       "<p>An explanation of a state invites a response nobody has been trained to give, and it frequently ends in sympathy and no change.</p>",
       "<blockquote><strong>The ask, on this protocol:</strong> <em>\"I do better with high-stakes things when I've had the material a day earlier. Could I have the deck on Wednesday rather than Thursday night?\"</em></blockquote>",
       "<blockquote>Or: <em>\"I'd rather present the second half than the first. Same content, and I'll be better in it.\"</em></blockquote>",

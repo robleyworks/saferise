@@ -17,7 +17,12 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-393** (the meditation player integration for T0-00 The Clearing —
+- **Highest ID issued: SR-394** (the editorial reading layout and shape diagrams for
+  resource.html — `.sr-read` landed with page-local R,G,B token triples, citation paragraphs
+  now detected and rebuilt live (60/60 matched), fan/ladder/dial mounted on Track 3 / Protocol 1
+  once the brief's own example key turned out not to exist — allocated per this pass's own
+  instruction. Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-393** (the meditation player integration for T0-00 The Clearing —
   the old placeholder modal removed, `SRMedPlayer`/`SRClearing` wired in with a new backdrop
   wrapper the supplied files didn't include, `content/meditation.js` added — allocated per this
   pass's own instruction. Verify against `git log -1` once it lands.)
@@ -16206,3 +16211,216 @@ the pop-up presentation the supplied CSS doesn't on its own; every item on the b
 list confirmed live except Space-to-toggle, which was verified by direct event dispatch instead
 of the Browser pane's own key simulation, and reported as such. **Not pushed.** *Raised and
 fixed:* 16 Sep 2026
+
+---
+
+## SR-394 · editorial reading layout and shape diagrams — resource.html
+
+Runs a brief supplied as `CLAUDE-CODE-resource-pages.md`, later found on disk at
+`pass/CLAUDE-CODE-resource-pages.md`. Step 1's own investigation (reported and confirmed with
+Andre before any edit) found the brief written against a guessed pipeline name
+(`resource-content.js`, which doesn't exist) and a guessed resource id (`t1-01-05`, which
+doesn't exist either) — both corrected before implementation, per that confirmation.
+
+### The real pipeline, as found
+
+`content/t{1,2,3}-resources.js` (`T{n}_RESOURCES`, keyed `t{track}p{protocol}-{type}`, e.g.
+`t3p1-raising`) → `js/saferise-resources.js`'s `SafeRiseResources.resolveSet()` (joins each
+record's `body` array into one HTML string) → `resource.html`'s `renderMain()`
+(`rbody.innerHTML = r.body`, skipped entirely for `type:'decision'`, which has its own renderer
+via `SafeRiseDecision.render()` and was not touched) → `enhanceResourceBody()` (classes only,
+added post-injection).
+
+**resource.html never loads `css/saferise-system.css`** — confirmed, zero
+`<link rel="stylesheet">` tags in the file. It's fully self-contained: its own `:root` (`--bg`,
+`--gold` as a **hex string**, `--text`/`--text2`/`--text3` with values unrelated to
+`docs/TYPE-AND-CONTRAST.md`), and its own reading-mode toggle (`body.rd-soft`, set via an inline
+`setTheme()`), unrelated to the sitewide `data-theme="sunrise"`/`sessionStorage['sr-theme']`
+mechanism. Both left exactly as they are.
+
+### §1 (revised) · the real resource id
+
+`t1-01-05` isn't a real id anywhere in this codebase. Confirmed by content match instead of
+guessing again: `t3p1-raising`'s own `sub` field reads, verbatim, *"Who to tell, how much, and
+what to ask for"* — the brief's own dial example, word for word. All three shapes this pass
+mounts are on **Track 3 / Protocol 1**, since `t3p1-companion` (Somatic Release), `t3p1-
+disclosure` and `t3p1-raising` co-occur there, and `t3p1-disclosure`'s own text says *"that's
+Raising It, the next resource,"* confirming they're meant to be read as a set.
+
+### §2 · includes
+
+```html
+<link rel="stylesheet" href="css/sr-resource-read.css">
+<script src="content/shapes.js"></script>
+<script src="js/sr-resource-shapes.js"></script>
+```
+`css/sr-resource-read.css`/`js/sr-resource-shapes.js` copied byte-identical from what was placed
+on disk — not modified. `content/shapes.js` is new, and uses `var SR_SHAPE_DATA = {...}` (the
+on-disk pass file had itself already been corrected to this from the originally-pasted
+`export const` — this codebase has no build step, every `content/*.js` loads as a bare
+`<script src>`, and `export` there is a syntax error), following `content/guidance.js`'s own
+plain-script pattern rather than the brief's illustrative snippet.
+
+### §3 · token contract — page-local, not saferise-system.css
+
+Per redirect, scoped into resource.html's own stylesheet under `.sr-read` rather than
+`saferise-system.css` (which the page never loads). Two token sources now exist on this site —
+recorded here as the divergence point:
+
+- **`--gold` here is `#E0B658` (hex), used bare (`color:var(--gold)`) hundreds of times
+  elsewhere on this same page.** `sr-resource-read.css` does `rgb(var(--gold))`/
+  `rgba(var(--gold),n)` throughout — a hex value there is an invalid CSS colour, fails silently,
+  no console error. Redefining `--gold` globally as a triple would have broken every one of
+  those other uses. Instead, `--gold`/`--sage`/`--slate` triples are defined **scoped to
+  `.sr-read`** (and its `body.rd-soft .sr-read` override) — shadows the page's own `--gold` only
+  inside this one subtree, touches nothing else on the page.
+- `--gold` triple (224,182,88) is this page's own `#E0B658` converted, not re-imported from
+  elsewhere — keeps the gold inside `.sr-read` visually identical to the gold already on the nav
+  and pills around it.
+- `--surface`/`--surface-raise` have no prior equivalent here — derived from this page's own
+  `--card` (dark `#1A1A26`, soft `#54648C`), `--surface-raise` mixed 14% toward white, rather
+  than invented from nothing.
+- `--font-serif`/`--font-sans` map to Cormorant Garamond / DM Sans, already loaded by this page's
+  own Google Fonts link — no new font link added.
+
+**Contrast, computed against this page's actual grounds, same WCAG relative-luminance method
+`docs/TYPE-AND-CONTRAST.md` uses:**
+
+| Token | Dark (`#0C0C12`) | Sunrise (`#465578`) |
+|---|---|---|
+| gold | `rgb(224,182,88)` — 10.22:1 | `rgb(255,216,148)` (page's own, unchanged) — 5.48:1 |
+| sage | `rgb(157,179,136)` (spec `--c2`) — 8.58:1 | `rgb(206,217,196)` — 5.07:1 |
+| slate | `rgb(130,152,187)` (spec `--c3`) — 6.65:1 | `rgb(192,204,221)` — 4.56:1 |
+
+**Finding about the spec, not only about this page:** `docs/TYPE-AND-CONTRAST.md`'s own sage/
+slate (`--c2`/`--c3`) clear the spec's 6:1 floor comfortably against the dark ground the spec was
+computed against, and were used as-is in dark mode here. Against *this page's* sunrise ground —
+a dusk blue, `#465578`, not the lighter cream `saferise-system.css`'s pages use for Sunrise — the
+same two values measure **3.26:1 and 2.53:1**, both under even the 4.5:1 AA floor for small text.
+The spec computed one ground colour; this page has two, and Sunrise isn't the same colour
+sitewide. Lightened both by mixing 50% toward white for `.sr-read`'s own sunrise override
+(table above) rather than shipping an illegible citation/dial accent in that mode.
+
+### §4 · the reading layout
+
+`.sr-read` wraps `.sr-head`'s former contents (renamed `.sr-read__hero`) and `#rbody` (renamed
+`.sr-read__body`, id kept — `renderMain()`/`SafeRiseDecision.render()` both target it by id and
+weren't touched). Real fields mapped, nothing invented:
+
+- **Crumb** (`.sr-read__crumb`) — `#reyebrow` only. No literal "track + number" field exists on
+  the normalised record (`js/saferise-resources.js`'s own shape has no such field); the track/
+  protocol name is already shown beside this, in `.sr-cover`'s own `h1`. Adding a second,
+  invented crumb segment would be decoration standing in for data that isn't there.
+- **Pill** (`.sr-read__pill`) — `#rmeta`, not `#rread`. `#rread` is never populated anywhere in
+  `js/saferise-resources.js` (`r.read` isn't part of the normalised record shape) — confirmed
+  live, it renders empty on every resource, pre-existing. An **empty** `.sr-read__pill` renders
+  as a visible blank oval (real padding, no content) — a regression an unused, unstyled `<span>`
+  never caused. Left `#rread` as plain text, exactly as before.
+- **§5's eyebrow span, per redirect, omitted.** Section headings in the real content
+  (`<h4>Recognise</h4>`, `<h4>Regulate</h4>`, `<h4>Front</h4>`…) are single words or short
+  phrases with no natural kicker to split out — the dot-marker/hairline in
+  `.sr-read__body h2` still renders correctly with no `.sr-read__eyebrow` span present, exactly
+  as instructed.
+- `<h4>`/`<h5>` → real `<h2>` elements (not just classed) — `sr-resource-read.css` only styles
+  `h2`. This flattens the old h4/h5 two-tier distinction (h5 was a smaller, indented sub-section
+  under an h4) to one level, since the brief's own mapping defines only one. 30 h5 headings
+  sitewide affected; reported, not compensated with an invented modifier class.
+- Opening paragraph: the first `<p>` child of the body (whether or not it also carries
+  `sr-lede`) gets `is-first` (the drop cap); it additionally gets `is-lede` only if the source
+  itself already marked it so. **Finding: `sr-lede` only ever appears inside `type:'decision'`
+  records sitewide** (`git grep` across all three content stores) — which bypass
+  `enhanceResourceBody()` entirely (§0, out of scope). `is-lede`'s enlarged-intro styling is
+  therefore currently unreachable on any real page; kept for forward compatibility, not removed,
+  since it's a one-line no-op cost.
+- `<blockquote>` → `.sr-pull`. `<ul>` keeps its pre-existing `.sr-rr-signs` treatment, rescoped
+  from `.sr-body` to `.sr-read__body` (not part of the brief's own mapping table, so left as its
+  own thing rather than forced into a shape it wasn't given). The `.sr-rr-rail` section nav
+  (h4Count ≥ 3) is kept and rescoped the same way — **also currently unreachable**: swept every
+  resource in all three content stores reachable through `visible()` (excludes `meditation`/
+  `crisiscard`, which `visible()` itself filters out, and `decision`, which bypasses this
+  function) and found none with 3+ section headings. Pre-existing dead condition, not introduced
+  by this pass, left in place.
+- **Dead code confirmed and removed, not just left:** the old `.sr-body`-scoped rule block
+  (`sr-rr-opening`/`sr-rr-section`/`sr-rr-script`/`sr-rr-close`, `sr-tight`, and the
+  `div.sr-lead` branch `enhanceResourceBody()` used to guard against) — grepped all three
+  content stores for `sr-tight` and `sr-lead` before deleting either, zero occurrences of both;
+  `sr-lead` is real elsewhere on the site (`saferise-system.css`'s `.sr-banner-copy`/
+  `#reader-overlay`), just never inside a resource body.
+
+**Measure — the priority item.** `.sr-read{width:min(40rem,calc(100% - 48px))}` replaces the old
+per-element `max-width:62ch` declarations scattered across five separate rules. Measured live via
+`getBoundingClientRect`, not eyeballed: **1440px → 51.3ch (494px), 1024px → 44.8ch, 390px →
+35.8ch** — all well under the 62ch ceiling at every width, and `document.documentElement.
+scrollWidth === clientWidth` at all three (no horizontal overflow introduced).
+
+### §5 · citations — detected live, nothing migrated
+
+`parseCitation()` (in `enhanceResourceBody()`) reads each `<p>`'s real DOM children (`<strong>`
+then `<em>`, not a regex on `innerHTML` — so entity-decoded text like "Shadow & individuation"
+round-trips correctly through a small `escHTML()` helper rather than corrupting the rebuilt
+markup) and rebuilds a match into `.sr-src.sr-src--{peer|clinical|interpretive}` with a small
+authored SVG glyph per register (shape furniture — `sr-resource-read.css` styles `.sr-src__sym
+svg` but ships none). **Verified live across every resource in all three content stores: 60
+register mentions (`<em>peer-reviewed|clinical practice|interpretive</em>`), 60 matched the full
+citation shape, 0 unmatched.** No record in `content/t{1,2,3}-resources.js` was edited for this —
+the transform runs fresh on every render, exactly as instructed.
+
+### §6-7 · the three shapes, mounted on Track 3 / Protocol 1
+
+- **`t3p1-companion` (fan)** — five of the resource's seven real actions (long exhale; jaw apart,
+  tongue down; hum; feet into the floor; warm hands), condensed to short diagram labels in
+  `content/shapes.js`. All seven stay in the body text, unabridged.
+- **`t3p1-disclosure` (ladder)** — four real script beats, alternating "the line" (said) and "the
+  move" (what it does). Labelled `leftLabel:'THE LINE'`/`rightLabel:'THE MOVE'` rather than the
+  default YOU/THEM — this resource is one person's script, not a two-party transcript, and the
+  default labels would have implied a dialogue that isn't in the source.
+- **`t3p1-raising` (dial)** — the three axes are the resource's own `sub` field, verbatim: "Who to
+  tell," "How much to say," "What to ask for." `content/t3-resources.js` was restructured (this
+  protocol only — the same content repeats on 9 other Track 3 protocols, all left untouched) to
+  wrap the real "who to tell" list (six `<p><strong>Label</strong> — description</p>` lines) and
+  the "how much"/"what to ask for" paragraphs into three `.sr-axis` panels (`ax-who`/`ax-much`/
+  `ax-ask`), matching each `axes[].target`. Wording unchanged except each label/value split's
+  first letter capitalised where the source's own em-dash assumed a lowercase continuation
+  ("Your manager — can change…") — the mechanical minimum a label+value split needs. `--sr-reg`
+  set inline per panel (`style="--sr-reg:224,182,88"` etc.), matching that axis's own accent in
+  `content/shapes.js` exactly — `sr-resource-read.css` styles `.sr-axis`'s accent via that
+  variable but supplies no per-axis binding of its own.
+
+`SRResourceShapes.init()` auto-runs on `DOMContentLoaded`, long before `renderMain()`'s
+`innerHTML` write ever happens — `renderMain()` now also calls `SRResourceShapes.init(rbody)`
+explicitly after `enhanceResourceBody()`, scoped to just the freshly-rendered body.
+
+**Measured nav height for `scroll-margin-top`: 72.5px** (`.sr-topnav`, `position:sticky`).
+`sr-resource-read.css`'s own default of 96px already clears it with margin to spare — not
+adjusted.
+
+### Verify
+
+Dial: a real `click` on a segment (`.sr-seg[aria-label="How much to say"]`) correctly dimmed the
+other two panels and scrolled the matching one into view; keyboard `focus()` + a dispatched
+`Enter` keydown activated a segment the same way; the click listener isn't gated behind any
+`hover`-only check in the supplied JS, so touch needs no separate path. Citation cards, fan and
+ladder all confirmed rendering and interactive, screenshotted. Drop cap confirmed present exactly
+once per resource body across every type checked. Pull quote measured breaking the body's own
+bounds by ~25px each side at 1440px and sitting flush (0px difference) at 600px. Sunrise theme
+screenshotted on the dial, an axis panel and a citation card — all legible, no hardcoded hex
+visible. All 8 of Track 3 / Protocol 1's visible resource types (plus `decision`, out of scope)
+rendered with zero thrown errors and zero console output across the whole pass. **Reduced motion
+verified by reading the code and the supplied CSS's own `@media(prefers-reduced-motion:reduce)`
+block (`transition:none !important` on `.sr-read *`/`.sr-shape *`/`.sr-axis`, and `sr-resource-
+shapes.js`'s own `REDUCED` flag gating `scrollIntoView`'s `behavior`), not live-emulated** — this
+Browser pane's `resize_window` tool has no reduced-motion toggle, the same category of tooling
+gap as SR-392/393's own environment caveats.
+
+**Emulation only**, same as every prior pass this session.
+
+Files: `resource.html`, `content/t3-resources.js`, `content/shapes.js` (new),
+`css/sr-resource-read.css` (new, supplied verbatim, already on disk), `js/sr-resource-shapes.js`
+(new, supplied verbatim, already on disk), `docs/fix-register.md`.
+
+*Status:* closed — Step 1's guessed pipeline name and guessed resource id both corrected and
+confirmed before implementation; tokens scoped page-local with the divergence recorded; citations
+detect-and-rebuild live at 60/60 with zero content migration; all three shapes mounted on a real,
+verified protocol once the brief's own example key was found not to exist; the h4/h5 flattening,
+the unreachable `is-lede`/`.sr-rr-rail` conditions, and the sunrise contrast fork are all reported
+rather than silently absorbed. **Not pushed.** *Raised and fixed:* 16 Sep 2026

@@ -607,38 +607,74 @@ textarea{min-height:100px}
 .sr-item.advisory .sr-t{font-style:italic}
 
 /* ---- centre ---- */
-.sr-head{border-bottom:1px solid var(--hair);padding-bottom:20px;margin-bottom:26px}
-.sr-head .eyebrow{display:block;margin:0}
-.sr-head h2{margin-bottom:9px}
-.sr-head .lede{margin:0 0 12px}
-.sr-body p{font-size:15px;line-height:1.78;color:var(--ink);max-width:62ch;margin-bottom:17px}
-.sr-body p.sr-tight{margin-bottom:6px}
+/* SR-394 (PASS-CLAUDE-CODE-resource-pages.md) · .sr-head/.sr-body and the
+   whole SR-381 "editorial component map" block that followed (sr-rr-opening/
+   sr-rr-section/sr-rr-script/sr-rr-close) are removed here — replaced by
+   .sr-read/.sr-read__* below, supplied in css/sr-resource-read.css, and by
+   enhanceResourceBody()'s new class output (see the JS). .sr-tight (on
+   .sr-body p) and the div.sr-lead branch enhanceResourceBody() used to guard
+   against were both already dead — grepped all three content/t{1,2,3}-
+   resources.js stores, zero occurrences of either, confirmed before removing
+   anything here. ul.sr-rr-signs and the .sr-rr-rail section-nav are real and
+   kept, rescoped from .sr-body to .sr-read__body below (the nav strip has no
+   equivalent in the supplied CSS and isn't part of this pass's own mapping
+   table, so it stays as its own thing rather than being folded in).
 
-/* ══ SR-381 (PASS-live-site-defects.md Part D) · editorial component map ══
-   sr-rr- surface code, claimed in CLAUDE.md's table. This is the real
-   resource reader (see the JS comment above) -- §0 found index.html's
-   sr-rd- version is never reached from any live navigation path. */
-.sr-body>:first-child{margin-top:0!important}
-.sr-body p.sr-rr-opening{font-size:1.5rem;line-height:1.42;font-weight:300;color:var(--text);
-  margin:0 0 8px;letter-spacing:-.005em;position:relative;padding-top:18px;max-width:62ch}
-.sr-body p.sr-rr-opening:before{content:"";position:absolute;top:0;left:0;width:28px;height:1px;
-  background:var(--gold);opacity:.85}
-.sr-body h4.sr-rr-section,.sr-body h5.sr-rr-section{font-weight:400;line-height:1.2;
-  color:var(--text);margin:44px 0 18px;position:relative;padding-top:18px}
-.sr-body h4.sr-rr-section{font-size:1.92rem}
-.sr-body h5.sr-rr-section{font-size:1.4rem;margin-top:30px}
-.sr-body .sr-rr-section:before{content:"";position:absolute;top:0;left:0;width:28px;height:1px;
-  background:var(--gold);opacity:.85}
-.sr-body blockquote.sr-rr-script{border-left:2px solid var(--gold);padding:2px 0 2px 22px;margin:0 0 18px}
-.sr-body blockquote.sr-rr-script p{font-size:1.2rem;font-style:italic;color:var(--text);
-  line-height:1.6;margin:0}
-.sr-body blockquote.sr-rr-script+blockquote.sr-rr-script{margin-top:22px}
-.sr-body ul.sr-rr-signs{list-style:none;padding:0;margin:0 0 17px;display:grid;gap:1px;
-  background:var(--hair);border-block:1px solid var(--hair);max-width:62ch}
-.sr-body ul.sr-rr-signs li{background:var(--bg,#08080C);padding:13px 22px;font-size:15px;
+   ══ SR-394 · .sr-read token contract, page-local ══
+   sr-resource-read.css expects --text/--text2/--text3/--surface/
+   --surface-raise/--font-serif/--font-sans/--gold/--sage/--slate to exist
+   and to be theme-aware. resource.html is self-contained — it never loads
+   css/saferise-system.css (confirmed: no <link rel="stylesheet"> for it
+   anywhere in this file), so its own :root above (line ~64) is the only
+   source of truth on this page, and it predates and diverges from
+   saferise-system.css's global tokens entirely. Two forks worth knowing
+   about, both left alone rather than merged:
+     1. --gold here is #E0B658, a hex string. The rest of this page uses it
+        bare (color:var(--gold), background:var(--gold)) hundreds of times,
+        so redefining it globally as an "R,G,B" triple would break every one
+        of those. sr-resource-read.css needs the triple form specifically
+        because it does rgb(var(--gold)) / rgba(var(--gold),n) throughout —
+        a hex value there fails silently (invalid color, no console error).
+        Scoping new --gold/--sage/--slate triples to .sr-read only shadows
+        the global --gold for this subtree and touches nothing outside it.
+     2. This page's reading-mode toggle is body.rd-soft (see ~line 723),
+        not the sitewide data-theme="sunrise"/sessionStorage['sr-theme']
+        mechanism protocol.html/dashboard.html use. Not changed — the
+        overrides below hook body.rd-soft .sr-read, matching what already
+        exists on this page.
+   --gold triple = this page's own #E0B658 converted, not re-imported from
+   elsewhere, so it still matches the gold already visible in the nav/pills
+   outside .sr-read. --sage/--slate triples in dark mode are
+   docs/TYPE-AND-CONTRAST.md §2's own --c2/--c3 (157,179,136 / 130,152,187) —
+   computed against this page's #0C0C12 ground (WCAG relative-luminance
+   method, same as the spec uses): sage 8.58:1, slate 6.65:1, both clear the
+   spec's 6:1 floor.
+   In body.rd-soft the ground is #465578 — a dusk blue, not the lighter
+   cream "sunrise" saferise-system.css's pages use — and the spec's sage/
+   slate FAIL there: computed 3.26:1 and 2.53:1, well under even the 4.5:1
+   AA floor for small text. That's a finding about the spec's own assumption
+   (one ground colour) rather than only about this page — reported in the
+   fix-register entry. Lightened both by mixing 50% toward white and
+   recomputed: sage (206,217,196) 5.07:1, slate (192,204,221) 4.56:1. Gold
+   in soft mode reuses this page's own existing #FFD894 (5.48:1) unchanged.
+   --surface/--surface-raise have no existing equivalent on this page —
+   derived from this page's own --card (dark #1A1A26, soft #54648C) rather
+   than invented, --surface-raise mixed 14% toward white so it reads as
+   "the same material, one step up" the way sr-resource-read.css's own
+   inset-highlight box-shadows expect. */
+.sr-read{
+  --gold:224,182,88; --sage:157,179,136; --slate:130,152,187;
+  --surface:#1A1A26; --surface-raise:#3A3A44;
+  --font-serif:'Cormorant Garamond',Georgia,serif; --font-sans:'DM Sans',sans-serif;
+}
+body.rd-soft .sr-read{
+  --gold:255,216,148; --sage:206,217,196; --slate:192,204,221;
+  --surface:#54648C; --surface-raise:#6C7A9C;
+}
+.sr-read__body ul.sr-rr-signs{list-style:none;padding:0;margin:0 0 17px;display:grid;gap:1px;
+  background:var(--hair);border-block:1px solid var(--hair)}
+.sr-read__body ul.sr-rr-signs li{background:var(--bg,#08080C);padding:13px 22px;font-size:15px;
   line-height:1.5;color:var(--ink)}
-.sr-body p.sr-rr-close{font-size:1.2rem;line-height:1.55;font-style:italic;color:var(--text);
-  margin:44px 0 0;padding-top:26px;border-top:1px solid var(--hair);max-width:62ch}
 
 /* D4 · section rail — horizontal sticky strip, same adaptation as
    index.html's: no spare side column in this layout either. */
@@ -646,7 +682,6 @@ textarea{min-height:100px}
   height:26px;padding:7px 0 5px;margin:0 0 8px;background:var(--card);border-bottom:1px solid var(--hair)}
 .sr-rr-railitem{appearance:none;-webkit-appearance:none;border:0;padding:0;cursor:pointer;
   width:13px;height:2px;background:var(--hair);transition:background .3s ease,width .3s ease}
-.sr-rr-railitem--h5{width:8px;margin-left:7px}
 .sr-rr-railitem.on{background:var(--gold);width:22px}
 .sr-rr-railitem:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
 .sr-close{margin-top:38px;padding:26px 28px;border:1px solid rgba(255,255,255,.045);border-radius:9px;
@@ -904,6 +939,10 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
   .sr-dc-askq{font-size:19px}
 }
 </style>
+<!-- SR-394 · the editorial reading layout, supplied verbatim. Cormorant and
+     DM Sans are already loaded above (the Google Fonts link); no font link
+     added here. -->
+<link rel="stylesheet" href="css/sr-resource-read.css">
 </head>
 <body>
 
@@ -956,19 +995,36 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
     </div>
 
     <div class="sr-main">
-      <div class="sr-head">
-        <div class="sr-headrow">
-          <p class="eyebrow" id="reyebrow">Choose</p>
-          <div class="sr-theme" role="group" aria-label="Reading theme">
-            <button class="on" onclick="setTheme('dark',this)">Midnight</button>
-            <button onclick="setTheme('soft',this)">Sunrise</button>
+      <!-- SR-394 · .sr-read/.sr-read__* per PASS-CLAUDE-CODE-resource-pages.md
+           §4. Real fields available are #reyebrow (a short action verb —
+           "Choose"/"Release"/"Tell" — from TYPE_META.eyebrow), #rtitle,
+           #rsub, #rmeta (TYPE_META.meta, a category label) and #rread
+           (never populated anywhere in js/saferise-resources.js — r.read
+           doesn't exist on the normalised record shape; kept empty rather
+           than invented, same as it rendered before this pass). No literal
+           "track + resource number" field exists to put in the crumb — the
+           track/protocol name is already shown in .sr-cover's own h1,
+           right beside this — so the crumb here is just #reyebrow; adding
+           a second, invented segment would be decoration standing in for
+           data that isn't there. #rmeta carries .sr-read__pill instead of
+           #rread (permanently empty) for the same reason: an empty pill
+           renders as a small blank oval, a real regression an unused
+           element wouldn't otherwise cause. -->
+      <div class="sr-read">
+        <div class="sr-read__hero">
+          <div class="sr-headrow">
+            <p class="sr-read__crumb"><b id="reyebrow">Choose</b></p>
+            <div class="sr-theme" role="group" aria-label="Reading theme">
+              <button class="on" onclick="setTheme('dark',this)">Midnight</button>
+              <button onclick="setTheme('soft',this)">Sunrise</button>
+            </div>
           </div>
+          <h2 class="sr-read__title" id="rtitle">The Decision</h2>
+          <p class="sr-read__sub" id="rsub">Choose who handles this pattern next.</p>
+          <div class="sr-read__meta"><span class="sr-read__pill" id="rmeta">Identity &amp; Embodiment</span><span id="rread"></span></div>
         </div>
-        <h2 id="rtitle">The Decision</h2>
-        <p class="lede" id="rsub">Choose who handles this pattern next.</p>
-        <p class="subline"><span id="rmeta">Identity &amp; Embodiment</span> &nbsp;·&nbsp; <span id="rread"></span></p>
+        <div class="sr-read__body" id="rbody"></div>
       </div>
-      <div class="sr-body" id="rbody"></div>
 
       <div class="sr-close sr-lit" id="closeblock">
         <p class="eyebrow sr-quiet">When you're ready</p>
@@ -1031,6 +1087,10 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
 <!-- SR-247 · the guidance record. The src comes from here, never from
      markup — Rule 24, a path is a claim the asset exists and is usable. -->
 <script src="content/guidance.js"></script>
+<!-- SR-394 · shape diagram data, same content/*.js pattern as guidance.js
+     above (plain script, no build step). Must load before js/sr-resource-
+     shapes.js below, which reads window.SR_SHAPE_DATA at render time. -->
+<script src="content/shapes.js"></script>
 <!-- PASS-CONSOLIDATED-2026-09-08, Section 3 · was three unconditional
      <script> tags loading all three content stores (~1.0 MB) regardless of
      which track this page actually renders. track/protocol are parsed here,
@@ -1049,6 +1109,11 @@ document.write('<scr' + 'ipt src="content/t' + SR_TRACK_NUM + '-resources.js"></
 </script>
 <script src="js/saferise-resources.js"></script>
 <script src="js/saferise-decision.js"></script>
+<!-- SR-394 · the shape diagrams (fan/ladder/dial etc.), supplied verbatim.
+     Its own DOMContentLoaded auto-init fires before renderMain() ever
+     writes into #rbody, so renderMain() also calls SRResourceShapes.init()
+     explicitly once the body is in the DOM — see below. -->
+<script src="js/sr-resource-shapes.js"></script>
 <script src="js/saferise-auth.js"></script>
 <script src="js/saferise-access.js"></script>
 <script>
@@ -1160,55 +1225,116 @@ function renderRail(){
   list.innerHTML=html;
 }
 
-/* SR-381 (PASS-live-site-defects.md Part D) · derive-don't-rewrite editorial
-   renderer, same mapping as SR-379's (index.html), adapted for this page's
-   own single-string r.body (not an array) and its own --ink/--gold/--muted
-   tokens -- no --rd- indirection needed here, this file already has those.
-   Classes only, added to markup r.body already contains; no change to any
-   resource's own text. Surface code sr-rr- (Resource Reader) -- distinct
-   from sr-rd-, which is index.html's separate, unreached reader. */
+/* SR-394 (PASS-CLAUDE-CODE-resource-pages.md) · replaces SR-381's
+   derive-don't-rewrite renderer with the editorial reading layout's own
+   class output. Same core technique -- classes only, no change to any
+   resource's own words -- extended two ways: h4/h5 become real <h2>
+   elements (sr-resource-read.css only styles h2; no eyebrow span, per this
+   pass's own instruction not to invent kicker text the source headings
+   don't carry -- "Recognise"/"Regulate" stay exactly that), and citation
+   paragraphs are now detected and rebuilt into .sr-src, live, every render
+   -- see parseCitation() below. Nothing here migrates content/t{1,2,3}-
+   resources.js; a citation still starts as a plain <p> and is rebuilt into
+   .sr-src by this function every time the resource is opened. */
+
+/* <p><strong>Framework — Expert</strong> · <em>register</em> · clause</p>,
+   confirmed the ONLY shape all 60 register mentions across the three
+   content stores take (verified with a script against the raw source
+   before writing this -- 60 <em>{register}</em> occurrences, all 60 inside
+   this exact paragraph shape, 0 elsewhere). Parses the real DOM node
+   (children, not a regex on innerHTML) so entity-decoded text -- "Shadow &
+   individuation" and the like -- round-trips correctly through escHTML()
+   below rather than corrupting the rebuilt markup. */
+var SR_REGISTER = { 'peer-reviewed': 'peer', 'clinical practice': 'clinical', 'interpretive': 'interpretive' };
+function escHTML(s){ var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+function parseCitation(el){
+  if (el.tagName !== 'P' || !el.firstElementChild) return null;
+  var kids = el.childNodes, strongEl = null, emEl = null, strongIdx = -1, emIdx = -1;
+  for (var i = 0; i < kids.length; i++) {
+    var n = kids[i];
+    if (n.nodeType === 1 && n.tagName === 'STRONG' && !strongEl) { strongEl = n; strongIdx = i; }
+    else if (n.nodeType === 1 && n.tagName === 'EM' && strongEl && !emEl) { emEl = n; emIdx = i; }
+  }
+  if (!strongEl || strongIdx !== 0 || !emEl) return null;
+  var regClass = SR_REGISTER[emEl.textContent.trim()];
+  if (!regClass) return null;
+  var dash = strongEl.textContent.split(/\s+—\s+/);
+  if (dash.length !== 2) return null;
+  var clauseHTML = '';
+  for (var j = emIdx + 1; j < kids.length; j++) {
+    var n2 = kids[j];
+    clauseHTML += n2.nodeType === 1 ? n2.outerHTML : escHTML(n2.textContent);
+  }
+  clauseHTML = clauseHTML.replace(/^[\s·]+/, '').trim();
+  if (!clauseHTML) return null;
+  return { framework: dash[0].trim(), expert: dash[1].trim(), regClass: regClass, regLabel: emEl.textContent.trim(), clauseHTML: clauseHTML };
+}
+/* Plain stroke glyphs, matching this component's own icon language
+   (thin stroke, rounded caps) -- shape furniture, not copy: the supplied
+   CSS styles a .sr-src__sym svg but nothing supplies one. One per
+   register, no text inside any of them. */
+var SR_SRC_ICON = {
+  peer: '<svg viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.4"/><path d="M6.6 10.3l2.3 2.3 4.6-5"/></svg>',
+  clinical: '<svg viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.4"/><path d="M10 6.4v7.2M6.4 10h7.2"/></svg>',
+  interpretive: '<svg viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.6c2.2-1 4.6-1 6 .1v8.7c-1.4-1.1-3.8-1.1-6-.1z"/><path d="M16 5.6c-2.2-1-4.6-1-6 .1v8.7c1.4-1.1 3.8-1.1 6-.1z"/></svg>'
+};
+function buildCitation(c){
+  var wrap = document.createElement('div');
+  wrap.className = 'sr-src sr-src--' + c.regClass;
+  wrap.innerHTML =
+    '<div class="sr-src__top"><h4>' + escHTML(c.framework) + '</h4>' +
+    '<span class="sr-src__reg">' + escHTML(c.regLabel) + '</span></div>' +
+    '<div class="sr-src__who"><span class="sr-src__sym">' + SR_SRC_ICON[c.regClass] + '</span>' + escHTML(c.expert) + '</div>' +
+    '<p>' + c.clauseHTML + '</p>';
+  return wrap;
+}
+
 function enhanceResourceBody(bodyEl){
   if (!bodyEl) return [];
   var kids = Array.prototype.slice.call(bodyEl.children);
   var ledes = kids.filter(function(el){ return el.tagName === 'P' && el.classList.contains('sr-lede'); });
+  var firstP = kids.filter(function(el){ return el.tagName === 'P'; })[0];
   var headings = [];
   var hCount = 0;
   kids.forEach(function(el){
     var tag = el.tagName;
     if (tag === 'H4' || tag === 'H5') {
       hCount++;
-      el.classList.add('sr-rr-section');
+      var h2 = document.createElement('h2');
+      h2.innerHTML = el.innerHTML;
       var id = 'rr-h-' + hCount;
-      el.id = id;
-      headings.push({ id: id, level: (tag === 'H4' ? 4 : 5), text: el.textContent });
+      h2.id = id;
+      bodyEl.replaceChild(h2, el);
+      headings.push({ id: id, level: 2, text: h2.textContent });
     } else if (tag === 'BLOCKQUOTE') {
-      el.classList.add('sr-rr-script');
+      el.classList.add('sr-pull');
     } else if (tag === 'UL') {
       el.classList.add('sr-rr-signs');
-    } else if (tag === 'P' && el.classList.contains('sr-lede')) {
-      if (el === ledes[0]) el.classList.add('sr-rr-opening');
-      else if (ledes.length > 1 && el === ledes[ledes.length - 1]) el.classList.add('sr-rr-close');
-      else el.classList.add('sr-rr-prose');
-    } else if (el.classList.contains('sr-lead')) {
-      /* real match is a <div class="sr-lead">, this page's own boxed callout
-         (styled elsewhere already) -- left unclassified, same reasoning as
-         index.html's port: adding an indented-hairline look on top would
-         double up two treatments on already-correct content. */
     } else if (tag === 'P') {
-      el.classList.add('sr-rr-prose');
+      var cite = parseCitation(el);
+      if (cite) {
+        bodyEl.replaceChild(buildCitation(cite), el);
+        return;
+      }
+      if (el.classList.contains('sr-lede')) el.classList.add('is-lede');
+      if (el === firstP) el.classList.add('is-first');
     }
+    /* the old div.sr-lead branch is gone -- grepped all three content
+       stores before removing it, zero occurrences of that class anywhere
+       in real resource body content (it's used elsewhere on the site, not
+       here), so there was nothing this function was ever actually
+       matching. */
   });
   var rail = document.getElementById('rrRail');
   if (rail) rail.remove();
-  var h4Count = headings.filter(function(h){ return h.level === 4; }).length;
-  if (h4Count >= 3) {
+  if (headings.length >= 3) {
     var nav = document.createElement('nav');
     nav.className = 'sr-rr-rail';
     nav.id = 'rrRail';
     nav.setAttribute('aria-label', 'Sections in this resource');
     nav.innerHTML = headings.map(function(h){
-      return '<button type="button" class="sr-rr-railitem' + (h.level === 5 ? ' sr-rr-railitem--h5' : '') +
-        '" data-rr-target="' + h.id + '" aria-label="' + h.text.replace(/"/g, '&quot;') + '"></button>';
+      return '<button type="button" class="sr-rr-railitem" data-rr-target="' + h.id +
+        '" aria-label="' + h.text.replace(/"/g, '&quot;') + '"></button>';
     }).join('');
     bodyEl.parentNode.insertBefore(nav, bodyEl);
     var items = Array.prototype.slice.call(nav.querySelectorAll('.sr-rr-railitem'));
@@ -1258,6 +1384,14 @@ function renderMain(){
        target, per SR-381's own §0 finding. Same technique: classes only,
        no change to r.body's own markup. */
     enhanceResourceBody(document.getElementById('rbody'));
+    /* SR-394 · shape mounts only exist on the three resources this pass
+       targets (their body arrays carry a [data-sr-shape] div directly --
+       see content/t3-resources.js). SRResourceShapes auto-inits on
+       DOMContentLoaded, long before this innerHTML write ever happens, so
+       every other resource's mount (there are none yet) would be missed
+       without calling it again, scoped to just this render. querySelector
+       inside init() no-ops instantly when there's nothing to find. */
+    if (window.SRResourceShapes) window.SRResourceShapes.init(document.getElementById('rbody'));
   }
   /* SR-191 · the rail names the resource, it no longer counts it. The test is
      what the string counts: a count of the member's position or progress is
