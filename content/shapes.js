@@ -372,6 +372,276 @@ var SR_SHAPE_DATA = {
     accent: 'rgb(var(--slate))',
     rows: ['Stop if this repeats the attempt', 'Stop if Release opens a bigger question', "This may be depletion, not a block, if exhausted", 'Contact someone if this has spread to everything'],
     caption: 'Remove the last row and the other three stop holding.'
+  },
+
+  /* SR-397 (PASS-CLAUDE-CODE-shapes-all-types.md) · overlap, rolled out
+     across every Accountability & Empathy resource. All 30 real ids follow
+     t{track}p{protocol}-accountability. t2p9-accountability is SR-395's,
+     not redone (see its own comment above — its middle carries a sub,
+     "about their motives," that these 29 deliberately don't; see why below).
+
+     STRUCTURAL FINDING: every one of the other 29 opens its own blind-spot
+     content with the exact same real shape — "[named behaviour] — From
+     inside, [reading A]. From outside, [reading B]." — one behaviour, two
+     simultaneous readings, not sequential steps. (The sequential part of
+     each record — naming the act, no because, no self-attack, the
+     checkable change — is a different section entirely and was not used
+     for any of these.) A first pass at this search looked specifically for
+     a second paragraph explicitly announcing "the one that belongs to
+     both," the way t2p9's own text does — found that construction in
+     exactly one other record (t2p2-accountability's "the wait... both of
+     you are in it for the same reason") and nearly concluded the other 28
+     should skip. That was checking for the wrong signal: t2p9's explicit
+     call-out exists because ITS blind-spot content comes in two named
+     variants (pursue, withdraw) that needed a third paragraph to name what
+     they share. Records with only one blind-spot paragraph don't need a
+     third paragraph to do that — the paragraph itself already names one
+     behaviour and gives its two readings directly. Re-read on that basis:
+     every one of the 29 has it. Zero skips this type, same finding as
+     SR-396's, stated the same way: the type genuinely has the shape.
+
+     LABEL BUDGET, measured, not carried forward from SR-395's estimate —
+     per the redirect asking for exactly that. The first attempt re-used
+     SR-395's own already-shipped t2p9 values as a sanity check and found
+     they don't clear a rendered-in-context getBBox() check either (a real
+     ~8-23 unit overlap between the side subs and t2p9's own middle.sub,
+     "about their motives" — small, screenshotted as legible at the time,
+     but a real number, not the near-zero this comment originally reported
+     in the SR-395 entry). Root cause, found before drawing any conclusion
+     from it: text measured on a bare SVG appended straight to
+     document.body picks up neither --font-sans/--font-serif (defined on
+     .sr-read, not global) nor the .sr-shape .sr-lb/.sr-sm size rules —
+     browser default (16px, wrong font) rather than the real 12.5-19px set.
+     Every measurement below was taken with the test shape mounted inside
+     the page's live .sr-read, matching real conditions exactly.
+
+     Real per-row-index budget, empirically: side labels ("From inside" /
+     "From outside", fixed, reused everywhere) have room to spare. Side
+     subs (12.5px) tolerate real, mostly-verbatim phrases up to
+     t2p9's own 32 characters with no change needed. middle.label (19px,
+     serif, centre-anchored, sitting on the SAME row as both side labels)
+     is the tight one — safe only up to roughly 20 characters, well under
+     the floor's per-row budgets and under what a flat "~40 character"
+     estimate would suggest. middle.sub, stacked on the same row as both
+     side subs, is tighter still — t2p9's own 20-character sub only just
+     clears its neighbours, and repeating that pattern 29 more times against
+     real (often longer) side subs did not clear safely. Dropped middle.sub
+     for this batch rather than fight that margin on every one of 29 —
+     .sr-tx's own serif label, larger and alone on its row, carries the
+     naming without it. A real difference from t2p9, reported rather than
+     silently matched or silently changed to fit.
+
+     middle.label is verbatim or a minimal trim of the resource's own name
+     for the behaviour in every case (confirmed against source: "Cancelling"
+     / "Not-doing" / "Braced" / "Correctness" / "The certainty" etc. are the
+     resource's own words). left.sub/right.sub are the same paragraph's own
+     "from inside" / "from outside" clauses, compressed for length, not
+     reworded in substance. Accent, caption and position (mounted directly
+     after the blind-spot paragraph the labels are drawn from) held
+     identical across all 29, and identical to t2p9 bar the middle.sub
+     difference above. */
+  't1p1-accountability': {
+    alt: 'Two readings of cancelling on plans: from inside a small private decision, from outside disinterest that accumulates',
+    left: { label: 'From inside', sub: 'a small private decision', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'disinterest, and it accumulates', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Cancelling', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't1p2-accountability': {
+    alt: 'Two readings of the volume: from inside the sixth round and normal, from outside the first round and sudden',
+    left: { label: 'From inside', sub: 'normal — the sixth round', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'sudden — the first round', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The volume', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't1p3-accountability': {
+    alt: 'Two readings of short replies: from inside efficiency, from outside being deprioritised',
+    left: { label: 'From inside', sub: 'efficiency, and necessary', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'being deprioritised', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Short replies', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't1p4-accountability': {
+    alt: 'Two readings of the checking: from inside clarifying, from outside requests to be reassured',
+    left: { label: 'From inside', sub: 'clarifying, staying close', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'requests to be reassured', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The checking', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't1p5-accountability': {
+    alt: 'Two readings of declining: from inside protecting other people, from outside being shut out repeatedly',
+    left: { label: 'From inside', sub: 'protecting other people', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'being shut out, repeatedly', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Declining', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't1p6-accountability': {
+    alt: 'Two readings of unpredictability: from inside just what the day was, from outside ground that keeps moving',
+    left: { label: 'From inside', sub: 'just what the day was', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'ground that keeps moving', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Unpredictability', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't1p7-accountability': {
+    alt: 'Two readings of not-doing: from inside the absence of capacity, from outside an invisible difference',
+    left: { label: 'From inside', sub: 'not a decision — an absence', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'the difference is invisible', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Not-doing', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't1p8-accountability': {
+    alt: 'Two readings of being less generous: from inside managing yourself silently, from outside seeming least pleased',
+    left: { label: 'From inside', sub: 'managing yourself, silently', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'seeming least pleased', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Less generous', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't1p9-accountability': {
+    alt: 'Two readings of staying out of the way: from inside the same, from outside capable and absent',
+    left: { label: 'From inside', sub: 'staying out of the way', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'capable, and didn’t show up', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Staying out of the way', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't1p10-accountability': {
+    alt: 'Two readings of not-doing: from inside the absence of capacity, from outside a series of small closures',
+    left: { label: 'From inside', sub: 'not a decision — an absence', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'a series of small closures', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Not-doing', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't2p1-accountability': {
+    alt: 'Two readings of being braced: from inside being careful, from outside someone braced who braces back',
+    left: { label: 'From inside', sub: 'being careful', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'someone braced, who braces back', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Braced', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't2p2-accountability': {
+    alt: 'Two readings of the coldness: from inside holding a boundary, from outside punishment, said or not',
+    left: { label: 'From inside', sub: 'holding a boundary', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'punishment, said or not', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The coldness', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't2p3-accountability': {
+    alt: 'Two readings of the checking: from inside caution you’ve earned, from outside being treated as though they might',
+    left: { label: 'From inside', sub: 'caution you’ve earned', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'treated as though they might', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The checking', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't2p4-accountability': {
+    alt: 'Two readings of correctness: from inside restraint, from outside being frozen out with nothing to answer',
+    left: { label: 'From inside', sub: 'restraint', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'frozen out, nothing to answer', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Correctness', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't2p5-accountability': {
+    alt: 'Two readings of the redirect: from inside a single small movement, from outside a pattern they can predict',
+    left: { label: 'From inside', sub: 'a single small movement', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'a pattern they can predict', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The redirect', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't2p6-accountability': {
+    alt: 'Two readings of being correct, and cold: from inside restraint and pride, from outside held at a distance',
+    left: { label: 'From inside', sub: 'restraint, and pride', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'held at a distance', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Correct, and cold', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't2p7-accountability': {
+    alt: 'Two readings of the certainty: from inside accurate perception, from outside a conclusion, not a question',
+    left: { label: 'From inside', sub: 'accurate perception', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'a conclusion, not a question', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The certainty', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't2p8-accountability': {
+    alt: 'Two readings of the flatness: from inside knowing it isn’t true, from outside no evidence for anything else',
+    left: { label: 'From inside', sub: 'you know that isn’t true', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'no evidence for anything else', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The flatness', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't2p10-accountability': {
+    alt: 'Two readings of absence: from inside no decision at any point, from outside a series of small closures',
+    left: { label: 'From inside', sub: 'no decision, at any point', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'a series of small closures', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Absence', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't3p1-accountability': {
+    alt: 'Two readings of a clipped tone: from inside conserving yourself, from outside coldness to those nearest',
+    left: { label: 'From inside', sub: 'conserving yourself', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'coldness, to those nearest', accent: 'rgb(var(--sage))' },
+    middle: { label: 'A clipped tone', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't3p2-accountability': {
+    alt: 'Two readings of the correctness: from inside professionalism under pressure, from outside someone who’s decided about you',
+    left: { label: 'From inside', sub: 'professionalism, under pressure', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'someone who’s decided about you', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The correctness', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't3p3-accountability': {
+    alt: 'Two readings of staying out of the way: from inside the same, from outside capable and absent',
+    left: { label: 'From inside', sub: 'staying out of the way', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'capable, and didn’t show up', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Staying out of the way', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't3p4-accountability': {
+    alt: 'Two readings of holding back: from inside care, from outside a thing that hasn’t arrived',
+    left: { label: 'From inside', sub: 'care', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'a thing that hasn’t arrived', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Holding back', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't3p5-accountability': {
+    alt: 'Two readings of the withdrawal: from inside not wanting to discuss it, from outside someone who won’t be thanked',
+    left: { label: 'From inside', sub: 'not wanting to discuss it', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'someone who won’t be thanked', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The withdrawal', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't3p6-accountability': {
+    alt: 'Two readings of the edited version: from inside careful and appropriate, from outside less interesting than you are',
+    left: { label: 'From inside', sub: 'careful, appropriate', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'less interesting than you are', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The edited version', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't3p7-accountability': {
+    alt: 'Two readings of being half-present: from inside weighing something enormous, from outside visibly on the way out',
+    left: { label: 'From inside', sub: 'weighing something enormous', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'visibly on the way out', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Half-present', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't3p8-accountability': {
+    alt: 'Two readings of the default: from inside being careful, from outside made by default by someone else',
+    left: { label: 'From inside', sub: 'being careful', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'made by default, by someone else', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The default', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't3p9-accountability': {
+    alt: 'Two readings of coping: from inside coping, from outside evidence the volume is fine',
+    left: { label: 'From inside', sub: 'coping', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'evidence the volume is fine', accent: 'rgb(var(--sage))' },
+    middle: { label: 'Coping', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
+  },
+  't3p10-accountability': {
+    alt: 'Two readings of the struggle: from inside three weeks of it, from outside indistinguishable from undone',
+    left: { label: 'From inside', sub: 'three weeks of struggle', accent: 'rgb(var(--slate))' },
+    right: { label: 'From outside', sub: 'indistinguishable from undone', accent: 'rgb(var(--sage))' },
+    middle: { label: 'The struggle', sub: '' },
+    caption: 'A reaction is information about the exterior of your state, not a verdict on you.'
   }
 };
 

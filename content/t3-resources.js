@@ -284,6 +284,7 @@ var T3_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and before something high-stakes, most of it lands on people who have nothing to do with the event.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 the state arrives before you do. A tight throat, a clipped tone, an economy of words. From inside you're conserving yourself for the thing that matters. From outside it's coldness, and the people nearest you get most of it because they're the ones in the room the night before.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t3p1-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the day-before shortness. Snapping about something small that isn't the thing. From inside it's an unrelated irritation. From outside it's being made to carry your nerves without being told they're nerves.</p>",
       "<p><strong>The third one, at work</strong> \u2014 going into the room braced. Braced reads as adversarial, and people brace back. The exchange you were preparing for becomes harder because of how you walked in.</p>",
       "<p><strong>Their earlier information</strong> \u2014 the people who live with you can usually tell days out. Worth asking: <em>when do you notice it starting?</em> The answer is usually earlier than you'd guess.</p>",
@@ -564,6 +565,7 @@ var T3_RESOURCES = {
       "<p>Assuming that isn't where you are:</p>",
       "<p>The protocol trains the interior half of the state. The other half exits into a workplace, where more people are watching than in any other setting on this platform.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 braced reads as hostile. The clipped reply, the correctness, the absence of the ordinary small exchange. From inside it's professionalism under difficult conditions. From outside it's someone who has decided about you, and they brace back \u2014 which produces the conflict you were managing.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t3p2-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the audience. Workplace conflict has witnesses, and both of you are being watched by people forming views. From inside you're handling it. From outside, a team is quietly deciding that working with either of you costs something.</p>",
       "<p><strong>The third one</strong> \u2014 the exchanges that get read as evidence. Once your case is complete, a short reply from them is curt, a decision is a manoeuvre, a silence is a position. Some of those readings are correct. Not all of them are, and you've lost the ability to tell which.</p>",
       "<p><strong>Their earlier information</strong> \u2014 a colleague who isn't in it can usually see both of you clearly. Worth asking one you trust: <em>how does this look from outside?</em> And then not defending the answer.</p>",
@@ -813,6 +815,7 @@ var T3_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits in ways that look like modesty from inside and like something else from outside.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 it exits as absence. Not putting yourself forward, not saying the thing, not taking the place. From inside that's staying out of the way. From outside it's someone capable who didn't show up, and colleagues had to cover it. They rarely say so, because complaining about someone's self-doubt feels unkind.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t3p3-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the pre-emptive undercut. <em>This is probably rubbish, don't expect much, I'm not really the right person.</em> From inside it's managing expectations. From outside it hands them the job of talking you up before they can respond to the actual work, every time. It's the version people tire of quietly.</p>",
       "<p><strong>The third one</strong> \u2014 deferring. Agreeing with the room, not raising the objection, going along. From inside it's not being difficult. From outside it's the loss of your actual view, and the people who wanted it are the ones who notice.</p>",
       "<p><strong>Their earlier information</strong> \u2014 people who work with you often see it before you feel it. Worth asking one you trust: <em>what do you see me do?</em></p>",
@@ -1062,6 +1065,7 @@ var T3_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half lands on people waiting for something.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 from inside, holding work back is care. From outside it's a thing that hasn't arrived, and nobody can tell the difference between work being polished and work not being done. The care is invisible; the absence isn't.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t3p4-accountability\"></div>",
       "<p><strong>The second one, and it's the consequential one</strong> \u2014 <strong>re-checking finished work is usually what stops you delegating, and not delegating is what keeps the work at your level.</strong> From inside, doing it yourself is faster and safer. From outside, it's a bottleneck with a person in it, and the people who might have done it are doing something less.</p>",
       "<p><strong>The third one</strong> \u2014 the received standard. Applied to your own work it's private. Applied to other people's, silently, it produces a colleague who never quite passes and can't work out why, because the criteria have never been stated.</p>",
       "<p><strong>Their earlier information</strong> \u2014 worth asking whoever waits on your work: <em>how late does it usually feel to you?</em> Expect a different number from yours.</p>",
@@ -1296,6 +1300,7 @@ var T3_RESOURCES = {
       "<p>The protocol trains the interior half of the state. The other half exits into a room full of people, and this is one of the few protocols where the exterior is mostly <em>not</em> what the member fears.</p>",
       "<p><strong>The specific blind spot here, and it runs the other way</strong> \u2014 most people watching notice far less than the monitoring reports. A tremor that feels enormous from inside is frequently invisible from six feet away. A pause that felt like a collapse read as a pause. This is the one place on the platform where the blind spot works in your favour, and it's worth checking rather than assuming.</p>",
       "<p><strong>What does land</strong> \u2014 the withdrawal afterwards. Leaving quickly, not staying for the conversation, deflecting when someone says something. From inside that's not wanting to discuss it. From outside it's someone who won't be thanked, and people stop offering.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t3p5-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the deflection itself. <em>\"It was a disaster, sorry about the middle bit.\"</em> From inside it's honesty. From outside it asks them to talk you out of your own account before they can say what they thought, which means you never find out what they thought.</p>",
       "<p><strong>Their earlier information</strong> \u2014 the people who've watched you do this more than once have a record you don't. Worth asking directly: <em>what did you actually see?</em> And then not arguing with the answer.</p>",
       "<p><strong>Naming the act, not the character</strong> \u2014 <em>\"I left straight after and didn't speak to anyone who came\"</em> is ownership. <em>\"I'm hopeless at this\"</em> is not; it names nothing, it's the monitoring again, and it asks them to argue with it.</p>",
@@ -1572,6 +1577,7 @@ var T3_RESOURCES = {
       "<p>Assuming that isn't where you are:</p>",
       "<p>The protocol trains the interior half of the state. The other half is happening in a room full of people, all day.</p>",
       "<p><strong>The specific blind spot here, and it's the consequential one</strong> \u2014 <strong>the edited version is the one being assessed.</strong> Careful, appropriate, and consistently less interesting than you are. Views are being formed of it in a setting where being memorable is most of what gets you offered things.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t3p6-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 withdrawal reads as disinterest. Not going to the thing, leaving early, not asking about anyone's weekend. From inside it's conserving yourself. From outside it's someone who doesn't want to be there, and people stop including those they've concluded don't want including.</p>",
       "<p><strong>The third one</strong> \u2014 the watchfulness is visible. Scanning a room registers as reserve, and reserve in a group registers as judgement. People frequently conclude that the person who feels excluded is the one holding themselves apart, and from where they stand there's no evidence against it.</p>",
       "<p><strong>Their earlier information</strong> \u2014 worth asking someone in the room you half-trust: <em>what was I like when I started?</em> The answer is often <em>hard to read</em>, which is not what the state predicts.</p>",
@@ -1846,6 +1852,7 @@ var T3_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half lands on colleagues who don't know, and on people at home who do.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 half-present reads as disengaged. From inside you're weighing something enormous. From outside, someone has stopped putting themselves forward, stopped taking on anything long-term, and stopped saying much in meetings. <strong>Being visibly on the way out is often what makes the leaving decision for you</strong>, and it happens months before anyone says anything.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t3p7-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the people at home. From inside, working it out alone is protecting them from an unresolved thing. From outside it's a decision that affects them being made without them, and then presented. Most people would rather have the uncertainty than the conclusion.</p>",
       "<p><strong>The third one</strong> \u2014 the Sunday. It arrives in the house every week, and the people in it have learned to work around it without ever having been told what it is.</p>",
       "<p><strong>Their earlier information</strong> \u2014 worth asking someone at home: <em>how long has it been like this?</em> Expect longer than you'd say.</p>",
@@ -2108,6 +2115,7 @@ var T3_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half lands on people waiting for an answer.</p>",
       "<p><strong>The specific blind spot here, and it's the consequential one</strong> \u2014 <strong>decisions that don't get made get made by default, by someone else, or by the deadline.</strong> From inside, holding one open is being careful. From outside, nothing arrived, and the situation resolved itself in whatever direction it was already going.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t3p8-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the people waiting. A small decision held for three days blocks somebody's work for three days, and they usually can't say so because it's too small to chase.</p>",
       "<p><strong>The third one</strong> \u2014 at home, it reads as indifference. <em>Whatever you like</em> said forty times is heard as not minding, and after a while people stop offering. From inside it's the only available answer.</p>",
       "<p><strong>Their earlier information</strong> \u2014 worth asking whoever brings you decisions: <em>how long do these usually sit with me?</em> Expect longer than you'd say.</p>",
@@ -2381,6 +2389,7 @@ var T3_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half lands on colleagues and on people at home, and most of them have concluded something about it already.</p>",
       "<p><strong>The specific blind spot here, and it's the consequential one</strong> \u2014 <strong>the reliable person gets given more, and absorbing it silently is what confirms the arrangement.</strong> From inside, taking it on is coping. From outside it's evidence that the volume is fine, and next quarter's is set accordingly.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t3p9-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the appearing fine. It works, which is the problem. Nobody adjusts anything for a load they can't see, and the effort of concealing it is the part that isn't visible on anyone's list.</p>",
       "<p><strong>The third one</strong> \u2014 at home, being present and absent at once. From inside it's having nothing left. From outside it's someone who is there and unreachable, week after week, and the people in the house have quietly stopped expecting anything.</p>",
       "<p><strong>The fourth one</strong> \u2014 the errors. Depleted people make more of them, and colleagues who don't know experience that as carelessness about them specifically.</p>",
@@ -2626,6 +2635,7 @@ var T3_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half lands on people waiting for something, and on people at home.</p>",
       "<p><strong>The specific blind spot here, and it's the consequential one</strong> \u2014 <strong>work that never leaves your hands is indistinguishable, from outside, from work that was never done.</strong> The struggle is invisible. The absence isn't. From inside you've been at it for three weeks; from outside nothing has arrived.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t3p10-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the silence about it. Not saying a deadline will slip until the deadline slips. From inside, holding on is hope that it'll come good. From outside it's a late notification of a thing that was known about for a fortnight, and it removes everyone else's options along with yours.</p>",
       "<p><strong>The third one</strong> \u2014 the evenings. This state colonises time that was somebody else's, and it does it without producing anything. From inside you're working. From outside you're absent and irritable, and there's nothing to show for it that would make sense of either.</p>",
       "<p><strong>Their earlier information</strong> \u2014 worth asking whoever waits on your work: <em>when did you first think this was going to be late?</em> Usually well before you told them.</p>",

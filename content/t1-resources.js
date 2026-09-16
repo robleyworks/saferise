@@ -222,6 +222,7 @@ var T1_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 into a room, a tone, a silence, something you did or didn't do \u2014 and lands somewhere you can't see from where you're standing.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 anxiety mostly exits as absence. Cancelling. Not replying. Being physically present and clearly elsewhere. Leaving early. From inside, each of those is a small private management decision. From outside, they read as disinterest, and they accumulate. Nobody tells you, because the polite reading of a cancelled plan is to say it's fine.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t1p1-accountability\"></div>",
       "<p><strong>Their earlier information</strong> \u2014 people close to you often see the onset before you feel it. That makes them a genuine instrument, and worth asking directly: <em>what do you see, before I know?</em></p>",
       "<p><strong>Naming the act, not the character</strong> \u2014 <em>\"I cancelled on you three times and didn't explain why\"</em> is ownership. <em>\"I'm a terrible friend\"</em> is not; it names nothing and asks them to disagree with it.</p>",
       "<p><strong>No because.</strong> The state is a real reason and it still doesn't belong in the sentence. It can be said afterwards, if they ask.</p>",
@@ -520,6 +521,7 @@ var T1_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 into a room, a tone, a silence, something you did or didn't do \u2014 and lands somewhere you can't see from where you're standing.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 anger's exterior is the one people misjudge by the widest margin. Volume feels normal from inside. Your face feels neutral. And the rerun you've been running is silent, so what arrives on the other side has no build-up attached to it. From where you stand it was the sixth round of an argument. From where they stand it was the first, and it was sudden.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t1p2-accountability\"></div>",
       "<p><strong>Their earlier information</strong> \u2014 people close to you can usually see it coming before you feel it. That makes them a real early-warning instrument, and it's worth asking directly: <em>what do you see, before I know?</em></p>",
       "<p><strong>Naming the act, not the character</strong> \u2014 <em>\"I raised my voice at you on Sunday, in front of the kids\"</em> is ownership. <em>\"I've been a nightmare lately\"</em> is not; it names nothing and quietly asks them to disagree with it. Pick the act they'd name if someone asked them.</p>",
       "<blockquote>\"I said the thing about your job. I knew where it would land and I said it anyway.\" \"I walked out mid-conversation and didn't come back.\"</blockquote>",
@@ -769,6 +771,7 @@ var T1_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 into a room, a tone, a silence \u2014 and lands somewhere you can't see from where you're standing.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 overwhelm exits as shortness and unavailability. Replies that answer the question and nothing else. Not asking how anyone is. Being in the room and clearly not in the room. From inside, each of those is efficiency, and it feels necessary. From outside it reads as being deprioritised, and the people closest to you absorb the most of it because they're the ones who complain least.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t1p3-accountability\"></div>",
       "<p><strong>The one nobody sees coming</strong> \u2014 under load you get worse at things, not just slower. Working memory narrows and you drop details you'd normally hold. Other people experience that as carelessness about them specifically, because they don't have the state in view.</p>",
       "<p><strong>Their earlier information</strong> \u2014 people around you usually see the onset before you feel it. Worth asking directly: <em>what do you see, before I know?</em></p>",
       "<p><strong>Naming the act, not the character</strong> \u2014 <em>\"I've been giving you two-word answers for a fortnight\"</em> is ownership. <em>\"I've been useless lately\"</em> is not; it names nothing and asks them to disagree with it.</p>",
@@ -1009,6 +1012,7 @@ var T1_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 into messages, into a tone, into what you did while you were certain \u2014 and lands on someone who has no view of what produced it.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 this state exits as pressure, and it doesn't feel like pressure from inside. From inside it's checking, or clarifying, or one more message. From outside it's a series of requests to be reassured, arriving faster than they can be answered, each one raising the cost of a slow reply. The other person often can't name it either. They just start feeling watched.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t1p4-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the pre-emptive withdrawal. Going cold first, to be the one who did it. From inside that's protection. From outside it's the thing you were afraid of, arriving from your side.</p>",
       "<p><strong>Their earlier information</strong> \u2014 the people closest to you can usually see it before you feel it. Worth asking directly: <em>what do you see, before I know?</em></p>",
       "<p><strong>Naming the act, not the character</strong> \u2014 <em>\"I sent you nine messages on Tuesday and then went silent for two days\"</em> is ownership. <em>\"I'm too much\"</em> is not. It names nothing, it's a verdict on you rather than an account of anything, and it asks them to talk you out of it \u2014 which is another request for reassurance.</p>",
@@ -1246,6 +1250,7 @@ var T1_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and this one exits in a way almost nobody recognises as exiting at all.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 this state exits as withdrawal, and withdrawal is invisible to the person doing it. Declining the invitation. Not replying. Being present and unreachable. Leaving early. From inside, each of those is protecting other people from you. From outside, it's being shut out, repeatedly, by someone who then seems fine with everyone else.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t1p5-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the pre-emptive apology. Apologising for existing in the room, for taking time, for having asked. From inside it's manners. From outside it asks the other person to keep reassuring you that you're welcome, which is a small ongoing tax they didn't agree to and usually can't name.</p>",
       "<p><strong>Their earlier information</strong> \u2014 people close to you often see the onset before you feel it. Worth asking directly: <em>what do you see, before I know?</em></p>",
       "<p><strong>Naming the act, not the character</strong> \u2014 this is the protocol where that distinction matters most, and where it's hardest. <em>\"I cancelled on you three times and didn't say why\"</em> is ownership. <em>\"I'm a burden\"</em> is not \u2014 it's the verdict again, wearing accountability's clothes, and it asks the other person to argue with it.</p>",
@@ -1451,6 +1456,7 @@ var T1_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and grief's exterior is one of the least discussed, because nobody wants to be the person raising it with someone bereaved.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 grief exits as unpredictability. Fine on Tuesday, unreachable on Wednesday, sharp with someone on Thursday over nothing. From inside, each of those is just what the day was. From outside, the people around you are walking on ground that moves, and they've stopped knowing which version of you they're going to get.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t1p6-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the disappearing. Not returning calls, letting things lapse, being unavailable for months. From inside it's having nothing to give. From outside it's being dropped, and the people who care most usually say nothing about it because raising it feels like an accusation against someone who's grieving.</p>",
       "<p><strong>Their earlier information</strong> \u2014 people close to you often see the day going before you feel it. Worth asking: <em>what do you see, before I know?</em></p>",
       "<p><strong>Naming the act, not the character</strong> \u2014 <em>\"I snapped at you on Thursday over the thing with the car\"</em> is ownership. <em>\"I've been impossible\"</em> is not; it names nothing and it invites them to say it's understandable, which lets both of you skip it.</p>",
@@ -1661,6 +1667,7 @@ var T1_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and this one exits as absence, which is the hardest kind to see from inside because from inside it feels like nothing happening at all.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 shutdown exits as not-doing. Unanswered messages. Plans that quietly lapse. Being in the room and not in it. From inside, each is not a decision \u2014 it's the absence of the capacity to make one. From outside, the difference between <em>couldn't</em> and <em>didn't</em> is invisible, and what lands is being dropped.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t1p7-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the flat <em>I'm fine</em>. From inside it's the only available answer. From outside it's a door closing, repeatedly, on someone who keeps trying it.</p>",
       "<p><strong>Their earlier information</strong> \u2014 people close to you usually see it before you do, because the first signs are things you stop doing rather than things you start.</p>",
       "<p><strong>Naming the act, not the character</strong> \u2014 <em>\"I didn't reply to you for three weeks and I didn't say why\"</em> is ownership. <em>\"I'm a waste of space\"</em> is not; it names nothing, it's the commentary again, and it asks them to argue with it.</p>",
@@ -1901,6 +1908,7 @@ var T1_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and this one exits in ways that are unusually hard to see, because most of it is done privately.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 this state exits as withdrawal of warmth. Slightly less generous. Slightly slower to congratulate. A flatness when their good news comes up. From inside, each of those is you managing yourself and saying nothing. From outside, it's the person closest to your success being the one who seems least pleased about it, and they usually notice long before you do.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t1p8-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the small diminishing. The qualifying remark, the joke with an edge, the <em>well, they had help.</em> From inside it's a passing thought said out loud. From outside it's a pattern, and it's the one that damages friendships quietly over years.</p>",
       "<p><strong>The third one, where it applies</strong> \u2014 checking. Looking at what you weren't invited to look at. From inside it's needing to know. From outside it's a breach, and it stays a breach regardless of what you found.</p>",
       "<p><strong>Their earlier information</strong> \u2014 people close to you often see it before you feel it. Worth asking directly: <em>what do you see, before I know?</em></p>",
@@ -2147,6 +2155,7 @@ var T1_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and this one exits in ways that look like modesty from inside and like something else entirely from outside.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 this state exits as absence. Not putting yourself forward, not saying the thing, not taking the place. From inside that's staying out of the way. From outside it's a person who was capable and didn't show up, and other people had to cover it. They rarely say so, because complaining about someone's self-doubt feels unkind.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t1p9-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the pre-emptive undercut. Getting there first: <em>this is probably rubbish, don't expect much, I'm not the right person for this.</em> From inside it's honesty, or managing expectations. From outside it hands them the job of talking you up before they can respond to the actual thing, every time, and it's the version people tire of quietly.</p>",
       "<p><strong>The third one</strong> \u2014 deferring. Agreeing with the room, not saying the objection, going along. From inside it's not being difficult. From outside it's the loss of your actual view, and the people who wanted it are the ones who notice.</p>",
       "<p><strong>Their earlier information</strong> \u2014 people close to you often see it before you feel it. Worth asking directly: <em>what do you see, before I know?</em></p>",
@@ -2386,6 +2395,7 @@ var T1_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits as absence, which is the hardest kind to see from inside because from inside it feels like nothing happening at all.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 this exits as not-doing. Messages unanswered, plans lapsed, things left. From inside each is not a decision but the absence of the capacity to make one. From outside, the difference between <em>couldn't</em> and <em>didn't</em> is invisible, and what lands is being dropped.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t1p10-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the flatness in the face of other people's news, good or bad. From inside there's nothing available to respond with. From outside it reads as not caring, particularly to the people who've been carrying you.</p>",
       "<p><strong>The third one</strong> \u2014 the people around you are often carrying the situation too, and doing so in a state you can't currently see. Not being able to ask how they are is characteristic. Not knowing that it lands is the blind spot.</p>",
       "<p><strong>Their earlier information</strong> \u2014 people close to you usually see it before you do, because the first signs are things you stop doing.</p>",

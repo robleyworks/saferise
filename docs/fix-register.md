@@ -17,7 +17,13 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-396** (the floor shape rolled out across all 30 Safe Practice
+- **Highest ID issued: SR-397** (the overlap shape rolled out across 29 of 30 Accountability
+  & Empathy resources — a font-scope measurement bug found and fixed before any label was
+  committed, zero genuine skips once the right structural unit was identified, one real defect
+  found in SR-395's own already-shipped `t2p9-accountability` mount and reported, not fixed
+  (out of this pass's scope) — allocated per this pass's own instruction. Verify against
+  `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-396** (the floor shape rolled out across all 30 Safe Practice
   resources — every row measured with `getBBox()` against the renderer's own fixed per-row
   widths before being committed, zero skips, the type genuinely has the shape everywhere —
   allocated per this pass's own instruction. Verify against `git log -1` once it lands.)
@@ -16664,3 +16670,107 @@ committed rather than trusted to an estimated character ceiling; SR-395's own ce
 once the real, index-aware budget was established empirically. Stopping here, as instructed, to
 report before starting `accountability` → `overlap`. **Not pushed.** *Raised and fixed:* 16 Sep
 2026
+
+---
+
+## SR-397 · overlap across Accountability & Empathy — 29 of 30
+
+Runs `pass/CLAUDE-CODE-shapes-all-types.md`, second type (`accountability` → `overlap`), per
+Andre's own instruction to stop and report before starting `guide` → `chain`. Depends on
+SR-394/395/396. `js/sr-resource-shapes.js` confirmed untouched throughout.
+
+### A measurement bug found and fixed before any label was committed
+
+Redirect §1 asked for the real per-element budget, measured the same way as SR-396's floor
+budget, rather than carrying SR-395's estimate forward. First step: re-measured SR-395's own
+already-shipped `t2p9-accountability` values as a sanity check, using `getBBox()` on a bare SVG
+appended straight to `document.body` — and found a real overlap (`"a conclusion drawn from
+evidence"` against `"about their motives"`, 51.7 of ~200 units) where SR-395's own report had
+recorded "one residual near-touch of ~8 units." That gap was the finding, not the input: the bare
+SVG had neither `--font-sans`/`--font-serif` (both defined on `.sr-read`, not globally) nor the
+`.sr-shape .sr-lb`/`.sr-sm` size rules in scope, so the browser fell back to its own default
+(16px, wrong font-family resolution) rather than the real 12.5–19px the design specifies.
+Re-measured with the test shape mounted inside the page's live `.sr-read` and got **8.0 units** —
+matching SR-395's original number exactly. Every measurement below, and every one used to build
+practice → floor, is taken this way from this point on.
+
+**A real defect this correction surfaces in SR-395's own shipped work, reported rather than
+quietly fixed here:** `t2p9-accountability`'s already-approved middle sub does overlap its
+neighbours by a real, measurable 8–23 units — small, and it read as legible in SR-395's own
+screenshots, but it is a real number, not the near-zero originally reported. `t2p9` is explicitly
+out of this pass's scope ("not redone"); flagging it for a decision rather than touching it
+unilaterally.
+
+**Real per-row budget, empirically, inside `.sr-read`:** side labels ("From inside"/"From
+outside", reused verbatim everywhere) have slack to spare. Side subs (12.5px) tolerate real,
+mostly-verbatim phrases up to at least t2p9's own 32 characters, unchanged. `middle.label` (19px,
+serif, centred, sharing its row with both side labels) is the tight one — safe up to roughly
+20–23 characters, well under a flat "~40 character" estimate and tighter than any of the floor's
+own row budgets. `middle.sub`, stacked with both side subs on one row, is tighter again — t2p9's
+own 20-character sub only barely clears its neighbours, and that margin does not survive being
+repeated against 29 more (often longer) sets of side subs. Dropped `middle.sub` for all 29 rather
+than fight that margin case by case — the serif `middle.label`, alone and larger on its own row,
+carries the naming without it. A real, reported difference from `t2p9`, not silently matched or
+silently changed to fit.
+
+### §1 (redirect) — the skip count, and where the first attempt went wrong
+
+**Genuine skips: 0 of 29. Mounted: 29 of 29.**
+
+The first pass at this search looked for the wrong signal — a second paragraph explicitly
+announcing "the one that belongs to both," the way `t2p9`'s own text does. That construction
+turned up in exactly one other record (`t2p2-accountability`'s "the wait… both of you are in it
+for the same reason") and nearly produced a report of 28 skips against the redirect's own
+one-third stop threshold. Caught before mounting anything: `t2p9`'s explicit call-out exists
+because *its* blind-spot content comes in two named variants (pursue, withdraw) that needed a
+third paragraph to say what they share. A record with only one blind-spot paragraph doesn't need
+a third paragraph to do that — **the paragraph already names one behaviour and gives its two
+readings directly.** Read every one of the other 29 in full on that corrected basis (not
+truncated, not sampled) and found the identical real shape in literally every one: *"[named
+behaviour] — From inside, [reading A]. From outside, [reading B]."* One behaviour, two
+simultaneous readings — not the sequential script (naming the act → no because → no self-attack →
+the checkable change) the redirect's own warning was rightly wary of, which is a different section
+of each record and wasn't touched for any of these.
+
+**Every `middle.label` is verbatim or a minimal trim of the resource's own name for the
+behaviour**, checked against source for each of the 29 individually — "Cancelling," "Not-doing,"
+"Braced," "Correctness," "The certainty," "Coping," "The struggle" and the rest are the record's
+own words, not paraphrases invented to fit. `left.sub`/`right.sub` are that same paragraph's own
+"from inside"/"from outside" clauses, compressed for length, not reworded in substance.
+
+### §2 — consistency
+
+Same accent pairing as `t2p9` (slate left, sage right), same caption
+("A reaction is information about the exterior of your state, not a verdict on you." — itself the
+resource's own closing line, verbatim or near-verbatim, in the great majority of these 29, not
+invented for the purpose) and the same position on all 30: mounted immediately after the specific
+blind-spot paragraph the labels are drawn from (`t3p5-accountability`'s own blind-spot paragraph
+runs the opposite way — "this is the one place the blind spot works in your favour" — so its
+mount uses the resource's second, ordinary paragraph, "What does land," instead; reported as the
+one deliberate placement difference in the set, not a departure from the rule).
+
+### Verify
+
+All 30 (29 new + `t2p9`) rendered in one live batch — shape and SVG present on every one, zero
+thrown errors, exactly one `.sr-shape` per resource. **Only `t2p9` fails the 2D `getBBox()`
+overlap check** (the pre-existing defect above); **all 29 new mounts measure clean, zero
+overlaps, in the actual page context** — not the isolated test harness. `decision` and `record`
+re-confirmed untouched across all 30 protocols (60 renders, zero shapes, zero errors). Five
+resources sampled for Sunrise legibility and no horizontal overflow at 1440/1024/390
+(`t1p1`, `t3p6`, `t1p9` — the longest middle label in the set, "Staying out of the way," 23
+characters, confirmed clean even at 390px), screenshotted. Zero console output across the whole
+batch.
+
+**Emulation only**, same as every prior pass this session.
+
+Files: `content/shapes.js`, `content/t1-resources.js`, `content/t2-resources.js`,
+`content/t3-resources.js`, `docs/fix-register.md`. `js/sr-resource-shapes.js` and
+`css/sr-resource-read.css` untouched.
+
+*Status:* closed — the real per-element budget measured empirically inside the correct CSS
+scope, catching and fixing a measurement bug (and, with it, a small real defect in SR-395's own
+shipped `t2p9` mount) before any of the 29 new labels were committed; the skip search corrected
+mid-pass once the wrong signal was identified, landing on zero genuine skips against the
+redirect's own one-third stop threshold; every middle label checked individually against source
+for fidelity. Stopping here, as instructed, to report before starting `guide` → `chain`. **Not
+pushed.** *Raised and fixed:* 16 Sep 2026

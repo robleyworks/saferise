@@ -258,6 +258,7 @@ var T2_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and before a conversation, most of it exits before you have said anything at all.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 the state arrives in the room ahead of your words. A tight throat changes your pitch. A narrowed system makes you brisk. From inside you are being careful. From outside, the first thing they receive is someone braced, and they brace back \u2014 which produces the difficult conversation you were preparing for.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t2p1-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the delay. Weeks of not raising something, while your manner changes. From inside that is waiting for the right moment. From outside it is being kept at arm's length by someone who will not say why, and it is usually more corrosive than the conversation would have been.</p>",
       "<p><strong>The third one</strong> \u2014 arriving with the script. When you have drafted eleven versions, the real exchange gets treated as a deviation from the plan. From outside, it is being talked at rather than talked with.</p>",
       "<p><strong>Their earlier information</strong> \u2014 the person you are dreading the conversation with can often tell something is coming. Worth asking, once it is open: <em>how long had you known something was up?</em></p>",
@@ -470,6 +471,7 @@ var T2_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and after a rupture, it exits directly at the person you are ruptured with.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 the state exits as coldness. Shorter replies. Ordinary civility with the warmth removed. Being technically present and unavailable. From inside, each of those is holding a boundary while you work out what you think. From outside, it is punishment, administered daily, without anything having been said.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t2p2-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the account you have been giving other people. Every telling firms it up, and the version you would now give is further from the events than the first one was. From outside, if it reaches them, it is a case circulated before they were asked for theirs.</p>",
       "<p><strong>The third one</strong> \u2014 the wait. From inside, waiting for them to move first is fairness: they did it, so they should. From outside it is a standoff, and both of you are in it for the same reason.</p>",
       "<p><strong>Their earlier information</strong> \u2014 worth asking, once it is open: <em>when did you know something was wrong?</em> Usually earlier than you think.</p>",
@@ -709,6 +711,7 @@ var T2_RESOURCES = {
       "<p>Assuming that isn't where you are:</p>",
       "<p>The protocol trains the interior half of the state. The other half exits, and after a betrayal it lands on people who had nothing to do with it.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 the alert doesn't discriminate. The checking, the tone in ordinary questions, the second look at a plausible explanation from someone unrelated. From inside it's caution you've earned. From outside, people who never lied to you are being treated as though they might.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t2p3-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the account, told repeatedly. Every telling firms it up, and the version you'd give now is further from the events than the first one was. That isn't dishonesty; it's what retelling does. But it means the people around you are holding a version you can no longer amend without admitting you built it.</p>",
       "<p><strong>The third one</strong> \u2014 the withdrawal. Cancelling, not replying, being present and elsewhere. From inside it's having nothing spare. From outside it's being dropped by someone in a crisis they'd have helped with.</p>",
       "<p><strong>Their earlier information</strong> \u2014 the people close to you often saw something before you did, and most of them have said nothing because there was nothing safe to say. Worth asking, once: <em>did anything seem off to you, before?</em> And then not making them justify the answer.</p>",
@@ -953,6 +956,7 @@ var T2_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits \u2014 and resentment's exterior is unusually deniable, which is what makes it damaging.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 it exits as correctness. Polite, reasonable, entirely fair, and cold. Nothing is ever said that could be objected to. From inside that's restraint. From outside it's being frozen out by someone who will not name it, and there's nothing to respond to because nothing has technically happened.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t2p4-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the small withdrawals. Not volunteering. Being slightly unavailable. Doing the thing but not offering. Individually invisible, cumulatively unmistakable.</p>",
       "<p><strong>The third one</strong> \u2014 the sideways version. The remark with an edge, the joke that isn't one, the <em>no, it's fine.</em> From inside it's a pressure valve. From outside it's the list being delivered in instalments without ever being opened.</p>",
       "<p><strong>Their earlier information</strong> \u2014 the person on the other end usually knows something is wrong and often has no idea what. Worth asking: <em>how long have you known I was off with you?</em> Expect the answer to be longer than you'd guess.</p>",
@@ -1169,6 +1173,7 @@ var T2_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half lands on someone who has usually been trying for a long time.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 the redirect is invisible to the person doing it and completely visible to the person receiving it. The joke, the change of subject, the sudden task. From inside, each is a single small movement. From outside, it's a pattern with a shape, and they can predict it.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t2p5-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the asymmetry of effort. If you keep the distance, they do the reaching. All of it, for years, without it being agreed. Most people on the receiving end stop mentioning it long before they stop noticing it.</p>",
       "<p><strong>The third one</strong> \u2014 what your unavailability gets read as. From inside it's protection with nothing to do with them. From outside, in the absence of any explanation, the default reading is that they aren't enough to warrant more. That reading has usually been running for a long time.</p>",
       "<p><strong>Their earlier information</strong> \u2014 they know the shape of it better than you do, because they've been on the outside of it. Worth asking: <em>what do you see me do?</em> And then not defending the answer.</p>",
@@ -1384,6 +1389,7 @@ var T2_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half exits as something almost impossible to name from outside.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 it exits as fairness with the warmth removed. Scrupulously reasonable, entirely correct, and cold. From inside that's restraint, and you're proud of it. From outside it's being held at a distance by someone who won't say why, and there is nothing to respond to because nothing has been said.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t2p6-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the compliance that isn't agreement. Going along with things while minding them. From outside, agreement looks like agreement, so the other person keeps doing the thing believing it's fine. Every instance you absorb silently makes the next one more likely.</p>",
       "<p><strong>The third one</strong> \u2014 the eventual delivery. When the pile finally goes, it goes as eleven instances at once, and the person receives an unanswerable case about things they'd have changed if asked. That's the outcome the collecting produces, and it lands as an ambush.</p>",
       "<p><strong>Their earlier information</strong> \u2014 worth asking: <em>did you know I minded?</em> Expect no more often than you'd think.</p>",
@@ -1582,6 +1588,7 @@ var T2_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half already landed on someone, which is what brought you here.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 the certainty arrives before the consideration, so from inside it feels like accurate perception. From outside it's being met with a conclusion rather than a question, by someone who wasn't there yet.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t2p7-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the character assessment. Not <em>that annoyed me</em> but <em>that's what you're like.</em> From inside it's a summary of evidence. From outside it's being told who you are by someone who was angry at the time, and people remember those for years.</p>",
       "<p><strong>The third one, and it's specific to this protocol</strong> \u2014 the risk of coming out of it and explaining their psychology to them. <em>I've realised that was my projection, and I think yours is about\u2026</em> That's the whole insight, weaponised. It will feel like generosity and it will land as an assault.</p>",
       "<p><strong>Their earlier information</strong> \u2014 worth asking, well after the event: <em>does this happen a lot?</em> And then not disputing the answer, however it comes.</p>",
@@ -1780,6 +1787,7 @@ var T2_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half lands on people who were trying to do something good.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 flatness reads as indifference, and the person on the receiving end usually concludes they misjudged it. They made an effort, it landed on nothing, and the reading available to them is that it wasn't wanted. From inside you know that isn't true. From outside there's no evidence for anything else.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t2p8-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the diminishing return. People stop offering. Not out of resentment \u2014 because the feedback said don't. That's the cost that compounds, and by the time you feel like yourself again, some of it has quietly stopped.</p>",
       "<p><strong>The third one</strong> \u2014 the flat thank you. Said, technically. Received as a formality. From inside it was all you had. From outside it can read as worse than nothing, because a formality implies the thing wasn't worth a real response.</p>",
       "<p><strong>Their earlier information</strong> \u2014 worth asking, once you can: <em>did you think I wasn't interested?</em> Expect yes.</p>",
@@ -2256,6 +2264,7 @@ var T2_RESOURCES = {
     body: [
       "<p>The protocol trains the interior half of the state. The other half lands on people who are also in it \u2014 and on some who aren't.</p>",
       "<p><strong>The specific blind spot here</strong> \u2014 the state exits as absence, and after an ending people expect absence, so nobody says anything. Messages unanswered for weeks. Plans that lapse. Friends who kept checking until they stopped. From inside there was no decision at any point. From outside it's a series of small closures.</p>",
+      "<div class=\"sr-shape\" data-sr-shape=\"overlap\" data-sr-shape-key=\"t2p10-accountability\"></div>",
       "<p><strong>The second one</strong> \u2014 the account, told repeatedly. Every telling firms it up and moves it further from the events. The people around you end up holding a version you can no longer amend without admitting you built it, and some of them are also holding a friendship with the other person.</p>",
       "<p><strong>The third one, where it applies</strong> \u2014 the people in the middle. Mutual friends, family on both sides, and children if there are any. From inside, saying what happened is being honest. From outside, for someone who cares about both of you, it's being asked to hold a position.</p>",
       "<p><strong>Their earlier information</strong> \u2014 worth asking, later: <em>how long did you keep trying before you stopped?</em> The answer is usually longer than you'd guess, and it's usually more generous.</p>",
