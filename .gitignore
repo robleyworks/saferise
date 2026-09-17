@@ -5,6 +5,11 @@ index.original.html
 pass/
 *.bak-*
 
+# prompt-galaxy-player.md's reference mockup — read for values/structure,
+# never committed (it's a standalone demo file with 12 embedded base64
+# images, ~5MB)
+galaxy-journey.html
+
 # generated audio — regenerates from the scripts
 audio/**/.cache/
 audio/**/*.mp3

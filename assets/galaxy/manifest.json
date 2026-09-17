@@ -1,0 +1,734 @@
+[
+  {
+    "id": "t0-00",
+    "title": "The Clearing",
+    "state": "Steady",
+    "slug": "the-clearing",
+    "cover": "assets/coming/band-clearing.jpg",
+    "start_breath": 10,
+    "separation": 26.4,
+    "mask_share": 0.2998,
+    "flagged": false,
+    "warm": [
+      50,
+      36,
+      20
+    ],
+    "cool": [
+      50,
+      51,
+      49
+    ],
+    "note": "no dedicated >=1920x1080 Clearing cover exists; using the 1200x640 band image, upscaled \u2014 flagged in the report.",
+    "files": {
+      "field": "assets/galaxy/t0-00-field.jpg",
+      "clear": "assets/galaxy/t0-00-clear.jpg",
+      "subject": "assets/galaxy/t0-00-subject.png",
+      "field_bytes": 77485,
+      "clear_bytes": 95897,
+      "subject_bytes": 160799
+    }
+  },
+  {
+    "id": "t1-01",
+    "title": "The Anxiety Reset Protocol",
+    "state": "Agitated",
+    "slug": "anxiety-reset",
+    "cover": "assets/covers/01.jpg",
+    "start_breath": 7,
+    "separation": 12.2,
+    "mask_share": 0.2354,
+    "flagged": true,
+    "warm": [
+      50,
+      26,
+      9
+    ],
+    "cool": [
+      49,
+      60,
+      61
+    ]
+  },
+  {
+    "id": "t1-02",
+    "title": "The Anger Alchemy Protocol",
+    "state": "Agitated",
+    "slug": "anger-alchemy",
+    "cover": "assets/covers/02.jpg",
+    "start_breath": 7,
+    "separation": 17.6,
+    "mask_share": 0.2442,
+    "flagged": true,
+    "warm": [
+      66,
+      36,
+      15
+    ],
+    "cool": [
+      7,
+      9,
+      9
+    ]
+  },
+  {
+    "id": "t1-03",
+    "title": "The Overwhelm Threshold Protocol",
+    "state": "Agitated",
+    "slug": "overwhelm-threshold",
+    "cover": "assets/covers/03.jpg",
+    "start_breath": 7,
+    "separation": 6.5,
+    "mask_share": 0.282,
+    "flagged": true,
+    "warm": [
+      120,
+      62,
+      22
+    ],
+    "cool": [
+      38,
+      63,
+      66
+    ]
+  },
+  {
+    "id": "t1-04",
+    "title": "The Abandonment Wound Protocol",
+    "state": "Agitated",
+    "slug": "abandonment-wound",
+    "cover": "assets/covers/04.jpg",
+    "start_breath": 7,
+    "separation": 22.9,
+    "mask_share": 0.208,
+    "flagged": false,
+    "warm": [
+      76,
+      40,
+      26
+    ],
+    "cool": [
+      9,
+      12,
+      16
+    ],
+    "files": {
+      "field": "assets/galaxy/t1-04-field.jpg",
+      "clear": "assets/galaxy/t1-04-clear.jpg",
+      "subject": "assets/galaxy/t1-04-subject.png",
+      "field_bytes": 78467,
+      "clear_bytes": 73781,
+      "subject_bytes": 197636
+    }
+  },
+  {
+    "id": "t1-05",
+    "title": "The Shame Dissolution Protocol",
+    "state": "Unsteady",
+    "slug": "shame-dissolution",
+    "cover": "assets/covers/05.jpg",
+    "start_breath": 12,
+    "separation": 13.4,
+    "mask_share": 0.2271,
+    "flagged": true,
+    "warm": [
+      34,
+      20,
+      12
+    ],
+    "cool": [
+      55,
+      55,
+      55
+    ]
+  },
+  {
+    "id": "t1-06",
+    "title": "The Grief Integration Protocol",
+    "state": "Unsteady",
+    "slug": "grief-integration",
+    "cover": "assets/covers/06.jpg",
+    "start_breath": 12,
+    "separation": 4.9,
+    "mask_share": 0.689,
+    "flagged": true,
+    "warm": [
+      28,
+      16,
+      12
+    ],
+    "cool": [
+      35,
+      38,
+      43
+    ]
+  },
+  {
+    "id": "t1-07",
+    "title": "The Shutdown Recovery Protocol",
+    "state": "Numb",
+    "slug": "shutdown-recovery",
+    "cover": "assets/covers/07.jpg",
+    "start_breath": 20,
+    "separation": 3.4,
+    "mask_share": 0.1854,
+    "flagged": true,
+    "warm": [
+      130,
+      83,
+      53
+    ],
+    "cool": [
+      36,
+      45,
+      56
+    ]
+  },
+  {
+    "id": "t1-08",
+    "title": "The Jealousy Release Protocol",
+    "state": "Unsteady",
+    "slug": "jealousy-release",
+    "cover": "assets/covers/08.jpg",
+    "start_breath": 12,
+    "separation": 10.4,
+    "mask_share": 0.19,
+    "flagged": true,
+    "warm": [
+      58,
+      32,
+      5
+    ],
+    "cool": [
+      65,
+      65,
+      65
+    ]
+  },
+  {
+    "id": "t1-09",
+    "title": "The Insecurity Anchor Protocol",
+    "state": "Unsteady",
+    "slug": "insecurity-anchor",
+    "cover": "assets/covers/09.jpg",
+    "start_breath": 12,
+    "separation": 17.6,
+    "mask_share": 0.23,
+    "flagged": true,
+    "warm": [
+      64,
+      42,
+      16
+    ],
+    "cool": [
+      65,
+      63,
+      61
+    ]
+  },
+  {
+    "id": "t1-10",
+    "title": "The Powerlessness & Despair Protocol",
+    "state": "Numb",
+    "slug": "powerlessness-despair",
+    "cover": "assets/covers/10.jpg",
+    "start_breath": 20,
+    "separation": 32.0,
+    "mask_share": 0.314,
+    "flagged": false,
+    "warm": [
+      70,
+      49,
+      22
+    ],
+    "cool": [
+      72,
+      72,
+      71
+    ],
+    "files": {
+      "field": "assets/galaxy/t1-10-field.jpg",
+      "clear": "assets/galaxy/t1-10-clear.jpg",
+      "subject": "assets/galaxy/t1-10-subject.png",
+      "field_bytes": 77464,
+      "clear_bytes": 84328,
+      "subject_bytes": 169044
+    }
+  },
+  {
+    "id": "t2-01",
+    "title": "The Safe Conversation Protocol",
+    "state": "Agitated",
+    "slug": "safe-conversation",
+    "cover": "assets/covers/t2-01.jpg",
+    "start_breath": 7,
+    "separation": 14.5,
+    "mask_share": 0.4889,
+    "flagged": true,
+    "warm": [
+      76,
+      39,
+      17
+    ],
+    "cool": [
+      102,
+      98,
+      93
+    ]
+  },
+  {
+    "id": "t2-02",
+    "title": "The Rupture & Repair Protocol",
+    "state": "Unsteady",
+    "slug": "rupture-repair",
+    "cover": "assets/covers/t2-02.jpg",
+    "start_breath": 12,
+    "separation": 6.0,
+    "mask_share": 0.4214,
+    "flagged": true,
+    "warm": [
+      139,
+      93,
+      50
+    ],
+    "cool": [
+      120,
+      123,
+      126
+    ]
+  },
+  {
+    "id": "t2-03",
+    "title": "The Trust & Betrayal Protocol",
+    "state": "Agitated",
+    "slug": "trust-betrayal",
+    "cover": "assets/covers/t2-03.jpg",
+    "start_breath": 7,
+    "separation": 11.6,
+    "mask_share": 0.5525,
+    "flagged": true,
+    "warm": [
+      166,
+      120,
+      82
+    ],
+    "cool": [
+      59,
+      61,
+      69
+    ]
+  },
+  {
+    "id": "t2-04",
+    "title": "The Resentment Release Protocol",
+    "state": "Unsteady",
+    "slug": "resentment-release",
+    "cover": "assets/covers/t2-04.jpg",
+    "start_breath": 12,
+    "separation": 13.3,
+    "mask_share": 0.3117,
+    "flagged": true,
+    "warm": [
+      87,
+      49,
+      36
+    ],
+    "cool": [
+      18,
+      16,
+      22
+    ]
+  },
+  {
+    "id": "t2-05",
+    "title": "The Intimacy Barrier Protocol",
+    "state": "Unsteady",
+    "slug": "intimacy-barrier",
+    "cover": "assets/covers/t2-05.jpg",
+    "start_breath": 12,
+    "separation": 17.3,
+    "mask_share": 0.5544,
+    "flagged": true,
+    "warm": [
+      82,
+      39,
+      21
+    ],
+    "cool": [
+      31,
+      30,
+      32
+    ]
+  },
+  {
+    "id": "t2-06",
+    "title": "The Double Standard Protocol",
+    "state": "Unsteady",
+    "slug": "double-standard",
+    "cover": "assets/covers/t2-06.jpg",
+    "start_breath": 12,
+    "separation": 9.2,
+    "mask_share": 0.5601,
+    "flagged": true,
+    "warm": [
+      98,
+      48,
+      27
+    ],
+    "cool": [
+      95,
+      90,
+      88
+    ]
+  },
+  {
+    "id": "t2-07",
+    "title": "The Projection Clarity Protocol",
+    "state": "Agitated",
+    "slug": "projection-clarity",
+    "cover": "assets/covers/t2-07.jpg",
+    "start_breath": 7,
+    "separation": 2.2,
+    "mask_share": 0.4166,
+    "flagged": true,
+    "warm": [
+      124,
+      65,
+      13
+    ],
+    "cool": [
+      104,
+      103,
+      102
+    ]
+  },
+  {
+    "id": "t2-08",
+    "title": "The Appreciation & Support Protocol",
+    "state": "Numb",
+    "slug": "appreciation-support",
+    "cover": "assets/covers/t2-08.jpg",
+    "start_breath": 20,
+    "separation": 7.3,
+    "mask_share": 0.484,
+    "flagged": true,
+    "warm": [
+      131,
+      71,
+      40
+    ],
+    "cool": [
+      52,
+      47,
+      48
+    ]
+  },
+  {
+    "id": "t2-09",
+    "title": "The Pursue & Withdraw Protocol",
+    "state": "Unsteady",
+    "slug": "pursue-withdraw",
+    "cover": "assets/covers/t2-09.jpg",
+    "start_breath": 12,
+    "separation": 21.6,
+    "mask_share": 0.2703,
+    "flagged": false,
+    "warm": [
+      61,
+      41,
+      20
+    ],
+    "cool": [
+      63,
+      64,
+      63
+    ],
+    "files": {
+      "field": "assets/galaxy/t2-09-field.jpg",
+      "clear": "assets/galaxy/t2-09-clear.jpg",
+      "subject": "assets/galaxy/t2-09-subject.png",
+      "field_bytes": 78706,
+      "clear_bytes": 82143,
+      "subject_bytes": 187200
+    }
+  },
+  {
+    "id": "t2-10",
+    "title": "The Conscious Separation Protocol",
+    "state": "Numb",
+    "slug": "conscious-separation",
+    "cover": "assets/covers/t2-10.jpg",
+    "start_breath": 20,
+    "separation": 6.2,
+    "mask_share": 0.437,
+    "flagged": true,
+    "warm": [
+      84,
+      55,
+      25
+    ],
+    "cool": [
+      87,
+      87,
+      87
+    ]
+  },
+  {
+    "id": "t3-01",
+    "title": "The High-Stakes Presence Protocol",
+    "state": "Agitated",
+    "slug": "high-stakes-presence",
+    "cover": "assets/covers/t3-01.jpg",
+    "start_breath": 7,
+    "separation": 1.7,
+    "mask_share": 0.3025,
+    "flagged": true,
+    "warm": [
+      93,
+      57,
+      26
+    ],
+    "cool": [
+      15,
+      24,
+      32
+    ]
+  },
+  {
+    "id": "t3-02",
+    "title": "The Conflict Navigation Protocol",
+    "state": "Agitated",
+    "slug": "conflict-navigation",
+    "cover": "assets/covers/t3-02.jpg",
+    "start_breath": 7,
+    "separation": 21.7,
+    "mask_share": 0.3497,
+    "flagged": false,
+    "warm": [
+      135,
+      76,
+      44
+    ],
+    "cool": [
+      96,
+      113,
+      138
+    ],
+    "files": {
+      "field": "assets/galaxy/t3-02-field.jpg",
+      "clear": "assets/galaxy/t3-02-clear.jpg",
+      "subject": "assets/galaxy/t3-02-subject.png",
+      "field_bytes": 87139,
+      "clear_bytes": 206075,
+      "subject_bytes": 322027
+    }
+  },
+  {
+    "id": "t3-03",
+    "title": "The Imposter Dissolution Protocol",
+    "state": "Unsteady",
+    "slug": "imposter-dissolution",
+    "cover": "assets/covers/t3-03.jpg",
+    "start_breath": 12,
+    "separation": 17.5,
+    "mask_share": 0.3313,
+    "flagged": true,
+    "warm": [
+      77,
+      45,
+      32
+    ],
+    "cool": [
+      57,
+      67,
+      74
+    ]
+  },
+  {
+    "id": "t3-04",
+    "title": "The Perfectionism Release Protocol",
+    "state": "Agitated",
+    "slug": "perfectionism-release",
+    "cover": "assets/covers/t3-04.jpg",
+    "start_breath": 7,
+    "separation": 16.1,
+    "mask_share": 0.2239,
+    "flagged": true,
+    "warm": [
+      135,
+      78,
+      30
+    ],
+    "cool": [
+      166,
+      163,
+      161
+    ]
+  },
+  {
+    "id": "t3-05",
+    "title": "The Performance Anxiety Protocol",
+    "state": "Agitated",
+    "slug": "performance-anxiety",
+    "cover": "assets/covers/t3-05.jpg",
+    "start_breath": 7,
+    "separation": 28.4,
+    "mask_share": 0.3202,
+    "flagged": false,
+    "warm": [
+      223,
+      141,
+      87
+    ],
+    "cool": [
+      131,
+      153,
+      165
+    ],
+    "files": {
+      "field": "assets/galaxy/t3-05-field.jpg",
+      "clear": "assets/galaxy/t3-05-clear.jpg",
+      "subject": "assets/galaxy/t3-05-subject.png",
+      "field_bytes": 79978,
+      "clear_bytes": 236406,
+      "subject_bytes": 274760
+    }
+  },
+  {
+    "id": "t3-06",
+    "title": "The Belonging Gap Protocol",
+    "state": "Unsteady",
+    "slug": "belonging-gap",
+    "cover": "assets/covers/t3-06.jpg",
+    "start_breath": 12,
+    "separation": 17.5,
+    "mask_share": 0.2924,
+    "flagged": true,
+    "warm": [
+      102,
+      68,
+      33
+    ],
+    "cool": [
+      36,
+      48,
+      50
+    ]
+  },
+  {
+    "id": "t3-07",
+    "title": "The Career Transition Protocol",
+    "state": "Unsteady",
+    "slug": "career-transition",
+    "cover": "assets/covers/t3-07.jpg",
+    "start_breath": 12,
+    "separation": 19.5,
+    "mask_share": 0.3549,
+    "flagged": false,
+    "warm": [
+      103,
+      72,
+      44
+    ],
+    "cool": [
+      68,
+      84,
+      91
+    ],
+    "files": {
+      "field": "assets/galaxy/t3-07-field.jpg",
+      "clear": "assets/galaxy/t3-07-clear.jpg",
+      "subject": "assets/galaxy/t3-07-subject.png",
+      "field_bytes": 83478,
+      "clear_bytes": 164645,
+      "subject_bytes": 258328
+    }
+  },
+  {
+    "id": "t3-08",
+    "title": "The Decision Fatigue Protocol",
+    "state": "Numb",
+    "slug": "decision-fatigue",
+    "cover": "assets/covers/t3-08.jpg",
+    "start_breath": 20,
+    "separation": 40.0,
+    "mask_share": 0.3927,
+    "flagged": false,
+    "warm": [
+      226,
+      114,
+      52
+    ],
+    "cool": [
+      31,
+      176,
+      228
+    ],
+    "files": {
+      "field": "assets/galaxy/t3-08-field.jpg",
+      "clear": "assets/galaxy/t3-08-clear.jpg",
+      "subject": "assets/galaxy/t3-08-subject.png",
+      "field_bytes": 87952,
+      "clear_bytes": 326017,
+      "subject_bytes": 432935
+    }
+  },
+  {
+    "id": "t3-09",
+    "title": "The Burnout & Overload Protocol",
+    "state": "Numb",
+    "slug": "burnout-overload",
+    "cover": "assets/covers/t3-09.jpg",
+    "start_breath": 20,
+    "separation": 23.9,
+    "mask_share": 0.3829,
+    "flagged": false,
+    "warm": [
+      88,
+      60,
+      29
+    ],
+    "cool": [
+      96,
+      96,
+      96
+    ],
+    "files": {
+      "field": "assets/galaxy/t3-09-field.jpg",
+      "clear": "assets/galaxy/t3-09-clear.jpg",
+      "subject": "assets/galaxy/t3-09-subject.png",
+      "field_bytes": 76212,
+      "clear_bytes": 132868,
+      "subject_bytes": 203172
+    }
+  },
+  {
+    "id": "t3-10",
+    "title": "The Creative Flow Protocol",
+    "state": "Unsteady",
+    "slug": "creative-flow",
+    "cover": "assets/covers/t3-10.jpg",
+    "start_breath": 12,
+    "separation": 18.1,
+    "mask_share": 0.2858,
+    "flagged": false,
+    "warm": [
+      170,
+      104,
+      38
+    ],
+    "cool": [
+      137,
+      136,
+      135
+    ],
+    "files": {
+      "field": "assets/galaxy/t3-10-field.jpg",
+      "clear": "assets/galaxy/t3-10-clear.jpg",
+      "subject": "assets/galaxy/t3-10-subject.png",
+      "field_bytes": 85499,
+      "clear_bytes": 240397,
+      "subject_bytes": 287739
+    }
+  }
+]
