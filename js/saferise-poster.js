@@ -163,80 +163,151 @@
     return { connectAnalyser: connectAnalyser, disconnectAnalyser: disconnectAnalyser, read: read, teardown: teardown };
   }
 
-  /* v2 #4 -- "One component owns its own controls." Built only when the
-     caller opts in (opts.buildControl); js/sr-medplayer.js's own call
-     never does, so the modal context (which already has
-     .sr-medplayer__play) is unaffected. Real <button>, so it is keyboard-
-     reachable and gets :focus-visible with no extra wiring; aria-label
-     kept in sync with play/pause. Disabled (no click handler bound at
-     all, not just visually) when hasAudio is false -- honest state, per
-     SR-406, not a fake control. */
-  function buildCtrl(stage, audio, hasAudio) {
+  /* GALAXY-PLAYER-COMPLETE.md #5 -- the centred overlay (control, theme,
+     title). Replaces SR-408's bare .sr-ps-ctrl -- that control's real-
+     button/keyboard/aria-sync behaviour is kept, just wrapped and restyled
+     (see css/saferise-poster.css). Built only when the caller opts in
+     (opts.buildControl); js/sr-medplayer.js's own call never does, so the
+     modal context (which already has .sr-medplayer__play, and its own
+     .sr-medplayer__copy for title/eyebrow outside the stage) is
+     unaffected -- building a second one there would be exactly the
+     "parallel system" every brief in this series has ruled out.
+     Disabled (no click handler bound at all, not just visually styled)
+     when hasAudio is false -- honest state, per SR-406, not a fake
+     control. theme/title are plain strings the caller already resolved
+     from its own data (protocol.html reads them from PAGE_PROTOCOL --
+     see that file -- not duplicated here). */
+  function buildOverlay(stage, audio, hasAudio, theme, title) {
+    var overlay = el('div', 'sr-ps-overlay');
     var ctrl = el('button', 'sr-ps-ctrl');
     ctrl.type = 'button';
     ctrl.appendChild(el('i'));
-    stage.appendChild(ctrl);
+    overlay.appendChild(ctrl);
+    if (theme) {
+      var themeEl = el('p', 'sr-ps-theme');
+      themeEl.textContent = theme;
+      overlay.appendChild(themeEl);
+    }
+    if (title) {
+      var titleEl = el('p', 'sr-ps-ptitle');
+      titleEl.textContent = title;
+      overlay.appendChild(titleEl);
+    }
+    stage.appendChild(overlay);
 
     if (!hasAudio) {
       ctrl.disabled = true;
       ctrl.setAttribute('aria-disabled', 'true');
       ctrl.setAttribute('aria-label', 'Guided audio not yet available for this protocol');
-      return ctrl;
+      return overlay;
     }
 
-    ctrl.setAttribute('aria-label', 'Play guided audio');
+    ctrl.setAttribute('aria-label', 'Play guided meditation');
     ctrl.addEventListener('click', function () {
       if (audio.paused) audio.play().catch(function () {});
       else audio.pause();
     });
     audio.addEventListener('play', function () {
       ctrl.setAttribute('data-playing', 'true');
-      ctrl.setAttribute('aria-label', 'Pause guided audio');
+      ctrl.setAttribute('aria-label', 'Pause guided meditation');
     });
     audio.addEventListener('pause', function () {
       ctrl.removeAttribute('data-playing');
-      ctrl.setAttribute('aria-label', 'Play guided audio');
+      ctrl.setAttribute('aria-label', 'Play guided meditation');
     });
     audio.addEventListener('ended', function () {
       ctrl.removeAttribute('data-playing');
-      ctrl.setAttribute('aria-label', 'Play guided audio');
+      ctrl.setAttribute('aria-label', 'Play guided meditation');
     });
-    return ctrl;
+    return overlay;
   }
 
-  function buildPlainFallback(stage, data) {
-    var img = el('img', 'sr-ps-plain');
-    img.src = data.cover;
-    img.alt = '';
-    stage.insertBefore(img, stage.firstChild);
-    return { subject: img };
+  /* #7 -- the lockup, this file's own build now (protocol.html's fully
+     custom mount has no .sr-medplayer__lockup to reuse the way SR-406/408
+     did). Confirmed no other lockup renders for this context before
+     building one -- js/sr-medplayer.js's own lockup is scoped to its own
+     modal stage, never this one. */
+  function buildLock(stage) {
+    var lock = el('div', 'sr-ps-lock');
+    lock.setAttribute('aria-hidden', 'true');
+    lock.appendChild(el('span', 'rule'));
+    var mark = el('span', 'mark');
+    mark.textContent = 'SAFERISE';
+    lock.appendChild(mark);
+    stage.appendChild(lock);
+    return lock;
   }
 
-  function buildGalaxy(stage, data) {
+  /* #4 -- the four-step bar, a sibling appended right after the stage
+     (outside it, per the brief), not inside. Returns the four .sr-ps-seg
+     elements so mount()'s own tick can drive them from the same idx/within
+     it already computes for .sr-ps-stepnow -- one computation, two
+     consumers, not two separate step trackers that could disagree. */
+  function buildSteps(stage) {
+    var bar = el('div', 'sr-ps-steps');
+    var segs = STEPS.map(function (name) {
+      var seg = el('span', 'sr-ps-seg');
+      seg.appendChild(el('i'));
+      var b = el('b');
+      b.textContent = name;
+      seg.appendChild(b);
+      bar.appendChild(seg);
+      return seg;
+    });
+    stage.insertAdjacentElement('afterend', bar);
+    return segs;
+  }
+
+  /* GALAXY-PLAYER-COMPLETE.md #0/#2 -- field and clear are the SAME
+     photograph on both tiers now (confirmed byte-identical in all four of
+     the reference mockup's own players before relying on this -- see this
+     pass's own report). The dissolve is pure CSS filter work on one
+     shared <img> reference per layer (two <img> elements, same src), not
+     a second asset. Full tier additionally gets a real .subject cutout
+     that breathes independently; universal tier has no subject at all --
+     the aura carries the breath alone (#2's own instruction), and that
+     stays safe under the governing rule for the same reason the rule was
+     amended in the first place: still one element, one period, one curve. */
+  function buildLayers(stage, data, hasSubject) {
     var frag = document.createDocumentFragment();
+    var photo = hasSubject ? data.field : data.cover;
+    var photoClear = hasSubject ? data.clear : data.cover;
 
-    var field = el('img', 'sr-ps-field'); field.src = data.field; field.alt = '';
-    var clear = el('img', 'sr-ps-clear'); clear.src = data.clear; clear.alt = '';
+    var field = el('img', 'sr-ps-field'); field.src = photo; field.alt = '';
+    var clear = el('img', 'sr-ps-clear'); clear.src = photoClear; clear.alt = '';
     var lights = el('div', 'sr-ps-lights');
     var wander = el('div', 'sr-ps-wander');
     for (var i = 0; i < 5; i++) wander.appendChild(el('i'));
-    var subjwrap = el('div', 'sr-ps-subjwrap');
-    var subject = el('img', 'sr-ps-subject'); subject.src = data.subject; subject.alt = '';
-    subjwrap.appendChild(subject);
-    /* prompt-galaxy-refinements.md #2 -- .sr-ps-aura is now a wrapper only
+
+    var subject = null;
+    var subjwrap = null;
+    if (hasSubject) {
+      subjwrap = el('div', 'sr-ps-subjwrap');
+      subject = el('img', 'sr-ps-subject'); subject.src = data.subject; subject.alt = '';
+      subjwrap.appendChild(subject);
+    }
+
+    /* prompt-galaxy-refinements.md #2 -- .sr-ps-aura is a wrapper only
        (carries the breath-synced sr-ps-auraSwell keyframe); the visible
        gradient plus the --amp/--release-responsive scale live on the inner
        div. See css/saferise-poster.css for why one element can't hold both. */
     var aura = el('div', 'sr-ps-aura');
     var auraInner = el('div', 'sr-ps-aura-inner');
     aura.appendChild(auraInner);
+    var scrim = el('div', 'sr-ps-scrim');
     var stepnow = el('p', 'sr-ps-stepnow');
     var edge = el('div', 'sr-ps-edge');
 
-    [field, clear, lights, wander, subjwrap, aura, stepnow, edge].forEach(function (n) { frag.appendChild(n); });
+    var order = [field, clear, lights, wander];
+    if (subjwrap) order.push(subjwrap);
+    order.push(aura, scrim, stepnow, edge);
+    order.forEach(function (n) { frag.appendChild(n); });
     stage.insertBefore(frag, stage.firstChild);
 
-    return { field: field, clear: clear, subject: subject, aura: aura, auraInner: auraInner, stepnow: stepnow, edge: edge };
+    return {
+      field: field, clear: clear, subject: subject, aura: aura,
+      auraInner: auraInner, scrim: scrim, stepnow: stepnow, edge: edge
+    };
   }
 
   function mount(stage, audio, opts) {
@@ -283,27 +354,30 @@
     var keyframeSuffix = STATE_KEYFRAME[state] || 'A';
     var reduced = reducedMotion();
 
-    var layers, subjectEl;
-    if (data && !data.flagged && data.field && data.clear && data.subject) {
-      layers = buildGalaxy(stage, data);
-      subjectEl = layers.subject;
-    } else {
-      /* flagged, or no manifest entry at all (id not recognised, or no
-         audio-derivable id yet) -- plain poster + breath only, per #2 */
-      var cover = (data && data.cover) || opts.fallbackCover;
-      if (!cover) return { destroy: function () {} }; /* nothing to show */
-      layers = buildPlainFallback(stage, { cover: cover });
-      subjectEl = layers.subject;
-    }
+    /* #2 -- two tiers, no fallback. hasSubject is the whole tier switch:
+       full when the manifest has a cutout, universal otherwise -- checked
+       against the manifest's own flagged/field/clear/subject fields, not
+       a hardcoded id list, so a protocol upgrades from universal to full
+       automatically the moment tools/mk_posters.py produces a subject.png
+       for it and content/galaxy.js records it (flagged:false). Every one
+       of the 30 track protocols has at least a `cover` (confirmed in this
+       pass's own report), so there is always something to show. */
+    var hasSubject = !!(data && !data.flagged && data.field && data.clear && data.subject);
+    var cover = (data && data.cover) || opts.fallbackCover;
+    if (!hasSubject && !cover) return { destroy: function () {} }; /* nothing to show at all */
 
-    /* v2 #1b -- select the per-state keyframe on both the subject/plain
-       and the aura wrapper (same shape, same period -- v2 #2). Set before
+    var layers = buildLayers(stage, data || { cover: cover }, hasSubject);
+
+    /* v2 #1b -- select the per-state keyframe. Full tier: subject carries
+       it. Universal tier: no subject exists, so only the aura carries the
+       breath (#2's own instruction) -- still one element/one period/one
+       curve, the reason the governing rule permits it at all. Set before
        reading getAnimations() below so the Animation object returned is
        the one actually running under the chosen name. */
-    if (subjectEl) subjectEl.style.animationName = 'sr-ps-breathe' + keyframeSuffix;
-    if (layers.aura) layers.aura.style.animationName = 'sr-ps-auraSwell' + keyframeSuffix;
+    if (layers.subject) layers.subject.style.animationName = 'sr-ps-breathe' + keyframeSuffix;
+    layers.aura.style.animationName = 'sr-ps-auraSwell' + keyframeSuffix;
 
-    if (!reduced) applyHeldBreath([subjectEl, layers.aura].filter(Boolean), heldBreath);
+    if (!reduced) applyHeldBreath([layers.subject, layers.aura].filter(Boolean), heldBreath);
     /* Inspectable record of the held value -- not read by anything here
        (playbackRate above is what actually drives speed), but set once,
        never rewritten, so a computed-style check can confirm the period
@@ -311,9 +385,59 @@
     stage.style.setProperty('--breath', heldBreath.toFixed(2) + 's');
 
     var hasAudio = !!(audio.getAttribute && audio.getAttribute('src'));
-    if (opts.buildControl) buildCtrl(stage, audio, hasAudio);
+    if (opts.buildControl) {
+      buildOverlay(stage, audio, hasAudio, opts.theme, opts.title);
+      buildLock(stage);
+    }
+    var stepSegs = opts.buildControl ? buildSteps(stage) : null;
+    if (opts.buildControl) stage.classList.add('sr-ps-player');
 
     var aura = makeAura(audio);
+
+    /* GALAXY-PLAYER-COMPLETE.md #3 -- the --p driver. Confirmed this file
+       already had a working one before this pass (an rAF loop polling
+       audio.currentTime/duration at ~4Hz, present since SR-403 and
+       exercised live in every pass since) -- the brief's "nothing in the
+       repo drives --p" does not hold here, reported rather than accepted
+       at face value. Its suggested timeupdate listener is still adopted,
+       for a real reason found while checking the claim rather than the
+       claim itself: rAF throttles to near-zero in a backgrounded tab,
+       while timeupdate keeps firing off the audio element's own clock
+       regardless of tab visibility -- a real gap for a meditation a
+       member might play with the screen off. Both drivers write the same
+       --p from the same audio.currentTime/duration; kept the rAF loop too
+       since --amp/--release/step/off-screen-pause still need per-frame
+       timing, not just per-timeupdate. */
+    function computeP() {
+      var dur = audio.duration;
+      return (dur && isFinite(dur) && dur > 0) ? Math.max(0, Math.min(1, audio.currentTime / dur)) : 0;
+    }
+
+    function applyStepsAndRelease(p) {
+      var idx = Math.min(3, Math.floor(p * 4));
+      var within = (p * 4) - idx;
+      if (layers.stepnow) {
+        var name = STEPS[idx];
+        if (layers.stepnow.textContent !== name) layers.stepnow.textContent = name;
+      }
+      if (stepSegs) {
+        stepSegs.forEach(function (seg, i) {
+          seg.classList.toggle('on', i === idx);
+          seg.classList.toggle('done', i < idx);
+          var w = i < idx ? '100%' : (i === idx ? (within * 100).toFixed(1) + '%' : '0%');
+          seg.querySelector('i').style.setProperty('--w', w);
+        });
+      }
+      var release = (idx === 2) ? Math.sin(within * Math.PI) : 0;
+      stage.style.setProperty('--release', release.toFixed(3));
+    }
+
+    function onTimeupdate() {
+      var p = computeP();
+      stage.style.setProperty('--p', p.toFixed(4));
+      applyStepsAndRelease(p);
+    }
+    audio.addEventListener('timeupdate', onTimeupdate);
 
     var raf = null, lastTick = 0, running = false;
 
@@ -323,19 +447,9 @@
       if (!document.contains(stage)) { teardown(); return; }
       if (now - lastTick >= TICK_MS) {
         lastTick = now;
-        var dur = audio.duration;
-        var p = (dur && isFinite(dur) && dur > 0) ? Math.max(0, Math.min(1, audio.currentTime / dur)) : 0;
+        var p = computeP();
         stage.style.setProperty('--p', p.toFixed(4));
-
-        var idx = Math.min(3, Math.floor(p * 4));
-        var within = (p * 4) - idx;
-        if (layers.stepnow) {
-          var name = STEPS[idx];
-          if (layers.stepnow.textContent !== name) layers.stepnow.textContent = name;
-        }
-        var release = (idx === 2) ? Math.sin(within * Math.PI) : 0;
-        stage.style.setProperty('--release', release.toFixed(3));
-
+        applyStepsAndRelease(p);
         if (!reduced) {
           stage.style.setProperty('--amp', aura.read().toFixed(3));
         }
@@ -347,6 +461,8 @@
       if (running) return;
       running = true;
       stage.setAttribute('data-sr-ps-playing', 'true');
+      stage.classList.add('playing');
+      stage.style.setProperty('--playing', '1');
       if (!reduced) aura.connectAnalyser();
       lastTick = 0;
       raf = requestAnimationFrame(frame);
@@ -354,14 +470,24 @@
     function stop() {
       running = false;
       stage.setAttribute('data-sr-ps-playing', 'false');
+      stage.classList.remove('playing');
+      stage.style.setProperty('--playing', '0');
       if (raf) cancelAnimationFrame(raf);
       raf = null;
       aura.disconnectAnalyser();
     }
+    /* #3 -- reset on ended and on an explicit reset, never on pause (a
+       paused session keeps its position). */
     function reset() {
       stage.style.setProperty('--p', 0);
       stage.style.setProperty('--release', 0);
       if (layers.stepnow) layers.stepnow.textContent = '';
+      if (stepSegs) {
+        stepSegs.forEach(function (seg) {
+          seg.classList.remove('on', 'done');
+          seg.querySelector('i').style.setProperty('--w', '0%');
+        });
+      }
     }
 
     audio.addEventListener('play', start);
@@ -385,6 +511,7 @@
       stop();
       audio.removeEventListener('play', start);
       audio.removeEventListener('pause', stop);
+      audio.removeEventListener('timeupdate', onTimeupdate);
       if (io) io.disconnect();
       aura.teardown();
     }

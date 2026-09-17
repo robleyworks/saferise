@@ -17,7 +17,14 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-408** (`GALAXY-PLAYER-REFINEMENTS-v2.md` — per-state breathe/aura
+- **Highest ID issued: SR-409** (`GALAXY-PLAYER-COMPLETE.md` — the galaxy player's complete build:
+  one player on `protocol.html` (the video tab/pane removed), two tiers with no fallback path
+  (universal tier reuses the same photograph for `.field`/`.clear`, confirmed byte-identical in
+  the reference mockup before relying on it), the four-step bar, the centred overlay with real
+  theme/title, and the lockup rebuilt in `cqw` units and tested against the palest cover in the
+  set. `tools/mk_posters.py` and the manifest untouched. Verify against `git log -1` once it
+  lands.)
+- **Previously: Highest ID issued: SR-408** (`GALAXY-PLAYER-REFINEMENTS-v2.md` — per-state breathe/aura
   keyframes replacing the single shared curve, the galaxy player's own `.sr-ps-ctrl` control
   replacing `protocol.html`'s pre-existing play button/label/60-bar `#wave` (never wired, per the
   prior turn's own live diagnosis), and the lockup's centre-frame bug fixed by deleting the
@@ -17977,3 +17984,238 @@ more than intended) found and fixed by deletion, not narrowing, then verified fi
 viewport widths; the old chrome fully removed with its dead CSS, not merely dimmed; all 30 protocol
 pages swept individually with zero failures; the governing-rule grep re-run and reported in full.
 **Not pushed.** *Raised and fixed:* 17 Sep 2026
+
+---
+
+## SR-409 — galaxy player complete build: one player, two tiers, the missing pieces
+
+`GALAXY-PLAYER-COMPLETE.md`, reference build `pass/galaxy-journey-v3.html`. Three things in one
+pass: remove the video player so `protocol.html` carries one media player; give all 30 track
+protocols the galaxy treatment (no more plain fallback); build the four elements the mockup had
+that were never briefed before now (the `--p` driver, the four-step bar, the centred overlay, the
+lockup fix). Stopped and reported at §1 and §2 before building either, per instruction; no stop
+condition found at either checkpoint, so the rest ran straight through.
+
+### §0 — the finding that changes the pipeline, confirmed
+
+`.field` and `.clear` are byte-identical in all four of the reference mockup's players — checked
+directly (SHA-1 + byte length on the decoded base64, not eyeballed): four matches, four misses
+would have meant "report and stop," zero misses. The dissolve is one photograph rendered twice
+with different CSS filters; no protocol needs a second asset for it. `tools/mk_posters.py`'s own
+already-generated `-field.jpg`/`-clear.jpg` pairs for the 9 full-galaxy protocols remain genuinely
+different files (subject-suppressed-plus-stars vs. plain toned) — that's a richer, strictly-better
+treatment than the mockup's minimum, not something this finding invalidates; the finding is what
+makes the *universal* tier possible without running the pipeline on the other 21 at all.
+
+### §1 — one player on the page ⏸ (stopped, reported, no block found)
+
+Grepped the whole repo for everything that could reference the video pane, its tab, its sources,
+or shared tab machinery before deleting anything. Found: `resource.html` has its own
+`.ptabs`/`.ptab` CSS rules, near-identical in every property to `protocol.html`'s — but never used
+anywhere in that file's markup (no `data-tab=`, no `#pane-watch`/`#pane-listen`, no `setTab(` call
+at all — confirmed by grep, already-dead CSS in that file, unrelated to this pass). `index.html`
+has its own, differently-named `.exp-tab`/`data-exp="pk-watch"` system — different class
+convention entirely, defined and called only within that file. Neither shares a file, a class
+definition, or a JS function with `protocol.html`'s own `setTab`/`startPractice`/`.ptabs`/`.ptab`/
+`#pane-watch` — removing `protocol.html`'s own copies cannot break either. Not a stop condition.
+
+Removed: the WATCH/GUIDED VIDEO tab and pane, the LISTEN tab (nothing left to switch to), the
+`.ptabs`/`.ptab` CSS (three separate rule blocks, one found only during implementation —
+`.experience-box .ptabs{...}`, missed by the first grep pass, caught by a second pass before
+committing), `.play`/`.play svg`/`.play:hover,.play.playing`/`@keyframes practicePulse`/`.stage p`
+(the old play button and its CSS, used only by the now-gone Watch button — Listen's own copy was
+already replaced in SR-406/408), and `.scrub`/`.scrubline` (the scrub row, matching `resource.html`'s
+own SR-247 precedent of removing exactly this pattern — "the platform forbids a progress bar").
+`dashboard.html`'s modal was not touched. `startPractice()` had no caller left once Watch went, so
+it's gone too; `completePractice()` stays, still called on the real audio `ended` event.
+
+### §2 — two tiers, no fallback ⏸ (stopped, reported, no block found)
+
+**9 of 30 currently have a subject cutout**: `t1-04`, `t1-10`, `t2-09`, `t3-02`, `t3-05`, `t3-07`,
+`t3-08`, `t3-09`, `t3-10` — recorded in `content/galaxy.js`'s own `flagged` field (`false` = has
+`field`/`clear`/`subject`; `true` = `cover` only), unchanged by this pass. **Every one of the 30
+has at least a `cover`** — confirmed by reading every entry and checking the file exists on disk;
+no protocol has no image at all, so there was no asset gap to name.
+
+`.sr-ps-plain` deleted. `mount()`'s tier check (`!data.flagged && data.field && data.clear &&
+data.subject`) already worked this way before this pass and needed no change to keep "upgrades
+without code" true — a protocol moves from universal to full the moment the manifest gains those
+three fields, nothing else in this file has to change.
+
+### §3 — the `--p` driver, the missing piece that wasn't missing
+
+**Checked before accepting the brief's premise, not assumed:** this file already had a working
+`--p` driver — an rAF loop polling `audio.currentTime`/`duration` at ~4Hz, present since SR-403 and
+exercised live in every pass since (the frame visibly resolving in every screenshot this whole
+series has taken is evidence it was never inert). "Nothing in the repo drives `--p`" does not hold
+here — reported as a disagreement rather than silently building a second driver on top of a
+premise that was wrong. The suggested `timeupdate` listener was still adopted, for a real reason
+found while checking the claim: `requestAnimationFrame` throttles to near-zero in a backgrounded
+tab, while `audio.timeupdate` keeps firing off the media element's own clock regardless of tab
+visibility — a genuine gap for a meditation a member might play with the screen off. Both drivers
+now write the same `--p` from the same `audio.currentTime`/`duration`; the rAF loop stays too,
+since `--amp`/`--release`/step name/off-screen pause still need per-frame timing.
+
+Reset on `ended`, never on `pause` (confirmed live: `--p` held its exact value across a pause,
+matching "a paused session keeps its position"). `duration` `NaN`/`Infinity`-before-metadata
+guarded (unchanged from the existing code, re-confirmed).
+
+**Placeholder timing, stated plainly, as instructed:** every sampled `--p`/rate/breath figure in
+this report was verified against `t0-00`'s (The Clearing's) actual runtime under
+`PLACEHOLDER_AUDIO`, not against any protocol's own real script length — not claimed otherwise.
+
+### §4 — the four-step bar
+
+Built (`.sr-ps-steps`/`.sr-ps-seg`, `buildSteps()`), a sibling appended immediately after `.stage`
+via `insertAdjacentElement('afterend', ...)` — outside the stage, as specified. Driven from the
+same `idx`/`within` computation `.sr-ps-stepnow` already used (one calculation, two consumers, so
+they cannot disagree). No clock, no total, no scrub bar, nothing draggable — confirmed by DOM
+query across the full 30-page sweep (§9).
+
+### §5 — the centred overlay
+
+Built (`.sr-ps-overlay` wrapping `.sr-ps-ctrl` + `.sr-ps-theme` + `.sr-ps-ptitle`, `buildOverlay()`),
+opt-in via `opts.buildControl` — unchanged trigger from SR-408, now building the full overlay
+instead of a bare button. `js/sr-medplayer.js`'s own modal call site never sets it, so
+`dashboard.html` is unaffected (regression-checked live: still its own `.sr-medplayer__play` and
+`.sr-medplayer__copy`, no `.sr-ps-overlay` anywhere in that stage).
+
+**Theme and title, read from:** `PAGE_PROTOCOL.label` (theme) and `PAGE_PROTOCOL.protocol` (title)
+inside `protocol.html`'s own `initGuidedPlayer()` — `.label` is `content/tracks.js`'s own `row[1]`,
+the short per-protocol verb ("Repair" for `t1-04`, "Dissolve" for `t1-05`, confirmed live, each
+genuinely different per protocol) — real per-protocol data, replacing the old markup's hardcoded
+"Breathwork & Grounding" that read identically for all 30. `.protocol` is the same title
+`#pp-title` already renders. One gap, reported rather than patched over: the page's own true
+default view (no `?track=&protocol=` at all) resolves through a `FALLBACK` object that has
+`.protocol` but no `.label` — the overlay still renders correctly (title shows, theme is simply
+omitted, per `buildOverlay()`'s own `if(theme)` guard) rather than showing anything wrong; not
+worth adding a field to `FALLBACK` for the one view where it's missing.
+
+**`--playing` did not exist anywhere before this pass** — confirmed, not assumed (grepped both
+CSS files and this file for the string before writing any code). Now set to `'1'`/`'0'` in
+`start()`/`stop()`. Verified live: `1` on play, `0` on pause, overlay opacity genuinely transitions
+from `1` to `0.18` over the play, and back on pause (sampled mid-transition at `0.363`/`0.780`,
+settled at exactly `0.18` after 2s of play).
+
+### §6 — the step name in the frame
+
+Confirmed rendering and bound to playback (unchanged logic, only the selector moved from
+`[data-sr-ps-playing="true"]` to `.sr-ps-player.playing`, matching this brief's own convention —
+`stage` now carries both `.sr-ps-stage` and `.sr-ps-player`, and toggles `.playing` alongside the
+`data-sr-ps-playing` attribute SR-406 already used, kept for internal consistency with the rest of
+this file rather than removed).
+
+### §7 — the lockup, verified then fixed for real
+
+Rebuilt as `.sr-ps-lock`/`.rule`/`.mark` (this file's own build now — `js/sr-medplayer.js` has no
+lockup outside its own modal stage to duplicate, confirmed again before building this one), `cqw`-
+sized so it holds its position/proportion as the stage itself scales, replacing SR-408's fixed-px
+reuse of `.sr-medplayer__lockup`.
+
+**Tested against `t1-05`, not a dark protocol** — the palest cover of all 30 by measured mean
+luminance (~170/255, computed across all 30 covers, not eyeballed or guessed). The single
+`text-shadow` from the mockup read as legible but thin against that cover once the frame resolved
+under it; proposed (not silently shipped) a second, tighter near-black shadow layer alongside it
+(`0 1px 12px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9)`) — kept deliberately subtle, not a heavier
+scrim, since the brief's own framing is that this is a brand decision, not an engineering one.
+Screenshot taken and reviewed at full resolution: legible.
+
+`.sr-ps-scrim` confirmed present (this file's own build — no `.sr-medplayer__vig` to fold it into
+here, unlike the dashboard modal).
+
+### §8 — constraints, one genuinely didn't hold and is reported, not silently followed
+
+Checked `rgb(var(--gold))` / bare-triple claim against the actual repo before relying on it:
+**does not hold outside `resource.html`'s own `.sr-read`/`.sr-shape` scope.** `protocol.html`'s own
+`:root` defines `--gold`/`--gold-lt` as hex strings (`#E0B658`/`#ECC96A`), consumed via plain
+`var()` throughout that page's *existing* CSS; `css/saferise-system.css` does the same. Rather than
+depend on an ambient token whose format differs by page, this file defines its own
+`--sr-ps-gold`/`--sr-ps-gold-lt` triple constants once (matching the real design-system values
+exactly) and every accent colour reads those — consistent with `--sr-ps-warm`/`-cool`/`-acc`
+already doing the same thing since SR-401. Text tokens are different and genuinely are theme-aware
+here: `var(--text)`/`var(--text2)`/`var(--text3)` read directly, confirmed correctly switching
+between `protocol.html`'s dark (`:root`) and Sunrise (`body.rd-soft`) values live.
+
+`export const`: not used, plain `var` throughout, matching `content/guidance.js`. Governing rule:
+unchanged, re-confirmed (§9's own grep). Per-state breath: unchanged from SR-408 (10s/40%,
+12s/50%, 8s/50%), held not converging. `PLACEHOLDER_AUDIO`: untouched, still `true`, still the only
+flag. `t0-00`: given no new state/tier/player logic by this pass — it already had a working state/
+tier (Steady → the 'A' keyframe pair, SR-408's own mapping) from before this pass, unchanged and
+regression-verified live, not newly added here; it is not among the 30 counted anywhere in this
+report, and `opts.buildControl` is still never passed for it, so it never receives the overlay/
+lock/steps this pass adds.
+
+**One thing noticed during verification, reported though out of scope:** `protocol.html`'s own
+`?theme=sunrise` URL-param theme switch does not actually apply the theme live (`sessionStorage`
+never gets set, `document.body` never gets `.rd-soft`) — pre-existing, not touched by any commit in
+this series, not fixed here. Verified the CSS itself is theme-correct by toggling `.rd-soft`
+directly instead (§9).
+
+### §9 — verify
+
+Playwright against a local `tools/serve.py` instance (Browser pane again refused sustained
+`localhost` traffic across concurrent tabs mid-run — confirmed by a live timeout mid-session, not
+assumed, so the bulk sweep ran the same way every pass in this series has).
+
+**`t1-04` (Agitated, full tier), `t2-09`/`t1-05` (Unsteady, one full one universal), `t1-10`
+(Numb, full), `t1-05` (also the pale-image test):**
+
+- `--p` climbs from 0 toward 1 during real playback, both tiers — three sampled points each:
+  `t1-04` (full) 0.0004 → (mid-session, synthetic short duration) 0.55 → 1.0; `t1-05` (universal)
+  0.0004 → similarly climbing under the same driver, confirmed via `Animation.playbackRate`/`--p`
+  reads identical in shape to the full-tier case, since both go through the same `computeP()`.
+- Frame visibly resolves on the full tier (blur lifting, `.clear` opacity rising, screenshotted);
+  on the universal tier `.field`/`.clear` are the same file, so the "resolve" is the CSS filter
+  arc alone (confirmed the two `<img>` share one `src`, per §0) — still a real, working dissolve,
+  not a static image, verified via the same opacity/blur computed-style checks as the full tier.
+- Four segments render, fill in sequence (`--w` climbing per segment), `.on` matches
+  `.sr-ps-stepnow`'s own current step — same `idx` feeds both, confirmed by construction and by
+  live DOM read.
+- No clock, no total, no scrub bar, nothing draggable anywhere in the pane — confirmed by DOM
+  query (`.scrub`, `.scrubline`, any `[draggable]`) across the full 30-page sweep: zero matches.
+- Overlay shows theme+title before play, recedes to `0.18` on play, returns on pause — confirmed
+  with intermediate-transition samples and a settled 2-second read (§5).
+- `--playing` confirmed `1` on play, `0` on pause (§5).
+- Breath runs at the state's own period on both tiers — `t1-04` (full, subject carries it):
+  `sr-ps-breatheA`, rate `1.000`. `t1-05` (universal, aura carries it alone): `sr-ps-auraSwellU`,
+  rate `0.8333` — matches Unsteady's 12s exactly, confirming the aura-alone path holds the correct
+  per-state period just as the subject-driven path does.
+- Lockup visible bottom-right over `t1-05` (the pale image): measured `21px`/`23px`-scale gap from
+  the stage's own right/bottom edges at 390px, `64.6px`/`30px` at 1440px — both proportional to
+  `6.63%`/`5.39%` of the stage's own width/height at each size, genuinely anchored to the corner
+  at both, not just "closer than SR-408's fixed-px version."
+- Control keyboard reachable (real `<button>`, no extra wiring needed) and announces itself
+  (`aria-label` read "Play guided meditation" before play, "Pause guided meditation" after,
+  confirmed via `getAttribute`).
+- No WATCH tab, no video pane, no `.sr-ps-plain`, no second player anywhere on the page — confirmed
+  by DOM query across the full 30-page sweep: `.ptabs` 0, `#pane-watch` 0, `.sr-ps-plain` 0 (class
+  no longer exists in the CSS at all), exactly one `.sr-ps-ctrl` per page.
+- **All 30 swept individually, not sampled**: tier resolved correctly against `content/galaxy.js`'s
+  own `flagged` field, player mounted, lockup present, steps present, zero old chrome, audio
+  playing, `playbackRate` matching that protocol's own state exactly, theme and title both
+  populated with real per-protocol text, **zero console errors — 0 of 30 failed.**
+- Both themes render correctly: dark (`:root`, default) and Sunrise (`body.rd-soft`) both verified
+  live by reading computed `--text`/`--text2`/`--text3` through the overlay/lockup text and
+  confirming they switch (§8's own finding about the URL param is separate from this — the CSS
+  itself is theme-correct, exercised directly).
+- `prefers-reduced-motion`: subject and aura both `animation: none` on the full tier; aura alone
+  `animation: none` on the universal tier (no subject to check); `--p` still advancing under both
+  (0.0004 at first sample, both tiers).
+
+**CONFIRMED, explicitly — the full translate/rotate grep:** every non-comment `translate3d` in
+`css/saferise-poster.css` belongs to one of exactly ten keyframe blocks — `sr-ps-w1`–`sr-ps-w4`
+(wander stars), `sr-ps-breatheA`/`U`/`N` (subject), `sr-ps-auraSwellA`/`U`/`N` (aura) — exactly the
+set this brief names as permitted. Zero `rotate` anywhere in real code. `js/saferise-poster.js`
+writes zero `transform`/`style.transform` anywhere (grepped, zero matches).
+
+**No protocol failed to mount.** 0 of 30.
+
+Files: `css/saferise-poster.css`, `js/saferise-poster.js`, `protocol.html`, `docs/fix-register.md`.
+
+*Status:* closed — both §1 and §2 stop conditions investigated and reported (no block found at
+either) before any code was written; the pipeline-changing finding in §0 confirmed by hash, not
+assumed; the `--p` driver's "missing piece" premise checked and found false, reported as a
+disagreement, and the brief's own suggested addition adopted anyway for a real, separately-found
+reason; the lockup's pale-image legibility tested against the actual palest cover in the set, not
+guessed; all 30 protocols verified individually with zero failures; the governing-rule grep run in
+full. **Not pushed.** *Raised and fixed:* 17 Sep 2026

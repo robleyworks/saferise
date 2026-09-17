@@ -14,31 +14,56 @@
    ============================================================================
    THE GOVERNING RULE -- prompt-galaxy-player.md #0, amended by
    prompt-galaxy-refinements.md #0, amended again by
-   GALAXY-PLAYER-REFINEMENTS-v2.md #0 (per-state breathe/auraSwell keyframes
-   replace the single shared ones; same exception, three named variants)
+   GALAXY-PLAYER-REFINEMENTS-v2.md #0, unchanged (confirmed, not just
+   assumed) by GALAXY-PLAYER-COMPLETE.md #8
    NO LAYER TRANSLATES OR ROTATES, except:
      - .sr-ps-wander i (the five individual wander stars), under 2% of the
        frame each, unchanged from SR-402;
-     - .sr-ps-subject and .sr-ps-plain's shared `sr-ps-breatheA`/`U`/`N`
-       keyframes (one per state, selected in JS -- see js/saferise-poster.js),
-       each under ~1.8% of the frame peak-to-peak, one element, one period,
-       one easing curve;
+     - .sr-ps-subject's `sr-ps-breatheA`/`U`/`N` keyframes (one per state,
+       selected in JS -- see js/saferise-poster.js), each under ~1.8% of the
+       frame peak-to-peak, one element, one period, one easing curve. Full-
+       galaxy tier only (GALAXY-PLAYER-COMPLETE.md #2) -- the universal tier
+       has no subject to carry this;
      - .sr-ps-aura's own `sr-ps-auraSwellA`/`U`/`N` keyframes, same shape,
        same period, on the outer wrapper only (see the aura split below).
+       Runs on BOTH tiers -- the universal tier's aura carries the breath
+       alone, per #2's own instruction, still one element/one period/one
+       curve, so the rule's own reasoning still holds.
    Still forbidden on .sr-ps-field, .sr-ps-clear, .sr-ps-lights,
-   .sr-ps-subjwrap, .sr-ps-stage, or any wrapper other than the two named
-   above. No parallax. No Ken Burns. Grep this file for "translate" and
-   "rotate" before trusting that claim -- don't just take the comment's word
-   for it (verified in the pass's own report).
+   .sr-ps-subjwrap, .sr-ps-stage, .sr-ps-overlay, .sr-ps-lock, .sr-ps-steps,
+   or any other wrapper. No parallax. No Ken Burns. Grep this file for
+   "translate" and "rotate" before trusting that claim -- don't just take
+   the comment's word for it (verified in the pass's own report).
    ============================================================================ */
 
 .sr-ps-stage {
-  --p: 0; --breath: 10s; --amp: 0; --release: 0; --warmshift: 0;
+  --p: 0; --breath: 10s; --amp: 0; --release: 0; --warmshift: 0; --playing: 0;
   /* container-type:inline-size -- needed for .sr-ps-ctrl's cqw sizing below
      (GALAXY-PLAYER-REFINEMENTS-v2.md #4: the galaxy player now builds its
      own control, matching the reference mockup's .ctrl geometry). Nothing
      else in this file used cqw before this, so nothing else depends on it. */
   container-type: inline-size;
+  /* GALAXY-PLAYER-COMPLETE.md #8's own gold/gold-lt bare-triple rule does
+     NOT already hold repo-wide -- checked before relying on it: protocol.
+     html's own :root defines --gold as a hex string (#E0B658), consumed
+     via plain var(--gold) throughout that page's existing CSS; the triple
+     convention (rgb(var(--gold))) only actually exists scoped inside
+     resource.html's own .sr-read/.sr-shape diagrams. Rather than depend on
+     an ambient token whose format differs by page, this file defines its
+     own triple constants once, here, and every accent colour below reads
+     them -- consistent with --sr-ps-warm/-cool/-acc already doing the same
+     thing. Values match the real design-system gold/gold-lt exactly
+     (css/saferise-system.css's own --gold:#D4A843/--gold-lt:#ECC96A).
+     Text colour (--text/--text2/--text3) is different: protocol.html DOES
+     define those locally as real, theme-aware hex values consumed via
+     plain var(), so this file reads them directly instead of duplicating
+     them -- they're used only where this file is actually loaded on a page
+     that defines them. */
+  --sr-ps-gold: 212,168,67;
+  --sr-ps-gold-lt: 236,201,106;
+  /* protocol.html doesn't define --ease at all (checked); the reference
+     mockup's own value, matching css/saferise-system.css's --ease too. */
+  --sr-ps-ease: cubic-bezier(.22,.61,.36,1);
 }
 
 .sr-ps-field,
@@ -205,14 +230,26 @@
 }
 @keyframes sr-ps-bloom { 0%,100% { opacity: .34 } 50% { opacity: .78 } }
 
-/* ---- the current step, named in the frame ---- */
+/* ---- the current step, named in the frame -- #6 confirms this already
+   existed; only the selector changes, to match .sr-ps-player.playing
+   (below) instead of the data-sr-ps-playing attribute SR-406 used. ---- */
 .sr-ps-stepnow {
-  position: absolute; left: 0; right: 0; top: 8%; z-index: 4; text-align: center;
+  position: absolute; left: 0; right: 0; top: 7%; z-index: 4; text-align: center;
   font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic;
-  font-size: 15px; color: #ECC96A; opacity: 0; transition: opacity 1.1s ease;
-  text-shadow: 0 1px 16px rgba(0,0,0,.9); pointer-events: none;
+  font-size: 15px; color: rgb(var(--sr-ps-gold-lt)); opacity: 0;
+  transition: opacity 1.1s var(--sr-ps-ease); text-shadow: 0 1px 16px rgba(0,0,0,.9);
+  pointer-events: none;
 }
-.sr-ps-stage[data-sr-ps-playing="true"] .sr-ps-stepnow { opacity: .92; }
+.sr-ps-player.playing .sr-ps-stepnow { opacity: .92; }
+
+/* ---- bottom gradient -- #7 confirms present; the lockup below sits on
+   this. Own layer now (protocol.html's fully custom mount has no
+   .sr-medplayer__vig to fold this into, unlike the dashboard modal). ---- */
+.sr-ps-scrim {
+  position: absolute; inset: 0; pointer-events: none; z-index: 3;
+  background: linear-gradient(180deg, rgba(8,8,12,.24) 0%, transparent 30%,
+    rgba(8,8,12,.5) 74%, rgba(8,8,12,.9) 100%);
+}
 
 /* ---- per-state hairline (visual differentiator between the four states,
    opacity/color only) ---- */
@@ -221,53 +258,102 @@
   box-shadow: inset 0 0 0 1px var(--sr-ps-acc, rgba(212,168,67,.3));
 }
 
-/* ---- v2 #4: the galaxy player's own control -- replaces protocol.html's
-   pre-existing play button, which SR-408 found never receded and never
-   went away. "One component owns its own controls." Built only when
-   js/saferise-poster.js's mount() is called with opts.buildControl (the
-   modal context, js/sr-medplayer.js, already has its own .sr-medplayer__play
-   and never sets that option, so nothing changes there). Real <button>,
-   so it is keyboard-reachable without extra wiring; aria-label set in JS
-   and kept in sync with play/pause state. Opacity/scale/transform-origin
-   fixed only -- never animated, matching the governing rule. */
-.sr-ps-ctrl {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  width: 7cqw; height: 7cqw; min-width: 44px; min-height: 44px;
-  border-radius: 50%; border: 1px solid rgba(236,201,106,.8);
-  display: grid; place-items: center; z-index: 7;
-  background: rgba(8,9,13,.4); backdrop-filter: blur(6px);
-  cursor: pointer; transition: transform .3s ease, background .3s ease, opacity .3s ease;
+/* ---- #5: the centred overlay -- control, theme, title. Replaces the
+   bare .sr-ps-ctrl SR-408 built (that control's real-button/keyboard/
+   aria-sync behaviour is kept, just wrapped and restyled here).
+   Built only when js/saferise-poster.js's mount() is called with
+   opts.buildControl (protocol.html only; js/sr-medplayer.js's own modal
+   call site never sets it, so dashboard.html is unaffected -- regression-
+   checked live). --playing (JS sets it 1 on play, 0 on pause -- it did
+   not exist anywhere before this pass, confirmed) recedes the overlay to
+   18% while the session runs, and brings it back on pause. */
+.sr-ps-overlay {
+  position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.3cqw; text-align: center;
+  opacity: calc(1 - var(--playing, 0) * .82); transition: opacity 1.6s var(--sr-ps-ease);
 }
-.sr-ps-ctrl:hover { background: rgba(212,168,67,.16); }
-.sr-ps-ctrl:focus-visible { outline: 2px solid rgba(236,201,106,.9); outline-offset: 3px; }
+.sr-ps-ctrl {
+  width: 7cqw; height: 7cqw; min-width: 44px; min-height: 44px;
+  border-radius: 50%; border: 1px solid rgba(var(--sr-ps-gold-lt), .8);
+  display: grid; place-items: center;
+  background: rgba(8,9,13,.4); backdrop-filter: blur(6px);
+  cursor: pointer; transition: transform .45s var(--sr-ps-ease), background .45s var(--sr-ps-ease);
+}
+.sr-ps-ctrl:hover { transform: scale(1.05); background: rgba(var(--sr-ps-gold), .16); }
+.sr-ps-ctrl:focus-visible { outline: 2px solid rgba(var(--sr-ps-gold-lt), .9); outline-offset: 3px; }
 .sr-ps-ctrl i {
-  display: block; width: 0; height: 0; margin-left: 3px;
-  border-top: 9px solid transparent; border-bottom: 9px solid transparent;
-  border-left: 14px solid #ECC96A;
+  display: block; width: 0; height: 0; margin-left: .55cqw;
+  border-top: 1.05cqw solid transparent; border-bottom: 1.05cqw solid transparent;
+  border-left: 1.7cqw solid rgb(var(--sr-ps-gold-lt));
 }
 .sr-ps-ctrl[data-playing="true"] i {
-  width: 12px; height: 15px; margin-left: 0; border: none;
-  border-left: 4px solid #ECC96A; border-right: 4px solid #ECC96A;
+  width: 1.1cqw; height: 1.4cqw; margin-left: 0; border: none;
+  border-left: .4cqw solid rgb(var(--sr-ps-gold-lt)); border-right: .4cqw solid rgb(var(--sr-ps-gold-lt));
 }
 .sr-ps-ctrl[disabled] { opacity: .4; cursor: default; pointer-events: none; }
-
-/* fixed left/50%,top/50%,translate(-50%,-50%) above is a static centring
-   transform, set once at layout and never animated -- not a governing-rule
-   exception, the same "fixed, non-animated" category as .sr-ps-field's own
-   scale(1.04). */
-
-/* ---- fallback: a flagged/uncovered protocol gets the plain cover, the
-   breath animation applied directly to it, and nothing else. Shares
-   `sr-ps-breatheA`/`U`/`N` by name with .sr-ps-subject, so v2 #1's per-state
-   swell applies here too without a second declaration -- verified live in
-   the pass's own report rather than assumed from the shared selector
-   alone. ---- */
-.sr-ps-plain {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  transform-origin: 50% 42%;
-  animation-duration: 10s; animation-timing-function: cubic-bezier(.37,0,.63,1);
-  animation-iteration-count: infinite; animation-name: sr-ps-breatheA;
+.sr-ps-theme {
+  font-size: 1.02cqw; font-weight: 700; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--text2); text-shadow: 0 1px 14px rgba(0,0,0,.9); margin: 0;
 }
+.sr-ps-ptitle {
+  font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300;
+  font-size: 2.5cqw; line-height: 1.08; color: var(--text);
+  text-shadow: 0 2px 22px rgba(0,0,0,.95); margin: 0;
+}
+
+/* ---- #7: the lockup -- own build now (protocol.html's fully custom mount
+   has no .sr-medplayer__lockup to reuse the way SR-406/408's dashboard-
+   adjacent code did). Geometry from the cover lockup, scaled by width
+   share -- cqw so it holds its position/size as the stage itself scales,
+   rather than SR-408's fixed px offsets. NEVER animates -- the one fixed
+   element in the frame, same as every version of this brief has said. */
+.sr-ps-lock {
+  position: absolute; right: 6.63%; bottom: 5.39%; z-index: 6;
+  display: flex; align-items: center; gap: 2.03cqw; opacity: .92;
+  pointer-events: none;
+}
+.sr-ps-lock .rule { display: block; width: 11.79cqw; height: 1px; background: var(--text); opacity: .75; }
+.sr-ps-lock .mark {
+  font-family: 'Cinzel', serif; font-weight: 400; font-size: 1.00cqw;
+  letter-spacing: .34em; color: var(--text); white-space: nowrap;
+  text-shadow: 0 1px 12px rgba(0,0,0,.85);
+}
+/* #7's own instruction: test against a pale image before trusting the
+   mockup's shadow alone, report rather than invent. Tested against t1-05
+   (mean luminance ~170/255, the palest of all 30 covers) -- see this
+   pass's own report. A second shadow layer added here, not left to a
+   single soft one: pale images (light sky, skin, fabric) can still wash
+   out one `0 1px 12px rgba(0,0,0,.85)` blur alone at the wordmark's own
+   thin letterforms, and this is a fixed element with no opacity/blur arc
+   to fall back on if the frame resolves brighter under it. Kept subtle
+   (a tight 1px near-black outline under the existing soft glow) rather
+   than a heavier scrim -- reported as a proposal, not shipped as if it
+   were the only possible answer. */
+.sr-ps-lock .mark { text-shadow: 0 1px 12px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9); }
+
+/* ---- #4: the four-step bar -- outside the stage, a sibling appended
+   right after it. Driven from the same --p as .sr-ps-stepnow (idx/within
+   computed once in JS, applied to both). No times, no total, no scrub,
+   nothing draggable -- a position indicator, not a progress control. */
+.sr-ps-steps {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  border-top: 1px solid var(--hair);
+}
+.sr-ps-seg { padding: 9px 10px 8px; display: flex; flex-direction: column; gap: 6px; }
+.sr-ps-seg i {
+  display: block; height: 2px; background: #20202c; border-radius: 2px;
+  overflow: hidden; position: relative;
+}
+.sr-ps-seg i::after {
+  content: ''; position: absolute; inset: 0; width: var(--w, 0%);
+  background: rgb(var(--sr-ps-gold)); transition: width .3s linear;
+}
+.sr-ps-seg b {
+  font-size: 8.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--text3); transition: color .5s var(--sr-ps-ease);
+}
+.sr-ps-seg.on b { color: rgb(var(--sr-ps-gold-lt)); }
+.sr-ps-seg.done b { color: var(--text2); }
 
 /* ---- off-screen: pause every animated layer, SR-343's own toggle-class
    shape (animation-play-state, not a scroll listener) ---- */
@@ -275,7 +361,6 @@
 .sr-ps-stage.sr-ps-off .sr-ps-lights::after,
 .sr-ps-stage.sr-ps-off .sr-ps-wander i,
 .sr-ps-stage.sr-ps-off .sr-ps-subject,
-.sr-ps-stage.sr-ps-off .sr-ps-plain,
 .sr-ps-stage.sr-ps-off .sr-ps-aura,
 .sr-ps-stage.sr-ps-off.sr-ps-stage::after {
   animation-play-state: paused;
@@ -298,7 +383,6 @@
   .sr-ps-lights::before, .sr-ps-lights::after,
   .sr-ps-wander i,
   .sr-ps-subject,
-  .sr-ps-plain,
   .sr-ps-aura,
   .sr-ps-stage::after {
     animation: none !important;
