@@ -1250,6 +1250,19 @@ function setTab(which){
   if(which==='listen') initGuidedPlayer();
 }
 
+/* SR-407 · placeholder audio, temporary, founder-approved
+   (prompt-placeholder-audio.md). SR-406 found the one resolution point for
+   a protocol's audio -- the MEDITATION[galaxyId] lookup a few lines below
+   -- and confirmed content/meditation.js has only ever carried a real
+   entry for t0-00, so 30 of 31 protocols resolve to nothing there. This
+   flag, and only this flag, decides what a miss does: fall back to
+   t0-00's real file so the component can be seen running live everywhere,
+   or resolve to nothing (the honest disabled-control state SR-406
+   shipped). Setting it to false restores that real behaviour everywhere,
+   in this one edit -- nothing else in this file changes.
+   MUST be false before public launch -- recorded in docs/page-invariants.md. */
+var PLACEHOLDER_AUDIO = true;
+
 var srGuidedPlayerMounted = false;
 function initGuidedPlayer(){
   if(srGuidedPlayerMounted) return;
@@ -1271,6 +1284,7 @@ function initGuidedPlayer(){
   var audio = document.createElement('audio');
   audio.preload = 'metadata';
   var med = (typeof MEDITATION !== 'undefined') ? MEDITATION[galaxyId] : null;
+  if(!med && PLACEHOLDER_AUDIO && typeof MEDITATION !== 'undefined') med = MEDITATION['t0-00'];
   var hasAudio = !!(med && med.src);
   if(hasAudio) audio.src = med.src;
   stage.appendChild(audio);

@@ -285,3 +285,32 @@ same hand-delivered page, for the same underlying reason — a page
 generated from a snapshot older than the fixes it silently undid. Check
 every invariant in this file against a hand-delivered drop, not just the
 one that broke last time.
+
+## Temporary flags that must be false before public launch (SR-407)
+
+**`PLACEHOLDER_AUDIO`, `protocol.html`, declared just above `initGuidedPlayer()`
+in that page's own inline `<script>`.** Currently `true`.
+
+While `true`: every one of the 30 track protocols whose own guided-meditation
+audio doesn't exist yet falls back to playing `t0-00`'s file (The Clearing) in
+its Listen pane, so the galaxy player component — poster, breath, steps,
+lockup, audio-reactive aura — can be seen running live everywhere rather than
+sitting behind 30 disabled controls. This is deliberate and founder-approved,
+for demonstration only; the UI carries no label or disclaimer saying so, per
+that same instruction (`prompt-placeholder-audio.md`).
+
+**Before public launch, this must be `false`.** Setting it to `false` is the
+entire fix, in the one place it lives — no other file changes. With it
+`false`, `protocol.html` reverts to SR-406's own honest behaviour: a
+protocol plays its own audio when `content/meditation.js` has a real entry
+for it, and shows a genuinely disabled control (not a fake simulation, not
+someone else's recording) when it doesn't. As of SR-406/407, that's still
+every one of the 30 — closing this flag is not the same task as recording
+the other 30 audio files, and does not become safe to flip until at least
+one of the two is true for a given protocol: its own audio exists, or the
+disabled state is an acceptable thing to ship.
+
+Check this flag specifically before any public launch or investor/demo
+recording where a member could reasonably believe they're hearing that
+protocol's own narration — this is exactly the kind of silently-reverted-or-
+silently-left-on state this file exists to catch.

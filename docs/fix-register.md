@@ -17,7 +17,14 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-406** (verify-and-wire-all-31-players — audited the true reach of the
+- **Highest ID issued: SR-407** (`prompt-placeholder-audio.md` — temporary, founder-approved:
+  every protocol with no meditation audio of its own now falls back to `t0-00`'s real file, so
+  the galaxy player can be seen running live on all 31, not just `t0-00`. One resolution point,
+  one flag (`PLACEHOLDER_AUDIO` in `protocol.html`, just above `initGuidedPlayer()`); flipping it
+  to `false` restores SR-406's honest disabled-control behaviour everywhere in that one edit.
+  Recorded in `docs/page-invariants.md` as a must-be-`false`-before-launch flag. Verify against
+  `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-406** (verify-and-wire-all-31-players — audited the true reach of the
   SR-401–405 galaxy player (only `t0-00` had a live button+audio; the other 30 protocols' pages
   never even loaded the scripts) and wired `protocol.html`'s existing "Guided Meditation
   Experience" Listen pane, for all 30, to mount the real poster/breath/lockup regardless of
@@ -17657,3 +17664,112 @@ wired without inventing new audio or a new page component now is (30 of 30), ver
 rather than sampled (§3), and the two remaining gaps (audio, and 21 covers) are reported with exact
 counts rather than folded into "some protocols need work." **Not pushed.** *Raised and fixed:*
 17 Sep 2026
+
+---
+
+## SR-407 — placeholder audio on all 31 players
+
+`prompt-placeholder-audio.md`. Temporary, founder-approved: wire `t0-00`'s real audio file to
+every protocol that doesn't have its own, so the galaxy player (poster, breath, steps, lockup,
+audio-reactive aura) can be seen running live everywhere, not just on `t0-00`. No warning label or
+disclaimer added to the UI, per direct instruction.
+
+### 1 · The source resolution
+
+One resolution point, confirmed by reading `js/sr-medplayer.js`, `content/meditation.js`, and
+`protocol.html`'s own `initGuidedPlayer()` (SR-406) rather than assumed: `protocol.html`'s
+`MEDITATION[galaxyId]` lookup, a few lines into `initGuidedPlayer()`. `content/meditation.js` has
+only ever carried a real entry for `t0-00` (its own comment says so: "One entry for now"), so the
+lookup misses for every one of the 30 track protocols and `hasAudio` resolves to `false` for all
+of them — the honest, disabled-control state SR-406 shipped.
+
+### 2 · The fallback
+
+One flag, one resolution point, as asked:
+
+```js
+var PLACEHOLDER_AUDIO = true;   // protocol.html, just above initGuidedPlayer()
+...
+var med = (typeof MEDITATION !== 'undefined') ? MEDITATION[galaxyId] : null;
+if(!med && PLACEHOLDER_AUDIO && typeof MEDITATION !== 'undefined') med = MEDITATION['t0-00'];
+```
+
+No 30 pages edited, no file duplicated, no 30 config entries added — `content/meditation.js` is
+untouched. `med` only ever supplies `.src` to `initGuidedPlayer()` (title/eyebrow/sub aren't read
+by it), so no protocol's UI copy is ever overwritten with The Clearing's own — only the audio
+underneath it changes. Setting `PLACEHOLDER_AUDIO = false` is the entire revert, in the one place
+it lives; recorded in `docs/page-invariants.md` as a must-be-`false`-before-launch flag (§5 below).
+
+### 3 · Every player reached
+
+31 of 31. `resource.html` still renders none, by design (SR-406's own finding, unchanged — the
+`meditation` resource type is deliberately excluded from its rail). `dashboard.html`'s `t0-00`
+needed no change (it already had real audio). All 30 `protocol.html` pages already had their mount
+call wired by SR-406; this pass only changed what `audio.src` each one resolves to.
+
+### 4 · Verify — 31 rows, not a summary
+
+Every row: navigated fresh, switched to Listen, clicked play, read live state (Playwright; the
+Browser pane worked over `localhost` for the first time this session, but its single-threaded dev
+server couldn't keep up with 31 sequential loads without stalling — confirmed by a hung `curl`
+against the same port mid-run, not assumed — so the bulk pass ran the same way SR-401–406's did).
+
+| id | player renders | poster | audio plays | breath rate vs. state | lockup | console errors |
+|---|---|---|---|---|---|---|
+| t0-00 | yes | galaxy | yes | 1.000 (Steady, correct — never entrains) | yes | none |
+| t1-01 | yes | fallback | yes | 1.423 (Agitated, expected ~1.423) | yes | none |
+| t1-02 | yes | fallback | yes | 1.425 (Agitated, expected ~1.425) | yes | none |
+| t1-03 | yes | fallback | yes | 1.425 (Agitated, expected ~1.425) | yes | none |
+| t1-04 | yes | galaxy | yes | 1.425 (Agitated, expected ~1.426) | yes | none |
+| t1-05 | yes | fallback | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t1-06 | yes | fallback | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t1-07 | yes | fallback | yes | 0.501 (Numb, expected ~0.501) | yes | none |
+| t1-08 | yes | fallback | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t1-09 | yes | fallback | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t1-10 | yes | galaxy | yes | 0.501 (Numb, expected ~0.501) | yes | none |
+| t2-01 | yes | fallback | yes | 1.425 (Agitated, expected ~1.425) | yes | none |
+| t2-02 | yes | fallback | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t2-03 | yes | fallback | yes | 1.425 (Agitated, expected ~1.425) | yes | none |
+| t2-04 | yes | fallback | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t2-05 | yes | fallback | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t2-06 | yes | fallback | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t2-07 | yes | fallback | yes | 1.425 (Agitated, expected ~1.425) | yes | none |
+| t2-08 | yes | fallback | yes | 0.501 (Numb, expected ~0.501) | yes | none |
+| t2-09 | yes | galaxy | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t2-10 | yes | fallback | yes | 0.501 (Numb, expected ~0.501) | yes | none |
+| t3-01 | yes | fallback | yes | 1.425 (Agitated, expected ~1.425) | yes | none |
+| t3-02 | yes | galaxy | yes | 1.425 (Agitated, expected ~1.425) | yes | none |
+| t3-03 | yes | fallback | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t3-04 | yes | fallback | yes | 1.425 (Agitated, expected ~1.425) | yes | none |
+| t3-05 | yes | galaxy | yes | 1.425 (Agitated, expected ~1.425) | yes | none |
+| t3-06 | yes | fallback | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t3-07 | yes | galaxy | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+| t3-08 | yes | galaxy | yes | 0.501 (Numb, expected ~0.501) | yes | none |
+| t3-09 | yes | galaxy | yes | 0.501 (Numb, expected ~0.501) | yes | none |
+| t3-10 | yes | galaxy | yes | 0.834 (Unsteady, expected ~0.834) | yes | none |
+
+"Breath rate vs. state" is `Animation.playbackRate` on the running `sr-ps-breathe` animation,
+checked against `10 / (start + (10 - start) * p^0.7)` for each protocol's own `startBreath`
+(computed independently for each row, not eyeballed) — confirmed it tracks the **playing
+protocol's own state**, not `t0-00`'s Steady/10s, even though `t0-00`'s audio file is what's
+actually sounding. Poster type matches `content/galaxy.js`'s `flagged` field exactly for all 31,
+independent of which audio is playing (galaxy/fallback selection was never touched by this pass).
+
+Three screenshots taken mid-playback, one per track (`t1-04`, `t2-09`, `t3-08` — a galaxy example
+from each track rather than a fallback one, to show the full field/clear/subject/lights/wander
+system rather than the plain-cover version), each showing a resolved photograph, the current step
+named in italic gold at top ("Rise"), the audio-reactive aura around the play control, and the
+SafeRise lockup lower right — sent alongside this report.
+
+### 5 · Recorded
+
+`docs/page-invariants.md` — new section, "Temporary flags that must be false before public
+launch (SR-407)": names `PLACEHOLDER_AUDIO`, where it lives, what `true` does, and that flipping
+it to `false` is the entire revert.
+
+Files: `protocol.html`, `docs/page-invariants.md`, `docs/fix-register.md`.
+
+*Status:* closed — single resolution point found and reported before editing, one flag added
+behind which the whole fallback lives, all 31 players verified individually with the flag on
+(table above), the revert path recorded where a launch checklist would find it. **Not pushed.**
+*Raised and fixed:* 17 Sep 2026
