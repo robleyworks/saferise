@@ -17,7 +17,13 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-398** (Part B of the shapes-and-nav pass — protocol switch now carries
+- **Highest ID issued: SR-400** (SR-399 standardises the "hand to heart" gesture wording across
+  `content/t1/t2/t3-resources.js` and `anxiety-reset.html`, and adds `tools/check-hand-to-heart.py`.
+  SR-400 is a separate defect report only, no fix: `index.html`'s `renderSomatic()` never renders
+  because it looks up reader pages by a bare `pN-companion` key while the real pages are keyed
+  `t1pN-companion`. Allocated per this pass's own instruction. Verify against `git log -1` once it
+  lands.)
+- **Previously: Highest ID issued: SR-398** (Part B of the shapes-and-nav pass — protocol switch now carries
   resources-vs-overview view state across the switch, resource.html's dead `#log` journal link
   and its unreachable-when-embedded 1:1 link both re-wired to the dashboard shell's own existing
   modals — allocated per this pass's own instruction. Verify against `git log -1` once it lands.)
@@ -16891,3 +16897,194 @@ written, per the brief's own gate; each fixed by routing through the dashboard s
 already-existing modal system rather than inventing a new one; `protocol.html`'s and dashboard's
 own journal handling confirmed already correct and left untouched. Stopping here, as instructed,
 to report Part B before starting Part A. **Not pushed.** *Raised and fixed:* 16 Sep 2026
+
+---
+
+## SR-399 — standardise "hand to heart" across the resource library
+
+`pass/CLAUDE-CODE-hand-to-heart.md`. One gesture, one wording, decided by *form* — a cue or bold
+label uses "heart", a flowing prose mention uses "chest", and "sternum" survives only where a
+passage is genuine mechanism copy (the anatomical term itself is the point, not merely the
+location). The audit for this pass found no passage anywhere in the corpus that clears that bar,
+so the word disappears entirely once this lands.
+
+**Step 1 — occurrence audit, done before any edit.** Searched the whole repo, not just the
+obvious content files. Two content-resolution paths exist, and this mattered a great deal for what
+turned out to be in scope:
+
+- **The real, live chain**: `content/t1/t2/t3-resources.js` (`T1/T2/T3_RESOURCES`) →
+  `js/saferise-resources.js`'s `resolveSet()` → `resource.html` / `protocol.html` /
+  `dashboard.html`. No `resource-content.js` file exists anywhere in the repo — that name, seen
+  in an earlier pass's notes, does not correspond to anything on disk.
+- **A second, older store living entirely inside `index.html`**: its own `RESOURCE_CONTENT` and
+  `SOMATIC_DATA` objects, resolved by `index.html`'s own `getResourceData(key)`. Traced line by
+  line: for every key except two hardcoded exceptions (`p2-companion`, `p2-guide`),
+  `getResourceData()` redirects to the heavy store above instead of reading `RESOURCE_CONTENT`
+  directly. Confirmed dead, not merely shadowed, in two ways: (1) `RESOURCE_CONTENT['p1'..'p10'
+  -crisiscard]` still carry an old 4-line "Heart — Hand to heart" cue-card structure that the live
+  `T1_RESOURCES['t1pN-crisiscard']` replaced with an unrelated "Recognise/Regulate/Release/Rise"
+  structure containing no "hand to heart" wording at all; (2) `SOMATIC_DATA`'s body-map widget
+  (`renderSomatic()`) never renders for any protocol, full stop — see SR-400 below, its own
+  defect, not a copy issue. The one live exception, `RESOURCE_CONTENT['p2-guide']`, was read in
+  full and turned out not to need a wording change (see step 2). **Per direct instruction, none of
+  `index.html`'s dead `RESOURCE_CONTENT`/`SOMATIC_DATA` entries were touched.**
+
+Occurrence count in the live corpus: 69 total across `content/t1/t2/t3-resources.js` (67) and
+`anxiety-reset.html` (1 — `index.html`'s one live exception needed no change, see step 2). Cue-card
+images and illustration briefs were checked (`docs/IMAGERY-BRIEF.md`, every filename under
+`assets/`) — nothing baked-in, no re-render needed. `content/guidance.js` and `content/inventory.js`:
+zero occurrences. `docs/PASS-full-resource-access-acceptance-table.md` and
+`docs/SafeRise_Track01_Review.md` describe the platform rather than feed it — reported, not
+edited. `pass/saferise-track01-reader.html`, `pass/RECON.md`, `pass/CLAUDE-CODE-combined-script-
+pass.md` are dev mockups/planning docs (the reader mockup is `noindex,nofollow` and unreferenced
+by any live page) — out of scope, not edited. `archive/track-sunrise.html` is an unreferenced
+historical snapshot — left untouched as a deliberate historical record.
+
+**The classification test, and why it changed mid-pass.** The brief's own instinct (instruction
+vs. explanation) doesn't survive contact with the corpus: `index.html`'s live `p2-guide` line
+("Put a hand on your chest if that helps") and five meditation-narration lines ("A hand on your
+chest, if you'd like one there") are the same grammatical shape — both tell the member to do
+something — but sit in different document genres. The test that actually holds is **structural,
+not grammatical**: is the sentence part of the fixed, repeating cue-card action-beat taxonomy —
+`Recognise`/`Regulate`/`Release`/`Rise` (crisiscard back) or `Name it`/`Breathe it`/`Stop fighting
+it`/`Step out` (crisiscard front) — identified by a heading or bold label reproducing one of those
+exact canonical words, verbatim, the same words used identically across all 30 protocols? Or does
+it sit in a different genre — a Protocol Guide's own bespoke per-step title, or a "Why…" rationale
+subheading — narrative or explanatory prose that never touches that taxonomy?
+- The five meditation-narration lines sit under `<h4>Regulate</h4>` — the canonical word itself —
+  so they are cues, same taxonomy slot as the crisiscard's own bold `Regulate` label, just
+  delivered as spoken narration instead of a compressed paragraph.
+- `index.html`'s `p2-guide` line sits under `<h4>Bring the intensity down another notch</h4>`, a
+  bespoke title that exists nowhere else in the corpus, inside a "Protocol Guide"/"How This
+  Works" document — a different genre that never touches the Regulate/Release taxonomy.
+- `anxiety-reset.html`'s "Hand on chest." sits under a step literally labelled "02 · Regulate" —
+  the canonical word again — so it is a cue.
+
+**Step 2 — the edits.** `content/t1-resources.js` (28 lines touched), `content/t2-resources.js`
+(27 lines), `content/t3-resources.js` (12 lines) — one word substituted per occurrence, nothing
+else, verified by an exact-count reconciliation before writing (67 physical lines touched,
+matching `git diff`'s own 67 insertions / 67 deletions exactly):
+
+- 15 × meditation `cues[]` `"note": "hand to sternum…"` (type `RED/ACTION`) → `"hand to heart…"`
+- 16 × bold body cue `<strong>Hand to sternum[, or hold your own arm].</strong>` → `heart`
+- 24 × `Hand to/on [your] chest` inside the Regulate/Breathe-it/Contact-then-breath taxonomy
+  (19 crisiscard-style bold instances + 5 meditation `<h4>Regulate</h4>` narration instances) →
+  `heart`, preposition (`to`/`on`) preserved exactly as written rather than forced to a single
+  canonical form, matching the brief's own worked example (`"Place your hand on your sternum"` →
+  `"Place your hand on your heart"`, keeping "on")
+- 12 × prose "Contact/warmth/pressure at the sternum is a [related signal/direct input]…,
+  registers when finer inputs don't" (none explain *why* the sternum specifically — no nerve,
+  vagal or other physiological reasoning, just the general functional value of touch) → `chest`
+- `anxiety-reset.html`: 1 line — `"Hand on chest."` → `"Hand on heart."` (preposition preserved)
+- `index.html`'s live `p2-guide` exception: read in full, confirmed prose under a bespoke guide
+  title, correctly already read `chest` — **no change needed.**
+
+**No sentence needed grammatical restructuring.** Every occurrence was written such that either
+noun (sternum/chest/heart) fits the same slot without a rewrite — confirmed by reading every
+resulting sentence after the substitution, e.g. `"Hand to heart. Flat hand, centre of the chest,
+light."` reads naturally with the cue word and the location detail coexisting.
+
+**The Numb exception verified verbatim, in every one of the 55 heart-bound cues**: "or hold the
+opposite arm" and "or hold your own arm" both survive untouched — the substitution only ever
+targeted the anatomical noun, never these alternative-action clauses.
+
+**Step 4 — the "four scripts may already be done" claim.** Checked `t1-05`, `t2-09`, `t3-04` and
+`t3-09` directly before assuming the brief was right. **None were pre-revised** — all four still
+carried the unrevised `cues[]`/bold-label "sternum" wording and the "Contact/warmth/pressure at
+the sternum…" prose sentence. Disagreement reported per the brief's own MATCH/DIFFERS framework;
+all four were edited along with the rest rather than skipped.
+
+**Step 5 — audio scripts vs. rendered files.** Only one protocol has rendered audio anywhere in
+the repo: `t0-00` (The Clearing — `assets/audio/meditation/t0-00-the-clearing.mp3`/`.m4a`). Its
+transcript (`audio/clearing/clearing.txt`) reads "Attention to the middle of your chest… If it
+helps — a hand there. Flat, light." — it never uses "sternum" (so this pass's edits never touched
+it) and doesn't use the word "heart" either, phrasing around both. Left untouched: it's already
+rendered, and rewording it now would put the text out of sync with the recorded audio — a
+re-render decision for Andre, not a copy edit. **No other protocol's meditation script has
+rendered audio**, confirmed by listing `assets/audio/meditation/` directly (`t0-00` only) — so
+none of this pass's 43 sternum-bearing / 24 chest-cue edits created a text/audio mismatch.
+
+**Step 6 — the lint rule.** Two lint files were named in the brief; only one exists.
+`tools/check.py` is a Playwright-driven visual-layout checker (flags orphaned short lines in
+rendered text at 1440/390px) — unrelated to script vocabulary. `lint_meditations.py` does not
+exist anywhere in the repo. **Neither file owns script-level content checks — reporting this
+disagreement rather than forcing the rule into the wrong tool.** Followed the closest real
+precedent instead, `tools/check-sitemap.py` (a standalone, standard-library-only, hand-run
+checker under `tools/`, same "checker, not a generator" shape), and added **`tools/check-hand-to-
+heart.py`**: scans `content/t1/t2/t3-resources.js` for "sternum" outside an `ALLOWLIST` dict
+(currently empty, per step 1's finding), reports every hit with its owning resource id and a
+snippet, exits 1 on any hit and 0 otherwise. Verified against a planted occurrence (flagged
+correctly, `content/t1-resources.js:140 [t1p1-companion]`, exit 1) and against the real,
+post-edit tree (clean, exit 0). **Not wired into any automated path** — run by hand, same as
+`check-sitemap.py`.
+
+**Shape-diagram interaction.** `content/shapes.js` was not touched, per the brief's own
+constraint. But the guide/companion bodies edited here for `t1p1`, `t1p4`–`t1p10`, `t2p1`–`t2p3`,
+`t2p5`, `t2p8`–`t2p10`, `t3p8` and `t3p9` are exactly the bodies the still-pending Part A of
+`pass/CLAUDE-CODE-shapes-and-nav.md` (chain/fan/ladder/dial) will extract from for those same
+resources — that pass must extract from this pass's post-edit copy, not any earlier version.
+Confirmed no overlap with the four shapes already mounted (`t1p3-guide`, `t3p1-companion`,
+`t3p1-disclosure`, `t3p1-raising`) or with the 30 floor / 29 overlap diagrams already shipped
+(SR-396/397) — none of those resource ids appear in this pass's edit list.
+
+**Verify:**
+- [x] Cues and bold labels read "heart"; prose reads "chest" — confirmed across all 69 edits
+- [x] The Numb "or hold the opposite arm"/"or hold your own arm" option survives verbatim
+- [x] Cue-card images and illustration briefs audited — nothing baked-in
+- [x] No surviving "sternum" is a mechanism explanation — none survive at all, confirmed by
+      `tools/check-hand-to-heart.py` (exit 0)
+- [x] No sentence left grammatically broken — every resulting sentence re-read
+- [x] The lint rule lives in `tools/check-hand-to-heart.py` (see step 6), flags a planted
+      occurrence, passes on the real tree
+- [x] `resource.html`, `protocol.html` and `dashboard.html` render unchanged otherwise — copy-only
+      substitutions, no markup/renderer touched
+- [ ] No console errors — not re-verified live in-browser this pass (text-only edits inside
+      already-rendered template strings; flagging rather than assuming, since a Playwright/browser
+      check wasn't run this pass)
+
+Files: `content/t1-resources.js`, `content/t2-resources.js`, `content/t3-resources.js`,
+`anxiety-reset.html`, `tools/check-hand-to-heart.py`, `docs/fix-register.md`.
+
+*Status:* closed. **Not pushed.** *Raised and fixed:* 16 Sep 2026
+
+---
+
+## SR-400 — `renderSomatic()` never renders, for any protocol (defect report only)
+
+Found as a byproduct of SR-399's step-1 audit, reported separately per direct instruction rather
+than folded into a copy pass. No fix applied — this is a rendering-logic defect, out of scope for
+a copy-only pass, and `content/shapes.js`/renderer changes are excluded from SR-399 by its own
+brief.
+
+**The defect.** `index.html`'s `SOMATIC_DATA` object (a per-protocol "Somatic Release" body-map
+widget for `p1-companion` through `p10-companion`) is wired up via `renderSomatic(key)`, which
+does:
+```js
+const page = document.querySelector('.reader-page[data-reader-page="' + key + '"]');
+```
+`renderSomatic` is called with the bare keys `SOMATIC_DATA` itself uses (`"p1-companion"` …
+`"p10-companion"`) — both from `renderAllOpenSomatic()` (`KEYS.forEach(renderSomatic)`, on
+`openReader`/`window.load`) and from the `selectReaderTab` monkey-patch, which passes through
+whatever key `openReader`'s own tab-building loop used. But every real reader page is built with
+`page.dataset.readerPage = key`, where `key` comes from `READER_PROTOCOLS[protocolKey].keys` —
+and those keys are always track-prefixed (`"t1p2-companion"`, confirmed directly in
+`content/tracks.js`'s `T1_PROTOCOL_KEYS`). `document.querySelector` never finds a page dataset
+matching the bare `"p2-companion"` form, `renderSomatic` hits its own `if (!page) return;` guard,
+and the widget's `bodyHtml()` is never inserted into any page, for any protocol, in either voice
+of the two call sites. This is a genuine bug, not merely dead-by-shadowing like the rest of
+`RESOURCE_CONTENT`: the code runs, on every `openReader`/`selectReaderTab` call, and does nothing,
+every time.
+
+**Why this matters for SR-399 specifically:** `SOMATIC_DATA`'s "Hand to chest"/"Hand to sternum"
+practice-list wording (found during SR-399's audit) is therefore never shown to a member under any
+circumstance — confirmed by this mismatch, not merely inferred from `getResourceData()`'s
+redirect logic. SR-399 left it untouched per its own scope and per direct instruction.
+
+**Not fixed here** — flagging for a future pass to decide: normalise `SOMATIC_DATA`'s keys to the
+track-prefixed form, normalise the `querySelector` lookup instead, or retire the widget entirely
+now that the live companion resources it would have supplemented already carry their own content
+in `T1_RESOURCES`.
+
+Files: none changed. Reported only, in `docs/fix-register.md`.
+
+*Status:* open — defect reported, not fixed, per direct instruction. *Raised:* 16 Sep 2026
