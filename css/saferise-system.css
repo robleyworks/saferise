@@ -4806,6 +4806,27 @@ section[id^="sr-org-"]{scroll-margin-top:124px}
    it below the band — near-solid only on this page, where the rail sits
    over dense text sections rather than a track page's imagery. */
 .sr-org-page #sr-rail .sr-rail-in{background:rgba(10,10,18,.97)}
+/* FB-14 (PASS-fix-batch-01.md) · scoped to this page only -- #sr-rail is
+   the shared chapter rail (also built on track pages and the Reader; see
+   PASS-org-layout.md §4 above), so its own centred/floating behaviour and
+   base rules stay untouched. This page's own eyebrows (this section's own
+   "Industry programmes" among them) run long enough that the pill row
+   already needs #sr-rail .sr-rail-in's existing overflow-x:auto -- the
+   active pill already scrolls itself into view on scroll (see
+   js/saferise-system.js initRail(), the railIn.scrollTo call), but
+   nothing signalled that the row was scrollable at all, so the last pill
+   just looked clipped. Border replaced with the same bezel/shadow
+   treatment as the rest of this page (no borders rule); width widened to
+   this page's own content measure instead of the shared default's
+   940px cap; an edge fade added on the trailing side as the scroll
+   affordance. */
+.sr-org-page #sr-rail .sr-rail-in{
+  border:1px solid rgba(245,237,218,.07);
+  box-shadow:inset 0 1px 0 rgba(245,237,218,.045),0 16px 40px -24px rgba(0,0,0,.5);
+  max-width:min(94vw,1180px);
+  -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 94%,transparent 100%);
+  mask-image:linear-gradient(90deg,#000 0%,#000 94%,transparent 100%);
+}
 
 /* -- pills (B6) -- */
 .sr-org-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;
@@ -4825,17 +4846,51 @@ section[id^="sr-org-"]{scroll-margin-top:124px}
 .sr-org-bezel:hover{border-color:var(--gold-dim);box-shadow:inset 0 1px 0 rgba(245,237,218,.045),0 24px 65px rgba(0,0,0,.3);transform:translateY(-2px)}
 
 /* -- hero (B3) -- underlay against the REAL fixed nav (~81px, SR-384) */
-.sr-org-hero{position:relative;overflow:hidden;min-height:88svh;display:grid;
+/* FB-13 · display:grid, was here originally -- swapped for flex. Grid's
+   own justify-items:normal (stretch) combined with .sr-org-hero-copy's
+   max-width and .sr-org-wrap's margin:0 auto resolved the item's used
+   margin-left to a flat 0 in testing (confirmed live via getComputedStyle
+   and by walking the stylesheet's own matched rules, not assumed) --
+   a real stretch/auto-margin interaction quirk, not this rule's fault.
+   Flexbox's own margin:auto centering is the well-established, reliable
+   version of the same thing and needs no other change below. */
+.sr-org-hero{position:relative;overflow:hidden;min-height:88svh;display:flex;
   align-items:center;padding:calc(81px + 40px) 0 74px}
 .sr-org-hero-img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
 .sr-org-hero-scrim{position:absolute;inset:0;z-index:-1;
   background:linear-gradient(96deg,rgba(10,12,20,.96) 0%,rgba(10,12,20,.9) 38%,rgba(10,12,20,.6) 68%,rgba(10,12,20,.3) 100%),
     linear-gradient(0deg,var(--bg) 0%,transparent 44%)}
-.sr-org-hero-copy{max-width:640px}
-.sr-org-hero-copy h1{font-size:clamp(2.2rem,4.6vw,3.6rem);line-height:1.04;letter-spacing:-.02em;margin:.8rem 0 1.2rem}
+/* FB-13 (PASS-fix-batch-01.md) · this element carries both .sr-org-wrap
+   (max-width:1180px; margin:0 auto -- the page's own content-edge class,
+   centred within the full-width hero the same way it centres every
+   section below) and .sr-org-hero-copy (max-width:640px, meant as a text
+   measure). The narrower max-width was winning on the WRAP itself, so the
+   640px box got auto-centred inside the hero instead of the 1180px one
+   -- measured live at 400px in from the hero, versus 130px for the nav
+   and every section below (the ~270px gap the brief reports). The 640px
+   cap wasn't doing anything .sr-org-hero-lead's own max-width:56ch and
+   .sr-org-hero-note's own max-width:52ch weren't already doing on the
+   elements that actually need a measure limit -- h1 wraps naturally at
+   its own font-size regardless -- so it's dropped here rather than
+   patched, and the wrap centres at the same 1180px as every other
+   section. A flex item's default main-axis sizing is fit-content, not
+   the block-level stretch-to-container a plain .sr-org-wrap gets in
+   normal flow elsewhere on this page -- confirmed live (margin-left
+   resolved to a real centred value once .sr-org-hero switched to flex,
+   but against this element's own narrower fit-content width, not its
+   1180px cap, landing short of the nav/every section's own 130px).
+   width:100% restores the stretch so the max-width cap is what actually
+   governs the box, matching every other .sr-org-wrap on the page. */
+.sr-org-hero-copy{width:100%}
+/* FB-13 · the label-to-what-it-labels/group-to-group spacing rhythm,
+   reusing this page's own already-established values rather than adding
+   new ones: 8px (.sr-org-head h2's own margin-top, this page's "small"),
+   24px (.sr-org-capacity-grid's own rule-to-numeral padding, "medium"),
+   44px (.sr-org-pull's own margin-top, "large"). */
+.sr-org-hero-copy h1{font-size:clamp(2.2rem,4.6vw,3.6rem);line-height:1.04;letter-spacing:-.02em;margin:8px 0 24px}
 .sr-org-hero-lead{color:var(--text2)!important;font-size:1.05rem;line-height:1.6;max-width:56ch}
-.sr-org-actions{display:flex;flex-wrap:wrap;gap:18px;margin-top:26px}
-.sr-org-hero-note{margin-top:18px;color:var(--text3)!important;font-size:var(--fs-caption);max-width:52ch}
+.sr-org-actions{display:flex;flex-wrap:wrap;gap:18px;margin-top:44px}
+.sr-org-hero-note{margin-top:24px;color:var(--text3)!important;font-size:var(--fs-caption);max-width:52ch}
 
 /* -- sections -- padding read from method.html's own .sr-mt-sec (SR-384) */
 /* PASS-org-layout.md §5 · was a 6vh-based clamp (40-66px on a real
@@ -4845,16 +4900,29 @@ section[id^="sr-org-"]{scroll-margin-top:124px}
    section background the same way). */
 .sr-org-section{padding:64px 0;border-top:1px solid var(--hair)}
 .sr-org-section-alt{background:var(--card)}
-.sr-org-head{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:end;margin-bottom:44px}
+.sr-org-head{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:start;margin-bottom:44px}
 .sr-org-head h2{font-size:clamp(1.8rem,3.2vw,2.6rem);line-height:1.08;letter-spacing:-.015em;margin-top:.5rem}
-.sr-org-head>p{color:var(--text2)!important;font-size:1rem;line-height:1.6;max-width:52ch}
+/* FB-14 · was align-items:end on the parent grid, which bottom-aligned
+   this column against the left column's eyebrow+h2 stack -- since this
+   paragraph usually wraps taller than that stack, bottom-alignment forced
+   its own top edge above the heading's. start-aligned now, with its own
+   top nudged down by the eyebrow's own measured height (~26px, live via
+   getBoundingClientRect against .sr-org-eyebrow/h2 in this exact section)
+   so it lines up with the heading's cap height specifically, not the
+   eyebrow above it. */
+.sr-org-head>p{color:var(--text2)!important;font-size:1rem;line-height:1.6;max-width:52ch;margin-top:26px}
 @media(max-width:900px){.sr-org-head{grid-template-columns:1fr;gap:20px}}
 
 /* -- capacity grid (3, numbered) -- */
 .sr-org-capacity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
-.sr-org-capacity-grid article{padding-top:24px;border-top:1px solid var(--gold)}
+/* FB-14 · was 24/14/10 -- loosest nearest the rule, tightest before the
+   body copy, backwards from every other label-then-content pattern on
+   this page. Same three values as the hero above (8/8/24), now ascending:
+   tight against the rule, tight against the numeral, room before the
+   description. */
+.sr-org-capacity-grid article{padding-top:8px;border-top:1px solid var(--gold)}
 .sr-org-capacity-grid span{font-family:'Cinzel',serif;color:var(--gold);font-size:.7rem;letter-spacing:.14em}
-.sr-org-capacity-grid h3{font-size:1.5rem;margin:14px 0 10px}
+.sr-org-capacity-grid h3{font-size:1.5rem;margin:8px 0 24px}
 .sr-org-capacity-grid p{font-size:.92rem;line-height:1.55}
 /* PASS-org-layout.md §1 · was max-width:56ch with no visual break from the
    grid above — narrow enough, and close enough, to read as column 01's own
@@ -4866,9 +4934,15 @@ section[id^="sr-org-"]{scroll-margin-top:124px}
    silently zeroing this margin outright (rendered gap: 0px, not 44px). Same
    fix applied below to .sr-org-story-note and .sr-org-vertical-note, the
    other two closing lines this page renders as <p>. */
+/* FB-14 · the full-measure width above was PASS-org-layout.md §1's own
+   fix for a different fault (reading as column 01's trailing paragraph,
+   not a section-level line) -- the rule and the extra margin/padding it
+   added already carry that distinctness, so capping the width here for
+   readability (60-65 characters, this page's own body measure) doesn't
+   undo it. */
 p.sr-org-pull{margin:44px 0 0;padding-top:28px;border-top:1px solid var(--hair);
   font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
-  font-size:1.3rem;color:var(--text)!important;line-height:1.5}
+  font-size:1.3rem;color:var(--text)!important;line-height:1.5;max-width:65ch}
 
 /* PASS-carousel-resume-and-routing.md §5 (cleanup, flagged as a known
    follow-up in SR-391's own entry) · .sr-org-story/-bg/-scrim/-inner/-intro

@@ -172,6 +172,7 @@ component. A generic class name is a defect, not a style preference.**
 | `sr-rr-` | The real resource reader (`resource.html`'s `#rbody`) — SR-381. Not `sr-rd-` (`index.html`'s reader), which no live navigation reaches — see §0 of PASS-live-site-defects.md |
 | `sr-org-` | `organisations.html` — SR-385. Now the B2B front door (`/organisations`); `for-organisations.html` (`sr-pr-`) 301s here, not deleted — see the SR-385 register entry |
 | `sr-pl-` | `plans.html` — SR-386. Rebuilt from `pass/mock-plans-final.html`; `/pricing` (`sr-pr-`) 301s here — see the SR-386 register entry |
+| `sr-pp-` | `protocol.html`'s embedded guided-session experience (cue card, journey/shift accordions, the CTA they share) — SR-411. Not `sr-tp-` (track/protocol marketing surfaces) or `sr-ps-` (the galaxy media player itself, its own surface since SR-401) |
 
 **Claim a new code in this table before using it.** Two surfaces sharing a code
 is how `.sr-mi-card` ended up governing two pages that must now change

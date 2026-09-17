@@ -17,7 +17,79 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-410** (`PASS-sleep-track-coming-soon.md` — added the Sleep & Recovery
+- **Highest ID issued: SR-411** (`PASS-fix-batch-01.md` — FB-01 to FB-14, protocol.html's
+  embedded experience, its media player, member-coming-soon.html, and organisations.html's hero
+  and operating-layer section. FB-01: the cue card banner's truncation/ellipsis was entirely
+  `.experience-box`-scoped CSS (`display:flex;align-items:baseline` on the text wrapper,
+  `white-space:nowrap`+`text-overflow:ellipsis` on the paragraph) over already-correct markup;
+  title changed to "The Cue Card", button to "Open" with an `aria-label` carrying the full name;
+  the `href="#"` is a real, working `data-sr-open="cue"` handler that posts to dashboard.html's
+  own `openModal('crisis')`, confirmed by reading both sides, not a dead link. FB-02: one content
+  edge (28px, matching `.pbody`'s own padding) applied to every block that had its own drifted
+  value — `.crisis` was compounding a 28px margin on top of the parent's own 28px padding (57px
+  measured, not 29px); `#experience .sechead--lead` was 36px; both now 28/29px live-measured
+  against `.stage`. One inner-row padding (20px) standardized across `.crisis`/`.shift-drop
+  summary`. FB-03: new shared `.sr-pp-cta` pill (claims surface code `sr-pp-` for protocol.html's
+  embedded session experience in the CLAUDE.md table) replaces three different treatments;
+  caret added to `.journey-toggle` (an accordion, was missing one) and kept on `.shift-toggle`,
+  withheld from the cue card's `.cb` (opens a modal elsewhere, doesn't expand in place). FB-04:
+  border → the same faint-border-plus-shadow bezel `css/saferise-system.css`'s own
+  `.sr-org-bezel` already uses (checked directly: "no borders anywhere" isn't literally true even
+  of the system's own pattern), 16px radius, on `.experience-box`/`.crisis`/`.shift-drop`/
+  `.journey`/`#pane-listen .stage` (the last one scoped under `.experience-box`, not the base
+  `.stage` rule, which resource.html also uses). FB-06: `.sr-ps-lights`/`.sr-ps-wander` raised
+  from z-index 1 to 4 — they were painting BELOW `.sr-ps-scrim`/`.sr-ps-aura` (both z-index 3),
+  which is the actual reason the stars read as barely visible, not insufficient opacity;
+  `.sr-ps-scrim` strengthened (radial vignette behind the centred control/title, stronger top
+  band under the step name) without flattening it, per the earlier hero-film.webp caution.
+  Wander amplitude left at its existing near-2% values — already at the governing rule's own
+  ceiling. FB-07: a voice indicator (4 bars, `--v` custom property, driven by the same
+  AnalyserNode `--amp` already reads — one analyser, two consumers) and a real elapsed/total
+  display with a native `<input type=range>` seek control (keyboard/click seeking, `aria-label`/
+  `aria-valuetext`, `--:--` before metadata). End-to-end seeking could not be verified against a
+  real jump in this environment: confirmed via `audio.seekable` that `tools/serve.py` (and plain
+  `python3 -m http.server` on this Python 3.9.6) never honours `Range` requests, so Chromium
+  marks the resource entirely unseekable regardless of how much is buffered — a dev-server
+  limitation, not a defect in the write path, which was verified by code review and by the
+  display staying internally consistent with whatever `currentTime` the browser actually
+  reports. FB-08: added the same card to member-coming-soon.html (confirmed byte-identical to
+  coming-soon.html's own Strength & Return card before duplicating it — these two pages are
+  maintained by hand, not from a shared source) and corrected its own "Seven tracks" heading,
+  which was already stale before this pass (8 cards existed). FB-09: `pricing.html`/
+  `for-organisations.html` updated to "Nine more tracks"; both are deliberate, documented 301-
+  stub files kept on disk until their redirects are confirmed (see the sr-pr- row in CLAUDE.md's
+  surface table) — not full live pages, not a duplicate needing deletion. FB-10: the
+  organisations.html Sleep & Recovery description reframed around the card's own "state at
+  eleven/three/seven, not a schedule" language. FB-11: the dispenza→Kross claim (carried forward
+  from the Sleep RECONSTRUCTED doc and this pass's own brief) does not hold — checked directly,
+  not assumed: `t1-09`/`t1-10` contain no live "dispenza" value anywhere; the only occurrences
+  are historical comments (SR-118/180/199) describing a correction that already happened
+  (dispenza → distance, kept deliberately per SR-180's own "do not re-add" note). No change
+  made. FB-12: confirmed `band-09.webp`'s 404 renders as a transparent gap (no dedicated
+  fallback exists; the tint/scrim/content layers already sit above the image slot). FB-13: the
+  hero's ~270px misalignment was `.sr-org-hero-copy` combining `.sr-org-wrap`'s own
+  `margin:0 auto` with a narrower `max-width:640px`, centering that narrower box inside the
+  full-width hero instead of aligning it — fixed by dropping the redundant 640px cap (the lead/
+  note already have their own ch-based measures) and, after `display:grid`'s own stretch+auto-
+  margin interaction resolved `margin-left` to a flat 0 in live testing, swapping the hero to
+  flex (reliable auto-margin centering) plus `width:100%` on the copy column (a flex item's
+  default main-axis sizing is fit-content, not block's stretch-to-container). Hero now measures
+  154px from the card edge, matching every section below exactly. Copy replaced per the brief's
+  own table. FB-14: the rail's "INDU" clipping is `#sr-rail` (the shared chapter nav, also used
+  by track pages and the Reader) running out of its 940px cap with no scroll affordance — scoped
+  under `.sr-org-page` only: bezel/shadow replacing the border, width raised to this page's own
+  1180px measure, a trailing edge-mask signalling scroll (the active pill already scrolled
+  itself into view before this pass — confirmed in `initRail()`, not added). Intro-paragraph
+  top-alignment fixed by switching `.sr-org-head` from `align-items:end` to `start` plus a
+  measured 26px `margin-top` on the paragraph (the eyebrow's own live-measured height) so it
+  lines up with the heading's cap-height specifically, applies to both sections sharing this
+  head component. Column rhythm inverted from 24/14/10 to 8/8/24 (ascending, matching every
+  other label-then-content pattern on the page). Closing line capped to 65ch without undoing
+  PASS-org-layout.md §1's own distinctness fix (the rule and the extra margin/padding already
+  carry that). Copy replaced per the brief's own table. Spacing throughout reuses three values
+  already established elsewhere on this exact page — 8px/24px/44px — no new tokens added, since
+  none exist as CSS custom properties on this page to begin with.)
+- **Previously: Highest ID issued: SR-410** (`PASS-sleep-track-coming-soon.md` — added the Sleep & Recovery
   coming-soon card (LG-273: it was promised on the organisations page and existed nowhere else).
   Card only — no protocol content, `tracks.js` untouched (has no track 5 and needs none for the
   card to render; the coming-soon cards are page-authored). Resolved the "Rest Guilt" collision

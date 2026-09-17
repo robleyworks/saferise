@@ -177,12 +177,26 @@
      control. theme/title are plain strings the caller already resolved
      from its own data (protocol.html reads them from PAGE_PROTOCOL --
      see that file -- not duplicated here). */
+  /* FB-07 (PASS-fix-batch-01.md) · four bars, a restrained "voice speaking"
+     signal. Height is written per-tick as a --v custom property from
+     mount()'s own frame loop (see below), reusing the same aura.read()
+     analyser value --amp already consumes -- one AnalyserNode, two
+     readouts, not a second audio graph per player. */
+  function buildVoice() {
+    var voice = el('div', 'sr-ps-voice');
+    voice.setAttribute('aria-hidden', 'true');
+    for (var i = 0; i < 4; i++) voice.appendChild(el('i'));
+    return voice;
+  }
+
   function buildOverlay(stage, audio, hasAudio, theme, title) {
     var overlay = el('div', 'sr-ps-overlay');
     var ctrl = el('button', 'sr-ps-ctrl');
     ctrl.type = 'button';
     ctrl.appendChild(el('i'));
     overlay.appendChild(ctrl);
+    var voice = buildVoice();
+    overlay.appendChild(voice);
     if (theme) {
       var themeEl = el('p', 'sr-ps-theme');
       themeEl.textContent = theme;
@@ -199,7 +213,7 @@
       ctrl.disabled = true;
       ctrl.setAttribute('aria-disabled', 'true');
       ctrl.setAttribute('aria-label', 'Guided audio not yet available for this protocol');
-      return overlay;
+      return { overlay: overlay, voice: voice };
     }
 
     ctrl.setAttribute('aria-label', 'Play guided meditation');
@@ -219,7 +233,7 @@
       ctrl.removeAttribute('data-playing');
       ctrl.setAttribute('aria-label', 'Play guided meditation');
     });
-    return overlay;
+    return { overlay: overlay, voice: voice };
   }
 
   /* #7 -- the lockup, this file's own build now (protocol.html's fully
@@ -236,6 +250,65 @@
     lock.appendChild(mark);
     stage.appendChild(lock);
     return lock;
+  }
+
+  function fmtTime(s) {
+    if (!isFinite(s) || s < 0) return '--:--';
+    s = Math.floor(s);
+    var m = Math.floor(s / 60), sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  /* FB-07 -- elapsed/total plus a seekable line. Native <input type=range>
+     for the seek control (see css/saferise-poster.css for why: real
+     keyboard support and the accessible value text come from the
+     platform). Total reads from the media's own metadata, never
+     hardcoded -- "--:--" until 'loadedmetadata' fires, per the brief.
+     dragging tracks whether the member currently has a pointer/keyboard
+     grip on the thumb, so the tick loop below doesn't fight their input
+     by resetting .value out from under them mid-drag. */
+  function buildTransport(stage, audio, hasAudio) {
+    var wrap = el('div', 'sr-ps-transport');
+    var time = el('div', 'sr-ps-time');
+    var cur = el('span'); cur.textContent = '--:--';
+    var sep = el('span', 'sep'); sep.textContent = '/';
+    var tot = el('span'); tot.textContent = '--:--';
+    time.appendChild(cur); time.appendChild(sep); time.appendChild(tot);
+    var seek = el('input', 'sr-ps-seek');
+    seek.type = 'range'; seek.min = '0'; seek.max = '1000'; seek.value = '0';
+    seek.step = '1';
+    seek.setAttribute('aria-label', 'Seek');
+    seek.setAttribute('aria-valuetext', '0:00 of --:--');
+    wrap.appendChild(time); wrap.appendChild(seek);
+    stage.appendChild(wrap);
+
+    if (!hasAudio) { seek.disabled = true; return { wrap: wrap, cur: cur, tot: tot, seek: seek, dragging: function () { return false; } }; }
+
+    var dragging = false;
+    seek.addEventListener('pointerdown', function () { dragging = true; });
+    seek.addEventListener('pointerup', function () { dragging = false; });
+    seek.addEventListener('keydown', function () { dragging = true; });
+    seek.addEventListener('blur', function () { dragging = false; });
+    seek.addEventListener('input', function () {
+      var dur = audio.duration;
+      if (!dur || !isFinite(dur)) return;
+      var p = (+seek.value) / 1000;
+      audio.currentTime = p * dur;
+      cur.textContent = fmtTime(audio.currentTime);
+      seek.style.setProperty('--sp', (p * 100).toFixed(2) + '%');
+      seek.setAttribute('aria-valuetext', fmtTime(audio.currentTime) + ' of ' + fmtTime(dur));
+    });
+    seek.addEventListener('change', function () { dragging = false; });
+
+    function onMeta() {
+      tot.textContent = fmtTime(audio.duration);
+      cur.textContent = fmtTime(audio.currentTime);
+      seek.setAttribute('aria-valuetext', fmtTime(audio.currentTime) + ' of ' + fmtTime(audio.duration));
+    }
+    if (audio.readyState >= 1 && audio.duration) onMeta();
+    audio.addEventListener('loadedmetadata', onMeta);
+
+    return { wrap: wrap, cur: cur, tot: tot, seek: seek, dragging: function () { return dragging; } };
   }
 
   /* #4 -- the four-step bar, a sibling appended right after the stage
@@ -385,14 +458,18 @@
     stage.style.setProperty('--breath', heldBreath.toFixed(2) + 's');
 
     var hasAudio = !!(audio.getAttribute && audio.getAttribute('src'));
+    var voiceEl = null, transport = null;
     if (opts.buildControl) {
-      buildOverlay(stage, audio, hasAudio, opts.theme, opts.title);
+      var built = buildOverlay(stage, audio, hasAudio, opts.theme, opts.title);
+      voiceEl = built.voice;
       buildLock(stage);
+      transport = buildTransport(stage, audio, hasAudio);
     }
     var stepSegs = opts.buildControl ? buildSteps(stage) : null;
     if (opts.buildControl) stage.classList.add('sr-ps-player');
 
     var aura = makeAura(audio);
+    var voiceBars = voiceEl ? voiceEl.querySelectorAll('i') : null;
 
     /* GALAXY-PLAYER-COMPLETE.md #3 -- the --p driver. Confirmed this file
        already had a working one before this pass (an rAF loop polling
@@ -432,10 +509,28 @@
       stage.style.setProperty('--release', release.toFixed(3));
     }
 
+    /* FB-07 -- kept out of the dragging member's way: skipped entirely
+       while transport.dragging() is true, same as a native scrub bar
+       would. Runs from both onTimeupdate (the audio element's own clock,
+       so it keeps counting in a backgrounded tab) and frame() below, so
+       the visible time/seek position never lags --p's own driver. */
+    function applyTransport() {
+      if (!transport || transport.dragging()) return;
+      var dur = audio.duration;
+      transport.cur.textContent = fmtTime(audio.currentTime);
+      if (dur && isFinite(dur) && dur > 0) {
+        var p2 = Math.max(0, Math.min(1, audio.currentTime / dur));
+        transport.seek.value = Math.round(p2 * 1000);
+        transport.seek.style.setProperty('--sp', (p2 * 100).toFixed(2) + '%');
+        transport.seek.setAttribute('aria-valuetext', fmtTime(audio.currentTime) + ' of ' + fmtTime(dur));
+      }
+    }
+
     function onTimeupdate() {
       var p = computeP();
       stage.style.setProperty('--p', p.toFixed(4));
       applyStepsAndRelease(p);
+      applyTransport();
     }
     audio.addEventListener('timeupdate', onTimeupdate);
 
@@ -450,8 +545,22 @@
         var p = computeP();
         stage.style.setProperty('--p', p.toFixed(4));
         applyStepsAndRelease(p);
+        applyTransport();
         if (!reduced) {
-          stage.style.setProperty('--amp', aura.read().toFixed(3));
+          var level = aura.read();
+          stage.style.setProperty('--amp', level.toFixed(3));
+          /* FB-07 -- four bars, each a fixed fraction of the same level
+             plus a small per-bar offset so they don't move in lockstep
+             (reads as "speaking", not a single meter needle). Still when
+             paused: frame() only runs while running is true (see start/
+             stop below), so --v simply stops being written. */
+          if (voiceBars) {
+            for (var vi = 0; vi < voiceBars.length; vi++) {
+              var off = [0, .12, .05, .18][vi] || 0;
+              var v = Math.max(0, Math.min(1, level * (1 - off) + (Math.sin(now / (240 + vi * 70)) * .08)));
+              voiceBars[vi].style.setProperty('--v', v.toFixed(3));
+            }
+          }
         }
       }
       raf = requestAnimationFrame(frame);
@@ -487,6 +596,14 @@
           seg.classList.remove('on', 'done');
           seg.querySelector('i').style.setProperty('--w', '0%');
         });
+      }
+      if (transport) {
+        transport.cur.textContent = fmtTime(0);
+        transport.seek.value = 0;
+        transport.seek.style.setProperty('--sp', '0%');
+      }
+      if (voiceBars) {
+        for (var vr = 0; vr < voiceBars.length; vr++) voiceBars[vr].style.setProperty('--v', 0);
       }
     }
 

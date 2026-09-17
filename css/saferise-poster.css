@@ -87,8 +87,15 @@
 .sr-ps-field { filter: blur(calc((1 - var(--p)) * 1.2px)); }
 
 /* ---- fixed light points -- opacity only, no movement ---- */
+/* FB-06 (PASS-fix-batch-01.md) · z-index 4, was 1 -- .sr-ps-scrim/.sr-ps-aura
+   (z-index 3) painted over both star layers, which is the actual reason
+   they read as barely visible: not too dim, but under the darkening
+   layer. Raised above the scrim/aura and level with .sr-ps-stepnow/
+   .sr-ps-overlay's own z-index 4 -- DOM order (this fragment is inserted
+   before both, see js/saferise-poster.js buildLayers/mount) keeps the
+   text layers on top at that tie, so legibility is unaffected. */
 .sr-ps-lights {
-  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  position: absolute; inset: 0; pointer-events: none; z-index: 4;
   mix-blend-mode: screen; opacity: calc(1 - var(--p) * .45);
 }
 .sr-ps-lights::before, .sr-ps-lights::after { content: ''; position: absolute; inset: 0; }
@@ -113,8 +120,9 @@
 @keyframes sr-ps-lightB { 0%,100% { opacity: .72 } 46% { opacity: .20 } }
 
 /* ---- wander stars -- THE ONLY LAYER PERMITTED TO TRANSLATE ---- */
+/* FB-06 · z-index 4, same reasoning as .sr-ps-lights above. */
 .sr-ps-wander {
-  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  position: absolute; inset: 0; pointer-events: none; z-index: 4;
   mix-blend-mode: screen; opacity: calc(1 - var(--p) * .55);
 }
 .sr-ps-wander i {
@@ -244,11 +252,22 @@
 
 /* ---- bottom gradient -- #7 confirms present; the lockup below sits on
    this. Own layer now (protocol.html's fully custom mount has no
-   .sr-medplayer__vig to fold this into, unlike the dashboard modal). ---- */
+   .sr-medplayer__vig to fold this into, unlike the dashboard modal).
+   FB-06 (PASS-fix-batch-01.md) · strengthened, not flattened -- a radial
+   darkening centred where the control/theme/title sit (so that text has
+   contrast regardless of what the cover shows underneath), a stronger top
+   band under .sr-ps-stepnow, everything else still fully transparent by
+   mid-frame. Checked against the earlier hero-film.webp scrim that erased
+   its subject entirely: that one was a flat fill; this stays a graduated
+   gradient the same way the original bottom-only version was, so the
+   photograph is still readable through the mid-frame gap. See screenshots
+   in this pass's own report, before and after. */
 .sr-ps-scrim {
   position: absolute; inset: 0; pointer-events: none; z-index: 3;
-  background: linear-gradient(180deg, rgba(8,8,12,.24) 0%, transparent 30%,
-    rgba(8,8,12,.5) 74%, rgba(8,8,12,.9) 100%);
+  background:
+    radial-gradient(58% 44% at 50% 47%, rgba(6,7,11,.34), transparent 74%),
+    linear-gradient(180deg, rgba(6,7,11,.5) 0%, rgba(6,7,11,.08) 20%, transparent 40%,
+      rgba(6,7,11,.56) 74%, rgba(6,7,11,.92) 100%);
 }
 
 /* ---- per-state hairline (visual differentiator between the four states,
@@ -300,6 +319,65 @@
   font-size: 2.5cqw; line-height: 1.08; color: var(--text);
   text-shadow: 0 2px 22px rgba(0,0,0,.95); margin: 0;
 }
+
+/* ---- FB-07 (PASS-fix-batch-01.md) -- the voice indicator. Four bars,
+   height driven per-frame from the same AnalyserNode reading that already
+   drives --amp (js/saferise-poster.js's aura.read()) -- one analyser, two
+   consumers, not a second audio graph. JS sets --v on each bar via inline
+   style (never a transform, per the governing rule -- height is not a
+   translate or rotate); this file only says how a given --v renders.
+   Static at its resting height when paused (no class toggling needed --
+   --v simply stops being written) and under reduced motion (the .sr-ps-
+   voice bar rule below pins it, same pattern as .sr-ps-aura-inner). */
+.sr-ps-voice {
+  display: flex; align-items: flex-end; justify-content: center; gap: .5cqw;
+  height: 1.6cqw; margin-bottom: .2cqw;
+}
+.sr-ps-voice i {
+  display: block; width: .34cqw; min-width: 2px; border-radius: 2px;
+  background: rgb(var(--sr-ps-gold-lt));
+  height: calc(18% + var(--v, 0) * 82%);
+  transition: height .12s linear;
+}
+
+/* ---- FB-07 -- elapsed/total and a seekable line. Bottom-left, mirroring
+   .sr-ps-lock's bottom-right position so neither collides with the
+   wordmark. Native <input type=range> for the seek control -- arrow-key
+   seeking and the accessible value text come from the platform, rather
+   than reimplementing a slider's keyboard handling by hand. */
+.sr-ps-transport {
+  position: absolute; left: 6.63%; bottom: 5.39%; z-index: 6;
+  display: flex; align-items: center; gap: 1.4cqw; max-width: 44%;
+}
+.sr-ps-time {
+  font-family: 'DM Sans', sans-serif; font-size: .92cqw; font-weight: 700;
+  letter-spacing: .05em; color: var(--text); white-space: nowrap;
+  text-shadow: 0 1px 12px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9);
+  font-variant-numeric: tabular-nums;
+}
+.sr-ps-time .sep { opacity: .55; margin: 0 .2em; }
+.sr-ps-seek {
+  -webkit-appearance: none; appearance: none; width: 9cqw; min-width: 54px;
+  height: 14px; background: transparent; cursor: pointer;
+}
+.sr-ps-seek::-webkit-slider-runnable-track {
+  height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, rgb(var(--sr-ps-gold)) 0%, rgb(var(--sr-ps-gold)) var(--sp, 0%),
+    rgba(255,255,255,.28) var(--sp, 0%), rgba(255,255,255,.28) 100%);
+}
+.sr-ps-seek::-moz-range-track { height: 2px; border-radius: 2px; background: rgba(255,255,255,.28); }
+.sr-ps-seek::-moz-range-progress { height: 2px; border-radius: 2px; background: rgb(var(--sr-ps-gold)); }
+.sr-ps-seek::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 10px; height: 10px; border-radius: 50%;
+  background: rgb(var(--sr-ps-gold-lt)); margin-top: -4px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.6);
+}
+.sr-ps-seek::-moz-range-thumb {
+  width: 10px; height: 10px; border-radius: 50%; border: 0;
+  background: rgb(var(--sr-ps-gold-lt)); box-shadow: 0 1px 6px rgba(0,0,0,.6);
+}
+.sr-ps-seek:focus-visible { outline: 2px solid rgba(var(--sr-ps-gold-lt), .9); outline-offset: 3px; }
+.sr-ps-seek[disabled] { opacity: .35; cursor: default; }
 
 /* ---- #7: the lockup -- own build now (protocol.html's fully custom mount
    has no .sr-medplayer__lockup to reuse the way SR-406/408's dashboard-
@@ -388,4 +466,9 @@
     animation: none !important;
   }
   .sr-ps-aura-inner { opacity: .18; transform: none; transition: none; }
+  /* FB-07 · the voice indicator is JS-driven (--v), not a CSS animation,
+     so it needs an explicit pin here rather than an animation:none --
+     otherwise it keeps reflecting real audio level under reduced motion,
+     which the brief's own "static under reduced motion" rules out. */
+  .sr-ps-voice i { height: 18% !important; transition: none; }
 }
