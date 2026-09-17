@@ -70,6 +70,14 @@ transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- SR-406 · the galaxy poster layers (SR-401-405), mounted into the
+     Listen pane's own .stage below. Not going through SRMedPlayer's modal
+     dialog here (this player is embedded on the page, not behind a
+     click-to-open control), but its lockup is still wanted -- reusing
+     css/sr-clearing-player.css's existing .sr-medplayer__lockup rather
+     than writing a second one, so only that one stylesheet is added. -->
+<link rel="stylesheet" href="css/sr-clearing-player.css">
+<link rel="stylesheet" href="css/saferise-poster.css">
 <style>
 :root{
   /* SR-380 (PASS-pricing-contact-typescale.md Part C) · raised per the
@@ -178,6 +186,19 @@ h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
 .scrub{display:flex;align-items:center;gap:14px;margin-top:14px;font-size:11.5px;color:var(--text3)}
 .scrubline{flex:1;height:2px;background:var(--hair);position:relative}
 .scrubline::after{content:"";position:absolute;left:0;top:-2.5px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+
+/* SR-406 · the Listen pane's .stage is the galaxy poster's mount point.
+   Scoped to #pane-listen only -- the Watch pane's .stage (no video asset
+   exists, out of scope for this pass) keeps its plain gradient box
+   unchanged. position:relative+overflow:hidden gives SRClearing.mount()'s
+   absolutely-positioned layers something to fill; the existing inner <div>
+   (play button/wave/label) gets a z-index above them so it stays the
+   visible control, on top of the poster rather than replaced by it. */
+#pane-listen .stage{position:relative;overflow:hidden}
+#pane-listen .stage>div{position:relative;z-index:10}
+#pane-listen .stage p{text-shadow:0 1px 10px rgba(0,0,0,.85)}
+#pane-listen .play[disabled]{opacity:.4;cursor:default;pointer-events:none}
+#pane-listen .play[disabled]:hover{background:transparent;box-shadow:none}
 
 /* ---------- journey image ---------- */
 .trihead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:30px 0 14px}
@@ -691,6 +712,20 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
      calls SafeRiseAccess.hasAccess() once PAGE_PROTOCOL has resolved. -->
 <script src="js/saferise-auth.js"></script>
 <script src="js/saferise-access.js"></script>
+<!-- SR-406 · the guided-session player (SR-401-405), previously wired only
+     into dashboard.html's own #srClearingPlay/t0-00. content/meditation.js
+     and content/galaxy.js are the same per-id data stores; js/saferise-
+     poster.js's window.SRClearing.mount() is called directly against the
+     Listen pane's own .stage (initGuidedPlayer(), below) rather than
+     through SRMedPlayer's modal dialog, since this player lives embedded
+     on the page, not behind a click-to-open control. js/sr-clearing-
+     visual.js is loaded first for the same reason dashboard.html loads it
+     first — saferise-poster.js's own window.SRClearing assignment is the
+     one that answers, by load order. -->
+<script src="content/meditation.js"></script>
+<script src="content/galaxy.js"></script>
+<script src="js/sr-clearing-visual.js"></script>
+<script src="js/saferise-poster.js"></script>
 
 <!-- SR-182 · shown only when a protocol was ASKED FOR and could not be found.
      A member who follows a card to a protocol that does not resolve gets told
@@ -1206,6 +1241,70 @@ function setTab(which){
   document.querySelectorAll('.ptab').forEach(function(t){t.classList.toggle('on',t.dataset.tab===which)});
   document.getElementById('pane-listen').classList.toggle('hidden',which!=='listen');
   document.getElementById('pane-watch').classList.toggle('hidden',which!=='watch');
+  /* SR-406 · lazy mount on first switch to Listen, not on page load --
+     mounting unconditionally would start loading every poster image
+     (field/clear/subject, up to ~850KB) before the member ever asks for
+     audio, the exact "should not block first paint" this system was built
+     against (see SR-401's own weight section). Watch has no video asset
+     (out of scope for this pass) and stays exactly as it was. */
+  if(which==='listen') initGuidedPlayer();
+}
+
+var srGuidedPlayerMounted = false;
+function initGuidedPlayer(){
+  if(srGuidedPlayerMounted) return;
+  srGuidedPlayerMounted = true;
+  if(!PAGE_PROTOCOL || !PAGE_PROTOCOL.protocolId) return; /* not-found state: no player to mount */
+  /* content/meditation.js / content/galaxy.js key their data 't{track}-{NN}'
+     (matching the audio-filename convention js/saferise-poster.js parses
+     protocol ids from); PAGE_PROTOCOL.protocolId is 't{track}-p{NN}' (the
+     query-param resolver's own convention, e.g. 't1-p04'). One string op
+     converts between them -- confirmed these are genuinely two different
+     id schemes, not assumed, before writing this. */
+  var galaxyId = PAGE_PROTOCOL.protocolId.replace('-p', '-');
+  var stage = document.querySelector('#pane-listen .stage');
+  var btn = document.querySelector('#pane-listen .play');
+  if(!stage || !btn) return;
+
+  btn.removeAttribute('onclick'); /* replacing startPractice()'s simulation below */
+
+  var audio = document.createElement('audio');
+  audio.preload = 'metadata';
+  var med = (typeof MEDITATION !== 'undefined') ? MEDITATION[galaxyId] : null;
+  var hasAudio = !!(med && med.src);
+  if(hasAudio) audio.src = med.src;
+  stage.appendChild(audio);
+
+  if(window.SRClearing && window.SRClearing.mount){
+    window.SRClearing.mount(stage, audio, { id: galaxyId });
+  }
+
+  /* js/sr-medplayer.js's own lockup markup, reused verbatim -- this player
+     bypasses SRMedPlayer.open() entirely (embedded, not a modal), so
+     nothing else on this page creates one. */
+  var lock = document.createElement('div');
+  lock.className = 'sr-medplayer__lockup';
+  lock.setAttribute('aria-hidden', 'true');
+  lock.innerHTML = '<i></i><span>SafeRise</span>';
+  stage.appendChild(lock);
+
+  /* SR-406 §2 · "an audio file that does not exist is not a reason to
+     skip the window" -- the poster/breath/lockup above already mounted
+     regardless of hasAudio. What's left is the control: real playback
+     when audio exists, an honest disabled state (not a fake simulation)
+     when it doesn't. */
+  if(!hasAudio){
+    btn.disabled = true;
+    btn.setAttribute('aria-disabled', 'true');
+    btn.setAttribute('aria-label', 'Guided audio not yet available for this protocol');
+    return;
+  }
+  btn.addEventListener('click', function(){
+    if(audio.paused) audio.play().catch(function(){}); else audio.pause();
+  });
+  audio.addEventListener('play', function(){ btn.classList.add('playing'); });
+  audio.addEventListener('pause', function(){ btn.classList.remove('playing'); });
+  audio.addEventListener('ended', function(){ btn.classList.remove('playing'); completePractice(); });
 }
 
 function startPractice(btn){

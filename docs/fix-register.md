@@ -17,7 +17,13 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-405** (prompt-galaxy-refinements.md — three refinements to the SR-401–404
+- **Highest ID issued: SR-406** (verify-and-wire-all-31-players — audited the true reach of the
+  SR-401–405 galaxy player (only `t0-00` had a live button+audio; the other 30 protocols' pages
+  never even loaded the scripts) and wired `protocol.html`'s existing "Guided Meditation
+  Experience" Listen pane, for all 30, to mount the real poster/breath/lockup regardless of
+  whether audio exists yet — a disabled control, not a fake simulation, where it doesn't
+  (`protocol.html`, `js/saferise-poster.js`). Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-405** (prompt-galaxy-refinements.md — three refinements to the SR-401–404
   galaxy player: a small translate now rides inside the subject's/aura's own breath keyframes
   (amending the governing no-translate rule, not breaking it), the aura split into a wrapper+inner
   pair so its swell and its audio/Release response no longer collide on one element's `transform`,
@@ -17475,3 +17481,179 @@ Files: `css/saferise-poster.css`, `js/saferise-poster.js`, `.gitignore` (`galaxy
 caught and resolved before writing code, exactly as the brief asked, and the same collision was
 found (not reproduced) in the reference mockup's own markup, not merely inferred from the brief's
 warning. **Not pushed.** *Raised and fixed:* 17 Sep 2026
+
+---
+
+## SR-406 — verify and wire all 31 galaxy players
+
+SR-404 reported that only `t0-00` had a live button and audio. This pass establishes the ground
+truth across all 31 and wires every protocol that can be wired.
+
+### 1 · The actual state — 31 rows, verified individually
+
+Method: read `protocol.html`/`resource.html`/`dashboard.html` directly (no assumption carried
+forward from SR-404's own summary), grepped every `SRMedPlayer.open(`/`SRClearing.mount(`/
+`window.SRClearing` call site repo-wide, checked `content/meditation.js` and `assets/audio/` on
+disk, cross-referenced `content/galaxy.js`'s `flagged` field. Pre-wiring state (i.e. before this
+pass's own fix in §2):
+
+| id | player window? | play control? | audio on disk? | `SRClearing.mount()` called? | galaxy/fallback |
+|---|---|---|---|---|---|
+| t0-00 | yes (dashboard.html modal) | yes | **yes** | **yes** | galaxy |
+| t1-01 | yes (protocol.html Listen pane) | yes (fake `setTimeout` sim) | no | no | fallback |
+| t1-02 | yes | yes (fake sim) | no | no | fallback |
+| t1-03 | yes | yes (fake sim) | no | no | fallback |
+| t1-04 | yes | yes (fake sim) | no | no | **galaxy** |
+| t1-05 | yes | yes (fake sim) | no | no | fallback |
+| t1-06 | yes | yes (fake sim) | no | no | fallback |
+| t1-07 | yes | yes (fake sim) | no | no | fallback |
+| t1-08 | yes | yes (fake sim) | no | no | fallback |
+| t1-09 | yes | yes (fake sim) | no | no | fallback |
+| t1-10 | yes | yes (fake sim) | no | no | **galaxy** |
+| t2-01 | yes | yes (fake sim) | no | no | fallback |
+| t2-02 | yes | yes (fake sim) | no | no | fallback |
+| t2-03 | yes | yes (fake sim) | no | no | fallback |
+| t2-04 | yes | yes (fake sim) | no | no | fallback |
+| t2-05 | yes | yes (fake sim) | no | no | fallback |
+| t2-06 | yes | yes (fake sim) | no | no | fallback |
+| t2-07 | yes | yes (fake sim) | no | no | fallback |
+| t2-08 | yes | yes (fake sim) | no | no | fallback |
+| t2-09 | yes | yes (fake sim) | no | no | **galaxy** |
+| t2-10 | yes | yes (fake sim) | no | no | fallback |
+| t3-01 | yes | yes (fake sim) | no | no | fallback |
+| t3-02 | yes | yes (fake sim) | no | no | **galaxy** |
+| t3-03 | yes | yes (fake sim) | no | no | fallback |
+| t3-04 | yes | yes (fake sim) | no | no | fallback |
+| t3-05 | yes | yes (fake sim) | no | no | **galaxy** |
+| t3-06 | yes | yes (fake sim) | no | no | fallback |
+| t3-07 | yes | yes (fake sim) | no | no | **galaxy** |
+| t3-08 | yes | yes (fake sim) | no | no | **galaxy** |
+| t3-09 | yes | yes (fake sim) | no | no | **galaxy** |
+| t3-10 | yes | yes (fake sim) | no | no | **galaxy** |
+
+**`resource.html` renders no player window for any of the 31, by design, not by gap** — its rail
+explicitly filters `type !== 'meditation'` out (its own comment: "meditation is the player above"),
+and the `meditation` resource records themselves (`content/t1/t2/t3-resources.js`, one per
+protocol, `kind: "Guided Meditation"`) carry a narration script but no audio field at all and were
+never reachable through any rendering path before this pass — text sitting in the data store with
+nowhere it was shown. Not wired here: adding a second player surface to `resource.html` would be
+the parallel system every brief in this series has ruled out; `protocol.html`'s existing
+"Guided Meditation Experience" section is the one real player window per protocol, confirmed by
+reading the page, not assumed from its name.
+
+**dashboard.html's own "Guided Experience" tile** (its generic explainer strip) is static marketing
+copy with no per-protocol identity and no click handler — not a 31st gap, a different thing
+entirely; left untouched.
+
+### 2 · Wiring every player that can be wired
+
+`protocol.html`'s Listen pane (`#pane-listen .stage`) is a real, existing player window for every
+one of the 30 track protocols (one page, `?track=&protocol=` selects which). It rendered a play
+button wired to `startPractice()` — a `setTimeout` simulation with no audio element, identical
+copy regardless of which protocol was loaded, calling `completePractice()` (opens the journal) on
+a fake 2.2s timer. Wired for real:
+
+- `content/meditation.js`, `content/galaxy.js`, `js/sr-clearing-visual.js`, `js/saferise-poster.js`,
+  `css/sr-clearing-player.css`, `css/saferise-poster.css` added to `protocol.html` (none were
+  loaded there before this pass).
+- New `initGuidedPlayer()`, called lazily from `setTab('listen')` on first switch to that tab (not
+  on page load — mounting eagerly would start loading every poster image, up to ~850KB, before a
+  member ever asks for audio, the "should not block first paint" SR-401 was built against).
+  Resolves `PAGE_PROTOCOL.protocolId` (the page's own `t{track}-p{NN}` convention, e.g. `t1-p04`)
+  to the galaxy/meditation store's `t{track}-{NN}` convention (e.g. `t1-04`) — confirmed these are
+  two genuinely different id schemes by reading both resolvers, not assumed from the similar
+  shape. Creates a real `<audio>` element (with a real `src` when `MEDITATION[id]` has one — today
+  only ever true for `t0-00`, which isn't one of the 30 track protocols and was never reachable
+  from this page anyway), calls `window.SRClearing.mount(stage, audio, {id: galaxyId})`, and
+  builds `js/sr-medplayer.js`'s own `.sr-medplayer__lockup` markup directly (reusing
+  `css/sr-clearing-player.css`'s existing rules) since this player bypasses `SRMedPlayer.open()`'s
+  modal dialog entirely — it's embedded on the page, not behind a click-to-open control, so nothing
+  else here would have built one.
+- `js/saferise-poster.js`'s `mount(stage, audio, opts)` gained `opts.id` as an explicit override
+  ahead of `idFromSrc(audio)` — needed because a protocol with no real audio has no parseable
+  `audio.src` to derive an id from at all. `dashboard.html`'s existing call (real audio, no
+  `opts.id`) is unaffected — regression-checked live, still mounts and plays `t0-00` correctly.
+
+**"An audio file that does not exist is not a reason to skip the window" — confirmed true, not
+merely asserted:** every one of the 30 protocol pages now mounts its poster (galaxy for 9, fallback
+for 21), runs the breath, and shows the lockup regardless of `hasAudio`. Where no audio exists —
+every one of the 30, today — the play button gets `disabled`/`aria-disabled="true"` and its old
+`onclick="startPractice(this)"` simulation is removed rather than left to fire a fake session.
+`completePractice()`/`startPractice()` remain exactly as they were for the **Watch** pane (video),
+untouched — no video asset exists anywhere in the repo and this brief's own "what's missing"
+categories (audio/mount/component/cover) don't name video, so it was left as the pre-existing
+decorative simulation rather than pulled into scope.
+
+**One honest limitation, reported rather than hidden:** with no audio, the breath keyframe still
+runs (`animation:...infinite` in CSS is unconditional) but at its plain default 10s period, not the
+protocol's own starting rhythm (e.g. Agitated's 7s) — entrainment is driven by playback progress
+via the rAF tick loop, which never starts without a `play` event. The ambient breath renders; it
+doesn't yet express the state-specific pacing SR-403 built. That requires real audio to resolve,
+not a further code change.
+
+### 3 · Verify — every protocol, not a summary
+
+All 30 track-protocol pages loaded fresh (`?track=&protocol=`), Listen tab clicked, checked live
+(Playwright; the session's Browser pane again refused `localhost`). Every row below: poster
+rendered (galaxy or fallback, matching §1's table exactly), `sr-ps-breathe` (or the plain
+fallback's own copy of it) confirmed running via computed `animation-name`, `.sr-medplayer__lockup`
+present with its "SafeRise" text, zero console or page errors.
+
+| id | poster | breathing | lockup | console errors |
+|---|---|---|---|---|
+| t1-01 | fallback (`assets/covers/01.jpg`) | yes | yes | none |
+| t1-02 | fallback | yes | yes | none |
+| t1-03 | fallback | yes | yes | none |
+| t1-04 | galaxy | yes | yes | none |
+| t1-05 | fallback | yes | yes | none |
+| t1-06 | fallback | yes | yes | none |
+| t1-07 | fallback | yes | yes | none |
+| t1-08 | fallback | yes | yes | none |
+| t1-09 | fallback | yes | yes | none |
+| t1-10 | galaxy | yes | yes | none |
+| t2-01 | fallback | yes | yes | none |
+| t2-02 | fallback | yes | yes | none |
+| t2-03 | fallback | yes | yes | none |
+| t2-04 | fallback | yes | yes | none |
+| t2-05 | fallback | yes | yes | none |
+| t2-06 | fallback | yes | yes | none |
+| t2-07 | fallback | yes | yes | none |
+| t2-08 | fallback | yes | yes | none |
+| t2-09 | galaxy | yes | yes | none |
+| t2-10 | fallback | yes | yes | none |
+| t3-01 | fallback | yes | yes | none |
+| t3-02 | galaxy | yes | yes | none |
+| t3-03 | fallback | yes | yes | none |
+| t3-04 | fallback | yes | yes | none |
+| t3-05 | galaxy | yes | yes | none |
+| t3-06 | fallback | yes | yes | none |
+| t3-07 | galaxy | yes | yes | none |
+| t3-08 | galaxy | yes | yes | none |
+| t3-09 | galaxy | yes | yes | none |
+| t3-10 | galaxy | yes | yes | none |
+
+Also confirmed: the page's own default view (`protocol.html`, no query params at all) resolves to
+`t1-p01` internally and mounts correctly on Listen — the no-request fallback path this page has
+always had was not bypassed. `dashboard.html`'s `t0-00` player regression-checked after the
+`opts.id` change to `js/saferise-poster.js` — still mounts, still plays, zero errors.
+
+### 4 · What is missing — grouped, not 30 individual gaps
+
+- **Mount call / page component: 0 outstanding.** Closed for all 30 by this pass.
+  `resource.html`'s lack of a player is by design (§1), not a gap.
+- **A real audio file: 30 of 30 outstanding.** No track protocol has one; `t0-00`'s is the only
+  meditation audio in the repo and isn't one of the 30. This is the one gap that actually blocks a
+  member from hearing anything — until it's closed for a given protocol, that protocol's control
+  stays honestly disabled no matter what else is wired.
+- **A cover that passes the separation test: 21 of 30 outstanding** (the SR-401 fail list,
+  unchanged by this pass — pipeline/manifest were not touched, per instruction). These 21 are not
+  broken today: they render the plain-poster-plus-breath fallback correctly, which is the system's
+  own designed answer for a cover that doesn't clear the bar, not a placeholder awaiting a fix.
+
+Files: `protocol.html`, `js/saferise-poster.js`, `docs/fix-register.md`.
+
+*Status:* closed — ground truth established for all 31 (table in §1), every protocol that could be
+wired without inventing new audio or a new page component now is (30 of 30), verified individually
+rather than sampled (§3), and the two remaining gaps (audio, and 21 covers) are reported with exact
+counts rather than folded into "some protocols need work." **Not pushed.** *Raised and fixed:*
+17 Sep 2026

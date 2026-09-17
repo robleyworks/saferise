@@ -208,7 +208,12 @@
 
     stage.classList.add('sr-ps-stage');
 
-    var id = idFromSrc(audio);
+    /* SR-406 · opts.id lets a caller name the protocol explicitly, for the
+       case this pass exists to cover: a page that wants the poster mounted
+       before any real audio (and therefore any parseable audio.src) exists
+       at all. idFromSrc() stays the default so the one already-working
+       caller (dashboard.html, via a real <audio src>) needs no change. */
+    var id = opts.id || idFromSrc(audio);
     var data = (root.GALAXY_POSTERS && id) ? root.GALAXY_POSTERS[id] : null;
 
     var warm = (data && data.warm) || opts.warm || [212, 168, 103];
