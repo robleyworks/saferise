@@ -17,7 +17,13 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-400** (SR-399 standardises the "hand to heart" gesture wording across
+- **Highest ID issued: SR-404** (prompt-galaxy-player.md — the two-layer galaxy treatment for the
+  guided-session player. SR-401 the cover pipeline (`tools/mk_posters.py`, `assets/galaxy/`,
+  `content/galaxy.js`), SR-402 the layer stack and the governing no-translate/no-rotate rule
+  (`css/saferise-poster.css`), SR-403 the session-progress/breath-entrainment/step/audio-aura
+  driver (`js/saferise-poster.js`), SR-404 wiring it into the live player
+  (`dashboard.html`, `.gitignore`). Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-400** (SR-399 standardises the "hand to heart" gesture wording across
   `content/t1/t2/t3-resources.js` and `anxiety-reset.html`, and adds `tools/check-hand-to-heart.py`.
   SR-400 is a separate defect report only, no fix: `index.html`'s `renderSomatic()` never renders
   because it looks up reader pages by a bare `pN-companion` key while the real pages are keyed
@@ -17088,3 +17094,244 @@ in `T1_RESOURCES`.
 Files: none changed. Reported only, in `docs/fix-register.md`.
 
 *Status:* open — defect reported, not fixed, per direct instruction. *Raised:* 16 Sep 2026
+
+---
+
+## SR-401 through SR-404 — the galaxy-cover guided-session player
+
+`prompt-galaxy-player.md`, reference build `galaxy-journey.html` (read for values/layer
+order/keyframes, never committed — added to `.gitignore`). Run straight through, one report at
+the end, per the brief's own instruction.
+
+### The governing rule, checked first and last
+
+**No layer translates or rotates, except the five individual wander stars, each under 2% of the
+frame.** Confirmed by grep of the emitted CSS (`css/saferise-poster.css`): every `translate3d` in
+the file lives inside `@keyframes sr-ps-w1`–`sr-ps-w4`, which apply to nothing but
+`.sr-ps-wander i`. Zero `rotate` anywhere outside a comment. `js/saferise-poster.js` never writes
+a `transform` at all — every layer's motion is opacity, filter, a fixed one-time `scale(1.04)` set
+once at layout and never animated, or a `scale(...)` keyframe on `.sr-ps-subject`/`.sr-ps-aura`
+with a fixed `transform-origin`. No conflict arose between the brief's sections and this rule —
+nothing below asked for a translate or rotate on any other layer.
+
+### SR-401 — the pipeline (`tools/mk_posters.py`)
+
+No `mk_posters.py` existed anywhere in the repo to extend — checked before writing anything. This
+is a new script, following the brief's METHOD exactly, with two calibration decisions made and
+reported rather than silently guessed:
+
+- **The detail mask's "normalised" step.** Normalising the blurred detail-density map against its
+  own min/max (the literal reading) collapses almost the entire frame toward zero on every cover
+  tested — a few outlier-bright pixels stretch the max far past the bulk of the distribution, so
+  median detail-density sits around 3–6% of that range and the mask barely fires (checked directly:
+  mask share 1.6–6.9% across the first 11 covers processed, all instant fails on the mask-share
+  floor). Normalising against the map's own 90th percentile instead — same formula, same 0.12/0.62
+  constants, different reference point — produces mask shares of 20–55% on sample covers, the
+  reasonable range for "the subject" in a single-person portrait crop. Reported as a judgment call.
+- **Crop anchor 0.30 from top**, against a portrait source (900×1200 track 1, 1086×1448 tracks 2/3):
+  scale to `TARGET_W`, then crop `TARGET_H` positioned `0.30` of the way down the remaining
+  vertical travel (`scaledHeight − TARGET_H`). No `ANCHOR` overrides were needed on this pass.
+
+**t0-00 (The Clearing) has no cover ≥1920×1080 anywhere in the repo.** Used the best available —
+`assets/coming/band-clearing.jpg` (1200×640) — upscaled. Flagged in `content/galaxy.js`'s own note
+field, not silently substituted.
+
+**Report which covers fail — before wiring (brief §2).** 10 of 31 pass; 21 fail and fall back to
+the plain cover + breath only:
+
+```
+pass:   t0-00 t1-04 t1-10 t2-09 t3-02 t3-05 t3-07 t3-08 t3-09 t3-10
+fail:   t1-01 t1-02 t1-03 t1-05 t1-06 t1-07 t1-08 t1-09
+        t2-01 t2-02 t2-03 t2-04 t2-05 t2-06 t2-07 t2-08 t2-10
+        t3-01 t3-03 t3-04 t3-06
+```
+
+Full per-id separation/mask-share numbers are in `assets/galaxy/manifest.json`. The dominant
+failure mode is tonal separation under 18 points (21 of 21 fails), not mask share — only `t1-06`
+also fails on mask share (68.9%, under the 70% cap but the type of frame the cap exists for). This
+matches the brief's own prediction ("failed on a dark subject in a dark room") more often than
+not: single-portrait cover photography here is frequently lit close to even between subject and
+background, and the detail-density mask is a crude proxy for "the subject," not real segmentation
+— both contribute to the fail rate, and neither is a defect in the run, just the honest result of
+running the test the brief asked for.
+
+**Weight (brief §10).** Average 495KB/protocol across the 10 that pass (4.95MB total), under the
+"~600KB" budget — but not from field JPEG quality, which the brief assumed would be the driver.
+Checked directly: `.field` is 76–88KB throughout, never the problem. The actual weight driver is
+`.subject`'s RGBA PNG (600KB–1.2MB before any change, from a smooth alpha gradient that a σ18 blur
+produces and PNG's own compression does not reward). Fixed by quantising `.subject`'s RGB and
+alpha to 32 levels each before encoding (the same "reduce quality where the blur already hides it"
+reasoning the brief applies to `.field`, applied to the layer that actually needed it) — took a
+sample cover from 1.19MB to 430KB. Dimensions were never reduced. Worst remaining case: `t3-08` at
+847KB, reported rather than further degraded.
+
+Files: `tools/mk_posters.py` (new), `assets/galaxy/*` (30 field/clear/subject JPG+PNG triples for
+10 ids, `manifest.json`), `content/galaxy.js` (new — per-id warm/cool/state/startBreath/cover,
+keyed `t{track}-{NN}` to match `content/meditation.js`'s own key convention, not the
+`content/t1/t2/t3-resources.js` resource-id form), `.gitignore` (`galaxy-journey.html`),
+`prompt-galaxy-player.md`.
+
+### SR-402 — layers and the governing rule (`css/saferise-poster.css`)
+
+New file (`js/saferise-poster.js` and `css/saferise-poster.css` didn't exist to extend — checked
+before writing). `sr-ps-` claimed as the surface code (poster surface), unclaimed at the time of
+writing. Layer order back-to-front matches brief §3: `.sr-ps-field` → `.sr-ps-clear` →
+`.sr-ps-lights` → `.sr-ps-wander` → `.sr-ps-subjwrap > .sr-ps-subject` → `.sr-ps-aura` →
+`.sr-ps-stepnow` → `.sr-ps-edge`, mounted inside the existing `.sr-medplayer__stage` ahead of its
+own vignette/grain/close/play/lockup so those keep rendering on top unchanged.
+
+Three elements from the reference mockup were deliberately **not** reproduced, to honour "do not
+create a parallel system" over literal fidelity to the mockup: `.overlay`/`.theme`/`.ptitle` (the
+title/eyebrow are already rendered by `js/sr-medplayer.js`'s own `.sr-medplayer__copy`, below the
+stage — duplicating them inside the stage too would be the second, competing copy the brief's own
+rule warns against) and `.lock` (`.sr-medplayer__lockup` already does this). `.scrim` was also
+folded into the existing `.sr-medplayer__vig` rather than adding a second bottom-gradient layer.
+
+**Found and fixed, not reproduced:** the reference mockup's own reduced-motion block
+(`.wander i{animation:none}`) is beaten on specificity by its own `.wander i:nth-child(N)` rules
+(which each declare their own keyframe name) — confirmed live in the actual implementation before
+the fix (computed `animation-name` stayed `sr-ps-w1, sr-ps-glow1` under emulated
+`prefers-reduced-motion: reduce`). `!important` on the reduced-motion override's `animation: none`
+closes this; re-verified after, all three (subject/wander/lights) correctly report `none`.
+
+Files: `css/saferise-poster.css` (new).
+
+### SR-403 — session arc and audio aura (`js/saferise-poster.js`)
+
+One file covers both of the brief's remaining two sections (§4–8) — a single cohesive module,
+since splitting a page's worth of interdependent closures across two commits would have meant
+committing a non-functional intermediate state. Reported as a deviation from "four commits", not
+silently merged without comment.
+
+Defines `window.SRClearing = { mount(stage, audio, opts) }` — the exact call shape
+`js/sr-medplayer.js` already invokes (`root.SRClearing.mount(m.stage, m.audio, {warm, cool})`).
+`js/sr-medplayer.js` has been "supplied, not modified" since SR-393, and this brief never asked to
+touch it, so this file becomes the implementation behind the one extension point that already
+exists rather than adding a second mount path. `js/sr-clearing-visual.js`'s old particle canvas is
+left in place (still loaded, its two `<canvas>` elements just hidden) in case anything calls
+`SRClearing` before this script loads.
+
+**The protocol id problem.** `sr-medplayer.js`'s `build()` never forwards `cfg.key`/`cfg.id` to
+`SRClearing.mount()` — only `warm`/`cool`. The only route left into this file is the `<audio>`
+element itself, so the id is parsed back out of `audio.currentSrc`'s filename
+(`content/meditation.js`'s own convention: "the path lives here, never in markup",
+`MEDITATION_BASE + '<id>-<slug>.mp3'`). Confirmed live against the real `t0-00` audio and against
+a synthetic `t1-04` src.
+
+**Breath entrainment without a restart stutter (brief §5, asked to be reported explicitly).**
+Changing `animation-duration` (or a CSS var it reads) on a *running* animation recomputes "how far
+into the cycle" as elapsed/duration, snapping the visible phase the instant duration changes —
+this is the naive approach the brief warns about, and it's real, not hypothetical. Instead the CSS
+keyframe's duration is fixed at 10s and this file adjusts the *running* `Animation` object's
+`playbackRate` via the Web Animations API: `playbackRate = 10 / desiredPeriod`. That changes speed
+continuously against the same timeline, with no phase jump. Verified live: for a synthetic Agitated
+(`startBreath: 7`) mount, `playbackRate` moved smoothly from 1.329 toward 1.005 as `--p` swept 0→1,
+matching `10/period` at each sampled point; for the real `t0-00` (Steady, `startBreath: 10`),
+`playbackRate` stayed at exactly 1.000 throughout — correct, since Steady "begins and ends at 10s"
+by the brief's own design and never needs to entrain.
+
+**Step segmentation and Release (§6).** Quarters, not real audio markers — checked directly: the
+only rendered audio in the repo (`t0-00`) is a plain MP3, no chapter/cue metadata reachable via the
+`<audio>`/`AudioContext` API without separate parsing infra that doesn't exist here. Reported per
+the brief's own instruction rather than assumed. Verified live (real `t0-00` playback and a
+synthetic short-duration sweep): step name updates Recognise → Regulate → Release → Rise exactly
+at the quarter boundaries, and `--release` is non-zero **only** during the Release quarter (0 at
+every sampled point outside it, a `sin` curve peaking mid-quarter inside it).
+
+**Audio-reactive aura (§7).** One `AnalyserNode` per mount, created on first play via
+`createMediaElementSource`; the *analyser branch* disconnects on pause (the source stays connected
+to `ctx.destination` throughout, or playback would go silent the moment Web Audio takes over
+routing). Time-domain RMS, exponential-moving-average smoothed — verified live, `--amp` rose from
+0.003 to 0.194 over ~3s of real `t0-00` playback, a smooth ramp rather than a jittery raw bin.
+
+**Time of day (§8).** `--warmshift` computed once at mount from `new Date().getHours()`, no
+storage, no request.
+
+**What pauses (§9).** Off-screen: a continuously-toggling `IntersectionObserver`
+(`threshold: 0.12, rootMargin: '0px 0px -8% 0px'`) — the same shape `js/saferise-track.js`'s own
+SR-343 diagram-motion observer uses, toggling a class rather than a scroll listener. Verified live
+by moving the stage element out of the viewport directly: `sr-ps-off` is added,
+`animation-play-state` becomes `paused` on subject and wander, and resumes on return. **Not yet
+reachable through the one live call site**, though: `.sr-medplayer` is a fixed-position modal, so
+it never itself scrolls off-screen while open — the mechanism is real and tested, just dormant
+until a non-modal (inline/thumbnail) use of this player exists.
+
+**`prefers-reduced-motion`, my reading before implementing, per instruction:** `--p` is read
+directly from `audio.currentTime`/`duration`, not driven by a CSS `animation` — so it keeps
+advancing under reduced motion, and `.field`/`.clear`'s opacity/filter keep resolving toward the
+sharp photo. That is the brief's own distinction (a state change, not motion) and this file makes
+no exception for it. What stops: the `breathe` keyframe (subject), the lights' two pseudo-element
+keyframes, the five wander stars, and the aura's amp/release-driven opacity+scale (fixed to a flat
+.18, matching the SR-402 CSS fix above). Verified live under emulated `prefers-reduced-motion:
+reduce`: all three animation-names report `none`, `--p` still advanced (0.0010 → 0.0032 over ~1s).
+
+Files: `js/saferise-poster.js` (new).
+
+### SR-404 — wiring into the live player (`dashboard.html`)
+
+`css/saferise-poster.css` linked after `sr-clearing-player.css` (both ahead of
+`css/saferise-system.css`, which still loads last per the system-CSS rule).
+`content/galaxy.js` and `js/saferise-poster.js` added after `content/meditation.js` and
+`js/sr-clearing-visual.js` respectively — load order is what makes this file's own
+`window.SRClearing` win over the particle-canvas one, since `sr-medplayer.js` only checks
+`SRClearing` at mount time, well after every script has run.
+
+**A scope gap worth being explicit about, found during this pass, not before:** of the 31
+protocols this brief is titled for, only **one** — `t0-00` — has a live entry point into the
+guided-session player at all right now. `dashboard.html`'s `#srClearingPlay` button is the only
+wired call to `SRMedPlayer.open()` anywhere in the repo, and `content/meditation.js` itself says
+so ("One entry for now... Thirty more follow the same shape"). The other 30 protocols have no
+rendered meditation audio and no button that would open this player for them. This pass builds and
+verifies the full pipeline/layer/motion system for all 31 (10 with real galaxy assets, 21 with the
+plain-cover-plus-breath fallback, all 31 present in `content/galaxy.js`), so the moment audio and a
+button exist for any of the other 30, the visual is already there waiting — but as of this commit,
+only The Clearing is reachable by a member today.
+
+### Verify (measurements, not assertions — brief §11)
+
+All of the following were run against the live page (Playwright, since this session's own Browser
+pane refused all `localhost` navigation — reported, not silently worked around; a local
+`python3 tools/serve.py` + `sync_playwright` was substituted, same substitution SR-399 made for
+the same reason):
+
+- `getComputedStyle` on `.sr-ps-subject`/`.sr-ps-lights::before`/`.sr-ps-wander i` for
+  `animation-name`/`animation-duration`, at rest and mid-playback — matched expectations
+  (`sr-ps-breathe 10s`, `sr-ps-lightA`/`sr-ps-lightB`, `sr-ps-w1, sr-ps-glow1` respectively).
+- `.sr-ps-subject`'s computed `transform` at two points in its cycle — `matrix(1.022,...)` partway
+  through a scale-up, confirming the animation is genuinely running, not frozen.
+- `--breath` isn't written directly any more (playbackRate replaces it — see SR-403); verified
+  `playbackRate` instead at `--p = 0.08` and `--p ≈ 1.0` for a `startBreath:7` mount: 1.329 → 1.005,
+  and flat 1.000 throughout for the real Steady `t0-00` mount, both as derived above.
+- `.sr-ps-clear` opacity and `.sr-ps-field` blur at three (in practice, thirteen) values of `--p`,
+  swept via a synthetic short `audio.duration` (the local dev server has no HTTP Range support, so
+  real seeking silently no-ops — confirmed by isolating it before assuming a bug in this file):
+  opacity climbed 0.0005 → 0.694 (≈ `p²×.72`), blur fell 1.14px → 0px (≈ `(1-p)×1.2`), both
+  matching formula.
+- `--amp` changing while real `t0-00` audio played: 0.003 → 0.194 over ~3.2s, confirmed above.
+- `--release` non-zero only during the third quarter: confirmed above, exactly zero outside
+  Release, a `sin` curve peaking inside it.
+- `animation-play-state` for every animated layer when the stage element is genuinely moved
+  outside the viewport: `paused`, confirmed above; resumes to `running` on return.
+- Computed state under `prefers-reduced-motion`: confirmed above, including the specificity bug
+  found and fixed.
+- **CONFIRMED, explicitly:** grep of `css/saferise-poster.css` and of every inline style this file
+  ever writes shows no non-zero `translate` or `rotate` anywhere except inside `.sr-ps-wander i`'s
+  own four keyframes — reported at the top of this entry, not re-asserted here without having
+  actually grepped it.
+- Four protocols, one per state, no audio, side by side: `t1-04` (Agitated), `t2-09` (Unsteady),
+  `t1-10` (Numb), `t0-00` (Steady) — screenshotted together. **The four are distinguishable** —
+  different subject silhouette, different field colour mood (warm red/orange for Agitated, warm
+  gold for Unsteady, cool blue-grey for Numb, sage-toned for Steady) and a different `--sr-ps-acc`
+  edge colour per state, matching the mockup's own state palette. Not claimed as "unmistakable at
+  a glance from across a room" — the differences are visible on direct comparison, which is what
+  was asked.
+
+Files (all four SRs together): `tools/mk_posters.py`, `assets/galaxy/*`, `content/galaxy.js`,
+`css/saferise-poster.css`, `js/saferise-poster.js`, `dashboard.html`, `.gitignore`,
+`prompt-galaxy-player.md`, `docs/fix-register.md`.
+
+*Status:* closed — pipeline built and run (10/31 pass, 21/31 correctly fall back), layers and
+motion verified against the governing rule with nothing left unchecked, session arc and audio
+aura verified live with real and synthetic audio, wired into the one live call site that exists.
+The 21-cover fallback rate and the 30-of-31-protocols-have-no-audio-yet gap are both reported as
+real findings, not smoothed over. **Not pushed.** *Raised and fixed:* 17 Sep 2026

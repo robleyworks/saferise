@@ -57,6 +57,10 @@
 <!-- SR-393 · the meditation player, supplied verbatim. Loads ahead of the
      system sheet, same rule as the two above it. -->
 <link rel="stylesheet" href="css/sr-clearing-player.css">
+<!-- prompt-galaxy-player.md · the galaxy-cover layers, replacing
+     js/sr-clearing-visual.js's abstract particle canvas inside the same
+     player. Loads after it for the same reason -- ahead of the system sheet. -->
+<link rel="stylesheet" href="css/saferise-poster.css">
 <link rel="stylesheet" href="css/saferise-system.css">
 </head>
 <body>
@@ -799,7 +803,14 @@
 <!-- SR-393 · meditation player data + engine, supplied verbatim. Must load
      before the inline script below, which calls SRMedPlayer.open(). -->
 <script src="content/meditation.js"></script>
+<script src="content/galaxy.js"></script>
 <script src="js/sr-clearing-visual.js"></script>
+<!-- prompt-galaxy-player.md · loads after sr-clearing-visual.js so its own
+     window.SRClearing = {mount} replaces the particle-canvas one; js/sr-
+     medplayer.js (below, still unmodified) only ever checks SRClearing at
+     mount time, well after page load, so load order here is what decides
+     which implementation answers. -->
+<script src="js/saferise-poster.js"></script>
 <script src="js/sr-medplayer.js"></script>
 <!-- SR-162 · the protocol cover, shared with the track pages. Must load
      before the inline script below, which calls SafeRiseCover.art(). -->
