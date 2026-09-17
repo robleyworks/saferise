@@ -23,18 +23,19 @@
    tools/mk_posters.py) having loaded first.
 
    ════════════════════════════════════════════
-   THE GOVERNING RULE, ENFORCED IN JS TOO
+   THE GOVERNING RULE, ENFORCED IN JS TOO -- amended by
+   prompt-galaxy-refinements.md #0
    ════════════════════════════════════════════
-   Every transform this file writes is a `scale(...)`, on .sr-ps-subject or
-   .sr-ps-aura, from a fixed transform-origin declared in CSS. Nothing here
-   ever sets `translate`, `translate3d`, or `rotate` on any element other
-   than delegating to the five .sr-ps-wander i CSS keyframes, which this
-   file never touches directly. Section 11's own verify step greps the
-   emitted CSS for this; there is nothing to grep in the emitted inline
-   styles either, since this file never writes a transform at all -- scale
-   lives in the CSS keyframe/computed styles above it, and JS only ever
-   writes custom properties (--p, --breath, --amp, --release, --warmshift)
-   plus a playbackRate on the existing animation. */
+   This file never writes a `transform` inline style at all, on any
+   element, ever -- every transform lives in a CSS keyframe or a computed
+   `calc()`, not here. JS only ever writes custom properties (--p, --breath,
+   --amp, --release, --warmshift) plus a playbackRate on the existing
+   breathe animation. The CSS keyframes themselves now permit a translate
+   on two elements beyond the five wander stars -- .sr-ps-subject/
+   .sr-ps-plain's shared `sr-ps-breathe` and .sr-ps-aura's own
+   `sr-ps-auraSwell` -- both under ~1.8% of the frame, one element/one
+   period/one curve each, per the amended rule. Section 5's verify step
+   greps the emitted CSS for this. */
 
 (function (root) {
   'use strict';
@@ -74,29 +75,36 @@
      on a *running* animation recomputes "how far into the cycle" as
      elapsed/duration, which snaps the visible phase the instant duration
      changes -- confirmed as the naive approach the brief warns about, not
-     assumed. Instead the CSS keyframe's own duration is fixed at 10s
-     (see .sr-ps-subject in saferise-poster.css) and this file adjusts the
-     *running* Animation object's playbackRate via the Web Animations API:
+     assumed. Instead each CSS keyframe's own duration is fixed at 10s
+     (.sr-ps-subject/.sr-ps-plain's sr-ps-breathe, .sr-ps-aura's own
+     sr-ps-auraSwell) and this file adjusts each *running* Animation
+     object's playbackRate via the Web Animations API in lockstep:
      playbackRate = 10 / desiredPeriod. That changes speed continuously
      against the same timeline, with no phase jump and no restart -- the
-     technique the brief is asking to be named, not merely a var rewrite. */
-  function makeBreathDriver(subjectEl, startPeriod) {
-    var anim = null;
-    if (subjectEl.getAnimations) {
-      var list = subjectEl.getAnimations();
-      for (var i = 0; i < list.length; i++) {
-        if (list[i].animationName === 'sr-ps-breathe') { anim = list[i]; break; }
-      }
-    }
+     technique the brief is asking to be named, not merely a var rewrite.
+
+     prompt-galaxy-refinements.md #2 asks the aura to share "the same
+     period and curve" as the subject -- driving both Animation objects
+     from the one playbackRate below is how that happens without a second,
+     independent (and possibly drifting) driver. */
+  function makeBreathDriver(elements, startPeriod) {
+    var anims = [];
+    elements.forEach(function (el) {
+      if (!el || !el.getAnimations) return;
+      var list = el.getAnimations();
+      if (list.length) anims.push({ el: el, anim: list[0] });
+    });
     function set(p) {
       var period = startPeriod + (10 - startPeriod) * Math.pow(p, 0.7);
-      if (anim) {
-        anim.playbackRate = 10 / period;
+      var rate = 10 / period;
+      if (anims.length) {
+        anims.forEach(function (a) { a.anim.playbackRate = rate; });
       } else {
         /* No Web Animations API (very old browser) -- fall back to the
-           naive var rewrite. It will stutter, per the brief's own warning;
-           there is no better option without getAnimations(). */
-        subjectEl.style.setProperty('--breath', period.toFixed(2) + 's');
+           naive var rewrite on the first element only. It will stutter,
+           per the brief's own warning; there is no better option without
+           getAnimations(). */
+        if (elements[0]) elements[0].style.setProperty('--breath', period.toFixed(2) + 's');
       }
       return period;
     }
@@ -172,14 +180,20 @@
     var subjwrap = el('div', 'sr-ps-subjwrap');
     var subject = el('img', 'sr-ps-subject'); subject.src = data.subject; subject.alt = '';
     subjwrap.appendChild(subject);
+    /* prompt-galaxy-refinements.md #2 -- .sr-ps-aura is now a wrapper only
+       (carries the breath-synced sr-ps-auraSwell keyframe); the visible
+       gradient plus the --amp/--release-responsive scale live on the inner
+       div. See css/saferise-poster.css for why one element can't hold both. */
     var aura = el('div', 'sr-ps-aura');
+    var auraInner = el('div', 'sr-ps-aura-inner');
+    aura.appendChild(auraInner);
     var stepnow = el('p', 'sr-ps-stepnow');
     var edge = el('div', 'sr-ps-edge');
 
     [field, clear, lights, wander, subjwrap, aura, stepnow, edge].forEach(function (n) { frag.appendChild(n); });
     stage.insertBefore(frag, stage.firstChild);
 
-    return { field: field, clear: clear, subject: subject, aura: aura, stepnow: stepnow, edge: edge };
+    return { field: field, clear: clear, subject: subject, aura: aura, auraInner: auraInner, stepnow: stepnow, edge: edge };
   }
 
   function mount(stage, audio, opts) {
@@ -227,7 +241,9 @@
       subjectEl = layers.subject;
     }
 
-    var breathDriver = reduced ? null : makeBreathDriver(subjectEl, startBreath);
+    var breathDriver = reduced
+      ? null
+      : makeBreathDriver([subjectEl, layers.aura].filter(Boolean), startBreath);
     var aura = makeAura(audio);
 
     var raf = null, lastTick = 0, running = false;

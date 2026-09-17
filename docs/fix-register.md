@@ -17,7 +17,14 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-404** (prompt-galaxy-player.md — the two-layer galaxy treatment for the
+- **Highest ID issued: SR-405** (prompt-galaxy-refinements.md — three refinements to the SR-401–404
+  galaxy player: a small translate now rides inside the subject's/aura's own breath keyframes
+  (amending the governing no-translate rule, not breaking it), the aura split into a wrapper+inner
+  pair so its swell and its audio/Release response no longer collide on one element's `transform`,
+  and the existing lockup confirmed correct rather than duplicated
+  (`css/saferise-poster.css`, `js/saferise-poster.js`, `.gitignore`). Verify against `git log -1`
+  once it lands.)
+- **Previously: Highest ID issued: SR-404** (prompt-galaxy-player.md — the two-layer galaxy treatment for the
   guided-session player. SR-401 the cover pipeline (`tools/mk_posters.py`, `assets/galaxy/`,
   `content/galaxy.js`), SR-402 the layer stack and the governing no-translate/no-rotate rule
   (`css/saferise-poster.css`), SR-403 the session-progress/breath-entrainment/step/audio-aura
@@ -17335,3 +17342,136 @@ motion verified against the governing rule with nothing left unchecked, session 
 aura verified live with real and synthetic audio, wired into the one live call site that exists.
 The 21-cover fallback rate and the 30-of-31-protocols-have-no-audio-yet gap are both reported as
 real findings, not smoothed over. **Not pushed.** *Raised and fixed:* 17 Sep 2026
+
+---
+
+## SR-405 — galaxy player refinements: breath swell, aura split, lockup confirmed
+
+`prompt-galaxy-refinements.md`, reference build `galaxy-journey-v3.html` (read for values, never
+committed — added to `.gitignore` alongside `galaxy-journey.html`). Refinement to SR-401–404, not
+a rebuild: the pipeline (`tools/mk_posters.py`) and `assets/galaxy/manifest.json` were not touched.
+
+### The governing rule, amended
+
+SR-401's rule was no translate/rotate anywhere except the five wander stars. This pass's brief
+amends it: the subject may now carry a small translate *inside its own breath keyframe* — one
+element, one period, one curve, not a second independent drift, which is what actually caused the
+motion sickness the original rule exists to prevent. Extended the same reasoning to the aura's new
+`sr-ps-auraSwell`, since the brief asks for the aura to share the subject's own period and curve.
+Nothing else changed: `.sr-ps-field`, `.sr-ps-clear`, `.sr-ps-lights`, `.sr-ps-subjwrap`,
+`.sr-ps-stage` still never translate or rotate. No conflict arose between any section of this
+brief and the amended rule.
+
+**One measured discrepancy worth reporting, not corrected:** the brief's own framing ("travelling
+under 1.6% of the frame") doesn't quite match the keyframe values it also supplies verbatim —
+computed peak-to-peak travel (the largest pairwise distance between any two of the breathe
+keyframe's five stops, 0%↔40%) is **1.76%**, not under 1.6%. The aura's own swell is comfortably
+under at 1.07%. Used the brief's literal keyframe numbers as given rather than adjusting them to
+fit its own summary framing — the numbers are the instruction, the percentage is context.
+
+### §1 — the breath swell
+
+`@keyframes sr-ps-breathe` replaced with the five-stop version exactly as given (scale unchanged
+at each stop, `translate3d` added at each). Entrainment mechanism unchanged: still
+`Animation.playbackRate` against a fixed-duration keyframe, never a duration rewrite — re-verified
+after the keyframe swap, no stutter, `playbackRate` still varies smoothly with `--p`.
+
+### §2 — the aura's collision, resolved before implementing
+
+**Checked before writing anything, as instructed:** the existing `.sr-ps-aura` was one flat
+`<div>` carrying both the visible gradient and the `--amp`/`--release`-responsive
+`transform: scale(...)` as a plain CSS declaration — exactly the shape that collides with a
+keyframe animation on the same property. Confirmed this is a real bug, not hypothetical, by
+reading the reference mockup's own markup: its `.aura` is also one element with both `auraSwell`
+(an `animation`) and the amp/release `transform` (a plain declaration) on it — meaning the
+mockup's own aura is inert to `--amp`/`--release` for as long as the swell runs, an artifact of the
+mockup, not a design worth reproducing.
+
+**Resolution, per the brief's own likely answer, confirmed against the actual code rather than
+assumed:** split into `.sr-ps-aura` (wrapper — position/size only, now carries `sr-ps-auraSwell`)
+and a new `.sr-ps-aura-inner` (the gradient, opacity, and the amp/release scale, previously on the
+single element). `js/saferise-poster.js`'s `buildGalaxy()` now appends the inner div; nothing else
+in the mount/teardown logic needed to change, since `--amp`/`--release` are set on the stage and
+inherit through the extra nesting level like any custom property.
+
+**A second, related bug found while wiring this in, not in the brief's own text:** the aura's
+`sr-ps-auraSwell` needs the *same* period as the subject ("give it the same period and curve"),
+but the only entrainment driver that existed (`makeBreathDriver`) only ever looked up the
+subject's own `Animation` object. Naming the aura's animation-duration `var(--breath, 10s)` (as
+the reference mockup does) and then rewriting that variable each tick would have reintroduced the
+exact stutter section 1 rules out. Fixed by giving `sr-ps-auraSwell` a fixed 10s duration (matching
+`sr-ps-breathe`'s own convention) and generalising `makeBreathDriver` to take a list of elements,
+setting the same computed `playbackRate` on each one's `Animation` object in lockstep. Verified
+live: at the animation's own local time 0ms/4000ms/10000ms (0%/40%/100% of the 10s base cycle),
+subject and aura both differ in **both** scale and translate at each sampled point, and 0%
+matches 100% (clean loop closure) for both.
+
+**Verified neither response cancels the other:** sampled together during real playback (10s
+synthetic duration, ~0.4s apart) — `--amp` climbed 0.003→0.134, `.sr-ps-aura-inner`'s computed
+scale climbed 1.00003→1.00423 and opacity 0.18→0.24 in step with it, while `.sr-ps-aura` (outer)
+and `.sr-ps-subject` kept tracing their own independent swell curve throughout, unaffected.
+
+### §3 — the lockup, confirmed, not duplicated
+
+**Checked whether `sr-medplayer.js` already renders one, before touching anything:**
+`js/sr-medplayer.js`'s `build()` (line 47) already creates `.sr-medplayer__lockup` — "SafeRise",
+rule + wordmark — and appends it *inside* `stage`, and `css/sr-clearing-player.css` (lines 88–101)
+already carries real, non-empty rules for it (position, the rule line, the wordmark type, plus a
+`max-width:640px` responsive override for the rule's width). This is **not** the mockup's own
+"CSS had been lost" state — the repo version is correct today, confirmed live: `right:22px;
+bottom:20px`, `font-size:10.5px`, text "SafeRise" render at both 1440px and 390px.
+
+**Did not add the mockup's own `.lock`/`.rule`/`.mark` (cqw-scaled) markup or CSS.** Doing so would
+have been the second lockup the brief explicitly warns against — reported instead, per the brief's
+own instruction, rather than silently declined or silently duplicated. One real difference worth
+naming: the repo's lockup uses fixed pixel offsets (`22px`/`20px`/`10.5px`) rather than the
+mockup's `cqw` container-relative units, so it doesn't scale continuously with the player's own
+width the way the mockup's geometry would — it still renders correctly and legibly at both widths
+tested, just via a breakpoint (`max-width:640px`) rather than fluid scaling. Not changed, since the
+brief asked for confirmation, not a rebuild of a layer that already works.
+
+### §4 — applies to all 31
+
+`.sr-ps-plain` (the 21-protocol fallback) shares the `sr-ps-breathe` keyframe by name with
+`.sr-ps-subject`, so the new swell reaches it without a second declaration. Verified live rather
+than assumed from the shared selector alone: mounted a synthetic flagged protocol (`t1-01`), read
+`.sr-ps-plain`'s own `Animation` object directly at 0ms/4000ms, and its computed transform moves
+through the same scale+translate values as the subject's.
+
+### §5 — verify (measurements, not assertions)
+
+Run the same way as SR-401–404 — Playwright against a local `tools/serve.py` instance, since this
+session's Browser pane again refused all `localhost` navigation:
+
+- Subject's computed `transform` at the animation's own local 0ms/4000ms/10000ms (0%/40%/100% of
+  its 10s base): `matrix(1.014,…,-3.19,4.16)` → `matrix(1.062,…,4.40,-3.93)` →
+  `matrix(1.014,…,-3.19,4.16)` — scale and translate both differ at 0%/40%, and 0% = 100%.
+- Aura (outer)'s computed `transform` at the same three points: `matrix(1,…,-1.8,2.5)` →
+  `matrix(1.034,…,2.79,-2.33)` → `matrix(1,…,-1.8,2.5)` — same shape, confirming the shared
+  period/curve.
+- `--amp` still changes the aura (inner) while the swell runs on the outer, confirmed above; two
+  separate elements, two separate transform sources, neither drops the other.
+- `--release` non-zero only in the third quarter: unaffected by this pass (step logic untouched),
+  spot-checked again, still holds.
+- Lockup computed `position`/`right`/`bottom`/`font-size` at 1440px and 390px: identical at both
+  (`absolute`, `22px`, `20px`, `10.5px`) — correct, since the repo's implementation is
+  breakpoint-based rather than fluid; confirmed rendering, not merely present.
+- `prefers-reduced-motion`: subject `animation:none`/`transform:none`; aura outer
+  `animation:none`/`transform:none`; aura inner fixed `opacity:.18`/`transform:none`; `--p` still
+  advancing underneath (0.0010 at the first sample) — both static, as required.
+- **CONFIRMED, explicitly:** grepped `css/saferise-poster.css` for every `translate`/`rotate`
+  declaration. Every real (non-comment) `translate3d` belongs to one of exactly three keyframe
+  blocks — `sr-ps-w1`–`sr-ps-w4` (wander stars), `sr-ps-breathe` (subject/plain), `sr-ps-auraSwell`
+  (aura outer) — and zero `rotate` exists anywhere outside a comment.  `js/saferise-poster.js`
+  still never writes a `transform` inline style at all (grepped, zero matches).
+
+Full end-to-end regression: opened the real `t0-00` player, played, waited, closed — zero console
+or page errors.
+
+Files: `css/saferise-poster.css`, `js/saferise-poster.js`, `.gitignore` (`galaxy-journey-v3.html`).
+`tools/mk_posters.py` and `assets/galaxy/manifest.json` untouched, per instruction.
+
+*Status:* closed — all three refinements implemented and verified live; the aura's collision was
+caught and resolved before writing code, exactly as the brief asked, and the same collision was
+found (not reproduced) in the reference mockup's own markup, not merely inferred from the brief's
+warning. **Not pushed.** *Raised and fixed:* 17 Sep 2026

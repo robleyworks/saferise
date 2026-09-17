@@ -12,13 +12,20 @@
    nothing here can leak onto an unrelated page.
 
    ============================================================================
-   THE GOVERNING RULE -- prompt-galaxy-player.md #0
-   NO LAYER TRANSLATES OR ROTATES, except .sr-ps-wander i (the five
-   individual wander stars), and only under 2% of the frame each. An earlier
-   build drifted the field and counter-drifted a star layer and it caused
-   motion sickness -- competing optical-flow cues, members arrive here
-   dysregulated. Every other layer only ever changes opacity, filter, or
-   scale from a fixed transform-origin. Grep this file for "translate" and
+   THE GOVERNING RULE -- prompt-galaxy-player.md #0, AMENDED by
+   prompt-galaxy-refinements.md #0
+   NO LAYER TRANSLATES OR ROTATES, except:
+     - .sr-ps-wander i (the five individual wander stars), under 2% of the
+       frame each, unchanged from SR-402;
+     - .sr-ps-subject and .sr-ps-plain's shared `sr-ps-breathe` keyframe,
+       which now carries a small translate (peak-to-peak under ~1.8% of the
+       frame -- see SR-405's own report for the exact figure) alongside its
+       scale, one element, one period, one easing curve;
+     - .sr-ps-aura's own `sr-ps-auraSwell` keyframe, same shape, same period,
+       on the outer wrapper only (see the aura split below).
+   Still forbidden on .sr-ps-field, .sr-ps-clear, .sr-ps-lights,
+   .sr-ps-subjwrap, .sr-ps-stage, or any wrapper other than the two named
+   above. No parallax. No Ken Burns. Grep this file for "translate" and
    "rotate" before trusting that claim -- don't just take the comment's word
    for it (verified in the pass's own report).
    ============================================================================ */
@@ -95,23 +102,55 @@
 @keyframes sr-ps-glow1 { 0%,100% { opacity: .22; filter: drop-shadow(0 0 2px rgba(255,240,214,.5)) } 48% { opacity: 1; filter: drop-shadow(0 0 9px rgba(255,240,214,.95)) } }
 @keyframes sr-ps-glow2 { 0%,100% { opacity: .85; filter: drop-shadow(0 0 7px rgba(226,240,255,.85)) } 42% { opacity: .18; filter: drop-shadow(0 0 2px rgba(226,240,255,.4)) } }
 
-/* ---- the subject -- scale from a fixed centre only, never translate ---- */
+/* ---- the subject -- prompt-galaxy-refinements.md #1: a small translate
+   now rides inside the same breathe keyframe (one element, one period, one
+   curve -- not a second, competing drift). transform-origin still fixed;
+   translate3d moves the element itself, independent of origin. ---- */
 .sr-ps-subjwrap { position: absolute; inset: 0; z-index: 2; }
 .sr-ps-subject {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
   transform-origin: 52% 46%; will-change: transform;
   animation: sr-ps-breathe 10s cubic-bezier(.37,0,.63,1) infinite;
 }
-@keyframes sr-ps-breathe { 0% { transform: scale(1.014) } 40% { transform: scale(1.058) } 100% { transform: scale(1.014) } }
+@keyframes sr-ps-breathe {
+  0%   { transform: scale(1.014) translate3d(-0.35%, 0.82%, 0) }
+  22%  { transform: scale(1.036) translate3d( 0.28%, 0.10%, 0) }
+  40%  { transform: scale(1.062) translate3d( 0.46%,-0.74%, 0) }
+  68%  { transform: scale(1.038) translate3d(-0.22%,-0.18%, 0) }
+  100% { transform: scale(1.014) translate3d(-0.35%, 0.82%, 0) }
+}
 
-/* ---- audio-reactive aura -- opacity/scale only, screen-blended ---- */
+/* ---- audio-reactive aura -- refinements.md #2: split into an outer
+   wrapper (carries sr-ps-auraSwell, the same breath-synced motion as the
+   subject) and an inner element (carries the --amp/--release-responsive
+   scale). A single element cannot hold both a keyframe animation and a
+   plain `transform` declaration on the same property -- the animation
+   wins for as long as it runs and the responsive scale is silently
+   dropped. Confirmed this is a real collision, not a hypothetical one: the
+   reference mockup puts auraSwell and the amp/release transform on the
+   very same .aura div, which means its own --amp/--release response is
+   inert whenever the swell is running. Not reproduced here. */
 .sr-ps-aura {
   position: absolute; inset: 0; pointer-events: none; z-index: 3;
+  /* Fixed 10s, matching .sr-ps-subject's own base duration -- NOT
+     var(--breath,10s). Entrainment for both is driven by Animation.
+     playbackRate in JS (see js/saferise-poster.js), never a duration
+     rewrite; a --breath custom property here would invite exactly the
+     rewrite-and-stutter this file has already ruled out once. */
+  animation: sr-ps-auraSwell 10s cubic-bezier(.37,0,.63,1) infinite;
+}
+.sr-ps-aura-inner {
+  position: absolute; inset: 0;
   mix-blend-mode: screen;
   background: radial-gradient(46% 54% at 52% 46%, rgba(var(--sr-ps-warm,212,168,103), .42), transparent 70%);
   opacity: calc(.18 + var(--amp,0) * .46 + var(--release,0) * .3);
   transform: scale(calc(1 + var(--amp,0) * .03 + var(--release,0) * .04));
   transition: opacity .10s linear, transform .14s linear;
+}
+@keyframes sr-ps-auraSwell {
+  0%   { transform: scale(1)     translate3d(-0.2%, 0.5%, 0) }
+  40%  { transform: scale(1.034) translate3d( 0.3%,-0.45%, 0) }
+  100% { transform: scale(1)     translate3d(-0.2%, 0.5%, 0) }
 }
 
 /* time-of-day bloom -- reuses the existing vignette's stacking position,
@@ -141,7 +180,10 @@
 }
 
 /* ---- fallback: a flagged/uncovered protocol gets the plain cover, the
-   breath animation applied directly to it, and nothing else ---- */
+   breath animation applied directly to it, and nothing else. Shares
+   `sr-ps-breathe` by name with .sr-ps-subject, so refinements.md #1's swell
+   applies here too without a second declaration -- verified live in the
+   pass's own report rather than assumed from the shared selector alone. ---- */
 .sr-ps-plain {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
   transform-origin: 50% 42%;
@@ -155,6 +197,7 @@
 .sr-ps-stage.sr-ps-off .sr-ps-wander i,
 .sr-ps-stage.sr-ps-off .sr-ps-subject,
 .sr-ps-stage.sr-ps-off .sr-ps-plain,
+.sr-ps-stage.sr-ps-off .sr-ps-aura,
 .sr-ps-stage.sr-ps-off.sr-ps-stage::after {
   animation-play-state: paused;
 }
@@ -177,8 +220,9 @@
   .sr-ps-wander i,
   .sr-ps-subject,
   .sr-ps-plain,
+  .sr-ps-aura,
   .sr-ps-stage::after {
     animation: none !important;
   }
-  .sr-ps-aura { opacity: .18; transform: none; transition: none; }
+  .sr-ps-aura-inner { opacity: .18; transform: none; transition: none; }
 }
