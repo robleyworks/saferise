@@ -17,7 +17,17 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-407** (`prompt-placeholder-audio.md` — temporary, founder-approved:
+- **Highest ID issued: SR-408** (`GALAXY-PLAYER-REFINEMENTS-v2.md` — per-state breathe/aura
+  keyframes replacing the single shared curve, the galaxy player's own `.sr-ps-ctrl` control
+  replacing `protocol.html`'s pre-existing play button/label/60-bar `#wave` (never wired, per the
+  prior turn's own live diagnosis), and the lockup's centre-frame bug fixed by deleting the
+  structural selector that caused it rather than narrowing it. **Numbering note:** the prior
+  turn's diagnosis (report-only, nothing committed) is referred to as "SR-408" in this pass's own
+  brief text, written before that diagnosis had actually been registered; `git log --grep` shows
+  no SR-408 commit, so this pass claims SR-408 for the record per its own "next free ID" rule —
+  flagged as a disagreement rather than silently resolved. See this pass's own report for detail.
+  Verify against `git log -1` once it lands.)
+- **Previously: Highest ID issued: SR-407** (`prompt-placeholder-audio.md` — temporary, founder-approved:
   every protocol with no meditation audio of its own now falls back to `t0-00`'s real file, so
   the galaxy player can be seen running live on all 31, not just `t0-00`. One resolution point,
   one flag (`PLACEHOLDER_AUDIO` in `protocol.html`, just above `initGuidedPlayer()`); flipping it
@@ -17773,3 +17783,197 @@ Files: `protocol.html`, `docs/page-invariants.md`, `docs/fix-register.md`.
 behind which the whole fallback lives, all 31 players verified individually with the flag on
 (table above), the revert path recorded where a launch checklist would find it. **Not pushed.**
 *Raised and fixed:* 17 Sep 2026
+
+---
+
+## SR-408 — galaxy player refinements v2: per-state breath, its own control, the lockup fixed
+
+`GALAXY-PLAYER-REFINEMENTS-v2.md`, reference build `pass/galaxy-journey-v3.html` (read for
+values, `pass/` is already gitignored so nothing to add there). Refinement to SR-401–407 — the
+pipeline (`tools/mk_posters.py`) and the manifest (`assets/galaxy/manifest.json`,
+`content/galaxy.js`) were not touched.
+
+**Numbering note, reported rather than silently resolved:** this brief's own text refers to "SR-
+408" as the ID for the live diagnosis the previous turn produced (report-only, nothing changed,
+nothing committed). `git log --grep` shows no SR-408 commit — the diagnosis was correctly never
+registered, since nothing changed. This entry claims SR-408 for the actual code in this pass, per
+the brief's own "next free ID from git log --grep" instruction; the brief's own prose and this
+register now name two different things "SR-408" (a diagnosis and an implementation). Not corrected
+retroactively — flagged here so it's visible rather than quietly papered over.
+
+### 0 · The governing rule, amended again
+
+Stands unchanged from SR-405's amendment for every layer except the two already-named exceptions.
+This pass changes *what* runs on those two exceptions (three named keyframes each, chosen by
+state, instead of one shared curve) but not *that* they're the only two. Nothing in this brief
+asked for a translate/rotate anywhere else; none was added — confirmed by the same grep as every
+prior pass in this series (full result in §7 below).
+
+### Gating question 1 — the aura transform collision (answered before implementing, per instruction)
+
+Already resolved, not solved fresh: SR-405 already split `.sr-ps-aura` into an outer wrapper
+(carries the swell keyframe) and `.sr-ps-aura-inner` (carries the `--amp`/`--release`-responsive
+`transform: scale(...)`). This pass keeps that split and extends it to three swell variants
+(`sr-ps-auraSwellA/U/N`) on the outer, selected the same way as the subject's breathe variant —
+nothing new to resolve, the mechanism from SR-405 already prevents the collision this brief warns
+about.
+
+### Gating question 2 — everything referencing `#wave`, `.wave`, the button, or the label (answered before implementing)
+
+`resource.html` also has `<div class="wave" id="wave">`, a near-identical `.wave{...}` CSS rule,
+and its own bottom-of-file script filling it with static sine bars — on inspection this is a
+**separate, independent, already-real feature**: it drives resource.html's own working "resource
+guidance" narration player (`content/guidance.js`'s `rg-0X-*.mp3` files), entirely separate
+markup, in a separate file, with its own separate `#play`/`#wave` pair, coincidentally similar in
+name only (confirmed by reading both files directly, not assumed from the shared class name).
+`method.html`'s own `.wave` is unrelated again — a decorative divider line, not audio. Nothing
+shares a file, module, or class definition with `protocol.html`'s copy; removing `protocol.html`'s
+own inline `#wave`/`.wave`/button/script cannot break either. Not a stop condition — proceeded.
+
+### 1 · The breath — per state, held, not converging
+
+**1a.** `--breath` is now set **once**, from the protocol's own `state` (`GALAXY_POSTERS[id].state`
+in `content/galaxy.js`, sourced originally from `content/tracks.js` — read at mount time, never a
+per-player `data-per` attribute), and held for the whole session — confirmed live, sampled across
+~0.5s of real playback progressing `--p` from 0.13 to 0.60 on an Unsteady protocol: `--breath`
+read `12.00s` at every sample, no drift toward 10s. `Animation.playbackRate` is still the
+mechanism (never a duration rewrite); the only change from SR-403/405 is that it's applied once at
+mount instead of every tick, since there's nothing left to ramp.
+
+Held values: Agitated 10s, Unsteady 12s, Numb 8s — exactly the brief's own table, confirmed by
+computed `--breath` and by `Animation.playbackRate` (`10 / heldSeconds`) on all three tested
+states: Agitated 1.000, Unsteady 0.8333, Numb 1.250, all exact.
+
+**Confirmed all 31 resolve.** 30 of 31 (`t1-01`…`t3-10`) checked individually — every one produced
+a valid `playbackRate` matching its own state (table in §7). `t0-00` (Steady) isn't in the brief's
+own table (only Agitated/Unsteady/Numb are named — the three that actually occur among the 30
+track protocols). Judgment call, reported rather than silently assumed: Steady reuses the 'A'
+keyframe pair (10s, 40%-peak) since Steady's own target has always been "4-in 6-out, already
+there" (SR-403's original framing) — mechanically the same shape as Agitated. Regression-checked
+live: `t0-00` mounts with `sr-ps-breatheA`, `--breath: 10.00s`, `playbackRate: 1`, correct.
+
+**1b.** Peak position confirmed per state, not eyeballed: Agitated peaks at 40% (`--breath`-cycle
+local time 4000ms of a 10s base), Unsteady and Numb at 50% (5000ms). Sampled `.sr-ps-subject`'s
+computed `transform` at each state's own 0%/peak/100% (via `Animation.currentTime`, not real
+playback time, for precision) — scale and translate both genuinely differ between 0% and peak for
+all three states, and 0% matches 100% exactly (clean loop closure). Numb's peak scale (1.042) is
+visibly shallower than Agitated/Unsteady's (1.062), matching "shallower on purpose."
+
+### 2 · The aura swells with it
+
+Three named variants (`sr-ps-auraSwellA/U/N`), same peak-position-per-state logic as the subject,
+same fixed-10s-base + `playbackRate` mechanism, selected and driven together with the subject from
+one call (`applyHeldBreath([subjectEl, auraEl], heldSeconds)` — both `Animation` objects set to
+the same rate in the same call, so they can't drift apart from each other). Verified live: for
+each of the three tested states, the aura's computed transform at 0%/peak/100% traces the same
+shape as the subject's own (scaled down), and `--amp` kept changing the aura's *inner* opacity/
+scale (0.18→0.24 range observed) while the swell kept running on the *outer* independently — the
+split from SR-405 confirmed still doing its job under the new three-variant system, not just
+assumed to still work.
+
+### 3 · The lockup — the centre-frame bug, root-caused and fixed
+
+Confirmed `js/sr-medplayer.js` doesn't render a lockup outside its own modal stage — no second one
+exists anywhere; this pass's `initGuidedPlayer()` remains the only place that builds one for the
+embedded (non-modal) context, unchanged from SR-406.
+
+**The defect, exactly as named in the brief:** `#pane-listen .stage>div{position:relative;
+z-index:10}` — written in SR-406 to give the *old* control wrapper a z-index above the poster
+layers — is a plain-element-shape selector, and `.sr-medplayer__lockup` is *also* a direct-child
+`<div>` of `.stage`, so it matched too, overriding the lockup's real `position:absolute;right:
+22px;bottom:20px;z-index:6` from `css/sr-clearing-player.css`. **Deleted the rule, not narrowed
+it with `:not()`** — per the brief's own reasoning, a structural selector that happens to catch
+the right element is the same bug waiting for the next element added to the stage. Removing the
+old control wrapper (§4) removed the only thing that rule existed for.
+
+Verified live, before and after: lockup's computed `position` was `relative` (wrong) before this
+pass, `absolute` (correct) after; `z-index` `10` before, `6` after; measured pixel gap from the
+stage's own right/bottom edges after the fix: `23px`/`21px` at both 1440px and 390px viewports
+(the brief's intended `22px`/`20px`, within a pixel of subpixel rounding) — genuinely anchored to
+the corner at both widths, not merely "closer than before."
+
+### 4 · The old chrome — removed, not dimmed
+
+Removed from `protocol.html`'s Listen pane: the play button (`onclick="startPractice(this)"`), its
+label (`<p>Breathwork &amp; Grounding — Audio Only</p>`), `<div class="wave" id="wave">`, the
+bottom-of-file script that filled it with 60 static bars, and the now-dead `.wave`/`.wave i` CSS
+rules. `#pane-listen .stage` is now empty markup — `SRClearing.mount()` (`initGuidedPlayer()`)
+builds everything into it, including its own new `.sr-ps-ctrl` play/pause control (real `<button>`,
+keyboard-reachable with no extra wiring, `aria-label` kept in sync with play/pause state — built
+only when the caller passes `opts.buildControl: true`, which only `protocol.html` does; `js/sr-
+medplayer.js`'s own call site never sets it, so the modal context keeps its existing
+`.sr-medplayer__play` unchanged, regression-checked live).
+
+`startPractice()`/`completePractice()` remain, used only by the **Watch** pane's own button — no
+video asset exists anywhere in the repo, out of scope for this pass exactly as it was for SR-406.
+`completePractice()` (opens the journal) is still called on the Listen pane's real `ended` event,
+now via a plain `audio.addEventListener('ended', completePractice)` rather than through the
+removed button.
+
+### 5 · Audio source — unchanged, confirmed
+
+`PLACEHOLDER_AUDIO` still `true`, still declared in the same place (`protocol.html`, just above
+`initGuidedPlayer()`), still the only flag, still documented in `docs/page-invariants.md` — none
+of those three touched by this pass. The breath period is still read from the *playing* protocol's
+own state regardless of which audio is actually sounding (confirmed again in §1's per-state rate
+table — `t0-00`'s file plays under all three tested states, each still entrained to its own rate).
+
+### 6 · Applies to all 31
+
+`.sr-ps-plain` (21-protocol fallback) shares `sr-ps-breatheA/U/N` by name with `.sr-ps-subject`,
+so it picks up both the new per-state keyframes and the corresponding held period without a
+second declaration — verified live on a flagged protocol (`t1-01`) in the same run as the 30-page
+sweep below; no protocol failed to pick up its own state's swell.
+
+### 7 · Verify
+
+Playwright against a local `tools/serve.py` instance (Browser pane again refused `localhost` this
+session).
+
+**Per-state, one protocol each (`t1-04` Agitated, `t2-09` Unsteady, `t1-10` Numb, plus `t0-00`
+Steady for the dashboard regression):**
+
+| state | protocol | held breath | peak % | playbackRate | 0%/peak/100% differ in scale+translate | lockup absolute+correct corner |
+|---|---|---|---|---|---|---|
+| Agitated | t1-04 | 10.00s | 40% | 1.000 | yes | yes |
+| Unsteady | t2-09 | 12.00s | 50% | 0.8333 | yes | yes |
+| Numb | t1-10 | 8.00s | 50% | 1.250 | yes | yes |
+| Steady | t0-00 | 10.00s | 40% (reused 'A') | 1.000 | n/a (dashboard regression only) | n/a (modal has its own lockup) |
+
+- `--amp` still changes the aura while the swell runs, on `t1-04`: sampled 10 points over real
+  playback, `--amp` ranged 0.006–0.190 while `.sr-ps-aura`'s own swell transform kept advancing
+  independently — neither cancels the other.
+- `--release` non-zero only in the third quarter: 14-point sweep on `t1-04`, zero everywhere
+  outside Release, a sin curve (0.62→0.93→0.74) peaking inside it — unaffected by this pass's
+  changes, reconfirmed rather than assumed since the tick loop was edited.
+- `prefers-reduced-motion`: subject and aura both `animation: none; transform: none` on `t1-04`;
+  `--p` still advanced (0.0005 at first sample) underneath.
+- **No `#wave`, no old control wrapper, no second play button anywhere in the pane** — confirmed
+  by DOM query across the full 30-page sweep below: `.wave` count 0, `.sr-ps-ctrl` count exactly
+  1, `.play` (the old class) count 0, on every one of the 30.
+- **Zero console errors** on all 30 protocol pages plus the `t0-00` dashboard regression.
+
+**All 30 `protocol.html` pages**, swept individually (not sampled): lockup present, zero `.wave`,
+exactly one control, zero old play buttons, audio genuinely playing, `playbackRate` matching that
+protocol's own state exactly (Agitated 1.000 / Unsteady 0.8333 / Numb 1.250, each within 0.01) —
+**0 failures out of 30**.
+
+**CONFIRMED, explicitly — the full translate/rotate grep:** every non-comment `translate3d` in
+`css/saferise-poster.css` belongs to exactly one of ten keyframe blocks: `sr-ps-w1`–`sr-ps-w4`
+(the five wander stars), `sr-ps-breatheA`/`sr-ps-breatheU`/`sr-ps-breatheN` (subject/plain), and
+`sr-ps-auraSwellA`/`sr-ps-auraSwellU`/`sr-ps-auraSwellN` (aura outer) — exactly the set the brief
+names as permitted. Zero `rotate` anywhere in real code. `js/saferise-poster.js` writes zero
+`transform`/`style.transform` anywhere (grepped, zero matches) — it writes `animationName` (which
+keyframe runs) and `playbackRate` (how fast), never a transform value itself.
+
+**No protocol failed to pick up the new swell or its correct per-state period** — 0 of 30.
+
+Files: `css/saferise-poster.css`, `js/saferise-poster.js`, `protocol.html`, `docs/fix-register.md`.
+
+*Status:* closed — both gating questions answered and reported before any code was written (§
+"Gating question 1"/"2" above); per-state breath/swell implemented and verified individually for
+all three real states plus Steady; the lockup's actual root cause (a structural selector matching
+more than intended) found and fixed by deletion, not narrowing, then verified fixed at two
+viewport widths; the old chrome fully removed with its dead CSS, not merely dimmed; all 30 protocol
+pages swept individually with zero failures; the governing-rule grep re-run and reported in full.
+**Not pushed.** *Raised and fixed:* 17 Sep 2026

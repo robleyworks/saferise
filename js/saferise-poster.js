@@ -24,17 +24,22 @@
 
    ════════════════════════════════════════════
    THE GOVERNING RULE, ENFORCED IN JS TOO -- amended by
-   prompt-galaxy-refinements.md #0
+   prompt-galaxy-refinements.md #0, amended again by
+   GALAXY-PLAYER-REFINEMENTS-v2.md #0
    ════════════════════════════════════════════
    This file never writes a `transform` inline style at all, on any
    element, ever -- every transform lives in a CSS keyframe or a computed
-   `calc()`, not here. JS only ever writes custom properties (--p, --breath,
-   --amp, --release, --warmshift) plus a playbackRate on the existing
-   breathe animation. The CSS keyframes themselves now permit a translate
-   on two elements beyond the five wander stars -- .sr-ps-subject/
-   .sr-ps-plain's shared `sr-ps-breathe` and .sr-ps-aura's own
-   `sr-ps-auraSwell` -- both under ~1.8% of the frame, one element/one
-   period/one curve each, per the amended rule. Section 5's verify step
+   `calc()`, not here. JS writes custom properties (--p, --amp, --release,
+   --warmshift, --sr-ps-warm/-cool/-acc), a `playbackRate` on the subject/
+   aura Animation objects (set once per mount now, not per tick -- v2 #1a
+   holds the breath period for the whole session instead of ramping it),
+   and an `animationName` selecting which of the three per-state keyframe
+   variants runs (v2 #1b) -- never which property animates or by how much,
+   so this still isn't writing a transform. The CSS keyframes themselves
+   permit a translate on two elements beyond the five wander stars --
+   .sr-ps-subject/.sr-ps-plain's `sr-ps-breatheA/U/N` and .sr-ps-aura's own
+   `sr-ps-auraSwellA/U/N` -- each under ~1.8% of the frame, one element/one
+   period/one curve each, per the amended rule. Section 7's verify step
    greps the emitted CSS for this. */
 
 (function (root) {
@@ -70,45 +75,42 @@
     return Math.max(0, Math.min(1, (hr - 8) / 14));
   }
 
-  /* ---------------------------------------------------- breath entrainment
-     Report (brief #5): changing animation-duration (or a CSS var it reads)
-     on a *running* animation recomputes "how far into the cycle" as
-     elapsed/duration, which snaps the visible phase the instant duration
-     changes -- confirmed as the naive approach the brief warns about, not
-     assumed. Instead each CSS keyframe's own duration is fixed at 10s
-     (.sr-ps-subject/.sr-ps-plain's sr-ps-breathe, .sr-ps-aura's own
-     sr-ps-auraSwell) and this file adjusts each *running* Animation
-     object's playbackRate via the Web Animations API in lockstep:
-     playbackRate = 10 / desiredPeriod. That changes speed continuously
-     against the same timeline, with no phase jump and no restart -- the
-     technique the brief is asking to be named, not merely a var rewrite.
+  /* ---------------------------------------------------------- the breath
+     GALAXY-PLAYER-REFINEMENTS-v2.md #1a/#1b -- two corrections to the
+     original mockup, both rulings: the period is HELD for the whole
+     session (no more easing every state toward a 10s target -- 10s is
+     Agitated's own pair only, not a universal destination), and the peak
+     keyframe position is per state (40% for Agitated's 4:6 ratio, 50% for
+     Unsteady/Numb's even ratios). Source: the protocol's own `state`
+     field in content/galaxy.js (GALAXY_POSTERS[id].state) -- read at mount
+     time below, never `data-per` typed per player.
 
-     prompt-galaxy-refinements.md #2 asks the aura to share "the same
-     period and curve" as the subject -- driving both Animation objects
-     from the one playbackRate below is how that happens without a second,
-     independent (and possibly drifting) driver. */
-  function makeBreathDriver(elements, startPeriod) {
-    var anims = [];
+     Steady isn't in the brief's own table (it names Agitated/Unsteady/
+     Numb only -- the three states that actually occur among the 30 track
+     protocols; Steady only ever applies to t0-00). Judgment call, reported
+     rather than silently assumed: Steady's own target has always been
+     "4-in 6-out, already there" (SR-403's original framing) -- the same
+     10s/40%-peak shape as Agitated -- so it reuses the 'A' keyframe/8
+     held-seconds-map entry rather than inventing a fourth pair. */
+  var STATE_HELD_BREATH = { Agitated: 10, Unsteady: 12, Numb: 8, Steady: 10 };
+  var STATE_KEYFRAME = { Agitated: 'A', Unsteady: 'U', Numb: 'N', Steady: 'A' };
+
+  /* Still Animation.playbackRate, never a duration rewrite (brief #1a: "The
+     entrainment mechanism does not otherwise change"). The only change
+     from SR-403/405's version is that this now runs ONCE, at mount, rather
+     than every tick -- there is nothing left to ramp once the period is
+     held for the whole session. Each CSS keyframe's own duration stays
+     fixed at 10s regardless of which named variant is selected (see
+     css/saferise-poster.css), so rate = 10 / heldSeconds reaches the true
+     per-state period exactly once, with no phase jump. */
+  function applyHeldBreath(elements, heldSeconds) {
+    var rate = 10 / heldSeconds;
     elements.forEach(function (el) {
       if (!el || !el.getAnimations) return;
       var list = el.getAnimations();
-      if (list.length) anims.push({ el: el, anim: list[0] });
+      if (list.length) list[0].playbackRate = rate;
     });
-    function set(p) {
-      var period = startPeriod + (10 - startPeriod) * Math.pow(p, 0.7);
-      var rate = 10 / period;
-      if (anims.length) {
-        anims.forEach(function (a) { a.anim.playbackRate = rate; });
-      } else {
-        /* No Web Animations API (very old browser) -- fall back to the
-           naive var rewrite on the first element only. It will stutter,
-           per the brief's own warning; there is no better option without
-           getAnimations(). */
-        if (elements[0]) elements[0].style.setProperty('--breath', period.toFixed(2) + 's');
-      }
-      return period;
-    }
-    return { set: set };
+    return rate;
   }
 
   /* ---------------------------------------------------------- audio aura
@@ -159,6 +161,47 @@
       if (ctx) { try { ctx.close(); } catch (e) {} }
     }
     return { connectAnalyser: connectAnalyser, disconnectAnalyser: disconnectAnalyser, read: read, teardown: teardown };
+  }
+
+  /* v2 #4 -- "One component owns its own controls." Built only when the
+     caller opts in (opts.buildControl); js/sr-medplayer.js's own call
+     never does, so the modal context (which already has
+     .sr-medplayer__play) is unaffected. Real <button>, so it is keyboard-
+     reachable and gets :focus-visible with no extra wiring; aria-label
+     kept in sync with play/pause. Disabled (no click handler bound at
+     all, not just visually) when hasAudio is false -- honest state, per
+     SR-406, not a fake control. */
+  function buildCtrl(stage, audio, hasAudio) {
+    var ctrl = el('button', 'sr-ps-ctrl');
+    ctrl.type = 'button';
+    ctrl.appendChild(el('i'));
+    stage.appendChild(ctrl);
+
+    if (!hasAudio) {
+      ctrl.disabled = true;
+      ctrl.setAttribute('aria-disabled', 'true');
+      ctrl.setAttribute('aria-label', 'Guided audio not yet available for this protocol');
+      return ctrl;
+    }
+
+    ctrl.setAttribute('aria-label', 'Play guided audio');
+    ctrl.addEventListener('click', function () {
+      if (audio.paused) audio.play().catch(function () {});
+      else audio.pause();
+    });
+    audio.addEventListener('play', function () {
+      ctrl.setAttribute('data-playing', 'true');
+      ctrl.setAttribute('aria-label', 'Pause guided audio');
+    });
+    audio.addEventListener('pause', function () {
+      ctrl.removeAttribute('data-playing');
+      ctrl.setAttribute('aria-label', 'Play guided audio');
+    });
+    audio.addEventListener('ended', function () {
+      ctrl.removeAttribute('data-playing');
+      ctrl.setAttribute('aria-label', 'Play guided audio');
+    });
+    return ctrl;
   }
 
   function buildPlainFallback(stage, data) {
@@ -230,7 +273,14 @@
       stage.style.setProperty('--sr-ps-acc', stateAccent[data.state]);
     }
 
-    var startBreath = (data && data.startBreath) || 10;
+    /* v2 #1a -- read straight from the protocol's own state, not a
+       per-player data-per attribute. Falls back to 'Agitated' only when
+       the id genuinely isn't in the manifest at all (never expected in
+       practice -- all 31 ids resolve, confirmed in this pass's own
+       report), so there is always a valid keyframe/held-seconds pair. */
+    var state = (data && data.state) || 'Agitated';
+    var heldBreath = STATE_HELD_BREATH[state] || 10;
+    var keyframeSuffix = STATE_KEYFRAME[state] || 'A';
     var reduced = reducedMotion();
 
     var layers, subjectEl;
@@ -246,9 +296,23 @@
       subjectEl = layers.subject;
     }
 
-    var breathDriver = reduced
-      ? null
-      : makeBreathDriver([subjectEl, layers.aura].filter(Boolean), startBreath);
+    /* v2 #1b -- select the per-state keyframe on both the subject/plain
+       and the aura wrapper (same shape, same period -- v2 #2). Set before
+       reading getAnimations() below so the Animation object returned is
+       the one actually running under the chosen name. */
+    if (subjectEl) subjectEl.style.animationName = 'sr-ps-breathe' + keyframeSuffix;
+    if (layers.aura) layers.aura.style.animationName = 'sr-ps-auraSwell' + keyframeSuffix;
+
+    if (!reduced) applyHeldBreath([subjectEl, layers.aura].filter(Boolean), heldBreath);
+    /* Inspectable record of the held value -- not read by anything here
+       (playbackRate above is what actually drives speed), but set once,
+       never rewritten, so a computed-style check can confirm the period
+       equals the state's own pair throughout the session and never drifts. */
+    stage.style.setProperty('--breath', heldBreath.toFixed(2) + 's');
+
+    var hasAudio = !!(audio.getAttribute && audio.getAttribute('src'));
+    if (opts.buildControl) buildCtrl(stage, audio, hasAudio);
+
     var aura = makeAura(audio);
 
     var raf = null, lastTick = 0, running = false;
@@ -262,8 +326,6 @@
         var dur = audio.duration;
         var p = (dur && isFinite(dur) && dur > 0) ? Math.max(0, Math.min(1, audio.currentTime / dur)) : 0;
         stage.style.setProperty('--p', p.toFixed(4));
-
-        if (breathDriver) breathDriver.set(p);
 
         var idx = Math.min(3, Math.floor(p * 4));
         var within = (p * 4) - idx;

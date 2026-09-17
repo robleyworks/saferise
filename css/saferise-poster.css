@@ -12,17 +12,19 @@
    nothing here can leak onto an unrelated page.
 
    ============================================================================
-   THE GOVERNING RULE -- prompt-galaxy-player.md #0, AMENDED by
-   prompt-galaxy-refinements.md #0
+   THE GOVERNING RULE -- prompt-galaxy-player.md #0, amended by
+   prompt-galaxy-refinements.md #0, amended again by
+   GALAXY-PLAYER-REFINEMENTS-v2.md #0 (per-state breathe/auraSwell keyframes
+   replace the single shared ones; same exception, three named variants)
    NO LAYER TRANSLATES OR ROTATES, except:
      - .sr-ps-wander i (the five individual wander stars), under 2% of the
        frame each, unchanged from SR-402;
-     - .sr-ps-subject and .sr-ps-plain's shared `sr-ps-breathe` keyframe,
-       which now carries a small translate (peak-to-peak under ~1.8% of the
-       frame -- see SR-405's own report for the exact figure) alongside its
-       scale, one element, one period, one easing curve;
-     - .sr-ps-aura's own `sr-ps-auraSwell` keyframe, same shape, same period,
-       on the outer wrapper only (see the aura split below).
+     - .sr-ps-subject and .sr-ps-plain's shared `sr-ps-breatheA`/`U`/`N`
+       keyframes (one per state, selected in JS -- see js/saferise-poster.js),
+       each under ~1.8% of the frame peak-to-peak, one element, one period,
+       one easing curve;
+     - .sr-ps-aura's own `sr-ps-auraSwellA`/`U`/`N` keyframes, same shape,
+       same period, on the outer wrapper only (see the aura split below).
    Still forbidden on .sr-ps-field, .sr-ps-clear, .sr-ps-lights,
    .sr-ps-subjwrap, .sr-ps-stage, or any wrapper other than the two named
    above. No parallax. No Ken Burns. Grep this file for "translate" and
@@ -30,7 +32,14 @@
    for it (verified in the pass's own report).
    ============================================================================ */
 
-.sr-ps-stage { --p: 0; --breath: 10s; --amp: 0; --release: 0; --warmshift: 0; }
+.sr-ps-stage {
+  --p: 0; --breath: 10s; --amp: 0; --release: 0; --warmshift: 0;
+  /* container-type:inline-size -- needed for .sr-ps-ctrl's cqw sizing below
+     (GALAXY-PLAYER-REFINEMENTS-v2.md #4: the galaxy player now builds its
+     own control, matching the reference mockup's .ctrl geometry). Nothing
+     else in this file used cqw before this, so nothing else depends on it. */
+  container-type: inline-size;
+}
 
 .sr-ps-field,
 .sr-ps-clear {
@@ -102,22 +111,43 @@
 @keyframes sr-ps-glow1 { 0%,100% { opacity: .22; filter: drop-shadow(0 0 2px rgba(255,240,214,.5)) } 48% { opacity: 1; filter: drop-shadow(0 0 9px rgba(255,240,214,.95)) } }
 @keyframes sr-ps-glow2 { 0%,100% { opacity: .85; filter: drop-shadow(0 0 7px rgba(226,240,255,.85)) } 42% { opacity: .18; filter: drop-shadow(0 0 2px rgba(226,240,255,.4)) } }
 
-/* ---- the subject -- prompt-galaxy-refinements.md #1: a small translate
-   now rides inside the same breathe keyframe (one element, one period, one
-   curve -- not a second, competing drift). transform-origin still fixed;
-   translate3d moves the element itself, independent of origin. ---- */
+/* ---- the subject -- v2 #1: three state-specific breathe keyframes, not
+   one shared curve. Peak position matches each state's own in-breath share
+   (Agitated 4:6 -> 40%, Unsteady/Numb even -> 50%); Numb is shallower on
+   purpose (a shutdown state gets less movement). js/saferise-poster.js sets
+   animation-name per mount, chosen from the protocol's own `state` (see
+   that file for where animation-duration/timing-function/iteration-count
+   are declared -- kept fixed at 10s/cubic-bezier/infinite here regardless
+   of which name is selected, so Animation.playbackRate is still what
+   reaches the true per-state period; see #1a). transform-origin still
+   fixed; translate3d moves the element itself, independent of origin. ---- */
 .sr-ps-subjwrap { position: absolute; inset: 0; z-index: 2; }
 .sr-ps-subject {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
   transform-origin: 52% 46%; will-change: transform;
-  animation: sr-ps-breathe 10s cubic-bezier(.37,0,.63,1) infinite;
+  animation-duration: 10s; animation-timing-function: cubic-bezier(.37,0,.63,1);
+  animation-iteration-count: infinite; animation-name: sr-ps-breatheA;
 }
-@keyframes sr-ps-breathe {
+@keyframes sr-ps-breatheA {
   0%   { transform: scale(1.014) translate3d(-0.35%, 0.82%, 0) }
   22%  { transform: scale(1.036) translate3d( 0.28%, 0.10%, 0) }
   40%  { transform: scale(1.062) translate3d( 0.46%,-0.74%, 0) }
   68%  { transform: scale(1.038) translate3d(-0.22%,-0.18%, 0) }
   100% { transform: scale(1.014) translate3d(-0.35%, 0.82%, 0) }
+}
+@keyframes sr-ps-breatheU {
+  0%   { transform: scale(1.014) translate3d(-0.35%, 0.82%, 0) }
+  27%  { transform: scale(1.038) translate3d( 0.26%, 0.08%, 0) }
+  50%  { transform: scale(1.062) translate3d( 0.46%,-0.74%, 0) }
+  75%  { transform: scale(1.038) translate3d(-0.20%,-0.16%, 0) }
+  100% { transform: scale(1.014) translate3d(-0.35%, 0.82%, 0) }
+}
+@keyframes sr-ps-breatheN {
+  0%   { transform: scale(1.010) translate3d(-0.24%, 0.58%, 0) }
+  27%  { transform: scale(1.026) translate3d( 0.18%, 0.06%, 0) }
+  50%  { transform: scale(1.042) translate3d( 0.32%,-0.52%, 0) }
+  75%  { transform: scale(1.026) translate3d(-0.14%,-0.12%, 0) }
+  100% { transform: scale(1.010) translate3d(-0.24%, 0.58%, 0) }
 }
 
 /* ---- audio-reactive aura -- refinements.md #2: split into an outer
@@ -136,8 +166,10 @@
      var(--breath,10s). Entrainment for both is driven by Animation.
      playbackRate in JS (see js/saferise-poster.js), never a duration
      rewrite; a --breath custom property here would invite exactly the
-     rewrite-and-stutter this file has already ruled out once. */
-  animation: sr-ps-auraSwell 10s cubic-bezier(.37,0,.63,1) infinite;
+     rewrite-and-stutter this file has already ruled out once. Three named
+     variants, same reasoning as .sr-ps-subject above -- JS picks one. */
+  animation-duration: 10s; animation-timing-function: cubic-bezier(.37,0,.63,1);
+  animation-iteration-count: infinite; animation-name: sr-ps-auraSwellA;
 }
 .sr-ps-aura-inner {
   position: absolute; inset: 0;
@@ -147,10 +179,20 @@
   transform: scale(calc(1 + var(--amp,0) * .03 + var(--release,0) * .04));
   transition: opacity .10s linear, transform .14s linear;
 }
-@keyframes sr-ps-auraSwell {
+@keyframes sr-ps-auraSwellA {
   0%   { transform: scale(1)     translate3d(-0.2%, 0.5%, 0) }
   40%  { transform: scale(1.034) translate3d( 0.3%,-0.45%, 0) }
   100% { transform: scale(1)     translate3d(-0.2%, 0.5%, 0) }
+}
+@keyframes sr-ps-auraSwellU {
+  0%   { transform: scale(1)     translate3d(-0.2%, 0.5%, 0) }
+  50%  { transform: scale(1.034) translate3d( 0.3%,-0.45%, 0) }
+  100% { transform: scale(1)     translate3d(-0.2%, 0.5%, 0) }
+}
+@keyframes sr-ps-auraSwellN {
+  0%   { transform: scale(1)      translate3d(-0.14%, 0.34%, 0) }
+  50%  { transform: scale(1.022)  translate3d( 0.2%, -0.30%, 0) }
+  100% { transform: scale(1)      translate3d(-0.14%, 0.34%, 0) }
 }
 
 /* time-of-day bloom -- reuses the existing vignette's stacking position,
@@ -179,15 +221,52 @@
   box-shadow: inset 0 0 0 1px var(--sr-ps-acc, rgba(212,168,67,.3));
 }
 
+/* ---- v2 #4: the galaxy player's own control -- replaces protocol.html's
+   pre-existing play button, which SR-408 found never receded and never
+   went away. "One component owns its own controls." Built only when
+   js/saferise-poster.js's mount() is called with opts.buildControl (the
+   modal context, js/sr-medplayer.js, already has its own .sr-medplayer__play
+   and never sets that option, so nothing changes there). Real <button>,
+   so it is keyboard-reachable without extra wiring; aria-label set in JS
+   and kept in sync with play/pause state. Opacity/scale/transform-origin
+   fixed only -- never animated, matching the governing rule. */
+.sr-ps-ctrl {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 7cqw; height: 7cqw; min-width: 44px; min-height: 44px;
+  border-radius: 50%; border: 1px solid rgba(236,201,106,.8);
+  display: grid; place-items: center; z-index: 7;
+  background: rgba(8,9,13,.4); backdrop-filter: blur(6px);
+  cursor: pointer; transition: transform .3s ease, background .3s ease, opacity .3s ease;
+}
+.sr-ps-ctrl:hover { background: rgba(212,168,67,.16); }
+.sr-ps-ctrl:focus-visible { outline: 2px solid rgba(236,201,106,.9); outline-offset: 3px; }
+.sr-ps-ctrl i {
+  display: block; width: 0; height: 0; margin-left: 3px;
+  border-top: 9px solid transparent; border-bottom: 9px solid transparent;
+  border-left: 14px solid #ECC96A;
+}
+.sr-ps-ctrl[data-playing="true"] i {
+  width: 12px; height: 15px; margin-left: 0; border: none;
+  border-left: 4px solid #ECC96A; border-right: 4px solid #ECC96A;
+}
+.sr-ps-ctrl[disabled] { opacity: .4; cursor: default; pointer-events: none; }
+
+/* fixed left/50%,top/50%,translate(-50%,-50%) above is a static centring
+   transform, set once at layout and never animated -- not a governing-rule
+   exception, the same "fixed, non-animated" category as .sr-ps-field's own
+   scale(1.04). */
+
 /* ---- fallback: a flagged/uncovered protocol gets the plain cover, the
    breath animation applied directly to it, and nothing else. Shares
-   `sr-ps-breathe` by name with .sr-ps-subject, so refinements.md #1's swell
-   applies here too without a second declaration -- verified live in the
-   pass's own report rather than assumed from the shared selector alone. ---- */
+   `sr-ps-breatheA`/`U`/`N` by name with .sr-ps-subject, so v2 #1's per-state
+   swell applies here too without a second declaration -- verified live in
+   the pass's own report rather than assumed from the shared selector
+   alone. ---- */
 .sr-ps-plain {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
   transform-origin: 50% 42%;
-  animation: sr-ps-breathe 10s cubic-bezier(.37,0,.63,1) infinite;
+  animation-duration: 10s; animation-timing-function: cubic-bezier(.37,0,.63,1);
+  animation-iteration-count: infinite; animation-name: sr-ps-breatheA;
 }
 
 /* ---- off-screen: pause every animated layer, SR-343's own toggle-class
