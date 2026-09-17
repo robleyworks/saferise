@@ -17,7 +17,33 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-409** (`GALAXY-PLAYER-COMPLETE.md` — the galaxy player's complete build:
+- **Highest ID issued: SR-410** (`PASS-sleep-track-coming-soon.md` — added the Sleep & Recovery
+  coming-soon card (LG-273: it was promised on the organisations page and existed nowhere else).
+  Card only — no protocol content, `tracks.js` untouched (has no track 5 and needs none for the
+  card to render; the coming-soon cards are page-authored). Resolved the "Rest Guilt" collision
+  by naming Sleep's protocol 07 "Permission to Stop" (Strength & Return keeps the original,
+  confirmed only one "Rest Guilt" remains on the page). Copy source was
+  `docs/COPY-sleep-and-recovery-RECONSTRUCTED.md` (the original `COPY-sleep-and-recovery.md` is
+  not in the repo). Adapted the card's copy onto the existing 3-paragraph
+  stand/lift+turn/land pattern: the brief supplied four body paragraphs (three plus a separate
+  closing line) against a pattern built for three, so a fourth, unstyled `<p>` was added between
+  `lift` and `land` rather than inventing a new style — `land` keeps the closing-line role it
+  plays on every other card, since Sleep's closing line follows the same "This never tells you
+  ___. It works the states that decide ___" template as the rest. `assets/coming/band-09.webp`
+  does not exist; left unset per instruction (confirmed the expected 404, not a bug). Updated
+  the four "eight tracks" references to "nine" (title, meta/og description — added Sleep &
+  Recovery to the named list, 95 of 158 chars — section heading, and the shared nav-dropdown
+  line, found on 7 pages: `coming-soon.html`, `index.html`, `method.html`, `plans.html`,
+  `live-sessions.html`, `anxiety-reset.html`, `about.html`). **Found, not fixed:** two further
+  pages (`pricing.html`, `for-organisations.html`) carry the *same* nav dropdown line already
+  reading "Seven more tracks in development" — a pre-existing drift from the other seven pages'
+  "Eight", unrelated to this pass and not corrected here since the brief only specified bumping
+  eight to nine. **Found, not fixed:** `member-coming-soon.html` duplicates the Strength & Return
+  card's exact markup (including its own "Rest Guilt" li) but is a separate page the brief never
+  named — Sleep & Recovery was not added there. **Found, not fixed:** `t1-09`/`t1-10` in
+  `tracks.js` `META` still list `dispenza` instead of `Kross` (also flagged in the copy source
+  itself) — unrelated live defect.)
+- **Previously: Highest ID issued: SR-409** (`GALAXY-PLAYER-COMPLETE.md` — the galaxy player's complete build:
   one player on `protocol.html` (the video tab/pane removed), two tiers with no fallback path
   (universal tier reuses the same photograph for `.field`/`.clear`, confirmed byte-identical in
   the reference mockup before relying on it), the four-step bar, the centred overlay with real
