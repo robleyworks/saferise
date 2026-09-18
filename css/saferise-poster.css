@@ -293,7 +293,7 @@
 }
 .sr-ps-ctrl {
   width: 7cqw; height: 7cqw; min-width: 44px; min-height: 44px;
-  border-radius: 50%; border: 1px solid rgba(var(--sr-ps-gold-lt), .8);
+  border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(var(--sr-ps-gold-lt), .8);
   display: grid; place-items: center;
   background: rgba(8,9,13,.4); backdrop-filter: blur(6px);
   cursor: pointer; transition: transform .45s var(--sr-ps-ease), background .45s var(--sr-ps-ease);
@@ -311,12 +311,12 @@
 }
 .sr-ps-ctrl[disabled] { opacity: .4; cursor: default; pointer-events: none; }
 .sr-ps-theme {
-  font-size: 1.02cqw; font-weight: 700; letter-spacing: .3em; text-transform: uppercase;
+  font-size: max(13px, 1.02cqw); font-weight: 700; letter-spacing: .3em; text-transform: uppercase;
   color: var(--text2); text-shadow: 0 1px 14px rgba(0,0,0,.9); margin: 0;
 }
 .sr-ps-ptitle {
   font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300;
-  font-size: 2.5cqw; line-height: 1.08; color: var(--text);
+  font-size: max(15px, 2.5cqw); line-height: 1.08; color: var(--text);
   text-shadow: 0 2px 22px rgba(0,0,0,.95); margin: 0;
 }
 
@@ -392,7 +392,7 @@
 }
 .sr-ps-lock .rule { display: block; width: 11.79cqw; height: 1px; background: var(--text); opacity: .75; }
 .sr-ps-lock .mark {
-  font-family: 'Cinzel', serif; font-weight: 400; font-size: 1.00cqw;
+  font-family: 'Cinzel', serif; font-weight: 400; font-size: max(11px, 1.00cqw);
   letter-spacing: .34em; color: var(--text); white-space: nowrap;
   text-shadow: 0 1px 12px rgba(0,0,0,.85);
 }
@@ -427,7 +427,7 @@
   background: rgb(var(--sr-ps-gold)); transition: width .3s linear;
 }
 .sr-ps-seg b {
-  font-size: 8.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  font-size: 13px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
   color: var(--text3); transition: color .5s var(--sr-ps-ease);
 }
 .sr-ps-seg.on b { color: rgb(var(--sr-ps-gold-lt)); }

@@ -56,9 +56,9 @@ a{color:inherit;text-decoration:none}
 h1{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(30px,4.4vw,48px);line-height:1.14}
 h2{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(22px,2.6vw,30px);line-height:1.24}
 h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
-.eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700}
 .lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:17px;color:var(--text2);line-height:1.68}
-.note{font-size:12.5px;color:var(--text3);line-height:1.7}
+.note{font-size:16px;color:var(--text3);line-height:1.7}
 .gold{color:var(--gold)}
 .skip{position:fixed;left:16px;top:-90px;z-index:60;background:var(--gold);color:#08080C;
   font:700 12.5px/1 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;
@@ -106,7 +106,7 @@ body.rd-soft .sr-fw-reg--int:before{background:#BFE4EA}
 /* ══════════ BACK BAR ══════════ */
 .sr-fw-backbar{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:20px var(--pad) 16px;
   border-bottom:1px solid var(--hair)}
-.sr-fw-back{display:inline-flex;align-items:center;gap:9px;font-size:11px;font-weight:700;letter-spacing:.17em;
+.sr-fw-back{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:700;letter-spacing:.17em;
   text-transform:uppercase;color:var(--text3);min-height:32px;transition:color .18s}
 .sr-fw-back:hover{color:var(--gold)}
 .sr-fw-back svg{width:14px;height:9px;stroke:currentColor;fill:none;stroke-width:1.5;transition:transform .18s}
@@ -118,7 +118,7 @@ body.rd-soft .sr-fw-reg--int:before{background:#BFE4EA}
   align-items:center;padding:56px var(--pad) 50px}
 .sr-fw-masthead-copy{max-width:46ch}
 .sr-fw-mast h1{margin:18px 0 0}
-.sr-fw-attrib{font-size:13px;color:var(--text2);margin-top:14px;letter-spacing:.02em}
+.sr-fw-attrib{font-size:16px;color:var(--text2);margin-top:14px;letter-spacing:.02em}
 .sr-fw-stance{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
   font-size:clamp(19px,1.7vw,23px);color:var(--text);line-height:1.55;max-width:44ch;
   margin-top:26px;border-left:1px solid var(--gold);padding-left:24px}
@@ -141,7 +141,7 @@ body.rd-soft .sr-fw-reg--int:before{background:#BFE4EA}
 .sr-fw-sechead{padding:52px var(--pad) 26px}
 .sr-fw-sechead .eyebrow{display:block;margin-bottom:12px}
 .sr-fw-sechead h2{max-width:20ch}
-.sr-fw-num{font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:.2em;margin-right:12px}
+.sr-fw-num{font-family:'Cinzel',serif;font-size:13px;color:var(--text3);letter-spacing:.2em;margin-right:12px}
 
 /* reading measure — 68ch. Starts on line B, stops short of the right edge. */
 .sr-fw-body{padding:0}
@@ -172,27 +172,32 @@ body.rd-soft .sr-fw-reg--int:before{background:#BFE4EA}
 .sr-fw-state b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:15px;color:var(--text);margin-bottom:5px}
 .sr-fw-state em{font-style:normal;color:var(--s);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
   font-weight:700;display:block;margin-bottom:7px}
-.sr-fw-state span{display:block;font-size:13.5px;color:var(--text2);line-height:1.7}
+.sr-fw-state span{display:block;font-size:16px;color:var(--text2);line-height:1.7}
 
 /* four-step mapping */
 .sr-fw-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:6px}
 .sr-fw-step{background:var(--band);border:1px solid var(--hair);border-radius:12px;padding:24px var(--pad)}
-.sr-fw-step--off{opacity:.5}
-.sr-fw-stepno{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:10px}
+/* SR-A-READABILITY §5c · opacity:.5 on the whole card halved .sr-fw-step p's
+   already-modest --text2 to an alpha of .50 against the card background —
+   instructional copy is the wrong place to economise. De-emphasis now
+   carries entirely through colour (--text2 → --text3), at full alpha. */
+.sr-fw-stepno{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:10px}
 .sr-fw-step--off .sr-fw-stepno{color:var(--text3)}
+.sr-fw-step--off h3{color:var(--text2)}
+.sr-fw-step--off p{color:var(--text3)}
 .sr-fw-step h3{font-size:15px;margin-bottom:10px}
-.sr-fw-step p{font-size:13.5px;color:var(--text2);line-height:1.72}
+.sr-fw-step p{font-size:16px;color:var(--text2);line-height:1.72}
 
 /* where it loads — named, concrete */
 .sr-fw-loads{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
 .sr-fw-card{background:var(--band);border:1px solid var(--hair);border-radius:12px;padding:24px var(--pad);
   display:block;transition:border-color .18s,background .18s}
 a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
-.sr-fw-cardkick{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
+.sr-fw-cardkick{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
   display:block;margin-bottom:9px}
 .sr-fw-card h3{font-size:15.5px;margin-bottom:9px}
 .sr-fw-card p{font-size:13.5px;color:var(--text2);line-height:1.72}
-.sr-fw-cardgo{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.17em;
+.sr-fw-cardgo{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;letter-spacing:.17em;
   text-transform:uppercase;color:var(--gold);margin-top:14px}
 .sr-fw-cardgo svg{width:12px;height:8px;stroke:currentColor;fill:none;stroke-width:1.5}
 
@@ -231,19 +236,19 @@ a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
 .sr-fw-src li{border-bottom:1px solid var(--hair);padding:18px var(--pad);display:grid;
   grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:baseline}
 .sr-fw-srcname{font-size:14.5px;color:var(--text);line-height:1.6}
-.sr-fw-srcname span{display:block;font-size:12.5px;color:var(--text3);margin-top:4px}
-.sr-fw-srctag{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);white-space:nowrap}
+.sr-fw-srcname span{display:block;font-size:16px;color:var(--text3);margin-top:4px}
+.sr-fw-srctag{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);white-space:nowrap}
 
 /* pager */
 .sr-fw-pager{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:56px 0 0}
 .sr-fw-pager a{border:1px solid var(--hair);border-radius:12px;padding:24px var(--pad);background:var(--band);
   transition:border-color .18s}
 .sr-fw-pager a:hover{border-color:rgba(212,168,67,.5)}
-.sr-fw-pagerkick{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:9px}
+.sr-fw-pagerkick{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:9px}
 .sr-fw-pager h3{font-size:15.5px;margin-bottom:10px}
 
 .sr-fw-foot{padding:44px var(--pad) 64px;margin-top:56px;border-top:1px solid var(--hair)}
-.sr-fw-foot p{font-size:12.5px;color:var(--text3);line-height:1.8;max-width:70ch}
+.sr-fw-foot p{font-size:16px;color:var(--text3);line-height:1.8;max-width:70ch}
 
 /* ══════════ RESPONSIVE ══════════ */
 @media(max-width:1040px){
@@ -296,7 +301,7 @@ a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
 .sr-fw-bandin{padding:34px var(--pad);z-index:2;max-width:46ch}
 .sr-fw-bandin p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
   font-size:clamp(18px,2vw,25px);line-height:1.48;color:var(--text);text-shadow:0 2px 20px rgba(0,0,0,.7)}
-.sr-fw-bandin span{display:block;font-family:'DM Sans',sans-serif;font-style:normal;font-size:10px;
+.sr-fw-bandin span{display:block;font-family:'DM Sans',sans-serif;font-style:normal;font-size:13px;
   letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:14px;font-weight:700}
 /* placeholder — removed the moment a real asset lands in .sr-fw-bandart */
 .sr-fw-needsart{position:absolute;top:16px;left:var(--pad);z-index:3;font-size:9px;letter-spacing:.16em;
@@ -313,7 +318,8 @@ a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
 .sr-fw-cardart img{width:100%;height:100%;object-fit:cover}
 .sr-fw-cardart--none{display:none}
 .sr-fw-cardbody{padding:24px var(--pad)}
-.sr-fw-cardslug{position:absolute;left:14px;bottom:12px;font-size:8.5px;letter-spacing:.16em;
+.sr-fw-cardbody p{font-size:16px}
+.sr-fw-cardslug{position:absolute;left:14px;bottom:12px;font-size:13px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--text3);border:1px dashed rgba(212,168,67,.4);border-radius:3px;
   padding:5px 8px;background:rgba(8,8,12,.55)}
 .sr-fw-cardslug b{color:var(--gold);font-weight:700}
@@ -321,7 +327,7 @@ a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
 /* ── D · tile reuse ────────────────────────────────────────────────────*/
 .sr-fw-pager a{display:grid;grid-template-columns:64px minmax(0,1fr);gap:20px;align-items:center}
 .sr-fw-pagertile{width:64px;height:64px;border-radius:50%;border:1px solid var(--hair);
-  background:var(--band2);display:grid;place-items:center;font-size:7.5px;letter-spacing:.1em;
+  background:var(--band2);display:grid;place-items:center;font-size:13px;letter-spacing:.1em;
   text-transform:uppercase;color:var(--text3);text-align:center;line-height:1.4}
 .sr-fw-pagertile--int{border-color:rgba(78,154,166,.45)}
 
@@ -343,7 +349,7 @@ a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
 .sr-mi-mast h1{max-width:20ch;margin-top:18px}
 .sr-mi-mast .sr-fw-stance{max-width:52ch;font-size:21px;margin-top:26px}
 .sr-mi-key{display:flex;gap:10px;flex-wrap:wrap;padding:0 var(--pad) 8px;align-items:center}
-.sr-mi-keylab{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);margin-right:6px}
+.sr-mi-keylab{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);margin-right:6px}
 
 .sr-mi-band{padding:46px 0 6px}
 .sr-mi-bandhead{padding:0 var(--pad) 24px}
@@ -365,14 +371,14 @@ a.sr-mi-card--int:hover{border-color:rgba(78,154,166,.6);border-top-color:var(--
 .sr-mi-card--peer{border-top:2px solid var(--gold)}
 .sr-mi-card--clin{border-top:2px solid rgba(212,168,67,.42)}
 .sr-mi-cardtop{display:flex;align-items:center;gap:14px;margin-bottom:14px}
-.sr-mi-cardno{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;color:var(--text3)}
+.sr-mi-cardno{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.2em;color:var(--text3)}
 .sr-mi-card h3{font-size:17px;margin-bottom:4px}
-.sr-mi-who{font-size:12.5px;color:var(--text3);margin-bottom:14px}
-.sr-mi-says{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:18px}
-.sr-mi-holds{border-top:1px solid var(--hair);padding-top:14px;margin-top:auto;font-size:12.5px;color:var(--text2);line-height:1.7}
+.sr-mi-who{font-size:16px;color:var(--text3);margin-bottom:14px}
+.sr-mi-says{font-size:16px;color:var(--text2);line-height:1.75;margin-bottom:18px}
+.sr-mi-holds{border-top:1px solid var(--hair);padding-top:14px;margin-top:auto;font-size:16px;color:var(--text2);line-height:1.7}
 .sr-mi-holds b{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
   font-weight:700;margin-bottom:6px}
-.sr-mi-go{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:.17em;
+.sr-mi-go{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.17em;
   text-transform:uppercase;color:var(--gold);margin-top:16px}
 .sr-mi-card--int .sr-mi-go{color:var(--teal)}
 body.rd-soft .sr-mi-card--int .sr-mi-go{color:#BFE4EA}
@@ -434,7 +440,7 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
 .sr-mi-sig{margin-top:26px;padding-top:20px;border-top:1px solid var(--hair);display:flex;
   align-items:center;gap:16px;flex-wrap:wrap}
 .sr-mi-sigmark{width:52px;height:52px;border-radius:50%;border:1px solid var(--hair);background:var(--band2);
-  display:grid;place-items:center;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;
+  display:grid;place-items:center;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--text3);text-align:center;line-height:1.4;flex:0 0 auto}
 .sr-mi-signame{font-family:'Cinzel',serif;font-size:15px;color:var(--text);line-height:1.4}
 .sr-mi-signame span{display:block;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text3);margin-top:4px}
@@ -451,7 +457,7 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
 .sr-mi-vehcol:last-child{border-right:0}
 .sr-mi-vehcol b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:14px;
   color:var(--text);margin-bottom:10px}
-.sr-mi-vehcol p{font-size:13.5px;color:var(--text2);line-height:1.72}
+.sr-mi-vehcol p{font-size:16px;color:var(--text2);line-height:1.72}
 .sr-mi-vehclose{margin-top:30px;padding-top:24px;border-top:1px solid var(--hair)}
 .sr-mi-vehclose p{font-size:16px;color:var(--text2);line-height:1.8;max-width:68ch}
 .sr-mi-vehclose p+p{margin-top:16px}
@@ -470,11 +476,18 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
 .sr-mi-steprail{position:sticky;top:24px;background:var(--band);border:1px solid var(--hair);
   border-radius:14px;padding:26px var(--pad)}
 .sr-mi-steprail>.eyebrow{display:block;margin-bottom:6px}
-.sr-mi-railintro{font-size:12.5px;color:var(--text3);line-height:1.7;margin-bottom:20px}
+.sr-mi-railintro{font-size:16px;color:var(--text3);line-height:1.7;margin-bottom:20px}
+/* SR-A-READABILITY §5c · opacity:.4 on the unlit default state took
+   .sr-mi-stepdesc's --text2 down to an effective alpha of .40 — the
+   instruction text for a step you haven't reached yet, still meant to be
+   read. Full opacity now; the unlit/lit distinction carries through the
+   border-colour change below plus the two colour overrides that follow. */
 .sr-mi-step{border-left:2px solid var(--hair);padding:0 0 0 16px;margin-bottom:18px;
-  transition:border-color .45s ease,opacity .45s ease;opacity:.4}
+  transition:border-color .45s ease,color .45s ease}
 .sr-mi-step:last-child{margin-bottom:0}
-.sr-mi-step.on{opacity:1;border-left-color:var(--accent)}
+.sr-mi-step:not(.on) .sr-mi-stepname{color:var(--text2)}
+.sr-mi-step:not(.on) .sr-mi-stepdesc{color:var(--text3)}
+.sr-mi-step.on{border-left-color:var(--accent)}
 /* SR-074 · the third shape: a source that sits beneath all four rather than
    carrying one. Half-light, dashed rule — visibly different from lit and unlit. */
 .sr-mi-step.beneath{opacity:.78;border-left-style:dashed;border-left-color:var(--accent)}
@@ -483,7 +496,7 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
   letter-spacing:.2em;color:var(--text3);margin-bottom:5px;transition:color .45s ease}
 .sr-mi-step.on b{color:var(--accent)}
 .sr-mi-stepname{display:block;font-size:14px;color:var(--text);line-height:1.35;margin-bottom:5px}
-.sr-mi-stepdesc{display:block;font-size:12.5px;color:var(--text2);line-height:1.65}
+.sr-mi-stepdesc{display:block;font-size:16px;color:var(--text2);line-height:1.65}
 .sr-mi-railfoot{margin-top:22px;padding-top:16px;border-top:1px solid var(--hair);
   font-size:11.5px;color:var(--text3);line-height:1.65;min-height:52px}
 .sr-mi-bands--int{--accent:var(--teal)}
@@ -532,7 +545,7 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
 .sr-mi-voice b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:15px;
   color:var(--text);margin-bottom:10px}
 .sr-mi-voice .sr-fw-reg{margin-bottom:12px}
-.sr-mi-voice p{font-size:13px;color:var(--text2);line-height:1.7}
+.sr-mi-voice p{font-size:16px;color:var(--text2);line-height:1.7}
 .sr-mi-voice:last-child{border-right:0}
 @media(max-width:960px){ .sr-mi-voices{grid-template-columns:repeat(2,minmax(0,1fr))}
   .sr-mi-voice:nth-child(3n){border-right:1px solid var(--hair)}

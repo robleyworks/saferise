@@ -18317,3 +18317,144 @@ disagreement, and the brief's own suggested addition adopted anyway for a real, 
 reason; the lockup's pale-image legibility tested against the actual palest cover in the set, not
 guessed; all 30 protocols verified individually with zero failures; the governing-rule grep run in
 full. **Not pushed.** *Raised and fixed:* 17 Sep 2026
+
+## SR-412 — PASS A readability: skip link, type floor, home door cards, scrim, contrast, player labels, line length, tap targets
+
+`pass/PASS-A-READABILITY.md`, working from `audit/out/design-audit-findings.json`. §0's three
+governing facts checked against live code before touching anything — the third (`rgb(var(--gold))`
+as a repo-wide convention) came back **false**: `--gold`/`--text`/`--text2` are hex strings consumed
+via plain `var()` everywhere in `css/saferise-system.css`, `saferise-dashboard.css` and
+`saferise-method.css`; the bare-R,G,B-triple convention only exists inside `resource.html`'s own
+`.sr-read` scope (confirmed by grep, not assumed). Every fix below that touches one of these tokens
+uses plain `var()`, with a literal hex fallback (`var(--gold,#D4A843)`) wherever the consuming
+selector's own scope doesn't define the token at all — two real instances of that found and fixed
+along the way (`.sr-home .skip`, index.html's own tokens are `--primary`, not `--gold`; `.sr-org-skip`
+would have been fine via `.sr-public`, fallback added anyway as a harmless second guarantee).
+
+### §1 — skip link
+One unscoped `.skip`/`.skip:focus` rule added near the top of `css/saferise-system.css`, plus the
+same `var(--gold,#D4A843)` fallback fix on `.sr-org-skip` and `.sr-home .skip`. Verified live via a
+real keyboard Tab (not `element.focus()` — this pane's `:focus` pseudo-class only matches on a real
+Tab keypress, confirmed by checking `a.matches(':focus')` after each) on index.html, method.html and
+organisations.html: all three now resolve `#D4A843` background / `#08080C` text, contrast 9.03:1.
+**Finding, not fixed:** six pages (`privacy`, `login`, `accessibility`, `account`, `signup`,
+`personal-transformation`) use a *different* class, `.sr-tp-skiplink`, scoped under `.sr-tp` with its
+own working `--gold` — already correct, contrary to the brief's "across 11 pages" claim; not
+touched. **Finding, not fixed:** `protocol.html` and `resource.html` have **no skip-link markup at
+all** (grepped for `.skip`, `sr-org-skip`, "Skip to", `#main` — none found; `protocol.html` has no
+`<main>` element and `resource.html`'s `<main>` is `hidden` by default), so the brief's own verify
+step ("focus the skip link on … protocol.html") could not be run there. Adding one is a markup change
+to two heavily-customised, JS-driven pages — out of scope for a CSS-fix pass; flagged for a follow-up
+rather than added unilaterally.
+
+### §2 — type floor
+Built the list from `design-audit-findings.json`'s `type_tiny` (222) + `type_small_body` (84) = 306
+distinct selectors, classified label-vs-prose per selector using each entry's own `sample` text
+(word count + sentence punctuation + all-caps check), cross-checked a handful of borderline ones by
+hand (`.sr-pf-wrap > p.sr-pf-scope`, `.sr-org-vertical-grid small`, `.sr-dash-foot > p`, `.sr-scope
+> p` — all classified "label" by the word-count heuristic because the JSON's own `sample` field is
+truncated at 70 characters mid-sentence; corrected to "prose" by hand). Applied via a small
+CSS-block parser (matches a JSON finding's own class to its real rule, not a blind find-and-replace)
+across `css/saferise-system.css`, `saferise-dashboard.css`, `saferise-method.css`,
+`saferise-footer.css` and the 22 audited HTML pages' inline `<style>` blocks, plus a manual pass for
+selectors the parser couldn't safely anchor (ancestor-only classes, e.g. `.sr-org-pathstage p`).
+Player selectors (`.sr-ps-*`) excluded from this batch and handled under §6 instead, since their
+measured sizes didn't match the brief's own §6d numbers (cqw-driven, viewport-dependent). Inline SVG
+diagram text (`font-size="N"` presentation attribute, not CSS) bumped separately across
+`about.html`, `method.html`, `organisations.html`, `member-frameworks.html`, `member-heartmath.html`
+— 44 attributes raised to 13. Re-measured: 222 → 94 distinct `tiny` selectors remaining (58%
+reduction) — see §9. Remaining 94 are real gaps (further `.sr-org-*`/`.sr-mi-*` instances,
+`#srLoginForm > label`, `.sr-fw-reg` badges, a few others) not reached in this pass; not rounded up
+as done.
+
+### §3 — home door cards
+**3a:** `.sr-home .door .dbody` was NOT uppercase/tracked as the brief described (`text-transform`
+was already `none`, HTML copy already sentence-case) — only "centred" and "14.5px" held up against
+live code; reported rather than silently fixing a defect that wasn't there. Set to 16px/1.5/34ch/
+left-aligned as instructed regardless, since those were real. **3b:** root cause was NOT the title
+wrapping (all three titles render on one line, identical height) — it was the CTA link
+(`.door .dgo`) wrapping to 1 or 2 lines depending on its own text length ("Relationship Healing" fits
+one line; "Personal Transformation"/"Professional Performance" need two), inside a
+`justify-content:flex-end` bottom-anchored column, which shifted the whole stack. Fixed by reserving
+worst-case (2-line) height on `.dgo` itself rather than the title. Verified live at 390/1024/1440:
+`titleY` (offset from card top, cards being stacked at mobile) now equal to the pixel at all three.
+
+### §4 — scrim
+`.sr-scrim`/`.sr-ontext` utilities added to `css/saferise-system.css` per spec. Applied to the
+priority item only given time — `h1#pp-title` on `protocol.html`, confirmed via live inspection to
+sit on `assets/covers/01.jpg` behind a gradient that fades to 12% opacity by the title's right edge
+(`.sechead--lead`'s own background, shared by other sections — not edited; the shadow was scoped to
+`#pp-title.sectitle` instead, its own existing rule). **Not fixed:** the rest of the 167-entry
+`contrast_over_photo` list — full coverage needs per-container markup decisions (where the scrim's
+DOM wrapping applies) across ~15 more named selectors and the broader unnamed set; out of reach in
+this pass's time budget, flagged rather than claimed done.
+
+### §5 — contrast, solid backgrounds
+**5a** (`organisations.html` track-body accent colours failing under Sunrise): fixed —
+`.sr-org-track-body span`/`.sr-org-soon-tag` now read `var(--text2)`/`var(--text)`, the hardcoded
+`--ac` kept only as a small `::before` leading dot. **5b** (faint step numbers): checked against live
+code and found **already correct** — `.sr-mi-step b`, `.sr-fw-stepno`, `.sr-mi-stepdesc`,
+`.sr-dash-slotbtn` all already read `var(--text3)`/`var(--gold)`, not the raw hex the brief
+describes; no `--dim`/`--ink`/`--soft` misuse found anywhere in this set. Reported as already
+resolved rather than re-fixing what wasn't broken. **5c** (opacity dimming): fixed — `.sr-fw-step`'s
+`opacity:.5` and `.sr-mi-step`'s `opacity:.4` (both whole-element, both halving already-modest
+`--text2`/`--text3` body copy) replaced with explicit `--text2`→`--text3` colour overrides on the
+inactive state, full opacity throughout.
+
+### §6 — the player
+**6a** fixed: `.sr-ps-seg b` (step bar labels) 8.5px → 13px. **6b** investigated and found **not a
+real defect**: `sr-spotcheck.py`'s own "steps" query (`.sr-ps-steps *`) lists every descendant,
+so the container `span.sr-ps-seg` and the empty `<i>` both report the label's inherited text/size
+alongside the actual `<b>` — that's the tool enumerating three nodes, not three renders; only `<b>`
+(confirmed 13px, `--text3`) paints. **6c** investigated and found **not a real defect**:
+`.sr-ps-stepnow` is wired (`js/saferise-poster.js` sets/clears `.textContent` from the same
+idx/name driver as the step bar) and correctly shows opacity 0 / empty text only in the paused
+initial state the audit's screenshot caught — confirmed via `sr-spotcheck.py`'s live re-run.
+**6d** fixed: `.sr-ps-lock .mark` → `max(11px, 1.00cqw)`, `.sr-ps-ptitle` → `max(15px, 2.5cqw)`,
+`.sr-ps-theme` → `max(13px, 1.02cqw)` (this last one not named in §6d but the same cqw-floor problem
+§2c describes, so given the same treatment). **6e** fixed: `.sr-ps-ctrl`'s `border` → `box-shadow:
+inset 0 0 0 1px`. Galaxy layer stack, breath keyframes, per-state periods and `playbackRate`
+untouched, per instruction. **Finding, not fixed:** `.sr-ps-transport` (elapsed/total time +
+seekable `<input type=range>`, `css/saferise-poster.css` lines ~348–360) is a real duration/scrub
+control on the player — a practice surface, where the standing rule in this same brief's §0 says
+"NO durations, timers, countdowns or progress bars." Not in this pass's §6 task list and removing a
+working, keyboard-accessible transport control is a product decision beyond a readability pass;
+flagged here rather than acted on.
+
+### §7 — line length
+Fixed the five named worst offenders where they could be found live (the JSON's own selector text —
+e.g. `.wrap > p` — didn't match any literal class in the page; found the real element by querying
+rendered paragraph widths in the browser instead): `.sr-mt-cta p` (method.html, new rule),
+`.sr-org-faq details p` (organisations.html), `.sr-pl-hint` (plans.html, also bumped 11.36px→13px
+under §2), `.resource-note` (protocol.html). `for-organisations.html`'s named offender did not
+reproduce live (no paragraph over 900px found) — not touched. The other ~17 of 22 `type_long_measure`
+entries and all 9 `type_tight_leading` headings not reached this pass.
+
+### §8 — tap targets
+Fixed as specified: `.sr-org-dot`/`.sr-dash-hero-dot` get a 44×44px `::after` hit area (visible dot
+unchanged); `.sr-pf-col a`, `.sr-dash-footlinks a` (also missing entirely — added), `.footer-col a`
+(protocol.html, resource.html) all get `padding`/`min-height:44px`. `.sr-dash-footlinks` and
+`.footer-col a` were also under 13px (10.5px, 12.5px) — bumped alongside, since already touching
+the rule.
+
+### §9 — verify
+`python3 sr-design-audit.py`, `sr-overimage.py` and `sr-spotcheck.py` re-run for real against this
+branch (Playwright installed and working in this environment). See the pass's own chat report for
+the full before/after table — headline: type-floor tiny-selector count 222 → 94; door-card `titleY`
+spread 41.8px → 0px at 390/1024/1440, confirmed live; player label/lock/title sizes confirmed raised
+via `spot.json`'s own re-measurement. Photo-contrast and solid-contrast counts only partially
+re-verified given the size of the full 227/167 lists relative to this pass's time budget — reported
+as partial, not rounded up.
+
+Files: `css/saferise-system.css`, `css/saferise-dashboard.css`, `css/saferise-method.css`,
+`css/saferise-footer.css`, `css/saferise-poster.css`, `index.html`, `method.html`,
+`coming-soon.html`, `protocol.html`, `resource.html`, `plans.html`, `about.html`,
+`live-sessions.html`, `organisations.html`, `docs/fix-register.md`.
+
+*Status:* partial — every named, concretely-specified item in §1–§8 addressed or explicitly
+resolved-as-already-fixed; the large enumerated tails of §2 (94 of 306 remain), §4 (167 total, one
+fixed) and §7 (22 total, 4 fixed) were not exhaustively swept given the size of those lists against
+one pass's time budget, and are reported as open rather than claimed complete. Three standing-rule
+findings surfaced and reported without unilateral action: the missing skip link on protocol.html/
+resource.html, and the `.sr-ps-transport` duration/scrub control on the player. **Not pushed.**
+*Raised and fixed:* 18 Sep 2026
