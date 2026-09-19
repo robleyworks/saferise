@@ -1,0 +1,437 @@
+<title>SafeRise Commercial Position</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#0a0c14; --panel:#11151f; --raised:#161b27; --line:rgba(245,237,218,.07);
+  --text:#f5edda; --ink:#e4dccb; --soft:#b3ada4; --dim:#948e86;
+  --gold:#d8aa43; --sage:#9db388; --slate:#8298bb; --bronze:#c8a87a; --clay:#c4877a;
+  --serif:"Newsreader",Cambria,Georgia,serif;
+  --sans:"Public Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:15px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px; margin:0 auto; padding-inline:20px; padding-block:clamp(36px,6vw,72px)}
+h1,h2,h3{font-family:var(--serif); font-weight:400; text-wrap:balance; margin:0; color:var(--text)}
+h1{font-size:clamp(2rem,4.4vw,3rem); line-height:1.12; letter-spacing:-.01em}
+h2{font-size:1.55rem; line-height:1.25}
+h3{font-size:1.05rem; line-height:1.3}
+p{margin:0}
+.eyebrow{font-size:.63rem; letter-spacing:.17em; text-transform:uppercase; color:var(--gold); font-weight:600}
+.lede{color:var(--soft); max-width:60ch; font-size:1.02rem}
+.note{color:var(--dim); font-size:.86rem; line-height:1.55}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---- masthead ---- */
+header{display:flex; flex-direction:column; gap:14px; padding-bottom:30px; border-bottom:1px solid var(--line)}
+.stamp{display:flex; flex-wrap:wrap; gap:10px 22px; align-items:baseline}
+.stamp .note{font-size:.8rem}
+
+/* ---- standing figures ---- */
+.figs{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-top:34px}
+.fig{background:var(--panel); padding:20px 18px; display:flex; flex-direction:column; gap:3px}
+.fig b{font-family:var(--serif); font-size:2.1rem; font-weight:300; line-height:1; color:var(--text);
+  font-variant-numeric:tabular-nums}
+.fig b.zero{color:var(--dim)}
+.fig .k{font-size:.66rem; letter-spacing:.13em; text-transform:uppercase; color:var(--dim); font-weight:600}
+.fig .s{font-size:.8rem; color:var(--soft); line-height:1.45}
+
+section{margin-top:clamp(44px,6vw,72px)}
+.shead{display:flex; flex-direction:column; gap:7px; margin-bottom:22px}
+
+/* ---- state chips ---- */
+.chip{display:inline-flex; align-items:center; gap:6px; flex:0 0 auto;
+  font-size:.65rem; letter-spacing:.09em; text-transform:uppercase; font-weight:600;
+  padding:3px 9px; border-radius:99px; white-space:nowrap}
+.chip:before{content:""; width:5px; height:5px; border-radius:99px; background:currentColor}
+.c-block{color:var(--clay); background:rgba(196,135,122,.11)}
+.c-wait{color:var(--gold); background:rgba(216,170,67,.10)}
+.c-ready{color:var(--sage); background:rgba(157,179,136,.11)}
+.c-open{color:var(--slate); background:rgba(130,152,187,.12)}
+
+/* ---- blocker rows ---- */
+.rows{display:flex; flex-direction:column; gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:12px; overflow:hidden}
+.row{background:var(--panel); padding:15px 18px; display:grid; gap:4px 18px;
+  grid-template-columns:1fr auto; align-items:start}
+.row .t{font-family:var(--serif); font-size:1.02rem; color:var(--text)}
+.row .d{grid-column:1/-1; color:var(--soft); font-size:.88rem; line-height:1.55; max-width:74ch}
+.row .owner{grid-column:1/-1; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--dim); font-weight:600}
+
+/* ---- revenue lines ---- */
+.lines{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px}
+.line{background:var(--panel); border-radius:14px; padding:20px 19px;
+  display:flex; flex-direction:column; gap:10px;
+  box-shadow:inset 0 1px 0 rgba(245,237,218,.045)}
+.line .h{display:flex; justify-content:space-between; align-items:start; gap:10px}
+.line .price{font-family:var(--serif); font-size:1.15rem; color:var(--gold); line-height:1.35;
+  font-variant-numeric:tabular-nums}
+.line .why{color:var(--soft); font-size:.86rem; line-height:1.55}
+.line .gate{font-size:.8rem; color:var(--dim); padding-top:9px; border-top:1px solid var(--line)}
+
+/* ---- gate table ---- */
+.tw{overflow-x:auto; border:1px solid var(--line); border-radius:12px}
+table{width:100%; border-collapse:collapse; font-size:.9rem; min-width:520px}
+th,td{text-align:left; padding:12px 16px; border-bottom:1px solid var(--line); background:var(--panel)}
+tr:last-child td{border-bottom:none}
+th{font-size:.64rem; letter-spacing:.13em; text-transform:uppercase; color:var(--dim); font-weight:600}
+td.m{font-family:var(--serif); font-size:1rem; color:var(--text)}
+td.f{font-variant-numeric:tabular-nums; color:var(--gold); font-weight:500; white-space:nowrap}
+td.n{font-variant-numeric:tabular-nums; color:var(--dim); white-space:nowrap}
+td.w{color:var(--soft); font-size:.85rem; line-height:1.5}
+
+/* ---- spend ---- */
+.phases{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:16px}
+.phase{background:var(--panel); border-radius:14px; padding:21px 20px;
+  box-shadow:inset 0 1px 0 rgba(245,237,218,.045)}
+.phase>.top{display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:4px}
+.phase .tot{font-family:var(--serif); font-size:1.5rem; color:var(--text); font-variant-numeric:tabular-nums}
+.phase .buys{color:var(--soft); font-size:.86rem; margin:6px 0 15px; line-height:1.5}
+.spend{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0}
+.spend li{display:flex; justify-content:space-between; gap:14px; align-items:baseline;
+  padding:7px 0; border-top:1px solid var(--line); font-size:.86rem}
+.spend li span:first-child{color:var(--ink)}
+.spend li span:last-child{font-variant-numeric:tabular-nums; color:var(--soft); white-space:nowrap}
+.spend li.key span:first-child{color:var(--text); font-weight:500}
+.spend li.key span:last-child{color:var(--gold)}
+
+/* ---- decisions ---- */
+.dec{display:flex; flex-direction:column; gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:12px; overflow:hidden}
+.dec>div{background:var(--panel); padding:16px 18px}
+.dec h3{margin-bottom:4px}
+.dec p{color:var(--soft); font-size:.88rem; line-height:1.55; max-width:78ch}
+.dec .cost{color:var(--gold); font-size:.8rem; margin-top:5px}
+
+footer{margin-top:clamp(48px,7vw,80px); padding-top:24px; border-top:1px solid var(--line);
+  display:flex; flex-wrap:wrap; gap:8px 20px; justify-content:space-between}
+@media (max-width:560px){
+  .row{grid-template-columns:1fr}
+  .row .chip{justify-self:start}
+}
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Business development tracker · v1</p>
+  <h1>Nothing is sold yet. None of it is the build.</h1>
+  <p class="lede">The build is not the constraint. Every revenue line below is specified, priced
+  and mostly built — and every one is held behind something that is not code.</p>
+  <div class="stamp">
+    <p class="note">19 September 2026 · Kenor International B.V.</p>
+    <p class="note">Companion to the build tracker. This one tracks money, not tickets.</p>
+  </div>
+</header>
+
+<div class="figs">
+  <div class="fig"><span class="k">Paying members</span><b class="zero">0</b><span class="s">Willingness to pay is entirely untested</span></div>
+  <div class="fig"><span class="k">Free accounts</span><b class="zero">0</b><span class="s">The site is not indexed — nobody can find it</span></div>
+  <div class="fig"><span class="k">MRR</span><b class="zero">€0</b><span class="s">No payment rail approved yet</span></div>
+  <div class="fig"><span class="k">Work invested</span><b>$232,005</b><span class="s">2,644 hours · 66.1 full-time weeks</span></div>
+  <div class="fig"><span class="k">Cash invested</span><b>$15,000</b><span class="s">Total to date. The bridge ahead asks for the same again</span></div>
+  <div class="fig"><span class="k">Days to beta</span><b>11</b><span class="s">Target 30 September</span></div>
+</div>
+
+<section>
+  <div class="shead">
+    <p class="eyebrow">What holds the revenue</p>
+    <h2>Six blockers and one schedule risk, ranked by what they cost.</h2>
+    <p class="note">Ordered by how much revenue sits behind each, not by effort.</p>
+  </div>
+  <div class="rows">
+
+    <div class="row">
+      <span class="t">Paddle seller approval</span>
+      <span class="chip c-wait">Outside our gift</span>
+      <span class="d">The longest lead time on the list and not in our control. Every euro of
+      subscription, 1:1 and workshop revenue runs through it. The free tier launches without
+      it — the conversion number does not.</span>
+      <span class="owner">Blocks · subscription · 1:1 · workshops</span>
+    </div>
+
+    <div class="row">
+      <span class="t"><code>noindex</code> still on the public pages</span>
+      <span class="chip c-block">Blocking</span>
+      <span class="d">Ten complete protocols of genuine content that search cannot see. This is
+      the one blocker with no external dependency and no cost — and until it lifts, the free
+      tier has no input at all.</span>
+      <span class="owner">Blocks · every acquisition channel</span>
+    </div>
+
+    <div class="row">
+      <span class="t">Audio in edit and master</span>
+      <span class="chip c-open">In production</span>
+      <span class="d">No longer a blocker. Vocals are recorded across all 31 protocols, sound beds
+      are chosen, and the first samples are live. The two-voice plan is dropped — one voice per
+      protocol, which halves the render count from 62 to 31 and removes the player voice toggle
+      from scope entirely. What remains is edit and master against the −16.0 LUFS / −1.0 dBTP
+      spec, and that is a schedule risk against 30 September rather than an open question.</span>
+      <span class="owner">Risk · schedule only</span>
+    </div>
+
+    <div class="row">
+      <span class="t">No contracted licensed clinician</span>
+      <span class="chip c-block">Hard gate</span>
+      <span class="d">Kirsten owns clinical requirements and sources practitioners; she is not
+      the contracted clinician, and the deck now says so consistently. Nothing facilitated can be
+      sold without agreed, signed escalation criteria. Embodied Nutrition and Sex &amp; Intimacy
+      cannot ship at all.</span>
+      <span class="owner">Blocks · all B2B delivery · two roadmap tracks</span>
+    </div>
+
+    <div class="row">
+      <span class="t">Facilitator capacity is the B2B ceiling</span>
+      <span class="chip c-wait">Capped</span>
+      <span class="d">Roughly four hours a month of delivery capacity exists. A Foundation
+      account consumes about six hours a year, a Practice account twenty-two, a Partner account
+      sixty. Partner cannot be sold before a second facilitator is contracted — selling a tier
+      the business cannot deliver is worse than not selling it.</span>
+      <span class="owner">Caps · annual access at the top band</span>
+    </div>
+
+    <div class="row">
+      <span class="t">No organisation data model</span>
+      <span class="chip c-wait">Deliberate</span>
+      <span class="d">Seats belong to individuals. Nothing in the platform represents an
+      organisation, provisions seats, or produces the quarterly seats-in-use figure promised in
+      writing. Deliberately not built: a 25-seat pilot is a coupon code and a spreadsheet, and
+      building it now spends €18,000 on customers we do not have.</span>
+      <span class="owner">Blocks · annual access at scale, not pilots</span>
+    </div>
+
+    <div class="row">
+      <span class="t">Trademark proximity not cleared</span>
+      <span class="chip c-wait">Unpriced risk</span>
+      <span class="d">An adjacent iOS product markets itself as “Regulate. Rewire. Rise.” A
+      knockout search is $400 and has not been run. A name collision found after launch is
+      expensive; found before, it is a decision.</span>
+      <span class="owner">Risk · the brand itself</span>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="eyebrow">Four streams, four buyers, one asset</p>
+    <h2>What is for sale, and what stops it selling.</h2>
+  </div>
+  <div class="lines">
+
+    <div class="line">
+      <div class="h"><h3>Subscription</h3><span class="chip c-block">Not open</span></div>
+      <p class="price">Track 01 free<br>€19 · Tracks 02–04<br>€29 · all eight</p>
+      <p class="why">B2C individual. Annual at ten months: €190 and €290. Adding a track inside a
+      tier never costs more. The €29 tier opens when the library doubles in month four.</p>
+      <p class="gate">Held by · Paddle approval · indexing · five unshipped tracks</p>
+    </div>
+
+    <div class="line">
+      <div class="h"><h3>Premium 1:1</h3><span class="chip c-block">Not open</span></div>
+      <p class="price">€129 single<br>€349 for three</p>
+      <p class="why">B2C high-intent. Launch rate €79 · €199 while the market is tested.
+      Calendar-capped — this line never scales past the founder's hours.</p>
+      <p class="gate">Held by · Paddle approval · insurance</p>
+    </div>
+
+    <div class="line">
+      <div class="h"><h3>Workshops</h3><span class="chip c-block">Not open</span></div>
+      <p class="price">€29 single<br>€39 per couple</p>
+      <p class="why">B2C community. Remote, so global reach at no venue cost. The monthly free
+      workshop is the highest-leverage two hours on the calendar — it fills the list and warms
+      the room.</p>
+      <p class="gate">Held by · Paddle approval · live platform price still reads €39 per person</p>
+    </div>
+
+    <div class="line">
+      <div class="h"><h3>Organisations</h3><span class="chip c-wait">Pipeline only</span></div>
+      <p class="price">€1,800 workshop<br>€2,400 · €3,500 · scoped<br>Annual by size</p>
+      <p class="why">B2B. Retreat bands to 50, 51–120, above 120 scoped. Annual access priced on
+      total headcount and tiered as a waterfall, never per seat — per-seat pricing would mean
+      counting individual usage, which the product refuses to do.</p>
+      <p class="gate">Held by · clinician · facilitator capacity · insurance</p>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="eyebrow">Gate A · month six</p>
+    <h2>The four numbers that decide which raise is available.</h2>
+    <p class="note">Ratios first, volume second. At this scale a backer is not testing whether we
+    can buy users — they are testing whether the unit economics hold when we do. 250 members at
+    4% churn beats 800 at 12%.</p>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Metric</th><th>Floor</th><th>Now</th><th>Why this number</th></tr></thead>
+      <tbody>
+        <tr><td class="m">Free → paid conversion</td><td class="f">≥ 3.5%</td><td class="n">—</td>
+          <td class="w">Below 3% the funnel is the problem, not the reach. Path B assumes 4.2%; at 2% you raise Path A and fix the funnel first</td></tr>
+        <tr><td class="m">Monthly churn, paid</td><td class="f">≤ 6%</td><td class="n">—</td>
+          <td class="w">Above 6% annualises past 50% and every forecast built on it collapses</td></tr>
+        <tr><td class="m">Second-protocol open rate</td><td class="f">≥ 45%</td><td class="n">—</td>
+          <td class="w">Whether the method transfers between states — which is the whole architecture</td></tr>
+        <tr><td class="m">Paying members</td><td class="f">≥ 180</td><td class="n">0</td>
+          <td class="w">The floor at which conversion and churn are statistically meaningful rather than anecdotal</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note" style="margin-top:14px">Tier 2, which makes the conversation easy: 300+ members ·
+  €6,500+ MRR · 4,000+ free accounts · ≥20% on the €29 tier · ≥30% thirty-day free retention ·
+  two written pilot findings reports · one named reference customer. <strong style="color:var(--soft);font-weight:500">None of these
+  are measurable until instrumentation is live — and retrofitting it in month four loses the
+  first cohort entirely.</strong></p>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="eyebrow">Pipeline</p>
+    <h2>Two motions. Neither has a conversation logged.</h2>
+  </div>
+  <div class="rows">
+    <div class="row">
+      <span class="t">Capital · first $5,000</span>
+      <span class="chip c-ready">Deck ready</span>
+      <span class="d">41-slide assessment current as of today. Buys months 1–3: the library to
+      eight tracks, the free tier live and indexed, and a measured conversion number — which is
+      the actual deliverable. No conversations logged against it yet.</span>
+      <span class="owner">Next · name the first five people to show it to</span>
+    </div>
+    <div class="row">
+      <span class="t">Capital · the raise</span>
+      <span class="chip c-wait">Gated on month six</span>
+      <span class="d">Path A €350,000 to breakeven in year three at €1.24M. Path B €500,000 to
+      €1.7M in year two. Path B is worth more if it works and loses more if it does not — it
+      needs the 4.2% conversion rate to hold. The choice is made by the Gate A numbers, not now.</span>
+      <span class="owner">Decision · deferred to the conversion number</span>
+    </div>
+    <div class="row">
+      <span class="t">B2B · warm network</span>
+      <span class="chip c-open">Untouched</span>
+      <span class="d">470+ named contacts, many now senior, from a decade of enterprise selling.
+      Exists today and costs nothing to work. The highest-yield channel available and the one
+      with no spend attached to it.</span>
+      <span class="owner">Target · first €1,800 organisation workshop by month six</span>
+    </div>
+    <div class="row">
+      <span class="t">B2B · pilots</span>
+      <span class="chip c-wait">Blocked on clinician</span>
+      <span class="d">Two pilots, run at cost, producing two written findings reports and one
+      named reference. This is what converts the corporate motion from theoretical to real —
+      and it cannot start before escalation criteria are signed.</span>
+      <span class="owner">Blocked · clinical gate</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="eyebrow">The $15,000 bridge</p>
+    <h2>Spend only on what cannot be done by hand.</h2>
+    <p class="note">Every line is either unblocking revenue, legally required, or producing audio
+    that cannot be voiced in person. Everything else waits for the raise.</p>
+  </div>
+  <div class="phases">
+
+    <div class="phase">
+      <div class="top"><h3>Months 1–3 · B2C live</h3><span class="tot">$5,015</span></div>
+      <p class="buys">Buys a conversion number, not revenue.</p>
+      <ul class="spend">
+        <li class="key"><span>ElevenLabs — audio production</span><span>$1,650</span></li>
+        <li class="key"><span>AI tooling</span><span>$960</span></li>
+        <li><span>Legal pages — review only</span><span>$900</span></li>
+        <li><span>Accounting setup, Kenor B.V.</span><span>$600</span></li>
+        <li><span>Trademark knockout search</span><span>$400</span></li>
+        <li><span>Missing imagery</span><span>$250</span></li>
+        <li><span>Transactional + marketing email</span><span>$120</span></li>
+        <li><span>Domain, hosting, CDN</span><span>$90</span></li>
+        <li><span>Supabase Pro</span><span>$75</span></li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="top"><h3>Months 4–6 · B2B pilot-ready</h3><span class="tot">$10,000</span></div>
+      <p class="buys">Buys two pilots and a named reference.</p>
+      <ul class="spend">
+        <li class="key"><span>Clinical governance — retainer</span><span>$2,400</span></li>
+        <li class="key"><span>Minimal seat mechanism</span><span>$2,200</span></li>
+        <li><span>Professional indemnity insurance</span><span>$1,400</span></li>
+        <li><span>Security &amp; data page + DPA</span><span>$1,200</span></li>
+        <li><span>Two pilots run at cost</span><span>$1,200</span></li>
+        <li><span>AI tooling</span><span>$1,050</span></li>
+        <li><span>Ongoing run rate</span><span>$700</span></li>
+        <li><span>Buyer collateral</span><span>$600</span></li>
+        <li><span>Contingency</span><span>$250</span></li>
+      </ul>
+    </div>
+
+  </div>
+  <p class="note" style="margin-top:16px">Deliberately not built on the bridge, and the cost
+  avoided: organisation data model <span class="num">~€18,000</span> · SSO and SAML
+  <span class="num">~€8,000</span> · admin console <span class="num">~€6,000</span> · automated
+  seat reporting <span class="num">~€4,000</span> · paid acquisition, which at this budget
+  measures nothing and buys nothing durable. Every one of those is on the raise.</p>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="eyebrow">Open</p>
+    <h2>Three items still open.</h2>
+  </div>
+  <div class="dec">
+    <div>
+      <h3>Founder salary — €70,000 to €90,000, start date undecided</h3>
+      <p>The model carries zero, which is what makes Path A add up. Path A raises €350,000 against
+      a €238,000 trough; with the stated 12% contingency that leaves roughly
+      <span class="num">€83,000</span> of headroom, and that headroom is the entire room available
+      for a salary without re-raising. It buys <span class="num">14 months</span> at €70,000,
+      <span class="num">12</span> at €80,000, <span class="num">11</span> at €90,000 — none of
+      which reach breakeven in year three.</p>
+      <p style="margin-top:9px"><strong style="color:var(--text);font-weight:500">So the live question
+      is when it starts, not what it is.</strong> Paid from close through to breakeven, Path A has to
+      rise to roughly €407,000 at €70,000, €427,000 at €80,000, €447,000 at €90,000 — and at that
+      point it sits close enough to Path B's €500,000 that the trade the deck presents on slides 37
+      and 38 stops being a real choice. Starting at month thirteen on €70,000 costs about €84,000 to
+      breakeven and fits the existing €350,000 almost exactly.</p>
+      <p class="cost">Holds · the raise size, and the Path A / Path B distinction</p>
+    </div>
+    <div>
+      <h3>The second facilitator</h3>
+      <p>Four hours a month is the ceiling on every B2B forecast in the deck. The Partner tier is
+      unsellable until a second contracted operator exists — which is also the named mitigation
+      for key-person risk.</p>
+      <p class="cost">Holds · annual access at the top band</p>
+    </div>
+    <div>
+      <h3>The expense ledger, line by line</h3>
+      <p>The total is known — $15,000 — and that is what a backer asks for. What does not exist is
+      the breakdown beneath it: subscriptions, audio credits, hosting, domain and entity setup have
+      no recorded split. That matters less for the raise than for Kenor B.V., where bookkeeping and
+      VAT are a live obligation and the bridge plan still carries the $600 accounting setup as
+      forward spend rather than something already done.</p>
+      <p class="cost">Holds · bookkeeping and VAT, not the raise</p>
+    </div>
+    <div>
+      <h3>Clara's role</h3>
+      <p>Held for now. Removed from the deck's team and collaborator slides this pass; the team
+      page carries Kirsten, Aleksandra and Dwight. Community and culturally specific delivery
+      remains an unfilled line.</p>
+      <p class="cost">Holds · the local pilot channel</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="note">SafeRise Protocol · commercial position · 19 September 2026</p>
+  <p class="note">Sources: investor deck v2 · the $15,000 bridge · traction and rollout · launch list 30 Sep</p>
+</footer>
+
+</div>
