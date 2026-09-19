@@ -121,23 +121,34 @@ resized to 1200×640 to match the other seven bands.
 
 ---
 
-## 7 · Free upgrades — better files, already made, no shoot
+## 7 · CORRECTED 19 Sep — these are NOT upgrades, they are different photographs
 
-| Live file | Currently | Library has | Where |
-|---|---|---|---|
-| `home/door-t1.jpg` | 1086×1448 | **1200×1600** | `used images/IMAGES/saferise-home-images/door-t1.jpg` |
-| `home/door-t2.jpg` | 1086×1448 | **1200×1600** | same folder — plus `door-t2-option-a/b/c.jpg`, three alternates at 1200×1600 if you want to reconsider that door |
-| `home/door-t3.jpg` | 1086×1448 | **1200×1600** | same folder |
-| `coming/band-welcome-corridor` | 2360×800 | **2400×900** | `Unused Images/hero-corridor.jpg` |
-| `t*/change.jpg` | 1600×700 | **1897×829** | `used images/change copy 2.jpg` |
-| `t*/cost.jpg` | 1600×700 | **1819×865** | `used images/cost copy 2.jpg` |
-| `t*/range.jpg` | 1600×600 | **2048×768** | `used images/range copy.jpg` |
+**An earlier version of this section was wrong and is retracted.** It listed
+seven files as "same image, larger master — drop-in re-export". They were
+matched on filename, dimensions and aspect ratio, and never opened. When they
+were opened, four of them turned out to be **entirely different pictures**:
 
-All seven are the same image at a larger size — drop-in re-exports, not
-judgement calls. The three doors correct the earlier review, which found only
-two: masters for all three exist.
+| Claimed as an upgrade | What it actually is |
+|---|---|
+| `door-t1.jpg` 1200×1600 | a different man, seated on the floor against a green wall — live is a man on a sofa in a bright room |
+| `door-t2.jpg` 1200×1600 | a different couple, in a café — live is a couple in a kitchen at night |
+| `door-t3.jpg` 1200×1600 | a woman in a grey coat on a staircase — live is a man in a blue blazer in an office |
+| `hero-corridor.jpg` 2400×900 | a dark timber-and-plaster corridor — live `band-welcome-corridor` is a bright white corridor opening to the sea |
 
----
+Swapping any of them would have silently changed the art direction of the
+homepage doors. **Do not treat matching dimensions as evidence of the same
+picture.**
+
+`change copy 2.jpg` (1897×829), `cost copy 2.jpg` (1819×865) and
+`range copy.jpg` (2048×768) are **unverified**. They are plausibly the masters
+of `t*/change`, `t*/cost` and `t*/range`, but note that each of those exists
+separately for t1, t2 and t3 at different byte sizes, so even if the picture
+matches, *which track it belongs to* is an open question. Open them before any
+swap.
+
+**The one upgrade that does hold:** `used images/band.jpeg` at 1941×810 is
+genuinely the master of `journey/t1-band`, confirmed by eye — same triptych,
+and `t1-band@2x.jpg` is 1941×527, already cut from it.
 
 ## What this changes for Sunday
 
@@ -146,7 +157,8 @@ two: masters for all three exist.
 - **Add §6 to Track 1, before anything else.** Four `cwebp`/`cjpeg` commands,
   6.6 MB, no markup and no artwork. It is the cheapest win in the whole image
   programme and it was not in the audit.
-- **Add the seven §7 re-exports** — existing files, better dimensions.
+- **Do NOT do the §7 re-exports.** That finding was wrong — see §7. Only
+  `band.jpeg` → `t1-band` survives, and it is a partial improvement, not a fix.
 - **Still needs new masters:** `journey/t2-band`, `journey/t3-band`,
   `coming/band-professional-performance`, both dashboard banners,
   `frameworks/range-photograph`, both About portraits, the `covers/01` recrop.

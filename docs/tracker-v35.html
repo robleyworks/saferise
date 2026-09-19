@@ -1,0 +1,752 @@
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Cormorant+Garamond:ital,wght@1,400&display=swap" rel="stylesheet">
+
+<style>
+  .lt-root {
+    --page:#0A0A0D; --raised:#131317; --card:#1C1C21; --input:#24242A; --hair:#33333B;
+    --head:#F2EDE3; --body:#95929A; --label:#77747C;
+    --gold:#C9A03C; --rose:#C08196; --teal:#4FA3A0; --violet:#8C7BB8; --red:#C0453A;
+    --s-none:#4A4A52;
+    background:var(--page); color:var(--body);
+    font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:14px; line-height:1.55; padding:0; margin:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  .lt-root *{box-sizing:border-box;}
+  .lt-wrap{max-width:940px;margin:0 auto;padding:28px 20px 80px;}
+
+  /* ---- masthead ---- */
+  .lt-eyebrow{font-size:9.5px;letter-spacing:2.6px;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0 0 10px;}
+  .lt-title{font-family:'Cinzel',Georgia,serif;font-size:27px;font-weight:600;color:var(--head);margin:0 0 6px;letter-spacing:0.3px;line-height:1.2;}
+  .lt-sub{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:16px;color:var(--label);margin:0 0 26px;}
+
+  /* ---- gate panel (signature) ---- */
+  .lt-gate{background:var(--raised);border:1px solid var(--hair);padding:22px 22px 18px;margin-bottom:14px;}
+  .lt-gate-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px;}
+  .lt-gate-num{font-family:'Cinzel',Georgia,serif;font-size:40px;line-height:1;color:var(--head);font-weight:600;}
+  .lt-gate-num.clear{color:var(--teal);}
+  .lt-gate-lab{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--label);margin-top:7px;font-weight:600;}
+  .lt-gate-pct{text-align:right;}
+  .lt-gate-pct b{font-family:'Cinzel',Georgia,serif;font-size:40px;line-height:1;color:var(--gold);font-weight:600;}
+
+  .lt-tally{display:flex;flex-wrap:wrap;gap:3px;}
+  .lt-tally i{width:13px;height:26px;background:var(--s-none);display:block;border-radius:1px;}
+  .lt-tally i.done{background:var(--teal);}
+  .lt-tally i.part{background:linear-gradient(to top,var(--teal) 55%,var(--s-none) 55%);}
+  .lt-tally i.prog{background:linear-gradient(to top,var(--gold) 30%,var(--s-none) 30%);}
+  .lt-tally i.block{background:var(--red);}
+  .lt-tally-cap{font-size:10.5px;color:var(--label);margin-top:11px;}
+
+  .lt-bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--hair);border:1px solid var(--hair);margin-bottom:22px;}
+  .lt-bar{background:var(--raised);padding:13px 14px;}
+  .lt-bar-n{font-size:9px;letter-spacing:1.6px;text-transform:uppercase;color:var(--label);font-weight:600;margin-bottom:8px;}
+  .lt-bar-v{font-size:19px;color:var(--head);font-family:'Cinzel',Georgia,serif;line-height:1;margin-bottom:9px;}
+  .lt-bar-t{height:3px;background:var(--input);}
+  .lt-bar-t span{display:block;height:100%;background:var(--gold);transition:width .35s ease;}
+
+  /* ---- controls ---- */
+  .lt-ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:22px;}
+  .lt-btn{background:var(--card);border:1px solid var(--hair);color:var(--body);font:inherit;font-size:11px;
+    letter-spacing:.4px;padding:7px 13px;cursor:pointer;transition:all .18s;font-family:inherit;}
+  .lt-btn:hover{border-color:var(--gold);color:var(--head);}
+  .lt-btn.on{border-color:var(--gold);color:var(--gold);background:rgba(201,160,60,.09);}
+  .lt-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .lt-spacer{flex:1;}
+  .lt-saved{font-size:10.5px;color:var(--label);letter-spacing:.3px;min-height:16px;}
+
+  /* ---- sections ---- */
+  .lt-sec{border:1px solid var(--hair);margin-bottom:12px;background:var(--raised);}
+  .lt-sec-h{display:flex;align-items:center;gap:13px;padding:14px 16px;cursor:pointer;user-select:none;background:none;border:0;width:100%;text-align:left;font-family:inherit;}
+  .lt-sec-h:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+  .lt-chev{color:var(--label);font-size:10px;transition:transform .2s;flex-shrink:0;}
+  .lt-sec.open .lt-chev{transform:rotate(90deg);}
+  .lt-sec-t{font-family:'Cinzel',Georgia,serif;font-size:14.5px;color:var(--head);flex:1;letter-spacing:.3px;}
+  .lt-sec-c{font-size:10.5px;color:var(--label);white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .lt-sec-ring{width:34px;height:4px;background:var(--input);flex-shrink:0;}
+  .lt-sec-ring span{display:block;height:100%;background:var(--gold);}
+  .lt-sec-b{display:none;border-top:1px solid var(--hair);}
+  .lt-sec.open .lt-sec-b{display:block;}
+
+  /* ---- rows ---- */
+  .lt-row{display:flex;align-items:flex-start;gap:12px;padding:9px 16px;border-bottom:1px solid rgba(51,51,59,.5);}
+  .lt-row:last-child{border-bottom:0;}
+  .lt-row:hover{background:rgba(255,255,255,.016);}
+  .lt-row.hide{display:none;}
+  .lt-id{font-size:9.5px;color:var(--label);letter-spacing:.6px;width:52px;flex-shrink:0;padding-top:5px;font-variant-numeric:tabular-nums;}
+  .lt-main{flex:1;min-width:0;padding-top:2px;}
+  .lt-name{font-size:13px;color:var(--head);line-height:1.45;}
+  .lt-meta{font-size:11px;color:var(--label);margin-top:2px;line-height:1.45;}
+  .lt-flag{display:inline-block;font-size:8.5px;letter-spacing:1.3px;text-transform:uppercase;font-weight:700;
+    padding:1px 6px;margin-left:7px;vertical-align:1.5px;border:1px solid;}
+  .lt-flag.gate{color:var(--red);border-color:rgba(192,69,58,.5);}
+  .lt-flag.ext{color:var(--violet);border-color:rgba(140,123,184,.45);}
+  .lt-note{width:100%;background:var(--input);border:1px solid var(--hair);color:var(--body);font:inherit;font-size:12px;
+    padding:6px 9px;margin-top:7px;resize:vertical;min-height:34px;display:none;font-family:inherit;}
+  .lt-note.show{display:block;}
+  .lt-note:focus{outline:none;border-color:var(--gold);}
+  .lt-noteb{background:none;border:0;color:var(--label);font-size:10.5px;cursor:pointer;padding:3px 0 0;font-family:inherit;}
+  .lt-noteb:hover{color:var(--gold);}
+
+  .lt-stat{flex-shrink:0;width:132px;background:var(--card);border:1px solid var(--hair);color:var(--body);
+    font:inherit;font-size:10px;letter-spacing:1.1px;text-transform:uppercase;font-weight:600;
+    padding:7px 4px;cursor:pointer;transition:all .18s;font-family:inherit;text-align:center;}
+  .lt-stat:hover{filter:brightness(1.25);}
+  .lt-stat:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .lt-stat[data-s="none"]{color:var(--label);}
+  .lt-stat[data-s="prog"]{color:var(--gold);border-color:rgba(201,160,60,.5);background:rgba(201,160,60,.08);}
+  .lt-stat[data-s="part"]{color:var(--rose);border-color:rgba(192,129,150,.5);background:rgba(192,129,150,.08);}
+  .lt-stat[data-s="done"]{color:var(--teal);border-color:rgba(79,163,160,.5);background:rgba(79,163,160,.09);}
+  .lt-stat[data-s="block"]{color:var(--red);border-color:rgba(192,69,58,.5);background:rgba(192,69,58,.09);}
+  .lt-stat[data-s="defer"]{color:var(--violet);border-color:rgba(140,123,184,.45);background:rgba(140,123,184,.07);}
+
+  .lt-foot{margin-top:26px;padding-top:18px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--label);line-height:1.7;}
+  .lt-foot b{color:var(--body);font-weight:500;}
+
+  .lt-toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--card);
+    border:1px solid var(--gold);color:var(--head);padding:10px 18px;font-size:12px;z-index:99;
+    opacity:0;pointer-events:none;transition:opacity .25s;}
+  .lt-toast.show{opacity:1;}
+
+  @media(max-width:620px){
+    .lt-row{flex-wrap:wrap;}
+    .lt-id{width:auto;padding-top:0;}
+    .lt-main{flex:1 1 100%;order:3;}
+    .lt-stat{width:auto;flex:1;order:2;}
+    .lt-gate-num,.lt-gate-pct b{font-size:32px;}
+  }
+  @media(prefers-reduced-motion:reduce){.lt-root *{transition:none!important;}}
+</style>
+
+<div class="lt-root">
+<div class="lt-wrap">
+
+  <p class="lt-eyebrow">Launch Readiness</p>
+  <h1 class="lt-title">SafeRise Protocol — Go-Live Register</h1>
+  <p class="lt-sub">Everything the platform needs before it can take a paying customer. <b>v35</b> &middot; 19 Sep 2026 &middot; 280 rows &middot; 52% weighted from the file defaults &middot; 67 open gates</p>
+  <div style="margin:14px 0 0;padding:13px 16px;border:1px solid #33333B;border-left:2px solid #C9A03C;border-radius:3px;background:#131317;font:14px/1.6 system-ui,sans-serif;color:#95929A"><b style="color:#C9A03C">v35 &middot; 19 Sep 2026.</b> Adds <b>LG-299</b> (18 guided meditations live) and <b>LG-300 to LG-305</b>, the night&rsquo;s image and diagram work. LG-279, 280, 282 and 283 move none &rarr; part: 18 of 31 sessions have cleared mix, engineer, master and upload &mdash; verified by hashing the files on disk, not taken on trust. LG-297 &rarr; prog. One new blocker, <b>LG-304</b> (the redrawn proof diagrams were rejected). <b>LG-305</b> records a correction to an earlier finding of mine that was wrong. 50% &rarr; 52%. Row IDs continue from 298, so nothing shares localStorage state with an existing item.<br><br><b style="color:#C9A03C">v34 &middot; 18 Sep 2026.</b> Built on <b>your v32</b> (14 Sep, 253 rows, 51%), not on v31. An earlier build of mine rebased onto v31 by mistake, which dropped the six rows LG-273 to LG-278 and the 22 items you had marked complete &mdash; that is the whole of the 51% to 43% fall. Those are restored here. New rows in this version start at LG-279, above your highest id.<br><b>Read the dial, not the header.</b> The header percentage is computed from the file defaults only. The big figure on the page is computed live and merges whatever you have set in this browser, so the two will differ, and yours is the real one.<br><b>Audio.</b> All 31 sessions &mdash; 30 protocols plus The Clearing &mdash; are written, trimmed, voice-reviewed and recorded, and all 31 beds are allocated across 12 builds. Remaining: mix (LG-279), engineer and assemble (LG-280), master (LG-282), upload to the protocol players (LG-283), with ten bed measurements outstanding before assembly (LG-281). The two-voice toggle is descoped (LG-198). The production scripts still diverge from the recorded vocals (LG-204) &mdash; six passes specified, none run.<br><b>From the voiceover handover.</b> Its inventory is superseded &mdash; it flagged five numbering gaps where there are seven, and all seven map 1:1 onto its own uncoded scripts (LG-290). Four items survive. <b>LG-285 is a member-safety gate</b>: Grief Integration is the session most likely to reach someone in real distress, and a spoken exit inside a 9-minute audio cannot be acted on by someone who has stopped listening &mdash; the crisis pathway has to be visible on the page. <b>LG-286</b> is urgent because the takes are already recorded, which makes the Italian-inflection question a re-render decision rather than an edit. LG-287 is the &ldquo;I lied&rdquo; close, a trust problem inside a trust protocol. LG-289 pins the render settings.<br><b>Design.</b> Full UX/UI audit ran 18 Sep (LG-291); two readability passes landed (LG-292); the player&rsquo;s clock and scrubber are gone (LG-293). Two passes remain (LG-294, LG-295). Sunrise is unfinished across 11 of 22 pages (LG-296); three referenced images are missing and two hotlink from Pexels (LG-297).<br><b>Carried forward:</b> state is stored in this browser under an unversioned key, so future versions inherit whatever you set here &mdash; use Export state before replacing the file. v7&ndash;v31 were rebuilt from the v4-era 90-row base plus TRACKER-DELTA-v7, so any status change made in v5 or v6 that the delta did not name is still missing. Track 04 &mdash; Elevation was removed in v31 (LG-24, LG-25, LG-136, LG-141, LG-70); the Elevation prospectus in docs/ still assumes &euro;222, now unset rather than agreed.</div>
+
+  <div class="lt-gate">
+    <div class="lt-gate-top">
+      <div>
+        <div class="lt-gate-num" id="gateNum">—</div>
+        <div class="lt-gate-lab">Launch gates outstanding</div>
+      </div>
+      <div class="lt-gate-pct">
+        <b id="pctNum">—</b>
+        <div class="lt-gate-lab">Weighted complete</div>
+      </div>
+    </div>
+    <div class="lt-tally" id="tally"></div>
+    <p class="lt-tally-cap" id="tallyCap">Loading…</p>
+  </div>
+
+  <div class="lt-bars" id="bars"></div>
+
+  <div class="lt-ctrl">
+    <button class="lt-btn" id="fGate">Gates only</button>
+    <button class="lt-btn" id="fOpen">Hide completed</button>
+    <button class="lt-btn" id="expAll">Expand all</button>
+    <button class="lt-btn" id="colAll">Collapse all</button>
+    <span class="lt-spacer"></span>
+    <button class="lt-btn" id="copyBtn">Copy status report</button>
+    <button class="lt-btn" id="resetBtn">Reset</button>
+  </div>
+  <p class="lt-saved" id="saved"></p><span style="margin-left:14px;display:inline-flex;gap:8px;vertical-align:middle"><button id="btnExp" style="background:none;border:1px solid #33333B;color:#95929A;border-radius:2px;padding:5px 10px;font:inherit;font-size:11.5px;cursor:pointer">Export state</button><button id="btnCopy" style="background:none;border:1px solid #33333B;color:#95929A;border-radius:2px;padding:5px 10px;font:inherit;font-size:11.5px;cursor:pointer">Copy state</button><button id="btnImp" style="background:none;border:1px solid #33333B;color:#C9A03C;border-radius:2px;padding:5px 10px;font:inherit;font-size:11.5px;cursor:pointer">Import state</button></span>
+
+  <div id="secs"></div>
+
+  <div class="lt-foot">
+    <b>How this counts.</b> Weighted progress treats In progress as a third, Partial as two thirds, Complete as whole. Blocked counts as zero regardless of work done. Deferred items are excluded from the maths entirely — they are not launch scope.<br>
+    <b>Launch gate</b> marks an item the site cannot go live without. <b>External</b> marks an item that depends on someone outside the build.<br>
+    <b>Defects</b> live in the saferise-fix-register artifact under their SR- numbers. LG-40 tracks that register as a whole rather than duplicating it.<br>
+    <b>Provenance — read this.</b> v32 is built from v32 plus the late session of 13 Sep — contact address decided, step-name migration complete, SR-379 in flight, pricing copy written. v23 was built from the 90-row base in project files plus TRACKER-DELTA-v7. That base is v4-era. Any status change made in v5 or v6 that the delta did not name is <b>not</b> carried here. Check the rows you touched most recently before trusting the percentage.<br>Status and notes save to this file’s own storage in your browser, not to the artifact.
+  </div>
+</div>
+<div class="lt-toast" id="toast"></div>
+</div>
+
+<script>
+(function(){
+  var KEY = 'saferise-launch-tracker';
+
+  var ORDER = ['none','prog','part','done','block','defer'];
+  var LABEL = {none:'Not started',prog:'In progress',part:'Partial',done:'Complete',block:'Blocked',defer:'Deferred'};
+  var WEIGHT = {none:0,prog:0.34,part:0.67,done:1,block:0};
+
+  // g = launch gate, x = external dependency, m = meta/context line
+  var DATA = [
+    ['Track 01 — written content', [
+      ['LG-01','Protocol Guide — all 10 protocols','',0,0,'done'],
+      ['LG-02','Source Insights — all 10 protocols','Retired 8 Sep. How This Works carries framework sourcing across 30 protocols at ~832 words each',0,0,'defer'],
+      ['LG-03','Reference Case — all 10 protocols','Cancelled 8 Sep. Removed from the manifest outright',0,0,'defer'],
+      ['LG-04','Life Companion Guide — all 10 protocols','',0,0,'done'],
+      ['LG-05','Disclosure & Support Guide — all 10 protocols','',0,0,'done'],
+      ['LG-06','Crisis Card — all 10 protocols','',0,0,'done'],
+      ['LG-07','Attention Advisory — protocols 02, 03, 04, 08, 09, 10','CORRECTED: SR-354 found Attention Advisory and Proximity Guide are substantively different, not one resource under two names. Naming decision open — see LG-116',0,0,'done'],
+      ['LG-08','Invitation to Repair — protocols 02, 04, 08, 09','',0,0,'done'],
+      ['LG-09','Workbook — all 10 protocols','',0,0,'done'],
+      ['LG-10','Guided meditation scripts — all 10 protocols','',0,0,'done'],
+      ['LG-11','Production video scripts — all 10 protocols','',0,0,'done'],
+      ['LG-12','Anxiety Reset — replace 6 placeholder resources','Closed on measurement. Zero placeholder text exists anywhere; Anxiety Reset carries 9 resources on the universal spine, not 12',0,0,'done'],
+      ['LG-13','"Why I Built This" — one piece per track (x3)','UNBLOCKED 9 Sep by ruling out the dependency. No clinician has replaced Bastien and none is expected before these ship, so the three pieces are written on Andre’s own completed certifications — Certified Jungian Practitioner, Meditation Coach, Certified Somatic Coach — with no clinical claim, no third-party credential and no implied endorsement. Content Andre writes; not a coding task',0,0,'none'],
+      ['LG-117','The Decision — content absent from the repo store','CLOSED SR-355. Was never missing — found in a git-tracked handover bundle added 4 Sep and never merged. 30 entries inserted, Decision last in every protocol, un-pended',1,0,'done'],
+      ['LG-133','Media provisioning audit','PARTIAL. PDFs audited SR-355: zero exist anywhere. The audio half was briefed into SR-356 and that report has not been reviewed',1,0,'part'],
+      ['LG-143','Handover bundle diff against the live content stores','The Decision sat unmerged in saferise-build-handover-repo-drop.zip for four days and 14,905 words. Establish whether anything else in that bundle never landed. Report only, no merging — Bundle diff executed as SR-356 and re-verified in SR-357; findings not yet reviewed',1,0,'none']
+    ]],
+    ['Track 02 — Relationship Healing', [
+      ['LG-14','Resource library — 86 content keys','',0,0,'done'],
+      ['LG-15','Safety Score interactive tool','Your Score / Their Score tabs, live averaging, tier calculation',0,0,'done'],
+      ['LG-16','Recording scripts','',0,0,'done'],
+      ['LG-17','Asset mapping confirmed — assets/t2/','Staged but not verified against the build',0,0,'none'],
+      ['LG-18','Content parity with Track 01','What\u2019s Included, testimonial, services pair, CTA band, FAQ — FAQ rewritten per track, therapy and crisis answers unchanged',0,0,'none']
+    ]],
+    ['Track 03 — Professional & Career', [
+      ['LG-19','Resource suite written','Exists as Word documents',0,0,'done'],
+      ['LG-20','Integrate resources into platform HTML','CLOSED. Track 03 is built — ten protocols with full resource sets, wired and live on the site at EUR 39/mo. Verified against the live page 9 Sep',0,1,'done'],
+      ['LG-21','Asset mapping confirmed — assets/t3/','CLOSED. Track 03 covers t3-01 to t3-10 are wired and rendering on the live track page',0,0,'done'],
+      ['LG-22','Content parity with Track 01','CLOSED. Track 03 has content parity with Track 01 — ten protocols, resource sets, guided meditation, somatic release, journal and progress. The remaining Track 03 gap is audio, not content',0,0,'done'],
+      ['LG-23','Dwight Williams \u2014 The Disciplined Man track and podcast','Relates only to The Disciplined Man and the planned podcast. No role in Tracks 01, 02 or 03. Does not gate Track 03. Move to a Track 07 section when one exists',0,1,'defer']
+    ]],
+    ['Site copy — editorial blocks', [
+      ['LG-26','Three-state naming block','The recognition device. Pure copy, no build',0,0,'none'],
+      ['LG-27','"Why insight hasn\u2019t moved it" block','Understanding and regulation are different systems',0,0,'none'],
+      ['LG-28','Cost-of-inaction block','Sleep, patience, clarity — not crisis',0,0,'none'],
+      ['LG-29','"What we don\u2019t promise" list','Genuine differentiator in this market',0,0,'none'],
+      ['LG-30','Portability promise','The aim is that you stop needing it in full',0,0,'none'],
+      ['LG-31','Outcome list rewritten in observable-change register','',0,0,'none'],
+      ['LG-32','Move somatic description and six-domain meter up the protocol page','Content exists, currently one click too deep',0,0,'none'],
+      ['LG-33','Itemise resource library with stated value','Name before description',0,0,'none'],
+      ['LG-34','Framework citations surfaced inline at each step','',0,0,'none'],
+      ['LG-35','Free entry point defined','DECIDED 9 Sep. FREE_TRACK_PREFIX = t1- is the free entry point — Track 01 free with an account, not without one. Closes by ruling; the mechanism already exists',1,0,'done'],
+      ['LG-36','Pricing copy reconciled to one source of truth','SETTLED 13 Sep, APPLIED in SR-381. content/tracks.js fixed at source with a dated supersession comment: Track 01 Free, Tracks 02/03 EUR 19/month (was EUR 29 and EUR 39), 1:1 pack EUR 299 corrected to EUR 349, workshops EUR 39. Two figures flagged and deliberately not touched \\u2014 the couples-workshop price, and plans.html which carries a three-tier comparison grid that conflicts structurally with the model',1,0,'done'],
+      ['LG-121','Chosen Self — the prohibited product word replaced','CLOSED SR-355. Both dashboard.html strings replaced with The identity you keep choosing. One further hit at index.html:8448 — see LG-144',0,0,'done'],
+      ['LG-131','Resource pages — editorial and design enhancement','CAUSE FOUND, SR-381. The SR-379 editorial reader was built onto index.html\'s #reader-overlay \\u2014 it works perfectly when opened directly, but NO NAVIGATION PATH EVER REACHES IT. The live reader is resource.html, loaded in an iframe from dashboard.html, rendering bodies as one raw innerHTML string. SR-381 ported the renderer onto resource.html. NOT YET VERIFIED \\u2014 that session had no route to serve the tree',0,0,'part'],
+      ['LG-116','Attention Advisory / Proximity Guide — naming decision','CLOSED SR-367. The two mislabelled Proximity Guide references in tracks.js corrected. Proximity Guide is the real resource; Attention Advisory remains a separate open question — see LG-163',0,0,'done'],
+      ['LG-134','Cue Card and Guided Meditation — remove from the resource list','Andre 8 Sep: both duplicated elsewhere. Takes the declared set from twelve to ten across 30 protocols. Not yet approved as a change',0,0,'none'],
+      ['LG-146','Elevation coming-soon copy carries prohibited vocabulary','CLOSED. Fixed in SR-357 across both coming-soon files and confirmed live on the site — the Elevation card now reads the clean copy. Approved replacement text lands with the method-page pass',1,0,'done'],
+      ['LG-148','Protocol titles finalised — Elevation and Executive Presence','Retitled 8 Sep to name a mechanism rather than a situation. Elevation: Arrival Flatness through Undefended. Executive Presence: Self-Disqualification through Role Drift',0,0,'done'],
+      ['LG-152','Public method page — new content','CLOSED. SR-365 landed the method page; SR-370 added its SEO head block',0,0,'done'],
+      ['LG-153','Method page vs about page redundancy','Both pages carry founder-account and framework material. Audit is report-only in the method pass — which side loses a duplicate is a voice decision, not a code one',0,0,'none'],
+      ['LG-157','Review docs/SEO-HEAD-TEMPLATE.md','Nine page titles and meta descriptions drafted, plus the pattern for protocol pages which pulls from content/tracks.js and needs no new copy. These are the words that appear in search results — a copy decision, not a technical one. Read before the split applies them to real pages',0,0,'none'],
+      ['LG-163','Attention Advisory promises a resource that does not exist','CLOSED SR-373/374. The advisory was never a missing resource — it is a safety notice, now labelled BEFORE YOU BEGIN above the player. The two false resource-promises were removed. The conflated copy turned out to be on dashboard.html rather than tracks.js and was reverted to a real Proximity Guide entry',1,0,'done'],
+      ['LG-171','Shutdown state token fails contrast at any scrim','CLOSED SR-374. --shut relit from 3.64:1 to 5.41:1 across all three CSS files that declare it — the token was duplicated, which is why one fix was not enough',0,0,'done'],
+      ['LG-172','Protocol count is wrong in several places','CLOSED SR-375 and SR-373. Counts corrected and the resource-count claim removed rather than restated, including a live instance on dashboard.html the brief had not anticipated',0,0,'done'],
+      ['LG-214','PLATFORM-DESCRIPTION.md \\u2014 canonical answer to \\u201cwhat is SafeRise\\u201d','COMPLETE 13 Sep. Establishes protocols as the core with workshops, premium 1:1, retreats and organisational work extending the system \\u2014 \\u201cexperiences and levels of support\\u201d, never \\u201cresources\\u201d, since that term is spent on the 308 per-protocol resources. Carries a RECORDED VOCABULARY EXCEPTION: practise is deliberately kept in the film\\u2019s closing line and must not be corrected by a later pass',0,0,'done']
+    ]],
+    ['Site build & defects', [
+      ['LG-37','Design system site-wide — sr- namespacing','',0,0,'done'],
+      ['LG-38','Footer with Scope & Safety notice on every page','',0,0,'done'],
+      ['LG-39','Track 01 portal — banner, carousel, full-page protocol opening','',0,0,'done'],
+      ['LG-40','Reader rebuilt dark with Dark / Sepia / Light toggle','',0,0,'done'],
+      ['LG-41','Tracks 02 and 03 covers, banners, colour families','',0,0,'done'],
+      ['LG-42','Fix register SR-001 to SR-016 cleared','Tracked in the saferise-fix-register artifact, not duplicated here',1,0,'none'],
+      ['LG-43','Nine protocols describe Source Insights as "work with anger"','Likely already closed by the Source Insights retirement — the resource is pending and filtered from every render path, so the string should no longer reach a member. The string itself may still sit in source. Verify, then delete with the retirement rather than fixing it',1,0,'prog'],
+      ['LG-44','Placeholder testimonial removed from live site','Fabricated endorsement, live on a public page, and a gate. Delete rather than replace — LG-84 covers real testimonials from the pilot cohort once they exist',1,0,'none'],
+      ['LG-45','Protocol banners become crops of the protocol\u2019s own cover','Andre reports complete 8 Sep; verification added to the pass. Depends on Track 01 covers being on spec first — banners cropped from a 900x1200 Track 01 cover inherit the dimension error',0,0,'part'],
+      ['LG-46','Clipped protocol titles on cover cards','NOT REPRODUCED, SR-387. Checked live on all three track pages, desktop and 390px, hover and rest. No clipping. It is a third surface (.sr-tp-card2 from the SR-383/384 rebuild) superseding SR-382\'s .sr-tp-pmeta, which is now dead',0,0,'done'],
+      ['LG-47','Loading placeholder unified to one gold family','',0,0,'none'],
+      ['LG-48','Image performance — WebP, srcset, dimensions, LQIP','94 files at q82, 64.5 MB \u2192 5.2 MB, SSIM 0.981 min. Tracks 2 and 3 brought to responsive parity in SR-351: 100 derivative files, 5.86 MB. srcset and LQIP untouched. Cover WebP quality now in question \u2014 see LG-102.',0,0,'part'],
+      ['LG-49','Scroll-lock mechanism that hangs automated browsers','Isolated, confirmed not a regression, still present',0,0,'none'],
+      ['LG-50','Mobile responsive pass across all track pages','',1,0,'none'],
+      ['LG-51','Accessibility pass — keyboard focus, reduced motion, contrast','',0,0,'none'],
+      ['LG-52','Playwright suite green — two protocols, one Reader resource, zero console errors','Run against local HTTP server, not file://',1,0,'none'],
+      ['LG-53','node --check on all JS and JSON.parse on RESOURCE_CONTENT','RESOLVED, SR-387. All 19 JS files syntax-check clean, verified through the browser\'s JS engine since no node is available. The single apparent failure was a shebang false positive. RESOURCE_CONTENT\'s main declaration is valid JSON; seven later reassignment blocks use unquoted keys and single quotes — valid JavaScript, not valid JSON, reported as style not defect',0,0,'done'],
+      ['LG-91','Homepage copy v103 landed','Hero quote, survival and authorship sections, gold clauses breaking to their own line. Commit fa5dd4c. Orphan scan clean at 1440 and 390. Not pushed',0,0,'done'],
+      ['LG-92','SR-084 \u2014 index.html is the entire site','CLOSED SR-372. The three track portals retired, not moved — the real pages already existed and were fuller. 48.8% cumulative reduction',1,0,'done'],
+      ['LG-93','t3-06 stale Ambition Recovery description','Approved Belonging Gap copy now verbatim in index.html:6009 and content/tracks.js:519. SR-350. In repo, not in production',0,0,'done'],
+      ['LG-94','Door card three says \u201carriving\u201d','Fixed in repo. Production still serves the old text pending push',0,0,'done'],
+      ['LG-95','Double footer on index.html','Resolved in SR-351, commit c46c1e5. #main-content, .prog-overlay is the clone target; all ten overlays plus main render exactly one .sr-foot',0,0,'done'],
+      ['LG-102','Cover WebP quality band \u2014 decision','35 of 60 new cover WebPs below 0.95 SSIM, lowest 0.928 (t2-07-320w). Track 1 ships 0.945\u20130.975 on the same profile, so inherited not introduced. The other 94 site images sit at 0.981 min. Covers carry an explicit q94 JPEG spec and are now the worst-compressed files on the site. Audit pass queued: SSIM by size band plus probe re-encode',0,0,'none'],
+      ['LG-103','Track 1 covers off-spec at 900\u00d71200','Spec is 1086\u00d71448. Tracks 2 and 3 ship on spec; Track 1 is the outlier. 11 unreferenced PNGs at 1086\u00d71448 may be Track 1 masters \u2014 if so the fix is a re-export, not a re-source. Unlogged, needs an SR ID',0,0,'none'],
+      ['LG-104','Homepage router copy pass','Commits 515ea0e and b18f1fd. Router copy landed but has since regressed \u2014 see LG-110. Door body top-alignment still not achieved; min-height 7.68em was derived from the mockup stylesheet, not css/saferise-system.css',0,0,'part'],
+      ['LG-105','Scope disclaimer aligned across authored copies','Resolved in b18f1fd. Applied character-for-character to index.html\u2019s template, js/saferise-footer.js SCOPE_HTML and dashboard.html, each keeping its own label markup. getting-help.html:84 shares the opening phrase but is a structurally different sentence \u2014 deliberately left alone',1,0,'done'],
+      ['LG-106','\u201cNot been through a clinical trial\u201d scattered across nine locations','CLOSED SR-355. Ten instances found, not nine — three FAQ answers plus seven framework disclaimers. Seven deduplicated, FAQ answers kept',0,0,'done'],
+      ['LG-107','member-*.html </div> mismatch','RESOLVED, SR-387 — and it was two bugs, not one, in six of the eight member-*.html files. They cancelled out in a naive count and were only caught by a real tag-stack trace: a missing close on the last Sessions and workshops card, and .sr-fw-body closing one tag too early',0,0,'done'],
+      ['LG-110','Router H2 duplicates the paragraph beneath it','Stage D of b18f1fd set the authorship H2 to the same sentence 515ea0e had moved into .sr-router-body. The page now reads it twice consecutively, and the approved heading \u2014 Discover how much your life can grow by getting your choices back \u2014 was overwritten. Fix pass needed before push',1,0,'none'],
+      ['LG-111','Two crisis messages back to back on index.html','The new scope text ends in its own crisis sentence; index.html already carried a fuller crisis paragraph with a findahelpline.com link directly after. Recommendation: cut the sentence from index.html only, keep the paragraph with the live link, and record the deliberate divergence in docs/page-invariants.md',1,0,'none'],
+      ['LG-112','Orphaned .postfilm-* CSS','RESOLVED, SR-387. Dead .postfilm-* CSS removed, zero live references confirmed',0,0,'done'],
+      ['LG-113','Spacing reductions not applied \u2014 Stage F skipped','All six assumed CSS values differed from the repo; two properties named did not exist. Correctly skipped rather than guessed. Page height 2437px against a ~1980px target, so the reduction is still outstanding. Rewrite as measure-then-reduce, not assumed values',0,0,'none'],
+      ['LG-114','docs/fix-register.md:3634 stale','RESOLVED, SR-387. The stale SR-243 status line corrected — its blocking condition (wrong image ratio) is long resolved, assets/journey/t3-band.jpg is now 1400x380 with a webp sibling. The separate code wiring is left alone as out of scope',0,0,'done'],
+      ['LG-140','Resource routing — every protocol opens its own resources','SR-354 then SR-355. Acceptance test now passes at 318 resources across 30 protocols — zero empty bodies, zero duplicates, zero cross-protocol leakage, every protocol exactly +1',1,0,'done'],
+      ['LG-119','resource.html page weight 1.0 MB','CLOSED SR-355. resource.html now loads one track store (~340-372 KB) instead of three (~1.03 MB) via document.write. No build step introduced',0,0,'done'],
+      ['LG-120','content/inventory.js is stale','Left in place — five live pages and content/tracks.js read it. Now doubly stale: also omits The Decision. Regenerate from the stores rather than hand-edit — Executed as SR-356; that report has not been reviewed, so this status is unverified',0,0,'prog'],
+      ['LG-118','Safety Score and Support Resources — undocumented types','Reported SR-355: neither duplicates an existing resource type, both distinct in function. Glyph assignment still Andre',0,0,'none'],
+      ['LG-129','Carousel — ambient drift','RESOLVED, SR-383. Revived the dormant initCarousel() in js/saferise-system.js rather than adding a fifth implementation. Fixed a live bug in it (stale .sr-cover selector matching nothing), added the off-screen pause, the sub-2px width guard and a reduced-motion exception. Manual input stops it PERMANENTLY per SR-368 — a deliberate divergence from the brief. NEW: Andre has asked for hover to pause and RESUME, which is a different event from manual input; queued in PASS-plans-final',0,0,'done'],
+      ['LG-130','The Decision — reflection capture','Mockup v2: six prompts, device-local autosave, an assembled summary, save a copy. Not built',1,0,'part'],
+      ['LG-132','Enter the reflection — link target','ALREADY CORRECT, SR-387. SR-373 wired this link with a comment citing LG-132 by name. Verified live through the member\'s route',0,0,'done'],
+      ['LG-126','Journal export control','Now required rather than optional: device-only storage means the member holds the only copy. The privacy disclosure cannot ship its export sentence until this exists',1,0,'none'],
+      ['LG-142','Download control renders on all 318 resources with no file behind it','Live user-facing defect from SR-355 section 9. Zero PDFs exist anywhere. A member clicks and gets nothing. Fix is a conditional or a flag correction, not a feature — Executed as SR-356; that report has not been reviewed, so this status is unverified',1,0,'none'],
+      ['LG-144','index.html:8448 — the last prohibited product word','ALREADY CORRECT, SR-387. Verified gone from index.html by direct grep rather than trusting the earlier unreviewed report',0,0,'done'],
+      ['LG-145','Coming-soon section — promotional card redesign','SR-362 landed the redesign on both coming-soon pages — 8 cards, borders off, focus outline, verified at 1440 and 390 with a measured containment proof. SR-364 wired all five hero banners. Entrepreneur’s Journey brought into the same treatment in SR-363',0,0,'done'],
+      ['LG-149','No mock/ directory exists in the repo','Cost two passes. Every mv to saferise/mock/ silently failed; the handover zip carries four other mock files under design/ and copy/. Mockups now go to pass/ until the real convention is confirmed',0,0,'part'],
+      ['LG-158','URL structure decision before redirects exist','DECIDED 9 Sep. Track paths stay long and readable — /personal-transformation, /relationship-healing, /professional-performance. Protocol pages are /protocols/{slug} with the slug from content/tracks.js, because that is the surface people share. Every existing query-string URL 301s rather than 404s',0,0,'done'],
+      ['LG-159','Split index.html — the distribution blocker','CLOSED SR-372. index.html down 39.8% this pass, 48.8% cumulative from the pre-split file. All 30 slugs resolve cold from any entry point, _redirects carries a 60-entry legacy map, crisis-block duplication down from 5 to 2, SR-084 dead weight gone from index.html entirely',1,0,'done'],
+      ['LG-168','No protocol carries a slug field','CLOSED SR-372. Explicit slug added to all 30 protocol records, Option A as recommended — one row had already been retitled once, which is exactly what a derived slug cannot survive',1,0,'done'],
+      ['LG-169','Track-portal split — the remaining half','CLOSED SR-372, and better than asked. Investigation before moving showed the three portals were dead weight — personal-transformation.html and its siblings already carried fuller content, the portals’ tracking widget was in-memory demo state, and nothing live reached two of the three. Retired rather than moved: 313KB of markup plus 19KB of orphaned CSS',1,0,'done'],
+      ['LG-170','X-Frame-Options DENY broke the dashboard iframe','Introduced by the _headers file in SR-366 and root-caused in SR-368. The dashboard frames protocol.html same-origin; DENY blocked it and produced a blank white panel for signed-in members. Fixed to SAMEORIGIN with the matching CSP frame-ancestors clause. Recorded because the same mistake is available every time a header is added blind',0,0,'done'],
+      ['LG-173','Internal documents are served publicly','docs/, pass/ and scripts/ are in the deployed repository and Netlify serves the whole thing. The invested-work report with its $202,860 figure, every tracker version and the fix register resolve at public URLs today. robots.txt omitted /docs/ — that was an error in the file delivered with the readiness work. Fixed by robots.txt plus X-Robots-Tag; whether the documents should be deployed at all is a separate decision',1,0,'none'],
+      ['LG-174','Attention Advisory naming split across systems','SR-374 flagged it: tracks.js and the 14 per-protocol records read Attention Advisory, while dashboard.html was reverted to Proximity Guide. Two systems, two names, one resource. Needs settling once rather than patched per surface',0,0,'none'],
+      ['LG-175','gen-sitemap.js never emitted protocol routes','Found and fixed in SR-375. The generator only walked .html files, so all 30 /protocols/{slug} routes — the entire indexable content library — were absent from every sitemap it produced. The bug never triggered a visible failure',0,0,'done'],
+      ['LG-176','accessibility.html carries no noindex','RESOLVED, SR-387. noindex added to accessibility.html, for-organisations.html and pricing.html. Deliberately NOT added to organisations.html or plans.html, which removed it intentionally with dated comments — those are the front doors',0,0,'done'],
+      ['LG-208','Protocol cover art is not per-protocol','SR-379 in flight. coverPath exported from js/saferise-track.js, script include added to protocol.html, hardcoded CSS cover removed. Verified in a browser across tracks 1, 2, 3 and the default no-param load. NOTE: covers resolve by position (covers/05.jpg) not by protocol ID \\\\u2014 reordering a protocol moves its cover with the slot, not with the protocol',0,0,'done'],
+      ['LG-209','Section-one symptom block removal','NOT SEEN in the SR-379 run log \\u2014 Part C of that pass did not appear in any progress report. Confirm on commit whether it landed or was silently skipped',0,0,'none'],
+      ['LG-210','Editorial illustrations','SR-379 in flight. Three approved illustrations placed. CHECK ON REPORT: the agent appears to have inlined generated SVG into index.html \\\\u2014 confirm pass/art.py survives as the generator, or regenerating a figure means re-pasting rather than re-running',0,0,'done'],
+      ['LG-211','Type scale and palette','APPROVED 13 Sep, quality gate. Measured: 169 of 233 font-size declarations in saferise-dashboard-v41.html are under 14px, 95 of 154 in the reader, sizes down to 7.5px. #565563 measures 2.48:1 on card and #7A7468 3.90:1 \\u2014 both fail AA. Approved: body 13\\u219216px, micro-label 9.5\\u219211px, 14px floor for readable text, ground #08080C\\u2192#0C0C12, card #15151F\\u2192#1A1A26, new --muted #B3A897 retiring the four dim greys. Line-height and padding move with the type or it reads worse. Mockup at pass/mock-scale-palette.html',1,0,'none'],
+      ['LG-251','Progress counter on resource.html','Progress-metric violations now enumerated. resource.html carries a \'7 of 8\' counter. The Track 01 landing page carries a whole section — \'The floor moves\', with 01 SCORE / 02 TIER / 03 LEARNING — under a heading reading PROGRESS YOU CAN SEE. SR-384 documented it and left it untouched as instructed; it is Track 01\'s own diagram, not shared across tracks. Andre to decide whether that section survives',1,0,'none'],
+      ['LG-252','plans.html conflicts with the pricing model','RESOLVED, SR-386. /plans absorbs /pricing with both redirect forms and the force flag; plans.html lost 993 lines of the retired EUR 19/29/39 ladder; surface code sr-pl- claimed in CLAUDE.md before use',1,0,'done'],
+      ['LG-253','Card titles oversized, The and Protocol repeated','Dashboard carousel: The Abandonment Wound Protocol wraps to FOUR lines and pushes its Begin link out of alignment with the row. Fix: strip a leading The and trailing Protocol AT RENDER TIME ONLY \\u2014 tracks.js keeps full names for the protocol page, breadcrumbs, title, meta, structured data and the journal. Dashboard cards 1.05rem, track landing 1.15rem, and reserve two lines of title height so one-line and two-line names produce the same card height \\u2014 that is what aligns the Begin links, not the size',0,0,'none'],
+      ['LG-254','Single carousel module','RESOLVED. The revived initCarousel() in js/saferise-system.js is the single implementation; the rejected drop-in remains dead code pending deletion',0,0,'done'],
+      ['LG-236','Track landing page cards \\u2014 quotes out, description on hover','13 Sep. Remove the identification quote stack from every card on every track landing page \\u2014 stop rendering, do not delete from tracks.js. At rest a card shows cover, label, number and title only; the description appears on hover. Card height must not change between states, keyboard focus behaves as hover, touch shows the description by default, and reduced motion shows it immediately with no transition. Note hover now does two jobs \\u2014 pausing the carousel and revealing the description',0,0,'none'],
+      ['LG-237','Protocol title font oversized','ALREADY CORRECT, SR-387. Verified live — title renders one line at a reasonable size. An earlier width:0 reading was a transient mid-fade-in glitch',0,0,'done'],
+      ['LG-238','Section boxes uneven','Adjacent panels in the same row are different heights across the dashboard and protocol pages; the ragged bottom edges read as broken. Panels in a row match height, content top-aligned',0,0,'none'],
+      ['LG-239','Dead space under resource content','A large empty region below the resource body. Cause unknown \\u2014 fixed height, min-height, an empty container left by the renderer, or a margin on a hidden element',0,0,'none'],
+      ['LG-240','Resource content cannot be scrolled to the bottom','On some resources the page will not scroll far enough to reach the Open the journal control. Reproduce on the longest \\u2014 The Decision, How This Works, Accountability & Empathy',1,0,'none'],
+      ['LG-241','Navigation and toggle placement','Back to the Protocol moves beneath Back to the Dashboard as a left-aligned stack. The Midnight/Sunrise toggle moves above the carousel on both the protocol page and the resource page, same position on each',0,0,'none'],
+      ['LG-242','Homepage footer scope and safety block','The scope and safety paragraph currently appears only on the dashboard, where a member sees it after signing up rather than before. Same wording and treatment in the homepage footer',0,0,'none'],
+      ['LG-243','Dashboard banner copy removed','ALREADY CORRECT, SR-387. Confirmed removed',0,0,'done'],
+      ['LG-291','Design audit -- full UX/UI assessment','COMPLETE 18 Sep. 22 pages x 2 themes x 3 viewports measured through the live DOM, plus a second pass screenshotting the real pixels behind every piece of text on a photo. Findings at audit/DESIGN-AUDIT-2026-09-18.md, machine-readable at audit/out/design-audit-findings.json, scripts at audit/. Baseline: 227 contrast failures on solid backgrounds, 167 over photographs, 222 selectors under 13px, 515 sub-12px declarations in source, 117 tap targets under 40px, 401 border rules against a no-borders house rule, 19 corner radii, 154 spacing values. Zero horizontal overflow anywhere',0,0,'done'],
+      ['LG-292','Readability passes -- SR-412 and SR-413','Two passes landed. Measured like-for-like against the audit baseline: contrast on solid backgrounds 227 to 53, selectors under 13px 222 to 21, small-body prose 84 to 33, paragraphs over 88ch 22 to 18, faded text 2 to 0, tap targets 117 to 72, horizontal overflow held at 0. Home door card titles went from 41.8px out of line to 0.0px. Player step labels 8.5px to 13px. The -text3 token was lightened at source (Midnight 6A6874 to 83818E, 3.51:1 to 5.01:1) rather than patching 100-plus selectors',0,0,'part'],
+      ['LG-293','Transport control removed from the player','COMPLETE SR-413. The galaxy player carried an elapsed/total readout and a seekable scrubber -- a duration display on a practice surface, against the standing rule. A visible clock invites checking how long is left, which is the opposite of what the protocol is for. Found by the coding agent, not by the audit brief',0,0,'done'],
+      ['LG-294','Readability tail -- PASS A-3','pass/PASS-A3-FINISH-TAIL.md. Remaining: 53 contrast failures (ten of the worst are one pattern on coming-soon.html where per-protocol identity accents carry text on a 4d5c82 panel -- the decision is that the accent stops carrying the text and survives as a dot or rule), 21 selectors under 13px, 33 prose blocks under 14.5px, 18 paragraphs over 88ch, 9 headings under 1.35 leading, 72 tap targets',0,0,'none'],
+      ['LG-295','Consistency pass -- PASS B','pass/PASS-B-CONSISTENCY.md. Radii 19 values to 3, spacing 154 values to a 9-step scale (106 currently off the 4px grid), 257 opaque borders to inset rings, images, self-hosted fonts, 103 alignment near-misses between 0.5 and 8px. Hold until A-3 lands -- churning tokens and borders on top of unfinished type work makes both harder to verify',0,0,'none'],
+      ['LG-296','Sunrise theme is unfinished','20 pages carry the theme toggle. Sunrise is defined by 8 rules across 4 scopes in 2 of 8 stylesheets. On 11 of 22 audited pages the toggle changes nothing -- dashboard, both protocol pages, resource, member surfaces, login, signup, account, privacy, accessibility, getting-help. A member sets Sunrise on the marketing site, signs in, and the whole practice surface reverts. PASS B implements Midnight-only for beta reversibly: one CSS rule, one JS guard, one attribute, no markup deleted. Also open: SR-413 lightened Sunrise -text3 to DFE3EC against a -text2 of DDE3F0, collapsing two of the three text levels into one',1,0,'none'],
+      ['LG-297','Images -- missing, hotlinked and off-spec','Three files referenced by code and absent from disk: assets/coming/band-09.webp (the jpg sibling exists, only the webp is missing), assets/anxiety-hero.webp, assets/method/res-somatic.jpg. Two About-page images hotlink live from images.pexels.com -- a licence and availability exposure, self-host them. Six images are upscaled and visibly soft (the three journey bands need 2880x908 against a current 1400x380), three are soft on retina, thirteen are oversized. assets/covers/01.jpg is portrait source displayed landscape and needs a recrop, not an upscale. Full spec table in PASS B section 4',0,0,'prog'],
+      ['LG-298','21 galaxy subject cutouts still missing','Nine protocols have cutouts, 21 do not and fall back to the universal galaxy. Spec: transparent PNG-24, subject isolated with a soft 2px feather, 1400px tall, subject occupying 62-70 percent of frame height, centred horizontally, no drop shadow baked in',0,0,'none'],
+      ['LG-212','Copy tightening review','Separate from LG-211 and explicitly out of scope there. Needs Andre\\u2019s voice, page by page',0,0,'none'],
+      ['LG-300','Four raw masters were shipping as JPEG fallbacks -- 6.9 MB recovered','19 Sep. Not in the design audit; found while reviewing the Desktop libraries. door-t1/t2/t3.jpg were the untouched 1086x1448 masters at 1.6-1.9 MB each, and coming/band-06.jpg was the only band of eight never resized, at 1717x916 and 1.8 MB -- each sitting beside a correct .webp of 53-86 KB. Re-encoded at JPEG q82, measured 42-44 dB PSNR against the originals (visually lossless, same pixels). band-06 also resized to 1200x640 to match its siblings, .webp regenerated. 6.9 MB -> 575 KB',0,0,'done'],
+      ['LG-301','Two "photograph pending" placeholders were one missing reference each','19 Sep. Professional Performance rendered its art brief as body text ("corridor moments before the room, desk log...") because content/tracks.js gave t3 band a ratio and a brief but no src -- blocked by SR-224, which recorded the delivered file as 1400x583 against a slot declaring 1400/380. No longer true: the file on disk is 1400x380. The dashboard showed three "band photograph pending" panels for the same track because dashboard.html had var BAND with keys 1 and 2 only. Installed the supplied triptych at 1400x380 (jpg + webp), wired both, and rewrote the SR-224 comment so it no longer contradicts the code',0,0,'done'],
+      ['LG-302','Live-sessions trio replaced -- premium 1:1, workshops, next available','19 Sep. assets/sessions/premium-1on1, workshops and calendar, each as jpg + webp. They are CSS background-images in a ~2.42:1 panel using center/cover, so each candidate crop was rendered and checked before writing -- all three centre cleanly with no face cut, so no custom crop was needed. Open question: the 1:1 conversation photo went to Next available and the solo photo to Premium 1:1, per the order given; swapping the two would read more directly',0,0,'done'],
+      ['LG-303','Two wrong-subject photographs swapped out','19 Sep. assets/t1/change (Personal Transformation, "what becomes available") was a man with a motorbike; replaced with the rooftop group shot, cropped to the 16/7 the slot declares, all three faces retained, out at 1600x700. assets/coming/band-03 (Strength, "training and the body") replaced with the gym shot -- 1717x916 is already the 1.875 band ratio so no crop was needed, and its dark right-hand third suits the overlaid kicker better than the old tight crop. band-03 is shared, so the one file covers coming-soon.html and member-coming-soon.html',0,0,'done'],
+      ['LG-304','Proof diagrams on T2 and T3 redrawn -- REJECTED, awaiting direction','19 Sep. The originals asserted their captions rather than showing them (T2 two static ellipses with no time axis; T3 two bare lines from one origin) and both were authored at ~520x220 then stretched to a 720px minimum inside a ~470px column, so both arrived clipped. Redrawn to show the mechanism each caption claims, fitted to the column, with pathLength 600 so the hard-coded stroke-dasharray draws exactly one full length. Reviewed and rejected. The exact pre-edit file is held and verified and can be restored in one step. BLOCKED on direction for what the two figures should show instead',1,0,'block'],
+      ['LG-305','CORRECTION -- the "seven drop-in upgrades" finding was wrong','19 Sep. UNUSED-IMAGES-REVIEW listed door-t1/t2/t3, band-welcome-corridor and change/cost/range as "same image, larger master -- drop-in re-export". Opened them: door-t1/t2/t3 and hero-corridor are entirely different photographs (different people, different rooms), not larger versions. They were matched on filename, dimensions and aspect ratio without being looked at. Only band.jpeg to journey/t1-band was verified by eye and still holds. change/cost/range remain unverified and must be opened before any swap. Review and provisioning CSV corrected',0,0,'done'],
+    ]],
+    ['Audio production', [
+      ['LG-54','The Clearing -- full audio recorded','COMPLETE 18 Sep. T0-00 voiced. Bed is Song 20, exclusive to this session. Length still to be measured against the bed -- see LG-224 and LG-281',1,0,'done'],
+      ['LG-55','Guided practice session scripts ×10','One full walkthrough per protocol',1,0,'none'],
+      ['LG-56','Guided practice session audio ×10 recorded','',1,0,'none'],
+      ['LG-57','Music beds -- allocated and rendered','SUPERSEDED 18 Sep. Architecture is no longer one bed per state. 31 sessions map to 12 bed builds: Song 1 (5 sessions), 2+21, 3.2+4+3.4, 7 (6 sessions), 8+partner, 10+11, 11+22, 12, 18+18.1 (5 sessions), 20, 23. Songs 11 and 18 each serve both a 10s and a 12s window so both render twice. Rhythm spec 90 BPM 3/4, one bar = 2s: Agitated 5 bars 4-in 6-out exhale-led, Unsteady 6 bars 6-6 symmetric, Numb 4 bars 4-4 symmetric and deliberately the fastest because shutdown comes up into range. Retired: the anger sound, song 3.3, song 19. Free in range: 5, 6, 9, 13, 14, 15, 16, 17. Outstanding measurements in LG-281',0,0,'part'],
+      ['LG-58','Cleanup pass on all audio','Adobe Podcast Enhance',0,0,'none'],
+      ['LG-59','Assembly and captioning','Descript',0,0,'none'],
+      ['LG-101','31 meditation sessions voiced','COMPLETE 18 Sep. All 30 protocols plus The Clearing written, trimmed, voice-reviewed and recorded in ElevenLabs Studio. Single voice for launch, shaped guided or spacious by state -- the two-voice member toggle is descoped, see LG-198. Every script now carries the breath count matching its state; the previous four-in-six-out cue on every state was the main defect the script audit found and was actively counter-therapeutic on the Numb sessions',1,0,'done'],
+      ['LG-196','Loudness target \\u2014 settled','SETTLED 13 Sep. STEREO delivery, \\u221216.0 LUFS integrated, \\u22121.0 dBTP. The \\u221219 figure was never a competing target \\u2014 it is the MONO equivalent of the same perceived level, since a mono file measures ~3 LU lower than the same signal across two channels. BED-RHYTHM-SPEC was correct at \\u221216; the platform rule is what changes',0,0,'done'],
+      ['LG-197','Clearing script rewritten as a transition vessel','COMPLETE 13 Sep, three revisions. The original opened \\u201cNothing\\u2019s wrong today\\u201d, asserting a state the member may not be in. Final version is forward-facing and causeless \\u2014 no assumption about how the member arrived, no cause named, oriented toward the engagement ahead. 523 spoken words. Supersedes the version in SafeRise_AllTracks_RecordingScripts.docx',0,0,'done'],
+      ['LG-198','Two-voice member toggle -- descoped for launch','DESCOPED 18 Sep by Andre. Launch ships one voice, shaped guided or spacious depending on the state, rather than a male/female toggle. SR-F (fbmnBhl0AKROCH04b4hT) and SR-M (7DhKLMri1c2Bkve4m7Ro) both exist and are kept. Revisit after beta',0,0,'defer'],
+      ['LG-201','Audio production pipeline','build_protocol.py renders each passage via the ElevenLabs API, inserts pauses, masters to \\u221216 LUFS stereo and caches by text so pause changes cost nothing. Script format is plain text with [[seconds]] markers. BLOCKER: per-passage rendering gives the model no context across seams, so tone lurches between passages. Studio renders a whole script as one performance and is the likely answer. Untested',1,0,'part'],
+      ['LG-202','t1-05 length outlier','CLOSED 18 Sep. Shame Dissolution trimmed and voiced, runs 9:53. Every session in the library now sits between 8:16 and 13:36',0,0,'done'],
+      ['LG-203','Retired step-name forms in the booth script','COMPLETE 13 Sep. 126 replacements \\u2014 63 Recognition\\u2192Recognise, 63 Regulation\\u2192Regulate. CORRECTION: only 31 of each were section headers; the other 32 are SPOKEN, in the closing line of every script and in the booth preamble. This was an audio issue, not a labelling one. Clearing script and clearing.txt migrated to match. Release and Rise were already verbs',0,0,'done'],
+      ['LG-204','Production scripts diverge from the recorded audio','Six repo passes were specified and none has run, so the site ships text that does not match the vocals now recorded. Divergences: step names (the verbs Recognise Regulate Release Rise are canonical, the nouns Recognition and Regulation retired); state-matched breath counts (production still cues four-in six-out on every state); timed pauses (production pauses are untimed); hand to heart and chest in place of sternum; Dispenza permanently banned from member-facing content. A lint script enforces these -- 265 problems in the original scripts, 0 in the revised set. Does not block the audio build, does block launch',1,0,'none'],
+      ['LG-217','SR-F chosen','COMPLETE 13 Sep. ElevenLabs fbmnBhl0AKROCH04b4hT. Brief used General American, female 33-40, level and dry with minimal intonation range \\u2014 deliberately above the 27-37 user bracket so steadiness does not read as someone going through the same thing. Negatives avoided in the prompt per ElevenLabs guidance; language and variant stated in the first sentence to prevent dialect drift',0,0,'done'],
+      ['LG-222','SR-M chosen','COMPLETE 13 Sep. ElevenLabs 7DhKLMri1c2Bkve4m7Ro, male 28-34. Brief revised twice: the first came back too dry (four negatives pointing the same way produced something clinical), the second too old. Final persona is a friend who has been through it, warm and easy rather than a practitioner. Both voice IDs are now in build_protocol.py with --voice f / --voice m; the cache is keyed on voice so both renders coexist',0,0,'done'],
+      ['LG-223','Clearing script \\u2014 second revision','13 Sep. Added: an opening that names the session and what it is for; the three mechanisms stated as what happens rather than what they achieve (breath count, breath and beat settling together, somatic release by permission); the authorship chain \\u2014 shifted attention gives a choice, a choice a different state, a different state a different response, a different response a different outcome you authored; an insight line on why people do this at all; a re-cue of the count mid-Regulate; and a new closing line. Regulate silences extended from 50s to 110s because five breath cycles under-doses the mechanism',0,0,'done'],
+      ['LG-224','Clearing runs 12 minutes against a stated requirement to be the shortest session','CONFLICT. 720 spoken words = 6.3 min at meditative pace, plus 5.1 min of programmed silence. The cue card states Clearing must remain the shortest session on the platform, with the reasoning that an intentional visitor should not be asked for more than a distressed one. Andre narrated the words in 7 min \\u2014 that measured speech WITHOUT the gaps. Either cut ~44 per cent of the words to hit 7:30 finished, or accept the length and rewrite the claim. The session now does three jobs the original did not: frames the platform, explains the mechanism, and runs a full Regulate',0,0,'none'],
+      ['LG-279','Mix -- vocals to beds, 31 sessions','Bed sits 18 dB under voice. Bed rooted near 41 Hz, clear of 100-250 Hz (voice fundamental), soft at 2-4 kHz for consonant definition. Three mix moves already settled and not to be relitigated at the desk: (1) Song 7 on T1-10 and T2-10 automates 2-3 dB DOWN across its build so net level stays flat -- both sessions end on an explicit refusal to resolve and a rising bed would argue with the script; take T2-10 at 3 dB and start earlier, it is the shortest session so the build lands more steeply; do T1-07 first because it gets the build at full depth and sets the level the other two come off. (2) Song 18 climax on T2-03, T2-04 and T1-08 rides back -- only T1-02 and T3-04 have a line at the 5:15 mark, the other three were voiced without a resistance beat and signed off that way, so the climax has nothing to land on. (3) T3-01 ends at full presence with no fade -- the script supplies the energy and the member walks into the room',1,0,'part'],
+      ['LG-280','Engineer -- assembly, seams and pauses','Pauses inserted at assembly from one timeline: 3s, long 6s, extended 10s, very long 15s. Breath cues are silences at the state window length. Named seams: T1-01 at 4:28, T3-05 at 5:00, T1-04 song 3.4 from 10:44, T2-07 3.4 from 9:59, T3-01 3.4 from 9:49, T1-06 song 21 from 9:29, T1-02 bed in at 2:36-3:36, T2-03 at 1:01-2:01, T3-04 at 1:18-2:18. Head-trims on T1-08 and T2-04. Loops at plateau on T1-10, T3-08, T3-09. RENDER CONSTRAINT from LG-289: both parts of a split script must come from the same ElevenLabs session at identical settings, or the seam is audible',1,0,'part'],
+      ['LG-281','Bed measurements outstanding before assembly','Ten items, all measurements not decisions. (1) Song 20 length against The Clearing, and confirm it neither settles nor lifts -- this is the one session assuming no arriving state and a bed with a direction would give it one. (2) Song 21 length and that it ends without a lift; it plays on after the vocal ends at 9:29 so it is the last thing the member hears, and song 3.3 was dropped so there is no fallback file. (3) Song 12 length and whether it lifts -- if it lifts it is wrong for Belonging Gap, a protocol about editing yourself to fit a room. (4) Choose the partner for song 8 on Overwhelm Threshold: song 8 is 5:00 against a 13:06 script with Release at 6:44, recommend extending 8 to 6:44 so the seam lands on Release, partner then runs 6:22 and must not resolve. (5) Song 22 against the 10s window on T1-01 and T3-05. (6) Song 23 length against 12:08 and 11:31, confirm it does not resolve. (7) Song 18+18.1 total length after trims. (8) Song 3.2+4 total, and hear the flute under a real dialogue take -- airy tone sits 1-3 kHz where breath noise also lands and the band is kept soft for consonants; the timpani is the safer choice, low and sustaining, at or under one stroke per phrase. (9) Confirm T3-06 reads Unsteady in the live tracks.js META. (10) Every master at -16 LUFS stereo, bed 18 dB under voice',1,0,'none'],
+      ['LG-282','Master -- 31 files to spec','-16.0 LUFS integrated, -1.0 dBTP, stereo. The -19 figure is the mono equivalent of the same perceived level and does not apply to this delivery. See LG-196',1,0,'part'],
+      ['LG-283','Upload masters to the protocol media players','31 files to the galaxy player on each protocol page. PLACEHOLDER_AUDIO in the player is still true and every protocol currently points at the Clearing file -- the flag flips off as the real files land. Naming follows the existing assets/audio/meditation/ convention',1,0,'part'],
+      ['LG-284','Editorial principle for any remaining bed decision','The beds carry a breathing rhythm, not an ending. Music must not supply a resolution the script refuses. This caught three separate problems during allocation -- the grief lift, the Numb reassurance build, and a bed that travelled from wronged to redeemed. Apply it to every bed question still open',0,0,'done'],
+      ['LG-285','Crisis resource in the UI around Grief Integration','SAFETY. T1-06 is the session most likely to reach someone in real distress. The script carries its own internal exits -- if this is more than you can hold alone today, then holding it alone is not the assignment, stop here and go and be near someone -- but an exit spoken inside a 9-minute audio cannot be acted on by someone who has stopped listening. The crisis pathway must be VISIBLE in the surrounding UI on that protocol page, not only in the audio. The platform already has a Crisis Card resource (LG-06) and findahelpline.com in the scope-and-safety block; this is about placement and prominence on T1-06 specifically. Applies equally to T1-10 Powerlessness and Despair and T2-10 Conscious Separation',1,0,'none'],
+      ['LG-286','Guide persona -- Italian inflection undecided','GATE. The newest Insecurity script carries Andre-added Italian-English inflection: three no? tags and the sign-off Perfetto, ciao. As a persona it is warm and distinctive, but it commits the whole library to an Italian-inflected guide, and a non-Italian TTS voice will flatten or mispronounce Perfetto. Decide one way: a single signature guide across all 31, recast around that persona -- or per-script neutrality, dropping the Italianisms. Mixed by accident is the outcome to avoid. URGENT because the sessions are already recorded: if the inflection is in a rendered take, the decision is now a re-render decision, not an editing one. Check which takes carry it before ruling',1,0,'none'],
+      ['LG-287','Insecurity closing reveal -- I lied','The close currently reads I said I wouldnt tell you, but I lied... you are enough. The timing instinct is right: reassurance lands at the end, after the audit is quieted, where it would have been discounted at the start. The wording is the problem -- it spends the oath the script is built on (I am not going to assess you), and for a listener whose insecurity sits on trust wounds, a guide admitting deception makes the other promise checkable too. Rewording that keeps the gift and the promise: One more thing before you go. I told you I wouldnt say it, and I meant it -- an hour ago youd have checked the source and set it straight back down. But youre not in the audit now. So Ill say it once, and you can do what you like with it. You are enough. You always were. Re-render that block if the current wording is in the take',0,0,'none'],
+      ['LG-288','Regulate sections are converging across the library','The hum, the warm-feeling step and the four-driver list (losing control / left alone / being the problem / running out of time) now appear in most Regulate sections. Legitimate as a protocol the member learns by repetition -- that is arguably the point -- but it should be a recorded decision rather than drift. Same question for the recurring refrains: weather passes through a room but the room doesnt become the weather, and striving is just another form of fighting. Report-only: confirm it is intended',0,0,'none'],
+      ['LG-289','Voiceover render spec -- pinned','REFERENCE, settled. ElevenLabs Studio, 5,000-character hard limit per render. Settings constant across the library: Speed 0.9 (Grief Integration 0.85), Stability 0.65, Similarity 0.75, Style exaggeration 0. Both parts of a split script must be rendered in the SAME session with identical settings or the seam is audible -- this constrains LG-280. Script formatting: plain text only, no markdown; titles, script codes, stage directions and drafting-tool preambles stripped; curly quotes straightened to ASCII; paragraphed into beats of roughly 150-170 characters with a forced break before each section marker and each breath instruction; ellipsis on the turn of the breath (in for four... and out for six) to give the out-breath air. Splits are even at a section boundary, never last-break-under-5000. The four phases must be audible, either as a standalone spoken line or woven into the prose -- newer scripts use the woven style. Full spec at docs/VOICEOVER-HANDOVER.md',0,0,'done'],
+      ['LG-290','Script numbering reconciled against the voiceover handover','CLOSED 18 Sep. The voiceover handover listed 23 coded scripts plus 7 uncoded and flagged five numbering gaps. The real gap count is SEVEN -- it missed T1-10 and T2-10 -- which maps 1:1 onto the seven uncoded scripts, and the build allocation has since assigned all 31 codes with beds and runtimes. Two probable duplicates it raised are also resolved by that allocation: Insecurity (tree/audit) against T1-09 Insecurity Anchor, and Ending/Grief against T1-06 Grief Integration. T3-09 Burnout and Overload no longer needs re-splitting (was 4,940/488, now runs 9:23) and T1-05 is no longer a length outlier. The voiceover doc is superseded on inventory and remains authoritative on render settings and script formatting',0,0,'done'],
+      ['LG-299','18 guided meditations live on the site','19 Sep. Verified on disk, not taken on trust: assets/audio/meditation holds 18 protocol sessions plus the Clearing (m4a and mp3). Ten share an identical byte count, which looked like a duplication fault and is not -- all 20 files hash distinct; the match is identical duration at a constant bitrate. Coverage: T1 02, 07, 08, 09, 10 (5 of 10); T2 02, 03, 04, 05, 06, 08, 09, 10 (8 of 10); T3 04, 07, 08, 09, 10 (5 of 10). Remaining 12: T1 01, 03, 04, 05, 06; T2 01, 07; T3 01, 02, 03, 05, 06. Each of the 18 has therefore cleared mix, engineer, master and upload, so LG-279, 280, 282 and 283 move to part',0,0,'done'],
+    ]],
+    ['Video production', [
+      ['LG-60','Landing page hero video — approx 8 min','Script v4 exists',1,0,'none'],
+      ['LG-61','Track 01 motivation video — 2:15 plus 60-second cut','Scripts exist',0,0,'none'],
+      ['LG-62','Tile sequence videos ×10','Scripts exist. Protocol 07 splits into 07 and 07B',0,0,'none'],
+      ['LG-63','"Why I Built This One" founder videos ×10','Blocked on LG-13',0,0,'none'],
+      ['LG-64','Protocol walkthrough / follow-along videos ×10','Pairs to the guided audio',1,0,'none'],
+      ['LG-65','Video host configured with domain restriction','Vimeo Pro or Wistia. Client-side gating on a single HTML file is not secure',1,0,'none'],
+      ['LG-66','All assets uploaded, named and wired into the build','',1,0,'none'],
+      ['LG-213','Homepage film','Produced via Runway in a parallel lane, due 13 Sep. Narration must be checked against docs/PLATFORM-DESCRIPTION.md and the prohibited vocabulary list before it is final \\u2014 outcome promises are the easiest drift for a lane that has not been handed the register rules',0,0,'part']
+    ]],
+    ['Commerce & access', [
+      ['LG-67','Membership vendor decision','Supabase (Frankfurt, eu-central-1) for auth and DB, Paddle as merchant of record. Outseta plus Stripe superseded \u2014 Stripe does not support Sint Maarten. Mollie ruled out. CX Pay / Orco Bank held as a possible second provider behind js/saferise-pay.js.',1,0,'done'],
+      ['LG-68','Authentication live','CLOSED. Verified end to end on the live project — a real account signed up, received the Brevo confirmation, followed it and established a session. Credentials in js/saferise-auth.js at lines 32-33',1,0,'done'],
+      ['LG-69','Paddle billing configured','Structure settled 13 Sep \\u2014 see LG-36, LG-199, LG-200. Webhook must verify the Paddle-Signature header. Sandbox and live are separate accounts with separate IDs; attach import_meta.external_id from the first product created',1,0,'none'],
+      ['LG-71','Real content gating replacing cosmetic CSS locks','Live bypass at protocol.html:1313 closed. FREE_TRACK_PREFIX t1- in js/saferise-access.js gates Track 01 as free. Media gating still open \u2014 see LG-98.',1,0,'prog'],
+      ['LG-72','EU VAT handling confirmed','Who remits, what Andre files',1,0,'none'],
+      ['LG-73','Onboarding and transactional email sequences','',0,0,'none'],
+      ['LG-74','End-to-end test transactions on every tier','Including upgrade, downgrade and cancellation',1,0,'none'],
+      ['LG-96','Supabase project created \u2014 Frankfurt eu-central-1','CLOSED. Project live in Frankfurt eu-central-1, ref mynjjgtjytzyfsuqqlhg. Migrations applied, RLS enabled on public.members and public.usage_events, security advisor returns zero lints after revoking PUBLIC execute on the two trigger functions. Credentials wired in SR-359',1,1,'done'],
+      ['LG-97','Paddle seller account approved','Unblocks the remaining payment phases',1,1,'none'],
+      ['LG-98','Audio gating architecture','No exclusively-paid audio exists today. The 10 guidance clips are keyed by resource type and shared across all three tracks including free Track 01, so they cannot be gated. Track 02/03 meditations must go to Supabase Storage behind signed URLs, not assets/',1,0,'none'],
+      ['LG-123','Transactional email provider selected','CLOSED. Brevo authenticated and branded on thesaferiseprotocol.com — seven DNS records written into Porkbun via API, DKIM and DMARC both green, contact@ verified as sender. SMTP credentials still to paste into Supabase auth settings',1,0,'part'],
+      ['LG-124','Paddle seller account','Needs the KvK number, legal address, bank details and a reviewable live site. Underwriting is the long pole',1,0,'none'],
+      ['LG-125','Wistia account and analytics decision','DECIDED 9 Sep — viewing analytics beyond delivery stay OFF, and storage region to be confirmed in the dashboard. That decision makes LG-77 a cookie policy with no consent banner',1,0,'part'],
+      ['LG-150','Confirmation redirect does not sign the member in','CLOSED SR-371, and it was not closed before. The confirmation and magic-link redirect silently did nothing — a member clicked the link and was not signed in. The fragment handler now establishes the session, clears the hash and redirects. Verified live',1,0,'done'],
+      ['LG-151','No password-reset flow exists','CLOSED SR-371. Full password-reset flow built at reset-password.html with a Forgot password link on login.html, verified live against the Supabase project including the mismatch and expired-token paths',1,0,'done'],
+      ['LG-156','Bulk HR licences, banded by headcount','EUR 6,000 up to 50 staff, EUR 14,000 to 250, EUR 28,000 to 1,000. Never priced per seat, so the employer never learns who used it and the privacy promise survives the pricing model. The only revenue line not capped by the calendar',0,0,'none'],
+      ['LG-199','Organisational programme tiers','DECIDED 13 Sep. Pilot \\u2014 half day, up to 3 groups, EUR 1,800, includes 25 trial seats for 30 days. Programme \\u2014 full day, up to 6 groups, EUR 4,200. Partner \\u2014 two days, up to 12 groups, EUR 9,500. Above 750 employees scoped. Note: a Pilot can run three groups of 25 so up to 75 may attend while only 25 get seats \\u2014 state on the page who the seats go to',0,0,'none'],
+      ['LG-200','Organisational seat pricing','DECIDED 13 Sep. Seats purchasable WITHOUT a programme. 25-99 EUR 15 \\u00b7 100-299 EUR 13 \\u00b7 300-749 EUR 11 \\u00b7 750+ scoped. Annual billing, 25-seat minimum. Programme buyers get the next tier\\u2019s rate at their seat count. This makes SafeRise licensable as well as delivered \\u2014 a seats-only customer never meets a facilitator, so onboarding and the advisory carry the whole experience',0,0,'none'],
+      ['LG-205','Retreats \\u2014 priced on enquiry','Cost base varies too much by venue, duration and region to publish a number',0,0,'defer'],
+      ['LG-206','Pricing page built','Unblocked by LG-36, 199 and 200. Nothing on the site currently states any of the agreed pricing. One of the three items blocking revenue',1,0,'none'],
+      ['LG-244','FAQ / knowledge base page','The dashboard prompt Questions about how any of this works? promises a page that does not exist. Copy written: six sections covering what this is, what the evidence shows and where it stops, using it, journal privacy, safety, and access and billing. Includes the uncomfortable answers \\u2014 will this fix my anxiety (no), is the research settled (not entirely, with the 2026 Porges challenge stated), what happens if you stop (nothing, and that is the aim). TWO PARAGRAPHS GATED: the employer-visibility answer repeats the seat-reporting commitment and cannot publish until that is verified; the pricing figures must be checked against the live page',0,0,'part'],
+      ['LG-245','Journal print and download','Print/download control in the journal modal footer, producing a readable document of the currently filtered entries. Print stylesheet: white ground, black text, no interface chrome \\u2014 the member is printing their own writing, not a screenshot of a web page',0,0,'none'],
+      ['LG-246','Open the journal \\u2014 scoped popout','The control at the end of a resource currently does nothing. It opens the same journal modal as the dashboard, pre-filtered to the protocol the member is in, with writing saved against that protocol. The member can clear the filter \\u2014 scoping is a starting point, not a restriction',0,0,'none'],
+      ['LG-247','Request a 1:1 session \\\\u2014 dead link','RESOLVED, SR-387. Points at live-sessions.html, matching the convention every other real link on the site uses',0,0,'done'],
+      ['LG-207','Escalation criteria for live delivery','Workshops, retreats and organisational programmes are now priced and about to be published while the clinical layer is empty. Self-guided audio and a room of people in real-time distress are different exposures. Written escalation criteria before the first delivered session is SOLD, not before the first is run',1,0,'none'],
+      ['LG-228','Escalation criteria for live delivery \\u2014 drafted','13 Sep. Three tiers: inside the work, pause for this person, stop and involve someone else today. Principle recorded \\u2014 a facilitator runs the protocol and notices, does not assess, treat or hold what the session was not built to hold. Four questions flagged for Kirsten Morris. DRAFT, NOT IN FORCE',1,0,'part'],
+      ['LG-229','Kirsten Morris collaboration \\u2014 terms drafted','13 Sep. Covers role and its limits, what SafeRise commits to in return, seven review items at ~3.5 hours for a first pass, a four-hour monthly ceiling, three compensation structures (favoured: EUR 400/month retainer for up to four hours, EUR 120/hour beyond), and the commercial position stated honestly \\u2014 zero paying members, nothing live, payments unwired. Equity named and declined rather than left unspoken. NOT AN OFFER, nothing agreed',1,0,'part'],
+      ['LG-230','Kirsten \\u2014 would she deliver 1:1 and workshops?','OPEN QUESTION, the one Andre most wants answered. Proposed EUR 85 of the EUR 129 one-to-one, flat EUR 350 for a workshop to ten and EUR 450 to twenty. THREE PROBLEMS: (1) if she delivers she cannot also be the escalation contact for her own sessions, which the escalation document assumes are different people; (2) the four-hour ceiling is consumed entirely by review, so delivery is ~7 hours on top; (3) delivering is a different professional-liability question from reviewing and needs an answer before a session is sold',1,0,'none'],
+      ['LG-231','Does the arrangement sit within what Kirsten is permitted and insured to do?','THE question in the collaboration document. Standing in on the clinical side may imply a duty of care she would personally carry. If it does, it changes what can be sold and what can be said. Needs a professional answer, not an assumption',1,0,'none'],
+      ['LG-215','Pricing page copy written','COMPLETE 13 Sep. Two pages \\u2014 consumer and for-organisations. Consumer leads with Track 01 free rather than with EUR 19. Structural rules recorded: not a comparison grid (a tick grid renders the free track as a stripped version of paid), nothing counts down or badges or discounts, and the annual rate keeps its ten-for-twelve sub-line or it reads as a hidden discount mechanic. Build is Part A of the next pass',0,0,'done'],
+      ['LG-216','Seat privacy claim \\u2014 verify before publishing','GATE. The organisations copy commits in writing that a company receives seats-used only, never individual usage and never names. Nobody has checked whether the platform can honour that. If any admin surface, export or analytics path could expose individual member usage, the paragraph does not publish. This is a written commitment to a paying customer',1,0,'none'],
+      ['LG-225','Wistia analytics enabled','DECIDED 13 Sep. Reverses the earlier analytics-off position, which was the thing making a consent banner unnecessary. Consent banner and the privacy-policy cookies section now both required \\u2014 see LG-226',0,0,'done'],
+      ['LG-226','Consent banner','Required by LG-225. Nothing non-essential loads until the member chooses; Reject equal in weight to Accept and listed first; dismissal counts as reject; choice persists and is re-openable from a footer link; consent record stores choice, timestamp and notice version. Copy drafted, explicitly not the we-use-cookies-to-improve-your-experience default. Brief written',1,0,'none'],
+      ['LG-227','Seat reporting \\u2014 quarterly, aggregate only','DECIDED 13 Sep. Organisations receive, once per quarter, the number of seats in use out of their total. No names, no individual usage, no per-protocol breakdown. Terms clause drafted including the line that SafeRise will not provide such information on request \\u2014 that sentence is what makes it real. Needs legal review. Two things to verify first: whether any existing data path could expose individual usage, and whether the schema can compute a quarterly figure at all \\u2014 active is undefined and no organisation identifier may exist on members',1,0,'part']
+    ]],
+    ['Legal & compliance', [
+      ['LG-75','Terms of Service published','terms.html built and in the working tree, footers wired across 28 pages. Production still serves the old build because it has not been pushed.',1,0,'part'],
+      ['LG-76','Privacy Policy published — GDPR','privacy.html built. Six open items block publication: date, email provider, transfer mechanism, email creation, Kenor registration number, checkout consent line.',1,0,'part'],
+      ['LG-77','Cookie policy and consent banner','Simplified by the LG-125 decision. With Wistia analytics off and analytics cookieless (Plausible, EU, IP-anonymised), no consent banner is required under the ePrivacy Directive — a cookie policy alone is sufficient. Draft accordingly',1,0,'none'],
+      ['LG-78','Data retention period decided','CLOSED SR-367. Six retention periods written into docs/article-30-register.md and into the privacy policy',0,0,'done'],
+      ['LG-79','Not-a-therapist and clinical-trial disclosures consistent site-wide','Partly done — b18f1fd aligned the scope text in four locations. What remains is a sweep of all FAQ answers (12 shared plus 6 per track) against the final policy wording. Depends on LG-106 landing first',1,0,'none'],
+      ['LG-80','Lawyer review of all three documents','',1,1,'none'],
+      ['LG-81','Kenor International BV / category 9299 scope alignment checked','',0,0,'none'],
+      ['LG-82','Crisis resources verified current and correct','Every number and URL checked against the provider’s own current page, not against our copy of it. International audience means a hardcoded national helpline is a hazard; findahelpline.com is the right pattern. NEDA is permanently disconnected — if it appears anywhere, it goes',1,0,'none'],
+      ['LG-99','International transfer mechanism','Frankfurt set as the standing preference. Article 30 record built (LG-122). Scoped lawyer question drafted. Journals device-only removes the Art. 9 layer',0,1,'prog'],
+      ['LG-100','Legal pages deployed','CORRECTED: this does not resolve on push. Deploying with [DATE], [EMAIL PROVIDER] or [TRANSFER MECHANISM] still visible is worse than a dead link. Order is placeholders filled, then push, then the href updated',1,0,'none'],
+      ['LG-115','terms.html states testing and efficacy position','CLOSED SR-355. Efficacy clause placed in terms.html',1,0,'done'],
+      ['LG-122','Article 30 record of processing activities','Built 8 Sep, seven activities including one for the journal, where no processing occurs. Location, transfer and retention rows still marked to verify',1,0,'part'],
+      ['LG-127','Device-only storage disclosure','CLOSED SR-355. Device-only paragraph on privacy.html and terms.html. No Export sentence introduced — that lands with LG-126',1,0,'done'],
+      ['LG-128','Publication date set','CLOSED SR-355. 23 October 2026 on all three legal pages. No page carries an Effective from field — Last updated only',0,0,'done']
+    ]],
+    ['Launch readiness', [
+      ['LG-83','thesaferiseprotocol.com resolving to the live site','Netlify, deployed from GitHub main. Currently noindex until launch',1,0,'none'],
+      ['LG-84','Real testimonials from the pilot cohort','SR-084 dead weight is gone from index.html as of SR-372 — the three cut resources and the stale duration strings left with the retired portals',0,1,'done'],
+      ['LG-85','Founding cohort pre-sale offer defined','Primary recommended funding route at this stage',0,0,'none'],
+      ['LG-86','Dr. Keny F. Bastien credibility placement on site','Decided 8 Sep: off all member-facing surfaces (b18f1fd), relationship retained for the month-7 investor pack',0,1,'done'],
+      ['LG-87','Analytics installed','',0,0,'none'],
+      ['LG-88','Support and contact route live','DECIDED 13 Sep. contact@thesaferiseprotocol.com \\u2014 mailbox created and live. Chosen over saferise@kenorinternational.com because it matches the domain members are on; a legal page pointing at a different company domain invites the question of who they are contracting with. Kenor International B.V. remains named as the legal entity in the terms text. Code replacement is Part B of the next pass',1,0,'part'],
+      ['LG-89','Every statistic on the site carries a citation','',0,0,'none'],
+      ['LG-90','Full credibility-rule sweep of live copy','PARTIAL SR-357. The banned-vocabulary half is done — repo-wide grep for frequency, quantum, manifest, rewire, attracting, vibration returns zero live hits. The positive half, Porges and HeartMath leading the credibility order, is not yet verified',1,0,'part'],
+      ['LG-135','Track — Sex & Intimacy prospectus','Prospectus rewritten in house format 8 Sep — ten protocols, overlap control against t2-05, provisioning matrix, safety rules, two new conditional resources. Clinical co-development named as a dependency',0,0,'part'],
+      ['LG-137','Track — Executive Presence prospectus','SCOPED AND READY FOR PRODUCTION. Ten protocols at v3, scored 23.4 of 25, nothing below 21, titles finalised: Self-Disqualification, The First Hire, Peer to Boss, Losing the Craft, The Promised Number, Asking for More, Letting Someone Go, Carrying What They Told You, What It Is Costing at Home, Role Drift. 65 per cent reuse, highest ACV in the portfolio at EUR 18,000, cheapest build. Ranked first for build in docs/VERTICAL-TRACK-RECOMMENDATIONS.md',0,0,'part'],
+      ['LG-138','Six new conditional resources scoped','Six across the three new tracks: Desire Check, Consent and Boundaries, Others in Your Material, Scope of Claim, The Hard Message, and the referral resource for leaders. The universal nine are unchanged',0,0,'none'],
+      ['LG-108','Commits pushed to production','RESOLVED 13 Sep. Production confirmed byte-identical to local for key files \\u2014 the commits went up, apparently via the GitHub Desktop commit. SR-373 to SR-380 are live. SR-381 (b5a6f5a) is committed locally and unpushed',1,0,'done'],
+      ['LG-109','Handover documents under version control','docs/SAFERISE-HANDOVER-2026-09-07.md, docs/handover/, docs/MARKET-INTEL-sound-frequency-segment.md and tools/check.py are untracked. The documents the next session inherits are outside git',0,0,'none'],
+      ['LG-147','Four coming-soon band images at 1200 x 640','Executive Presence placed as band-03. Five hero banners produced and wired: anxiety-reset (light, full bleed), relationship-healing, professional-performance, clearing, live-session. band-anxiety-reset-wide.jpg was missing and is delivered with the method pass. Seven method-page images still to source',0,0,'part'],
+      ['LG-232','Site photography manifest','SUPERSEDED 13 Sep by an audit. IMAGE-MANIFEST-PHOTOGRAPHY.md (IMG-200-231) was written without checking what exists and specified images the site already has \\u2014 DO NOT GENERATE FROM IT. Audit found 428 images on hand and 19 unresolved references, of which only SIX need generating. Replacement spec is IMAGE-PROVISIONING-GAPS.md',0,0,'done'],
+      ['LG-233','Six images to provision','AUDITED 13 Sep. assets/pages/plans-hero.jpg, assets/method/m-attention.jpg, m-vessel.jpg, m-built.jpg, m-outward.jpg, assets/method/res-somatic.jpg. Casting brief, grade and rejection criteria in IMAGE-PROVISIONING-GAPS.md. Four of the six contain a person \\u2014 judge diversity across the SET, not per image',0,0,'none'],
+      ['LG-255','Founder portrait','13 Sep. A generated portrait was produced first and rejected \\u2014 on the page carrying the founder account, a synthetic likeness would undermine the one asset the platform cannot rebuild. Replaced with a real photograph, cropped to 4:5 at 1600x2000, background darkened and de-blued so it sits on the near-black warm ground, grain added. assets/img-225-founder-dark.jpg and .webp, plus a 1200 square. NOTE: the image reads professional rather than personal \\u2014 suit against glass \\u2014 so the About copy beside it should carry the warmth the picture does not',0,0,'part'],
+      ['LG-256','Two repos on one machine','RESOLVED 14 Sep. ~/dev/saferise was a stale mirror at SR-378 holding organisations.html plus two docs, built there by another tool. The three untracked files were rsynced across with --ignore-existing; the five MODIFIED tracked files were deliberately not copied, since they sat on SR-378 and would have reverted six passes. Stale repo deleted. Consequence: if organisations.html depended on edits in those files, those edits are gone',0,0,'done'],
+      ['LG-257','organisations.html built outside the design system','Arrived with 88 sr-org-* class references and NO stylesheet defining them — css/saferise-organisations.css never existed, so the page rendered as unstyled default-serif text. Not linked from anywhere, so never publicly broken. SR-385 reconciled it onto the system. data-sr-org-tab / -panel were dead because their handler lived in the deleted saferise-system.js',0,0,'done'],
+      ['LG-258','Department tabs do nothing when clicked','DID NOT REPRODUCE, SR-390. SR-385 had already shipped a complete working inline tablist handler in organisations.html — not the deleted saferise-system.js handler the brief blamed. Click, ArrowRight, Home and End all move focus and aria-selected correctly; git status confirms this is the shipped state, not a stray edit. Reported as DIFFERS rather than re-fixing working code. One real gap closed: the tablist\'s .3s transition was not exempted in the central reduced-motion block',1,0,'done'],
+      ['LG-259','Seats-in-use commitment published, unbacked','RESOLVED, SR-388. The quarterly seats-in-use commitment removed and replaced with the no-individual-reporting sentence. Confirmed by grep it existed in exactly one place sitewide',1,0,'done'],
+      ['LG-260','Headcount waterfall bands','RESOLVED, SR-388. Five bands plus a EUR 6,000 minimum, published with five worked examples as a row-based .sr-org-waterfall component rather than a table, so it stays readable at 390px without horizontal scroll. No headline number published',0,0,'done'],
+      ['LG-261','Layout defects on organisations.html','RESOLVED, SR-389 — and the five reported symptoms traced to ONE root cause. A page-wide .sr-org-page p{margin:0} reset was outranking every single-class closing-line rule, silently zeroing their margins whatever value was written. That is why the operating-layer line read as nested under column 01. Fixed by raising each rule\'s specificity rather than touching the shared reset. Found four more affected elements the brief never named',0,0,'done'],
+      ['LG-262','Eight core tracks, five unshipped','APPLIED, SR-388 — but see LG-273. The curriculum grid was showing seven with no in-development markers despite its own note saying there should be some. Now eight with markers',0,0,'done'],
+      ['LG-263','Sleep & Recovery identified as the largest content gap','Strongest mechanistic evidence of any substrate input, least stigmatised corporate entry point, named in three of the six sector bundles, and entirely unbuilt. Ten protocols drafted. Recommended to build first because it ships without waiting on a clinician and strengthens every bundle',0,0,'none'],
+      ['LG-264','Vocabulary rule unenforceable at current scope','SR-384 swept the site and found ~608 occurrences of practice/practise across 25 files — core resource vocabulary, not stray usage. The five named product-surface instances were fixed. A prohibition at that scale will resurface in every pass; a narrowed rule scoping it to product, navigation and marketing surfaces, with resource body copy exempt, is to be proposed for CLAUDE.md',0,0,'none'],
+      ['LG-265','No node in the agent sandbox','RESOLVED, SR-388. tools/check-sitemap.py built and run. It works and immediately surfaced real divergence — see LG-274',0,0,'done'],
+      ['LG-266','Founder portrait and about page','Portrait graded to assets/img-225-founder-dark.jpg (1600x2000, warmed, de-blued, grain). A generated portrait was produced first and rejected — a synthetic likeness on the page carrying the founder account would undermine the one asset the platform cannot rebuild. SR-382 found about.html has NO image element and no founder content at all despite its own title promising one',0,0,'part'],
+      ['LG-267','Investor deck and financial model','Consolidated 36-slide deck built, merging the pitch deck and the GTM deck with tonight material: the three-layer model, sector bundles, core library, operating leverage, two raise paths. Financial model in xlsx, 387 formulas, zero errors. Canonical figures: 2,316 hours, $202,860 replacement cost, 30 protocols, 308 resources, 151,773 words. ARR corrected to EUR 5M+. Raise sized at EUR 350,000 to breakeven, or EUR 500,000 to EUR 1.7M in year two',0,0,'done'],
+      ['LG-268','Fix-register Highest ID pointer thirteen passes stale','RESOLVED, SR-387. The pointer was stuck at SR-372 through thirteen passes. Now current at SR-390',0,0,'done'],
+      ['LG-269','Twenty-three new image slots from tonight','Core library cards x8 (1200x800, subject in the right third, object-position 72% 30%), organisations hero plus six sector panels (2400x1000 / 1400x1000), plans hero plus three track bands plus three live-session cards, four deck slides. Plus five method-page images still outstanding. Specifications and per-track casting in IMAGE-INVENTORY-14SEP.md',0,0,'none'],
+      ['LG-270','Two cover sets off-register against the casting brief','Relationship Healing covers are couples on beaches at sunset, which the brief explicitly bans. Professional Performance covers are all suits and glass towers, the most corporate set on the site and off-register against lively and contemporary. Both need replacing rather than provisioning',0,0,'none'],
+      ['LG-271','Dead #journey fragment','SR-351 found showMain() fires correctly but its #journey fragment target does not exist anywhere on the page. Confirmed pre-existing, absent from backups predating that pass. Never logged until now',0,0,'none'],
+      ['LG-272','Four passes queued in one instruction','All four passes complete and committed locally, none pushed. SR-387 defect sweep (60239d2), SR-388 organisations pricing and tracks (f905608), SR-389 organisations layout (2af2c2b), SR-390 organisations tabs (ed5f8ce)',0,0,'done'],
+      ['LG-273','Sleep & Recovery is promised nowhere else','SR-388 applied the eight-track list as instructed and flagged a real gap: Sleep & Recovery exists NOWHERE else in the codebase — not on coming-soon.html, not in content/tracks.js, not in SR-386 nav-teaser accounting, which counts a DIFFERENT set of eight. The organisations page now promises a track no other page mentions. Either it joins the roadmap properly or it comes off that grid',1,0,'none'],
+      ['LG-274','Sitemap and generator have diverged','tools/check-sitemap.py found two genuine disagreements on first run: /organisations and /pricing are missing from sitemap.xml despite not matching any exclusion rule, and 30 /protocols/* URLs are IN the sitemap that the current generator cannot produce from disk. Reported, not regenerated',1,0,'none'],
+      ['LG-275','assets/brand/logo.png genuinely missing','SR-387 found this is not a path bug — only pangolin.svg exists. Reported rather than invented a fix',0,0,'none'],
+      ['LG-276','Four of five unshipped tracks already have imagery','SR-388 found the brief assumption wrong: Executive Presence, Embodied Nutrition, Strength & Return and Elevation Series each have their own dedicated band photo already built for coming-soon.html, not borrowed from a shipped track. Only Sleep & Recovery has none anywhere. This is the third time an image brief premise has proved wrong — check assets/ before asserting a gap',0,0,'done'],
+      ['LG-277','--gold-lt token duplicated','#ECC96A against #E8C877 on a shared global token. Unrelated to loading states and too broad-impact to change inside a defect sweep. Flagged by SR-387 for its own pass',0,0,'none'],
+      ['LG-278','Dead space under resource content could not be reproduced','SR-387 investigated thoroughly across eight resource types with screenshots and computed styles. The gap analysis was a false positive — closeblock legitimate height accounts for it fully. Reported as not reproduced rather than chased further',0,0,'done'],
+      ['LG-234','Thirteen broken image references','CODE FIX, not a production job. Ten protocol cover references use assets/covers/t1-01.jpg through t1-10.jpg, but covers resolve at runtime BY POSITION as covers/05.jpg with no track prefix \\u2014 the files exist, the references do not match them. Also assets/brand/logo.png, assets/anxiety-hero.webp and a template literal assets/covers/NN.jpg. Resolve each against disk and report any that genuinely has no file behind it',0,0,'none'],
+      ['LG-235','Relationship Healing covers are off-register','Ten live covers show couples embracing on beaches at sunset in golden light \\u2014 precisely the imagery the casting brief excludes, and it reads as stock romance rather than as this product. Not a missing file. Regenerating ten covers is a real job and a separate decision',0,0,'none'],
+      ['LG-218','Machine disk at 100 per cent capacity','ROOT CAUSE of a long run of git failures 13 Sep. ~350MB free on a 228GB drive. Produced fatal: mmap failed, ENOSPC, a 40-minute commit, and a corrupted index. Bin emptied, recovered to ~2.5GB. Still tight for a repo that materialises every file on demand',1,0,'part'],
+      ['LG-219','Repo sits on an iCloud-synced path','~/Documents/GitHub/saferise is inside the Desktop and Documents sync area, so every file a git operation touches is lazily fetched through macOS FileProvider. Measured cause of the slow commits, not a git fault. The move to ~/dev was decided months ago and never executed',1,0,'none'],
+      ['LG-220','Git index corruption \\\\u2014 recovered','13 Sep. Three processes \\u2014 GitHub Desktop, Claude Code and the terminal \\u2014 took turns holding .git/index.lock. Removing the lock under a running commit corrupted the index. Recovered with git read-tree HEAD. git fsck --full then returned CLEAN: exit 0, no missing or broken objects, 9 dangling objects which are ordinary. Damage was confined to .git/index. LESSON: one git process at a time on this repo',0,0,'done'],
+      ['LG-248','SR-379 verification ran against a mirror, not the live tree','RESOLVED as diagnosis, 13 Sep. The mirror was not the real problem \\u2014 SR-379\'s reader was built onto the WRONG FILE. index.html works when opened directly; the member\'s route goes to resource.html via an iframe. RULE: verification runs against the live tree AND through the route a member actually takes, not by opening a file',1,0,'done'],
+      ['LG-249','SR-380 landed split across two commits','RESOLVED, SR-387. SR-380\'s register entry verified accurate against the real commit hashes. No change needed',0,0,'done'],
+      ['LG-250','SR-381 work is unverified','RESOLVED. SR-383 (3af3a7e) rebuilt all three track landing pages from the approved mockups as one shared template and verified them live. It also corrected two of this brief\'s own premises: the \'39 images, none exist\' claim was wrong (real hero/band/cost/change images already sit in content/tracks.js), and it read prices from data rather than from the mockups, avoiding a \'Free a month\' string bug present in both paid-track mockups',1,0,'done'],
+      ['LG-221','Audio output excluded from version control','13 Sep. .gitignore added for audio cache, mp3 and wav. Staged file count went 127 to 16. The cache regenerates from the scripts and git keeps binaries permanently, so this had to land before any commit touching audio',0,0,'done'],
+      ['LG-154','Seven method-page images','METHOD-01..07, 1200 x 1500 4:5, each briefed with a subject and an explicit exclusion. Slot 01 must not be someone meditating, slot 04 must carry no religious iconography, slot 06 has no person in it',0,0,'none'],
+      ['LG-155','Business development assessment deck','27 slides built and validated. Adds three things the prior decks lacked: a stated ask of EUR 120,000 with use of funds, unit economics per buyer type, and five business metrics. Year one models at EUR 101,012 on four corporate annual licences; without any it is EUR 59,212',0,0,'part'],
+      ['LG-160','Affiliate terms — three figures and a legal review','Drafted at docs/affiliate-terms.md. Rate 30% for 12 months, 60-day cookie, EUR 50 threshold, all marked as decisions. Section 6 binds affiliates to the platform claim rules and needs a lawyer in the same engagement as the MOU. The application form is live on the site with none of this attached',0,0,'part'],
+      ['LG-161','Restore test — never performed','Supabase free tier retains daily backups for seven days with no point-in-time recovery. The corpus is safe in Git; the member table is the single-copy exposure. Weekly pg_dump plus one properly tested restore, roughly two hours, before the free tier opens',0,0,'none'],
+      ['LG-162','Data subject rights — three of six not built','Export, erasure and portability are absent. Manageable by hand for two accounts, not manageable once the free tier opens, and the statutory deadline is one month',0,0,'none'],
+      ['LG-164','Executive Presence — production build','Prospectus complete and ready for writing. First in the vertical build order because it is already scoped, clears procurement as leadership development rather than mental health, and carries the highest ACV at the cheapest build. Protocols 1, 9 and 10 are the ones a corporate buyer will ask to soften — they must not be softened',0,0,'none'],
+      ['LG-165','Sales & Quota — second vertical build','Ten protocols named in docs/VERTICAL-TRACK-RECOMMENDATIONS.md. Scores 24 of 25, level with Executive Presence, and carries founder authority no competitor can match. Sold from sales enablement budget, one decision-maker, weeks not quarters, never touches wellbeing procurement',0,0,'none'],
+      ['LG-166','Short-format resource — a platform capability, not a track cost','Contact Centre and Sales both need a 60-90 second between-calls format; the existing architecture assumes eleven minutes and a private space. Build once for Sales and Contact Centre inherits it. This is the cost the portfolio reuse percentages do not capture',0,0,'none'],
+      ['LG-167','Vertical ACV untested — the gate on the build wave','The portfolio assumes a vertical licence closes at EUR 14,000-18,000 rather than EUR 6,000. No vertical track exists and none has been sold. Build Executive Presence and Sales, sell one licence, then decide. Committing EUR 103,090 of build capacity against an estimate is the one genuine mistake available',1,0,'none']
+    ]]
+  ];
+
+  var state = {};
+  var openSecs = {};
+  var fGate = false, fOpen = false;
+  var $ = function(id){ return document.getElementById(id); };
+  var saveTimer = null;
+
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  function itemState(id, def){
+    if (state[id] && state[id].s) return state[id].s;
+    return def;
+  }
+
+  /* ---------- persistence ---------- */
+  function save(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      var txt = JSON.stringify(state);
+      try {
+        localStorage.setItem(KEY, txt);
+        $('saved').textContent = 'Saved ' + new Date().toLocaleTimeString();
+      } catch(e){
+        MEM = txt;
+        $('saved').textContent = 'Held for this session only — export before closing';
+      }
+    }, 220);
+  }
+
+  var MEM = null;
+
+  function load(){
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) state = JSON.parse(raw) || {};
+    } catch(e){
+      try { if (MEM) state = JSON.parse(MEM) || {}; } catch(e2){ state = {}; }
+    }
+    render();
+  }
+
+  /* ---------- export / import ---------- */
+  function exportState(){
+    var payload = JSON.stringify({ key: KEY, savedAt: new Date().toISOString(), state: state }, null, 1);
+    var b = new Blob([payload], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'saferise-tracker-state.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  function copyState(){
+    navigator.clipboard.writeText(JSON.stringify(state)).then(function(){
+      $('saved').textContent = 'State copied to clipboard';
+    });
+  }
+  function importState(){
+    var txt = prompt('Paste tracker state JSON. This merges into what is already here — rows not mentioned keep their current status.');
+    if (!txt) return;
+    var incoming;
+    try { incoming = JSON.parse(txt); } catch(e){ alert('That is not valid JSON.'); return; }
+    if (incoming && incoming.state) incoming = incoming.state;
+    var n = 0;
+    for (var k in incoming){ if (Object.prototype.hasOwnProperty.call(incoming,k)){ state[k]=incoming[k]; n++; } }
+    save(); render();
+    $('saved').textContent = 'Merged ' + n + ' rows';
+  }
+
+  /* ---------- render ---------- */
+  function render(){
+    var html = '';
+    DATA.forEach(function(sec, si){
+      var name = sec[0], items = sec[1];
+      var open = openSecs[si] !== undefined ? openSecs[si] : (si === 0);
+      var tot = 0, sum = 0, dn = 0;
+      items.forEach(function(it){
+        var s = itemState(it[0], it[5]);
+        if (s === 'defer') return;
+        tot++; sum += WEIGHT[s];
+        if (s === 'done') dn++;
+      });
+      var pct = tot ? Math.round(sum / tot * 100) : 100;
+
+      html += '<div class="lt-sec' + (open ? ' open' : '') + '" data-sec="' + si + '">';
+      html += '<button class="lt-sec-h" data-toggle="' + si + '"><span class="lt-chev">\u25B6</span>';
+      html += '<span class="lt-sec-t">' + esc(name) + '</span>';
+      html += '<span class="lt-sec-c">' + dn + ' / ' + tot + ' \u00b7 ' + pct + '%</span>';
+      html += '<span class="lt-sec-ring"><span style="width:' + pct + '%"></span></span></button>';
+      html += '<div class="lt-sec-b">';
+
+      items.forEach(function(it){
+        var id = it[0], nm = it[1], mt = it[2], gate = it[3], ext = it[4];
+        var s = itemState(id, it[5]);
+        var note = (state[id] && state[id].n) || '';
+        var hide = (fGate && !gate) || (fOpen && (s === 'done' || s === 'defer'));
+
+        html += '<div class="lt-row' + (hide ? ' hide' : '') + '" data-row="' + id + '">';
+        html += '<span class="lt-id">' + id + '</span>';
+        html += '<button class="lt-stat" data-s="' + s + '" data-cycle="' + id + '" title="Click to change status">' + LABEL[s] + '</button>';
+        html += '<div class="lt-main"><div class="lt-name">' + esc(nm);
+        if (gate) html += '<span class="lt-flag gate">Launch gate</span>';
+        if (ext) html += '<span class="lt-flag ext">External</span>';
+        html += '</div>';
+        if (mt) html += '<div class="lt-meta">' + esc(mt) + '</div>';
+        html += '<button class="lt-noteb" data-note="' + id + '">' + (note ? 'Note \u00b7 ' + esc(note.slice(0,44)) + (note.length > 44 ? '\u2026' : '') : '+ note') + '</button>';
+        html += '<textarea class="lt-note' + '" data-input="' + id + '" placeholder="Working note">' + esc(note) + '</textarea>';
+        html += '</div></div>';
+      });
+
+      html += '</div></div>';
+    });
+    $('secs').innerHTML = html;
+    stats();
+  }
+
+  function stats(){
+    var tot = 0, sum = 0, gatesOpen = 0, counts = {none:0,prog:0,part:0,done:0,block:0,defer:0};
+    var tallyHtml = '';
+    DATA.forEach(function(sec){
+      sec[1].forEach(function(it){
+        var s = itemState(it[0], it[5]);
+        counts[s]++;
+        if (s === 'defer') return;
+        tot++; sum += WEIGHT[s];
+        if (it[3] && s !== 'done') gatesOpen++;
+        var cls = s === 'done' ? 'done' : s === 'part' ? 'part' : s === 'prog' ? 'prog' : s === 'block' ? 'block' : '';
+        tallyHtml += '<i class="' + cls + '"></i>';
+      });
+    });
+    var pct = tot ? Math.round(sum / tot * 100) : 0;
+    $('gateNum').textContent = gatesOpen;
+    $('gateNum').className = 'lt-gate-num' + (gatesOpen === 0 ? ' clear' : '');
+    $('pctNum').textContent = pct + '%';
+    $('tally').innerHTML = tallyHtml;
+    $('tallyCap').textContent = tot + ' items in launch scope \u00b7 ' + counts.done + ' complete \u00b7 ' +
+      counts.part + ' partial \u00b7 ' + counts.prog + ' in progress \u00b7 ' + counts.block + ' blocked \u00b7 ' +
+      counts.none + ' not started' + (counts.defer ? ' \u00b7 ' + counts.defer + ' deferred out of scope' : '');
+
+    var bars = [
+      ['Complete', counts.done, 'done'],
+      ['In flight', counts.prog + counts.part, 'flight'],
+      ['Not started', counts.none, 'none'],
+      ['Blocked', counts.block, 'block']
+    ];
+    $('bars').innerHTML = bars.map(function(b){
+      var w = tot ? Math.round(b[1] / tot * 100) : 0;
+      return '<div class="lt-bar"><div class="lt-bar-n">' + b[0] + '</div><div class="lt-bar-v">' + b[1] +
+             '</div><div class="lt-bar-t"><span style="width:' + w + '%"></span></div></div>';
+    }).join('');
+  }
+
+  /* ---------- interaction ---------- */
+  $('secs').addEventListener('click', function(e){
+    var t = e.target.closest('[data-cycle]');
+    if (t){
+      var id = t.getAttribute('data-cycle');
+      var cur = t.getAttribute('data-s');
+      var next = ORDER[(ORDER.indexOf(cur) + 1) % ORDER.length];
+      if (!state[id]) state[id] = {};
+      state[id].s = next;
+      t.setAttribute('data-s', next);
+      t.textContent = LABEL[next];
+      save();
+      var sec = t.closest('.lt-sec');
+      var openIdx = sec ? sec.getAttribute('data-sec') : null;
+      DATA.forEach(function(_, i){ openSecs[i] = !!document.querySelector('.lt-sec[data-sec="' + i + '"].open'); });
+      render();
+      if (openIdx !== null){
+        var el = document.querySelector('.lt-row[data-row="' + id + '"] .lt-stat');
+        if (el) el.focus();
+      }
+      return;
+    }
+    var n = e.target.closest('[data-note]');
+    if (n){
+      var nid = n.getAttribute('data-note');
+      var ta = document.querySelector('[data-input="' + nid + '"]');
+      if (ta){ ta.classList.toggle('show'); if (ta.classList.contains('show')) ta.focus(); }
+      return;
+    }
+    var h = e.target.closest('[data-toggle]');
+    if (h){
+      var si = h.getAttribute('data-toggle');
+      var sc = document.querySelector('.lt-sec[data-sec="' + si + '"]');
+      sc.classList.toggle('open');
+      openSecs[si] = sc.classList.contains('open');
+    }
+  });
+
+  $('secs').addEventListener('input', function(e){
+    var ta = e.target.closest('[data-input]');
+    if (!ta) return;
+    var id = ta.getAttribute('data-input');
+    if (!state[id]) state[id] = {};
+    state[id].n = ta.value;
+    save();
+  });
+
+  function applyFilters(){
+    DATA.forEach(function(sec){
+      sec[1].forEach(function(it){
+        var s = itemState(it[0], it[5]);
+        var row = document.querySelector('.lt-row[data-row="' + it[0] + '"]');
+        if (!row) return;
+        var hide = (fGate && !it[3]) || (fOpen && (s === 'done' || s === 'defer'));
+        row.classList.toggle('hide', hide);
+      });
+    });
+  }
+
+  $('fGate').addEventListener('click', function(){
+    fGate = !fGate; this.classList.toggle('on', fGate);
+    if (fGate) document.querySelectorAll('.lt-sec').forEach(function(s){ s.classList.add('open'); });
+    applyFilters();
+  });
+  $('fOpen').addEventListener('click', function(){
+    fOpen = !fOpen; this.classList.toggle('on', fOpen);
+    applyFilters();
+  });
+  $('expAll').addEventListener('click', function(){
+    document.querySelectorAll('.lt-sec').forEach(function(s,i){ s.classList.add('open'); openSecs[i]=true; });
+  });
+  $('colAll').addEventListener('click', function(){
+    document.querySelectorAll('.lt-sec').forEach(function(s,i){ s.classList.remove('open'); openSecs[i]=false; });
+  });
+
+  function toast(msg){
+    var t = $('toast'); t.textContent = msg; t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+
+  $('copyBtn').addEventListener('click', function(){
+    var lines = ['# SafeRise — Launch Readiness, ' + new Date().toISOString().slice(0,10), ''];
+    var tot = 0, sum = 0, gates = [];
+    DATA.forEach(function(sec){
+      lines.push('## ' + sec[0]);
+      sec[1].forEach(function(it){
+        var s = itemState(it[0], it[5]);
+        var note = (state[it[0]] && state[it[0]].n) ? '  \u2014 ' + state[it[0]].n : '';
+        lines.push('- [' + LABEL[s] + '] ' + it[0] + ' ' + it[1] + (it[3] ? ' (LAUNCH GATE)' : '') + (it[4] ? ' (EXTERNAL)' : '') + note);
+        if (s === 'defer') return;
+        tot++; sum += WEIGHT[s];
+        if (it[3] && s !== 'done') gates.push(it[0] + ' ' + it[1]);
+      });
+      lines.push('');
+    });
+    lines.unshift('Weighted complete: ' + Math.round(sum/tot*100) + '% \u00b7 Launch gates outstanding: ' + gates.length, '');
+    var out = lines.join('\n');
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(out).then(function(){ toast('Status report copied'); })
+        .catch(function(){ toast('Copy blocked — select the page text instead'); });
+    } else { toast('Clipboard unavailable in this view'); }
+  });
+
+  $('resetBtn').addEventListener('click', function(){
+    if (this.dataset.armed === '1'){
+      state = {}; this.dataset.armed = ''; this.textContent = 'Reset'; this.classList.remove('on');
+      save(); render(); toast('Reset to starting positions');
+    } else {
+      this.dataset.armed = '1'; this.textContent = 'Reset — click again'; this.classList.add('on');
+      var b = this;
+      setTimeout(function(){ if (b.dataset.armed === '1'){ b.dataset.armed=''; b.textContent='Reset'; b.classList.remove('on'); } }, 4000);
+    }
+  });
+
+  var _b;
+  _b=$('btnExp'); if(_b) _b.addEventListener('click', exportState);
+  _b=$('btnCopy'); if(_b) _b.addEventListener('click', copyState);
+  _b=$('btnImp'); if(_b) _b.addEventListener('click', importState);
+  load();
+})();
+</script>
