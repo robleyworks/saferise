@@ -1,0 +1,1394 @@
+{
+"assets/coming/band-01.jpg": [
+1200,
+640
+],
+"assets/coming/band-01.webp": [
+1200,
+640
+],
+"assets/coming/band-02.jpg": [
+1200,
+640
+],
+"assets/coming/band-02.webp": [
+1200,
+640
+],
+"assets/coming/band-03.jpg": [
+1200,
+640
+],
+"assets/coming/band-03.webp": [
+1200,
+640
+],
+"assets/coming/band-04.jpg": [
+1200,
+640
+],
+"assets/coming/band-04.webp": [
+1200,
+640
+],
+"assets/coming/band-05.jpg": [
+1200,
+640
+],
+"assets/coming/band-05.webp": [
+1200,
+640
+],
+"assets/coming/band-06.jpg": [
+1717,
+916
+],
+"assets/coming/band-06.webp": [
+1717,
+916
+],
+"assets/coming/band-07.jpg": [
+1200,
+640
+],
+"assets/coming/band-07.webp": [
+1200,
+640
+],
+"assets/coming/band-08.jpg": [
+1200,
+640
+],
+"assets/coming/band-08.webp": [
+1200,
+640
+],
+"assets/coming/band-anxiety-reset-dark.jpg": [
+2240,
+640
+],
+"assets/coming/band-clearing.jpg": [
+1200,
+640
+],
+"assets/coming/band-live-session.jpg": [
+1200,
+640
+],
+"assets/coming/band-professional-performance.jpg": [
+1200,
+640
+],
+"assets/coming/band-relationship-healing.jpg": [
+1200,
+640
+],
+"assets/coming/band-welcome-corridor.jpg": [
+2360,
+800
+],
+"assets/coming/band-welcome-corridor.webp": [
+2360,
+800
+],
+"assets/coming/coming-hero.jpg": [
+3840,
+1200
+],
+"assets/coming/coming-hero.webp": [
+3840,
+1200
+],
+"assets/covers/01-320.jpg": [
+320,
+427
+],
+"assets/covers/01-320.webp": [
+320,
+427
+],
+"assets/covers/01-640.jpg": [
+640,
+853
+],
+"assets/covers/01-640.webp": [
+640,
+853
+],
+"assets/covers/01.jpg": [
+900,
+1200
+],
+"assets/covers/01.png": [
+1086,
+1448
+],
+"assets/covers/01.webp": [
+900,
+1200
+],
+"assets/covers/02-320.jpg": [
+320,
+427
+],
+"assets/covers/02-320.webp": [
+320,
+427
+],
+"assets/covers/02-640.jpg": [
+640,
+853
+],
+"assets/covers/02-640.webp": [
+640,
+853
+],
+"assets/covers/02.jpg": [
+900,
+1200
+],
+"assets/covers/02.png": [
+1086,
+1448
+],
+"assets/covers/02.webp": [
+900,
+1200
+],
+"assets/covers/03-320.jpg": [
+320,
+427
+],
+"assets/covers/03-320.webp": [
+320,
+427
+],
+"assets/covers/03-640.jpg": [
+640,
+853
+],
+"assets/covers/03-640.webp": [
+640,
+853
+],
+"assets/covers/03.jpg": [
+900,
+1200
+],
+"assets/covers/03.png": [
+1086,
+1448
+],
+"assets/covers/03.webp": [
+900,
+1200
+],
+"assets/covers/04-320.jpg": [
+320,
+427
+],
+"assets/covers/04-320.webp": [
+320,
+427
+],
+"assets/covers/04-640.jpg": [
+640,
+853
+],
+"assets/covers/04-640.webp": [
+640,
+853
+],
+"assets/covers/04.jpg": [
+900,
+1200
+],
+"assets/covers/04.png": [
+1086,
+1448
+],
+"assets/covers/04.webp": [
+900,
+1200
+],
+"assets/covers/05-320.jpg": [
+320,
+427
+],
+"assets/covers/05-320.webp": [
+320,
+427
+],
+"assets/covers/05-640.jpg": [
+640,
+853
+],
+"assets/covers/05-640.webp": [
+640,
+853
+],
+"assets/covers/05.jpg": [
+900,
+1200
+],
+"assets/covers/05.png": [
+1086,
+1448
+],
+"assets/covers/05.webp": [
+900,
+1200
+],
+"assets/covers/06-320.jpg": [
+320,
+427
+],
+"assets/covers/06-320.webp": [
+320,
+427
+],
+"assets/covers/06-640.jpg": [
+640,
+853
+],
+"assets/covers/06-640.webp": [
+640,
+853
+],
+"assets/covers/06.jpg": [
+900,
+1200
+],
+"assets/covers/06.png": [
+1086,
+1448
+],
+"assets/covers/06.webp": [
+900,
+1200
+],
+"assets/covers/07-320.jpg": [
+320,
+427
+],
+"assets/covers/07-320.webp": [
+320,
+427
+],
+"assets/covers/07-640.jpg": [
+640,
+853
+],
+"assets/covers/07-640.webp": [
+640,
+853
+],
+"assets/covers/07.jpg": [
+900,
+1200
+],
+"assets/covers/07.png": [
+1086,
+1448
+],
+"assets/covers/07.webp": [
+900,
+1200
+],
+"assets/covers/08-320.jpg": [
+320,
+427
+],
+"assets/covers/08-320.webp": [
+320,
+427
+],
+"assets/covers/08-640.jpg": [
+640,
+853
+],
+"assets/covers/08-640.webp": [
+640,
+853
+],
+"assets/covers/08.jpg": [
+900,
+1200
+],
+"assets/covers/08.png": [
+1086,
+1448
+],
+"assets/covers/08.webp": [
+900,
+1200
+],
+"assets/covers/09-320.jpg": [
+320,
+427
+],
+"assets/covers/09-320.webp": [
+320,
+427
+],
+"assets/covers/09-640.jpg": [
+640,
+853
+],
+"assets/covers/09-640.webp": [
+640,
+853
+],
+"assets/covers/09.jpg": [
+900,
+1200
+],
+"assets/covers/09.png": [
+1086,
+1448
+],
+"assets/covers/09.webp": [
+900,
+1200
+],
+"assets/covers/10-320.jpg": [
+320,
+427
+],
+"assets/covers/10-320.webp": [
+320,
+427
+],
+"assets/covers/10-640.jpg": [
+640,
+853
+],
+"assets/covers/10-640.webp": [
+640,
+853
+],
+"assets/covers/10.jpg": [
+900,
+1200
+],
+"assets/covers/10.png": [
+1086,
+1448
+],
+"assets/covers/10.webp": [
+900,
+1200
+],
+"assets/covers/t2-01-320.jpg": [
+320,
+427
+],
+"assets/covers/t2-01-320.webp": [
+320,
+427
+],
+"assets/covers/t2-01-640.jpg": [
+640,
+853
+],
+"assets/covers/t2-01-640.webp": [
+640,
+853
+],
+"assets/covers/t2-01.jpg": [
+1086,
+1448
+],
+"assets/covers/t2-01.webp": [
+1086,
+1448
+],
+"assets/covers/t2-02-320.jpg": [
+320,
+427
+],
+"assets/covers/t2-02-320.webp": [
+320,
+427
+],
+"assets/covers/t2-02-640.jpg": [
+640,
+853
+],
+"assets/covers/t2-02-640.webp": [
+640,
+853
+],
+"assets/covers/t2-02.jpg": [
+1086,
+1448
+],
+"assets/covers/t2-02.webp": [
+1086,
+1448
+],
+"assets/covers/t2-03-320.jpg": [
+320,
+427
+],
+"assets/covers/t2-03-320.webp": [
+320,
+427
+],
+"assets/covers/t2-03-640.jpg": [
+640,
+853
+],
+"assets/covers/t2-03-640.webp": [
+640,
+853
+],
+"assets/covers/t2-03.jpg": [
+1086,
+1448
+],
+"assets/covers/t2-03.webp": [
+1086,
+1448
+],
+"assets/covers/t2-04-320.jpg": [
+320,
+427
+],
+"assets/covers/t2-04-320.webp": [
+320,
+427
+],
+"assets/covers/t2-04-640.jpg": [
+640,
+853
+],
+"assets/covers/t2-04-640.webp": [
+640,
+853
+],
+"assets/covers/t2-04.jpg": [
+1086,
+1448
+],
+"assets/covers/t2-04.webp": [
+1086,
+1448
+],
+"assets/covers/t2-05-320.jpg": [
+320,
+427
+],
+"assets/covers/t2-05-320.webp": [
+320,
+427
+],
+"assets/covers/t2-05-640.jpg": [
+640,
+853
+],
+"assets/covers/t2-05-640.webp": [
+640,
+853
+],
+"assets/covers/t2-05.jpg": [
+1086,
+1448
+],
+"assets/covers/t2-05.webp": [
+1086,
+1448
+],
+"assets/covers/t2-06-320.jpg": [
+320,
+427
+],
+"assets/covers/t2-06-320.webp": [
+320,
+427
+],
+"assets/covers/t2-06-640.jpg": [
+640,
+853
+],
+"assets/covers/t2-06-640.webp": [
+640,
+853
+],
+"assets/covers/t2-06.jpg": [
+1086,
+1448
+],
+"assets/covers/t2-06.webp": [
+1086,
+1448
+],
+"assets/covers/t2-07-320.jpg": [
+320,
+427
+],
+"assets/covers/t2-07-320.webp": [
+320,
+427
+],
+"assets/covers/t2-07-640.jpg": [
+640,
+853
+],
+"assets/covers/t2-07-640.webp": [
+640,
+853
+],
+"assets/covers/t2-07.jpg": [
+1086,
+1448
+],
+"assets/covers/t2-07.webp": [
+1086,
+1448
+],
+"assets/covers/t2-08-320.jpg": [
+320,
+427
+],
+"assets/covers/t2-08-320.webp": [
+320,
+427
+],
+"assets/covers/t2-08-640.jpg": [
+640,
+853
+],
+"assets/covers/t2-08-640.webp": [
+640,
+853
+],
+"assets/covers/t2-08.jpg": [
+1086,
+1448
+],
+"assets/covers/t2-08.webp": [
+1086,
+1448
+],
+"assets/covers/t2-09-320.jpg": [
+320,
+427
+],
+"assets/covers/t2-09-320.webp": [
+320,
+427
+],
+"assets/covers/t2-09-640.jpg": [
+640,
+853
+],
+"assets/covers/t2-09-640.webp": [
+640,
+853
+],
+"assets/covers/t2-09.jpg": [
+1086,
+1448
+],
+"assets/covers/t2-09.webp": [
+1086,
+1448
+],
+"assets/covers/t2-10-320.jpg": [
+320,
+427
+],
+"assets/covers/t2-10-320.webp": [
+320,
+427
+],
+"assets/covers/t2-10-640.jpg": [
+640,
+853
+],
+"assets/covers/t2-10-640.webp": [
+640,
+853
+],
+"assets/covers/t2-10.jpg": [
+1086,
+1448
+],
+"assets/covers/t2-10.webp": [
+1086,
+1448
+],
+"assets/covers/t3-01-320.jpg": [
+320,
+427
+],
+"assets/covers/t3-01-320.webp": [
+320,
+427
+],
+"assets/covers/t3-01-640.jpg": [
+640,
+853
+],
+"assets/covers/t3-01-640.webp": [
+640,
+853
+],
+"assets/covers/t3-01.jpg": [
+1086,
+1448
+],
+"assets/covers/t3-01.webp": [
+1086,
+1448
+],
+"assets/covers/t3-02-320.jpg": [
+320,
+427
+],
+"assets/covers/t3-02-320.webp": [
+320,
+427
+],
+"assets/covers/t3-02-640.jpg": [
+640,
+853
+],
+"assets/covers/t3-02-640.webp": [
+640,
+853
+],
+"assets/covers/t3-02.jpg": [
+1086,
+1448
+],
+"assets/covers/t3-02.webp": [
+1086,
+1448
+],
+"assets/covers/t3-03-320.jpg": [
+320,
+427
+],
+"assets/covers/t3-03-320.webp": [
+320,
+427
+],
+"assets/covers/t3-03-640.jpg": [
+640,
+853
+],
+"assets/covers/t3-03-640.webp": [
+640,
+853
+],
+"assets/covers/t3-03.jpg": [
+1086,
+1448
+],
+"assets/covers/t3-03.webp": [
+1086,
+1448
+],
+"assets/covers/t3-04-320.jpg": [
+320,
+427
+],
+"assets/covers/t3-04-320.webp": [
+320,
+427
+],
+"assets/covers/t3-04-640.jpg": [
+640,
+853
+],
+"assets/covers/t3-04-640.webp": [
+640,
+853
+],
+"assets/covers/t3-04.jpg": [
+1086,
+1448
+],
+"assets/covers/t3-04.webp": [
+1086,
+1448
+],
+"assets/covers/t3-05-320.jpg": [
+320,
+427
+],
+"assets/covers/t3-05-320.webp": [
+320,
+427
+],
+"assets/covers/t3-05-640.jpg": [
+640,
+853
+],
+"assets/covers/t3-05-640.webp": [
+640,
+853
+],
+"assets/covers/t3-05.jpg": [
+1086,
+1448
+],
+"assets/covers/t3-05.webp": [
+1086,
+1448
+],
+"assets/covers/t3-06-320.jpg": [
+320,
+427
+],
+"assets/covers/t3-06-320.webp": [
+320,
+427
+],
+"assets/covers/t3-06-640.jpg": [
+640,
+853
+],
+"assets/covers/t3-06-640.webp": [
+640,
+853
+],
+"assets/covers/t3-06.jpg": [
+1086,
+1448
+],
+"assets/covers/t3-06.webp": [
+1086,
+1448
+],
+"assets/covers/t3-07-320.jpg": [
+320,
+427
+],
+"assets/covers/t3-07-320.webp": [
+320,
+427
+],
+"assets/covers/t3-07-640.jpg": [
+640,
+853
+],
+"assets/covers/t3-07-640.webp": [
+640,
+853
+],
+"assets/covers/t3-07.jpg": [
+1086,
+1448
+],
+"assets/covers/t3-07.webp": [
+1086,
+1448
+],
+"assets/covers/t3-08-320.jpg": [
+320,
+427
+],
+"assets/covers/t3-08-320.webp": [
+320,
+427
+],
+"assets/covers/t3-08-640.jpg": [
+640,
+853
+],
+"assets/covers/t3-08-640.webp": [
+640,
+853
+],
+"assets/covers/t3-08.jpg": [
+1086,
+1448
+],
+"assets/covers/t3-08.webp": [
+1086,
+1448
+],
+"assets/covers/t3-09-320.jpg": [
+320,
+427
+],
+"assets/covers/t3-09-320.webp": [
+320,
+427
+],
+"assets/covers/t3-09-640.jpg": [
+640,
+853
+],
+"assets/covers/t3-09-640.webp": [
+640,
+853
+],
+"assets/covers/t3-09.jpg": [
+1086,
+1448
+],
+"assets/covers/t3-09.webp": [
+1086,
+1448
+],
+"assets/covers/t3-10-320.jpg": [
+320,
+427
+],
+"assets/covers/t3-10-320.webp": [
+320,
+427
+],
+"assets/covers/t3-10-640.jpg": [
+640,
+853
+],
+"assets/covers/t3-10-640.webp": [
+640,
+853
+],
+"assets/covers/t3-10.jpg": [
+1086,
+1448
+],
+"assets/covers/t3-10.webp": [
+1086,
+1448
+],
+"assets/dashboard/clearing-tile.jpg": [
+900,
+600
+],
+"assets/dashboard/clearing-tile.webp": [
+900,
+600
+],
+"assets/dashboard/journal-banner.jpg": [
+1000,
+260
+],
+"assets/dashboard/journal-banner.webp": [
+1000,
+260
+],
+"assets/dashboard/left-off-tile.jpg": [
+900,
+600
+],
+"assets/dashboard/left-off-tile.webp": [
+900,
+600
+],
+"assets/dashboard/state-banner.jpg": [
+1200,
+300
+],
+"assets/dashboard/state-banner.webp": [
+1200,
+300
+],
+"assets/extracted/45774db62956cedb.jpg": [
+900,
+1200
+],
+"assets/extracted/45774db62956cedb.webp": [
+900,
+1200
+],
+"assets/frameworks/band-heartmath.jpg": [
+2680,
+720
+],
+"assets/frameworks/band-heartmath.webp": [
+2680,
+720
+],
+"assets/frameworks/band-jung.jpg": [
+2680,
+720
+],
+"assets/frameworks/band-jung.webp": [
+2680,
+720
+],
+"assets/frameworks/band-kross.jpg": [
+2680,
+720
+],
+"assets/frameworks/band-kross.webp": [
+2680,
+720
+],
+"assets/frameworks/band-mate.jpg": [
+2680,
+720
+],
+"assets/frameworks/band-mate.webp": [
+2680,
+720
+],
+"assets/frameworks/band-porges.jpg": [
+2680,
+720
+],
+"assets/frameworks/band-porges.webp": [
+2680,
+720
+],
+"assets/frameworks/band-watts.jpg": [
+2680,
+720
+],
+"assets/frameworks/band-watts.webp": [
+2680,
+720
+],
+"assets/frameworks/guided-session.jpg": [
+1340,
+420
+],
+"assets/frameworks/guided-session.webp": [
+1340,
+420
+],
+"assets/frameworks/range-photograph.jpg": [
+1340,
+300
+],
+"assets/frameworks/range-photograph.webp": [
+1340,
+300
+],
+"assets/frameworks/tile-heartmath.png": [
+400,
+400
+],
+"assets/frameworks/tile-heartmath.webp": [
+400,
+400
+],
+"assets/frameworks/tile-jung.png": [
+400,
+400
+],
+"assets/frameworks/tile-jung.webp": [
+400,
+400
+],
+"assets/frameworks/tile-kross.png": [
+400,
+400
+],
+"assets/frameworks/tile-kross.webp": [
+400,
+400
+],
+"assets/frameworks/tile-mate.png": [
+400,
+400
+],
+"assets/frameworks/tile-mate.webp": [
+400,
+400
+],
+"assets/frameworks/tile-porges.png": [
+400,
+400
+],
+"assets/frameworks/tile-porges.webp": [
+400,
+400
+],
+"assets/frameworks/tile-watts.png": [
+400,
+400
+],
+"assets/frameworks/tile-watts.webp": [
+400,
+400
+],
+"assets/galaxy/t0-00-clear.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t0-00-field.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t0-00-subject.png": [
+1920,
+1080
+],
+"assets/galaxy/t1-04-clear.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t1-04-field.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t1-04-subject.png": [
+1920,
+1080
+],
+"assets/galaxy/t1-10-clear.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t1-10-field.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t1-10-subject.png": [
+1920,
+1080
+],
+"assets/galaxy/t2-09-clear.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t2-09-field.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t2-09-subject.png": [
+1920,
+1080
+],
+"assets/galaxy/t3-02-clear.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-02-field.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-02-subject.png": [
+1920,
+1080
+],
+"assets/galaxy/t3-05-clear.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-05-field.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-05-subject.png": [
+1920,
+1080
+],
+"assets/galaxy/t3-07-clear.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-07-field.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-07-subject.png": [
+1920,
+1080
+],
+"assets/galaxy/t3-08-clear.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-08-field.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-08-subject.png": [
+1920,
+1080
+],
+"assets/galaxy/t3-09-clear.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-09-field.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-09-subject.png": [
+1920,
+1080
+],
+"assets/galaxy/t3-10-clear.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-10-field.jpg": [
+1920,
+1080
+],
+"assets/galaxy/t3-10-subject.png": [
+1920,
+1080
+],
+"assets/home/door-t1.jpg": [
+1086,
+1448
+],
+"assets/home/door-t1.webp": [
+1086,
+1448
+],
+"assets/home/door-t2.jpg": [
+1086,
+1448
+],
+"assets/home/door-t2.webp": [
+1086,
+1448
+],
+"assets/home/door-t3.jpg": [
+1086,
+1448
+],
+"assets/home/door-t3.webp": [
+1086,
+1448
+],
+"assets/home/film-poster.jpg": [
+2400,
+1350
+],
+"assets/home/film-poster.webp": [
+2400,
+1350
+],
+"assets/home/hero-film.jpg": [
+3840,
+1600
+],
+"assets/home/hero-film.webp": [
+3840,
+1600
+],
+"assets/home/panel-t1.jpg": [
+2400,
+1000
+],
+"assets/home/panel-t1.webp": [
+2400,
+1000
+],
+"assets/home/panel-t2.jpg": [
+2400,
+1000
+],
+"assets/home/panel-t2.webp": [
+2400,
+1000
+],
+"assets/home/panel-t3.jpg": [
+2400,
+1000
+],
+"assets/home/panel-t3.webp": [
+2400,
+1000
+],
+"assets/journey/t1-band.jpg": [
+1400,
+380
+],
+"assets/journey/t1-band.webp": [
+1400,
+380
+],
+"assets/journey/t2-band.jpg": [
+1400,
+380
+],
+"assets/journey/t2-band.webp": [
+1400,
+380
+],
+"assets/journey/t3-band.jpg": [
+1400,
+380
+],
+"assets/journey/t3-band.webp": [
+1400,
+380
+],
+"assets/media-15.webp": [
+1600,
+892
+],
+"assets/media-16.webp": [
+1600,
+892
+],
+"assets/media-17.webp": [
+1600,
+892
+],
+"assets/media-18.webp": [
+1600,
+892
+],
+"assets/media-19.webp": [
+1600,
+892
+],
+"assets/media-20.webp": [
+1600,
+892
+],
+"assets/media-21.webp": [
+1600,
+892
+],
+"assets/media-22.webp": [
+1600,
+892
+],
+"assets/media-23.webp": [
+1600,
+892
+],
+"assets/pt/protocols/anxiety-journey.webp": [
+2172,
+724
+],
+"assets/sessions/calendar.jpg": [
+900,
+450
+],
+"assets/sessions/calendar.webp": [
+900,
+450
+],
+"assets/sessions/premium-1on1.jpg": [
+900,
+450
+],
+"assets/sessions/premium-1on1.webp": [
+900,
+450
+],
+"assets/sessions/workshops.jpg": [
+900,
+450
+],
+"assets/sessions/workshops.webp": [
+900,
+450
+],
+"assets/shared/four-steps.jpg": [
+1600,
+500
+],
+"assets/shared/four-steps.webp": [
+1600,
+500
+],
+"assets/sr-v23-somatic-transparent-illustrations.webp": [
+1600,
+892
+],
+"assets/t1/change.jpg": [
+1600,
+700
+],
+"assets/t1/change.webp": [
+1600,
+700
+],
+"assets/t1/cost.jpg": [
+1600,
+700
+],
+"assets/t1/cost.webp": [
+1600,
+700
+],
+"assets/t1/hero.jpg": [
+2400,
+1000
+],
+"assets/t1/hero.webp": [
+2400,
+1000
+],
+"assets/t1/range.jpg": [
+1600,
+600
+],
+"assets/t1/range.webp": [
+1600,
+600
+],
+"assets/t2/change.jpg": [
+1600,
+700
+],
+"assets/t2/change.webp": [
+1600,
+700
+],
+"assets/t2/cost.jpg": [
+1600,
+700
+],
+"assets/t2/cost.webp": [
+1600,
+700
+],
+"assets/t2/hero.jpg": [
+2400,
+1000
+],
+"assets/t2/hero.webp": [
+2400,
+1000
+],
+"assets/t2/range.jpg": [
+1600,
+600
+],
+"assets/t2/range.webp": [
+1600,
+600
+],
+"assets/t3/change.jpg": [
+1600,
+700
+],
+"assets/t3/change.webp": [
+1600,
+700
+],
+"assets/t3/cost.jpg": [
+1600,
+700
+],
+"assets/t3/cost.webp": [
+1600,
+700
+],
+"assets/t3/hero.jpg": [
+2400,
+1000
+],
+"assets/t3/hero.webp": [
+2400,
+1000
+],
+"assets/t3/range.jpg": [
+1600,
+600
+],
+"assets/t3/range.webp": [
+1600,
+600
+]
+}
