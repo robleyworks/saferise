@@ -1,139 +1,154 @@
-# `~/Desktop/Unused Images` — reviewed 19 September
+# Desktop image libraries vs the provisioning manifest — complete, 19 September
 
-Checked against `docs/IMAGE-PROVISIONING-2026-09-19.csv` to find work that is
-already done. 137 files: 70 PNG, 66 JPG.
+Supersedes the partial review of the same date. Every file in
+`~/Desktop/Unused Images` (137) and `~/Desktop/used images` (143, including
+five nested `IMAGES/` sub-folders) has now been measured, and cross-referenced
+against the 77 rows of `docs/IMAGE-PROVISIONING-2026-09-19.csv` and the 348
+files in `assets/`.
 
-**Headline: it does not reduce tomorrow's shoot.** Every candidate for the five
-upscaled and three soft-on-retina files is at the *same* resolution as the copy
-already shipping, or below target. There are three genuine upgrades and a set of
-unallocated art, listed below.
-
-**This review is partial.** Many files are iCloud placeholders that are not
-downloaded — 5 of 40 in the first batch, 8 of 12 in the second — and cannot be
-read until they are opened in Finder. Everything in the "not yet reviewable"
-section below is unassessed.
+The earlier review was blocked by iCloud placeholders. They are downloaded and
+every file read cleanly.
 
 ---
 
-## 1 · Exact duplicates — already shipping, identical dimensions
+## Verdict in one line
 
-No action. These are copies of live assets, not newer masters.
+**Tomorrow's list drops from 14 assets to 9.** Three MISSING rows can be filled
+from art already sitting on the Desktop. The five UPSCALED and three
+SOFT-RETINA rows still need new masters — one of them now has a better source
+than the manifest assumed. The 63 galaxy rows are untouched.
 
-| Unused file | Dimensions | Site file | Site has |
+The review also turned up **~7 MB of oversized JPEG fallbacks shipping today**
+that nothing in the audit had flagged.
+
+---
+
+## 1 · MISSING — all three closeable from existing art
+
+The manifest calls these "new art". They are not: the library holds usable
+candidates at or above the required resolution. What is needed is an art pick,
+not a shoot.
+
+**How the coming-soon bands are built.** Every band on disk is 1200×640, and
+the masters they were cut from are **1717×916 PNGs** — confirmed because
+`Unused Images/hero-04.png` and `used images/ban-04.png` are byte-identical
+(2,145,292 bytes), and `assets/coming/band-06.jpg` was shipped at 1717×916
+without being resized. There are **eight unallocated masters at exactly that
+size**, plus five wider plates that exceed the target and can be cropped down.
+
+| Row | Target | Recommended candidate | Why |
 |---|---|---|---|
-| `panel-t1.jpg` `panel-t2.jpg` `panel-t3.jpg` | 2400×1000 | `assets/home/panel-t*` | 2400×1000 |
-| `film-poster.jpg` | 2400×1350 | `assets/home/film-poster` | 2400×1350 |
-| `hero-film.jpg` | 3840×1600 | `assets/home/hero-film` | 3840×1600 |
-| `coming-hero.jpg` | 3840×1200 | `assets/coming/coming-hero` | 3840×1200 |
-| `hero.jpg` | 2400×1000 | `assets/t1/hero` | 2400×1000 |
-| `change.jpg` `cost.jpg` | 1600×700 | `assets/t1/change` `cost` | 1600×700 |
-| `calendar.jpg` `workshops.jpg` `premium-1on1.jpg` | 900×450 | `assets/sessions/*` | 900×450 |
-| `clearing-tile.jpg` `left-off-tile.jpg` | 900×600 | `assets/dashboard/*` | 900×600 |
-| `band-clearing-asis.jpg` | 1200×640 | `assets/coming/band-clearing.jpg` | 1200×640 |
-| `door-t1.jpg`, `door-t1 copy.jpg`, `door-t3.png` | 1086×1448 | `assets/home/door-t1` | 1086×1448 |
+| `coming/band-09` | 1200×640 | `Codex Image 13 Sept 2026, 22_58_03.png` **1920×819** | man on a headland at sunrise, arms open. Reads as Rise; matches band-08's single-subject cinematic register |
+| | | alt: `hero-06.png` **1717×916** | man in a doorway with a gym bag, dawn light — same register, exact master size |
+| | | alt: `Codex 4 Sept 17_56_22.png` **1717×916** | friends on a roof terrace at night, warm |
+| `anxiety-hero.webp` | 1200×640 | `exec-593163c0-….png` **1983×793** | a hand resting on a bare arm, sunlit — self-soothing, no face, works under a scrim |
+| `method/res-somatic.jpg` | 1200×640 | `used images/exec-7caaf864-….png` **1672×941** | seated woman, hand at her middle, low light — literally the somatic resource |
 
-Several carry `1`-suffixed twins (`change1.jpg`, `cost1.jpg`, `hero1.jpg`,
-`d-0X-…1.jpg`) that are the same image at a different compression. Nothing to
-recover from them.
+Other unallocated wide plates worth keeping for future bands:
+`exec-a71d74a4` 2048×768 (a crowded, warm social gathering) ·
+`exec-e81cb658` 2048×768 (empty sunlit interior, no people) ·
+`exec-ad63514a` 1919×820 (water caustics, pure abstract texture) ·
+`Codex 9 Sept 00_36_57` 1717×916 (gym, battle ropes).
+
+One caution: `Codex Image 2 Sept 2026, 03_54_45.png` is a **four-up contact
+sheet** with `home-01.jpg`…`home-03.jpg` burnt into the corners, not a usable
+frame. Several of the 1536×1024 and 1254×1254 batches are the same — check
+before allocating any file from this library.
 
 ---
 
-## 2 · Does NOT solve the upscale problem — confirm before shooting
+## 2 · UPSCALED — one improves, four unchanged
 
-These are the files the audit flagged as rendered larger than source. The
-unused folder has same-size copies, not bigger ones. **Still needs a new
-master or a re-shoot.**
-
-| Provisioning need | Target | Unused folder has | Verdict |
+| Row | Target | Best source found | Verdict |
 |---|---|---|---|
-| `journey/t3-band` | 2880×908 | `t3-band.jpg` **1400×380** | identical to live — no help |
-| `journey/t1-band` | 2880×908 | `journey.jpg` 1400×583 | different crop, still under |
-| `dashboard/state-banner` | 1920×480 | `state-banner.jpg`, `d-08-state-range-banner.jpg` both **1200×300** | identical to live — no help |
-| `dashboard/journal-banner` | 1800×468 | `journal-banner.jpg`, `d-09-journal-banner.jpg` both **1000×260** | identical to live — no help |
-| `coming/band-professional-performance` | 2848×1584 | — | nothing |
-| `frameworks/guided-session` | 2848×864 | — | nothing |
+| `journey/t1-band` | 2880×908 | **`used images/band.jpeg` 1941×810** | **partial.** Confirmed by eye as the same triptych now shipping at 1400×380 — headphones / aeroplane window / man with a golden retriever. Corroborated by `journey/t1-band@2x.jpg`, which is 1941×527: same width, already cut from it. Re-cutting gives **1941×612 — 67% of target, up from 49%.** Better, not solved |
+| `journey/t2-band` | 2880×908 | — | **nothing.** No wider copy of the couples triptych anywhere in either folder |
+| `journey/t3-band` | 2880×908 | — | **nothing.** No wider copy of the chef / laptop / night-office triptych |
+| `coming/band-professional-performance` | 2848×1584 | — | **nothing** at that aspect above 1672px wide |
+| `frameworks/guided-session` | 2848×864 | `exec-9b0f6619-….png` 2172×724 | **not a master — a different picture.** Live is a single woman in headphones on a sofa; this is a four-panel strip of a seated man practising. A substitute if you want one, and your call, but it does not upscale the existing frame |
 
 ---
 
-## 3 · Three genuine upgrades — take these
+## 3 · SOFT-RETINA — all three unchanged
 
-| Unused file | Dimensions | Replaces | Currently | Gain |
-|---|---|---|---|---|
-| `door-t2.jpg` | **1200×1600** | `assets/home/door-t2` | 1086×1448 | +10% linear, same 0.75 aspect |
-| `door-t3.jpg` | **1200×1600** | `assets/home/door-t3` | 1086×1448 | +10% linear, same 0.75 aspect |
-| `hero-corridor.jpg` | **2400×900** | `assets/coming/band-welcome-corridor` | 2360×800 | taller crop, more room for the scrim |
-
-`range.jpg` / `range copy.jpg` at **1600×600** are bigger than the live
-`frameworks/range-photograph` at 1340×300 — but the aspect differs (2.67 vs
-4.47), so it is a different crop rather than a larger version of the same
-image. A judgement call, not a drop-in. Target remains 2584×578.
-
----
-
-## 4 · Unallocated art — provisioned but never placed
-
-Nothing on the site points at these. Worth a decision before commissioning
-anything similar.
-
-| File | Dimensions | Likely slot |
-|---|---|---|
-| `live-premium-1to1.jpg` | 1800×1100 | `live-sessions.html` — the page has offers with no art |
-| `live-online-workshop.jpg` | 1800×1100 | same |
-| `live-conference-event.jpg` | 1800×1100 | same |
-| `live-retreat.jpg`, `live-org-office.jpg`, `live-hero-remote.jpg` | — | iCloud placeholders, not yet readable |
-| `method-hero.jpg` | 2400×1000 | `method.html` hero |
-| `begin-tile.jpg` | 900×600 | dashboard tile, matches the other two at 900×600 |
-| `band-clearing-mirrored.jpg` | — | a mirrored variant of the live band |
-
----
-
-## 5 · ~66 large generated PNGs — unallocated, in dated batches
-
-`Codex Image *` (≈44) and `exec-*` (≈22), 1.6–2.7 MB each. They fall into
-aspect-ratio batches, which suggests each batch was generated for a different
-slot type:
-
-| Batch | Aspect | Sample dimensions | Reads as |
+| Row | Target | Library has | Verdict |
 |---|---|---|---|
-| 13 Sept | **1.78** (16:9) | 1671×941 | coming-soon band art — the one opened is a family-kitchen nutrition scene, matching the "Nutrition" band on `coming-soon.html` |
-| 2 Sept | 1.50 | 1536×1024 | — |
-| 4 Sept | 1.33 | 1448×1086 | — |
-| 9 Sept | **0.75** | 1086×1448 | protocol cover ratio |
-
-**Relevant to the galaxy question:** the 16:9 batch is the right *shape* for a
-galaxy plate but 1671×941 against a 1920×1080 requirement — about 13% short on
-each axis. Usable as a source to re-render from, not as a drop-in.
-
-The 0.75 batch is at exactly the protocol-cover dimension (1086×1448), so those
-may be unused cover candidates.
-
-None of these can be allocated without looking at them. That is an art
-decision, not a measurement.
+| `dashboard/state-banner` | 1920×480 | `state-banner.jpg`, `d-08-state-range-banner.jpg`, both 1200×300 | identical to live |
+| `dashboard/journal-banner` | 1800×468 | `journal-banner.jpg`, `d-09-journal-banner.jpg`, both 1000×260 | identical to live |
+| `frameworks/range-photograph` | 2584×578 | — | **nothing.** `range copy.jpg` at 2048×768 is a *different image* — live `range-photograph.jpg` is a shelf still-life (lamp, books, brass bowl); `range copy.jpg` is a three-panel portrait sequence. It belongs to `t*/range.jpg` instead — see §5 |
 
 ---
 
-## 6 · Not yet reviewable — iCloud placeholders
+## 4 · RECROP — the manifest's premise is wrong
 
-These failed to stage because macOS has not downloaded them locally. Open the
-folder in Finder and let it sync, then this review can be completed:
+`covers/01.jpg` is 900×1200, but **`assets/covers/01.png` at 1086×1448 is
+already in the repo** — a 1.18 MB portrait master. The landscape recompose to
+2000×1124 still stands, but it starts from 1086px wide, not 900. Correct the
+row.
 
-`Codex Image 9 Sept 2026, 00_32_55.png` · all sampled `exec-*.png` ·
-`hero-04.png` · `hero-06.png` · `fb0873bf-….png` · `39844b29-….png` ·
-`live-retreat.jpg` · `live-org-office.jpg` · `live-hero-remote.jpg` ·
-`method-integration.jpg` · `method-lineage.jpg` · `method-states.jpg`
+---
+
+## 5 · GALAXY — 63 rows, nothing found. Confirmed.
+
+Not a single file in either folder is 1920×1080, and nothing 16:9 exceeds
+1672×941 — 13% short on each axis. The closest batch by aspect is the six
+1672×941 files, which are the right shape and the wrong size.
+
+`used images` does hold **all 30 protocol cover masters** at 1086×1448
+(`t1-01`…`t1-10`, `t2-01`…`t2-10`, `t3-01-master`…`t3-10-master`). They are
+portrait covers, so they cannot serve a landscape plate — and in any case the
+21 protocols without galaxy art were rejected by the `separation` quality gate,
+not left undone. Track 3 stands as written.
+
+---
+
+## 6 · Not on the manifest — ~7 MB shipping today for nothing
+
+Four JPEG fallbacks on disk are raw masters that were never resized. Each has
+a correctly-sized `.webp` beside it, so the moment PASS C's `<picture>` wrapper
+lands the browser stops requesting them — but until then they are what loads:
+
+| File | On disk | Its `.webp` | Waste |
+|---|---|---|---|
+| `assets/home/door-t3.jpg` | 1086×1448, **1823 KB** | 86 KB | 1.74 MB |
+| `assets/coming/band-06.jpg` | **1717×916**, 1769 KB — the only band not resized to 1200×640 | 74 KB | 1.66 MB |
+| `assets/home/door-t2.jpg` | 1086×1448, **1745 KB** | 71 KB | 1.63 MB |
+| `assets/home/door-t1.jpg` | 1086×1448, **1645 KB** | 53 KB | 1.55 MB |
+
+Re-encoding the four at JPEG q82 costs one command and recovers most of
+**6.6 MB** even before the markup changes. `band-06.jpg` should also be
+resized to 1200×640 to match the other seven bands.
+
+---
+
+## 7 · Free upgrades — better files, already made, no shoot
+
+| Live file | Currently | Library has | Where |
+|---|---|---|---|
+| `home/door-t1.jpg` | 1086×1448 | **1200×1600** | `used images/IMAGES/saferise-home-images/door-t1.jpg` |
+| `home/door-t2.jpg` | 1086×1448 | **1200×1600** | same folder — plus `door-t2-option-a/b/c.jpg`, three alternates at 1200×1600 if you want to reconsider that door |
+| `home/door-t3.jpg` | 1086×1448 | **1200×1600** | same folder |
+| `coming/band-welcome-corridor` | 2360×800 | **2400×900** | `Unused Images/hero-corridor.jpg` |
+| `t*/change.jpg` | 1600×700 | **1897×829** | `used images/change copy 2.jpg` |
+| `t*/cost.jpg` | 1600×700 | **1819×865** | `used images/cost copy 2.jpg` |
+| `t*/range.jpg` | 1600×600 | **2048×768** | `used images/range copy.jpg` |
+
+All seven are the same image at a larger size — drop-in re-exports, not
+judgement calls. The three doors correct the earlier review, which found only
+two: masters for all three exist.
 
 ---
 
 ## What this changes for Sunday
 
-- **Track 2 does not shrink.** The five upscaled and three soft files still
-  need new masters. Do not go looking in this folder for them.
-- **Add three quick swaps** to Track 2: `door-t2`, `door-t3`, `hero-corridor`.
-  Existing files, better dimensions, no shoot required.
-- **Decide on the live-sessions art** before commissioning any — three usable
-  1800×1100 images are sitting there unplaced.
-- **Look at the 16:9 batch** before starting galaxy work. Wrong resolution to
-  drop in, but they may be the source the plates were meant to come from.
-
-There is also a `~/Desktop/used images` folder that has **not** been reviewed.
-If masters live anywhere, that is the next place to look.
+- **Track 2 drops from 14 assets to 9.** The three MISSING rows become art
+  picks from the shortlist in §1 — minutes, not a shoot.
+- **Add §6 to Track 1, before anything else.** Four `cwebp`/`cjpeg` commands,
+  6.6 MB, no markup and no artwork. It is the cheapest win in the whole image
+  programme and it was not in the audit.
+- **Add the seven §7 re-exports** — existing files, better dimensions.
+- **Still needs new masters:** `journey/t2-band`, `journey/t3-band`,
+  `coming/band-professional-performance`, both dashboard banners,
+  `frameworks/range-photograph`, both About portraits, the `covers/01` recrop.
+  `journey/t1-band` improves to 1941px but does not reach 2880.
+- **Track 3 unchanged.** No galaxy art exists in either folder.

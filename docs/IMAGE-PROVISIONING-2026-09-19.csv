@@ -1,78 +1,89 @@
-category,file,current,target_px,format,note
-MISSING,assets/coming/band-09.webp,absent,1200x640 (band) / per slot,WebP q78 + JPEG q82,"coming-soon band 09; sibling band-09.jpg is ALSO absent, so this is new art not a conversion"
-MISSING,assets/anxiety-hero.webp,absent,1200x640 (band) / per slot,WebP q78 + JPEG q82,"referenced, never created"
-MISSING,assets/method/res-somatic.jpg,absent,1200x640 (band) / per slot,WebP q78 + JPEG q82,method.html somatic resource still
-HOTLINK,assets/about/portrait-01.jpg → replaces pexels 4098997,external,2880x1518,AVIF q50 + WebP q78 + JPEG q82,about.html hero; record licence in assets/about/CREDITS.md
-HOTLINK,assets/about/portrait-02.jpg → replaces pexels 6937837,external,1024x812,WebP q78 + JPEG q82,about.html inset
-UPSCALED,assets/journey/t1-band.webp,1400x380,2880x908,WebP q78 (+JPEG fallback),currently rendered larger than source; needs a higher-res master or a re-shoot
-UPSCALED,assets/journey/t2-band.webp,1400x380,2880x908,WebP q78 (+JPEG fallback),currently rendered larger than source; needs a higher-res master or a re-shoot
-UPSCALED,assets/journey/t3-band.webp,1400x380,2880x908,WebP q78 (+JPEG fallback),currently rendered larger than source; needs a higher-res master or a re-shoot
-UPSCALED,assets/coming/band-professional-performance.jpg,1200x640,2848x1584,WebP q78 (+JPEG fallback),currently rendered larger than source; needs a higher-res master or a re-shoot
-UPSCALED,assets/frameworks/guided-session.webp,1340x420,2848x864,WebP q78 (+JPEG fallback),currently rendered larger than source; needs a higher-res master or a re-shoot
-RECROP,assets/covers/01.jpg,900x1200 portrait,2000x1124 landscape,JPEG q82,"source is PORTRAIT but displayed LANDSCAPE. Recompose, do not upscale"
-SOFT-RETINA,assets/dashboard/state-banner.webp,1200x300,1920x480,WebP q78,"fine at 1x, mushy at 2x"
-SOFT-RETINA,assets/dashboard/journal-banner.webp,1000x260,1800x468,WebP q78,"fine at 1x, mushy at 2x"
-SOFT-RETINA,assets/frameworks/range-photograph.webp,1340x300,2584x578,WebP q78,"fine at 1x, mushy at 2x"
-GALAXY,assets/galaxy/t1-01-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t1-01-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t1-01-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t1-02-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t1-02-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t1-02-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t1-03-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t1-03-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t1-03-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t1-05-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t1-05-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t1-05-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t1-06-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t1-06-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t1-06-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t1-07-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t1-07-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t1-07-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t1-08-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t1-08-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t1-08-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t1-09-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t1-09-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t1-09-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t2-01-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t2-01-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t2-01-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t2-02-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t2-02-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t2-02-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t2-03-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t2-03-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t2-03-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t2-04-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t2-04-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t2-04-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t2-05-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t2-05-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t2-05-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t2-06-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t2-06-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t2-06-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t2-07-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t2-07-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t2-07-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t2-08-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t2-08-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t2-08-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t2-10-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t2-10-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t2-10-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t3-01-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t3-01-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t3-01-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t3-03-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t3-03-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t3-03-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t3-04-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t3-04-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t3-04-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
-GALAXY,assets/galaxy/t3-06-field.jpg,absent,1920x1080,JPEG q82,blurred plate
-GALAXY,assets/galaxy/t3-06-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field
-GALAXY,assets/galaxy/t3-06-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height"
+category,file,current,target_px,format,note,source_found,source_verdict
+MISSING,assets/coming/band-09.webp,absent,1200x640 (band) / per slot,WebP q78 + JPEG q82,"coming-soon band 09; sibling band-09.jpg is ALSO absent, so this is new art not a conversion","Codex Image 13 Sept 2026, 22_58_03.png 1920x819 (Unused Images)","CLOSEABLE from library - art pick. Alts: hero-06.png 1717x916, Codex 4 Sept 17_56_22.png 1717x916"
+MISSING,assets/anxiety-hero.webp,absent,1200x640 (band) / per slot,WebP q78 + JPEG q82,"referenced, never created",exec-593163c0-d948-484c-ab76-d7e348faabcd.png 1983x793 (Unused Images),"CLOSEABLE from library - hand on arm, sunlit, no face"
+MISSING,assets/method/res-somatic.jpg,absent,1200x640 (band) / per slot,WebP q78 + JPEG q82,method.html somatic resource still,exec-7caaf864-5ae2-49fc-8c44-fb59e21d05d6.png 1672x941 (used images),"CLOSEABLE from library - seated figure, hand at torso"
+HOTLINK,assets/about/portrait-01.jpg → replaces pexels 4098997,external,2880x1518,AVIF q50 + WebP q78 + JPEG q82,about.html hero; record licence in assets/about/CREDITS.md,-,NOTHING - no portrait art in either folder
+HOTLINK,assets/about/portrait-02.jpg → replaces pexels 6937837,external,1024x812,WebP q78 + JPEG q82,about.html inset,-,NOTHING - no portrait art in either folder
+UPSCALED,assets/journey/t1-band.webp,1400x380,2880x908,WebP q78 (+JPEG fallback),currently rendered larger than source; needs a higher-res master or a re-shoot,band.jpeg 1941x810 (used images),"PARTIAL - confirmed master of the live triptych; re-cut gives 1941x612 = 67% of target, up from 49%. Still short of 2880"
+UPSCALED,assets/journey/t2-band.webp,1400x380,2880x908,WebP q78 (+JPEG fallback),currently rendered larger than source; needs a higher-res master or a re-shoot,-,NOTHING in either folder - new master or re-shoot
+UPSCALED,assets/journey/t3-band.webp,1400x380,2880x908,WebP q78 (+JPEG fallback),currently rendered larger than source; needs a higher-res master or a re-shoot,-,NOTHING in either folder - new master or re-shoot
+UPSCALED,assets/coming/band-professional-performance.jpg,1200x640,2848x1584,WebP q78 (+JPEG fallback),currently rendered larger than source; needs a higher-res master or a re-shoot,-,NOTHING at 1.80 aspect above 1672px wide
+UPSCALED,assets/frameworks/guided-session.webp,1340x420,2848x864,WebP q78 (+JPEG fallback),currently rendered larger than source; needs a higher-res master or a re-shoot,exec-9b0f6619-8b18-4927-999a-4b67cf03c095.png 2172x724 (used images),"DIFFERENT PICTURE, not a master - live is one woman in headphones, this is a four-panel seated man. Substitute only, Andre's call"
+RECROP,assets/covers/01.jpg,900x1200 portrait,2000x1124 landscape,JPEG q82,"source is PORTRAIT but displayed LANDSCAPE. Recompose, do not upscale",assets/covers/01.png 1086x1448 - already in repo,"SOURCE CORRECTION: master is 1086x1448 PNG, not 900x1200. Landscape recompose still required"
+SOFT-RETINA,assets/dashboard/state-banner.webp,1200x300,1920x480,WebP q78,"fine at 1x, mushy at 2x",state-banner.jpg / d-08-state-range-banner.jpg both 1200x300,NO HELP - identical to live
+SOFT-RETINA,assets/dashboard/journal-banner.webp,1000x260,1800x468,WebP q78,"fine at 1x, mushy at 2x",journal-banner.jpg / d-09-journal-banner.jpg both 1000x260,NO HELP - identical to live
+SOFT-RETINA,assets/frameworks/range-photograph.webp,1340x300,2584x578,WebP q78,"fine at 1x, mushy at 2x",-,"NOTHING. 'range copy.jpg' 2048x768 is a DIFFERENT image (belongs to t*/range.jpg, see UPGRADE rows)"
+GALAXY,assets/galaxy/t1-01-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-01-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-01-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-02-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-02-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-02-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-03-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-03-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-03-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-05-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-05-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-05-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-06-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-06-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-06-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-07-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-07-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-07-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-08-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-08-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-08-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-09-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-09-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t1-09-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-01-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-01-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-01-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-02-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-02-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-02-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-03-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-03-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-03-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-04-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-04-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-04-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-05-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-05-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-05-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-06-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-06-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-06-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-07-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-07-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-07-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-08-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-08-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-08-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-10-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-10-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t2-10-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-01-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-01-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-01-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-03-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-03-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-03-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-04-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-04-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-04-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-06-field.jpg,absent,1920x1080,JPEG q82,blurred plate,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-06-clear.jpg,absent,1920x1080,JPEG q88,sharp plate; a DIFFERENT file from field,-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+GALAXY,assets/galaxy/t3-06-subject.png,absent,1920x1080,PNG-24 RGBA,"subject cut in place, registers exactly over the plate, full frame height",-,NOTHING - no 1920x1080 or 16:9 above 1672x941 in either folder
+OVERSIZED-FALLBACK,assets/home/door-t3.jpg,1086x1448 1823KB,1086x1448,JPEG q82,raw master shipped as the fallback; .webp beside it is 86KB. Re-encode. 1.74MB,on disk,"RE-ENCODE, no new art"
+OVERSIZED-FALLBACK,assets/home/door-t2.jpg,1086x1448 1745KB,1086x1448,JPEG q82,raw master shipped as the fallback; .webp is 71KB. 1.63MB,on disk,"RE-ENCODE, no new art"
+OVERSIZED-FALLBACK,assets/home/door-t1.jpg,1086x1448 1645KB,1086x1448,JPEG q82,raw master shipped as the fallback; .webp is 53KB. 1.55MB,on disk,"RE-ENCODE, no new art"
+OVERSIZED-FALLBACK,assets/coming/band-06.jpg,1717x916 1769KB,1200x640,JPEG q82 + WebP q78,the only band never resized; every other band is 1200x640. 1.66MB,on disk,"RESIZE + RE-ENCODE, no new art"
+UPGRADE,assets/home/door-t1.jpg,1086x1448,1200x1600,JPEG q82 + WebP q78,"same image, larger master",used images/IMAGES/saferise-home-images/door-t1.jpg 1200x1600,DROP-IN re-export
+UPGRADE,assets/home/door-t2.jpg,1086x1448,1200x1600,JPEG q82 + WebP q78,"same image, larger master; door-t2-option-a/b/c also exist at 1200x1600 as alternates",used images/IMAGES/saferise-home-images/door-t2.jpg 1200x1600,DROP-IN re-export
+UPGRADE,assets/home/door-t3.jpg,1086x1448,1200x1600,JPEG q82 + WebP q78,"same image, larger master",used images/IMAGES/saferise-home-images/door-t3.jpg 1200x1600,DROP-IN re-export
+UPGRADE,assets/coming/band-welcome-corridor.jpg,2360x800,2400x900,JPEG q82 + WebP q78,"taller crop, more room for the scrim",Unused Images/hero-corridor.jpg 2400x900,DROP-IN re-export
+UPGRADE,assets/t1|t2|t3/change.jpg,1600x700,1897x829,JPEG q82 + WebP q78,"same image, larger master",used images/change copy 2.jpg 1897x829,DROP-IN re-export
+UPGRADE,assets/t1|t2|t3/cost.jpg,1600x700,1819x865,JPEG q82 + WebP q78,"same image, larger master",used images/cost copy 2.jpg 1819x865,DROP-IN re-export
+UPGRADE,assets/t1|t2|t3/range.jpg,1600x600,2048x768,JPEG q82 + WebP q78,"same image, larger master",used images/range copy.jpg 2048x768,DROP-IN re-export
