@@ -13,7 +13,7 @@
    `eyebrow` and `sub` are copied from the protocol records in tracks.js and
    are not authored here — tracks.js stays the source of truth for copy.
 
-   19 of 31 present. The remaining twelve follow the same shape as their
+   21 of 31 present. The remaining ten follow the same shape as their
    masters land.
    ═════════════════════════════════════════════════════════════════════════ */
 
@@ -26,6 +26,13 @@ var MEDITATION = {
     title:   'The Clearing',
     sub:     'Quiet the noise and arrive in a state where the work can land.',
     src:     MEDITATION_BASE + 't0-00-the-clearing.mp3'
+  },
+  't1-01': {
+    key:     't1-01',
+    eyebrow: 'Regulate',
+    title:   'Anxiety Reset',
+    sub:     'Calm fear responses, quiet spiralling thoughts, and return to the present.',
+    src:     MEDITATION_BASE + 't1-01-anxiety-reset.mp3'
   },
   't1-02': {
     key:     't1-02',
@@ -124,6 +131,13 @@ var MEDITATION = {
     title:   'Perfectionism Release',
     sub:     'Let it be finished when it is good enough.',
     src:     MEDITATION_BASE + 't3-04-perfectionism-release.mp3'
+  },
+  't3-05': {
+    key:     't3-05',
+    eyebrow: 'Perform',
+    title:   'Performance Anxiety',
+    sub:     'Keep access to what you know while people are watching you use it.',
+    src:     MEDITATION_BASE + 't3-05-performance-anxiety.mp3'
   },
   't3-07': {
     key:     't3-07',
