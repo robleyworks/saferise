@@ -252,64 +252,10 @@
     return lock;
   }
 
-  function fmtTime(s) {
-    if (!isFinite(s) || s < 0) return '--:--';
-    s = Math.floor(s);
-    var m = Math.floor(s / 60), sec = s % 60;
-    return m + ':' + (sec < 10 ? '0' : '') + sec;
-  }
-
-  /* FB-07 -- elapsed/total plus a seekable line. Native <input type=range>
-     for the seek control (see css/saferise-poster.css for why: real
-     keyboard support and the accessible value text come from the
-     platform). Total reads from the media's own metadata, never
-     hardcoded -- "--:--" until 'loadedmetadata' fires, per the brief.
-     dragging tracks whether the member currently has a pointer/keyboard
-     grip on the thumb, so the tick loop below doesn't fight their input
-     by resetting .value out from under them mid-drag. */
-  function buildTransport(stage, audio, hasAudio) {
-    var wrap = el('div', 'sr-ps-transport');
-    var time = el('div', 'sr-ps-time');
-    var cur = el('span'); cur.textContent = '--:--';
-    var sep = el('span', 'sep'); sep.textContent = '/';
-    var tot = el('span'); tot.textContent = '--:--';
-    time.appendChild(cur); time.appendChild(sep); time.appendChild(tot);
-    var seek = el('input', 'sr-ps-seek');
-    seek.type = 'range'; seek.min = '0'; seek.max = '1000'; seek.value = '0';
-    seek.step = '1';
-    seek.setAttribute('aria-label', 'Seek');
-    seek.setAttribute('aria-valuetext', '0:00 of --:--');
-    wrap.appendChild(time); wrap.appendChild(seek);
-    stage.appendChild(wrap);
-
-    if (!hasAudio) { seek.disabled = true; return { wrap: wrap, cur: cur, tot: tot, seek: seek, dragging: function () { return false; } }; }
-
-    var dragging = false;
-    seek.addEventListener('pointerdown', function () { dragging = true; });
-    seek.addEventListener('pointerup', function () { dragging = false; });
-    seek.addEventListener('keydown', function () { dragging = true; });
-    seek.addEventListener('blur', function () { dragging = false; });
-    seek.addEventListener('input', function () {
-      var dur = audio.duration;
-      if (!dur || !isFinite(dur)) return;
-      var p = (+seek.value) / 1000;
-      audio.currentTime = p * dur;
-      cur.textContent = fmtTime(audio.currentTime);
-      seek.style.setProperty('--sp', (p * 100).toFixed(2) + '%');
-      seek.setAttribute('aria-valuetext', fmtTime(audio.currentTime) + ' of ' + fmtTime(dur));
-    });
-    seek.addEventListener('change', function () { dragging = false; });
-
-    function onMeta() {
-      tot.textContent = fmtTime(audio.duration);
-      cur.textContent = fmtTime(audio.currentTime);
-      seek.setAttribute('aria-valuetext', fmtTime(audio.currentTime) + ' of ' + fmtTime(audio.duration));
-    }
-    if (audio.readyState >= 1 && audio.duration) onMeta();
-    audio.addEventListener('loadedmetadata', onMeta);
-
-    return { wrap: wrap, cur: cur, tot: tot, seek: seek, dragging: function () { return dragging; } };
-  }
+  /* PASS-A2-READABILITY-FINISH.md §1 -- buildTransport()/fmtTime() removed
+     outright, along with the elapsed/total readout and seekable range
+     input they built: a duration display and a scrubber on a practice
+     surface, a direct standing-rule violation. Play/pause only. */
 
   /* #4 -- the four-step bar, a sibling appended right after the stage
      (outside it, per the brief), not inside. Returns the four .sr-ps-seg
@@ -458,12 +404,11 @@
     stage.style.setProperty('--breath', heldBreath.toFixed(2) + 's');
 
     var hasAudio = !!(audio.getAttribute && audio.getAttribute('src'));
-    var voiceEl = null, transport = null;
+    var voiceEl = null;
     if (opts.buildControl) {
       var built = buildOverlay(stage, audio, hasAudio, opts.theme, opts.title);
       voiceEl = built.voice;
       buildLock(stage);
-      transport = buildTransport(stage, audio, hasAudio);
     }
     var stepSegs = opts.buildControl ? buildSteps(stage) : null;
     if (opts.buildControl) stage.classList.add('sr-ps-player');
@@ -509,28 +454,10 @@
       stage.style.setProperty('--release', release.toFixed(3));
     }
 
-    /* FB-07 -- kept out of the dragging member's way: skipped entirely
-       while transport.dragging() is true, same as a native scrub bar
-       would. Runs from both onTimeupdate (the audio element's own clock,
-       so it keeps counting in a backgrounded tab) and frame() below, so
-       the visible time/seek position never lags --p's own driver. */
-    function applyTransport() {
-      if (!transport || transport.dragging()) return;
-      var dur = audio.duration;
-      transport.cur.textContent = fmtTime(audio.currentTime);
-      if (dur && isFinite(dur) && dur > 0) {
-        var p2 = Math.max(0, Math.min(1, audio.currentTime / dur));
-        transport.seek.value = Math.round(p2 * 1000);
-        transport.seek.style.setProperty('--sp', (p2 * 100).toFixed(2) + '%');
-        transport.seek.setAttribute('aria-valuetext', fmtTime(audio.currentTime) + ' of ' + fmtTime(dur));
-      }
-    }
-
     function onTimeupdate() {
       var p = computeP();
       stage.style.setProperty('--p', p.toFixed(4));
       applyStepsAndRelease(p);
-      applyTransport();
     }
     audio.addEventListener('timeupdate', onTimeupdate);
 
@@ -545,7 +472,6 @@
         var p = computeP();
         stage.style.setProperty('--p', p.toFixed(4));
         applyStepsAndRelease(p);
-        applyTransport();
         if (!reduced) {
           var level = aura.read();
           stage.style.setProperty('--amp', level.toFixed(3));
@@ -596,11 +522,6 @@
           seg.classList.remove('on', 'done');
           seg.querySelector('i').style.setProperty('--w', '0%');
         });
-      }
-      if (transport) {
-        transport.cur.textContent = fmtTime(0);
-        transport.seek.value = 0;
-        transport.seek.style.setProperty('--sp', '0%');
       }
       if (voiceBars) {
         for (var vr = 0; vr < voiceBars.length; vr++) voiceBars[vr].style.setProperty('--v', 0);

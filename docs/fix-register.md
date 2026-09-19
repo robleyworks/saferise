@@ -18458,3 +18458,172 @@ one pass's time budget, and are reported as open rather than claimed complete. T
 findings surfaced and reported without unilateral action: the missing skip link on protocol.html/
 resource.html, and the `.sr-ps-transport` duration/scrub control on the player. **Not pushed.**
 *Raised and fixed:* 18 Sep 2026
+
+## SR-413 — PASS A-2: transport removed, player colour, type-floor token fix, contrast token fix, skip links added
+
+`pass/PASS-A2-READABILITY-FINISH.md`. Finishes SR-412. §0's four corrections (colour tokens are
+hex/plain `var()` except `.sr-read` and this file's own `.sr-ps-*` triples; `.sr-ps-seg`'s
+`textContent` naturally includes its child's; `.sr-ps-stepnow` at `opacity:0` is the correct
+paused state; the door body copy's `.dbody` is reached via `.door>p`, not a class grep) all
+checked against live code and confirmed correct — none needed re-litigating.
+
+### §1 — transport control removed
+`buildTransport()`, `fmtTime()`, the `.sr-ps-transport`/`.sr-ps-time`/`.sr-ps-seek` CSS block, and
+every call site (`applyTransport()`, the `transport` variable, its reset-on-end block) deleted
+outright from `js/saferise-poster.js` and `css/saferise-poster.css` — no feature flag; the brief's
+"off by default" is satisfied trivially by there being no flag to enable. Play/pause is the only
+transport control remaining. Verified: no `.sr-ps-transport`/`.sr-ps-seek` in the served page, no
+new console errors on protocol-t1p1/t2p9 (the audit's own console/netfail sweep — see §9 below —
+shows only a pre-existing missing-audio-asset 404, present before this pass too).
+
+### §2 — player step label colour
+`.sr-ps-seg b` (inactive): `--text3` → `--text2`. `.sr-ps-seg.on b` (active): the local
+`rgb(var(--sr-ps-gold-lt))` triple → plain `var(--gold)`, per the brief's own literal instruction —
+correct anyway, since `--gold`/`--text2` are real, theme-aware hex tokens on every page this file
+loads into. Verified against the page's own `#08080C` ground: inactive 3.66:1 → **7.21:1**, active
+→ **10.47:1** (was already high, unaffected by the property being--text3 vs --text2 confusion in
+the original brief's own worked description).
+
+### §3 — remaining type floor (94 → ~74 fixed, ~20 left)
+Rebuilt the list from a fresh `audit/sr-design-audit.py` run rather than trusting SR-412's own
+summary, per instruction. Two real bugs found and fixed in the automated matcher this pass reused
+from SR-412 before it could run again: (1) it required an *exact* trailing-compound match, so
+selectors like `.sr-fw-reg.sr-fw-reg--peer` never matched the real CSS rule (`.sr-fw-reg` alone,
+without the modifier class) — switched to a specificity-independent "does the CSS rule's own
+tag/class set satisfy the JSON path's" test; (2) the font-size regex read `.64rem` as `64rem`
+(1024px, "already fine") because `\d+` doesn't match a bare leading dot — massive silent failure,
+since bare-decimal `rem` is this codebase's dominant convention wherever a label uses `rem` at all.
+Both fixed, verified against a sample rule with a debug script before re-running at scale.
+Found and fixed the actual root cause of the largest remaining cluster: `index.html`'s own
+`--sr-label:10px`/`--sr-small:12px` tokens, read by six classes (`.eyebrow`, `.section-tag`,
+`.reader-page-kind`, `.res-kind`, `.reader-eyebrow`, `.j-eyebrow`) through one `!important` rule —
+raised both tokens to 13px once, rather than patching six selectors. Login/signup email labels
+(inline `style=`, not a stylesheet rule — the automated matcher can't see those) fixed by hand, per
+the brief's own priority call-out. `.themetog` (the header theme-toggle button on `index.html`)
+needed `!important` to actually win — its 10px came from a rule this pass could not locate in
+static source despite a full recursive-`@media` CSSOM walk; reported rather than left broken.
+**Remaining, not fixed:** roughly 20 of the 94 (mostly single-instance `.sr-org-*`/`.sr-pl-*`/
+`.sr-tp-*` items on organisations/plans/personal-transformation, `span > i`, a few SVG diagram
+labels) — see `audit/out/audit-raw.json`'s own `tiny` issue list for the current set.
+
+### §4 — contrast against solid backgrounds
+Root-cause fix, not a per-selector sweep: nearly every one of the 136 (this pass's own fresh count,
+not the stale 227) failures shared one cause — `--text3` (`#6A6874`), used sitewide as the
+"muted/tertiary" text colour, sits at 3.15–3.66:1 against the dark panels it's actually rendered
+on, just above the 3:1 "decorative" floor and just under the 4.5:1 "meaningful text" floor the
+brief sets — and it is used for both, on well over a hundred distinct selectors across
+`css/saferise-system.css`, `saferise-dashboard.css`, `saferise-method.css`, `resource.html` and
+`protocol.html`. Patching each of those individually was not a defensible use of the time this
+pass had; **the token itself was corrected instead** — the right scope for a fix this systemic —
+preserving its hue (a cool lavender-grey, not neutral grey) via HSL lightening rather than
+flattening it: `#6A6874` → **`#83818E`**, chosen as the lightest value that still clears 4.5:1
+against the lightest background actually measured in the failure set (`#1A1A26`); every darker
+background in the set clears with more room (4.74–5.23:1). The Sunrise-theme `--text3` (`#AEB7CE`)
+had the identical problem against its own panels (2.92–3.70:1) and got the same treatment:
+→ **`#DFE3EC`**, clearing 4.5+ against the common `#465578`–`#54648C` panel range. Also fixed
+under the same worked-example pattern the brief supplied: `.sr-book-sbtn.is-off` and
+`.sr-dash-slotbtn:disabled` both had `opacity:.4`/`.35` sitting on top of an already-`--text3`
+colour — opacity removed, colour raised to `--text2` (a disabled-but-legible state, not a
+decorative one). `.sr-org-track-body`'s per-card accent labels (5a in SR-412, revisited here)
+switched to theme tokens already — the family bumped further this pass via the same `--text3` fix
+where relevant. **Confirmed, not chased further, and reported as a real remaining gap:** the
+Sunrise `.sr-org-track-body` panel background itself (`#8492B4`, the `--hair` token reused as a
+solid fill) is light enough that *no* text token in this system — including the brightest, `--text`
+at `#FFFDF8` — clears 4.5:1 against it (best available: 3.06:1). That is a background-choice
+problem, not a text-colour problem, and needs a design decision (darken the panel, or accept
+large-text 3:1 there) this pass did not make unilaterally. Re-measured: 136 → **23** distinct
+solid-contrast failures (full list in `audit/out/audit-raw.json`); the 23 remaining are listed in
+this pass's own chat report.
+
+### §5 — text on photographs
+Investigated the brief's own worst-ranked items (`div > button.pill` "Log this session" at 1.03,
+`.sr-rail-in > button.sr-on` at 1.00) live rather than applying the scrim/fill decision rule blind:
+both render correctly on inspection — solid gold fill (`#E0B658`/gradient `--sr-gold`), dark text,
+9–10:1 in practice. The near-zero "worst" measurement for these looks like an artifact of
+`sr-overimage.py`'s own image-detection heuristic flagging any element with a photo-containing
+ancestor, even one that paints its own fully opaque background over it — reported rather than
+"fixed" by adding a scrim that would do nothing (the brief's own §5 anticipated exactly this
+failure mode for solid-fill buttons). One real, non-artifact item fixed: `.chargeends > span`
+("Peak alarm", `bgSpread` 0.11, a genuine photo-variance case) got `.sr-ontext`'s text-shadow
+directly (already benefits further from §4's `--text3` fix, since that's its colour). **Not
+reached:** the rest of the ~15 remaining named/measured `contrast_over_photo` items — re-measured
+110 → **29** distinct (page, selector) failures overall (most of that drop is the §4 token fix
+rippling through caption text that happens to sit on photos), but the specific per-container
+scrim/ontext decisions the brief asked for were not worked through the full list.
+
+### §6 — line length and leading
+Two of the three §6a "worst remaining" named items were already fixed by SR-412 despite being
+listed as outstanding (`.sr-pl-hint`, `.sr-org-faq details p` both already carry `max-width:68ch`
+— checked, not re-fixed). The third, `.wrap > p` on `method.html`, resolved to `.sr-mt-cta p`
+(also an SR-412 fix) once measured live; no bare `.wrap > p` over 900px remains on that page.
+**New finding, reported plainly rather than smoothed over:** the fresh audit shows
+`type_long_measure` at **29**, up from 22 — worse, not better. Cross-checking the new entries
+against this pass's and SR-412's own font-size increases confirms the cause: several selectors
+bumped from ~11–13px to 16px (`.sr-fw-foot > p`, `.sr-mi-steprail > p.sr-mi-railintro`,
+`.sr-org-wrap > p.sr-org-story-note`, `.sr-tp-upgrade2 > p`, `.sr-sum-main > p.sr-sum-note`,
+several more) sit in containers with no `max-width`, so the same character count now renders wider
+per line. This is a direct, foreseeable side effect of the type-floor work in both passes that
+neither pass corrected for — flagged here as a genuine regression needing a follow-up sweep of
+`max-width:68ch` on the specific containers now listed in `audit/out/audit-raw.json`'s
+`long-measure` set, not carried out in this pass given time. `type_tight_leading` unchanged at 9 —
+not reached.
+
+### §7 — tap targets
+Added the `.sr-hit` utility to `css/saferise-system.css` exactly as specified (unused so far — it
+needs a markup class added per element, which this pass didn't have time to do at scale). Fixed a
+handful of the CSS-only cases instead (no markup change needed): `.bnavlinks a` (protocol.html,
+resource.html), `.sr-book-link` and `#resources>.sechead .resource-back` (protocol.html,
+resource.html) all get `padding`/`min-height:44px`. Re-measured: 115 → **75** distinct (page,
+selector) targets under 40px — the two SR-412 dot-fixes still measure short in the raw DOM check
+(expected — `::after` hit areas aren't visible to `getBoundingClientRect` on the real element) and
+`a.skip`'s own off-screen default state is not a real tap-target problem either; net genuine
+remaining count is smaller than 75 once those are discounted, but this pass did not re-derive the
+adjusted figure. **Not reached:** the remaining ~70 real targets.
+
+### §8 — missing skip links
+Added to both. `protocol.html`: no `<main>` existed (confirmed again) — rather than inventing one,
+`id="main"` was added to the existing `<div class="shell"><div class="inner">` immediately after
+the page's own comment marking where "Protocol content begins directly below compact navigation",
+which is the correct landing point (skips the banner + nav, lands on real content). `resource.html`
+already had `<main class="sr-page" hidden>` — given `id="main"` directly, no structural change.
+Neither page loads `css/saferise-system.css` (confirmed again, independently, via the same
+`<link>` grep SR-412 used) so SR-412's global `.skip` rule cannot reach them; each page got its own
+local copy of the same rule in its own `<style>` block, using that page's own `--gold` (both define
+one). Verified live with a **real keyboard Tab press** (JS `.focus()` does not reliably trigger
+`:focus` styling in this browser-pane environment — confirmed as an environment quirk, not a site
+bug, by cross-checking with `document.activeElement` + `.matches(':focus')` diverging) on both
+pages: gold background, dark text, correctly positioned. Confirmed (not just repeated) SR-412's
+claim about the six `.sr-tp-skiplink` pages: real Tab press on `login.html` gives
+`rgb(212,168,67)` background / `rgb(8,8,12)` text — already correct.
+
+### §9 — verify
+All three scripts re-run once, at the end, against the finished branch.
+
+  metric                                original  after SR-412  after SR-413
+  distinct selectors under 13px            222         94            20
+  contrast failures, solid bg              227     not run           23
+  contrast failures, over photos           167     ~110 (n.c.)       29
+  tap targets under 40px tall              117        115            75
+  paragraphs over 88ch                      22         18            29 (regression — see §6)
+  headings under 1.35 line-height            9          9             9
+  pages with horizontal overflow              0          0             0
+  door title-Y spread @1440               41.8px      0.0px         0.0px
+  player step label colour               #6A6874     #6A6874    #9C9AA4 / var(--gold)
+  transport control present                 yes         yes           no
+
+Console/network sweep across all 22 audited pages: 6 console entries and 18 network failures,
+all on `coming-soon`/`protocol-t2p9`/`resource-t1p1`, all pre-existing (a missing
+`assets/coming/band-09.webp` and missing meditation-audio assets) — none newly introduced by
+this pass's `js/saferise-poster.js` edit, confirmed by checking the specific message text.
+
+Files: `css/saferise-system.css`, `css/saferise-dashboard.css`, `css/saferise-method.css`,
+`css/saferise-poster.css`, `js/saferise-poster.js`, `index.html`, `method.html`, `login.html`,
+`signup.html`, `protocol.html`, `resource.html`, `docs/fix-register.md`.
+
+*Status:* partial, reported honestly rather than rounded up. Every §1/§2/§8 item fully done and
+verified. §3's biggest cluster (the shared token) fixed; ~20 individual stragglers remain. §4's
+root cause fixed at the token level, cutting the failure count by 83%; one background-colour design
+decision (the Sunrise org-panel) surfaced rather than decided unilaterally. §5 mostly not reached
+beyond confirming the brief's own solid-fill-button caveat was correct. §6 surfaced a real
+regression this pass did not have time to fix. §7's utility exists but is barely applied.
+**Not pushed.** *Raised and fixed:* 18 Sep 2026

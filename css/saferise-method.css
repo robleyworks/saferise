@@ -31,7 +31,7 @@
 :root{
   --bg:#08080C; --band:#0E0E1A; --band2:#101020; --card:#15151F; --hair:#22222E;
   --gold:#D4A843; --gold-lt:#ECC96A; --teal:#4E9AA6;
-  --text:#F5EDD8; --text2:#9C9AA4; --text3:#6A6874;
+  --text:#F5EDD8; --text2:#9C9AA4; --text3:#83818E;
   /* SR-374 (PASS-advisory-and-token.md §2) · same fix as
      css/saferise-dashboard.css's own copy of this token — see its
      comment for the measured before/after. */
@@ -71,7 +71,7 @@ h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
 /* ── theme toggle, shared shape with the reader ── */
 .sr-theme{display:inline-flex;border:1px solid rgba(255,255,255,.22);border-radius:24px;overflow:hidden;
   background:rgba(8,8,12,.66);backdrop-filter:blur(8px)}
-.sr-theme button{background:transparent;border:0;cursor:pointer;font:700 9.5px/1 'DM Sans',sans-serif;
+.sr-theme button{background:transparent;border:0;cursor:pointer;font:700 13px/1 'DM Sans',sans-serif;
   letter-spacing:.17em;text-transform:uppercase;color:rgba(245,237,216,.6);padding:10px 15px;transition:.18s}
 .sr-theme button.on{background:rgba(212,168,67,.16);color:var(--gold)}
 
@@ -79,7 +79,7 @@ h3{font-family:'Cinzel',serif;font-weight:400;font-size:18px;line-height:1.34}
    exactly, flat colours, no gradient. SR-324 reverted this back from
    SR-320's gradient fills now that this file is confirmed MEMBER. */
 body.rd-soft{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card:#54648C;--hair:#8492B4;
-  --text:#FFFDF8;--text2:#DDE3F0;--text3:#AEB7CE}
+  --text:#FFFDF8;--text2:#DDE3F0;--text3:#DFE3EC}
 /* SR-335 · body.rd-soft .sr-dash-navrail{background:#3C4B78} moved to
    css/saferise-rail.css. */
 body,.sr-dash-navrail,.sr-fw-panel,.sr-fw-limit,.sr-fw-disc,.sr-fw-card,.sr-fw-step,.sr-fw-src,
@@ -89,7 +89,7 @@ body,.sr-dash-navrail,.sr-fw-panel,.sr-fw-limit,.sr-fw-disc,.sr-fw-card,.sr-fw-s
    Gold is the evidence colour, teal the interpretive one. Peer-reviewed is
    filled; clinical practice is the same hue held back to an outline, because
    "proven" and "practised" must not read at the same weight. */
-.sr-fw-reg{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.19em;
+.sr-fw-reg{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.19em;
   text-transform:uppercase;padding:7px 13px;border-radius:20px;line-height:1;white-space:nowrap}
 .sr-fw-reg:before{content:"";width:6px;height:6px;border-radius:50%;flex:0 0 auto}
 .sr-fw-reg--peer{background:rgba(212,168,67,.15);border:1px solid var(--gold);color:var(--gold-lt)}
@@ -170,7 +170,7 @@ body.rd-soft .sr-fw-reg--int:before{background:#BFE4EA}
 .sr-fw-statelist{display:flex;flex-direction:column;gap:20px;max-width:56ch}
 .sr-fw-state{border-left:2px solid var(--s);padding-left:18px}
 .sr-fw-state b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:15px;color:var(--text);margin-bottom:5px}
-.sr-fw-state em{font-style:normal;color:var(--s);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+.sr-fw-state em{font-style:normal;color:var(--s);font-size:13px;letter-spacing:.18em;text-transform:uppercase;
   font-weight:700;display:block;margin-bottom:7px}
 .sr-fw-state span{display:block;font-size:16px;color:var(--text2);line-height:1.7}
 
@@ -376,7 +376,7 @@ a.sr-mi-card--int:hover{border-color:rgba(78,154,166,.6);border-top-color:var(--
 .sr-mi-who{font-size:16px;color:var(--text3);margin-bottom:14px}
 .sr-mi-says{font-size:16px;color:var(--text2);line-height:1.75;margin-bottom:18px}
 .sr-mi-holds{border-top:1px solid var(--hair);padding-top:14px;margin-top:auto;font-size:16px;color:var(--text2);line-height:1.7}
-.sr-mi-holds b{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
+.sr-mi-holds b{display:block;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
   font-weight:700;margin-bottom:6px}
 .sr-mi-go{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.17em;
   text-transform:uppercase;color:var(--gold);margin-top:16px}
@@ -388,7 +388,7 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
 .sr-mi-claim{margin:56px 0 0;border:1px solid var(--hair);border-radius:14px;background:var(--band);
   display:grid;grid-template-columns:auto minmax(0,1fr);gap:36px;align-items:center;padding:34px var(--pad)}
 .sr-mi-claimfig{font-family:'Cinzel',serif;font-size:clamp(34px,4.6vw,52px);color:var(--gold);line-height:1;white-space:nowrap}
-.sr-mi-claimfig span{display:block;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.2em;
+.sr-mi-claimfig span{display:block;font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--text3);margin-top:12px;font-weight:700}
 .sr-mi-claim p{font-size:15px;color:var(--text2);line-height:1.78;max-width:68ch}
 .sr-mi-claim p b{color:var(--text);font-weight:500}
@@ -423,7 +423,7 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
 .sr-mi-heroin{padding:32px var(--pad);z-index:2;max-width:52ch}
 .sr-mi-heroin p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;
   font-size:clamp(18px,1.9vw,24px);line-height:1.5;color:var(--text);text-shadow:0 2px 20px rgba(0,0,0,.7)}
-.sr-mi-heroin span{display:block;font-family:'DM Sans',sans-serif;font-style:normal;font-size:10px;
+.sr-mi-heroin span{display:block;font-family:'DM Sans',sans-serif;font-style:normal;font-size:13px;
   letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:20px;font-weight:700}
 /* ── founder's note. One per site, on the index only. ── */
 /* SR-074 · one column. The side column (Not a clinician / Where the line is /
@@ -492,7 +492,7 @@ a.sr-mi-card:hover .sr-mi-go svg{transform:translateX(4px)}
    carrying one. Half-light, dashed rule — visibly different from lit and unlit. */
 .sr-mi-step.beneath{opacity:.78;border-left-style:dashed;border-left-color:var(--accent)}
 .sr-mi-step.beneath b{color:var(--accent)}
-.sr-mi-step b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:9.5px;
+.sr-mi-step b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:13px;
   letter-spacing:.2em;color:var(--text3);margin-bottom:5px;transition:color .45s ease}
 .sr-mi-step.on b{color:var(--accent)}
 .sr-mi-stepname{display:block;font-size:14px;color:var(--text);line-height:1.35;margin-bottom:5px}

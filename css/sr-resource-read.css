@@ -164,7 +164,7 @@
 .sr-src__top h4{margin:0;color:var(--text);font:500 1.32rem var(--font-serif)}
 .sr-src__reg{
   display:inline-flex;align-items:center;gap:7px;white-space:nowrap;color:rgb(var(--sr-reg));
-  font:500 .55rem var(--font-sans);letter-spacing:.18em;text-transform:uppercase;
+  font:500 13px var(--font-sans);letter-spacing:.18em;text-transform:uppercase;
 }
 .sr-src__reg::before{content:"";width:5px;height:5px;border-radius:50%;background:rgb(var(--sr-reg));opacity:.9}
 .sr-src__reg em{font-style:normal;color:var(--text3);letter-spacing:.14em}

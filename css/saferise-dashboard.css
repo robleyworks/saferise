@@ -22,7 +22,7 @@
      "current" values C1/C2 measured against. */
   --bg:#0C0C12; --band:#0E0E1A; --band2:#101020; --card:#1A1A26; --hair:#2C2C3C;
   --gold:#E0B658; --gold-lt:#ECC96A; --teal:#4E9AA6; --muted:#B3A897;
-  --text:#FBF6E7; --text2:#9C9AA4; --text3:#6A6874;
+  --text:#FBF6E7; --text2:#9C9AA4; --text3:#83818E;
   /* SR-374 (PASS-advisory-and-token.md §2) · --shut was #5A6B84, 3.87:1
      against --bg — SR-368's finding, below 4.5:1 where it sets text.
      #7288A0 measures 5.41:1, still the dimmest of the three state
@@ -387,7 +387,7 @@ body.reading #srLibrary{margin-top:22px}
 .sr-dash-slot:first-of-type{border-top:0}
 .sr-dash-slotdate{width:44px;flex:0 0 auto;text-align:center;line-height:1.1}
 .sr-dash-slotdate b{display:block;font-family:'Cinzel',serif;font-size:19px;color:var(--text);font-weight:400}
-.sr-dash-slotdate span{display:block;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-top:3px}
+.sr-dash-slotdate span{display:block;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-top:3px}
 .sr-dash-slotmain{flex:1 1 auto;min-width:0}
 .sr-dash-slotname{font-size:13.5px;color:var(--text);line-height:1.4}
 .sr-dash-slotmeta{font-size:13px;color:var(--text3);margin-top:3px}
@@ -397,7 +397,7 @@ body.reading #srLibrary{margin-top:22px}
   font:700 13px/1 'DM Sans',sans-serif;letter-spacing:.16em;text-transform:uppercase;padding:11px 15px;
   border-radius:7px;cursor:pointer;min-height:38px;transition:.18s}
 .sr-dash-slotbtn:hover{background:rgba(212,168,67,.14);border-color:var(--gold)}
-.sr-dash-slotbtn:disabled{opacity:.35;cursor:default;border-color:var(--hair);color:var(--text3)}
+.sr-dash-slotbtn:disabled{cursor:default;border-color:var(--hair);color:var(--text2)}
 .sr-dash-datesfoot{margin-top:auto;padding-top:16px;border-top:1px solid var(--hair);display:flex;
   align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 @media(max-width:1000px){
@@ -490,7 +490,7 @@ body.reading #srLibrary{margin-top:22px}
 .sr-dash-bookpanel.b2{background:url('../assets/sessions/premium-1on1.webp') center/cover no-repeat,radial-gradient(56% 90% at 46% 55%,rgba(155,127,212,.22),transparent 66%),linear-gradient(120deg,#0C0B13,#1A1526 62%,#241C36)}
 .sr-dash-bookpanel.b3{background:url('../assets/sessions/calendar.webp') center/cover no-repeat,radial-gradient(56% 90% at 52% 58%,rgba(78,154,166,.2),transparent 66%),linear-gradient(120deg,#0A0F12,#132228 62%,#1B2F35)}
 .sr-dash-booklabel{position:relative;z-index:3;padding:0 0 14px;width:100%}
-.sr-dash-booklabel span{display:block;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+.sr-dash-booklabel span{display:block;font-size:13px;letter-spacing:.22em;text-transform:uppercase;
   color:rgba(245,237,216,.72);font-weight:700}
 .sr-dash-booklabel em{display:block;font-style:normal;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
   color:rgba(245,237,216,.34);margin-top:5px}
@@ -748,7 +748,7 @@ body.reading #srLibrary{margin-top:22px}
 
 /* ── theme toggle, shared shape with the reader ── */
 .sr-theme{display:inline-flex;border:1px solid rgba(255,255,255,.22);border-radius:24px;overflow:hidden;background:rgba(8,8,12,.66);backdrop-filter:blur(8px)}
-.sr-theme button{background:transparent;border:0;cursor:pointer;font:700 9.5px/1 'DM Sans',sans-serif;
+.sr-theme button{background:transparent;border:0;cursor:pointer;font:700 13px/1 'DM Sans',sans-serif;
   letter-spacing:.17em;text-transform:uppercase;color:rgba(245,237,216,.6);padding:10px 15px;transition:.18s}
 .sr-theme button.on{background:rgba(212,168,67,.16);color:var(--gold)}
 .sr-themewrap{position:absolute;top:16px;right:var(--pad);z-index:6}
@@ -764,7 +764,7 @@ body.reading #srLibrary{margin-top:22px}
 
 /* ── sunrise: same tokens the reader uses ── */
 body.rd-soft{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card:#54648C;--hair:#8492B4;
-  --text:#FFFDF8;--text2:#DDE3F0;--text3:#AEB7CE}
+  --text:#FFFDF8;--text2:#DDE3F0;--text3:#DFE3EC}
 /* SR-335 · body.rd-soft .sr-dash-navrail{background:#3C4B78} moved to
    css/saferise-rail.css. */
 /* every surface eases together, and at the same rate as the embedded pages */

@@ -340,44 +340,11 @@
   transition: height .12s linear;
 }
 
-/* ---- FB-07 -- elapsed/total and a seekable line. Bottom-left, mirroring
-   .sr-ps-lock's bottom-right position so neither collides with the
-   wordmark. Native <input type=range> for the seek control -- arrow-key
-   seeking and the accessible value text come from the platform, rather
-   than reimplementing a slider's keyboard handling by hand. */
-.sr-ps-transport {
-  position: absolute; left: 6.63%; bottom: 5.39%; z-index: 6;
-  display: flex; align-items: center; gap: 1.4cqw; max-width: 44%;
-}
-.sr-ps-time {
-  font-family: 'DM Sans', sans-serif; font-size: .92cqw; font-weight: 700;
-  letter-spacing: .05em; color: var(--text); white-space: nowrap;
-  text-shadow: 0 1px 12px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9);
-  font-variant-numeric: tabular-nums;
-}
-.sr-ps-time .sep { opacity: .55; margin: 0 .2em; }
-.sr-ps-seek {
-  -webkit-appearance: none; appearance: none; width: 9cqw; min-width: 54px;
-  height: 14px; background: transparent; cursor: pointer;
-}
-.sr-ps-seek::-webkit-slider-runnable-track {
-  height: 2px; border-radius: 2px;
-  background: linear-gradient(90deg, rgb(var(--sr-ps-gold)) 0%, rgb(var(--sr-ps-gold)) var(--sp, 0%),
-    rgba(255,255,255,.28) var(--sp, 0%), rgba(255,255,255,.28) 100%);
-}
-.sr-ps-seek::-moz-range-track { height: 2px; border-radius: 2px; background: rgba(255,255,255,.28); }
-.sr-ps-seek::-moz-range-progress { height: 2px; border-radius: 2px; background: rgb(var(--sr-ps-gold)); }
-.sr-ps-seek::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 10px; height: 10px; border-radius: 50%;
-  background: rgb(var(--sr-ps-gold-lt)); margin-top: -4px;
-  box-shadow: 0 1px 6px rgba(0,0,0,.6);
-}
-.sr-ps-seek::-moz-range-thumb {
-  width: 10px; height: 10px; border-radius: 50%; border: 0;
-  background: rgb(var(--sr-ps-gold-lt)); box-shadow: 0 1px 6px rgba(0,0,0,.6);
-}
-.sr-ps-seek:focus-visible { outline: 2px solid rgba(var(--sr-ps-gold-lt), .9); outline-offset: 3px; }
-.sr-ps-seek[disabled] { opacity: .35; cursor: default; }
+/* ---- PASS-A2-READABILITY-FINISH.md §1 -- FB-07's elapsed/total readout
+   and seekable <input type=range> removed outright: a duration display
+   and a scrubber on a practice surface, a direct standing-rule violation
+   (no durations/timers/countdowns/scrubbers/progress bars). Play/pause
+   is the only transport control this player keeps. */
 
 /* ---- #7: the lockup -- own build now (protocol.html's fully custom mount
    has no .sr-medplayer__lockup to reuse the way SR-406/408's dashboard-
@@ -426,11 +393,17 @@
   content: ''; position: absolute; inset: 0; width: var(--w, 0%);
   background: rgb(var(--sr-ps-gold)); transition: width .3s linear;
 }
+/* PASS-A2-READABILITY-FINISH.md §2 -- --text3 (#6A6874) was still under
+   3:1 on the dark stage even at 13px. var() here, not the rgb(var(--sr-
+   ps-*)) triples the rest of this file uses, per the brief's own literal
+   instruction -- and correct anyway: --gold/--text2 are real, theme-aware
+   hex tokens on every page this file loads into (protocol.html,
+   dashboard.html), same as SR-412 already established for this scope. */
 .sr-ps-seg b {
   font-size: 13px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--text3); transition: color .5s var(--sr-ps-ease);
+  color: var(--text2); transition: color .5s var(--sr-ps-ease);
 }
-.sr-ps-seg.on b { color: rgb(var(--sr-ps-gold-lt)); }
+.sr-ps-seg.on b { color: var(--gold); }
 .sr-ps-seg.done b { color: var(--text2); }
 
 /* ---- off-screen: pause every animated layer, SR-343's own toggle-class
