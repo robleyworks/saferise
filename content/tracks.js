@@ -604,11 +604,14 @@ var TRACKS = {
          Rule 24 stands and is why the band has none: a path here is a claim the
          asset exists, and an absent one costs a 404 per slot on every page load
          to reach the same visible result as making no request. */
-      /* SR-224 · band still has NO src. The delivered t3-band.jpg measures
-         1400×583 (2.401:1) against t1 and t2 at 1400×380 (3.684:1) and a slot
-         declaring '1400/380'. Installing it would letterbox or crop it against
-         its two siblings. Reported, not resolved — SR-224. */
-      band:   { ratio: '1400/380',
+      /* SR-224 · RESOLVED 19 Sep. The 1400×583 file that blocked this is gone:
+         assets/journey/t3-band is now 1400×380, the ratio this slot declares and
+         the one t1 and t2 already use, so the src is wired and the brief below
+         is kept as the art note rather than as rendered placeholder text.
+         The same file also fills dashboard.html's BAND[3], which until now fell
+         through to three "band photograph pending" panels. */
+      band:   { src: 'assets/journey/t3-band.webp',
+                ratio: '1400/380',
                 brief: 'corridor moments before the room, desk log, reading at day\u2019s end' },
       cost:   { src: 'assets/t3/cost.webp',
                 ratio: '16/7',
