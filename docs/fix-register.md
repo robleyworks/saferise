@@ -17,7 +17,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-419** (SR-414 through SR-419 — `PASS-dashboard-panel-and-carousel.md`;
+- **Highest ID issued: SR-423** (SR-420 through SR-423 — `PASS-dashboard-F2-F4.md`; see that
+  entry near the end of the file.)
+- **Previously: Highest ID issued: SR-419** (SR-414 through SR-419 — `PASS-dashboard-panel-and-carousel.md`;
   see that entry near the end of the file. This line was found already stale — reading SR-411
   while SR-412/SR-413 headers already existed below it — so it was corrected to the true ceiling
   rather than left compounding the drift for the next pass.)
@@ -18764,3 +18766,159 @@ scoped exactly to what the brief asked before stopping. F2–F4 not attempted, a
 DIFFERS corrected in-place (Part B's visibility claim), one DIFFERS adapted and cross-referenced
 (Part F1's architecture), one AMBIGUOUS skipped and reported (Part E's B1 wording), one real bug
 introduced and caught before shipping (SR-417's hoisting order). **Not pushed.**
+
+## SR-420 through SR-423 — dashboard library: search, save, and the protocol-page panel (F2–F4)
+
+`pass/PASS-dashboard-F2-F4.md`. All three parts built in this pass, per the brief's explicit
+withdrawal of the previous pass's "stop after F1" instruction. Extended `sr-dash-` throughout —
+no new surface code claimed, per `CLAUDE.md` line ~177's SR-418 decision, which this brief itself
+pointed back to. Committed locally, not pushed.
+
+### SR-421 — F2, keyword search across every track
+
+New `#srLibSearch` in the library head, above the track panel — a second, separate control from
+`#srArrive` (the state router), never reused, moved or restyled, per the brief's own warning.
+Debounced 180ms. Searches title, verb and track name across all three tracks via a new
+`collectList()`, independent of `render()`'s single-track path. While a query is active the rail
+deselects and `#srTrackNote` becomes the result count (`Results for "<query>" · <n> across all
+tracks` — the mockup's two-line title+subtitle collapsed into this page's one available text
+node, since the real markup has no second slot for it). Empty state is a single `<p
+class="sr-dash-emptyline">` in the strip, not an empty carousel. Autoplay resets on every rebuild
+(`pos`/`vel`/`target` zeroed, `stopped` cleared, `startFlow()` restarted) rather than continuing to
+drift through cards that may no longer be there.
+
+**DIFFERS, reported rather than built against:** the brief's "already exists" table names
+`.sr-cover-rail`/`.sr-cover-title`/`.sr-cover-kick`/`.sr-cover-play` as the carousel's "cover
+internals" and "per-cover progress bar." Grepped directly: those classes belong to one single
+element, the standalone Clearing hero (`#srClearingPlay`), not the carousel cards — which use
+`.sr-pcover`/`.sr-dash-card`/`.sr-dash-cardname` (via `SafeRiseCover.art()`) and carry no progress
+marker of any kind. `isRecent()` (used by F3's Recently-used chip, below) reads real data instead
+— `currentProtocol()` and `sr.journal.entries`, the same two sources SR-161/SR-191 already
+established as the only genuine "this was actually opened" signals on this page.
+
+### SR-422 — F3, save, the Saved list, and the filter chips
+
+Heart button, top-right of each cover, `rgba(245,237,218,.6)` quiet / gold when saved (30×30+
+tap target). Persists to `localStorage['sr-saved-v1']`, an array of `"<track>:<no>"` ids, through
+the existing `Store` helper (`js` inline, `dashboard.html`) rather than a new read/write path —
+`Store.get`/`Store.set` already wrap every access in try/catch and already fall back to an
+in-memory store on a throwing `localStorage`, which is exactly what the brief asks for. Verified:
+saved state survives a reload (`localStorage.getItem('sr-saved-v1')` checked directly after
+navigating away and back); a `localStorage.setItem` made to throw mid-session (simulating a
+blocked/private store) does not throw out of the click handler — the write silently falls back to
+memory, exactly as `Store.set`'s own try/catch is written to do.
+
+Filter chips (All protocols · In my plan · Saved · Recently used) beneath search, pill-shaped,
+gold wash when active, Saved carrying a live count. Saved/Recently-used/In-my-plan all route
+through the same `collectList()`/`renderCombined()` path search uses — rail deselects, head
+becomes the count.
+
+**DIFFERS, adapted rather than built as specified:**
+- **No `.slot` wrapper.** The brief's F3 warns at length about a button-cannot-nest-in-button
+  problem in the mockup, whose `.cover` is a `<button>`. `.sr-dash-card` is an `<article>`
+  containing an `<a class="sr-dash-go">`, not a button — the mockup's problem, and its wrapper
+  fix, do not apply to this markup. The heart is inserted as a sibling of the cover image inside
+  `SafeRiseCover.art()`'s own `extra` slot (`.sr-pcover`, already `position:relative`), which
+  needed no restructuring and carries none of the flex-basis risk the brief warned about.
+- **Rose accent replaced with gold.** This palette (`css/saferise-dashboard.css`'s `:root`) has no
+  rose/pink token anywhere — checked before assuming one. The saved state uses the existing gold
+  accent instead of introducing an unprecedented colour.
+- **A locked cover opening the upsell on click did not exist before this pass**, in any mode —
+  the pre-existing code's own comment said "locked cards do nothing." Added for both F2/F3 (a
+  locked card can now appear in a cross-track result, via its own `data-track`) and as a
+  byproduct, plain single-track browsing too. Could not be end-to-end verified live: this
+  environment's `SafeRiseAccess.hasAccess()` returns `true` for every track (no real entitlement
+  gate active locally), so no genuinely locked card exists to click. Verified by direct code
+  inspection instead — `showLockCta(n)` is the same function `render()` already used for the
+  per-track upsell (extracted, not rewritten), called with the clicked card's own `data-track`.
+- **A direct rail-button click now clears an active search/filter** before switching track. Not
+  stated in the brief; a reasonable extension of "clearing the query restores the previously
+  selected track" so the rail's own selection state and the visible result set cannot disagree.
+
+### SR-423 — F4, the track panel on protocol.html
+
+New `#ppLibrary` section, inserted between `#experience` (the guided-session player, which holds
+the SR-417 crisis-pathway banner) and `#log` — "above the reader," read as above the log/resources
+sections, and deliberately outside `#experience` entirely so nothing in this pass touches the
+crisis banner's position or precedence. Verified directly on all three of its protocols
+(`t1-p06`/`t1-p10`/`t2-p10`): banner still renders, unchanged, after the panel was added.
+
+Same `sr-dash-`/`sr-pcover` selectors as the dashboard, same behaviour (locked cards open this
+panel's own `#ppLockCta`, computed cover-width formula, borderless separation) — but the rules
+themselves are copied into protocol.html's own `<style>` block rather than linking
+`css/saferise-dashboard.css`. `protocol.html` is documented as deliberately self-contained (its
+own comment, next to `.skip`: "this page carries no `<link>` to css/saferise-system.css —
+confirmed — it is fully self-contained") and already carries independent copies of the same
+design tokens (`--gold`/`--hair`/`--text` etc., byte-for-byte identical values to
+`saferise-dashboard.css`'s own `:root`) rather than importing them — the same "same class name,
+separately styled per page" pattern this file already uses for `.stage` and `.crisis`. Linking the
+whole dashboard stylesheet would have pulled in everything else on it (hero sliders, journal
+grids, arc gauges) into a page whose entire point is not carrying that. `js/saferise-card.js`
+(`SafeRiseCover.art()`) is genuinely new to this page — added via `<script>`, before
+`js/saferise-track.js` per that file's own load-order comment — since nothing here rendered an
+actual cover before this pass.
+
+Track selection is local and one-way: seeded from `PAGE_PROTOCOL.trackId` (already correct when
+opened from the dashboard — the iframe `src` already carries `&track=`, so no `postMessage` was
+needed) and never reported anywhere. Holds rather than auto-advances — there is no drift timer for
+this carousel at all, only a plain `scrollBy` on the arrows. Unlocked cards carry a real
+`href="protocol.html?track=&protocol="` (`&embed=1` preserved when already embedded) so they work
+without JavaScript; the whole card is also click-delegated to match the dashboard's own carousel.
+
+**DIFFERS, reported:**
+- **No search, chips or heart on this panel.** F4's own text asks only for "the track panel + the
+  carousel" and its own upsell — not F2/F3's controls — so none were added, keeping this
+  panel's scope to what F4 actually specified rather than porting F2/F3 wholesale a second time.
+- **"Above the reader" is an inference, not a literal instruction** — protocol.html has no element
+  named or commented as "the reader." Read as "above `#log`/`#resources`," the section that most
+  plausibly earns that description, and cross-checked against the one hard constraint the brief
+  did give (must not disturb the SR-417 banner's position) — placing it after `#experience`
+  entirely satisfies that constraint by construction, regardless of which reading is right.
+
+**Caught and fixed before it shipped, same class of bug as SR-417:** the first version declared
+`PP_ACCENT`/`PP_TRACKNAME`/`PP_ARROW`/`PP_LOCK`/`ppEmbed` as top-level `var`s positioned after the
+`PAGE_PROTOCOL`-resolution IIFE that calls `initLibraryPanel()` synchronously on page load —
+`function` declarations hoist with their body, but a `var`'s value is only assigned when execution
+reaches that line, which is after the call site. Every one of these five was moved inside the
+function that actually uses it before this was ever loaded in a browser, so the live-tested code
+never carried the bug — caught by re-reading against the SR-417 lesson, not by reproducing the
+crash first.
+
+### Verify
+
+Six widths (1440/1200/1024/900/640/390) on both `dashboard.html` (with a search query active, the
+largest combined result set) and `protocol.html`: `document.documentElement.scrollWidth −
+document.documentElement.clientWidth` was `0` at every one on both pages. (`window.innerWidth`
+itself read `0` on one freshly-created, never-resized browser tab in this environment —
+confirmed as a tooling artifact via `document.documentElement.clientWidth`/`visualViewport.width`
+agreeing at 1024 on the same tab, not a real layout defect; noted so the next pass doesn't
+mistake it for one.)
+
+Search: cross-track results confirmed (1 match for "grief"); rail deselects; "All protocols"
+restores the previously browsed track and re-selects its rail button. Heart: toggles without
+opening the protocol or moving `window.scrollY`; count updates live; state survives a reload;
+a mid-session `localStorage.setItem` throw does not crash the click handler. Saved/Recently-used/
+In-my-plan chips: correct cross-track counts, correct empty state, correct chip highlighting.
+F4 panel: renders on a fresh tab with no console errors; seeds to the opened protocol's track;
+marks it `is-current` with "Reading" instead of "Open"; track-rail clicks move only the strip;
+crisis banner re-verified present and unchanged on `t1-p06`, `t1-p10`, `t2-p10` after the panel
+was added. No console errors observed on either page across all of the above, each time checked
+on a fresh tab (a reused tab's console carries stale entries across navigation in this
+environment — the same finding SR-417 already made, re-confirmed here rather than re-investigated
+as if new).
+
+### Files
+
+`css/saferise-dashboard.css`, `dashboard.html`, `protocol.html`, `docs/fix-register.md`. No
+`CLAUDE.md` edit needed — its `sr-dash-`/`sr-lib-` note from SR-418 already covers this pass's
+own namespace decision.
+
+*Status:* F2, F3 and F4 all complete and verified, per the brief's withdrawal of the prior
+"stop after F1" instruction. Three DIFFERS reported (the mislabelled progress-bar/cover-internals
+table, the rose-accent substitution, F4's CSS carried inline rather than linked); two behaviours
+added beyond a literal reading (locked-card-opens-upsell, rail-click-clears-search) with reasoning
+given for each; one verification item (the locked-cover click, live) could not be produced
+end-to-end in an environment with no active entitlement gate, and was verified by code inspection
+instead, reported as a limitation rather than claimed as done. One class of bug (var-hoisting
+before its assignment executes) recurred from SR-417 and was caught by deliberately re-reading
+against that lesson before first load, not by re-discovering it live. **Not pushed.**

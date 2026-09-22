@@ -258,6 +258,22 @@
           <button class="sr-dash-carbtn sr-dash-carnext" aria-label="More protocols"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
         </div>
       </div>
+
+      <!-- SR-421 (PASS-dashboard-F2-F4.md Part F2) · a second, separate search
+           control — #srArrive above is the state router and is never reused,
+           moved or restyled for this. Searches title, subtitle and track name
+           across all three tracks; see refreshLibrary() in the script below. -->
+      <div class="sr-dash-search">
+        <svg class="sr-dash-searchico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+        <input type="search" id="srLibSearch" class="sr-dash-searchinput" placeholder="Search every track — try &lsquo;overwhelm&rsquo;, &lsquo;sleep&rsquo; or &lsquo;anger&rsquo;" aria-label="Search all protocols">
+      </div>
+      <div class="sr-dash-chips" role="group" aria-label="Filter protocols" id="srLibChips">
+        <button type="button" class="sr-dash-chip on" aria-pressed="true" data-f="all">All protocols</button>
+        <button type="button" class="sr-dash-chip" aria-pressed="false" data-f="inc">In my plan</button>
+        <button type="button" class="sr-dash-chip" aria-pressed="false" data-f="saved">Saved<span class="sr-dash-chipn" id="srSavedCount">0</span></button>
+        <button type="button" class="sr-dash-chip" aria-pressed="false" data-f="recent">Recently used</button>
+      </div>
+
       <div class="sr-dash-lib">
         <div class="sr-dash-rail" role="tablist" aria-label="Tracks">
           <button class="sr-dash-railbtn on" role="tab" aria-selected="true" data-track="1">
@@ -977,6 +993,11 @@
   var next = document.querySelector('.sr-dash-carnext');
   var ARROW = '<svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg>';
   var LOCK  = '<svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>';
+  /* SR-422 (PASS-dashboard-F2-F4.md Part F3) · rose is not a token this
+     palette carries anywhere (gold/teal/muted only, checked before assuming
+     it) — the saved state uses the existing gold accent instead of
+     introducing an unprecedented colour. Reported as adapted. */
+  var HEART = '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.2A4.1 4.1 0 0 1 12 8a4.1 4.1 0 0 1 7 2.8C19 15.6 12 20 12 20Z"/></svg>';
 
   function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
   /* PASS-card-titles.md · derived at render time only, on the card label alone.
@@ -1033,6 +1054,70 @@
   function ribbonFor(){ return ''; }
 
   var CURRENT_TRACK = 1;
+
+  /* SR-421 (PASS-dashboard-F2-F4.md Parts F2/F3) · pulled out of render()
+     unchanged (same markup, same SafeRiseCover.art() call, same ribbon/
+     action logic) so a cross-track result list (search, Saved, Recently
+     used, In my plan) can build cards for protocols outside the currently
+     browsed track — render() itself only ever asks DASHTRACKS for one
+     track. Two additions beyond the extraction: data-track, so a card
+     built for one track is still resolvable to it inside a mixed list; and
+     the heart button, drawn inside SafeRiseCover.art()'s own `extra` slot
+     (a sibling of the cover image, not a wrapper around .sr-dash-card —
+     see the CSS comment on .sr-dash-heart for why the mockup's button-in-
+     button fix does not apply here). */
+  function cardHTML(n, i){
+    var t = DASHTRACKS[n];
+    var it = t.items[i];
+    var no = String(i+1).padStart(2,'0');
+    // PASS-carousel-resume-and-routing.md §4 · -640 derivative, not the
+    // 900x1200 original, for a 176px-wide carousel card (~65KB vs ~120KB
+    // each, confirmed present on disk for every cover, all three tracks).
+    var src = COVERDIR[n] + no + '-640.jpg';
+    var cur = t.unlocked && it[1] === currentProtocol();
+    /* SR-162 · the cover is the shared component in js/saferise-card.js,
+       the same one the track pages render. What stood here was a
+       `.sr-dash-fallback` tile carrying the kicker and number, deleted on
+       image load by an onload handler, because the number was burned into
+       the cover art. The covers are being reshot BARE, so that tile was
+       no longer a fallback — it was the only thing that would carry the
+       number, and it removed itself the moment the picture arrived.
+       Both are permanent now, drawn from the record on every surface. */
+    var ribbon = ribbonFor(cur);
+    var saved = isSaved(n, no);
+    var heart = '<button type="button" class="sr-dash-heart" data-heart="1" data-track="'+n+'" data-no="'+no+
+      '" aria-pressed="'+saved+'" aria-label="'+(saved?'Remove from saved':'Save this protocol')+'">'+HEART+'</button>';
+    var action = t.unlocked
+      ? '<a class="sr-dash-go" href="#">'+(cur?'Continue':'Begin')+' '+ARROW+'</a>'
+      : '<span class="sr-dash-lock">'+LOCK+'Locked</span>';
+    return '<article class="sr-dash-card'+(t.unlocked?'':' sr-dash-locked')+(cur?' is-current':'')+
+      '" data-track="'+n+'" data-open="'+(t.unlocked?esc(it[1]):'')+'" data-no="'+no+'" data-src="'+src+'">'+
+      SafeRiseCover.art({ src: src, no: no, label: it[0], extra: ribbon + heart })+
+      '<h3 class="sr-dash-cardname">'+esc(cardTitle(it[1]))+'</h3>'+action+'</article>';
+  }
+
+  /* Extracted from render() unchanged, so a locked-card click (F2/F3: "still
+     opens the upsell on click", in any mode, not only when the whole track
+     is being browsed) can show the same panel for whichever track the
+     clicked card belongs to, not only CURRENT_TRACK. */
+  function showLockCta(n){
+    var t = DASHTRACKS[n];
+    var lock = document.getElementById('srLockCta');
+    if(!lock) return;
+    if(!t || t.unlocked || !t.items.length){ lock.classList.remove('show'); return; }
+    document.getElementById('srLockText').innerHTML =
+      '<b>' + TRACKNAME[n] + ' is not on your plan yet.</b> ' +
+      'Adding it opens all ten protocols and every resource inside them. Your existing access stays exactly as it is.';
+    var up = TRACKS[n] && TRACKS[n].price;
+    document.getElementById('srLockBtn').innerHTML =
+      'Add for ' + (up ? up.amount + ' ' + up.per : '') + ' ' + ARROW;
+    lock.classList.add('show');
+  }
+  function hideLockCta(){
+    var lock = document.getElementById('srLockCta');
+    if(lock) lock.classList.remove('show');
+  }
+
   function render(n){
     var t = DASHTRACKS[n];
     CURRENT_TRACK = +n;
@@ -1046,51 +1131,14 @@
        If a future track ever ships with no protocols, restore a guard here with
        that track's own copy, not the retired one's. */
 
-    var CURRENT = currentProtocol();
-
-    var CARDS = t.items.map(function(it,i){
-      var no  = String(i+1).padStart(2,'0');
-      // PASS-carousel-resume-and-routing.md §4 · -640 derivative, not the
-      // 900x1200 original, for a 176px-wide carousel card (~65KB vs ~120KB
-      // each, confirmed present on disk for every cover, all three tracks).
-      var src = COVERDIR[n] + no + '-640.jpg';
-      var cur = t.unlocked && it[1] === CURRENT;
-      /* SR-162 · the cover is the shared component in js/saferise-card.js,
-         the same one the track pages render. What stood here was a
-         `.sr-dash-fallback` tile carrying the kicker and number, deleted on
-         image load by an onload handler, because the number was burned into
-         the cover art. The covers are being reshot BARE, so that tile was
-         no longer a fallback — it was the only thing that would carry the
-         number, and it removed itself the moment the picture arrived.
-         Both are permanent now, drawn from the record on every surface. */
-      var ribbon = ribbonFor(cur);
-      var action = t.unlocked
-        ? '<a class="sr-dash-go" href="#">'+(cur?'Continue':'Begin')+' '+ARROW+'</a>'
-        : '<span class="sr-dash-lock">'+LOCK+'Locked</span>';
-      return '<article class="sr-dash-card'+(t.unlocked?'':' sr-dash-locked')+(cur?' is-current':'')+
-        '" data-open="'+(t.unlocked?esc(it[1]):'')+'" data-no="'+no+'" data-src="'+src+'">'+
-        SafeRiseCover.art({ src: src, no: no, label: it[0], extra: ribbon })+
-        '<h3 class="sr-dash-cardname">'+esc(cardTitle(it[1]))+'</h3>'+action+'</article>';
-    }).join('');
+    var CARDS = t.items.map(function(it,i){ return cardHTML(n, i); }).join('');
     // Two identical sets. The flow runs forward only; when it has travelled the
     // width of one set we subtract that width with no animation, so the loop is
     // seamless — no reversal, no jump back, nothing that reads as a dip.
     row.innerHTML = t.items.length > 3 ? CARDS + CARDS : CARDS;
     row.setAttribute('data-doubled', t.items.length > 3 ? '1' : '0');
 
-    var lock = document.getElementById('srLockCta');
-    if(lock){
-      if(t.unlocked || !t.items.length){ lock.classList.remove('show'); }
-      else {
-        document.getElementById('srLockText').innerHTML =
-          '<b>' + TRACKNAME[n] + ' is not on your plan yet.</b> ' +
-          'Adding it opens all ten protocols and every resource inside them. Your existing access stays exactly as it is.';
-        var up = TRACKS[n] && TRACKS[n].price;
-        document.getElementById('srLockBtn').innerHTML =
-          'Add for ' + (up ? up.amount + ' ' + up.per : '') + ' ' + ARROW;
-        lock.classList.add('show');
-      }
-    }
+    showLockCta(n);
     pos = 0; apply();
     sync();
     if(typeof updateCount === 'function') updateCount();
@@ -1109,6 +1157,14 @@
 
   rail.forEach(function(b){
     b.addEventListener('click', function(){
+      /* SR-421 · a direct track pick is an explicit "back to normal
+         browsing" action — clears whatever search/filter state was active
+         rather than leaving the rail's own selection out of sync with it.
+         Not stated explicitly in the brief; a reasonable extension of "clearing
+         the query restores the previously selected track," reported as adapted. */
+      libQuery = ''; libFilter = 'all';
+      if(searchInput) searchInput.value = '';
+      setChip('all');
       rail.forEach(function(x){ x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
       b.classList.add('on'); b.setAttribute('aria-selected','true');
       var n = b.getAttribute('data-track');
@@ -1117,6 +1173,150 @@
       render(n);
       renderJourney(n);
       paintFoldTitle();           /* SR-373 · no longer track-dependent — see its own definition */
+    });
+  });
+
+  // ══════════ SR-421/SR-422 (PASS-dashboard-F2-F4.md Parts F2/F3) ══════════
+  // Search across every track, the Saved/Recently-used/In-my-plan filter
+  // chips, and device-only saving. All four share one mechanism: build a
+  // cross-track list, deselect the rail, and repaint the head as a count —
+  // matching the reference mockup's build()/head()/matches() shape, adapted
+  // onto DASHTRACKS/cardHTML rather than the mockup's own data shape.
+  var SAVED_KEY = 'sr-saved-v1';
+  function getSaved(){
+    var arr = Store.get(SAVED_KEY, []);
+    return Array.isArray(arr) ? arr : [];
+  }
+  function isSaved(n, no){ return getSaved().indexOf(n + ':' + no) !== -1; }
+  function toggleSaved(n, no){
+    var id = n + ':' + no, list = getSaved(), i = list.indexOf(id);
+    if(i === -1) list.push(id); else list.splice(i, 1);
+    Store.set(SAVED_KEY, list);          // Store.set already wraps localStorage in try/catch
+    return i === -1;                     // true if now saved
+  }
+  function updateSavedCount(){
+    var el = document.getElementById('srSavedCount');
+    if(el) el.textContent = String(getSaved().length);
+  }
+
+  /* Real usage only — no fabricated progress metric. currentProtocol() and
+     sr.journal.entries are the only genuine "this protocol was actually
+     opened" signals this page has (see SR-161/SR-191's own reasoning, a few
+     screens up: a measurement with no real writer is worse than none). The
+     brief's "already exists" table names .sr-cover-rail as a per-cover
+     progress bar — that class is the single Clearing hero
+     (#srClearingPlay), not the carousel cards, which carry no progress
+     marker at all; reported as DIFFERS rather than built against a
+     non-existent element. */
+  function isRecent(n, no, title){
+    if(currentProtocol() === title) return true;
+    var entries = Store.get(K_ENTRIES, []);
+    if(!Array.isArray(entries)) return false;
+    for(var i = 0; i < entries.length; i++){
+      if(entries[i] && entries[i].protocol === title) return true;
+    }
+    return false;
+  }
+
+  var libQuery = '', libFilter = 'all';
+  function matchesQuery(n, i, q){
+    var t = DASHTRACKS[n], it = t.items[i];
+    var hay = (it[1] + ' ' + it[0] + ' ' + TRACKNAME[n]).toLowerCase();
+    return hay.indexOf(q) !== -1;
+  }
+  function collectList(){
+    var out = [];
+    [1,2,3].forEach(function(n){
+      var t = DASHTRACKS[n];
+      t.items.forEach(function(it, i){
+        var no = String(i+1).padStart(2,'0');
+        if(libQuery && !matchesQuery(n, i, libQuery)) return;
+        if(libFilter === 'inc'    && !t.unlocked) return;
+        if(libFilter === 'saved'  && !isSaved(n, no)) return;
+        if(libFilter === 'recent' && !isRecent(n, no, it[1])) return;
+        out.push({track: n, i: i});
+      });
+    });
+    return out;
+  }
+  function inCombinedMode(){ return !!libQuery || libFilter !== 'all'; }
+
+  function updateLibHead(n){
+    if(libQuery){ note.textContent = 'Results for “' + libQuery + '” · ' + n + ' across all tracks'; return; }
+    if(libFilter === 'saved'){  note.textContent = 'Saved · ' + n + ' protocol' + (n===1?'':'s') + ' you kept'; return; }
+    if(libFilter === 'recent'){ note.textContent = 'Recently used · ' + n + ' in progress or complete'; return; }
+    if(libFilter === 'inc'){    note.textContent = 'In my plan · ' + n + ' protocol' + (n===1?'':'s'); return; }
+  }
+
+  /* Rebuilds the row for a cross-track list. Autoplay resets rather than
+     continuing to drift through cards that may no longer be there — same
+     pos/vel/target/stopped reset render() already does on a plain track
+     switch, plus stopped=false, since a manual stop from a PRIOR result set
+     should not silently carry over and suppress drift on a new one. */
+  function renderCombined(list){
+    row.className = 'sr-dash-carrow';
+    var CARDS = list.map(function(e){ return cardHTML(e.track, e.i); }).join('');
+    row.innerHTML = list.length > 3 ? CARDS + CARDS : CARDS;
+    row.setAttribute('data-doubled', list.length > 3 ? '1' : '0');
+    hideLockCta();
+    pos = 0; vel = 0; target = 0; stopped = false; apply();
+    sync();
+    updateCount();
+    startFlow();
+  }
+
+  function refreshLibrary(){
+    if(!inCombinedMode()){
+      rail.forEach(function(x){
+        var on = x.getAttribute('data-track') === String(CURRENT_TRACK);
+        x.classList.toggle('on', on);
+        x.setAttribute('aria-selected', String(on));
+      });
+      render(CURRENT_TRACK);
+      updateSavedCount();
+      return;
+    }
+    rail.forEach(function(x){ x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
+    var list = collectList();
+    if(!list.length){
+      row.className = 'sr-dash-carrow';
+      row.innerHTML = '<p class="sr-dash-emptyline">Nothing matches that yet. Try a state rather than a title — ‘overwhelm’, ‘shutdown’, ‘anger’.</p>';
+      row.setAttribute('data-doubled', '0');
+      hideLockCta();
+      pos = 0; apply();
+      updateLibHead(0);
+      updateSavedCount();
+      return;
+    }
+    renderCombined(list);
+    updateLibHead(list.length);
+    updateSavedCount();
+  }
+
+  var searchInput = document.getElementById('srLibSearch');
+  var chips = document.querySelectorAll('.sr-dash-chip');
+  function setChip(f){
+    chips.forEach(function(x){
+      var on = x.getAttribute('data-f') === f;
+      x.classList.toggle('on', on);
+      x.setAttribute('aria-pressed', String(on));
+    });
+  }
+  if(searchInput){
+    var searchTimer = null;
+    searchInput.addEventListener('input', function(){
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function(){
+        libQuery = searchInput.value.trim().toLowerCase();
+        refreshLibrary();
+      }, 180);
+    });
+  }
+  chips.forEach(function(c){
+    c.addEventListener('click', function(){
+      libFilter = c.getAttribute('data-f');
+      setChip(libFilter);
+      refreshLibrary();
     });
   });
 
@@ -2701,21 +2901,49 @@
   document.getElementById('srProtoBack').addEventListener('click', closeProtocol);
 
   row.addEventListener('click', function(e){
+    /* SR-422 · checked first, same as the reference mockup's bindPick() —
+       saving never opens the protocol. stopPropagation is largely
+       redundant here (row IS the listener; nothing above it also opens on
+       click) but matches the brief's explicit instruction and costs
+       nothing to keep. */
+    var heart = e.target.closest('.sr-dash-heart');
+    if(heart){
+      e.preventDefault(); e.stopPropagation();
+      var htrack = heart.getAttribute('data-track'), hno = heart.getAttribute('data-no');
+      var nowSaved = toggleSaved(htrack, hno);
+      heart.setAttribute('aria-pressed', String(nowSaved));
+      heart.setAttribute('aria-label', nowSaved ? 'Remove from saved' : 'Save this protocol');
+      updateSavedCount();
+      if(libFilter === 'saved') refreshLibrary();   // unsaving here must drop it from its own list
+      return;
+    }
     var card = e.target.closest('.sr-dash-card');
     if(!card) return;
+    /* SR-421 · "locked cards do nothing" above was true before this pass —
+       F2/F3 need a locked cover (which can now belong to a track other than
+       CURRENT_TRACK, in a mixed search/filter result) to open the upsell
+       rather than silently no-op. */
+    if(card.classList.contains('sr-dash-locked')){
+      e.preventDefault();
+      showLockCta(card.getAttribute('data-track') || CURRENT_TRACK);
+      var cta = document.getElementById('srLockCta');
+      if(cta) cta.scrollIntoView({block:'nearest', behavior:'smooth'});
+      return;
+    }
     var name = card.getAttribute('data-open');
-    if(!name) return;       // locked cards do nothing
+    if(!name) return;
     e.preventDefault();
     // PASS-CLAUDE-CODE-shapes-and-nav.md, Part B1 · this is the actual
     // protocol switcher — carry whatever view the member is in right now
     // (read before pOpen/frame.src change for the new protocol) across
     // the switch, rather than always landing on the overview.
-    openProtocol(name, card.getAttribute('data-src'), card.getAttribute('data-no'), CURRENT_TRACK, undefined, inResourceView);
+    openProtocol(name, card.getAttribute('data-src'), card.getAttribute('data-no'), +card.getAttribute('data-track') || CURRENT_TRACK, undefined, inResourceView);
   });
 
   render(1);
   renderJourney(1);
   updateCount();
+  updateSavedCount();
   startFlow();
 
   /* pass/legal/LEGAL-PAGES-BRIEF.md Task 3, continued. The synchronous

@@ -180,6 +180,42 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
 .sr-dash-railbtn.on .sr-dash-railname{color:var(--text)}
 .sr-dash-railmeta{display:block;font-size:13px;color:var(--text3);margin-top:3px}
 
+/* SR-421 (PASS-dashboard-F2-F4.md Part F2) · library search, a second and
+   separate control from #srArrive (the state router — never reused, per the
+   brief). Borderless per the standing constraint: a surface step
+   (background) plus an inset highlight, never a border. */
+.sr-dash-search{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.02);
+  box-shadow:inset 0 1px 0 rgba(245,237,218,.055);border-radius:12px;padding:12px 16px;margin-bottom:14px}
+.sr-dash-searchico{width:16px;height:16px;flex:0 0 auto;stroke:var(--text3);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.sr-dash-searchinput{flex:1;min-width:0;border:0;background:transparent;color:var(--text);font:inherit;font-size:14px;outline:none}
+.sr-dash-searchinput::placeholder{color:var(--text3)}
+
+/* SR-422 (PASS-dashboard-F2-F4.md Part F3) · filter chips beneath search. */
+.sr-dash-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.sr-dash-chip{border:0;background:rgba(255,255,255,.02);box-shadow:inset 0 1px 0 rgba(245,237,218,.055);
+  color:var(--text3);font:inherit;font-size:12.5px;padding:8px 15px;border-radius:99px;cursor:pointer;transition:background .2s,color .2s}
+.sr-dash-chip:hover{color:var(--text2)}
+.sr-dash-chip.on{background:rgba(212,168,67,.13);color:var(--gold)}
+.sr-dash-chip:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.sr-dash-chipn{color:var(--text3);font-size:11px;margin-left:5px}
+.sr-dash-chip.on .sr-dash-chipn{color:var(--gold)}
+
+/* The heart lives inside .sr-pcover (position:relative, saferise-system.css)
+   via SafeRiseCover.art()'s `extra` slot — not a wrapper around .sr-dash-card,
+   because .sr-dash-card is an <article>, not a <button> (it holds an <a> for
+   Begin/Continue). The mockup's button-in-button problem, and its .slot
+   wrapper fix, does not apply to this markup — reported as adapted. */
+.sr-dash-heart{position:absolute;top:8px;right:8px;z-index:4;width:28px;height:28px;border:0;
+  border-radius:50%;background:rgba(8,8,12,.55);cursor:pointer;display:grid;place-items:center;
+  color:rgba(245,237,218,.6);transition:color .2s,background .2s,transform .2s}
+.sr-dash-heart:hover{background:rgba(8,8,12,.78);transform:scale(1.08)}
+.sr-dash-heart svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.sr-dash-heart[aria-pressed="true"]{color:var(--gold)}
+.sr-dash-heart[aria-pressed="true"] svg{fill:var(--gold)}
+.sr-dash-heart:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+.sr-dash-emptyline{flex:1 1 auto;padding:30px 4px;color:var(--text2);font-size:13.5px;line-height:1.7}
+
 .sr-dash-carwrap{position:relative;min-width:0}
 /* PASS-organisations-full.md A3 · was overflow:hidden with the row moved
    by transform (confirmed the one surface genuinely on the transform bug
