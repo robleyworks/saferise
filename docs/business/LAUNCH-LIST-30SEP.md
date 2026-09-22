@@ -66,9 +66,9 @@ passage separately, so the model has no context across seams and tone lurches
 between passages. **ElevenLabs Studio — one continuous performance with gaps placed
 on a timeline afterwards — is the likely fix and is untested.**
 
-- [ ] Test Studio on one full protocol, both voices
+- [ ] Test Studio on one full protocol
 - [ ] Compare against the current per-passage output
-- [ ] **Decide before rendering 62 files the wrong way**
+- [ ] **Decide before rendering 31 files the wrong way**
 
 ### B2 · Production
 
@@ -180,7 +180,7 @@ banner, **the team page**, instrumentation, and the tone-break decision.
 
 ## The two honest risks
 
-**The audio.** 62 renders in 16 days with an unresolved pipeline problem, alongside
+**The audio.** 31 renders in 16 days with an unresolved pipeline problem, alongside
 a full-time job. **If Studio does not solve the seam problem in the first two days,
 the beta opens with one voice and fewer protocols — decide that early rather than
 discovering it on the 28th.**

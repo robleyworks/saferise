@@ -29,6 +29,15 @@
      colours (mob 6.09, safe 5.62) so the meaning survives; one token
      lightened, not a design change. */
   --mob:#C97A5A; --safe:#7FA88C; --shut:#7288A0;
+  /* SR-425 (PASS-finish.md Part C) · 22 September 2026 — gold already carries
+     active/selected across this dashboard (active track row, active filter
+     chip, progress fill); a saved protocol needs its own colour rather than
+     reading as another "selected" state. Measured against --bg (#0C0C12,
+     6.59:1) and against docs/TYPE-AND-CONTRAST.md's own #0a0c14 ground
+     (6.60:1) — both clear AA and that doc's 6:1 comfort floor with no
+     lightening needed; recorded there, not copied from the brief that
+     suggested the hex value. */
+  --rose:#c4877a;
   --accent:var(--sr-track01);
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -210,8 +219,13 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
   color:rgba(245,237,218,.6);transition:color .2s,background .2s,transform .2s}
 .sr-dash-heart:hover{background:rgba(8,8,12,.78);transform:scale(1.08)}
 .sr-dash-heart svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.sr-dash-heart[aria-pressed="true"]{color:var(--gold)}
-.sr-dash-heart[aria-pressed="true"] svg{fill:var(--gold)}
+/* SR-425 (PASS-finish.md Part C) · was var(--gold) — gold already means
+   active/selected elsewhere on this dashboard (track row, filter chip,
+   progress fill), so a saved cover read as a selected one. --rose is its
+   own token now; see the :root comment above and docs/TYPE-AND-CONTRAST.md
+   for the measured ratio. Resting (unsaved) colour is untouched. */
+.sr-dash-heart[aria-pressed="true"]{color:var(--rose)}
+.sr-dash-heart[aria-pressed="true"] svg{fill:var(--rose)}
 .sr-dash-heart:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 .sr-dash-emptyline{flex:1 1 auto;padding:30px 4px;color:var(--text2);font-size:13.5px;line-height:1.7}

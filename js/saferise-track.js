@@ -193,9 +193,9 @@
 
   /* ── 01 · protocol rail ───────────────────────────────────────────
      PASS-track-landing-pages.md §3/§4. Card at rest: cover, door label,
-     number, state tag, title. Description and one identification quote
-     reveal on hover/focus-within. Height is fixed so the rail never
-     reflows when a card opens.
+     number, title. Description and one identification quote reveal on
+     hover/focus-within. Height is fixed so the rail never reflows when a
+     card opens.
 
      Titles: cardTitle(p[2]) — derived, never edited into content/tracks.js
      (SR-382's own rule, reused here rather than a second implementation).
@@ -209,14 +209,29 @@
      Door label: p[1] (the stored verb), even on the few cards where a
      mockup's own door text drifted from it — the data model stays
      authoritative.
-     State tag: the LAST array element, not a fixed index — most rows are
-     7 elements (state at [7]), but t3-06 (Belonging Gap) carries a
-     documented one-row schema exception (an 8th element, a body-sentence,
-     inserted before the slug — see its own comment in content/tracks.js),
-     which pushed a fixed p[7] read onto its slug string instead of its
-     state on that one row. p[p.length-1] is correct regardless. New
-     per-protocol classification this pass adds
-     (Agitated / Unsteady / Numb), sourced from the three mockups.
+     SR-424 (PASS-finish.md Part A, applying PASS-cover-state-and-rail.md
+     Part A) · 22 September 2026 — HISTORICAL, kept for the schema knowledge
+     it carries, not for the read it used to document. The paragraph below
+     described why the state tag was read as the LAST array element rather
+     than a fixed p[7]: most rows are 7 elements (state at [7]), but t3-06
+     (Belonging Gap) carries a documented one-row schema exception (an 8th
+     element, a body-sentence, inserted before the slug — see its own
+     comment in content/tracks.js), which would push a fixed p[7] read onto
+     its slug string instead of its state on that one row. The state tag
+     itself is gone from the cover (display decision only — the
+     classification stays in content/tracks.js, untouched); nothing in this
+     function reads the last element any more. The exception is still true
+     of the data, and the next person to add a per-protocol field needs to
+     know t3-06's row is 8 elements long, not 7 — that is why this stays
+     rather than being deleted with the read it used to explain.
+     Original paragraph, for the record: "State tag: the LAST array element,
+     not a fixed index — most rows are 7 elements (state at [7]), but t3-06
+     (Belonging Gap) carries a documented one-row schema exception (an 8th
+     element, a body-sentence, inserted before the slug — see its own
+     comment in content/tracks.js), which pushed a fixed p[7] read onto its
+     slug string instead of its state on that one row. p[p.length-1] is
+     correct regardless. New per-protocol classification this pass adds
+     (Agitated / Unsteady / Numb), sourced from the three mockups."
 
      Rail markup carries data-sr-carousel / data-sr-track so
      js/saferise-system.js's revived carousel binds to it — see that file
@@ -235,7 +250,7 @@
           '<img class="sr-tp-cardimg2" src="' + esc(coverPath(t.id, p[0], '640')) + '" alt="" loading="lazy" decoding="async" onerror="this.closest(\'.sr-tp-cardcov2\').classList.add(\'sr-tp-ph2\')">' +
           '<span class="sr-tp-carddoor2">' + esc(p[1]) + '</span>' +
           '<span class="sr-tp-cardnum2">' + esc(p[0]) + '</span>' +
-          '<span class="sr-tp-cardstate2">' + esc(p[p.length - 1] || '') + '</span>' + free +
+          free +
         '</div>' +
         '<div class="sr-tp-cardtext2">' +
           '<h3>' + esc(title) + '</h3>' +

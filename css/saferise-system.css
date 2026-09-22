@@ -4663,8 +4663,13 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
   letter-spacing:.2em;text-transform:uppercase;color:var(--tc)}
 .sr-tp-cardnum2{position:absolute;right:16px;top:12px;z-index:2;
   font:300 1.4rem/1 'Cormorant Garamond',serif;color:rgba(242,234,216,.72)}
-.sr-tp-cardstate2{position:absolute;right:16px;bottom:12px;z-index:2;font:500 13px/1 'DM Sans',sans-serif;
-  letter-spacing:.16em;text-transform:uppercase;color:rgba(242,234,216,.52)}
+/* SR-424 (PASS-finish.md Part A, applying PASS-cover-state-and-rail.md Part A) ·
+   22 September 2026 — .sr-tp-cardstate2 removed from js/saferise-track.js's
+   card markup (the state word no longer renders on any landing-page cover),
+   so this rule is now orphaned. The source brief claimed the class appeared
+   exactly once in the repo (the markup line alone) — false, this rule was
+   the second occurrence, found by the repo-wide grep the brief itself asked
+   for before concluding there was nothing to remove. */
 .sr-tp-free2{position:absolute;left:16px;bottom:12px;z-index:2;font:700 13px/1 'DM Sans',sans-serif;
   letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
 /* PASS-organisations-full.md A2 · root cause of "text doesn't show on

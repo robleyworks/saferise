@@ -17,7 +17,9 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-423** (SR-420 through SR-423 — `PASS-dashboard-F2-F4.md`; see that
+- **Highest ID issued: SR-426** (SR-424 through SR-426 — `PASS-finish.md`; see that entry near
+  the end of the file.)
+- **Previously: Highest ID issued: SR-423** (SR-420 through SR-423 — `PASS-dashboard-F2-F4.md`; see that
   entry near the end of the file.)
 - **Previously: Highest ID issued: SR-419** (SR-414 through SR-419 — `PASS-dashboard-panel-and-carousel.md`;
   see that entry near the end of the file. This line was found already stale — reading SR-411
@@ -18922,3 +18924,119 @@ end-to-end in an environment with no active entitlement gate, and was verified b
 instead, reported as a limitation rather than claimed as done. One class of bug (var-hoisting
 before its assignment executes) recurred from SR-417 and was caught by deliberately re-reading
 against that lesson before first load, not by re-discovering it live. **Not pushed.**
+
+## SR-424 through SR-426 — the three items still open (PASS-finish.md)
+
+`pass/PASS-finish.md`. Parts A, B and C, all applied and verified. Committed locally, not
+pushed.
+
+**On "Parts A, B, C and D":** the brief that opened this pass names four parts, but
+`pass/PASS-finish.md` on disk has three (A, B, C) plus a closing "Report" section — no
+Part D. The brief's own description of "Part D" ("a documentation change only — do not
+build the voice toggle") matches the file's **Part B** exactly — a wording correction in
+`docs/business/LAUNCH-LIST-30SEP.md`, explicitly not a toggle build, with no guidance given
+for any "Part B" of its own. Read as the same three parts under a label mismatch (Part
+B ≡ the brief's "Part D") rather than a fourth, unspecified item — inventing content for a
+literal Part D would have meant guessing at something only Andre could actually ask for.
+Flagged here rather than silently reinterpreted.
+
+### SR-424 — Part A, the state word removed from landing-page covers
+
+Applied `pass/PASS-cover-state-and-rail.md` Part A only, as instructed — Part B
+(`LAP_SECONDS`, the reduced-motion opt-out) untouched. `js/saferise-track.js`'s
+`rProtocols()`: the `.sr-tp-cardstate2` span deleted, `free` kept on its own line (verified
+by reading the result back — `free` still concatenates into the same string). The block
+comment at lines ~212–219 marked historical with a dated SR-424 note rather than deleted,
+carrying forward the t3-06 (Belonging Gap) 8-element schema-exception knowledge a future
+per-protocol field addition needs; the original paragraph is quoted verbatim inside the new
+comment so nothing written there is lost, only superseded. The one-line summary at ~196
+("Card at rest: cover, door label, number, state tag, title") also updated — "state tag"
+dropped, since it's no longer part of what's at rest.
+
+**DIFFERS, found and fixed rather than left:** both source briefs claim
+`.sr-tp-cardstate2` "appears exactly once in the entire repository" and explicitly ask for
+a repo-wide grep to confirm that before concluding there's nothing to clean up. The grep
+found a second occurrence — a live CSS rule in `css/saferise-system.css` (line ~4666),
+sitting among its sibling card-overlay rules (`.sr-tp-carddoor2`, `.sr-tp-cardnum2`,
+`.sr-tp-free2`). Since the markup change removes every remaining usage, this rule is now
+genuinely orphaned rather than a shared selector serving something else — removed, with a
+dated comment in its place rather than a silent deletion.
+
+**Verified:** all three landing pages (`personal-transformation.html`,
+`relationship-healing.html`, `professional-performance.html`) — 20 cards each (10 real + 10
+cloned for the rail's continuous loop), zero `.sr-tp-cardstate2` elements, door label and
+number both present and correct on every card, zero console errors on any of the three.
+t3-06 Belonging Gap specifically checked on the Professional Performance page: renders
+`num:"06"`, `door:"Stand"`, title "Belonging Gap" — no stray slug string, confirming the
+schema-exception row degrades safely with the state read removed entirely.
+`content/tracks.js`'s t3-06 row and its own SR-216/SR-258 comments confirmed untouched.
+**Not independently confirmed by screenshot** — this environment's browser-pane screenshot
+tool returned a blank black frame on repeated attempts across all three pages (a recurring
+tooling artifact this session, not new; `get_page_text` confirmed real page content was
+present throughout). Verification here rests on DOM/attribute inspection and console
+output, not a visual capture.
+
+### SR-425 — Part C, the saved heart's own colour
+
+`--rose:#c4877a` added to `css/saferise-dashboard.css`'s `:root`, alongside the other
+accent tokens, and to `docs/TYPE-AND-CONTRAST.md`'s Accents table. `.sr-dash-heart[aria-
+pressed="true"]` (colour and `svg` fill) repointed from `var(--gold)` to `var(--rose)`; the
+resting (unsaved) heart colour is untouched, and nothing else in the codebase was repointed
+at `--rose`.
+
+**Measured, not copied:** the brief gave the hex value `#c4877a` but no ratio — WCAG
+relative-luminance contrast computed independently against both grounds this token could
+plausibly render on: `docs/TYPE-AND-CONTRAST.md`'s own `#0a0c14` (**6.60:1**) and
+`css/saferise-dashboard.css`'s actual `--bg` (`#0C0C12`, **6.59:1**). Method verified first
+by recomputing the doc's four existing accents (gold/sage/slate/bronze) with the same
+formula and confirming each landed within 0.05 of its recorded figure, before trusting a
+new result from it. Both grounds clear AA (4.5:1) and the document's own 6:1 comfort floor
+without any lightening — recorded as measured in `TYPE-AND-CONTRAST.md`, with the note that
+future uses of `--rose` on a surface whose ground isn't close to `#0a0c14` should re-check,
+not assume this pass's figure still holds.
+
+**Verified:** saved-heart colour computes to `rgb(196, 135, 122)` (`#c4877a` exactly) —
+confirmed distinct from the active track row (its accent, a gold/track-tinted colour) and
+the active filter chip (`rgb(224, 182, 88)`, gold) checked simultaneously in the same DOM
+state. Resting heart colour confirmed unchanged. One methodology note for whoever verifies
+this kind of thing next: `getComputedStyle` read immediately after a `.click()` in this
+tooling environment intermittently returned a stale pre-transition value across separate
+tool calls, even past the rule's own 0.2s transition duration — forcing a reflow
+(`el.offsetHeight`) before reading resolved it every time. Not a site defect; flagged so it
+doesn't get mistaken for one.
+
+### SR-426 — Part B, closing the two-voice wording
+
+Three corrections applied to `docs/business/LAUNCH-LIST-30SEP.md`, exactly as specified:
+B1's `Test Studio on one full protocol, both voices` → drops `, both voices`;
+`rendering 62 files the wrong way` → `31 files`; and the "two honest risks" section's
+`62 renders in 16 days` → `31 renders in 16 days`. Line ~59's already-corrected supersession
+note (from SR-416) left untouched, as instructed. Both voice IDs remain on record at B2,
+untouched. Confirmed by grep: no remaining `62`/`both voices`/`two voices` occurrences in
+the file.
+
+### Report, per the brief's own request
+
+Every part above is confirmed applied and verified, with two exceptions stated plainly
+rather than rounded up: Part A's landing-page rendering was verified by DOM inspection and
+`get_page_text`, not by a working screenshot (the pane returned blank frames repeatedly);
+and SR-422's locked-cover → upsell path — flagged again here since the brief asked — is
+**still** verified by code inspection only. This environment's `SafeRiseAccess.hasAccess()`
+returns `true` unconditionally for every track, so no genuinely locked card can be
+constructed without monkey-patching internal module state this pass could not reach from
+outside the page's own closures (`DASHTRACKS` is not exposed on `window`). That gap was not
+closed this pass — it would need either a real signed-out session against a live
+entitlement backend, or a test-only hook deliberately added to the dashboard's own script,
+neither of which this pass's scope covered.
+
+### Files
+
+`js/saferise-track.js`, `css/saferise-system.css`, `css/saferise-dashboard.css`,
+`docs/TYPE-AND-CONTRAST.md`, `docs/business/LAUNCH-LIST-30SEP.md`, `docs/fix-register.md`.
+
+*Status:* Parts A, B and C all complete and verified, with the two verification gaps named
+above stated rather than hidden. One DIFFERS found and corrected (the orphaned
+`.sr-tp-cardstate2` CSS rule the source brief claimed didn't exist). One labelling
+mismatch between the opening instruction ("Parts A, B, C and D") and the file on disk
+(three parts) resolved by mapping rather than invention, and reported rather than silently
+absorbed. **Not pushed.**

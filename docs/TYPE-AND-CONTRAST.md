@@ -39,6 +39,18 @@ only. If a paragraph is set in `--dim`, it is set wrong.
 | Sage | `#8FA37B` | **`#9db388`** | 8.6:1 |
 | Slate | `#6E86A8` | **`#8298bb`** | 6.7:1 |
 | Bronze | `#B59666` | **`#c8a87a`** | 8.7:1 |
+| Rose | — | **`#c4877a`** | 6.6:1 |
+
+**Rose** (SR-425, `PASS-finish.md` Part C) · added, not lifted from an existing value — this is
+a new state (the dashboard's saved-heart indicator), not a rescue of a failing one. Measured
+independently against `#0a0c14` using this sheet's own formula (WCAG relative luminance,
+verified first against the four accents above — recomputing each one landed within 0.05 of its
+recorded ratio, confirming the method before trusting a new result from it): **6.6:1**, clearing
+AA (4.5:1) and this sheet's own 6:1 comfort floor without lightening. Scoped narrowly: only
+`.sr-dash-heart[aria-pressed="true"]` (`css/saferise-dashboard.css`) points at it. Do not repoint
+anything else at `--rose` without checking whether that surface's own ground is still `#0a0c14` —
+`dashboard.html`'s actual `--bg` is `#0C0C12`, close enough here (6.59:1, still clears both
+floors) but not guaranteed to be for every future use.
 
 Slate at `#6E86A8` was 5.2:1 — passing but visibly the faintest thing on the page. The
 lifted values sit within 2.5 ratio points of each other, so no accent reads weaker than the
