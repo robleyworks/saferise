@@ -39,6 +39,20 @@ each image is approved on its own and the repetition only appears when you scrol
 **Audit for this at the set level.** Two images that are each fine can still be
 wrong together.
 
+**The cost/change pair is the one place a face repeats on purpose.** Each track's
+`cost` and `change` images show the same person, in the same period of their life,
+before and after. The repetition is the argument — a different face in the second
+image would read as a different person's outcome. The same clothing across the pair
+is part of that: it places both images in one stretch of time rather than in two
+unrelated ones.
+
+The rule still holds everywhere else, and **across** tracks: Personal
+Transformation's subject must not appear in Professional Performance's images, or
+anywhere else on the site.
+
+*SR-415 (PASS-track-image-swap.md §2) · 22 September 2026 — recorded when Personal
+Transformation's and Professional Performance's cost/change art was replaced.*
+
 ---
 
 ## 3 · Banned outright

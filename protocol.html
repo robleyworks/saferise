@@ -456,6 +456,19 @@ textarea{min-height:100px}
 .experience-box .crisis h3{margin:0 0 6px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500}
 .experience-box .crisis p{margin:0;font-size:13.5px}
 .experience-box .heals{margin:18px 28px 28px;border-radius:16px}
+
+/* SR-417 (LG-285) · crisis-pathway banner, shown only around the player on
+   the three highest-risk protocols (t1-06, t1-10, t2-10 — renderProtocolContent()
+   below unhides it by PAGE_PROTOCOL.protocolId). Sage --safe, not --mob's
+   terracotta the Cue Card above uses: reassurance, not alarm — and never
+   .crisis, which is the Cue Card's class, not a crisis pathway. */
+.sr-cp-banner{margin:14px 0 0;border:1px solid color-mix(in srgb, var(--safe) 30%, transparent);
+  border-radius:16px;background:linear-gradient(105deg,color-mix(in srgb, var(--safe) 7%, transparent),transparent 62%)}
+.sr-cp-in{display:flex;align-items:flex-start;gap:14px;padding:18px 20px}
+.sr-cp-ico{width:20px;height:20px;flex:0 0 auto;margin-top:1px;stroke:var(--safe);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.sr-cp-lede{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--safe);font-weight:700;margin:0 0 6px}
+.sr-cp-banner p{margin:0;font-size:13.5px;line-height:1.6;color:var(--text3)}
+.sr-cp-banner a{color:var(--safe);text-decoration:underline;text-underline-offset:2px}
 .attention-advisory{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:15px 28px;border-bottom:1px solid var(--hair);background:linear-gradient(90deg,rgba(212,168,67,.055),rgba(212,168,67,.012) 62%,transparent)}
 .attention-advisory .attention-label{padding-top:2px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;white-space:nowrap}
 /* SR-374 (PASS-advisory-and-token.md §1b/1d) · was two colours -- text3
@@ -575,6 +588,7 @@ textarea{min-height:100px}
      zeroed the same way. */
   #experience .sechead--lead{padding:24px 18px}
   .experience-box .pbody{padding:20px 18px 0}.experience-box .crisis{margin:12px 0 0}.experience-box .heals{margin:16px 18px 18px}
+  .sr-cp-banner{margin:12px 0 0}
   .attention-advisory{grid-template-columns:1fr;gap:6px;padding:14px 18px}.attention-advisory .attention-label{white-space:normal}
   /* FB-01 · was display:block on the text wrapper plus display:none on
      the body paragraph -- the button ends up below the text as intended,
@@ -905,6 +919,25 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
            own controls, and now its own everything else too. -->
       <div id="pane-listen">
         <div class="stage"></div>
+      </div>
+
+      <!-- CRISIS PATHWAY -->
+      <!-- SR-417 (LG-285, "Not in this pass" §0 of PASS-dashboard-panel-and-carousel.md)
+           · 22 September 2026 — hidden by default; renderProtocolContent() below
+           reveals it only for t1-06 (Grief Integration), t1-10 (Powerlessness &
+           Despair) and t2-10 (Conscious Separation), the three protocols whose
+           only exit is spoken inside the audio itself. Copy reuses the
+           already-authored t1p10-crisis resource and the "What if I am in
+           crisis right now?" FAQ answer in content/tracks.js — placement and
+           prominence, not new content. -->
+      <div class="sr-cp-banner" id="ppCrisisBanner" hidden>
+        <div class="sr-cp-in">
+          <svg class="sr-cp-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5"/><path d="M12 16.3v.1"/><path d="M10.3 3.9 2.5 18a2 2 0 0 0 1.8 3h15.4a2 2 0 0 0 1.8-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          <div>
+            <p class="sr-cp-lede">If this brings up more than you expected</p>
+            <p>This protocol is a supplement to professional support, not a substitute for it. If you're in immediate danger, contact your local emergency number. If you need to talk to someone now, <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> lists free, confidential helplines by country — reaching out there is the right move, and it is not an overreaction.</p>
+          </div>
+        </div>
       </div>
 
       <!-- QUIET SHORT ALTERNATIVE -->
@@ -1567,7 +1600,25 @@ var PAGE_PROTOCOL = (function () {
    protocol was actually requested and resolved — the no-request default
    leaves the page's own authored Track 01 content exactly as it was, so
    nothing changes for a plain visit to protocol.html. */
+/* SR-417 (LG-285) · the three protocols whose only exit is spoken inside the
+   audio itself — Grief Integration, Powerlessness & Despair, Conscious
+   Separation. protocolId format is 't{track}-p{no}' (PAGE_PROTOCOL's own),
+   matched directly rather than via the 't1-06' form other code derives from
+   it, so this list reads the same shape it is compared against.
+   The list lives INSIDE the function, not as a module-level var above it —
+   this function runs synchronously from the IIFE higher up the same
+   <script>, before a later top-level `var` assignment would have executed,
+   so a module-level array here would read as undefined on first call. */
+function renderCrisisBanner(pp) {
+  var el = document.getElementById('ppCrisisBanner');
+  if (!el) return;
+  var CRISIS_PATHWAY_PROTOCOLS = ['t1-p06', 't1-p10', 't2-p10'];
+  var show = pp && pp.protocolId && CRISIS_PATHWAY_PROTOCOLS.indexOf(pp.protocolId) !== -1;
+  el.hidden = !show;
+}
+
 function renderProtocolContent(pp) {
+  renderCrisisBanner(pp);
   var row = pp.row;
   if (!row) return;
   var esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };

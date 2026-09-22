@@ -163,7 +163,12 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
 
 /* ============ library ============ */
 .sr-dash-lib{display:grid;grid-template-columns:212px 1fr}
-.sr-dash-rail{border-right:1px solid var(--hair);padding-right:20px;display:flex;flex-direction:column;gap:2px}
+/* SR-418 (PASS-dashboard-panel-and-carousel.md Part F1) · was a 1px
+   var(--hair) border, the separation the standing rule now forbids (a
+   surface step, never a border — see CLAUDE.md's CSS namespacing rule).
+   The step is the rail's own faint raised tint; the shadow is the actual
+   division line, replacing the border 1:1. */
+.sr-dash-rail{background:rgba(255,255,255,.012);box-shadow:inset -1px 0 0 rgba(245,237,218,.055);padding-right:20px;display:flex;flex-direction:column;gap:2px}
 .sr-dash-railbtn{display:flex;align-items:flex-start;gap:12px;text-align:left;background:transparent;border:0;border-left:2px solid transparent;padding:12px 10px;cursor:pointer;font-family:inherit;color:var(--text3);transition:color .18s,border-color .18s,background .18s;border-radius:0 4px 4px 0}
 .sr-dash-railbtn:hover{background:rgba(255,255,255,.02);color:var(--text2)}
 .sr-dash-railbtn.on{border-left-color:var(--accent);background:rgba(255,255,255,.028)}
@@ -184,14 +189,29 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
 .sr-dash-carviewport{overflow-x:auto;padding:2px 0 6px;-webkit-overflow-scrolling:touch;
   touch-action:pan-x;overscroll-behavior-x:contain;scrollbar-width:none;scroll-snap-type:x mandatory}
 .sr-dash-carviewport::-webkit-scrollbar{display:none}
-.sr-dash-carrow{display:flex;gap:14px}
+/* SR-419 (PASS-dashboard-panel-and-carousel.md Part A) · a fixed 176px basis
+   made the on-screen cover count an accident of container width. Replaced
+   with a computed slot: the viewport is split into --per cards plus a
+   --peek sliver, both tuned per breakpoint. flex-grow/shrink stay 0 — a
+   shrinkable card breaks snap align. */
+.sr-dash-carwrap{ --gap:14px; --peek:26px; --per:5 }
+@media (max-width:1199px){ .sr-dash-carwrap{ --per:4 } }
+@media (max-width:899px) { .sr-dash-carwrap{ --per:3; --peek:22px } }
+@media (max-width:639px) { .sr-dash-carwrap{ --per:2; --peek:20px } }
+.sr-dash-carrow{display:flex;gap:var(--gap)}
 .sr-dash-card{scroll-snap-align:start}
-.sr-dash-carbtn{position:relative;top:auto;width:38px;height:38px;flex:0 0 38px;padding:0;box-sizing:border-box;border-radius:50%;border:1px solid var(--hair);background:rgba(8,8,12,.9);color:var(--text2);cursor:pointer;display:grid;place-items:center;z-index:3;transition:border-color .18s,color .18s}
-.sr-dash-carbtn:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+/* SR-418 (PASS-dashboard-panel-and-carousel.md Part F1) · was a 1px
+   var(--hair) border. box-shadow replaces it 1:1 so the disabled/hover
+   states below (both border-color transitions) keep working unchanged —
+   only the property carrying the line changed. */
+.sr-dash-carbtn{position:relative;top:auto;width:38px;height:38px;flex:0 0 38px;padding:0;box-sizing:border-box;border-radius:50%;border:0;box-shadow:inset 0 0 0 1px var(--hair);background:rgba(8,8,12,.9);color:var(--text2);cursor:pointer;display:grid;place-items:center;z-index:3;transition:box-shadow .18s,color .18s}
+.sr-dash-carbtn:hover:not(:disabled){box-shadow:inset 0 0 0 1px var(--gold);color:var(--gold)}
 .sr-dash-carbtn:disabled{opacity:.22;cursor:default}
 .sr-dash-carbtn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.6}
 
-.sr-dash-card{flex:0 0 176px;display:flex;flex-direction:column;gap:9px}
+.sr-dash-card{
+  flex:0 0 calc((100% - var(--peek) - (var(--per) - 1) * var(--gap)) / var(--per));
+  display:flex;flex-direction:column;gap:9px}
 /* cover: kicker word and number are baked into the image — never overlay them */
 /* SR-162 · the art itself — aspect-ratio, clipping, object-fit — moved to the
    shared .sr-pcover in saferise-system.css, which the track pages load too.
@@ -562,10 +582,17 @@ body.reading #srLibrary{margin-top:22px}
 /* ============ responsive ============ */
 @media(max-width:1000px){
   .sr-dash-lib{grid-template-columns:1fr}
-  .sr-dash-rail{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--hair);padding:0 0 4px;margin-bottom:20px;scrollbar-width:none}
+  /* SR-418 (PASS-dashboard-panel-and-carousel.md Part F1) · below 899px the
+     panel becomes a horizontal chip row, not a tab strip that pushes the
+     covers down — the brief's own language. background:transparent (no
+     shadow needed once the rail isn't a divided column) plus pill-shaped
+     .sr-dash-railbtn below replace the old bottom border + underline. */
+  .sr-dash-rail{background:transparent;box-shadow:none;flex-direction:row;overflow-x:auto;padding:0 0 4px;margin-bottom:20px;scrollbar-width:none}
   .sr-dash-rail::-webkit-scrollbar{display:none}
-  .sr-dash-railbtn{flex:0 0 auto;border-left:0;border-bottom:2px solid transparent;border-radius:4px 4px 0 0}
-  .sr-dash-railbtn.on{border-left-color:transparent;border-bottom-color:var(--accent)}
+  .sr-dash-railbtn{flex:0 0 auto;align-items:center;border:0;border-radius:99px;padding:9px 16px;background:rgba(255,255,255,.03)}
+  .sr-dash-railbtn.on{background:rgba(212,168,67,.11)}
+  .sr-dash-railico{width:17px;height:17px}
+  .sr-dash-railmeta{display:none}
   .sr-dash-carwrap{padding-left:0}
   .sr-dash-jcols{grid-template-columns:1fr;gap:30px;padding:30px 0 0}
   .sr-dash-jcol{padding:0;border-left:0;border-top:1px solid var(--hair);padding-top:26px}

@@ -53,8 +53,11 @@ lose the conversion number, not the beta.
 
 ## Block B · Audio — the long pole
 
-**31 protocols × 2 voices = 62 renders.** This is the single largest piece of work
+**31 protocols, one voice = 31 renders.** This is the single largest piece of work
 on the list and it sits on the critical path for the beta.
+<!-- SR-416 (PASS-panel-and-carousel.md Part E) · 22 September 2026 — was "31
+     protocols × 2 voices = 62 renders." Launch ships one voice, not two; see B2
+     and the deleted B3 below. -->
 
 ### B1 · Resolve the tone-break first
 
@@ -69,7 +72,9 @@ on a timeline afterwards — is the likely fix and is untested.**
 
 ### B2 · Production
 
-- [ ] SR-F `fbmnBhl0AKROCH04b4hT` · SR-M `7DhKLMri1c2Bkve4m7Ro`
+- [ ] SR-F `fbmnBhl0AKROCH04b4hT` is the shipping voice. SR-M
+      `7DhKLMri1c2Bkve4m7Ro` is kept as a record, for after beta — not rendered
+      for launch.
 - [ ] Loudness: **stereo, −16.0 LUFS integrated, −1.0 dBTP** (SR-378)
 - [ ] Music beds — **one per state**, four in total, **none generated yet**
 - [ ] Trim t1-05 Shame Dissolution, currently ~1,738 words against a ~850 average.
@@ -79,17 +84,6 @@ on a timeline afterwards — is the likely fix and is untested.**
 
 ⚠ **Realistic scope for 16 days:** one voice complete across all 31, the second
 following. **A beta with one voice is fine. A beta with half the protocols is not.**
-
-### B3 · Voice toggle in the players
-
-- [ ] Toggle in the audio player, male/female
-- [ ] Toggle in the video player
-- [ ] **Choice persists across protocols and sessions** — nobody wants to set it
-      31 times
-- [ ] Falls back gracefully when only one voice exists for a protocol
-- [ ] Keyboard accessible, labelled for screen readers
-- [ ] **Does not restart playback** when switched mid-session — or if it must,
-      resumes at the same timestamp
 
 ---
 

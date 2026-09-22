@@ -17,7 +17,11 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-411** (`PASS-fix-batch-01.md` — FB-01 to FB-14, protocol.html's
+- **Highest ID issued: SR-419** (SR-414 through SR-419 — `PASS-dashboard-panel-and-carousel.md`;
+  see that entry near the end of the file. This line was found already stale — reading SR-411
+  while SR-412/SR-413 headers already existed below it — so it was corrected to the true ceiling
+  rather than left compounding the drift for the next pass.)
+- **Superseded note, kept for its own history below: Highest ID issued: SR-411** (`PASS-fix-batch-01.md` — FB-01 to FB-14, protocol.html's
   embedded experience, its media player, member-coming-soon.html, and organisations.html's hero
   and operating-layer section. FB-01: the cue card banner's truncation/ellipsis was entirely
   `.experience-box`-scoped CSS (`display:flex;align-items:baseline` on the text wrapper,
@@ -18627,3 +18631,136 @@ decision (the Sunrise org-panel) surfaced rather than decided unilaterally. §5 
 beyond confirming the brief's own solid-fill-button caveat was correct. §6 surfaced a real
 regression this pass did not have time to fix. §7's utility exists but is barely applied.
 **Not pushed.** *Raised and fixed:* 18 Sep 2026
+
+## SR-414 through SR-419 — dashboard panel, carousel sizing, and the settled price decisions
+
+`pass/PASS-dashboard-panel-and-carousel.md`. Run through Parts A–F1 plus the LG-285 safety item,
+which the brief itself says outranks Part F. Stopped after F1 as instructed. Committed locally,
+not pushed.
+
+### SR-419 — Part A, carousel cover width
+
+`.sr-dash-card`'s fixed `flex:0 0 176px` replaced with the brief's own computed-slot formula,
+verbatim, on `.sr-dash-carwrap`/`.sr-dash-carrow`/`.sr-dash-card` (`css/saferise-dashboard.css`).
+`.sr-dash-carwrap` already carried `min-width:0` — the page-scroll landmine the brief warned about
+was already handled before this pass touched it.
+
+**Verified by measurement**, not by eye, at all six required widths (`.sr-dash-carviewport` as
+"viewport", `.sr-dash-carrow`'s gap): ratio (target : 5/5/4/4/3/2) —
+1440→5.13, 1200→5.16, 1024→4.17, 900→4.15, 640→3.12, 390→2.13.
+`document.documentElement.scrollWidth − innerWidth` was `0` at every one. Two of six (1200, 1024)
+land 0.014–0.019 outside the brief's own 0.15 tolerance; this is `per·peek/(vpWidth−peek+gap)`,
+an algebraic property of the exact formula the brief specified, not an implementation defect —
+reported rather than silently loosened or the formula quietly changed.
+
+### SR-414 — Part B/C, workshop pricing
+
+`content/tracks.js`: `workshopPersonal` €39 → €29/person (SR-091's couples-vs-single question,
+left open by SR-381, is now closed: no, they don't collapse to one rate). `workshopRelationship`
+stays €39/couple, unchanged. €29 tier's annual price recorded as a comment (€290/year, the same
+ten-month convention as t2/t3) — tier isn't live, no price surface added.
+
+**DIFFERS, corrected in the commentary rather than silently repeated:** the brief asserts nothing
+renders `workshopPersonal` and to expect no visible change. False — `dashboard.html` reads it via
+six `data-sr-price="workshopPersonal"` spans (the workshops offer card, the booking panel, two
+session slots). This price change **is** visible there. The in-file comment states this rather
+than the brief's assumption.
+
+### SR-415 — Part D, track image art notes
+
+Ran `pass/PASS-track-image-swap.md` in the same pass, as instructed. `content/tracks.js` t1/t3
+`cost.brief`/`change.brief` corrected to describe the images actually at those paths (swapped 22
+Sep, confirmed already in git status before this pass began). `docs/image-intrinsic-dims.json`
+verified still correct (1600×700 all four) rather than assumed. Casting exception recorded in
+`docs/IMAGERY-BRIEF.md` §2, in the brief's own voice, as instructed.
+
+**Verified:** all eight files (4 `.webp` + 4 `.jpg`) resolve 200. Both `personal-transformation.html`
+and `professional-performance.html` render the correct images (screenshot-checked against each new
+brief's description — matched exactly). Intrinsic ratio (1600×700) equals the display ratio
+(16/7) exactly, so no cropping occurs at any width — the "no face clipped at 1440/390" check is
+trivially satisfied, not just spot-checked.
+
+### SR-416 — Part E, launch-list voice count
+
+`docs/business/LAUNCH-LIST-30SEP.md` Block B: "31 protocols × 2 voices = 62 renders" → "31
+protocols, one voice = 31 renders" (dated comment recording the supersession). B2's voice-ID line
+rewritten to state SR-F is shipping and SR-M is kept for after beta, not rendered for launch. B3
+(the whole voice-toggle block) deleted outright, as instructed. `docs/tracker-v35.html` left
+untouched — already correct per the brief.
+
+**AMBIGUOUS, skipped and reported rather than guessed at:** B1 still reads "Test Studio on one
+full protocol, **both voices**" and "before rendering **62 files** the wrong way." The brief named
+only B2/B3 for this correction; B1's two-voice language may be deliberate (testing the tone-break
+fix against both voices before committing to one is a defensible R&D step even when only one ships)
+or may be the same drift the rest of Block B had. Left as-is rather than assumed.
+
+### SR-417 — LG-285, crisis pathway on the three highest-risk protocols
+
+The brief places this ahead of Part F and it was treated that way. New `.sr-cp-banner` on
+`protocol.html`, inserted between `#pane-listen` (the player) and the existing `.crisis` Cue Card
+banner — "around the player," per the brief. Hidden by default; `renderCrisisBanner()` (called
+from `renderProtocolContent()`) reveals it only when `PAGE_PROTOCOL.protocolId` is `t1-p06`
+(Grief Integration), `t1-p10` (Powerlessness & Despair) or `t2-p10` (Conscious Separation). Copy
+reuses the already-authored `t1p10-crisis` resource and the "What if I am in crisis right now?"
+FAQ answer in `content/tracks.js` — placement and prominence, not new copy, per the brief.
+Sage `--safe` accent, deliberately not `--mob`'s terracotta (the Cue Card's colour) — reassurance,
+not alarm. New surface code `sr-cp-` claimed in `CLAUDE.md` before writing the CSS, and the
+`.crisis` false-friend warning the brief raised is now also cross-referenced there.
+
+**Caught and fixed before it shipped:** the first version declared the three-protocol allowlist as
+a module-level `var` positioned *after* the IIFE that calls `renderProtocolContent()` synchronously
+on page load. Function declarations hoist; `var` assignments don't — so the array was still
+`undefined` the first time the function ran, throwing `TypeError: Cannot read properties of
+undefined (reading 'indexOf')` inside `renderProtocolContent()` and silently aborting the rest of
+that function **for every protocol**, not just the three targeted ones. Moved the array inside
+`renderCrisisBanner()` itself, removing the ordering dependency entirely. Re-verified clean (see
+below) after the fix.
+
+**Verified**, on fresh tabs (a reused tab's console persists stale entries across navigation in
+this environment — cost real time before that was confirmed): banner correctly hidden on t1-01
+(control), correctly shown on t1-06, t1-10, t2-10, zero console errors on any of the four. Title
+and body content both confirmed still rendering (`renderProtocolContent()` was not silently
+truncated by the bug above once fixed).
+
+### SR-418 — Part F1, the track panel and stream
+
+**DIFFERS, adapted rather than duplicated:** the brief frames F1 as new construction ("the
+collapsible member panel in the mockup does not exist in `dashboard.html`") and asks to port
+`.tracks`/`.trackhead`/`.tracklist`/`.trk`/`.stream` under a new `sr-lib-` code. `dashboard.html`
+already has a track panel + stream — `.sr-dash-rail`/`.sr-dash-railbtn` (the track list) beside
+`.sr-dash-carwrap` (the carousel), both under the existing `sr-dash-` surface, structurally the
+same feature the brief describes. Building a second, parallel implementation under `sr-lib-` would
+have forked one feature into two competing surfaces on the same page — the exact failure mode
+CLAUDE.md's namespacing rule exists to prevent. Adapted the existing classes instead; `sr-lib-`
+recorded as *not* claimed in `CLAUDE.md`, with the reasoning, so a future pass doesn't reach for it
+by habit.
+
+Concrete fixes applied: `.sr-dash-rail`'s `border-right:1px solid var(--hair)` (desktop) and
+`border-bottom:1px solid var(--hair)` (≤1000px) replaced with `box-shadow: inset ... rgba(245,237,218,.055)`
+— a surface step, never a border, per the standing rule. `.sr-dash-carbtn`'s `border:1px solid
+var(--hair)` replaced with an equivalent inset `box-shadow`, keeping its existing hover/disabled
+states (only the property carrying the ring changed, not the states). Below 899px (the existing
+1000px breakpoint already covers this range), `.sr-dash-railbtn` restyled from a tab-underline
+strip to actual pill-shaped chips (`border-radius:99px`, filled background, meta line hidden) —
+the brief's literal "horizontal chip row," which the tab-strip treatment already there did not
+satisfy.
+
+**Verified:** both properties confirmed borderless via computed style (`border: 0px none`,
+separation now carried entirely by `box-shadow`). At 800px: `flex-direction:row`, panel height
+40px (not a stacked block pushing covers below the fold), pill `border-radius:99px`, zero
+page-level horizontal scroll. Track switching re-tested after the chip restyle — still works.
+Zero console errors on `dashboard.html`, fresh tab.
+
+**Not reached, per the brief's own sequencing instruction:** F2 (global keyword search), F3
+(device-only Saved/heart), F4 (the same panel on `protocol.html`).
+
+### Files
+
+`css/saferise-dashboard.css`, `content/tracks.js`, `docs/IMAGERY-BRIEF.md`,
+`docs/business/LAUNCH-LIST-30SEP.md`, `protocol.html`, `CLAUDE.md`, `docs/fix-register.md`.
+
+*Status:* A, B/C, D, E and the LG-285 safety item complete and verified. F1 complete and verified,
+scoped exactly to what the brief asked before stopping. F2–F4 not attempted, as instructed. One
+DIFFERS corrected in-place (Part B's visibility claim), one DIFFERS adapted and cross-referenced
+(Part F1's architecture), one AMBIGUOUS skipped and reported (Part E's B1 wording), one real bug
+introduced and caught before shipping (SR-417's hoisting order). **Not pushed.**

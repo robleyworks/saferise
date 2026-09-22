@@ -57,15 +57,28 @@ var PRICING = {
   /* SR-091 · there was one 'workshop' key holding €29 — Track 03's monthly
      price, never a workshop price. Workshops are priced per format, so there
      are two keys and the block reads 'from' the lower one. */
-  /* SR-381 (PASS-live-site-defects.md Part O) -- was '\u20AC29'. O1's price
-     book states "Workshops | \u20AC39 per person," a single figure.
-     workshopRelationship (the couples workshop, \u20AC39/couple, below) is NOT
-     addressed by O1 at all -- left unchanged, reported as ambiguous rather
-     than guessed at. Whether the couples workshop should also collapse into
-     this same \u20AC39/person rate is Andre's call, not assumed here. */
-  workshopPersonal:     { amount: '\u20AC39',  per: 'per person' },
-  /* SR-308 · founder-confirmed 28 Aug 2026: €49 -> €39 per couple. */
+  /* SR-414 (PASS-panel-and-carousel.md Part B) · 22 September 2026 —
+     SUPERSEDES the note this replaces. That note left open whether the
+     couples workshop should collapse into the €39/person single rate —
+     that question is now closed: it does not. workshopPersonal drops from
+     €39 to €29/person; workshopRelationship stays €39/couple
+     (SR-308), unchanged and correct. The settled position is €29 single /
+     €39 per couple. The brief that ordered this change assumed nothing
+     renders workshopPersonal — false: dashboard.html reads it via six
+     `data-sr-price="workshopPersonal"` spans (the workshops offer card, the
+     booking panel and two session slots), so this price is live and visible
+     there, not a dormant source-of-truth-only correction. */
+  workshopPersonal:     { amount: '\u20AC29',  per: 'per person' },
+  /* SR-308 · founder-confirmed 28 Aug 2026: €49 -> €39 per couple.
+     Reaffirmed unchanged by SR-414 above. */
   workshopRelationship: { amount: '\u20AC39',  per: 'per couple' },
+  /* SR-414 (PASS-panel-and-carousel.md Part C) · 22 September 2026 —
+     settled: the €29 tier's annual price is €290/year, on the same
+     ten-month convention that gives €19 → €190 (see t2/t3 above).
+     The €29 tier itself is not live — it opens when the library
+     reaches eight tracks — so no live price surface is added here. This
+     comment is the record until that tier ships and gets its own
+     PRICING key. */
   /* SR-136/SR-137 · there is no `premium` key. It held \u20AC275 / session for the
      1:1, which turned out to be the SAME offer as `premium1` under a second name —
      dashboard.html and protocol.html sold "Premium 1:1" at \u20AC275 / 90 min while
@@ -339,15 +352,20 @@ var TRACKS = {
       band:   { src: 'assets/journey/t1-band.webp',
                 ratio: '1400/380',
                 brief: 'one person alone: listening with headphones, writing, reading' },
+      /* SR-415 (PASS-track-image-swap.md \u00a71) \u00b7 22 September 2026 \u2014 the
+         cost/change images at these two paths were swapped in place for new
+         art on 22 Sep; these briefs described the retired images and are
+         now corrected to describe what actually renders. ratio and src are
+         unchanged and correct. */
       cost:   { src: 'assets/t1/cost.webp',
                 ratio: '16/7',
-                brief: 'one person, same room \u2014 evening, three in the morning, next morning' },
+                brief: 'one woman across three settings \u2014 a kitchen argument, a dinner table she has gone quiet at, and a call she is not answering' },
       range:  { src: 'assets/t1/range.webp',
                 ratio: '16/6',
                 brief: 'the same person three times \u2014 braced, settled, absent' },
       change: { src: 'assets/t1/change.webp',
                 ratio: '16/7',
-                brief: 'one person moving easily through an ordinary day at home' }
+                brief: 'the same woman mid-sentence at an outdoor lunch, the table listening' }
     },
 
     protocols: [
@@ -613,15 +631,20 @@ var TRACKS = {
       band:   { src: 'assets/journey/t3-band.webp',
                 ratio: '1400/380',
                 brief: 'corridor moments before the room, desk log, reading at day\u2019s end' },
+      /* SR-415 (PASS-track-image-swap.md \u00a71) \u00b7 22 September 2026 \u2014 the
+         cost/change images at these two paths were swapped in place for new
+         art on 22 Sep; these briefs described the retired images and are
+         now corrected to describe what actually renders. ratio and src are
+         unchanged and correct. */
       cost:   { src: 'assets/t3/cost.webp',
                 ratio: '16/7',
-                brief: 'one person at work \u2014 early, midday, still there late' },
+                brief: 'one man across three office moments \u2014 a confrontation, a conversation he is outside of, and a review he is being given' },
       range:  { src: 'assets/t3/range.webp',
                 ratio: '16/6',
                 brief: 'the same professional before a meeting \u2014 braced, settled, absent' },
       change: { src: 'assets/t3/change.webp',
                 ratio: '16/7',
-                brief: 'someone leaving work at a reasonable hour, unhurried' }
+                brief: 'the same man presenting, the room turned towards him' }
       },
 
     protocols: [
