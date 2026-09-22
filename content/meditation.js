@@ -13,8 +13,9 @@
    `eyebrow` and `sub` are copied from the protocol records in tracks.js and
    are not authored here — tracks.js stays the source of truth for copy.
 
-   21 of 31 present. The remaining ten follow the same shape as their
-   masters land.
+   SR-427 · 22 September 2026 — 24 of 31 present (t1-04, t2-07, t3-01 added
+   this pass). The remaining seven follow the same shape as their masters
+   land: t1-03, t1-05, t1-06, t2-01, t3-02, t3-03, t3-06.
    ═════════════════════════════════════════════════════════════════════════ */
 
 var MEDITATION_BASE = 'assets/audio/meditation/';
@@ -166,6 +167,27 @@ var MEDITATION = {
     title:   'Creative Flow',
     sub:     'Get back to the work that used to come easily.',
     src:     MEDITATION_BASE + 't3-10-creative-flow.mp3'
+  },
+  't1-04': {
+    key:     't1-04',
+    eyebrow: 'Repair',
+    title:   'Abandonment Wound',
+    sub:     'Settle the fear of being left, and feel safe in the room again.',
+    src:     MEDITATION_BASE + 't1-04-abandonment-wound.mp3'
+  },
+  't2-07': {
+    key:     't2-07',
+    eyebrow: 'Clarify',
+    title:   'Projection Clarity',
+    sub:     'Tell what they actually did apart from what your past says they meant.',
+    src:     MEDITATION_BASE + 't2-07-projection-clarity.mp3'
+  },
+  't3-01': {
+    key:     't3-01',
+    eyebrow: 'Steady',
+    title:   'High-Stakes Presence',
+    sub:     'Settle before you walk in, so you arrive as yourself.',
+    src:     MEDITATION_BASE + 't3-01-high-stakes-presence.mp3'
   }
 };
 
