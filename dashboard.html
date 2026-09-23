@@ -993,10 +993,13 @@
   var next = document.querySelector('.sr-dash-carnext');
   var ARROW = '<svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg>';
   var LOCK  = '<svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>';
-  /* SR-422 (PASS-dashboard-F2-F4.md Part F3) · rose is not a token this
-     palette carries anywhere (gold/teal/muted only, checked before assuming
-     it) — the saved state uses the existing gold accent instead of
-     introducing an unprecedented colour. Reported as adapted. */
+  /* SR-428 · 22 September 2026 — SUPERSEDES the note this replaces. SR-422
+     found this palette carried no rose/pink token at the time and used gold
+     for the saved state instead, reported as adapted. SR-426 has since added
+     --rose:#c4877a (measured, see docs/TYPE-AND-CONTRAST.md) and repointed
+     .sr-dash-heart[aria-pressed="true"] at it, so gold's absence is no
+     longer the reason HEART renders the way it does below — kept here as
+     the record of why gold came first. */
   var HEART = '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.2A4.1 4.1 0 0 1 12 8a4.1 4.1 0 0 1 7 2.8C19 15.6 12 20 12 20Z"/></svg>';
 
   function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }

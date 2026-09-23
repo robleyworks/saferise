@@ -730,19 +730,11 @@ body.rd-soft{--gold:#FFD894;--gold-lt:#FFE8B6;--bg:#465578;--band:#4D5C82;--card
   --recess:rgba(24,30,60,.2);--lift:rgba(255,226,186,.1)}
 body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
 
-/* SR-423 (PASS-dashboard-F2-F4.md Part F4) · the track panel, above the log/
-   resources sections. Same selectors as css/saferise-dashboard.css (and
-   .sr-pcover from css/saferise-system.css) — CLAUDE.md line ~177's decision
-   (extend sr-dash-, do not claim sr-lib-) holds here too, per the brief.
-   Copied rather than linked: this page is deliberately self-contained (see
-   the .skip comment above, and every other :root/.stage/.crisis rule on this
-   page — same class name, independently styled per page is this codebase's
-   own established pattern for a self-contained page reusing a shared name).
-   Selectors, values and behaviour are unchanged from the dashboard's; only
-   --accent's three track values are inlined (--sr-track01/02/03 live in
-   saferise-system.css, also not loaded here). No search, chips or heart —
-   F4 asks only for the track panel + carousel + its own upsell, not F2/F3's
-   controls, so none were added. */
+/* Left in place, not prefixed #ppLibrary so outside this pass's specified CSS
+   cut. Its only consumer on this page was ppRenderTrack() (removed below with
+   #ppLibrary), so this is now orphaned here — flagged rather than removed
+   unasked, since the cut's boundary was given precisely. Shared naming with
+   css/saferise-system.css's own .sr-pcover; harmless if it stays unused. */
 .sr-pcover{position:relative;aspect-ratio:3/4;overflow:hidden;isolation:isolate;
   background:linear-gradient(145deg,#151526,#343044 58%,#76607b)}
 .sr-pcover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
@@ -752,88 +744,6 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
   text-transform:uppercase;font-weight:700;color:rgba(245,237,216,.86);line-height:1.4}
 .sr-pcover-no{position:absolute;right:12px;bottom:7px;font-family:'Cinzel',serif;font-size:30px;
   color:rgba(245,237,216,.88);line-height:1}
-
-#ppLibrary .sr-dash-panel{background:var(--band);border:1px solid var(--hair);border-radius:14px;padding:28px 30px}
-#ppLibrary .sr-dash-carhead{display:flex;align-items:center;justify-content:space-between;gap:20px;
-  margin:0 0 22px;padding:0 0 16px;border-bottom:1px solid var(--hair)}
-#ppLibrary .sr-dash-carkick{font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:700}
-#ppLibrary .sr-dash-carnav{display:flex;align-items:center;gap:12px}
-#ppLibrary .note{font-size:13px;color:var(--text3)}
-#ppLibrary .sr-dash-carbtn{position:relative;width:38px;height:38px;flex:0 0 38px;padding:0;box-sizing:border-box;
-  border-radius:50%;border:0;box-shadow:inset 0 0 0 1px var(--hair);background:rgba(8,8,12,.9);color:var(--text2);
-  cursor:pointer;display:grid;place-items:center;transition:box-shadow .18s,color .18s}
-#ppLibrary .sr-dash-carbtn:hover:not(:disabled){box-shadow:inset 0 0 0 1px var(--gold);color:var(--gold)}
-#ppLibrary .sr-dash-carbtn:disabled{opacity:.22;cursor:default}
-#ppLibrary .sr-dash-carbtn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.6}
-
-#ppLibrary .sr-dash-lib{display:grid;grid-template-columns:212px 1fr}
-#ppLibrary .sr-dash-rail{background:rgba(255,255,255,.012);box-shadow:inset -1px 0 0 rgba(245,237,218,.055);
-  padding-right:20px;display:flex;flex-direction:column;gap:2px}
-#ppLibrary .sr-dash-railbtn{display:flex;align-items:flex-start;gap:12px;text-align:left;background:transparent;
-  border:0;border-left:2px solid transparent;padding:12px 10px;cursor:pointer;font-family:inherit;color:var(--text3);
-  transition:color .18s,border-color .18s,background .18s;border-radius:0 4px 4px 0}
-#ppLibrary .sr-dash-railbtn:hover{background:rgba(255,255,255,.02);color:var(--text2)}
-#ppLibrary .sr-dash-railbtn.on{border-left-color:var(--pp-accent);background:rgba(255,255,255,.028)}
-#ppLibrary .sr-dash-railico{width:23px;height:23px;flex:0 0 auto;stroke:currentColor;fill:none;
-  stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round;margin-top:1px;opacity:.9}
-#ppLibrary .sr-dash-railbtn.on .sr-dash-railico{opacity:1;stroke:var(--pp-accent)}
-#ppLibrary .sr-dash-railname{display:block;font-size:13px;line-height:1.35}
-#ppLibrary .sr-dash-railbtn.on .sr-dash-railname{color:var(--text)}
-#ppLibrary .sr-dash-railmeta{display:block;font-size:13px;color:var(--text3);margin-top:3px}
-
-#ppLibrary .sr-dash-carwrap{position:relative;min-width:0;--gap:14px;--peek:26px;--per:5}
-@media (max-width:1199px){ #ppLibrary .sr-dash-carwrap{--per:4} }
-@media (max-width:899px) { #ppLibrary .sr-dash-carwrap{--per:3;--peek:22px} }
-@media (max-width:639px) { #ppLibrary .sr-dash-carwrap{--per:2;--peek:20px} }
-#ppLibrary .sr-dash-carviewport{overflow-x:auto;padding:2px 0 6px;-webkit-overflow-scrolling:touch;
-  touch-action:pan-x;overscroll-behavior-x:contain;scrollbar-width:none;scroll-snap-type:x mandatory}
-#ppLibrary .sr-dash-carviewport::-webkit-scrollbar{display:none}
-#ppLibrary .sr-dash-carrow{display:flex;gap:var(--gap)}
-#ppLibrary .sr-dash-card{scroll-snap-align:start;
-  flex:0 0 calc((100% - var(--peek) - (var(--per) - 1) * var(--gap)) / var(--per));
-  display:flex;flex-direction:column;gap:9px}
-#ppLibrary .sr-dash-card .sr-pcover{border-radius:10px;border:1px solid var(--hair);transition:border-color .2s}
-#ppLibrary .sr-dash-card:hover .sr-pcover{border-color:rgba(212,168,67,.5)}
-#ppLibrary .sr-dash-card.is-current .sr-pcover{border-color:var(--pp-accent);box-shadow:0 0 0 1px var(--pp-accent) inset}
-#ppLibrary .sr-dash-cardname{font-size:1.05rem;color:var(--text);line-height:1.3;letter-spacing:.01em;
-  margin-top:14px;height:2.6em;overflow:hidden}
-#ppLibrary .sr-dash-locked .sr-pcover{filter:saturate(.3) brightness(.62)}
-#ppLibrary .sr-dash-lock{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--text3);min-height:32px}
-#ppLibrary .sr-dash-lock svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.4}
-#ppLibrary .sr-dash-go{display:inline-flex;align-items:center;gap:8px;font-family:'Cormorant Garamond',serif;
-  font-size:18px;font-weight:400;color:var(--pp-accent);min-height:32px;border-bottom:1px solid rgba(212,168,67,.3);
-  padding-bottom:3px;width:max-content}
-#ppLibrary .sr-dash-go svg{width:13px;height:9px;stroke:currentColor;fill:none;stroke-width:1.5;transition:transform .18s}
-#ppLibrary .sr-dash-go:hover svg{transform:translateX(4px)}
-#ppLibrary .t-1 .sr-pcover{background:linear-gradient(145deg,#151526,#343044 58%,#76607b)}
-#ppLibrary .t-2 .sr-pcover{background:linear-gradient(145deg,#1d1119,#4d2233 58%,#b4677f)}
-#ppLibrary .t-3 .sr-pcover{background:linear-gradient(145deg,#0F1A1D,#26414a 58%,#5b8b93)}
-
-#ppLibrary .sr-dash-lockcta{display:none;align-items:center;gap:18px;flex-wrap:wrap;margin:20px 0 0;padding-top:18px;
-  border-top:1px solid var(--hair)}
-#ppLibrary .sr-dash-lockcta.show{display:flex}
-#ppLibrary .sr-dash-lockcta p{flex:1 1 320px;font-size:13px;color:var(--text2);line-height:1.7;min-width:0}
-#ppLibrary .sr-dash-lockcta p b{color:var(--text);font-weight:500}
-#ppLibrary .sr-dash-addbtn{background:var(--gold);color:#08080C;font:700 13px/1.2 'DM Sans',sans-serif;
-  letter-spacing:.17em;text-transform:uppercase;padding:12px 18px;border:1px solid var(--gold);border-radius:8px;
-  cursor:pointer;min-height:42px;display:inline-flex;align-items:center;gap:9px;transition:.18s}
-#ppLibrary .sr-dash-addbtn:hover{background:var(--gold-lt);border-color:var(--gold-lt)}
-#ppLibrary .sr-dash-addbtn svg{width:13px;height:9px;stroke:currentColor;fill:none;stroke-width:1.5;flex:0 0 auto}
-#ppLibrary .sr-dash-emptyline{flex:1 1 auto;padding:30px 4px;color:var(--text2);font-size:13.5px;line-height:1.7}
-
-@media(max-width:1000px){
-  #ppLibrary .sr-dash-lib{grid-template-columns:1fr}
-  #ppLibrary .sr-dash-rail{background:transparent;box-shadow:none;flex-direction:row;overflow-x:auto;
-    padding:0 0 4px;margin-bottom:20px;scrollbar-width:none}
-  #ppLibrary .sr-dash-rail::-webkit-scrollbar{display:none}
-  #ppLibrary .sr-dash-railbtn{flex:0 0 auto;align-items:center;border:0;border-radius:99px;padding:9px 16px;
-    background:rgba(255,255,255,.03)}
-  #ppLibrary .sr-dash-railbtn.on{background:rgba(212,168,67,.11)}
-  #ppLibrary .sr-dash-railico{width:17px;height:17px}
-  #ppLibrary .sr-dash-railmeta{display:none}
-}
-@media(max-width:640px){ #ppLibrary .sr-dash-panel{padding:22px 18px} }
 </style>
 <!-- SR-375 (PASS-indexing-readiness.md §2) · sitewide Organization block,
      same content as js/saferise-footer.js's own copy — this page keeps its
@@ -1124,51 +1034,6 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
     </div>
   </details>
 
-  </div>
-</section>
-
-<!-- SR-423 (PASS-dashboard-F2-F4.md Part F4) · the track panel, above the
-     log/resources sections ("the reader") and entirely outside #experience —
-     the crisis-pathway banner (SR-417) lives inside #experience, right after
-     the player, and nothing here touches that section, so its position and
-     precedence there are unaffected. Independent carousel: seeded from
-     PAGE_PROTOCOL.trackId (already correct when opened from the dashboard,
-     since the iframe src already carries &track=), never posts anything back
-     to a parent frame. Holds rather than auto-advancing — no drift timer
-     exists for it. Its own #ppLockCta, independent of the dashboard's. -->
-<section class="sec" id="ppLibrary" aria-label="Switch protocol">
-  <div class="sr-dash-panel">
-    <div class="sr-dash-carhead">
-      <p class="sr-dash-carkick">Switch protocol</p>
-      <div class="sr-dash-carnav">
-        <p class="note" id="ppTrackNote"></p>
-        <button class="sr-dash-carbtn" id="ppCarPrev" aria-label="Previous protocols"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
-        <button class="sr-dash-carbtn" id="ppCarNext" aria-label="More protocols"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
-      </div>
-    </div>
-    <div class="sr-dash-lib">
-      <div class="sr-dash-rail" role="tablist" aria-label="Tracks" id="ppRail">
-        <button type="button" class="sr-dash-railbtn" role="tab" data-track="1">
-          <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="12" cy="7.2" r="3.1"/><path d="M5.6 20a6.4 6.4 0 0 1 12.8 0"/></svg>
-          <span><span class="sr-dash-railname">Personal Transformation</span><span class="sr-dash-railmeta">10 protocols</span></span>
-        </button>
-        <button type="button" class="sr-dash-railbtn" role="tab" data-track="2">
-          <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="8.4" cy="7.6" r="2.7"/><circle cx="15.6" cy="7.6" r="2.7"/><path d="M3 20a5.4 5.4 0 0 1 8.4-4.5"/><path d="M12.6 15.5A5.4 5.4 0 0 1 21 20"/></svg>
-          <span><span class="sr-dash-railname">Relationship Healing</span><span class="sr-dash-railmeta">10 protocols</span></span>
-        </button>
-        <button type="button" class="sr-dash-railbtn" role="tab" data-track="3">
-          <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="8.6" cy="7.4" r="2.9"/><path d="M3 20a5.6 5.6 0 0 1 11.2 0"/><path d="M16.6 17.2V20M19.2 13.8V20M21.8 10.4V20"/></svg>
-          <span><span class="sr-dash-railname">Professional Performance</span><span class="sr-dash-railmeta">10 protocols</span></span>
-        </button>
-      </div>
-      <div class="sr-dash-carwrap">
-        <div class="sr-dash-carviewport" id="ppCarViewport"><div class="sr-dash-carrow" id="ppCarRow"></div></div>
-      </div>
-    </div>
-    <div class="sr-dash-lockcta" id="ppLockCta">
-      <p id="ppLockText"></p>
-      <button type="button" class="sr-dash-addbtn" id="ppLockBtn"></button>
-    </div>
   </div>
 </section>
 
@@ -1742,13 +1607,12 @@ var PAGE_PROTOCOL = (function () {
      no-params default (this page's own hardcoded Track 1/Anxiety Reset
      content) via the early return right here. Only the true not-found
      branch above skips it -- there is no protocol to mount a player for. */
-  if (!PAGE_PROTOCOL.resolved) { initLibraryPanel(PAGE_PROTOCOL); initGuidedPlayer(); return; }   /* nothing requested: leave the page, but still mount */
+  if (!PAGE_PROTOCOL.resolved) { initGuidedPlayer(); return; }   /* nothing requested: leave the page, but still mount */
 
   document.title = 'SafeRise — ' + PAGE_PROTOCOL.protocol;
   var t = document.querySelector('.bannerimg');
   if (t) t.setAttribute('aria-label', PAGE_PROTOCOL.protocol + ' cover');
   renderProtocolContent(PAGE_PROTOCOL);
-  initLibraryPanel(PAGE_PROTOCOL);
   initGuidedPlayer();
 })();
 
@@ -1774,133 +1638,6 @@ function renderCrisisBanner(pp) {
   var CRISIS_PATHWAY_PROTOCOLS = ['t1-p06', 't1-p10', 't2-p10'];
   var show = pp && pp.protocolId && CRISIS_PATHWAY_PROTOCOLS.indexOf(pp.protocolId) !== -1;
   el.hidden = !show;
-}
-
-/* SR-423 (PASS-dashboard-F2-F4.md Part F4) · independent from the dashboard's
-   own carousel (a different page/frame regardless, but named distinctly for
-   clarity) — its own row/rail/track state, seeded once from PAGE_PROTOCOL
-   below and never posting anything back to a parent frame. No search, no
-   chips, no heart: F4 asks for the track panel + carousel + its own upsell
-   only, not F2/F3's controls. Holds rather than auto-advancing — arrows do
-   a plain smooth scrollBy; no drift timer exists for this carousel at all. */
-/* SR-423 · PP_ACCENT etc. below used to be top-level `var`s here. This
-   function block is CALLED from the resolution IIFE above (initLibraryPanel(),
-   textually further down but invoked earlier — same hoisting trap as
-   SR-417's CRISIS_PATHWAY_PROTOCOLS: function declarations hoist with their
-   body, but a `var`'s VALUE is only assigned when execution reaches that
-   line, which is after the call site here. Each constant now lives inside
-   the function that uses it instead of depending on file order. */
-var ppRow, ppVp, ppRail, ppCurrentTrack = 1;
-
-function ppEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
-function ppCardTitle(s){ return String(s).replace(/^The\s+/, '').replace(/\s+Protocol$/, ''); }
-function ppCoverPath(n, no){
-  return (window.SafeRiseCover && SafeRiseCover.coverPath) ? SafeRiseCover.coverPath(n, no, '640')
-    : (n === 1 ? 'assets/covers/' + no + '-640.jpg' : 'assets/covers/t' + n + '-' + no + '-640.jpg');
-}
-function ppShowLockCta(n, unlocked){
-  var lock = document.getElementById('ppLockCta');
-  if(!lock) return;
-  if(unlocked){ lock.classList.remove('show'); return; }
-  var PP_TRACKNAME = {1:'Personal Transformation', 2:'Relationship Healing', 3:'Professional Performance'};
-  var PP_ARROW = '<svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg>';
-  var textEl = document.getElementById('ppLockText'), btnEl = document.getElementById('ppLockBtn');
-  if(textEl) textEl.innerHTML = '<b>' + PP_TRACKNAME[n] + ' is not on your plan yet.</b> ' +
-    'Adding it opens all ten protocols and every resource inside them. Your existing access stays exactly as it is.';
-  if(btnEl){
-    var up = typeof TRACKS !== 'undefined' && TRACKS[n] && TRACKS[n].price;
-    btnEl.innerHTML = 'Add for ' + (up ? up.amount + ' ' + up.per : '') + ' ' + PP_ARROW;
-  }
-  lock.classList.add('show');
-}
-
-function ppRenderTrack(n, currentTitle){
-  if(!ppRow || typeof TRACKS === 'undefined' || !TRACKS[n]) return;
-  var PP_ACCENT = {1:'#D4A843', 2:'#E87090', 3:'#38C8BE'};
-  var PP_ARROW = '<svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg>';
-  var PP_LOCK  = '<svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>';
-  var ppEmbed = /[?&]embed=1/.test(location.search);
-  ppCurrentTrack = n;
-  var src = TRACKS[n];
-  var unlocked = !!(window.SafeRiseAccess && SafeRiseAccess.hasAccess('t' + n + '-p01'));
-  ppRow.className = 'sr-dash-carrow t-' + n;
-  ppRow.style.setProperty('--pp-accent', PP_ACCENT[n]);
-  var note = document.getElementById('ppTrackNote');
-  if(note) note.textContent = src.name + (unlocked ? ' · in your plan' : ' · not on your plan yet');
-
-  var rows = src.protocols || [];
-  ppRow.innerHTML = rows.map(function(prow){
-    var no = prow[0], title = prow[2], verb = prow[1];
-    var cur = unlocked && title === currentTitle;
-    var coverSrc = ppCoverPath(n, no);
-    var href = 'protocol.html?track=' + n + '&protocol=' + no + (ppEmbed ? '&embed=1' : '');
-    var action = unlocked
-      ? '<a class="sr-dash-go" href="' + href + '">' + (cur ? 'Reading' : 'Open') + ' ' + PP_ARROW + '</a>'
-      : '<span class="sr-dash-lock">' + PP_LOCK + 'Locked</span>';
-    var art = (window.SafeRiseCover && SafeRiseCover.art)
-      ? SafeRiseCover.art({ src: coverSrc, no: no, label: verb })
-      : '<div class="sr-pcover"><img class="sr-pcover-img" src="' + ppEsc(coverSrc) + '" alt="" loading="lazy" onerror="this.remove()"></div>';
-    return '<article class="sr-dash-card' + (unlocked ? '' : ' sr-dash-locked') + (cur ? ' is-current' : '') +
-      '" data-track="' + n + '" data-no="' + no + '" data-href="' + (unlocked ? href : '') + '">' +
-      art + '<h3 class="sr-dash-cardname">' + ppEsc(ppCardTitle(title)) + '</h3>' + action + '</article>';
-  }).join('');
-  ppRow.setAttribute('data-doubled', '0');   // holds — never doubled for a seamless loop, because it never loops
-  ppShowLockCta(n, unlocked);
-}
-
-function ppCardStep(){
-  var c = ppRow.querySelector('.sr-dash-card');
-  return c ? c.offsetWidth + 14 : 190;
-}
-
-function initLibraryPanel(pp){
-  ppRow  = document.getElementById('ppCarRow');
-  ppVp   = document.getElementById('ppCarViewport');
-  ppRail = document.querySelectorAll('#ppRail .sr-dash-railbtn');
-  if(!ppRow || !ppVp || !ppRail.length) return;
-
-  var seedTrack = (pp && pp.resolved && pp.trackId) ? +pp.trackId : 1;
-  var currentTitle = (pp && pp.resolved) ? pp.protocol : null;
-
-  ppRail.forEach(function(b){
-    var on = +b.getAttribute('data-track') === seedTrack;
-    b.classList.toggle('on', on);
-    b.setAttribute('aria-selected', String(on));
-    b.addEventListener('click', function(){
-      ppRail.forEach(function(x){ x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
-      b.classList.add('on'); b.setAttribute('aria-selected','true');
-      /* Changing track here moves only this strip — no link back to the
-         dashboard or to the reader above it, per the brief. */
-      ppRenderTrack(+b.getAttribute('data-track'), currentTitle);
-      ppVp.scrollLeft = 0;
-    });
-  });
-  ppRenderTrack(seedTrack, currentTitle);
-
-  var prev = document.getElementById('ppCarPrev'), next = document.getElementById('ppCarNext');
-  if(prev) prev.addEventListener('click', function(){ ppVp.scrollBy({left: -ppCardStep()*2, behavior:'smooth'}); });
-  if(next) next.addEventListener('click', function(){ ppVp.scrollBy({left:  ppCardStep()*2, behavior:'smooth'}); });
-
-  /* A locked cover opens this panel's own upsell rather than navigating —
-     unlocked cards carry a real href on .sr-dash-go and need no JS to work,
-     but the whole card is clickable too, matching the dashboard's own
-     carousel. */
-  ppRow.addEventListener('click', function(e){
-    var card = e.target.closest('.sr-dash-card');
-    if(!card) return;
-    if(card.classList.contains('sr-dash-locked')){
-      e.preventDefault();
-      ppShowLockCta(+card.getAttribute('data-track'), false);
-      var cta = document.getElementById('ppLockCta');
-      if(cta) cta.scrollIntoView({block:'nearest', behavior:'smooth'});
-      return;
-    }
-    var href = card.getAttribute('data-href');
-    if(href && e.target.closest('a.sr-dash-go') === null){
-      e.preventDefault();
-      location.href = href;
-    }
-  });
 }
 
 function renderProtocolContent(pp) {

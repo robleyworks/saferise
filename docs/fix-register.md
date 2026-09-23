@@ -17,7 +17,10 @@ Canonical record of defects and design decisions. Commits reference the ID:
   issued to the stale *"Pricing to be announced"* clause, the orphaned *"separately, above"*
   reference, and the carousel-clipping decision. The register is the allocator; a script is a
   consumer.
-- **Highest ID issued: SR-426** (SR-424 through SR-426 — `PASS-finish.md`; see that entry near
+- **Highest ID issued: SR-428** (SR-427 — meditation install, no register entry needed, a
+  script run rather than a PASS brief; SR-428 — the `#ppLibrary` reversal; see that entry
+  near the end of the file.)
+- **Previously: Highest ID issued: SR-426** (SR-424 through SR-426 — `PASS-finish.md`; see that entry near
   the end of the file.)
 - **Previously: Highest ID issued: SR-423** (SR-420 through SR-423 — `PASS-dashboard-F2-F4.md`; see that
   entry near the end of the file.)
@@ -19040,3 +19043,86 @@ above stated rather than hidden. One DIFFERS found and corrected (the orphaned
 mismatch between the opening instruction ("Parts A, B, C and D") and the file on disk
 (three parts) resolved by mapping rather than invention, and reported rather than silently
 absorbed. **Not pushed.**
+
+## SR-428 — reverse SR-423: remove the #ppLibrary track carousel from protocol.html
+
+A reversed decision, not a defect. SR-423 built the track-panel carousel on `protocol.html`
+exactly as `pass/PASS-dashboard-F2-F4.md` Part F4 specified; Andre has since seen it in
+place and it comes out — with the dashboard carousel one click away, a second one on the
+reader page reads as duplication. Recorded that way rather than as a correction of
+something built wrong.
+
+Three self-contained cuts, confirmed self-contained before removing anything (grepped for
+every identifier named below; none has a caller or reference outside the block removed):
+
+- **Markup**: the SR-423 comment through `<section id="ppLibrary">`'s closing tag.
+- **CSS**: every `#ppLibrary`-prefixed rule, plus the two `@media` blocks that held only
+  `#ppLibrary` rules (confirmed empty of anything else before removing the blocks
+  themselves, not just their `#ppLibrary` lines). `.sr-pp-cta` (an unrelated CTA button)
+  left untouched — a name collision the brief warned about, confirmed still there after.
+- **Script**: the SR-423 comment through the close of `initLibraryPanel()` —
+  `ppRow`/`ppVp`/`ppRail`/`ppCurrentTrack`, `ppEsc`, `ppCardTitle`, `ppCoverPath`,
+  `ppShowLockCta`, `ppRenderTrack`, `ppCardStep`, `initLibraryPanel`. The two call sites
+  fixed precisely as specified: the not-found/no-request branch keeps `initGuidedPlayer()`
+  and its `return`, only the `initLibraryPanel(PAGE_PROTOCOL)` call inside it removed; the
+  resolved-protocol branch's own `initLibraryPanel(PAGE_PROTOCOL);` statement removed
+  outright. `window.SafeRiseCover` and its `js/saferise-card.js`/`js/saferise-track.js`
+  includes are untouched, per the brief's explicit warning that `ppCoverPath` reads that
+  global (moot now that `ppCoverPath` itself is gone, but the includes were never asked to
+  go and weren't touched).
+
+**DIFFERS, found and corrected rather than followed literally:** the brief's CSS-cut
+warning says "Line ~742's `--accent` comment is the page's own theming note. Leave it" —
+checked directly: line 742 is not a separate note. It is the middle sentence of the single
+`/* SR-423 ... */` comment block that opens the whole `#ppLibrary` CSS section (lines
+733–745), entirely about the feature this pass removes. There is no independent theming
+comment anywhere else referencing `--accent` (grepped: one match in the whole file, this
+one). Removed the full comment with the rules it explains, rather than leaving an orphaned
+paragraph documenting a feature that no longer exists — the opposite of what "leave it" was
+presumably meant to protect against.
+
+**Reported rather than acted on unasked:** `.sr-pcover`/`.sr-pcover-img`/`.sr-pcover-scrim`/
+`.sr-pcover-label`/`.sr-pcover-no` (protocol.html's own copy, not `#ppLibrary`-prefixed) sit
+just above the removed CSS block and become fully orphaned by this pass — their only
+consumer on this page was `ppRenderTrack()`'s call to `SafeRiseCover.art()`, confirmed by
+grep to be the sole reference. The brief's CSS cut is explicitly bounded to
+"`#ppLibrary`-prefixed" rules, which these are not, so they were left in place with a
+comment explaining why, rather than unilaterally expanding a precisely-scoped surgical
+removal. Flagged for a founder call rather than decided here, unlike the SR-424 pass's
+`.sr-tp-cardstate2` cleanup, where the source brief's own factual claim ("appears exactly
+once") was directly and verifiably false — here the brief simply didn't address this file's
+`.sr-pcover` copy at all, which is a gap, not a contradiction.
+
+Same commit: `dashboard.html`'s SR-422 comment ("rose is not a token this palette carries")
+superseded with a dated SR-428 note — true when SR-422 wrote it, false since SR-426 added
+`--rose` and repointed the saved heart at it. Kept as the record of why gold came first
+rather than deleted.
+
+### Verify
+
+Loaded clean (zero console errors) on: a resolved protocol (t1-06), the no-params default
+(Track 1/Anxiety Reset, exercises the early-return branch the ~1610 edit touches), and a
+genuine not-found slug. Guided player confirmed mounted in all three (11 children in
+`#pane-listen .stage` on the resolved case — this is exactly what breaks first if the
+early-return edit drops `initGuidedPlayer()` or its `return` by mistake, so checked
+directly rather than assumed from a clean console alone). Crisis banner re-verified present
+and in the same place on all three of its protocols (`t1-p06`, `t1-p10`, `t2-p10`) after the
+removal — unaffected, since nothing touched inside `#experience`.
+`document.documentElement.scrollWidth − clientWidth` was `0` at 1440, 900 and 390 (one
+freshly-created browser tab in this environment reported `clientWidth:0` and a
+`scrollWidth` in the low hundreds before an explicit resize — the same tooling artifact
+prior passes this session already found, not a real defect; re-confirmed by resizing the
+tab and re-measuring). `grep` confirms zero remaining `ppLibrary`/`initLibraryPanel`/`pp*`
+references anywhere in `protocol.html` outside this entry's own explanatory comments, and
+HTML comment/section tag counts balance.
+
+### Files
+
+`protocol.html`, `dashboard.html`, `docs/fix-register.md`.
+
+*Status:* complete and verified. Two things surfaced and reported rather than silently
+resolved: a factually-wrong "leave it" warning (acted on — the comment came out with the
+feature it described) and an out-of-scope orphaning the brief didn't address (not acted on
+— left for a decision, since the cut's boundary was given precisely and the cost of leaving
+nine lines of unused CSS is near zero against the cost of an unrequested scope expansion).
+**Not pushed.**
