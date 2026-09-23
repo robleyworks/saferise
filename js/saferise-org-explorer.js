@@ -36,6 +36,23 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c];
     });
   }
+  /* SR-434 (PASS-I.md §4) · carried across from #sr-org-curriculum
+     (organisations.html) before that section was deleted — one distinct
+     one-line description per track, different wording from F8_TRACKS'
+     own `lead` (which the card and this panel already show, and stays
+     untouched). Kept here rather than added to content/f8-tracks.js,
+     whose own header comment still says "do not edit copy here" for
+     every field but the `cover` path this pass separately added. */
+  var CURRICULUM_NOTE = {
+    '01': 'States that arise within the person: anxiety, anger, overwhelm, grief, shame and shutdown.',
+    '02': 'Conflict, trust, distance, repair and the patterns that keep repeating between people.',
+    '03': 'Pressure, visibility, judgement, belonging, decision load and burnout.',
+    '04': 'Authority, transition, visibility and holding responsibility without losing access to self.',
+    '05': 'The states around eating, nourishment and the body\'s relationship with fuel.',
+    '06': 'Training, rest, interruption and the nervous-system work of returning.',
+    '07': 'The state you are in at eleven, at three, at seven — not a sleep schedule.',
+    '08': 'What becomes available when survival is no longer consuming the whole budget.'
+  };
   function byId(id) {
     for (var i = 0; i < B2B_PROTOCOLS.length; i++) { if (B2B_PROTOCOLS[i].id === id) return B2B_PROTOCOLS[i]; }
     return null;
@@ -49,6 +66,19 @@
     }
     var cls = p.kind === 'role' ? 'sr-org-elay-role' : 'sr-org-elay-industry';
     return '<div class="sr-org-eplate ' + cls + '"><div><i>' + esc(p.id) + '</i><u>Cover pending</u></div></div>';
+  }
+  /* SR-434 (PASS-I.md §3) · the Foundation 8's own version of the pattern
+     above — F8_TRACKS objects carry `cover` (added this pass), `id` and
+     `kind` (which coverOrPlate() reads) do not, so this is a parallel
+     function rather than a shared one forced onto a shape it does not
+     have. Same fallback rule: a track whose cover path is ever missing
+     gets the layer-tinted typographic plate, never a broken <img>. */
+  function f8CoverOrPlate(t) {
+    if (t.cover) {
+      return '<img src="' + esc(t.cover) + '" alt="" loading="lazy">';
+    }
+    var lay = LAYER_CLASS[t.layer] || '';
+    return '<div class="sr-org-eplate ' + lay + '"><div><i>' + esc(t.n) + '</i><u>' + esc(t.layer) + '</u></div></div>';
   }
 
   function byTitle(a, b) { return a.title.localeCompare(b.title, 'en'); }
@@ -138,9 +168,15 @@
       b.type = 'button'; b.className = 'sr-org-ecard sr-org-ecard--f8'; b.dataset.i = i;
       b.setAttribute('aria-expanded', 'false');
       var lay = LAYER_CLASS[t.layer] || '';
+      /* SR-434 (PASS-I.md §4) · the eyebrow reads the layer name, not the
+         fixed "Foundation track" label every one of the eight cards used
+         to share (still true, still shown below in the panel's own
+         "Layer" field — this is the retired curriculum section's own
+         layer eyebrow, carried onto the card face where it was visible
+         before, not just one click deeper). */
       b.innerHTML =
-        '<div class="sr-org-eplate ' + lay + '"><div><i>' + esc(t.n) + '</i><u>' + esc(t.layer) + '</u></div></div>'
-        + '<div class="sr-org-et"><p class="sr-org-ek">Foundation track</p><h3>' + esc(t.name) + '</h3>'
+        '<figure class="sr-org-ecover ' + lay + '">' + f8CoverOrPlate(t) + '</figure>'
+        + '<div class="sr-org-et"><p class="sr-org-ek">' + esc(t.layer) + '</p><h3>' + esc(t.name) + '</h3>'
         + '<p>' + esc(t.lead) + '</p><span class="sr-org-ef8cue">Read the track</span></div>';
       f8host.appendChild(b);
     });
@@ -165,15 +201,21 @@
          grid. Without it .sr-org-eside ran full-width and the plate (with
          the handler's own inline width:100%) resolved to ~1500x2000. */
       f8inner.className = 'sr-org-edinner';
+      /* SR-434 (PASS-I.md §3) · the wall's own <figure class="sr-org-ecover">
+         wrapper, not a bare plate with an inline width — .sr-org-ecover
+         img{width:100%} already covers that, and #srOrgF8Inner's own scoped
+         aspect-ratio rule (css/saferise-system.css) handles the band shape
+         without touching .sr-org-eside/.sr-org-ecover's shared base rules,
+         which the wall's own detail panel also uses. */
       f8inner.innerHTML =
         '<button type="button" class="sr-org-eclose" data-f8close>Close</button>'
-        + '<div class="sr-org-eside"><div class="sr-org-eplate ' + lay + '" style="width:100%">'
-        + '<div><i>' + esc(t.n) + '</i><u>' + esc(t.layer) + '</u></div></div>'
+        + '<div class="sr-org-eside"><figure class="sr-org-ecover ' + lay + '">' + f8CoverOrPlate(t) + '</figure>'
         + '<div class="sr-org-eanchor"><span>Layer</span><b>' + esc(t.layer) + '</b></div>'
         + '<div class="sr-org-ewho"><span>Who it serves</span><p>' + esc(t.audience) + '</p></div></div>'
         + '<div class="sr-org-etext"><p class="sr-org-ek" style="color:var(--gold)">Track ' + esc(t.n) + ' · Foundation</p>'
         + '<h3>' + esc(t.name) + '</h3><p class="sr-org-elead">' + esc(t.lead) + '</p>'
         + '<div class="sr-org-efgrid">'
+        + '<div class="sr-org-erow"><span>Included for every member</span><p>' + esc(CURRICULUM_NOTE[t.n] || '') + '</p></div>'
         + '<div class="sr-org-erow"><span>What this track works</span><p>' + esc(t.story) + '</p>'
         + '<span class="sr-org-emt">Depth specific to this track</span><p>' + esc(t.depth) + '</p></div>'
         + '<div class="sr-org-erow"><span>Ten protocols</span><ol class="sr-org-efp">'

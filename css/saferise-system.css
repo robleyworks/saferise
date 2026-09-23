@@ -2088,19 +2088,16 @@ details.sr-q .sr-a a{color:var(--primary2)}
   .sr-tp-card2:hover .sr-tp-cardimg2,
   .sr-tp-card2:focus-within .sr-tp-cardimg2{transform:none}
 
-  /* PASS-org-pricing-tracks.md §4 · explicit instruction for this one new
-     component, unlike its .tb model above (which this file's SR-303 default
-     leaves running under reduced motion, same as everything else not listed
-     here). The lift/glow and image zoom both stop; the card still lights via
-     the instant colour change already implicit in removing the transition,
-     no separate static treatment needed. */
-  .sr-org-track,
-  .sr-org-track-img{transition:none!important}
+  /* SR-434 (PASS-I.md §4) · the .sr-org-track/.sr-org-track-img rule this
+     comment used to sit above was #sr-org-curriculum's own reduced-motion
+     override — that section is deleted (merged into #sr-org-explorer),
+     grepped repo-wide first to confirm no markup anywhere still uses
+     either class before removing this rule with it. */
 
   /* PASS-org-tabs.md §3 · explicit requirement for the department/function
      tablist: selection is a colour + border-colour swap (no movement), but
      this brief asks reduced motion to disable the transition outright
-     rather than just running it unslowed, same as .sr-org-track above. */
+     rather than just running it unslowed. */
   .sr-org-tabs button{transition:none!important}
 
   /* PASS-organisations-full.md B1 · the three-layer diagram — explicit
@@ -5137,59 +5134,14 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-sector img{width:100%;aspect-ratio:4/3;object-fit:cover}
 @media(max-width:820px){.sr-org-sector{grid-template-columns:1fr}.sr-org-sector figure{order:-1}}
 
-/* -- curriculum -- */
-.sr-org-curriculum-shell{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px;align-items:start}
-.sr-org-curriculum-core h3{font-size:1.6rem;margin:10px 0 14px}
-.sr-org-curriculum-core>p{color:var(--text2)!important}
-.sr-org-curriculum-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--hair);
-  border:1px solid var(--hair);border-radius:4px;overflow:hidden}
-/* PASS-org-pricing-tracks.md §4/§5 · hover mechanism copied from coming-soon.html's
-   .tb rule (the only place this site already does "accent glow + lift" on a card):
-   translateY(-3px) plus a three-stop shadow whose outer glow is color-mix(in srgb,
-   var(--ac) 55%,transparent), same .5s var(--ease) timing, :focus-within identical
-   to :hover, same accent-tinted outline for keyboard users. --ac is set per card
-   inline, same convention .tb uses, real track colour where one exists (--t1/--t2/
-   --t3, or the coming-soon page's own accent for a name that also appears there),
-   var(--gold) where none does (Sleep & Recovery). No prefers-reduced-motion block
-   here — handled centrally in this file per CLAUDE.md; that block already turns
-   this transition off. Height is fixed (min-height below), not content-driven, so
-   the in-development tag adds no layout shift. */
-.sr-org-track{position:relative;overflow:hidden;height:230px;
-  box-shadow:0 2px 10px rgba(0,0,0,.30), 0 14px 40px rgba(0,0,0,.24);
-  transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
-.sr-org-track:hover,.sr-org-track:focus-within{transform:translateY(-3px);
-  box-shadow:0 4px 14px rgba(0,0,0,.34), 0 30px 70px rgba(0,0,0,.42),
-             0 0 60px -18px color-mix(in srgb,var(--ac) 55%,transparent)}
-.sr-org-track:focus-within{outline:2px solid color-mix(in srgb,var(--ac) 70%,transparent);outline-offset:3px}
-.sr-org-track-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  transition:transform 1.2s var(--ease),filter .6s var(--ease);filter:saturate(.72)}
-.sr-org-track:hover .sr-org-track-img,.sr-org-track:focus-within .sr-org-track-img{
-  transform:scale(1.04);filter:saturate(.95)}
-.sr-org-track-scrim{position:absolute;inset:0;z-index:1;
-  background:linear-gradient(0deg, rgba(16,16,23,.97), rgba(16,16,23,.72))}
-.sr-org-track-hatch{background:repeating-linear-gradient(45deg,#141a2a,#141a2a 10px,#182034 10px,#182034 20px)}
-.sr-org-track-body{position:relative;z-index:2;height:100%;padding:22px;box-sizing:border-box;
-  display:flex;flex-direction:column;justify-content:flex-end}
-/* SR-A-READABILITY §5a · these per-card --ac hex values (#7BA3CC, #7FA88C,
-   #9B86D6, #A8B87A…) were picked against the dark Midnight panel and don't
-   move under Sunrise, where the panel goes light — measured down to
-   1.00:1. Text now reads in the theme-aware --text2; --ac survives only as
-   a small leading dot so each track keeps its own colour identity. */
-.sr-org-track-body span{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--text2);display:inline-flex;align-items:center;gap:7px}
-.sr-org-track-body span::before{content:"";width:6px;height:6px;border-radius:50%;
-  background:var(--ac,var(--gold));flex:none}
-.sr-org-track-body h3{font-size:1.25rem;margin:10px 0 8px;color:#fff}
-.sr-org-track-body p{font-size:1rem;line-height:1.5;color:rgba(245,237,216,.88);
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.sr-org-soon-tag{display:inline-block;margin-top:12px;padding:4px 10px;border-radius:3px;
-  font:700 13px/1 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;
-  background:color-mix(in srgb,var(--ac) 20%,transparent);color:var(--text)}
-/* PASS-org-layout.md §5 · same two faults as .sr-org-pull/.sr-org-gold-copy:
-   below the ≥32px closing-line floor, and losing to .sr-org-page p. */
-p.sr-org-curriculum-note{margin-top:32px;color:var(--text3)!important;font-size:var(--fs-caption);max-width:65ch}
-@media(max-width:900px){.sr-org-curriculum-shell{grid-template-columns:1fr}}
-@media(max-width:600px){.sr-org-curriculum-grid{grid-template-columns:1fr}}
+/* SR-434 (PASS-I.md §4) · the "-- curriculum --" block that used to sit here
+   (.sr-org-curriculum-*/.sr-org-track*/.sr-org-soon-tag, ~50 lines) styled
+   #sr-org-curriculum, deleted this same pass — merged into #sr-org-explorer.
+   Grepped repo-wide first to confirm none of these classes are used
+   anywhere else before removing the rules; .sr-org-soon-tag specifically
+   was already unused even before the section it was written for was
+   deleted (worth recording, not acted on beyond removing it with the
+   rest of a block that is now entirely dead either way). */
 
 /* PASS-carousel-resume-and-routing.md §5 (cleanup) · .sr-org-library (the
    four-item plain list) rendered the old "what people receive" section,
@@ -5646,24 +5598,28 @@ p.sr-org-curriculum-note{margin-top:32px;color:var(--text3)!important;font-size:
    anywhere, per the standing rule — every division below is a
    box-shadow. */
 
-/* -- equation strip, before any heading (§3a①) -- */
-.sr-org-eeq{display:flex;align-items:center;flex-wrap:wrap;gap:var(--sr-org-s3);
-  margin-bottom:var(--sr-org-s6);padding:var(--sr-org-s4);border-radius:8px;
-  background:linear-gradient(145deg,rgba(245,237,218,.03),transparent 62%);
-  box-shadow:inset 0 0 0 1px var(--hair)}
-.sr-org-eeqn{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:2rem;color:var(--text)}
-.sr-org-eeqlbl{display:flex;flex-direction:column;font:700 11px/1.3 'DM Sans',sans-serif;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--text3)}
-.sr-org-eeqlbl i{font-style:normal;font-size:10px;letter-spacing:.04em;text-transform:none;color:var(--text3);opacity:.8}
-.sr-org-eeqop{font-size:1.3rem;color:var(--text3);opacity:.6}
-.sr-org-eeqtotal{display:flex;flex-direction:column;padding:8px 18px;border-radius:6px;
-  background:rgba(var(--sr-org-gold),.14);box-shadow:inset 0 0 0 1px rgba(var(--sr-org-gold),.4)}
-.sr-org-eeqtotal b{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.7rem;color:var(--text)}
-.sr-org-eeqtotal i{font-style:normal;font:700 10px/1.4 'DM Sans',sans-serif;letter-spacing:.1em;color:rgb(var(--sr-org-gold))}
-@media(max-width:820px){
-  .sr-org-eeq{flex-direction:column;align-items:flex-start;gap:var(--sr-org-s2)}
-  .sr-org-eeqop{display:none}
-}
+/* -- ring, before any heading (§3a①) -- SR-434 (PASS-I.md §2) · replaces
+   the equation strip (.sr-org-eeq*, removed — grepped first to confirm no
+   other reference anywhere in the repo). Ported from
+   pass/PASS-F-assets/PASS-F-reference-explorer.html (CSS lines 294–309),
+   sr-org- prefixed rather than a second namespace. Colour substitution
+   (role/industry segments) reported in the markup's own comment, above
+   the figure. */
+.sr-org-ringfig{margin:0 0 var(--sr-org-s6);display:grid;justify-items:center;gap:20px}
+.sr-org-ringwrap{position:relative;width:min(300px,100%);aspect-ratio:1}
+.sr-org-ring{width:100%;height:100%;overflow:visible;transform:rotate(-90deg)}
+.sr-org-ring circle{fill:none;stroke-width:15;stroke-linecap:butt}
+.sr-org-ring .sr-org-ringbed{stroke:rgba(245,237,218,.05);stroke-width:15}
+.sr-org-ring .sr-org-ringseg{opacity:0;animation:srOrgRingSegIn .5s var(--sr-org-ease) var(--d) both}
+@keyframes srOrgRingSegIn{from{opacity:0;stroke-width:5}to{opacity:1;stroke-width:15}}
+.sr-org-ringmid{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:2px}
+.sr-org-ringmid b{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:64px;line-height:1;color:var(--text)}
+.sr-org-ringmid span{font:700 9.5px/1.45 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--text3)}
+.sr-org-ringcap{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;font-size:11.5px;color:var(--text3)}
+.sr-org-ringkey{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.sr-org-ringkey--gold{background:rgb(var(--sr-org-gold))}
+.sr-org-ringkey--role{background:rgb(var(--sr-org-slate))}
+.sr-org-ringkey--industry{background:rgb(var(--sr-org-sage))}
 
 /* -- section banner underlays (§4h) — base and plus-two headers only -- */
 .sr-org-head--band{position:relative;z-index:0;padding:var(--sr-org-s5) var(--sr-org-s4) var(--sr-org-s4);
@@ -5765,7 +5721,26 @@ p.sr-org-curriculum-note{margin-top:32px;color:var(--text3)!important;font-size:
 .sr-org-eplate{flex:none;width:86px;position:relative;border-radius:3px;overflow:hidden;
   aspect-ratio:1086/1448;display:grid;place-items:center;text-align:center;padding:8px;
   background:linear-gradient(165deg,color-mix(in srgb,var(--lc) 26%,#0d0d14),#0b0b11)}
-.sr-org-ef8 .sr-org-eplate{width:100%}
+/* SR-434 (PASS-I.md §3, option (a)) · F8's own slot moves to the band
+   aspect — the eight cover assets are all bands (two 1400×380 journey
+   bands, six 1200×640 "coming" bands), so a portrait box would either
+   crop hard or leave the two journey bands visibly soft. 16/7 matches
+   the ratio this codebase already uses for the track pages' cost/change
+   images — not invented here. Applies to both the real-cover case
+   (.sr-org-ecover, wraps a plain <img>) and the plate fallback
+   (.sr-org-eplate) so a track with art and a track without render at the
+   same height in the same row. Scoped to .sr-org-ef8 (the grid) and
+   #srOrgF8Inner (the detail panel, by id — .sr-org-eside/.sr-org-ecover
+   are shared with the wall's own detail panel, so an unscoped change
+   here would have reshaped that too; CLAUDE.md's "never modify a shared
+   selector to fix one surface" rule). */
+.sr-org-ef8 .sr-org-eplate,#srOrgF8Inner .sr-org-eplate{width:100%;aspect-ratio:16/7}
+.sr-org-ef8 .sr-org-ecover,#srOrgF8Inner .sr-org-ecover{width:100%;aspect-ratio:16/7}
+.sr-org-ef8 .sr-org-ecover img,#srOrgF8Inner .sr-org-ecover img{aspect-ratio:16/7}
+/* the F8 grid/detail cover has no role/industry split (the wall's own
+   .erol/.eind pair) — tinted by layer instead, same --lc every layer
+   class already sets for the plate above. */
+.sr-org-ecover[class*="sr-org-elay-"]::after{background:var(--lc)}
 .sr-org-eplate::after{content:"";position:absolute;right:0;bottom:0;width:16px;height:16px;
   background:var(--lc);clip-path:polygon(100% 0,100% 100%,0 100%)}
 .sr-org-eplate i{font-style:normal;font-family:'Cormorant Garamond',Georgia,serif;font-size:26px;line-height:1;
@@ -5958,8 +5933,10 @@ p.sr-org-curriculum-note{margin-top:32px;color:var(--text3)!important;font-size:
      (applyFilter() checks the same media query before ever adding the
      class), so this rule is a backstop, not the only guard. */
   .sr-org-capacity-grid::before,.sr-org-capacity-grid article,
-  .sr-org-pathstage,.sr-org-ewall.sr-org-ereflow .sr-org-etile{animation:none!important}
+  .sr-org-pathstage,.sr-org-ewall.sr-org-ereflow .sr-org-etile,
+  .sr-org-ringseg{animation:none!important}
   .sr-org-hpeel,.sr-org-trust p,.sr-org-pathstage p{transition:none!important}
+  .sr-org-ringseg{opacity:1!important;stroke-width:15!important}
 }
 
 /* ═══════════════════════════════════════════════════════════════

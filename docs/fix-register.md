@@ -19768,9 +19768,11 @@ rather than claimed as directly observed. **Not pushed.**
 
 ## SR-434 — organisations.html: F8 reveal, dead anchor, and the counts (PASS-I.md)
 
-§1 and §5 (unambiguous, no decision needed) and §4's count removal (confirmed by Andre
-after the cited doc — `claude/VIDEO-SCRIPTS-THREE-SURFACES-V2.md` — was supplied) are
-done. §2 and §3 still wait on Andre; nothing built for either.
+§1, §5, §4's count removal, and — following Andre's decision on all three, delivered in a
+follow-up message ("All three PASS-I decisions are made. Proceed.") — §2 (port the ring,
+drop the equation strip), §3 (option a, band-shaped cover slot), and §4's merge-and-delete
+of `#sr-org-curriculum` are all done and verified live. Nothing in this pass is still
+waiting on a decision.
 
 ### §1 — the F8 reveal's missing class
 
@@ -19822,43 +19824,168 @@ extending the fix here without being asked would be exactly the kind of unreques
 expansion this project's own passes have been told to avoid. Flagged for a decision rather
 than silently swept in.
 
-### §2 and §3 — reported only, per the brief's own "wait on Andre"
+### §2 — the ring, ported
 
-**§2, the ring illustration.** Confirmed `.ringwrap`/`.ring`/`.ringmid` exist in
-`pass/PASS-F-assets/PASS-F-reference-explorer.html` (CSS lines 295–304, markup lines
-408–422) and that `organisations.html` has zero occurrences of any of the three classes —
-the equation strip is confirmed as what actually shipped in the ring's place. Nothing
-built; (a)/(b)/(c) is Andre's call.
+Lifted `.ringwrap`/`.ring`/`.ringmid` markup and CSS from
+`pass/PASS-F-assets/PASS-F-reference-explorer.html` (SVG at line 409, CSS 295–305) as
+inline SVG, not reimplemented as a conic-gradient — porting the actual markup per
+instruction. Landed under the `sr-org-` prefix: `.sr-org-ringfig` (figure wrapper),
+`.sr-org-ringwrap`/`.sr-org-ring`/`.sr-org-ringbed` (the SVG circle group),
+`.sr-org-ringmid` (the centred "10 / tracks per person" text), `.sr-org-ringcap` +
+`.sr-org-ringkey`/`--gold`/`--role`/`--industry` (the figcaption legend, replacing the
+equation strip's role of naming what's counted). Ten `<circle>` segments carried over
+unchanged: 8 gold (foundation), 1 slate (role), 1 sage (industry), same
+`stroke-dasharray`/staggered `stroke-dashoffset`/`--d` delay values as the reference.
 
-**§3, the Foundation 8 covers.** Confirmed `content/f8-tracks.js` carries no `cover`,
-`img`, `src` or `band` key on any of the eight track objects — every "cover" grep hit was
-the substring inside "Recovery," not a data field. Nothing built; the band-vs-portrait
-question (a)/(b)/(c) is Andre's call, and it gates §4's proposed curriculum merge in turn.
+Replaced `.sr-org-eeq` entirely in `organisations.html`; grepped the file afterward —
+zero remaining references — before removing the now-orphaned `.sr-org-eeq*` block (7
+rules plus its `@media(max-width:820px)` override) from `saferise-system.css`. The SR-434
+comment recording *why* the counts came out (citing
+`claude/VIDEO-SCRIPTS-THREE-SURFACES-V2.md` §4) was carried across to sit above the ring
+rather than deleted with the strip — the reasoning still applies to anything added around
+the ring, not just to the equation it originally explained. The centre "10 / tracks per
+person" stays, unchanged, as the promise rather than a count.
 
-**One fact worth having before that merge decision, surfaced while reading, not asked
-for:** `#sr-org-curriculum`'s own per-track grid (`organisations.html` line 199 onward)
-carries a **different** one-line description per track than `content/f8-tracks.js`'s own
-`lead` field — e.g. curriculum's Personal Transformation reads "States that arise within
-the person: anxiety, anger, overwhelm, grief, shame and shutdown," against f8-tracks.js's
-`lead`, "Everyday emotional states. A steadier place to choose." Genuinely different copy,
-not a duplicate — a straight delete-without-merging would lose it. The layer eyebrows
-(Capacity/Relational/etc.) are *not* at the same risk: the explorer's own F8 cards already
-render `t.layer` in both the plate and the detail panel's "Layer" field, just styled
-differently than the curriculum's small `<span>` eyebrow.
+Added the ring's segment-in animation to the page's own existing org-page reduced-motion
+block rather than writing a new one — `.sr-org-ringseg{animation:none!important}` plus an
+explicit `opacity:1!important;stroke-width:15!important}` (disabling the animation alone
+would otherwise leave segments frozen at their initial `opacity:0`).
 
-**The subnav dangling-reference concern turned out not to apply.** Read
-`js/saferise-system.js`'s sticky pill-nav builder (~line 397 on): it is not a hardcoded
-list. It walks every `<section>` on the page live, reads each one's own eyebrow text by
-computed style (uppercase, letter-spacing, colour match), and builds the nav from
-whatever it finds. Deleting `#sr-org-curriculum` would remove its "THE COMPLETE
-CURRICULUM" pill automatically, with nothing left to go stale — reported so this doesn't
-cost a separate check later.
+**Colour substitution, reported as instructed:** gold matches the reference exactly (it's
+already `--sr-org-gold` in this file). The reference's role/industry segments are blue and
+green; this codebase has no blue or green token on this surface, so `--sr-org-slate`
+(role) and `--sr-org-sage` (industry) were used as the nearest existing tokens — not exact
+matches, no new token invented. Worth a look from Andre if the distinction between role
+and industry needs to read more clearly than slate/sage allow.
+
+**Verified live:** ring renders at 1440 (300×300, full size) and 390 (still 300×300 — the
+`min(300px,100%)` sizing has room at this width), 10 `.sr-org-ringseg` elements present,
+zero console errors at either width.
+
+### §3 — Foundation 8 covers, option (a), band-shaped slot
+
+Added a `cover` field to all eight objects in `content/f8-tracks.js`, mapped from the
+existing band images already live elsewhere on this same page (`#sr-org-curriculum`'s own
+`.trk` art, before that section's deletion in §4) — no new photography:
+
+```
+01 Personal Transformation -> assets/journey/t1-band.webp
+02 Relationship Healing    -> assets/org/track-t2.webp
+03 Professional Performance-> assets/journey/t3-band.webp
+04 Executive Presence      -> assets/coming/band-08.webp
+05 Embodied Nutrition      -> assets/coming/band-04.webp
+06 Strength & Return       -> assets/coming/band-03.webp
+07 Sleep & Recovery        -> assets/coming/band-09.webp
+08 Elevation Series        -> assets/coming/band-01.webp
+```
+
+All eight paths confirmed to exist on disk before wiring in. The file's "do not edit copy
+here" header comment was updated in the same commit to record `cover` as a deliberate,
+narrow exception (a path, not prose) and to explain the 16:7 slot ratio and its source
+(the track pages' own cost/change images already use it — not invented for this pass).
+
+`js/saferise-org-explorer.js` gained `f8CoverOrPlate(t)`, paralleling the existing
+`coverOrPlate(p, sizeAttrs)`: renders the real `<img>` when `t.cover` is set, falls back
+to the typographic plate otherwise (same fallback contract as the wall's own cards, so a
+future track added without art degrades the same way). Both the F8 grid-card loop and the
+detail-panel click handler now wrap the cover in `<figure class="sr-org-ecover ...">`
+rather than a bare plate `<div>` — this also closes the "second, smaller difference"
+flagged in §1 (the wall's detail panel already used a `<figure class="sr-org-ecover">`
+wrapper; F8's used a bare plate). The old inline `style="width:100%"` on the plate came
+out; `.sr-org-ecover img{width:100%}` already covers it.
+
+CSS: `.sr-org-eplate`'s base rule keeps its existing 1086:1448 portrait ratio (still used
+by the wall's own cards, which are not changing). The band aspect is scoped to
+`.sr-org-ef8 .sr-org-eplate` / `.sr-org-ef8 .sr-org-ecover` (the grid) and, for the detail
+panel, `#srOrgF8Inner .sr-org-eplate` / `#srOrgF8Inner .sr-org-ecover` — the **ID**, not
+the shared `.sr-org-eside`/`.sr-org-edinner`/`.sr-org-ecover` classes, because those
+classes are also used by the wall's own detail panel (`#srOrgDinner`). Styling them
+directly would have restyled the wall's cover to band-shape too — exactly the "never
+modify a shared selector to fix one page/surface" case CLAUDE.md names directly.
+
+**Verified live:** all eight F8 cards open; grid cover and detail-panel cover both measure
+2.286 (16:7) exactly, matching the target ratio precisely, not approximately. Zero console
+errors across all eight opens (cross-checked via network requests, not just `img.complete`
+— a fast click-loop otherwise produces false "not loaded" reads purely from decode timing,
+not a real defect).
+
+### §4 — merge and delete `#sr-org-curriculum`
+
+Two pieces of that section's content were carried across before deletion, as instructed:
+
+1. **Layer eyebrows.** The F8 grid card's eyebrow (`js/saferise-org-explorer.js`) changed
+   from a fixed `"Foundation track"` string to `t.layer` — now visible on the card face
+   without opening the panel, exactly as it was on the curriculum section's own card face.
+   No new data needed; `t.layer` already existed on every track object.
+2. **Each track's one-line description.** The curriculum section's per-track copy is
+   genuinely different prose from `content/f8-tracks.js`'s own `lead` field (confirmed
+   while investigating §3 — e.g. curriculum's Personal Transformation read "States that
+   arise within the person: anxiety, anger, overwhelm, grief, shame and shutdown," against
+   f8-tracks.js's `lead`, "Everyday emotional states. A steadier place to choose."). Added
+   a `CURRICULUM_NOTE` lookup directly in `js/saferise-org-explorer.js` (not in
+   `content/f8-tracks.js`, respecting that file's copy-editing restriction — the `cover`
+   exception in §3 was a path, not prose) and render it as a new first row in the detail
+   panel's `.sr-org-efgrid`, labelled "Included for every member" (a phrase reused from the
+   curriculum section itself, not invented).
+
+**Two pieces of curriculum content were *not* carried across — reported per the
+instruction to report anything else that section carried which the explorer doesn't:**
+
+- The section's own heading/lede, specifically framing that "the industry route doesn't
+  reduce access... every organisational member can use the complete cross-industry
+  curriculum." This was argumentative/positioning copy about *why* the Foundation 8 exists
+  in an industry-routed product, not track-specific content — nothing in the merged
+  explorer currently makes this argument.
+- The fuller "Included for every member / A wider system for the person doing the
+  work... workplace strain does not stay neatly at work" framing paragraph. Only the
+  label phrase "Included for every member" was reused (as the new row's label, item
+  above); the paragraph's own argument about strain crossing the work/life boundary is
+  not present anywhere else on the page now.
+
+Both are prose decisions (what the page argues, not what data it's missing) rather than
+something a rename/carry-across pass should invent copy to replace — flagging both for
+Andre rather than writing new positioning copy unasked.
+
+Deleted `#sr-org-curriculum` (`organisations.html`, was 4171 bytes, one line) via a direct
+byte-offset splice (Python, not the `Edit` tool — the block's minified single-line form
+made a reliable `old_string` match impractical). Verified via repo-wide grep
+(`sr-org-curriculum` → zero matches outside my own explanatory comments) and a full HTML
+tag-balance check (div/section/header/main/article all balanced) before and after.
+
+**The subnav needed no cleanup, confirmed rather than assumed.**
+`js/saferise-system.js`'s sticky pill-nav builder (~line 397) walks every `<section>` on
+the page live and reads its eyebrow by computed style — it is not a hardcoded list.
+Deleting the section removed its "THE COMPLETE CURRICULUM" pill automatically; confirmed
+live in the loaded page rather than only reasoned about from the code.
+
+**CSS cleanup.** Removed the now-orphaned `.sr-org-curriculum-*`/`.sr-org-track*` block
+(~50 lines: `.sr-org-curriculum-shell`, `-core h3`, `-core>p`, `-grid`, `.sr-org-track` +
+its hover/focus-within states, `-img`, `-scrim`, `-hatch`, `-body` + sub-rules,
+`.sr-org-soon-tag`, `p.sr-org-curriculum-note`, two closing `@media` overrides) from
+`saferise-system.css`, plus a small related fragment in the shared reduced-motion block
+(`.sr-org-track,.sr-org-track-img{transition:none!important}`). Grepped repo-wide first
+for every class name in the block — zero remaining consumers anywhere outside `pass/` and
+my own comments. `.sr-org-soon-tag` specifically got an extra check on top (its name is
+generic enough to risk reuse elsewhere) — also zero matches, and worth noting it was
+already unused before this pass touched it, not a wall this pass carved off pre-existing
+usage from live pages.
+
+**Verified live:** "Foundation 8" text appears on the page exactly the count expected for
+one section (no duplicate section); `document.getElementById('sr-org-curriculum')` returns
+null; the Foundation 8 explorer (`#sr-org-explorer` → `#sr-org-base`) is the only place it
+renders. Zero console errors. Zero horizontal overflow measured (not eyeballed) at both
+1440 (`scrollWidth` 1424 vs `innerWidth` 1440) and 390 (`scrollWidth` 374 vs `innerWidth`
+390).
 
 ### Files
 
-Modified: `organisations.html`, `js/saferise-org-explorer.js`, `docs/fix-register.md`.
+Modified: `organisations.html`, `js/saferise-org-explorer.js`, `content/f8-tracks.js`,
+`css/saferise-system.css`, `docs/fix-register.md`.
 
-*Status:* §1, §4 (the three named phrases) and §5 complete and verified live. §2 and §3
-reported only, per instruction — nothing built for either. One new finding surfaced and
-left for a decision: the second "Fourteen... sixteen..." occurrence in the wall's own
-lede, not part of this pass's resolving instruction. **Not pushed.**
+*Status:* §1, §2, §3, §4 (counts + merge/delete), and §5 complete and verified live —
+every part of this pass Andre decided on is now built. One item remains flagged, not
+fixed, from the §4 count sweep: the second "Fourteen... sixteen..." occurrence in the
+wall's own lede (`.sr-org-esecwide`), not part of this pass's resolving instruction. Two
+items remain flagged, not built, from the curriculum merge: the section's own
+industry-access framing lede, and the fuller "wider system... workplace strain" paragraph
+— both prose/positioning decisions for Andre, not carried across. **Not pushed.**

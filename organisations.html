@@ -105,20 +105,48 @@
 
 <section class="sr-org-section" id="sr-org-explorer"><div class="sr-org-wrap">
 
-<!-- SR-434 (PASS-I.md §4) · "14 to draw from" / "16 to draw from" / "224
-     combinations" removed — claude/VIDEO-SCRIPTS-THREE-SURFACES-V2.md §4:
-     "No count of roles, sectors or combinations, spoken or on screen. The
-     14 x 16 arithmetic is a good internal fact and a bad public one."
-     "10 tracks per person" stays: the promise, not a count of inventory. -->
-<div class="sr-org-eeq" role="group" aria-label="Every employee receives ten tracks">
-  <span class="sr-org-eeqn">8</span><span class="sr-org-eeqlbl">Foundation</span>
-  <span class="sr-org-eeqop" aria-hidden="true">+</span>
-  <span class="sr-org-eeqn">1</span><span class="sr-org-eeqlbl">Role</span>
-  <span class="sr-org-eeqop" aria-hidden="true">+</span>
-  <span class="sr-org-eeqn">1</span><span class="sr-org-eeqlbl">Industry</span>
-  <span class="sr-org-eeqop" aria-hidden="true">=</span>
-  <span class="sr-org-eeqtotal"><b>10</b><i>tracks per person</i></span>
-</div>
+<!-- SR-434 (PASS-I.md §4, carried across from the equation strip this ring
+     replaces) · "14 to draw from" / "16 to draw from" / "224 combinations"
+     were removed from the strip — claude/VIDEO-SCRIPTS-THREE-SURFACES-V2.md
+     §4: "No count of roles, sectors or combinations, spoken or on screen.
+     The 14 x 16 arithmetic is a good internal fact and a bad public one."
+     The ring's own centre, "10 / tracks per person", stays: the promise,
+     not a count of inventory — the same rule applies to anything added
+     around it.
+     SR-434 (PASS-I.md §2) · ported from
+     pass/PASS-F-assets/PASS-F-reference-explorer.html (markup lines
+     407–429, CSS lines 294–309) — inline SVG, not reimplemented as a
+     conic-gradient. Colour substitution, reported: the reference's 8 gold
+     segments use --gold:#D4A843, an exact match to rgb(var(--sr-org-gold))
+     already in this file. The role segment (reference: --blue:#7BA3CC) and
+     industry segment (reference: --green:#6E9080) are NOT exact matches to
+     --sr-org-slate (130,152,187) / --sr-org-sage (157,179,136) — nearest
+     existing tokens used, matching the role=slate/industry=sage convention
+     this page's own wall and detail panel already carry, not a new token
+     invented. -->
+<figure class="sr-org-ringfig" aria-label="Every employee receives ten tracks: eight foundation, one for their role, one for their industry.">
+  <div class="sr-org-ringwrap">
+    <svg viewBox="0 0 240 240" class="sr-org-ring" role="img" aria-hidden="true">
+      <circle cx="120" cy="120" r="92" class="sr-org-ringbed"/>
+      <circle class="sr-org-ringseg" cx="120" cy="120" r="92" stroke="rgb(var(--sr-org-gold))" stroke-dasharray="52.81 525.25" stroke-dashoffset="-0.00" style="--d:0ms"/>
+      <circle class="sr-org-ringseg" cx="120" cy="120" r="92" stroke="rgb(var(--sr-org-gold))" stroke-dasharray="52.81 525.25" stroke-dashoffset="-57.81" style="--d:70ms"/>
+      <circle class="sr-org-ringseg" cx="120" cy="120" r="92" stroke="rgb(var(--sr-org-gold))" stroke-dasharray="52.81 525.25" stroke-dashoffset="-115.61" style="--d:140ms"/>
+      <circle class="sr-org-ringseg" cx="120" cy="120" r="92" stroke="rgb(var(--sr-org-gold))" stroke-dasharray="52.81 525.25" stroke-dashoffset="-173.42" style="--d:210ms"/>
+      <circle class="sr-org-ringseg" cx="120" cy="120" r="92" stroke="rgb(var(--sr-org-gold))" stroke-dasharray="52.81 525.25" stroke-dashoffset="-231.22" style="--d:280ms"/>
+      <circle class="sr-org-ringseg" cx="120" cy="120" r="92" stroke="rgb(var(--sr-org-gold))" stroke-dasharray="52.81 525.25" stroke-dashoffset="-289.03" style="--d:350ms"/>
+      <circle class="sr-org-ringseg" cx="120" cy="120" r="92" stroke="rgb(var(--sr-org-gold))" stroke-dasharray="52.81 525.25" stroke-dashoffset="-346.83" style="--d:420ms"/>
+      <circle class="sr-org-ringseg" cx="120" cy="120" r="92" stroke="rgb(var(--sr-org-gold))" stroke-dasharray="52.81 525.25" stroke-dashoffset="-404.64" style="--d:490ms"/>
+      <circle class="sr-org-ringseg" cx="120" cy="120" r="92" stroke="rgb(var(--sr-org-slate))" stroke-dasharray="52.81 525.25" stroke-dashoffset="-462.44" style="--d:560ms"/>
+      <circle class="sr-org-ringseg" cx="120" cy="120" r="92" stroke="rgb(var(--sr-org-sage))" stroke-dasharray="52.81 525.25" stroke-dashoffset="-520.25" style="--d:630ms"/>
+    </svg>
+    <div class="sr-org-ringmid"><b>10</b><span>tracks<br>per person</span></div>
+  </div>
+  <figcaption class="sr-org-ringcap">
+    <i class="sr-org-ringkey sr-org-ringkey--gold"></i>8 foundation &mdash; everyone
+    <i class="sr-org-ringkey sr-org-ringkey--role"></i>1 for their role
+    <i class="sr-org-ringkey sr-org-ringkey--industry"></i>1 for their industry
+  </figcaption>
+</figure>
 
 <div id="sr-org-base">
   <div class="sr-org-head sr-org-head--band">
@@ -201,16 +229,7 @@
 
 </div></section>
 
-<section class="sr-org-section sr-org-section-alt sr-org-curriculum" id="sr-org-curriculum"><div class="sr-org-wrap"><!-- SR-385 (PASS-organisations.md B2) · curriculum band slot. No existing asset represents "the whole library" as a scene; the framework band images (assets/frameworks/band-*) are each tied to a specific named framework page and would misattribute the curriculum to one of them. Hatch placeholder. --><div class="sr-org-ph rv" style="aspect-ratio:16/3;border-radius:4px;margin-bottom:36px" aria-hidden="true"></div><div class="sr-org-head rv"><div><p class="eyebrow sr-org-eyebrow">The complete curriculum</p><h2>Three to five industry protocols. The whole SafeRise library.</h2></div><p>The industry route surfaces what is most likely to matter first. It does not reduce access. Every organisational member can use the complete cross-industry curriculum.</p></div><div class="sr-org-curriculum-shell rv"><div class="sr-org-curriculum-core"><p class="sr-org-kicker">Included for every member</p><h3>A wider system for the person doing the work.</h3><p>Workplace strain does not stay neatly at work, and personal state does not disappear at the office door. The full curriculum keeps those realities connected.</p></div><div class="sr-org-curriculum-grid">
-<article class="sr-org-track" style="--ac:var(--t1)" tabindex="0"><img class="sr-org-track-img" src="assets/journey/t1-band.webp" alt=""><div class="sr-org-track-scrim"></div><div class="sr-org-track-body"><span>Capacity</span><h3>Personal Transformation</h3><p>States that arise within the person: anxiety, anger, overwhelm, grief, shame and shutdown.</p></div></article>
-<article class="sr-org-track" style="--ac:#9B86D6" tabindex="0"><img class="sr-org-track-img" src="assets/coming/band-01.webp" alt=""><div class="sr-org-track-scrim"></div><div class="sr-org-track-body"><span>Beyond</span><h3>Elevation Series</h3><p>What becomes available when survival is no longer consuming the whole budget.</p></div></article>
-<article class="sr-org-track" style="--ac:var(--t2)" tabindex="0"><img class="sr-org-track-img" src="assets/org/track-t2.webp" alt=""><div class="sr-org-track-scrim"></div><div class="sr-org-track-body"><span>Relational</span><h3>Relationship Healing</h3><p>Conflict, trust, distance, repair and the patterns that keep repeating between people.</p></div></article>
-<article class="sr-org-track" style="--ac:#A8B87A" tabindex="0"><img class="sr-org-track-img" src="assets/coming/band-04.webp" alt=""><div class="sr-org-track-scrim"></div><div class="sr-org-track-body"><span>Substrate</span><h3>Embodied Nutrition</h3><p>The states around eating, nourishment and the body's relationship with fuel.</p></div></article>
-<article class="sr-org-track" style="--ac:#7FA88C" tabindex="0"><img class="sr-org-track-img" src="assets/coming/band-03.webp" alt=""><div class="sr-org-track-scrim"></div><div class="sr-org-track-body"><span>Substrate</span><h3>Strength &amp; Return</h3><p>Training, rest, interruption and the nervous-system work of returning.</p></div></article>
-<article class="sr-org-track" style="--ac:var(--gold)" tabindex="0"><img class="sr-org-track-img" src="assets/coming/band-09.webp" alt=""><div class="sr-org-track-scrim"></div><div class="sr-org-track-body"><span>Substrate</span><h3>Sleep &amp; Recovery</h3><p>The state you are in at eleven, at three, at seven — not a sleep schedule.</p></div></article>
-<article class="sr-org-track" style="--ac:var(--t3)" tabindex="0"><img class="sr-org-track-img" src="assets/journey/t3-band.webp" alt=""><div class="sr-org-track-scrim"></div><div class="sr-org-track-body"><span>Application</span><h3>Professional Performance</h3><p>Pressure, visibility, judgement, belonging, decision load and burnout.</p></div></article>
-<article class="sr-org-track" style="--ac:#7BA3CC" tabindex="0"><img class="sr-org-track-img" src="assets/coming/band-08.webp" alt=""><div class="sr-org-track-scrim"></div><div class="sr-org-track-body"><span>Application</span><h3>Executive Presence</h3><p>Authority, transition, visibility and holding responsibility without losing access to self.</p></div></article>
-</div></div></div></section><section class="sr-org-section" id="sr-org-model8plus2"><div class="sr-org-wrap"><header class="sr-org-head rv"><p class="sr-org-eyebrow">The 8 + 2 model</p><h2>One foundation. Two layers of context.</h2><p>The person is not the job. The role is not the industry. SafeRise separates the three so personalisation comes from context, not from duplicating the same content under different names.</p></header><div class="sr-org-twoup rv"><article class="sr-org-layer sr-org-layer--role"><p class="sr-org-protoid"><span>+1</span>Role / function</p><h3>What does this responsibility repeatedly ask me to carry?</h3><p>Responsibility, cognitive load, authority, scrutiny, rejection, precision, vigilance, dependency, performance cycles and repeated interpersonal demand.</p></article><article class="sr-org-layer sr-org-layer--industry"><p class="sr-org-protoid"><span>+1</span>Industry</p><h3>What does this work environment repeatedly expose me to?</h3><p>Operational rhythm, service pressure, public contact, emergency exposure, safety consciousness, sensory demand, shifts, disruption and competition.</p></article></div><div class="sr-org-combos rv"><p class="sr-org-eyebrow">How it combines</p><ul><li><b>Resort accountant</b><span>Financial Focus + Hospitality</span></li><li><b>Audit-firm accountant</b><span>Financial Focus + Legal Services</span></li><li><b>Professional athlete</b><span>Athletic Performance + Sport Performance</span></li><li><b>Football coach</b><span>Teaching Impact + Sport Performance</span></li></ul></div><div class="sr-org-bezel rv"><p><b>The development rule.</b> If a resource still works almost unchanged after the role or industry name is replaced, it belongs in the Foundation 8. B2B content exists only where the work context genuinely changes the experience.</p></div></div></section>
+<section class="sr-org-section" id="sr-org-model8plus2"><div class="sr-org-wrap"><header class="sr-org-head rv"><p class="sr-org-eyebrow">The 8 + 2 model</p><h2>One foundation. Two layers of context.</h2><p>The person is not the job. The role is not the industry. SafeRise separates the three so personalisation comes from context, not from duplicating the same content under different names.</p></header><div class="sr-org-twoup rv"><article class="sr-org-layer sr-org-layer--role"><p class="sr-org-protoid"><span>+1</span>Role / function</p><h3>What does this responsibility repeatedly ask me to carry?</h3><p>Responsibility, cognitive load, authority, scrutiny, rejection, precision, vigilance, dependency, performance cycles and repeated interpersonal demand.</p></article><article class="sr-org-layer sr-org-layer--industry"><p class="sr-org-protoid"><span>+1</span>Industry</p><h3>What does this work environment repeatedly expose me to?</h3><p>Operational rhythm, service pressure, public contact, emergency exposure, safety consciousness, sensory demand, shifts, disruption and competition.</p></article></div><div class="sr-org-combos rv"><p class="sr-org-eyebrow">How it combines</p><ul><li><b>Resort accountant</b><span>Financial Focus + Hospitality</span></li><li><b>Audit-firm accountant</b><span>Financial Focus + Legal Services</span></li><li><b>Professional athlete</b><span>Athletic Performance + Sport Performance</span></li><li><b>Football coach</b><span>Teaching Impact + Sport Performance</span></li></ul></div><div class="sr-org-bezel rv"><p><b>The development rule.</b> If a resource still works almost unchanged after the role or industry name is replaced, it belongs in the Foundation 8. B2B content exists only where the work context genuinely changes the experience.</p></div></div></section>
 
 <section class="sr-org-section sr-org-section-alt" id="sr-org-included"><div class="sr-org-wrap">
   <div class="sr-org-head rv"><div><p class="eyebrow sr-org-eyebrow">What people receive</p><h2>You set the conditions. What happens inside stays inside.</h2></div><p>Organisational access uses the same core method as individual membership. You add two things to it from the outside — and nothing comes back out.</p></div>
