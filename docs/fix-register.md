@@ -19240,3 +19240,97 @@ art yet, by design, per §4), the pre-existing `/organisations` sitemap gap, and
 `R02`/`I13` anchor-string conflicts §8 asks to be restated for a founder decision (the site
 form's own copy currently wins on the live page; not changed by this pass either way).
 **Not pushed.**
+
+## SR-430 — imagery wiring: method, about, live-sessions, plans
+(PASS-G-IMAGERY-METHOD-ABOUT-LIVE-PLANS.md)
+
+Wiring only, as the brief said — every asset was already on disk, untracked. Ten hatched
+placeholders on `method.html` (four named slots + the six-cell METHOD-07 arena grid), five
+on `about.html`, four hotlinked Pexels images on `live-sessions.html`, and one `img: null`
+in `js/saferise-plans.js` all now render real photography. §0's read-first-and-report
+surfaced one gap in the brief itself (below); the other three items are the fix-register
+entries the brief explicitly asked for rather than a plain summary line.
+
+**§0 finding against live code:** `live-sessions.html` has **four** `images.pexels.com`
+references, not the three §2/§6 describe. The brief names `.liveheroart` and both
+`.offerart` blocks; it does not mention a third use of the same hero file (4098997) inside
+`.slot.slot--wide` — the "17" calendar-day tile in the `#lv-me` section. Left unfixed, the
+pass would have shipped a live "0" in the §6 `pexels` row that was actually 1. Fixed
+alongside the other three, using `assets/sessions/calendar.jpg`/`.webp` — an asset already
+in the folder, sized and cropped for exactly this tile, not named in the brief's asset list
+(it names only the three the brief's own three elements needed) but unambiguous once found:
+`ls assets/sessions/` turned it up before any judgement call was needed. `grep -r "pexels"
+*.html js/ css/` now returns nothing; no other external image host found.
+
+**Judgement call — METHOD-03, install as-is (brief's own §1d, confirmed accurate):** the
+scaffolding text asked for "a kitchen counter, a desk." The delivered `m-built.jpg` is
+headphones on a tram at dusk, a string bag of groceries in hand. Ordinary and unglamorous,
+which is the spirit of the brief, but not the letter of it. Shipped per the brief's own
+explicit instruction to ship both judgement calls; alt text describes what the photo
+actually shows, not the deleted art direction.
+
+**Judgement call — METHOD-05, install as-is, but the brief's own §1d claim about it is
+itself wrong:** the brief states "the brief asks for eyes closed. Hers are open, turned
+away" and lists this as a second judgement call to ship-and-report. Viewed the actual file
+(`assets/method/m-vessel.jpg`, zoomed on the face) before writing alt text: her eyes are
+**closed**, head tilted back against the headphones, which is what the original scaffolding
+text asked for. There is no mismatch to ship past on this one — correcting the brief's own
+claim here rather than repeating it, per "your fix-register entries outrank this brief,
+report the disagreement." Alt text reads "eyes closed" because that is what the photograph
+shows, confirmed directly rather than copied from either the scaffolding or the brief's
+description of it.
+
+**IMG-057, installed as provisional per the brief's own §3a:** the same table as IMG-052,
+a different crop, one person's hands and one visible cup rather than the brief's
+"table between two people... two coffees, one untouched." Installed exactly as instructed —
+Andre has already been told, and the brief is explicit that a rejection sends the slot back
+to a placeholder rather than a third crop of the same table. Not resolved further here.
+
+### Other findings
+
+`.sr-mt-id`/`.sr-mt-brief`/`.sr-mt-spec` (method.html) and `.slotmeta`/`.slotid`/
+`.slotdim`/`.slotbrief` (about.html) — the scaffolding text's own CSS rules — were removed
+in the same edit as the markup that used them, after grepping each file to confirm no
+remaining reference anywhere. Not a scope expansion: these rules had no other consumer and
+became dead code as a direct, immediate result of this pass's own markup change, not a
+pre-existing orphan being opportunistically cleaned up.
+
+### Verify
+
+Live in the browser (not by reading files), across all four pages: zero console errors on
+load; all ten method.html photos found by their alt text and visually confirmed by
+screenshot (the four named slots and all six arena cells, figcaption intact, no filename
+`<i>` elements left); all five about.html photos found and screenshot-confirmed; all four
+live-sessions.html images render distinctly (hero, calendar tile, Premium 1:1, workshops —
+no more shared-file duplication); the plans.html Sleep & Recovery card now matches its
+seven siblings (image + "IN DEVELOPMENT" badge, no hatch). `document.body.scrollWidth ===
+document.documentElement.clientWidth` true at 1440, 1280 and 390 on all four pages (12
+checks, all passed) — measured, not eyeballed. `curl`'d the raw served HTML directly:
+10/10 method.html photo `src`s, 5/5 about.html, 4/4 live-sessions.html present without
+JavaScript; plans.html's cards are JS-rendered site-wide (pre-existing `SafeRisePlans.render()`
+architecture, not something this pass introduced or could change within "wiring only").
+`grep -r "pexels" *.html js/ css/` returns nothing; no other external image `src` host
+found repo-wide. Byte growth: the 38 files this pass actually wires total 4.7MB (assets/
+method, assets/about, assets/sessions combined), within the brief's own ≈4MB estimate and
+under its 6MB flag threshold.
+
+### webp/jpg fallback pattern (§1c)
+
+Followed the pattern already established in `dashboard.html` (`<picture><source
+type="image/webp" srcset="…webp"><img src="…jpg" alt="…"></picture>`) rather than
+inventing a new one — method.html and about.html had no pre-existing picture/webp pattern
+of their own to match, so the nearest sitewide precedent was used.
+
+### Orphaned assets (§5), reported and left alone
+
+`assets/method/method-underlay.jpg` — referenced by no page or stylesheet; not deleted.
+`assets/img-225-founder-dark.jpg`/`.webp` — a founder portrait referenced nowhere,
+consistent with the founder account's planned move to a future `/team` page; waiting for
+that page, not missing.
+
+### Files
+
+Modified: `method.html`, `about.html`, `live-sessions.html`, `js/saferise-plans.js`,
+`docs/fix-register.md`.
+
+*Status:* complete and verified live. **Not pushed.**

@@ -596,10 +596,14 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .sr-mt-imgslot{position:relative;aspect-ratio:4/5;border-radius:6px;overflow:hidden;
  background:repeating-linear-gradient(45deg,#141A26,#141A26 11px,#171E2C 11px,#171E2C 22px);
  display:flex;flex-direction:column;justify-content:space-between;padding:16px}
-.sr-mt-imgslot .sr-mt-id{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.26em;color:var(--gold)}
-.sr-mt-imgslot .sr-mt-id b{display:block;color:var(--head);font-weight:500;margin-top:5px;letter-spacing:.16em}
-.sr-mt-imgslot .sr-mt-brief{font-size:16px;line-height:1.5;color:#8E8B95}
-.sr-mt-imgslot .sr-mt-spec{font:500 13px/1.5 'DM Sans';letter-spacing:.1em;color:#5E5B66;font-family:ui-monospace,monospace}
+/* SR-430 (PASS-G-IMAGERY-METHOD-ABOUT-LIVE-PLANS.md §1a) · .sr-mt-id/
+   .sr-mt-brief/.sr-mt-spec (the scaffolding text's own rules) removed
+   here — every slot that used them is now a photograph; grepped first
+   to confirm no markup anywhere still references the classes. The hatched
+   placeholder background stays as the pre-decode fallback; the photo
+   fills the slot exactly as the placeholder did (same aspect-ratio,
+   same border-radius, same tall/small/band variants below). */
+.sr-mt-imgslot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .sr-mt-fig .swatch{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair)}
 .sr-mt-fig .swatch svg{width:100%;height:auto;opacity:.85}
 
@@ -652,10 +656,14 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .sr-mt-fwmark svg{width:100%;height:100%}
 .sr-mt-collagefig{position:static}
 .sr-mt-collage{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.sr-mt-cell{aspect-ratio:1/1;border-radius:5px;display:flex;flex-direction:column;justify-content:space-between;
+.sr-mt-cell{position:relative;aspect-ratio:1/1;border-radius:5px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;
  padding:11px;background:repeating-linear-gradient(45deg,#141A26,#141A26 9px,#171E2C 9px,#171E2C 18px)}
-.sr-mt-cell span{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.22em;color:var(--gold);opacity:.85}
-.sr-mt-cell i{font-family:ui-monospace,monospace;font-style:normal;font-size:13px;color:#5A5762;line-height:1.4}
+.sr-mt-cell span{position:relative;z-index:2;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.22em;color:var(--gold);opacity:.85}
+/* SR-430 (PASS-G-IMAGERY-METHOD-ABOUT-LIVE-PLANS.md §1b) · .sr-mt-cell i
+   (the filename label) removed with the markup that used it. */
+.sr-mt-cell img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.sr-mt-cell::before{content:"";position:absolute;inset:0 0 auto 0;height:46%;
+ background:linear-gradient(to bottom,rgba(8,8,12,.7),transparent);z-index:1;pointer-events:none}
 .sr-mt-cta{text-align:center;padding:0 0 clamp(56px,9vh,96px)}
 .sr-mt-cta p{max-width:68ch;margin-left:auto;margin-right:auto}
 .sr-mt-cta p{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,2.4vw,26px);color:var(--body);
@@ -695,7 +703,6 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .sr-mt-fig.sr-mt-small .sr-mt-imgslot{aspect-ratio:1/1;min-height:0}
 .sr-mt-fig.sr-mt-band{position:static;grid-column:1/-1;margin:30px 0 0;max-width:none}
 .sr-mt-fig.sr-mt-band .sr-mt-imgslot{aspect-ratio:8/3;min-height:0;flex-direction:row;align-items:flex-end;gap:22px}
-.sr-mt-fig.sr-mt-band .sr-mt-brief{flex:1;max-width:34rem}
 @media(max-width:900px){
  .sr-mt-fig.sr-mt-tall .sr-mt-imgslot{min-height:360px}
  .sr-mt-fig.sr-mt-band .sr-mt-imgslot{aspect-ratio:3/2;flex-direction:column;align-items:stretch}
@@ -780,7 +787,7 @@ the inside, without moving.</p>
 attention kept returning. <b>Attention is not a spectator. It builds.</b></p>
 <p>It is also the only thing you own that you can spend without noticing. It is always going somewhere.
 Most of the time nobody chose where.</p>
-<p>Which makes that the only question worth asking.</p></div><figure class="sr-mt-fig sr-mt-tall"><div class="sr-mt-imgslot"><span class="sr-mt-id">METHOD-01<b>ATTENTION LANDING</b></span><span class="sr-mt-brief">A person genuinely absorbed. Not meditating — reading, building, making. Attention resting on one thing and not moving.</span><span class="sr-mt-spec">assets/method/m-attention.jpg<br>1200 &times; 1500 &middot; 4:5</span></div></figure></div></section><div class="sr-mt-track" aria-hidden="true"><svg viewBox="0 0 40 44" fill="none">
+<p>Which makes that the only question worth asking.</p></div><figure class="sr-mt-fig sr-mt-tall"><div class="sr-mt-imgslot"><picture><source type="image/webp" srcset="assets/method/m-attention.webp"><img src="assets/method/m-attention.jpg" alt="A woman crouched beside a bicycle in a courtyard, absorbed in repairing its rear gears." loading="lazy"></picture></div></figure></div></section><div class="sr-mt-track" aria-hidden="true"><svg viewBox="0 0 40 44" fill="none">
 <ellipse cx="20" cy="30" rx="9" ry="10" fill="var(--gold)" opacity=".16"/>
 <ellipse cx="10" cy="15" rx="3" ry="4.6" fill="var(--gold)" opacity=".2" transform="rotate(-22 10 15)"/>
 <ellipse cx="20" cy="11" rx="3" ry="5" fill="var(--gold)" opacity=".2"/>
@@ -796,7 +803,7 @@ decides what you are still willing to try.</b></p>
 <p>Which holds, right until it does not. Something lands wrong and the version of yourself you thought
 you were is simply not there. <b>Not because it was never real. Because it was never yours to hold.</b></p>
 <p>The world is not going to get quieter. The only thing left to change is <b>who is holding the
-regulation</b> — and that is a skill, not a temperament.</p><figure class="sr-mt-fig sr-mt-band"><div class="sr-mt-imgslot"><span class="sr-mt-id">METHOD-02<b>WAITING ON THE ROOM</b></span><span class="sr-mt-brief">In company but braced. Reading a face, waiting for a reply, checking the room before settling.</span><span class="sr-mt-spec">assets/method/m-outward.jpg<br>2400 &times; 900 &middot; 8:3</span></div></figure></div></div></section><div class="sr-mt-track" aria-hidden="true"><svg viewBox="0 0 40 44" fill="none">
+regulation</b> — and that is a skill, not a temperament.</p><figure class="sr-mt-fig sr-mt-band"><div class="sr-mt-imgslot"><picture><source type="image/webp" srcset="assets/method/m-outward.webp"><img src="assets/method/m-outward.jpg" alt="A man speaking to colleagues seated around a table in a glass-walled meeting room." loading="lazy"></picture></div></figure></div></div></section><div class="sr-mt-track" aria-hidden="true"><svg viewBox="0 0 40 44" fill="none">
 <ellipse cx="20" cy="30" rx="9" ry="10" fill="var(--gold)" opacity=".16"/>
 <ellipse cx="10" cy="15" rx="3" ry="4.6" fill="var(--gold)" opacity=".2" transform="rotate(-22 10 15)"/>
 <ellipse cx="20" cy="11" rx="3" ry="5" fill="var(--gold)" opacity=".2"/>
@@ -807,7 +814,7 @@ can run on an ordinary Tuesday without clearing your diary or explaining yoursel
 research, contemplative traditions that have been at this for millennia, and what people report works
 while they are still in it.</p>
 <p class="sr-mt-big">None of it is new. That is the point.</p>
-<p>We found that out from an animal before we found it in the literature.</p></div><figure class="sr-mt-fig sr-mt-small"><div class="sr-mt-imgslot"><span class="sr-mt-id">METHOD-03<b>AN ORDINARY TUESDAY</b></span><span class="sr-mt-brief">Headphones, a kitchen counter, a desk. Domestic and unglamorous. It has to fit a normal day.</span><span class="sr-mt-spec">assets/method/m-built.jpg<br>900 &times; 900 &middot; 1:1</span></div></figure></div></section><div class="sr-mt-track" aria-hidden="true"><svg viewBox="0 0 40 44" fill="none">
+<p>We found that out from an animal before we found it in the literature.</p></div><figure class="sr-mt-fig sr-mt-small"><div class="sr-mt-imgslot"><picture><source type="image/webp" srcset="assets/method/m-built.webp"><img src="assets/method/m-built.jpg" alt="A woman wearing headphones on an evening tram, a bag of groceries in hand, rain streaking the window." loading="lazy"></picture></div></figure></div></section><div class="sr-mt-track" aria-hidden="true"><svg viewBox="0 0 40 44" fill="none">
 <ellipse cx="20" cy="30" rx="9" ry="10" fill="var(--gold)" opacity=".16"/>
 <ellipse cx="10" cy="15" rx="3" ry="4.6" fill="var(--gold)" opacity=".2" transform="rotate(-22 10 15)"/>
 <ellipse cx="20" cy="11" rx="3" ry="5" fill="var(--gold)" opacity=".2"/>
@@ -886,7 +893,7 @@ hold your attention for its whole length — which is the point, not the packagi
   <circle cx="389" cy="52" r="3"/><circle cx="546" cy="40" r="3"/></g>
 </svg>
 </div>
-<p style="margin-top:20px">Each of those four steps rests on something. Here is what, and who says so.</p></div><figure class="sr-mt-fig sr-mt-tall"><div class="sr-mt-imgslot"><span class="sr-mt-id">METHOD-05<b>INSIDE THE SESSION</b></span><span class="sr-mt-brief">One person, eyes closed, headphones on, in an ordinary room. Not a studio, not a retreat.</span><span class="sr-mt-spec">assets/method/m-vessel.jpg<br>1200 &times; 1500 &middot; 4:5</span></div></figure></div></section><div class="sr-mt-track" aria-hidden="true"><svg viewBox="0 0 40 44" fill="none">
+<p style="margin-top:20px">Each of those four steps rests on something. Here is what, and who says so.</p></div><figure class="sr-mt-fig sr-mt-tall"><div class="sr-mt-imgslot"><picture><source type="image/webp" srcset="assets/method/m-vessel.webp"><img src="assets/method/m-vessel.jpg" alt="A woman leaning back against a couch at home, eyes closed, headphones on." loading="lazy"></picture></div></figure></div></section><div class="sr-mt-track" aria-hidden="true"><svg viewBox="0 0 40 44" fill="none">
 <ellipse cx="20" cy="30" rx="9" ry="10" fill="var(--gold)" opacity=".16"/>
 <ellipse cx="10" cy="15" rx="3" ry="4.6" fill="var(--gold)" opacity=".2" transform="rotate(-22 10 15)"/>
 <ellipse cx="20" cy="11" rx="3" ry="5" fill="var(--gold)" opacity=".2"/>
@@ -908,7 +915,7 @@ some version of this is already on the syllabus.</p>
 <ul class="sr-mt-lineage sr-mt-doms"><li><b>Elite sport</b><span>Arousal regulation, imagery rehearsal and pre-performance routine are standard psychological skills training — not an edge somebody discovered, a syllabus.</span></li><li><b>Military and emergency response</b><span>Deliberate breath control is taught as doctrine, because fine motor control and decision-making degrade under sympathetic load and everybody knows it.</span></li><li><b>Surgery and aviation</b><span>Pre-procedure routines that settle the operator before the checklist, on the understanding that a steady hand is upstream of a correct step.</span></li><li><b>Performance and music</b><span>Mental rehearsal before playing. Running the piece from the inside, then running the room.</span></li><li><b>Clinical trauma work</b><span>Grounding and orienting before content. Nobody competent asks someone to look at the hard thing while they are still in the state.</span></li></ul>
 <p class="sr-mt-big">Not a secret, and not an advantage. Just training that most people are never offered.</p>
 <p>Every one of them has a coach, a protocol, an institution, and a room built for it.</p>
-</div><figure class="sr-mt-fig sr-mt-collagefig"><div class="sr-mt-collage"><div class="sr-mt-cell"><span>THEATRE</span><i>m-arena-theatre.jpg</i></div><div class="sr-mt-cell"><span>COCKPIT</span><i>m-arena-cockpit.jpg</i></div><div class="sr-mt-cell"><span>START LINE</span><i>m-arena-startline.jpg</i></div><div class="sr-mt-cell"><span>STAGE DOOR</span><i>m-arena-stage.jpg</i></div><div class="sr-mt-cell"><span>CONTROL ROOM</span><i>m-arena-control.jpg</i></div><div class="sr-mt-cell"><span>THE CALL</span><i>m-arena-call.jpg</i></div></div><figcaption>METHOD-07 &middot; SIX SCENES &middot; 800 &times; 800 each &middot; no recognisable faces</figcaption></figure></div></section>
+</div><figure class="sr-mt-fig sr-mt-collagefig"><div class="sr-mt-collage"><div class="sr-mt-cell"><picture><source type="image/webp" srcset="assets/method/m-arena-theatre.webp"><img src="assets/method/m-arena-theatre.jpg" alt="Seen from behind, a performer in an ornate costume holds back a stage curtain, looking out at a lit auditorium." loading="lazy"></picture><span>THEATRE</span></div><div class="sr-mt-cell"><picture><source type="image/webp" srcset="assets/method/m-arena-cockpit.webp"><img src="assets/method/m-arena-cockpit.jpg" alt="Seen from behind, a pilot at the controls of an aircraft cockpit at dusk, runway lights ahead." loading="lazy"></picture><span>COCKPIT</span></div><div class="sr-mt-cell"><picture><source type="image/webp" srcset="assets/method/m-arena-startline.webp"><img src="assets/method/m-arena-startline.jpg" alt="Seen from behind, a cyclist in race kit riding through a crowd-lined street at dusk." loading="lazy"></picture><span>START LINE</span></div><div class="sr-mt-cell"><picture><source type="image/webp" srcset="assets/method/m-arena-stage.webp"><img src="assets/method/m-arena-stage.jpg" alt="Seen from behind, a musician carrying an instrument case walks through a door marked Stage Door." loading="lazy"></picture><span>STAGE DOOR</span></div><div class="sr-mt-cell"><picture><source type="image/webp" srcset="assets/method/m-arena-control.webp"><img src="assets/method/m-arena-control.jpg" alt="A hand on the controls of an industrial control room, monitor screens in the background." loading="lazy"></picture><span>CONTROL ROOM</span></div><div class="sr-mt-cell"><picture><source type="image/webp" srcset="assets/method/m-arena-call.webp"><img src="assets/method/m-arena-call.jpg" alt="Seen from behind, a person on a balcony at night takes a phone call overlooking a lit city." loading="lazy"></picture><span>THE CALL</span></div></div><figcaption>METHOD-07 &middot; SIX SCENES &middot; 800 &times; 800 each &middot; no recognisable faces</figcaption></figure></div></section>
 
 <section class="sr-mt-landing">
   <p class="sr-mt-eyebrow">WHAT HAS BEEN MISSING</p>

@@ -40,10 +40,14 @@
      & Return, band-04=Embodied Nutrition, band-08=Executive Presence).
      Colours are the mock's own inline --ca/--cglow values, carried over
      unchanged per the brief's own instruction ("report them — they are not
-     yet system tokens"). "Sleep & Recovery" is the brief's own fifth named
-     track; it matches no track anywhere in coming-soon.html, tracks.js or
-     any nav — flagged in the SR-386 register entry, not guessed at, and
-     given the hatch placeholder rather than a wrong photo. */
+     yet system tokens"). "Sleep & Recovery" was the brief's own fifth named
+     track when SR-386 shipped it, and matched no track anywhere in
+     coming-soon.html, tracks.js or any nav at the time — flagged in the
+     SR-386 register entry rather than guessed at, and given the hatch
+     placeholder rather than a wrong photo. SR-430 (PASS-G-IMAGERY…) found
+     this stale: coming-soon.html now carries a Sleep & Recovery card
+     (band-09.webp, "NIGHT & RECOVERY"), and assets/coming/band-09.webp
+     exists — wired below instead of the hatch. */
   var CORE_LIVE = [
     { id: 1, kicker: 'Capacity', ca: 'var(--t1)', cglow: 'rgba(201,123,90,.22)',
       img: 'assets/home/panel-t1.webp', alt: 'Personal Transformation' },
@@ -56,7 +60,7 @@
     { name: 'Executive Presence', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
       img: 'assets/coming/band-08.webp', alt: 'Executive Presence' },
     { name: 'Sleep & Recovery', kicker: 'Substrate', ca: '#7B87A8', cglow: 'rgba(123,135,168,.20)',
-      img: null, alt: '' },
+      img: 'assets/coming/band-09.webp', alt: 'Sleep & Recovery' },
     { name: 'Embodied Nutrition', kicker: 'Substrate', ca: '#8FA37B', cglow: 'rgba(143,163,123,.20)',
       img: 'assets/coming/band-04.webp', alt: 'Embodied Nutrition' },
     { name: 'Strength & Return', kicker: 'Substrate', ca: '#C08A5E', cglow: 'rgba(192,138,94,.20)',
