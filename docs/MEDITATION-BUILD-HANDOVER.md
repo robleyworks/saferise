@@ -121,13 +121,15 @@ State counts: 11 Agitated · 13 Unsteady · 6 Numb · 1 with no arriving state.
 1. Song 20's length against The Clearing, and confirm it neither settles nor lifts. This is the one session that assumes no arriving state; a bed with a direction would give it one.
 2. Song 21's length, and that it ends without a lift. It plays on after the vocal ends at 9:29, so it is the last thing the member hears. Song 3.3 was dropped, so there is no fallback file — if 21 lifts, the tail gets edited: percussion and harmonic lift out, bed thinning to nothing.
 3. Song 12's length and whether it lifts. If it lifts it is the wrong bed for Belonging Gap — that protocol is about editing yourself to fit a room, and a lift at the close is the music performing a version that fits.
-4. Choose the partner for song 8 on Overwhelm Threshold. Song 8 is 5:00 against a 13:06 script with Release at 6:44. Recommended: extend song 8 to 6:44 so the seam lands on Release, partner then runs 6:22. The partner must hold without arriving anywhere and must not resolve — the script ends on *the load is still there*.
-5. Song 22 against the ten-second window, on T1-01 and T3-05.
-6. Song 23's length against 12:08 and 11:31, and confirm it does not resolve at the close — neither script does.
-7. Song 18 + 18.1 total length, measured after the trims.
-8. Song 3.2 + 4 total length, and hear the flute under an actual dialogue take. Airy tone sits in 1–3 kHz, over the band kept soft for consonants, and breath noise lands in the same place. The timpani is safer — low, sustaining, at or under one stroke per phrase.
-9. Confirm T3-06 reads Unsteady in the live `tracks.js` META.
-10. Every master at −16 LUFS stereo, bed 18 dB under voice.
+4. Song 22 against the ten-second window, on T1-01 and T3-05.
+5. Song 23's length against 12:08 and 11:31, and confirm it does not resolve at the close — neither script does.
+6. Song 18 + 18.1 total length, measured after the trims.
+7. Song 3.2 + 4 total length, and hear the flute under an actual dialogue take. Airy tone sits in 1–3 kHz, over the band kept soft for consonants, and breath noise lands in the same place. The timpani is safer — low, sustaining, at or under one stroke per phrase.
+8. Confirm T3-06 reads Unsteady in the live `tracks.js` META.
+9. Every master at −16 LUFS stereo, bed 18 dB under voice.
+
+The former item 4 (song 8's partner on Overwhelm Threshold) moved to §7 — SR-431, 23 September
+2026 (PASS-J.md E2): decided, not outstanding.
 
 ---
 
@@ -138,6 +140,14 @@ State counts: 11 Agitated · 13 Unsteady · 6 Numb · 1 with no arriving state.
 **Song 18's climax, on T2-03, T2-04 and T1-08.** Only T1-02 and T3-04 have a line at the 5:15 mark. The other three were voiced without a resistance beat and signed off that way, so the climax has nothing to land on. Ride it back in the mix rather than letting it peak against silence.
 
 **T3-01 ends at full presence, no fade.** The script supplies the energy — *you're keyed up, and you're ready* — and the session ends with the member walking into the room. A fade would drain it.
+
+**Song 8's partner, on Overwhelm Threshold — SR-431, 23 September 2026 (PASS-J.md E2).**
+Extend song 8 to 6:44 so the seam lands on Release, partner then runs 6:22. Recommended in
+§6 with reasoning (the partner must hold without arriving anywhere and must not resolve —
+the script ends on *the load is still there*) and nothing has contradicted it since. No
+re-edit, no re-render of song 8 itself. `t1-03` still ships interim regardless — see
+`docs/INSTALL-MEDITATIONS.md` §4: the master has no bed at all for its first eight minutes
+until this partner exists, which is a separate, larger rebuild than choosing the partner.
 
 ---
 

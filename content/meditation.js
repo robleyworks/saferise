@@ -13,9 +13,16 @@
    `eyebrow` and `sub` are copied from the protocol records in tracks.js and
    are not authored here — tracks.js stays the source of truth for copy.
 
-   SR-427 · 22 September 2026 — 24 of 31 present (t1-04, t2-07, t3-01 added
-   this pass). The remaining seven follow the same shape as their masters
-   land: t1-03, t1-05, t1-06, t2-01, t3-02, t3-03, t3-06.
+   SR-431 · 23 September 2026 — 28 of 31 present (t1-05, t2-01, t3-02, t3-03
+   added this pass). PLACEHOLDER_AUDIO (protocol.html) stays true until the
+   last three land. All three failed the loudness/peak preflight and were
+   held rather than installed (docs/INSTALL-MEDITATIONS.md §A3):
+     t1-03 — LRA 6.9 against 18–19 elsewhere; the master has no bed for its
+             first eight minutes and is a known-interim render, not a defect.
+     t1-06 — −15.5 LUFS / LRA 15.0, quieter and flatter than the library;
+             needs a listen before deciding whether to re-run the chain.
+     t3-06 — peak −0.4 dBFS, the hottest file in the library; re-run the
+             mastering chain at the shared peak target before installing.
    ═════════════════════════════════════════════════════════════════════════ */
 
 var MEDITATION_BASE = 'assets/audio/meditation/';
@@ -188,6 +195,34 @@ var MEDITATION = {
     title:   'High-Stakes Presence',
     sub:     'Settle before you walk in, so you arrive as yourself.',
     src:     MEDITATION_BASE + 't3-01-high-stakes-presence.mp3'
+  },
+  't1-05': {
+    key:     't1-05',
+    eyebrow: 'Dissolve',
+    title:   'Shame Dissolution',
+    sub:     'Stop judging yourself for one moment, and stop it standing for who you are.',
+    src:     MEDITATION_BASE + 't1-05-shame-dissolution.mp3'
+  },
+  't2-01': {
+    key:     't2-01',
+    eyebrow: 'Speak',
+    title:   'Safe Conversation',
+    sub:     'Make it safe enough to say the true thing and be heard.',
+    src:     MEDITATION_BASE + 't2-01-safe-conversation.mp3'
+  },
+  't3-02': {
+    key:     't3-02',
+    eyebrow: 'Navigate',
+    title:   'Conflict Navigation',
+    sub:     'Stay in the disagreement without blowing it up or walking away.',
+    src:     MEDITATION_BASE + 't3-02-conflict-navigation.mp3'
+  },
+  't3-03': {
+    key:     't3-03',
+    eyebrow: 'Dissolve',
+    title:   'Imposter Dissolution',
+    sub:     'Stop believing you only got here by luck.',
+    src:     MEDITATION_BASE + 't3-03-imposter-dissolution.mp3'
   }
 };
 

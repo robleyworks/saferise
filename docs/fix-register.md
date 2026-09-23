@@ -18928,6 +18928,15 @@ instead, reported as a limitation rather than claimed as done. One class of bug 
 before its assignment executes) recurred from SR-417 and was caught by deliberately re-reading
 against that lesson before first load, not by re-discovering it live. **Not pushed.**
 
+**Gap closed — SR-431, 23 September 2026 (PASS-J.md Part C).** `js/saferise-access.js`'s
+`hasAccess()` now reads `?srmock=locked:<track>` and reports that track as not entitled,
+guarded on `srIsDev()` (localhost/127.0.0.1/*.local only, never a build flag) so it cannot
+fire off-localhost. Verified live, not by inspection: on `dashboard.html?srmock=locked:2`,
+switching to track 2 renders ten `.sr-dash-locked` cards with the lock badge, `#srLockCta`
+opens with the real "not on your plan yet" copy and price, clicking a locked card does not
+navigate (`location.href` unchanged), and without the parameter zero cards lock. The
+locked-cover upsell path is now testable end-to-end, closing the limitation recorded above.
+
 ## SR-424 through SR-426 — the three items still open (PASS-finish.md)
 
 `pass/PASS-finish.md`. Parts A, B and C, all applied and verified. Committed locally, not
@@ -19334,3 +19343,131 @@ Modified: `method.html`, `about.html`, `live-sessions.html`, `js/saferise-plans.
 `docs/fix-register.md`.
 
 *Status:* complete and verified live. **Not pushed.**
+
+## SR-431 — the last seven meditations, plus four items carried from the old PASS-G
+(PASS-J.md)
+
+Filename collision resolved first: `pass/PASS-G.md` (22 Sep) is superseded by this file —
+its Parts B–E are reproduced in PASS-J.md and were run from there, not from the old file.
+`pass/PASS-G.md` itself was left on disk, not deleted (the brief said either was fine).
+`pass/PASS-G-IMAGERY-METHOD-ABOUT-LIVE-PLANS.md` is the real PASS G and had already run,
+separately, as SR-430.
+
+### Part A — four meditations installed, three held
+
+Re-ran the brief's own A2 preflight (`ffprobe`/`ffmpeg`, all seven masters) independently
+rather than trusting the brief's own already-filled-in A3 table — it matched to within
+normal rounding (one LRA reading 19.4 against the brief's 19.5) on every one of the 21
+measured values, so the table is confirmed, not merely copied. Installed: `t1-05` Shame
+Dissolution, `t2-01` Safe Conversation, `t3-02` Conflict Navigation, `t3-03` Imposter
+Dissolution — copied, registered in `content/meditation.js` via the install document's own
+parser (which reads `content/tracks.js` for `eyebrow`/`sub`, never authors copy itself),
+and confirmed present on disk via the Python equivalent of the doc's `node -e` check (no
+`node` on this machine). **Held, not installed:**
+- `t3-06` Belonging Gap — peak −0.4 dBFS, the hottest file in the library.
+- `t1-06` Grief Integration — −15.5 LUFS / LRA 15.0, quieter and flatter than the library.
+- `t1-03` Overwhelm Threshold — LRA 6.9, the known-interim no-bed-for-eight-minutes master
+  a judgement call, per the brief's own framing, not a measurement one; reported rather
+  than decided here.
+
+`PLACEHOLDER_AUDIO` stays `true` (28 of 31, not 31 — the check itself refused to suggest
+flipping it). `content/meditation.js`'s header comment updated to 28/31 and names the three
+outstanding keys with why each is held, replacing the stale "24 of 31" / SR-427 note.
+
+**A1's three corrections applied to `docs/INSTALL-MEDITATIONS.md` itself**, not just
+followed silently: the sample commit message no longer says `git push origin main` or a
+hardcoded `SR-393` (now `SR-xxx`, with a note explaining both changes and that two commits
+already carry the real SR-393); the male/female-toggle paragraph's reasoning is corrected
+to "launch ships one voice; the toggle is a post-beta roadmap item" (LG-198, reaffirmed 22
+Sep) rather than the stale "waiting for the member-toggled architecture" — the outcome
+(`MASTER_T1-03m` stays on the Desktop) is unchanged, only the reason given.
+
+### Part B — `tools/serve.py` now honours Range requests
+
+Python's own `http.server.SimpleHTTPRequestHandler` (3.9.6, this machine) has no Range
+support at all — confirmed by reading its source before writing anything, not assumed.
+Added a `RangeRequestHandler` subclass overriding `send_head()`: directories and 404s
+delegate to the parent unchanged; a real file with a `Range` header is parsed (`bytes=N-`,
+`bytes=N-M`, `bytes=-N`), served as 206 with a correct `Content-Range`/`Content-Length` via
+a small bounded reader wrapper (seeks once, caps total bytes read — never loads the file
+into memory), or 416 with `Content-Range: bytes */<total>` if unsatisfiable; malformed or
+comma-containing (multi-range) headers fall back to a full 200. Every 200 for a real file
+now also carries `Accept-Ranges: bytes`, including the plain no-Range-header case, which
+needed its own small reimplementation of the 200 path since `send_head()`'s return value
+convention (a file object the caller copies, headers already sent) leaves no later point to
+inject a header into the parent's own 200 response. Dev-server only, as instructed — zero
+changes anywhere in `js/`, `css/` or any page.
+
+**Verify:** `curl -H 'Range: bytes=0-1023'` → 206 with `Content-Range: bytes
+0-1023/<size>`; a byte-for-byte comparison of a 100-byte ranged response against the same
+slice read directly from the source file matched exactly; a suffix range (`bytes=-100`) and
+an unsatisfiable range (`bytes=999999999-`) both behaved correctly; a malformed `Range:
+garbage` header fell back to 200. Live in Chrome, not just curl: on a real protocol page,
+`audio.seekable.length === 1` and `.end(0)` matched `.duration` exactly (512s, matching the
+Part A preflight's own measurement of that same file); setting `currentTime` to 75% of
+duration landed there; the network log showed real `206 Partial Content` responses issued
+by the browser's own media pipeline, not simulated.
+
+### Part C — the locked-cover upsell is now testable, closing the SR-422 gap
+
+`js/saferise-access.js`'s `hasAccess()` reads `?srmock=locked:<track>`, guarded on
+`srIsDev()` (the same hostname check the existing dev bypass already uses — localhost /
+127.0.0.1 / *.local only, explicitly never `*.netlify.app`) so it cannot fire anywhere the
+bypass itself couldn't. One line added ahead of the existing dev-bypass return, not a
+parallel code path.
+
+**Verify, live, not by inspection** — this is the entire point of Part C, so it is reported
+that way rather than folded into a generic "done": on `dashboard.html?srmock=locked:2`,
+switching the rail to track 2 renders ten `.sr-dash-locked` cards with the lock badge and
+opens `#srLockCta` with its real copy ("Relationship Healing is not on your plan yet… Add
+for €19 / month"); clicking a locked card does not navigate (`location.href` unchanged
+before and after); loading the same page with no `srmock` parameter renders zero locked
+cards. One debugging note worth recording: the first two attempts at this test, on the
+already-open `:8642` tab, kept reading the *old* `hasAccess()` source even after the file
+on disk and a direct `curl` both showed the edit — the browser's disk cache for
+`js/saferise-access.js` (no `Cache-Control` header from this dev server, so heuristic
+caching applies), not a bug in the fix. A fresh tab on a second port (`:8643`, an origin
+Chrome had never cached) showed the edit immediately. Closed the SR-422 register gap in
+place, with this verification recorded against it.
+
+### Part D — the duplicate protocol name
+
+`coming-soon.html` had "The Long Middle" as protocol 10 in both Entrepreneur's Journey and
+Addiction Recovery. Renamed the **Addiction Recovery** one only, per the brief, to "Staying
+with Recovery" — confirmed by track context (the Addiction Recovery `<article>` block, item
+10 sits alongside "The Urge", "Relapse Shame", "The Repair Debt") before editing, and by
+`grep -c "The Long Middle"` dropping from 2 to 1 afterward, with the remaining one confirmed
+still inside Entrepreneur's Journey. The 40-name reconciliation itself stays out of scope,
+as instructed — nothing else on the page touched.
+
+### Part E — three decisions recorded
+
+- **E1**, true-peak ceiling −1.0 dBTP (−1.8 dBTP preferred) — recorded in
+  `docs/INSTALL-MEDITATIONS.md` §4, with the `t1-07` reference-fails-its-own-spec reasoning
+  and the explicit link to why it makes `t3-06` a hold.
+- **E2**, `t1-03`'s song-8 partner (extend to 6:44, partner runs 6:22) — moved out of
+  `docs/MEDITATION-BUILD-HANDOVER.md` §6 ("Outstanding — measurements, not decisions", was
+  item 4, remaining items renumbered 4–9) into §7 ("Mix decisions already settled") as a
+  dated, decided entry, with a note that `t1-03` still ships interim regardless (the missing
+  first-eight-minutes bed is the larger, separate rebuild).
+- **E3**, I11/I12/R01 are missing assets, not pending ones — re-confirmed
+  `mockup-covers/masters/` does not exist anywhere on this machine (checked again for this
+  note rather than citing PASS F's finding secondhand) and recorded beside the Replacements
+  table in `docs/business/B2B-COVER-MAP.md`.
+
+### Also found, not fixed here
+
+`/organisations` missing from `sitemap.xml` — PASS F's own finding, restated per the
+brief's "also found, not in this pass" note so it stays visible until PASS H Part D
+actually regenerates the sitemap.
+
+### Files
+
+Modified: `content/meditation.js`, `assets/audio/meditation/{t1-05,t2-01,t3-02,t3-03}-*.mp3`
+(new), `docs/INSTALL-MEDITATIONS.md`, `tools/serve.py`, `js/saferise-access.js`,
+`coming-soon.html`, `docs/MEDITATION-BUILD-HANDOVER.md`, `docs/business/B2B-COVER-MAP.md`,
+`docs/fix-register.md`.
+
+*Status:* complete and verified live, all five parts. Two judgement calls surfaced and
+deliberately left undecided rather than resolved here: `t1-06`'s hold (needs a listen) and
+`t1-03`'s ship-interim-or-wait question (Andre's call, per the brief). **Not pushed.**

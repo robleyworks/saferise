@@ -65,6 +65,12 @@ added by hand on 22 September — see *Replacements* below.
 Full-size masters are in `mockup-covers/masters/`; the grid thumbnails in
 `mockup-covers/covers/` are 408×544 derivatives.
 
+**SR-431, 23 September 2026 (PASS-J.md E3) — I11, I12 and R01 are missing assets, not
+pending ones.** `mockup-covers/masters/` does not exist on this machine — checked again
+directly for this note, same result PASS F reported. All three render the organisations
+explorer's typographic-plate fallback on `/organisations`; no photograph has been
+substituted for any of them.
+
 Two casting observations, neither blocking:
 
 - **I12 is the only cover in either collection showing firearms.** It reads

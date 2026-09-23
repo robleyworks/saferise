@@ -47,6 +47,20 @@
     return h === 'localhost' || h === '127.0.0.1' || h === '' || h.endsWith('.local');
   }
 
+  /* SR-431 (PASS-J.md Part C) · the locked-cover upsell (dashboard.html's
+     .sr-dash-locked / #srLockCta) has been verified by inspection only
+     since SR-422, because hasAccess() below returns true for everything on
+     localhost — there is no real way to make a track report as locked in
+     this environment. Guarded on hostname (srIsDev()), same as the dev
+     bypass itself — not a build flag, not a stored value — so it can only
+     ever fire where the bypass already applies, and is a no-op everywhere
+     else including every *.netlify.app preview. */
+  function srMockLockedTrack() {
+    if (!srIsDev()) return null;
+    var m = /[?&]srmock=locked:(\d+)/.exec(global.location ? global.location.search : '');
+    return m ? m[1] : null;
+  }
+
   function currentUser() {
     if (!global.srAuth) return null;
     var u = global.srAuth.user();
@@ -56,6 +70,8 @@
     return typeof id === 'string' && id.indexOf(FREE_TRACK_PREFIX) === 0;
   }
   function hasAccess(id) {
+    var mockTrack = srMockLockedTrack();
+    if (mockTrack && typeof id === 'string' && id.indexOf('t' + mockTrack + '-') === 0) return false;
     if (srIsDev()) return true;
     if (isFree(id)) return true;
     if (!global.srAuth) return false;
