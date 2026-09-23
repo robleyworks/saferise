@@ -19126,3 +19126,117 @@ feature it described) and an out-of-scope orphaning the brief didn't address (no
 — left for a decision, since the cut's boundary was given precisely and the cost of leaving
 nine lines of unused CSS is near zero against the cost of an unrequested scope expansion).
 **Not pushed.**
+
+## SR-429 — organisations.html: the #sr-org-explorer, replacing #sr-org-fit/#sr-org-verticals
+(PASS-F-ORGANISATIONS-EXPLORER-AND-SECTIONS.md)
+
+Full run of the brief end to end, after two blocking discoveries were surfaced and
+resolved by Andre rather than guessed at: the source cover-map document, the protocol-name
+conflict list and the copy assessment did not exist at first ask (created mid-pass and
+re-read once confirmed present), and the cover map's own "Placement on /organisations"
+section proposed a different architecture (two preview sections + a density control) that
+would have forked against this brief's single-explorer design — resolved in PASS F's favour
+and the map's own document updated to mark that section superseded.
+
+**§0 findings against live code, reported before building anything:**
+- `p.sr-org-pull` — the brief claims this selector "HAS NO CSS AT ALL." False: it already
+  carries a documented specificity-bug fix from an earlier pass (`PASS-org-layout.md §1`).
+  Not duplicated; the existing rule's `max-width` was adjusted (65ch → 56ch) in place and
+  the false claim noted in a comment rather than silently trusted.
+- `§4f`'s "40 protocol names differ across 9 tracks" figure could not be reproduced from
+  `f8-tracks.json` alone — a direct diff against live `coming-soon.html` found 30 names
+  differing across 5 tracks, all inside Foundation-8/PASS-F scope. Reconciled once
+  `claude/PROTOCOL-NAME-CONFLICTS.md` existed: the 40/9 figure includes four tracks entirely
+  outside this brief's scope (Entrepreneur's Journey, Money Shift, Sex & Intimacy, Addiction
+  Recovery). The narrower in-scope count (30 across 5) is correct for what this pass
+  touches; both figures are consistent once the scopes are separated.
+
+**Build, per §3/§4/§5:**
+- `#sr-org-explorer` (new) replaces the full span from `#sr-org-verticals` through
+  `#sr-org-fit` — equation strip, `#sr-org-base` (Foundation 8 cards, click to open a detail
+  panel with all six fields: layer/audience/story/depth/protocols/guard), `#sr-org-plustwo`
+  (role + industry `<select>` pickers, live two-card stack, `R13→I13`-only role constraint),
+  `#sr-org-wall` (30-tile filterable library, hide-not-dim filters, Without/With detail
+  panel per tile, a `.sr-vh` visually-hidden index of all 30 names/leads/anchors so the
+  library is indexable with JavaScript disabled).
+- `#sr-org-trust`, `#sr-org-capacity`, `#sr-org-impact` rebuilt per
+  `pass/PASS-F-assets/PASS-F-reference-sections.html` — hover/focus-within/touch-visible
+  reveal (`.sr-org-hpeel`), continuous capacity rail, four-column impact grid with split
+  Directly-supported/Reasonably-expected/Observed/Not-promised labels (previously combined).
+- Three named border violations fixed (`.sr-org-trust article`, `.sr-org-capacity-grid
+  article`, `.sr-org-fit-note>div` — all now shadow/inset-ring only).
+- New content: `content/b2b-protocols.js` (30 records, verbatim from
+  `pass/PASS-F-assets/b2b-protocols.json`, unmodified per "do not edit copy here") and
+  `content/f8-tracks.js` (8 records; market-outlook fields are absent from the source
+  entirely, not stripped — corrected an early draft comment that wrongly implied removal).
+- 27 of 30 cover images processed via Pillow (no `cwebp` in this environment — WebP
+  quality=78/method=5, progressive JPEG quality=82/subsampling=1, matching the brief's
+  targets as closely as the available tool allows) from `~/Desktop/B2B protocol covers/`
+  using `docs/business/B2B-COVER-MAP.md`'s ID→filename table, not folder/timestamp order.
+- **I11 Manufacturing, I12 Security Operations, R01 People Leadership have no cover this
+  pass** — the replacement files the cover map names were not found on disk; per explicit
+  instruction, no photograph was substituted. `js/saferise-org-explorer.js`'s
+  `coverOrPlate()` renders the existing typographic-plate fallback (the same pattern the
+  Foundation 8 already uses for its own art) on the wall tile, the tile's detail-panel
+  cover, and the +2 stack card, tinted by kind (`sr-org-elay-role` / `sr-org-elay-industry`)
+  since a protocol has no "layer" of its own the way a Foundation track does.
+- `?role=Rnn&industry=Inn` deep link added (not in the reference build) — industry applied
+  before role, so an `R13` link is not silently dropped by a role list still scoped to the
+  previous industry.
+
+**Verify (live, via the browser, not by opening files):** F8 cards open/close with all six
+fields rendering for Personal Transformation; role/industry pickers update the stack line
+and both cards live (tested a value change, no reload); the `R13`/`I13` role-only
+constraint confirmed both ways (`R13` present when `I13` selected, absent otherwise); all
+30 wall tiles render, exactly 3 "Cover pending" plates (R01/I11/I12) and 27 photographs;
+wall detail panel confirmed on both a photographed tile (Business Ownership) and a plate
+tile (People Leadership) — the plate tile's panel shows the small plate thumbnail, not a
+broken `<img>`; role/industry filters confirmed hide-not-dim (tile count text updates,
+grid reflows, no gaps); all four close methods confirmed (Close button, Escape-with-focus-
+return, click-outside, re-click-same-card-to-toggle); deep link confirmed with real IDs
+(`?industry=I01&role=R10` and the `R13`/`I13` pair) — an initial test with title strings
+instead of IDs was a test error on my part, not a code defect, caught by reading
+`paramFrom`'s usage against `p.id`. Zero console errors through every interaction above.
+Horizontal-overflow measured per §9g's exact method (`document.body.scrollWidth >
+document.documentElement.clientWidth`) at 1440, 1280 and 390 — false (no overflow) at all
+three; visually confirmed clean stacking at 390 by screenshot. `curl`'d the raw served HTML
+directly (not the DOM) and confirmed all 30 `<li>` entries of `#srOrgIndexList` are present
+without JavaScript. Zero Market-outlook rendering anywhere (grepped for the field names
+across every new file). `grep -c 'border[a-z-]*:'` (excluding `border-radius`/`border-box`)
+across `css/saferise-system.css` sitewide: **279** matches after this pass's three fixes and
+the new explorer CSS (which introduces none) — reported per §6, not reduced further, since
+§6 only named three specific violations to fix.
+
+**Not run:** `audit/sr-design-audit.py` — this working tree is intermittently very slow on
+git/content operations that touch the large committed audio assets (`assets/audio/**`,
+tens of MB each); the script hung past several minutes with no output and was killed
+rather than reported as passing on a guess. `tools/check-sitemap.py` was run instead (does
+not need `node`) and found `/organisations` already absent from `sitemap.xml` — a
+pre-existing gap unrelated to this pass (this pass changed the page's content, not its
+route) and out of this brief's scope to fix; reported rather than silently regenerated.
+
+**Repo-hygiene note, unrelated to this brief's content but discovered while trying to
+commit it:** `.git/index` was missing entirely (a `.git/index.broken` dated 2026-09-13 was
+found alongside it, so this predates this session by over a week). Every one of the 811
+tracked files showed as staged-deleted against an empty index while remaining untouched on
+disk — confirmed for several sampled files before touching anything. Fixed with
+`git read-tree HEAD` (rebuilds the index from the last commit's tree; touches no working-tree
+file). A plain `git reset`/`git status` over the whole tree was tried first and abandoned
+after several minutes each, stuck reading full audio-file content byte-for-byte to verify
+stat mismatches it had no cached data to compare against; commit staging below was scoped
+to only this pass's own changed paths to avoid the same whole-tree cost.
+
+### Files
+
+New: `content/b2b-protocols.js`, `content/f8-tracks.js`, `js/saferise-org-explorer.js`,
+`assets/org/covers/*.webp` and `*.jpg` (27 protocols × 2 formats = 54 files, ~6.06MB total —
+slightly over the brief's 6MB flag threshold, reported here rather than trimmed further
+against quality targets already at the low end of the brief's range).
+Modified: `organisations.html`, `css/saferise-system.css`, `docs/fix-register.md`.
+
+*Status:* complete and verified live. Outstanding, not fixed this pass: I11/I12/R01 covers
+(3 of 30), 8 Foundation-track covers (not in this brief's scope — Foundation 8 has no cover
+art yet, by design, per §4), the pre-existing `/organisations` sitemap gap, and the
+`R02`/`I13` anchor-string conflicts §8 asks to be restated for a founder decision (the site
+form's own copy currently wins on the live page; not changed by this pass either way).
+**Not pushed.**

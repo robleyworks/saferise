@@ -1,0 +1,1134 @@
+/* ══════════════════════════════════════════════════════════════════
+   SafeRise — content/b2b-protocols.js
+   SR-429 · B2B protocol detail. Source: B2B Protocol Catalogue v6,
+   reconciled 22 Sep. Do not edit copy here — edit the register and
+   regenerate.
+
+   Consumed by organisations.html's #sr-org-explorer (PASS-F-ORGANISATIONS-
+   EXPLORER-AND-SECTIONS.md §3). Rendered at runtime, not baked into the
+   served HTML for all 30 (§3f) — the tiles' own markup (title, lead,
+   anchor) carries what §7a needs for indexing without JS.
+
+   Two anchors disagree between the live site and Catalogue v6 (§8 of the
+   brief): R02 Business Ownership ("The Weight of Ownership" here vs. v6's
+   "Ownership Weight") and I13 Sport Performance ("Competition to Recovery"
+   here vs. v6's "Competition Recovery"). The SITE forms are what's below,
+   per the brief's own instruction — open decision, reported, not
+   reconciled by this pass.
+   ════════════════════════════════════════════════════════════════ */
+
+var B2B_PROTOCOLS = [
+  {
+    "id": "I01",
+    "kind": "industry",
+    "title": "Healthcare",
+    "cover": "assets/org/covers/i01.webp",
+    "lead": "Care without asking people to disappear inside it.",
+    "sub": "Care responsibility, human need and emotional proximity.",
+    "anchor": "After Carrying Others",
+    "why": [
+      "Healthcare combines technical responsibility with repeated proximity to human need, uncertainty and difficult outcomes.",
+      "The worker may need to remain clinically useful even while absorbing distress around them. This protocol focuses on what the care environment repeatedly exposes the system to, then routes broader grief, anxiety or sleep issues into the Foundation tracks."
+    ],
+    "without": "Repeated care exposure can leave the system carrying vigilance, sadness or unfinished responsibility into the next patient and eventually home.",
+    "with_good": "Cleaner shift-to-home transitions, better recovery after emotionally difficult care moments, and earlier use of appropriate support when self-guided tools are not enough.",
+    "who": "Hospitals, clinics, allied health, residential care and related care organisations.",
+    "core": [
+      "Care responsibility",
+      "vulnerable people",
+      "family distress",
+      "difficult outcomes",
+      "grief",
+      "repeated human need",
+      "shifts",
+      "handovers"
+    ],
+    "resources": [
+      "Before Shift",
+      "Difficult Outcome",
+      "Family Distress",
+      "Repeated Exposure",
+      "Handover",
+      "After Witnessing Suffering",
+      "Going Home"
+    ],
+    "org_value": "A high-value organisational pathway for hospitals and care providers. It can sit alongside occupational health, EAP, clinical supervision and existing wellbeing programmes.",
+    "guard": "Specialist clinical content requires appropriate governance and review."
+  },
+  {
+    "id": "I02",
+    "kind": "industry",
+    "title": "Emergency Response",
+    "cover": "assets/org/covers/i02.webp",
+    "lead": "Regulation around exposure, urgency and the aftermath.",
+    "sub": "Acute mobilisation, shock and return from high alert.",
+    "anchor": "Come Down Safely",
+    "why": [
+      "Emergency work depends on rapid mobilisation.",
+      "The goal is not to make responders less activated when activation is useful; it is to help them recognise when the emergency state is still running after the scene has ended. This protocol treats high alert as functional in context and recovery as a separate professional need."
+    ],
+    "without": "Repeated mobilisation without enough downshift can leave ordinary environments feeling physiologically similar to the incident environment.",
+    "with_good": "More deliberate stand-down after acute activation, stronger post-incident recovery habits, and less emergency-state carryover into ordinary life.",
+    "who": "Fire, EMS, dispatch and emergency/public-safety environments.",
+    "core": [
+      "Acute events",
+      "unpredictability",
+      "rapid mobilisation",
+      "difficult scenes",
+      "repeated calls",
+      "post-incident activation",
+      "shift-to-home transition"
+    ],
+    "resources": [
+      "Pre-Response",
+      "Post-Incident",
+      "Difficult Outcome",
+      "Repeated Calls",
+      "Replay",
+      "Delayed Reaction",
+      "Shift-to-Home"
+    ],
+    "org_value": "A specialist, high-relevance offering for response organisations. Content should remain complementary to formal critical-incident, peer-support and clinical pathways.",
+    "guard": "Activation is often functional during the event. The work is noticing when it has continued after the event ended."
+  },
+  {
+    "id": "I03",
+    "kind": "industry",
+    "title": "Hospitality",
+    "cover": "assets/org/covers/i03.webp",
+    "lead": "Presence for the guest that does not cost the person.",
+    "sub": "Guest expectations, service recovery and peak demand.",
+    "anchor": "Service Without Carry",
+    "why": [
+      "Hospitality asks employees to maintain welcome, responsiveness and presentation while operations behind the scenes may be under strain.",
+      "Guest emotion is immediate and visible, and service failures can become personal before the worker has time to reset. The protocol is built around that continuous guest-facing environment."
+    ],
+    "without": "Guest-facing emotional labour can accumulate across a shift when the person repeatedly resets socially without actually downshifting internally.",
+    "with_good": "Better recovery between guest interactions, more sustainable service presence during peak periods, and less shift pressure carried home.",
+    "who": "Hotels, resorts and related guest-service organisations.",
+    "core": [
+      "Guest expectations",
+      "occupancy peaks",
+      "service recovery",
+      "public-facing performance",
+      "irregular demand",
+      "complaints",
+      "back-to-back interaction"
+    ],
+    "resources": [
+      "Peak Arrival",
+      "Guest Escalation",
+      "Full Occupancy",
+      "Service Failure",
+      "Complaint Aftermath",
+      "Back-to-Back Interaction",
+      "Shift-to-Home"
+    ],
+    "org_value": "Particularly strong for Caribbean POCs and large resort employers. It can be mapped across front desk, operations, leadership, security, sales and foodservice roles.",
+    "guard": null
+  },
+  {
+    "id": "I04",
+    "kind": "industry",
+    "title": "Foodservice",
+    "cover": "assets/org/covers/i04.webp",
+    "lead": "Staying in the service when the service speeds up.",
+    "sub": "Rush cycles, sensory load and live coordination.",
+    "anchor": "Through the Rush",
+    "why": [
+      "Foodservice combines time pressure with sensory intensity and tightly linked dependencies.",
+      "A kitchen, bar or floor can move from manageable to fully activated in minutes, and mistakes require immediate correction rather than a long pause. The protocol supports state recovery inside the rhythm of service itself."
+    ],
+    "without": "Sensory load plus time pressure can keep the system mobilised long after the rush finishes, especially when late hours compress recovery.",
+    "with_good": "Faster downshift after rush periods, better recovery after service errors or conflict, and more usable attention through demanding service cycles.",
+    "who": "Restaurants, bars, catering, kitchens and nightlife operations.",
+    "core": [
+      "Rush periods",
+      "heat",
+      "noise",
+      "timing",
+      "order accumulation",
+      "customer demand",
+      "FOH/BOH dependencies",
+      "late-hour recovery"
+    ],
+    "resources": [
+      "Pre-Service",
+      "Rush Onset",
+      "Kitchen Pressure",
+      "Order Accumulation",
+      "Error Recovery",
+      "FOH",
+      "BOH Friction",
+      "After Service",
+      "Late-Night Downshift"
+    ],
+    "org_value": "Highly relevant to restaurant groups, hotels with F&B;, catering and nightlife. Short-form resources can be deployed before service and during breaks.",
+    "guard": null
+  },
+  {
+    "id": "I05",
+    "kind": "industry",
+    "title": "Retail",
+    "cover": "assets/org/covers/i05.webp",
+    "lead": "Reading people all day without being worn down by it.",
+    "sub": "The floor: presentation, approach, conversion and rejection.",
+    "anchor": "Working the Floor",
+    "why": [
+      "Brick-and-mortar retail is its own social environment.",
+      "Employees are physically visible, repeatedly reading strangers, deciding when to approach and remaining available through rejection, slow periods and sudden surges. The regulation demand differs from customer success or office-based sales because the interaction is live, embodied and continuous."
+    ],
+    "without": "Continuous floor awareness can create social vigilance even when no customer is actively engaging, making the entire shift feel performance-based.",
+    "with_good": "More consistent floor presence under fluctuating traffic, better recovery after rejection or difficult customers, and a cleaner end-of-shift social downshift.",
+    "who": "Fashion, footwear, luxury, jewellery, cosmetics, electronics and showroom retail.",
+    "core": [
+      "Customer approach",
+      "floor awareness",
+      "conversion",
+      "rejection",
+      "commission",
+      "manager observation",
+      "slow periods",
+      "rush periods",
+      "presentation"
+    ],
+    "resources": [
+      "Before Opening",
+      "Customer Approach",
+      "Slow Floor",
+      "Customer Rush",
+      "Difficult Interaction",
+      "Rejection",
+      "Conversion Pressure",
+      "Closing Socially"
+    ],
+    "org_value": "Strong for boutiques, luxury retail, duty-free, department stores and multi-location chains. It is easy to assign and can be used in very short moments.",
+    "guard": null
+  },
+  {
+    "id": "I06",
+    "kind": "industry",
+    "title": "Aviation",
+    "cover": "assets/org/covers/i06.webp",
+    "lead": "Procedure holding when the schedule does not.",
+    "sub": "Safety consciousness, disruption and irregular duty.",
+    "anchor": "Steady in Disruption",
+    "why": [
+      "Aviation combines strict procedure with operational uncertainty.",
+      "Crews and ground teams may need to remain composed through delay, disruption and passenger emotion while still respecting safety-critical systems. The protocol focuses on staying oriented when the environment changes faster than the person can control."
+    ],
+    "without": "Disruption plus procedural responsibility can keep the system braced for the next change, even after the operational problem has resolved.",
+    "with_good": "Stronger regulation around disruption and passenger pressure, clearer off-duty transition, and better use of formal fatigue and support systems when needed.",
+    "who": "Airlines, cabin/flight crew, airports, ground teams and travel operations.",
+    "core": [
+      "Procedural demand",
+      "safety awareness",
+      "delay",
+      "disruption",
+      "passenger pressure",
+      "turnaround",
+      "irregular schedules",
+      "limited control"
+    ],
+    "resources": [
+      "Pre-Duty",
+      "Delay",
+      "Passenger Escalation",
+      "Turnaround Pressure",
+      "Operational Uncertainty",
+      "Irregular Schedule",
+      "End-of-Duty Transition"
+    ],
+    "org_value": "A compelling specialist vertical for airlines, airports and aviation-service organisations, with clear role pairing for pilots, cabin crew, service teams and operations.",
+    "guard": null
+  },
+  {
+    "id": "I07",
+    "kind": "industry",
+    "title": "Education",
+    "cover": "assets/org/covers/i07.webp",
+    "lead": "Capacity for the classroom, the staff room and the return home.",
+    "sub": "Learning, childcare and developmental responsibility.",
+    "anchor": "Hold the Room",
+    "why": [
+      "Education and childcare require sustained interpersonal attention.",
+      "The professional is simultaneously tracking safety, behaviour, learning and emotional needs, often for several people at once. The protocol recognises that teaching and care are not simply cognitive work; they are continuous co-regulation environments."
+    ],
+    "without": "Constant relational demand can shorten patience and leave the educator carrying classroom vigilance into the rest of the day.",
+    "with_good": "More sustainable patience and attention across the day, better recovery after difficult learner or parent interactions, and cleaner end-of-day transition.",
+    "who": "Schools, childcare, daycare, tutoring and learning-support environments.",
+    "core": [
+      "Continuous attention",
+      "safety",
+      "behaviour",
+      "learning",
+      "parent contact",
+      "divided attention",
+      "repeated correction",
+      "developmental responsibility"
+    ],
+    "resources": [
+      "Before Learners Arrive",
+      "Classroom Activation",
+      "Child Distress",
+      "Repeated Behaviour",
+      "Parent Interaction",
+      "Divided Attention",
+      "End-of-Day Transition"
+    ],
+    "org_value": "Applicable across schools, daycares, tutoring and learning-support organisations. It can support staff wellbeing without turning behavioural or staffing problems into individual coping tasks.",
+    "guard": null
+  },
+  {
+    "id": "I08",
+    "kind": "industry",
+    "title": "Financial Services",
+    "cover": "assets/org/covers/i08.webp",
+    "lead": "Judgement that holds when the numbers move.",
+    "sub": "Client money, market movement and consequential trust.",
+    "anchor": "Steady Around Stakes",
+    "why": [
+      "Financial services adds a particular type of consequence: decisions and conversations may directly touch another person's money, security or future plans.",
+      "Market movement and regulatory expectations can change the emotional atmosphere quickly. This protocol addresses that environment without duplicating the Finance & Accounting role protocol."
+    ],
+    "without": "When money and trust are at stake, uncertainty can be interpreted as threat long before a final outcome is known.",
+    "with_good": "Clearer separation between market/client stress and personal threat, steadier decision presence, and less financial rumination after work.",
+    "who": "Banks, insurers, investment organisations, lending, brokerage and related institutions.",
+    "core": [
+      "Client money",
+      "markets",
+      "targets",
+      "regulation",
+      "trust",
+      "high-value decisions",
+      "client fear",
+      "financial-loss conversations"
+    ],
+    "resources": [
+      "Market Volatility",
+      "Client Distress",
+      "Regulatory Review",
+      "Target Pressure",
+      "High-Value Decision",
+      "Financial-Loss Conversation",
+      "End-of-Day Rumination"
+    ],
+    "org_value": "Strong for banking, insurance and investment organisations because it can serve multiple roles while remaining clearly linked to the sector's distinctive stakes.",
+    "guard": null
+  },
+  {
+    "id": "I09",
+    "kind": "industry",
+    "title": "Legal Services",
+    "cover": "assets/org/covers/i09.webp",
+    "lead": "Ending the day without every matter still open.",
+    "sub": "Professional practice under client urgency and scrutiny.",
+    "anchor": "Close the Matter",
+    "why": [
+      "Professional-practice firms operate through open matters, client deadlines and review by senior professionals.",
+      "Work can remain mentally unfinished because several consequential matters coexist at once. This protocol addresses the environment shared across legal, accounting and advisory firms while role-specific protocols still provide the second layer."
+    ],
+    "without": "Open matters can stack faster than they psychologically close, keeping attention fragmented across clients and deadlines.",
+    "with_good": "Better closure between open matters, less cumulative deadline carryover, and more deliberate recovery after client urgency or professional scrutiny.",
+    "who": "Law firms, accounting firms, audit, tax, fiduciary, consulting and advisory practices.",
+    "core": [
+      "Client urgency",
+      "multiple open matters",
+      "partner review",
+      "deadlines",
+      "confidentiality",
+      "adversarial work",
+      "billable/time pressure",
+      "professional error"
+    ],
+    "resources": [
+      "Deadline Compression",
+      "Client Urgency",
+      "Partner Review",
+      "Multiple Matters",
+      "Adversarial Exposure",
+      "Audit Cycle",
+      "Professional Error",
+      "Work Remaining Open"
+    ],
+    "org_value": "A strong fit for firms where the business itself is professional advice. It can be assigned across associates, partners, accountants, consultants and support professionals.",
+    "guard": null
+  },
+  {
+    "id": "I10",
+    "kind": "industry",
+    "title": "Technology",
+    "cover": "assets/org/covers/i10.webp",
+    "lead": "Human recovery around incidents, interruption and change.",
+    "sub": "Incidents, uptime and continuous digital demand.",
+    "anchor": "Disconnect After Demand",
+    "why": [
+      "Technology organisations can combine rapid change with a cultural expectation of digital availability.",
+      "Incidents arrive through channels that make work immediately visible and urgent, while unresolved technical problems can continue across time zones and working hours. This protocol addresses the industry rhythm around those demands."
+    ],
+    "without": "Always-on channels can make it difficult for the system to distinguish genuine incident readiness from habitual availability.",
+    "with_good": "Cleaner transitions out of incident and on-call states, reduced always-on carryover, and more sustainable attention during release and change cycles.",
+    "who": "Software, SaaS, telecom, digital infrastructure and technology organisations.",
+    "core": [
+      "Incidents",
+      "uptime",
+      "rapid change",
+      "on-call work",
+      "digital availability",
+      "changing priorities",
+      "technical uncertainty",
+      "postmortems"
+    ],
+    "resources": [
+      "Production Incident",
+      "On-Call Recovery",
+      "Channel Overload",
+      "Release Day",
+      "Changing Priorities",
+      "Postmortem",
+      "End Digital Availability"
+    ],
+    "org_value": "Highly scalable across SaaS, telecom and digital businesses. It can complement incident-management and engineering practices without interfering with technical response procedures.",
+    "guard": null
+  },
+  {
+    "id": "I11",
+    "kind": "industry",
+    "title": "Manufacturing",
+    "cover": "assets/org/covers/i11.webp",
+    "lead": "Usable support inside real shifts and physical constraints.",
+    "sub": "Output, equipment, safety attention and shift rhythm.",
+    "anchor": "Steady Through Output",
+    "why": [
+      "Manufacturing and logistics combine output pressure with safety attention and physical environments that continue moving.",
+      "Disruption in one part of the system can cascade quickly. The protocol supports workers and supervisors in maintaining usable attention around throughput without treating fatigue or unsafe conditions as individual mindset problems."
+    ],
+    "without": "Output pressure plus physical fatigue can reduce recovery windows and keep the system operating in urgency even after the shift ends.",
+    "with_good": "Better recovery around production disruption and backlog, steadier attention during handover, and less urgency carried beyond the shift.",
+    "who": "Factories, warehouses, fulfilment, distribution and industrial operations.",
+    "core": [
+      "Production rhythm",
+      "physical/cognitive load",
+      "equipment",
+      "safety attention",
+      "backlog",
+      "handovers",
+      "shifts",
+      "delays",
+      "overtime"
+    ],
+    "resources": [
+      "Pre-Shift",
+      "Production Pressure",
+      "Equipment Disruption",
+      "Backlog",
+      "Safety Reset",
+      "Handover",
+      "Overtime",
+      "Shift-to-Home"
+    ],
+    "org_value": "Strong for plants, warehouses and distribution networks. Deployment can align with shift briefings while remaining separate from formal safety procedures.",
+    "guard": null
+  },
+  {
+    "id": "I12",
+    "kind": "industry",
+    "title": "Security Operations",
+    "cover": "assets/org/covers/i12.webp",
+    "lead": "Coming off the door without bringing it with you.",
+    "sub": "Tactical readiness, confrontation and protective environments.",
+    "anchor": "Stand Down Safely",
+    "why": [
+      "Security work can move quickly from observation to confrontation or tactical response.",
+      "Personnel may be expected to scan for anomalies, manage boundaries and remain ready to act while most people around them are not operating in that state. The protocol focuses on the transition between readiness and stand-down, not on operational tactics."
+    ],
+    "without": "When readiness is repeatedly reinforced, the body can continue scanning after the operational context has ended.",
+    "with_good": "More deliberate stand-down after confrontation or high-readiness periods, stronger post-incident recovery, and earlier routing to formal operational support when needed.",
+    "who": "Private security, commercial security, event protection and law-enforcement-adjacent protective teams where appropriate.",
+    "core": [
+      "Tactical readiness",
+      "crowd/scene monitoring",
+      "confrontation",
+      "boundary enforcement",
+      "uncertain behaviour",
+      "rapid mobilisation",
+      "post-incident stand-down"
+    ],
+    "resources": [
+      "Before Post",
+      "Scene",
+      "Crowd Scan",
+      "Confrontation",
+      "After Intervention",
+      "High-Readiness Period",
+      "Incident Aftermath",
+      "Shift End"
+    ],
+    "org_value": "A specialist offering requiring clear safety boundaries and, where deployed in law-enforcement contexts, appropriate organisational review. It complements rather than replaces operational training.",
+    "guard": "Distinct from R11 Protective Readiness: conventional venue and event security, not tactical."
+  },
+  {
+    "id": "I13",
+    "kind": "industry",
+    "title": "Sport Performance",
+    "cover": "assets/org/covers/i13.webp",
+    "lead": "What happens after the result is decided.",
+    "sub": "Competition culture, team dynamics and public evaluation.",
+    "anchor": "Competition to Recovery",
+    "why": [
+      "Sport organisations create an environment where physical arousal, public evaluation and outcome feedback are constant.",
+      "Athletes and staff move repeatedly between preparation, competition and recovery. The protocol gives that environment a shared language while the Athletic Performance role protocol provides the competitor-specific layer."
+    ],
+    "without": "When every outcome carries identity and selection implications, recovery can become another performance task instead of a genuine transition.",
+    "with_good": "More deliberate competition-to-recovery transitions across the organisation, better reset after selection or outcome pressure, and stronger support around injury and performance.",
+    "who": "Professional clubs, federations, academies, collegiate programmes and competitive sport organisations.",
+    "core": [
+      "Competition",
+      "selection",
+      "coaching pressure",
+      "team dynamics",
+      "injury",
+      "public evaluation",
+      "victory/defeat cycles",
+      "performance culture"
+    ],
+    "resources": [
+      "Competition Day",
+      "Team Pressure",
+      "Error Recovery",
+      "Selection",
+      "Injury",
+      "Defeat",
+      "Victory Downshift",
+      "Return to Competition"
+    ],
+    "org_value": "A differentiated entry for clubs, academies and federations. It can complement existing performance and mental-health services rather than positioning itself as a substitute.",
+    "guard": null
+  },
+  {
+    "id": "I14",
+    "kind": "industry",
+    "title": "Government",
+    "cover": "assets/org/covers/i14.webp",
+    "lead": "Working in public view without living there.",
+    "sub": "Public responsibility, scrutiny and shifting priorities.",
+    "anchor": "Public Without Carry",
+    "why": [
+      "Public-office work can combine visibility, confidentiality, stakeholder pressure and rapidly changing schedules.",
+      "Staff may be responsible for another person's calendar or public obligations while managing information that cannot be discussed freely. The protocol is intentionally nonpartisan: it addresses occupational load, not political positions or persuasion."
+    ],
+    "without": "Public visibility and constantly shifting priorities can keep attention anticipating the next demand even when the day is technically finished.",
+    "with_good": "More sustainable composure under scrutiny and schedule pressure, clearer separation between public role and private life, and better use of internal support channels.",
+    "who": "Elected-office environments, legislative offices, ministers' offices, policy teams, communications staff and public-administration teams.",
+    "core": [
+      "Public visibility",
+      "constituent demand",
+      "confidential information",
+      "changing priorities",
+      "senior-principal pressure",
+      "media/public events",
+      "high-stakes schedules"
+    ],
+    "resources": [
+      "Public Scrutiny",
+      "Constituent Interaction",
+      "Schedule Overload",
+      "Principal Pressure",
+      "Crisis Communication",
+      "Public Event",
+      "Ending the Public Role"
+    ],
+    "org_value": "Useful for government offices and public-sector teams seeking a private employee-support resource. It should be framed around workplace wellbeing and professional functioning only.",
+    "guard": "Strictly nonpartisan. The subject is the occupational experience of public office, not policy or politics."
+  },
+  {
+    "id": "I15",
+    "kind": "industry",
+    "title": "Real Estate",
+    "cover": "assets/org/covers/i15.webp",
+    "lead": "Long cycles, other people’s emotion, uncertain income.",
+    "sub": "Long deal cycles, availability and uncertain outcomes.",
+    "anchor": "Steady Through Outcome",
+    "why": [
+      "Real estate combines personal relationships with high-value decisions and outcomes that can remain uncertain for weeks.",
+      "The professional may repeatedly enter homes, negotiations and client emotion while income itself may depend on a deal eventually closing. This protocol addresses that waiting-and-availability rhythm."
+    ],
+    "without": "A transaction can remain mentally active for days or weeks, making every new message feel like a possible change in outcome.",
+    "with_good": "Less deal-outcome carryover, steadier negotiation presence, and better boundaries around availability, commission uncertainty and long sales cycles.",
+    "who": "Property brokerages, agents, property organisations and real-estate operations.",
+    "core": [
+      "Commission uncertainty",
+      "showings",
+      "negotiation",
+      "client emotion",
+      "deal collapse",
+      "long sales cycles",
+      "weekend/evening availability",
+      "property issues"
+    ],
+    "resources": [
+      "Showing Day",
+      "Offer Uncertainty",
+      "Deal Collapse",
+      "Negotiation",
+      "Difficult Buyer",
+      "Seller",
+      "Commission Pressure",
+      "Weekend Availability",
+      "Close the Transaction Internally"
+    ],
+    "org_value": "Strong for brokerages and property firms, including independent professionals who may not have a large traditional HR structure.",
+    "guard": null
+  },
+  {
+    "id": "I16",
+    "kind": "industry",
+    "title": "Events",
+    "cover": "assets/org/covers/i16.webp",
+    "lead": "The build, the doors, and the quiet afterwards.",
+    "sub": "Deadline compression, crowd arrival and event comedown.",
+    "anchor": "Through the Event",
+    "why": [
+      "Live events compress weeks of preparation into a narrow window where problems become immediately public.",
+      "Crews move through build, doors, show and breakdown with few natural pauses. The nervous-system challenge is not only event-day activation but also the abrupt transition after sustained intensity."
+    ],
+    "without": "After hours of compressed activation, the body may not downshift simply because the audience has left or the show has ended.",
+    "with_good": "Better regulation through event-day compression, faster recovery after last-minute disruption, and a cleaner post-event comedown once the operational peak ends.",
+    "who": "Venues, production companies, festivals, event agencies and live-entertainment operations.",
+    "core": [
+      "Event-day compression",
+      "crowd arrival",
+      "technical dependencies",
+      "last-minute change",
+      "public visibility",
+      "long hours",
+      "abrupt post-event downshift"
+    ],
+    "resources": [
+      "Pre-Open",
+      "Last-Minute Change",
+      "Crowd Arrival",
+      "Technical Disruption",
+      "Team Friction",
+      "Showtime",
+      "Event Comedown"
+    ],
+    "org_value": "Useful for venues, event producers, festivals and hospitality organisations with large event operations. Strong potential for short pre-event and post-event resources.",
+    "guard": null
+  },
+  {
+    "id": "R01",
+    "kind": "role",
+    "title": "People Leadership",
+    "cover": "assets/org/covers/r01.webp",
+    "lead": "Carrying the decision without carrying everyone in it.",
+    "sub": "Responsibility, authority and carrying others.",
+    "anchor": "Responsibility Without Overholding",
+    "why": [
+      "Leadership is not only a communication skill. It repeatedly asks one person to hold responsibility for people, outcomes and information that cannot always be shared.",
+      "Pressure can arrive from senior leadership while employees simultaneously look upward for steadiness. When that load stays internally open, it can follow the leader from meeting to meeting and into recovery time."
+    ],
+    "without": "Repeated responsibility can keep attention scanning for unfinished people problems, narrow patience and make genuine off-duty recovery harder.",
+    "with_good": "Faster recovery after difficult people decisions, clearer boundaries around responsibility, and steadier availability for the next leadership moment.",
+    "who": "Managers, supervisors, directors, executives and team leaders.",
+    "core": [
+      "Decision uncertainty",
+      "employee distress",
+      "difficult conversations",
+      "pressure from above",
+      "accountability",
+      "visibility",
+      "team conflict",
+      "leadership decompression"
+    ],
+    "resources": [
+      "Before the Difficult Conversation",
+      "After Being Challenged",
+      "Pressure From Above",
+      "Carrying Team Anxiety",
+      "After a Leadership Mistake",
+      "Leaving Leadership at Work"
+    ],
+    "org_value": "A strong layer for manager enablement, leadership development and organisational change. It gives managers a private, in-the-moment tool without replacing management training or structural support.",
+    "guard": null
+  },
+  {
+    "id": "R02",
+    "kind": "role",
+    "title": "Business Ownership",
+    "cover": "assets/org/covers/r02.webp",
+    "lead": "The weight that does not clock off.",
+    "sub": "Ultimate responsibility, stewardship and exposure.",
+    "anchor": "The Weight of Ownership",
+    "why": [
+      "Management responsibility can be delegated; ownership often cannot.",
+      "Capital, payroll, reputation, debt and final liability may remain psychologically present after operational staff have gone home. The protocol is built around the particular tension of having authority while still carrying the consequences that cannot be handed off."
+    ],
+    "without": "The owner can leave the building while remaining mentally on call for the enterprise, which can erode boundaries, sleep and decision recovery.",
+    "with_good": "More deliberate decisions under ownership pressure, better delegation without constant checking, and a clearer transition between the business and personal life.",
+    "who": "Founders, owners, partners, principals, franchisees and portfolio owners.",
+    "core": [
+      "Capital exposure",
+      "payroll",
+      "liability",
+      "revenue uncertainty",
+      "delegation",
+      "owner isolation",
+      "final decisions",
+      "business identity"
+    ],
+    "resources": [
+      "Payroll Week",
+      "Revenue Drop",
+      "Delegating Without Rechecking",
+      "The Final Call",
+      "When the Business Becomes You",
+      "Going Home With It Unresolved"
+    ],
+    "org_value": "Useful for founder-led businesses, partnerships and owner-operators that may not fit traditional department structures. It also gives enterprise buyers a route for principals and partners.",
+    "guard": "Responsibility can be delegated. Ultimate exposure often cannot."
+  },
+  {
+    "id": "R03",
+    "kind": "role",
+    "title": "Sales Growth",
+    "cover": "assets/org/covers/r03.webp",
+    "lead": "Separating the outcome from the next conversation.",
+    "sub": "Rejection, targets and uncertain outcomes.",
+    "anchor": "Release the Result",
+    "why": [
+      "Selling creates a repeating cycle of social exposure, uncertainty and result pressure.",
+      "One rejection may be manageable; repeated rejection, comparison and target attachment can accumulate across a day. The protocol helps the salesperson reset between outcomes so the next conversation is not carrying the emotional residue of the last one."
+    ],
+    "without": "Without a reset, one customer answer can enter the next conversation first, increasing anticipatory tension, self-criticism and performance carryover.",
+    "with_good": "Cleaner resets between outcomes, less carryover from rejection, and more consistent presence in the next commercial conversation.",
+    "who": "Salespeople, account executives, business-development professionals and commission-based teams.",
+    "core": [
+      "Rejection",
+      "pipeline uncertainty",
+      "persuasion",
+      "targets",
+      "commission",
+      "negotiation",
+      "comparison",
+      "deal loss",
+      "month-end pressure"
+    ],
+    "resources": [
+      "Before Outreach",
+      "After Rejection",
+      "Between Calls",
+      "Empty Pipeline",
+      "Target Pressure",
+      "Lost Deal",
+      "Month-End",
+      "Negotiation Activation"
+    ],
+    "org_value": "Highly deployable for commercial teams because the use moments are obvious and frequent. It can sit alongside sales enablement without attempting to teach sales technique.",
+    "guard": null
+  },
+  {
+    "id": "R04",
+    "kind": "role",
+    "title": "Frontline Service",
+    "cover": "assets/org/covers/r04.webp",
+    "lead": "Available to people all day without disappearing.",
+    "sub": "Continuous customer contact and emotional availability.",
+    "anchor": "Stay With Yourself",
+    "why": [
+      "Frontline employees can move from one customer directly into the next with little opportunity to metabolise what just occurred.",
+      "The work asks for social availability even when the employee has just absorbed frustration, rejection or disrespect. This protocol supports the transition between interactions without turning service into emotional suppression."
+    ],
+    "without": "High-contact work can create accumulated vigilance and emotional masking when there is no time to reset between people.",
+    "with_good": "Quicker recovery after difficult customers, stronger boundaries during service, and less emotional residue carried into the next interaction or home.",
+    "who": "Receptionists, floor staff, guest-facing employees and high-contact service teams.",
+    "core": [
+      "Continuous social availability",
+      "customer mood",
+      "complaints",
+      "queues",
+      "hostility",
+      "surges",
+      "repeated interactions",
+      "public-facing composure"
+    ],
+    "resources": [
+      "Before Opening",
+      "Customer Surge",
+      "After Hostility",
+      "Boundary Reset",
+      "Next Customer",
+      "End the Public-Facing State"
+    ],
+    "org_value": "An immediately understandable resource for HR and operations in retail, hospitality, reception and service environments. Especially strong for mobile access during short breaks.",
+    "guard": null
+  },
+  {
+    "id": "R05",
+    "kind": "role",
+    "title": "Client Success",
+    "cover": "assets/org/covers/r05.webp",
+    "lead": "Owning the relationship without absorbing it.",
+    "sub": "Relationship ownership without internal carryover.",
+    "anchor": "Client Without Carry",
+    "why": [
+      "Client-success work differs from transactional selling because the relationship remains open.",
+      "The employee can become the human interface between a demanding client and a complex organisation, often holding problems they cannot personally solve. This protocol helps separate responsible ownership from absorbing the client's urgency as a permanent internal state."
+    ],
+    "without": "Open client issues can keep attention on call after contact ends, increasing rumination, boundary erosion and emotional carryover.",
+    "with_good": "Greater separation between client urgency and personal urgency, better escalation recovery, and steadier relationship ownership over time.",
+    "who": "Account managers, relationship managers, customer-success professionals and retained-client teams.",
+    "core": [
+      "Escalation",
+      "renewals",
+      "retention",
+      "expectation management",
+      "unresolved client problems",
+      "internal/client tension",
+      "ongoing relationship ownership"
+    ],
+    "resources": [
+      "Before Escalation",
+      "After Escalation",
+      "Client Urgency",
+      "Difficult Renewal",
+      "Internal",
+      "Client Tension",
+      "Ending Availability"
+    ],
+    "org_value": "A good complement for SaaS, professional services and account-led businesses. It provides a real-time support layer without duplicating account-management process training.",
+    "guard": null
+  },
+  {
+    "id": "R06",
+    "kind": "role",
+    "title": "Financial Focus",
+    "cover": "assets/org/covers/r06.webp",
+    "lead": "Accuracy that does not run on adrenaline.",
+    "sub": "Precision, deadlines and consequences of error.",
+    "anchor": "Precision Without Panic",
+    "why": [
+      "Finance work often rewards precision, verification and control.",
+      "Under deadline pressure, the same strengths can become repetitive checking, threat-focused attention and difficulty disengaging from a possible error. This protocol supports the person doing exacting work without asking them to lower professional standards."
+    ],
+    "without": "When vigilance becomes endless verification, cognitive recovery shortens and work can remain mentally active long after the task is complete.",
+    "with_good": "More usable attention under deadline and audit pressure, less compulsive rechecking, and cleaner cognitive shutdown after high-consequence work.",
+    "who": "Accounting, finance, reporting, controller, audit-support and analytical finance functions.",
+    "core": [
+      "Close periods",
+      "reporting",
+      "reconciliation",
+      "audit",
+      "checking",
+      "deadline compression",
+      "error discovery",
+      "consequential financial work"
+    ],
+    "resources": [
+      "Close Period",
+      "Before Reporting",
+      "Error Discovery",
+      "Audit Pressure",
+      "Rechecking",
+      "Deadline Compression",
+      "Ending Financial Rumination"
+    ],
+    "org_value": "Strong for finance departments across industries. It is easy for HR and finance leaders to explain because the use cases align with close, audit and reporting cycles.",
+    "guard": null
+  },
+  {
+    "id": "R07",
+    "kind": "role",
+    "title": "Legal Clarity",
+    "cover": "assets/org/covers/r07.webp",
+    "lead": "Thinking clearly while being argued with.",
+    "sub": "Judgment, scrutiny and adversarial pressure.",
+    "anchor": "Clear Under Pressure",
+    "why": [
+      "Legal and compliance work can require sustained attention to ambiguity, evidence and consequence while communication may be adversarial.",
+      "The nervous system can stay organised around a matter even when the immediate interaction ends. This protocol protects clarity by supporting recovery from scrutiny without softening the professional responsibility itself."
+    ],
+    "without": "Open matters and adversarial exchanges can keep the system rehearsing evidence, arguments and possible outcomes beyond useful working time.",
+    "with_good": "Clearer thinking under scrutiny, better separation from adversarial material, and more intentional closure after professionally demanding matters.",
+    "who": "Legal, risk, compliance and regulatory professionals.",
+    "core": [
+      "Adversarial communication",
+      "ambiguity",
+      "evidence",
+      "confidentiality",
+      "scrutiny",
+      "professional consequence",
+      "open matters",
+      "regulatory demand"
+    ],
+    "resources": [
+      "Hostile Correspondence",
+      "Adversarial Meeting",
+      "Matter Overload",
+      "Regulatory Scrutiny",
+      "Uncertainty",
+      "Close the Matter"
+    ],
+    "org_value": "Relevant across in-house legal, risk and compliance teams and pairs naturally with the Legal Services industry protocol for firms whose core business is advisory work.",
+    "guard": null
+  },
+  {
+    "id": "R08",
+    "kind": "role",
+    "title": "Operations Flow",
+    "cover": "assets/org/covers/r08.webp",
+    "lead": "Finding the order again after the interruption.",
+    "sub": "Throughput, interruption and cascading dependencies.",
+    "anchor": "Recover the Sequence",
+    "why": [
+      "Operations rarely waits for the person to feel ready.",
+      "Work continues while interruptions, delays and dependencies accumulate. This protocol helps restore sequence when everything starts to feel equally urgent, supporting usable attention without pretending that the workload itself has disappeared."
+    ],
+    "without": "Cascading tasks can push the system into constant triage, narrowing attention and making handovers, prioritisation and recovery more difficult.",
+    "with_good": "Improved prioritisation under disruption, faster recovery after operational problems, and less urgency carried into handovers and off-duty time.",
+    "who": "Operations staff, operational managers, logistics coordinators, fulfilment and facilities teams.",
+    "core": [
+      "Throughput",
+      "interruption",
+      "queues",
+      "cascading dependencies",
+      "handovers",
+      "priorities",
+      "real-time problems",
+      "operational errors"
+    ],
+    "resources": [
+      "Everything Is Urgent",
+      "Backlog",
+      "Disruption",
+      "Handover",
+      "Operational Error",
+      "Conflicting Priorities",
+      "Post-Shift Transition"
+    ],
+    "org_value": "Highly applicable across hospitality, logistics, manufacturing, facilities and service businesses. It can augment operational training with a private state-management layer.",
+    "guard": null
+  },
+  {
+    "id": "R09",
+    "kind": "role",
+    "title": "Tech Innovation",
+    "cover": "assets/org/covers/r09.webp",
+    "lead": "Closing the problem that follows you home.",
+    "sub": "Deep work, interruption and unresolved complexity.",
+    "anchor": "Exit the Loop",
+    "why": [
+      "Technical work can require sustained concentration on problems that do not resolve cleanly at the end of a day.",
+      "Interruptions and incidents force rapid switching, while unfinished complexity can continue running mentally after the laptop closes. This protocol is designed for that cognitive carryover."
+    ],
+    "without": "The brain can keep searching for solutions after work ends, delaying recovery and making the next period of focused work harder to enter cleanly.",
+    "with_good": "Better recovery after incidents and interruptions, easier disengagement from unresolved technical problems, and more deliberate return to deep work.",
+    "who": "Engineers, developers, technical teams, product teams and digital operations.",
+    "core": [
+      "Deep work",
+      "context switching",
+      "unresolved problems",
+      "incidents",
+      "technical scrutiny",
+      "ambiguity",
+      "cognitive continuation after work"
+    ],
+    "resources": [
+      "Context-Switch Reset",
+      "Post-Incident",
+      "Unresolved Problem",
+      "Release Day",
+      "Technical Scrutiny",
+      "Postmortem",
+      "End Cognitive Work"
+    ],
+    "org_value": "A strong fit for engineering, product and technology teams, particularly where on-call, release and incident cycles already exist.",
+    "guard": null
+  },
+  {
+    "id": "R10",
+    "kind": "role",
+    "title": "People Support",
+    "cover": "assets/org/covers/r10.webp",
+    "lead": "Holding other people’s difficulty without taking it on.",
+    "sub": "Supporting others without absorbing everything.",
+    "anchor": "Support Without Absorption",
+    "why": [
+      "People professionals often hear what others cannot easily carry alone while simultaneously representing the organisation.",
+      "Confidentiality can limit where they take their own reaction, and difficult conversations may arrive one after another. This protocol supports empathy with boundaries rather than emotional detachment."
+    ],
+    "without": "Repeated exposure to other people's distress can create quiet accumulation, especially when confidentiality prevents ordinary processing with colleagues.",
+    "with_good": "Stronger emotional boundaries while supporting employees, better recovery after mediation or difficult messages, and reduced absorption of organisational distress.",
+    "who": "HR, People Operations, culture, employee relations and organisational-support teams.",
+    "core": [
+      "Employee distress",
+      "mediation",
+      "confidentiality",
+      "conflict",
+      "restructuring",
+      "organisational tension",
+      "difficult messages",
+      "emotional support"
+    ],
+    "resources": [
+      "Employee Distress",
+      "Before Mediation",
+      "Confidentiality Burden",
+      "Restructuring",
+      "Difficult Message",
+      "End-of-Day Release"
+    ],
+    "org_value": "Directly useful to the HR audience that may also purchase SafeRise. It demonstrates that the platform supports the people who support everyone else.",
+    "guard": null
+  },
+  {
+    "id": "R11",
+    "kind": "role",
+    "title": "Protective Readiness",
+    "cover": "assets/org/covers/r11.webp",
+    "lead": "Coming off alert when the shift ends.",
+    "sub": "High-readiness protection and sustained scanning.",
+    "anchor": "Vigilance Without Carryover",
+    "why": [
+      "Protective work requires a deliberately heightened relationship with the environment.",
+      "The challenge is not that vigilance exists; it is knowing when a useful readiness state is continuing after the protective context has changed. This protocol supports professional alertness while creating a route back out of it."
+    ],
+    "without": "Sustained scanning can follow the person off duty, keeping ordinary environments coded as work and making downshift difficult.",
+    "with_good": "More deliberate movement between readiness and stand-down, cleaner post-duty recovery, and better separation between protective responsibility and personal vigilance.",
+    "who": "Executive protection, specialist corporate protection and high-readiness protective personnel.",
+    "core": [
+      "Environmental scanning",
+      "protective responsibility",
+      "ambiguous threat",
+      "boundary enforcement",
+      "rapid mobilisation",
+      "sustained readiness",
+      "stand-down"
+    ],
+    "resources": [
+      "Before Duty",
+      "Long Monitoring Period",
+      "Ambiguous Threat",
+      "After Intervention",
+      "Protective Responsibility",
+      "Handover",
+      "Stop Scanning"
+    ],
+    "org_value": "A specialist enterprise offering for protection firms, executive-security teams and organisations with dedicated protective staff. Appropriate review and safety boundaries are essential.",
+    "guard": "Distinct from I12 Security Operations: this is tactical and specialist, that is conventional venue and event security."
+  },
+  {
+    "id": "R12",
+    "kind": "role",
+    "title": "Teaching Impact",
+    "cover": "assets/org/covers/r12.webp",
+    "lead": "Staying patient with someone else’s pace.",
+    "sub": "Responsibility for another person's development.",
+    "anchor": "Guide Without Gripping",
+    "why": [
+      "Teaching and coaching ask a person to remain attentive to someone else's progress while repeatedly correcting, encouraging and recalibrating.",
+      "When the learner struggles, the professional can begin to hold the outcome as evidence about their own effectiveness. This protocol helps separate guidance from over-control."
+    ],
+    "without": "Outcome attachment can tighten patience, increase frustration and make the learner's difficulty feel like the instructor's personal failure.",
+    "with_good": "More patience under repeated correction, less identity fusion with another person's progress, and steadier feedback and coaching presence.",
+    "who": "Teachers, tutors, instructors, coaches, trainers and skills-development professionals.",
+    "core": [
+      "Repeated correction",
+      "patience",
+      "learner frustration",
+      "developmental responsibility",
+      "feedback",
+      "parent/client expectations",
+      "outcome attachment"
+    ],
+    "resources": [
+      "Learner Struggling",
+      "Repeated Correction",
+      "Difficult Feedback",
+      "Parent",
+      "Client Pressure",
+      "Managing Frustration",
+      "Their Result",
+      "Your Worth"
+    ],
+    "org_value": "Broadly deployable across education, sport and training environments. It gives organisations a consistent role-based resource without forcing every coach or instructor into one industry.",
+    "guard": null
+  },
+  {
+    "id": "R13",
+    "kind": "role",
+    "title": "Athletic Performance",
+    "cover": "assets/org/covers/r13.webp",
+    "lead": "Getting back to the next play, not the last one.",
+    "sub": "Competition, mistakes and return to performance.",
+    "anchor": "Return to Play",
+    "why": [
+      "Athletes do not need to eliminate activation; they need to work with it.",
+      "Competition can amplify physical arousal, public evaluation and identity pressure, while a mistake often has to be processed before the next play begins. This protocol focuses on returning attention to the next available action."
+    ],
+    "without": "When the last error remains active, attention leaves the present play and performance can become increasingly organised around avoiding another mistake.",
+    "with_good": "Faster reset after mistakes, better competition-to-recovery transitions, and less performance residue carried into identity, sleep or the next training session.",
+    "who": "Competitive amateur, academy, collegiate, elite and professional athletes.",
+    "core": [
+      "Pre-performance activation",
+      "mistakes",
+      "momentum",
+      "selection",
+      "injury",
+      "scrutiny",
+      "competition",
+      "outcome identity",
+      "recovery"
+    ],
+    "resources": [
+      "Before Competition",
+      "After the Mistake",
+      "Between Plays",
+      "Momentum Loss",
+      "Selection Pressure",
+      "Injury Return",
+      "Competition Downshift"
+    ],
+    "org_value": "A differentiated route for clubs, academies and high-performance environments. It complements coaching and sports psychology while maintaining clear boundaries around clinical care.",
+    "guard": null
+  },
+  {
+    "id": "R14",
+    "kind": "role",
+    "title": "Project Delivery",
+    "cover": "assets/org/covers/r14.webp",
+    "lead": "Responsibility without complete control.",
+    "sub": "Accountability without complete control.",
+    "anchor": "Control What Moves",
+    "why": [
+      "Project work often creates an unusual combination: responsibility for an outcome without control over every dependency that determines it. Delays, scope changes and stakeholder expectations can remain mentally active because the project is never fully contained within one person's authority."
+    ],
+    "without": "The system can keep trying to control variables that are structurally outside the project manager's control, increasing rumination and over-monitoring.",
+    "with_good": "More control over what can actually be moved, better recovery after stakeholder escalation, and less rumination around unresolved dependencies.",
+    "who": "Project managers, programme managers, implementation leads and delivery professionals.",
+    "core": [
+      "Dependencies",
+      "changing scope",
+      "stakeholder pressure",
+      "deadlines",
+      "accountability for others' work",
+      "launches",
+      "limited direct authority"
+    ],
+    "resources": [
+      "Missed Dependency",
+      "Scope Change",
+      "Deadline Compression",
+      "Stakeholder Escalation",
+      "Launch Day",
+      "Responsibility Without Authority",
+      "Unfinished Project"
+    ],
+    "org_value": "Relevant across professional services, technology, construction, transformation and implementation teams. Easy to layer onto existing project-management methodologies.",
+    "guard": null
+  }
+];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { B2B_PROTOCOLS: B2B_PROTOCOLS };
+}
