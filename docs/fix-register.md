@@ -19636,3 +19636,23 @@ finding worth flagging above every other line in this entry — it silently brok
 `/protocols/{slug}` URL on the site, in a way that produced no console error and no visibly
 broken page (the bare `?track=&protocol=` and no-params paths were unaffected, which is
 almost certainly why it went unnoticed). **Not pushed.**
+
+**Addendum — SR-433, cross-checked against `pass/PASS-H.md` after it was amended (23 Sep,
+same day):** the amended brief explicitly adds `pass/mock-card-sleep-recovery.html` to the
+"keep noindex" list, alongside `dashboard.html`. SR-432's own noindex count (19) was taken
+with `pass/` excluded from the search — the same exclusion `robots.txt` and `_redirects`
+both already apply to that whole directory (`Disallow: /pass/`, and a 404! rewrite), so the
+file was never reachable regardless. Checked directly rather than left as a discrepancy:
+`pass/mock-card-sleep-recovery.html` exists and already carries `content="noindex,nofollow"`
+(no edit needed — it was never a removal candidate). Including `pass/`, the sitewide count
+is **20** (19 SR-432 + this one), matching the amended brief's own stated Verify expectation
+exactly. `protocol.html`'s removal and `dashboard.html`'s retention — the amendment's other
+two changes — were both already independently reasoned to the same conclusion in SR-432,
+before the amendment was re-read, and needed no correction. No file other than this register
+entry changes for this addendum.
+
+### Files
+
+Modified: `docs/fix-register.md`.
+
+*Status:* count reconciled, no functional change. **Not pushed.**
