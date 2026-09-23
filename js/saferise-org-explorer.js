@@ -159,6 +159,12 @@
       closeF8(); f8open = i;
       b.classList.add('sr-org-eon'); b.setAttribute('aria-expanded', 'true');
       var lay = LAYER_CLASS[t.layer] || '';
+      /* SR-434 (PASS-I.md §1) · f8inner never carried this class — the wall
+         panel a few lines down does (dinner.className, below), and
+         .sr-org-edinner is the only rule holding the panel's 200px/1fr
+         grid. Without it .sr-org-eside ran full-width and the plate (with
+         the handler's own inline width:100%) resolved to ~1500x2000. */
+      f8inner.className = 'sr-org-edinner';
       f8inner.innerHTML =
         '<button type="button" class="sr-org-eclose" data-f8close>Close</button>'
         + '<div class="sr-org-eside"><div class="sr-org-eplate ' + lay + '" style="width:100%">'

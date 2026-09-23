@@ -19765,3 +19765,100 @@ Modified: `dashboard.html`, `css/saferise-dashboard.css`, `docs/fix-register.md`
 certainty: the live-resize-crossing-1000px path for the two JS listeners could not be
 exercised in this environment (see Part B) — backstopped by CSS either way, but flagged
 rather than claimed as directly observed. **Not pushed.**
+
+## SR-434 — organisations.html: F8 reveal, dead anchor, and the counts (PASS-I.md)
+
+§1 and §5 (unambiguous, no decision needed) and §4's count removal (confirmed by Andre
+after the cited doc — `claude/VIDEO-SCRIPTS-THREE-SURFACES-V2.md` — was supplied) are
+done. §2 and §3 still wait on Andre; nothing built for either.
+
+### §1 — the F8 reveal's missing class
+
+Confirmed against live code before editing, exactly as the brief described:
+`js/saferise-org-explorer.js`'s F8 click handler (line 155) wrote `f8inner.innerHTML`
+(line 162) and never set a class; the wall handler a few lines down does
+(`dinner.className =`, line 220 — exact line match). `.sr-org-edinner`
+(`css/saferise-system.css:5855`) is the only rule carrying the panel's 200px/1fr grid.
+Fix: `f8inner.className = 'sr-org-edinner';` set immediately before the `innerHTML`
+write, matching the wall's own pattern rather than diverging from it.
+
+**Verified live, all eight cards, not just the one in the screenshot:** looped through
+every Foundation-8 card — all eight now open at exactly 200px side-column width, `Who it
+serves` sitting under the Layer chip rather than above the track title. Zero console
+errors.
+
+### §5 — the dead hero anchor
+
+Confirmed no `id="sr-org-verticals"` exists anywhere in the file (grep, whole file) before
+changing anything. Fixed `href="#sr-org-verticals"` → `href="#sr-org-explorer"` on the
+hero's "Explore industries" link. Repo-wide grep for `sr-org-verticals`/`sr-org-fit`
+outside `pass/` found only: `.sr-org-fit-note` (a live, differently-scoped class inside
+`#sr-org-trust` — not the retired `#sr-org-fit` id/section, just a name that shares a
+word), one historical CSS comment, and several historical fix-register/tracker entries
+correctly recording the old section names. No other live dangling reference. Verified
+live: the link now scrolls to `#sr-org-explorer`.
+
+### §4 — the counts
+
+`claude/VIDEO-SCRIPTS-THREE-SURFACES-V2.md` did not exist at first read — flagged rather
+than guessed at, same cause as `docs/business/B2B-COVER-MAP.md` earlier this session (a
+project doc, not yet a repo file). Supplied and re-read; §4's rule quoted verbatim: "No
+count of roles, sectors or combinations, spoken or on screen. The 14 x 16 arithmetic is a
+good internal fact and a bad public one." Removed from the equation strip
+(`#sr-org-explorer`'s `.sr-org-eeq`, confirmed at line 108, matching the brief): `<i>14 to
+draw from</i>` and `<i>16 to draw from</i>` off the Role/Industry labels, ` · 224
+combinations` off the total. `<b>10</b><i>tracks per person</i>` stays — the promise, not
+inventory. Verified live: the strip renders "8 Foundation + 1 Role + 1 Industry = 10
+tracks per person," no orphaned CSS gap where the removed `<i>` sub-labels were.
+
+**Found while verifying, not named in the brief:** a second, separate occurrence of the
+same substance violation — `#sr-org-wall`'s own lede, "Fourteen protocols for
+responsibility, sixteen for environment" (organisations.html, `.sr-org-esecwide` inside
+the library section). Spelled out rather than numeralled, but it is the same 14×16
+breakdown the cited rule forbids "spoken or on screen." **Not touched** — the resolving
+instruction named exactly three phrases ("224 combinations", "14 to draw from", "16 to
+draw from") and this is a fourth, different location the brief itself never cited;
+extending the fix here without being asked would be exactly the kind of unrequested scope
+expansion this project's own passes have been told to avoid. Flagged for a decision rather
+than silently swept in.
+
+### §2 and §3 — reported only, per the brief's own "wait on Andre"
+
+**§2, the ring illustration.** Confirmed `.ringwrap`/`.ring`/`.ringmid` exist in
+`pass/PASS-F-assets/PASS-F-reference-explorer.html` (CSS lines 295–304, markup lines
+408–422) and that `organisations.html` has zero occurrences of any of the three classes —
+the equation strip is confirmed as what actually shipped in the ring's place. Nothing
+built; (a)/(b)/(c) is Andre's call.
+
+**§3, the Foundation 8 covers.** Confirmed `content/f8-tracks.js` carries no `cover`,
+`img`, `src` or `band` key on any of the eight track objects — every "cover" grep hit was
+the substring inside "Recovery," not a data field. Nothing built; the band-vs-portrait
+question (a)/(b)/(c) is Andre's call, and it gates §4's proposed curriculum merge in turn.
+
+**One fact worth having before that merge decision, surfaced while reading, not asked
+for:** `#sr-org-curriculum`'s own per-track grid (`organisations.html` line 199 onward)
+carries a **different** one-line description per track than `content/f8-tracks.js`'s own
+`lead` field — e.g. curriculum's Personal Transformation reads "States that arise within
+the person: anxiety, anger, overwhelm, grief, shame and shutdown," against f8-tracks.js's
+`lead`, "Everyday emotional states. A steadier place to choose." Genuinely different copy,
+not a duplicate — a straight delete-without-merging would lose it. The layer eyebrows
+(Capacity/Relational/etc.) are *not* at the same risk: the explorer's own F8 cards already
+render `t.layer` in both the plate and the detail panel's "Layer" field, just styled
+differently than the curriculum's small `<span>` eyebrow.
+
+**The subnav dangling-reference concern turned out not to apply.** Read
+`js/saferise-system.js`'s sticky pill-nav builder (~line 397 on): it is not a hardcoded
+list. It walks every `<section>` on the page live, reads each one's own eyebrow text by
+computed style (uppercase, letter-spacing, colour match), and builds the nav from
+whatever it finds. Deleting `#sr-org-curriculum` would remove its "THE COMPLETE
+CURRICULUM" pill automatically, with nothing left to go stale — reported so this doesn't
+cost a separate check later.
+
+### Files
+
+Modified: `organisations.html`, `js/saferise-org-explorer.js`, `docs/fix-register.md`.
+
+*Status:* §1, §4 (the three named phrases) and §5 complete and verified live. §2 and §3
+reported only, per instruction — nothing built for either. One new finding surfaced and
+left for a decision: the second "Fourteen... sixteen..." occurrence in the wall's own
+lede, not part of this pass's resolving instruction. **Not pushed.**
