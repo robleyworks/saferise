@@ -64,7 +64,6 @@
 transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
 </style>
 <meta charset="utf-8">
-<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SafeRise — Anxiety Reset Protocol</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1524,13 +1523,17 @@ var PAGE_PROTOCOL = (function () {
       var trows = trk && trk.protocols;
       if (!trows) continue;
       for (var si = 0; si < trows.length; si++) {
-        /* The slug is always the row's LAST element, not always index [6] —
-           t3-06 ("Belonging Gap") already carried a 7th field (a
-           Footer-correction-pass sentence, index [6]) before this pass
-           added slugs, so its slug landed at [7] instead. Every other row
-           is a normal 6-element row with the slug at [6]. Checking the
-           last element handles both without a special case here. */
-        if (trows[si][trows[si].length - 1] === slugParam) { foundTrack = trk; foundRow = trows[si]; break; }
+        /* SR-432 (PASS-H.md Part B3/D) · corrected. The comment this
+           replaced claimed the slug is always the row's LAST element —
+           false for all 30 rows, not just an edge case: every row in
+           content/tracks.js ends '...,'<slug>','<state>']', state being
+           one of Agitated/Unsteady/Numb/Steady (confirmed by grepping
+           every row before changing this). The slug is the SECOND-TO-LAST
+           element, uniformly, with no per-row exception. Checking
+           length-1 against a slug parameter could never match anything —
+           this is why ?slug= and therefore every /protocols/{slug} URL
+           reported "not found" before this fix. */
+        if (trows[si][trows[si].length - 2] === slugParam) { foundTrack = trk; foundRow = trows[si]; break; }
       }
     }
     if (!foundRow) {
@@ -1663,7 +1666,9 @@ function renderProtocolContent(pp) {
      own note — no new copy needed); the slug is the row's own last
      element, same rule protocol.html's own PAGE_PROTOCOL resolver above
      already follows for the same t3-06 reason. */
-  var slug = row[row.length - 1];
+  var slug = row[row.length - 2];  /* SR-432 (PASS-H.md Part B3) · was `- 1`, which read the
+       trailing state word (Agitated/Unsteady/Numb/Steady), not the slug — see the matching
+       fix and full explanation on the ?slug= resolver above. */
   var canonicalHref = 'https://thesaferiseprotocol.com/protocols/' + slug;
   var canonicalEl = document.querySelector('link[rel="canonical"]');
   if (!canonicalEl) {

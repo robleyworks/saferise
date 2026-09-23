@@ -1,6 +1,12 @@
 # thesaferiseprotocol.com
-# NOTE: pages still carry <meta name="robots" content="noindex, nofollow">.
-# Removing this file's restrictions has no effect until those are removed.
+# SR-432 (PASS-H.md Part A), 23 September 2026: the <meta name="robots"
+# content="noindex, nofollow"> tag that used to block every page site-wide
+# is now removed from the public marketing/content pages this file already
+# treats as indexable below. It remains, deliberately, on every page this
+# file also disallows (member surfaces, internal docs, auth) plus
+# resource.html and the two 301 stubs — see docs/fix-register.md's SR-432
+# entry for the full list and the one page (resource.html) left as an
+# open decision rather than a settled one.
 
 User-agent: *
 Allow: /

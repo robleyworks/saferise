@@ -15,14 +15,11 @@
      stylesheet this has to precede. Keep it equal to --bg for this page. -->
 <meta name="color-scheme" content="dark">
 <style>html,body{background:#080810}</style>
-<!-- SR-100 · deliberate: the domain is live but pre-launch, and this must
-     come off on soft-launch day, together with robots.txt at the site root.
-     robots.txt alone does not reliably keep a page out of an index when it
-     is linked from somewhere else, which is why both exist. -->
-<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- SR-370 (PASS-split-execute.md §5, docs/SEO-HEAD-TEMPLATE.md). noindex
-     above stays — this is prep for launch, not a launch decision itself. -->
+<!-- SR-432 (PASS-H.md Part A) · the noindex tag SR-100/SR-370 documented
+     here is removed — this is that soft-launch day. robots.txt at the
+     site root still needs its own equivalent update; not this file's
+     concern. -->
 <title>SafeRise Protocol — guided nervous system regulation</title>
 <meta name="description" content="Guided protocols for the states that are hardest to get through — anxiety, anger, overwhelm, shame, shutdown. Self-guided, ready when you need them.">
 <link rel="canonical" href="https://thesaferiseprotocol.com/">
@@ -32,6 +29,44 @@
 <meta property="og:description" content="Guided protocols for the states that are hardest to get through — anxiety, anger, overwhelm, shame, shutdown. Self-guided, ready when you need them.">
 <meta property="og:url" content="https://thesaferiseprotocol.com/">
 <meta name="twitter:card" content="summary_large_image">
+<!-- SR-432 (PASS-H.md Part B1/B2) · Organization + WebSite, the only two
+     structured-data blocks this pass puts on this page. Shape follows
+     docs/SEO-HEAD-TEMPLATE.md's own "Structured data" section rather than
+     inventing a second one, with two departures from that template,
+     both reported: placed on index.html only, per this brief's explicit
+     B1 instruction, not sitewide in a footer partial as the template's
+     own text says; and no `logo` — the template names
+     assets/brand/logo.png, which does not exist anywhere on the site (no
+     logo image asset at all; the nav mark is a styled Unicode glyph, not
+     a file), and a field has to be true of the page it sits on. Kenor
+     International B.V. (from privacy.html/terms.html, the only place it
+     exists on the site) is the parentOrganization, matching the
+     template's own nesting rather than a flat legalName. contactPoint's
+     email is the one already live sitewide (index.html's own footer,
+     accessibility.html, for-organisations.html). No sameAs: no social
+     profile of any kind is linked from this site, so there is nothing
+     true to list. No SearchAction on WebSite (not in the template at
+     all, and the brief separately forbids it) — there is no site search
+     endpoint. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "SafeRise Protocol",
+  "url": "https://thesaferiseprotocol.com/",
+  "parentOrganization": { "@type": "Organization", "name": "Kenor International B.V." },
+  "contactPoint": { "@type": "ContactPoint", "email": "contact@thesaferiseprotocol.com", "contactType": "customer support" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "SafeRise Protocol",
+  "url": "https://thesaferiseprotocol.com/",
+  "inLanguage": "en"
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {

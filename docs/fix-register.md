@@ -19471,3 +19471,168 @@ Modified: `content/meditation.js`, `assets/audio/meditation/{t1-05,t2-01,t3-02,t
 *Status:* complete and verified live, all five parts. Two judgement calls surfaced and
 deliberately left undecided rather than resolved here: `t1-06`'s hold (needs a listen) and
 `t1-03`'s ship-interim-or-wait question (Andre's call, per the brief). **Not pushed.**
+
+## SR-432 — make the site indexable, and give it structured data (PASS-H.md)
+
+One significant defect found and fixed mid-pass because Part B3/D's own verification
+depended on it (below), plus every part of the brief otherwise complete.
+
+### Part A — noindex removed from 14, plus one the brief missed
+
+The 14 named files, done exactly as specified: the tag deleted outright, not swapped for
+`index, follow`. **Found before editing:** the site actually carries the tag on **34**
+files, not 32 — `dashboard.html` and `protocol.html` are both real, live noindex pages the
+brief's enumeration never mentions on either side of the 14/17 split.
+- `protocol.html` — removed. Strong corroborating evidence, not a guess: the page already
+  builds its own canonical (`https://thesaferiseprotocol.com/protocols/{slug}`, SR-372) and
+  Part B3 explicitly says its "canonical half" already landed and only the structured-data
+  half was outstanding — both statements only make sense if this page was always meant to
+  be indexable. Part D's own verification (all 30 `/protocols/{slug}` URLs must resolve)
+  would be pointless to run against a page still marked noindex.
+- `dashboard.html` — left noindexed. No corroborating evidence either way from the brief,
+  but every fact available points the same way: it is the member's personal dashboard,
+  `robots.txt` already disallows `/dashboard` at the crawler level, and it is the same kind
+  of surface as the eight `member-*.html` pages the brief explicitly keeps closed. Treated
+  as an omission from the "keep" list, not a candidate for the "remove" list.
+
+`resource.html` left noindexed exactly as instructed — flagged, not decided, here.
+
+**§Verify recount:** 19 files still match `content="noindex`, not the brief's stated 18 —
+the one extra is `dashboard.html`, accounted for above. All 8 `member-*.html` still match.
+None of the 15 removed files (14 + `protocol.html`) contain a robots meta tag at all.
+
+Two now-stale comments referencing the removed tag were updated in the same edit, since
+they became actively wrong (not merely unused) the moment the tag left: `index.html`'s
+SR-100/SR-370 pair ("must come off on soft-launch day" / "noindex above stays") and
+`accessibility.html`'s LG-176 comment. `robots.txt`'s own header comment ("pages still
+carry noindex... removing this file's restrictions has no effect") was also updated — it is
+now false for the 15 pages this pass changes, and the brief's own opening line
+("`robots.txt` already documents this in its own header") points straight at it.
+
+### Part B — structured data
+
+**B1/B2, `index.html`.** Built the Organization + WebSite blocks against
+`docs/SEO-HEAD-TEMPLATE.md`'s own "Structured data" section rather than the brief's field
+list alone, since the brief itself says to follow the template where one exists — two
+departures from the template, both reported: placed on `index.html` only (the brief's
+explicit B1 instruction) rather than sitewide in a footer partial, and no `logo` (the
+template names `assets/brand/logo.png`, which does not exist anywhere on the site — no
+logo image asset of any kind; the nav mark is a styled Unicode glyph). `parentOrganization`
+holds Kenor International B.V. (from `privacy.html`/`terms.html`, the only place the legal
+name exists on the site) rather than a flat `legalName`, matching the template's own
+nesting. `contactPoint` uses `contact@thesaferiseprotocol.com`, verified live sitewide
+(`index.html`'s own footer, `accessibility.html`, `for-organisations.html`) before including
+it. No `sameAs` — grepped the whole site for any social-profile link and found none. No
+`SearchAction` — no site search endpoint, per the brief.
+
+**B3, `protocol.html`.** Found already fully built (SR-375) — `headline`, `description`,
+`about`, `isPartOf`, `publisher`, `inLanguage`, all populated from the same row data the
+page resolves, `Article` type, no medical schema type anywhere. The brief's premise ("only
+the canonical half landed") was stale; nothing needed adding. Confirmed live rather than
+trusted: loaded a resolved protocol, parsed `#srArticleJsonLd`'s content as JSON, and
+repeated it for a title containing a raw `&` (Powerlessness & Despair) to confirm
+`JSON.stringify` keeps the block valid regardless of special characters — it does, and
+grepping `content/tracks.js`'s 30 rows confirmed none has an empty title or description
+that would leave `headline`/`description` blank.
+
+**Rich Results Test could not be run** — Google's tool requires signing in to test via
+pasted code (the only mode that can reach `localhost`; the URL mode needs a publicly
+reachable address). Not attempted with credentials. Fell back to the brief's own stated
+alternative: offline validation — JSON parses cleanly for every block, live in two
+browsers-worth of pages, described above rather than merely asserted.
+
+### Part C — metadata gaps
+
+Added canonical + all four `og:*` fields to `getting-help.html`, `privacy.html`,
+`terms.html`, `refunds.html`; added the four `og:*` fields (canonical already present) to
+`accessibility.html`. `docs/SEO-HEAD-TEMPLATE.md`'s own `og:image`/`og:image:width`/
+`og:image:height` fields were **not** added to any of the five — the brief's own Part C
+list names exactly `og:title`/`og:description`/`og:url`/`og:type` and no others, and
+generating an `/assets/og/` image set is real asset work with nothing supplied for it this
+pass; the gap is real (the template calls for it) and reported rather than invented.
+Checked all 14 descriptions for duplicates: all fourteen are distinct and each describes
+its own page — none to report.
+
+### Part D — sitemap regenerated
+
+`node` is not available in this environment, so `scripts/gen-sitemap.js` could not run.
+Wrote `tools/gen-sitemap.py`, a Python equivalent that follows the same rules (mtime-derived
+`lastmod`, same priority tiers, destinations only) rather than hand-editing `sitemap.xml`.
+`tools/check-sitemap.py` (PASS F) was run against the result and, as expected, disagrees
+with it in exactly the ways this pass deliberately corrects — its own output is the
+clearest evidence for each:
+
+- **Two more bugs found in `scripts/gen-sitemap.js`'s own `EXCLUDE` regex**, beyond the
+  `/organisations` gap this session already knew about: it does not exclude `pricing` (which
+  301s to `/plans`, same as the `for-organisations` case it does handle) or
+  `reset-password` (an auth surface, noindexed, in the brief's own Part A "keep" list) —
+  both would be wrongly generated if the script ran as committed. Neither is in the
+  regenerated sitemap. Not fixed in `scripts/gen-sitemap.js` itself since that requires
+  `node` to verify the fix, which this environment cannot do — reported for whoever next
+  touches that file with `node` available.
+- The old `sitemap.xml` (48 URLs) had two entries that should never have been there: a bare
+  `/protocol` (the template shell — no `?slug=`/`?track=&protocol=` means
+  `PAGE_PROTOCOL.resolved` is false and no canonical is ever set; the 30 `/protocols/{slug}`
+  entries are the real destinations) and `/resource` (noindexed — directly contradicts this
+  same pass's own §Verify line, "is not noindex"). Both removed.
+- `galaxy-journey.html` and `galaxy-journey-v3.html` are real, non-noindexed, 200-serving
+  files that `scripts/gen-sitemap.js`'s literal regex would include — deliberately left out.
+  Grepped every `.html`/`.js`/`.css` file in the repo for "galaxy-journey" and checked
+  `_redirects`: nothing anywhere links to either page. Adding an orphaned, unlinked page to
+  a sitemap asks Google to index content nobody browsing the site can ever reach, which
+  is a different problem than the one this pass exists to solve.
+- `/organisations` added, per the explicit instruction carried into this pass from PASS F's
+  own finding.
+- All 30 `/protocols/{slug}` entries use `protocol.html`'s own `lastmod`, since the route is
+  virtual (no physical `protocols/*.html` file) and that is the file that actually serves
+  every one of them.
+
+**The defect that made Part D's own verification requirement impossible to satisfy without
+a fix:** `protocol.html` built both its `?slug=` resolver and its canonical/Article `slug`
+from `row[row.length - 1]` — the row's LAST element. Every one of the 30 rows in
+`content/tracks.js` ends `'<slug>','<state>']` (state being one of
+Agitated/Unsteady/Numb/Steady) — confirmed by grepping all 30, not assumed from one. The
+last element is always the state word, never the slug, for every row without exception —
+so `?slug=shame-dissolution` (or any real slug) could never match anything, and the
+"canonical" URL this pass's own Part B3 was meant to complete was actually shipping state
+words like `/protocols/Agitated` instead of `/protocols/anxiety-reset`. Both call sites
+fixed to `row.length - 2`. The old comment on the `?slug=` resolver claimed "the slug is
+always the row's LAST element... every other row is a normal 6-element row with the slug at
+[6]" — also false for all 30, not just the one exception (t3-06) it named; replaced with a
+comment recording what was actually checked. Verified live: `?slug=shame-dissolution` and
+`?slug=belonging-gap` (the row the old comment specifically called out) both now resolve to
+their real protocol instead of "Protocol not found"; the canonical on Anxiety Reset now
+reads `/protocols/anxiety-reset`, not `/protocols/Agitated`; the live `TRACKS[1..3]`
+object's own 30 rows, walked in-browser with the corrected index, produced 30 unique slugs
+identical to `content/tracks.js`'s own list.
+
+**§Verify:** 46 sitemap URLs checked — the 16 top-level pages and `protocol.html` itself via
+`curl` (200, zero noindex matches, all 17); all 30 protocol slugs via `curl` against
+`protocol.html?slug=`, which is the equivalent of the `/protocols/{slug}` 200 rewrite this
+dev server does not itself implement (200, all 30); and, beyond HTTP status, all 30 slugs'
+actual *content* resolution confirmed by walking the live `TRACKS` object in-browser with
+the corrected index and diffing the resulting slug list against `content/tracks.js`'s own —
+exact match, not merely "didn't 404."
+
+### Part E — noted, not changed
+
+`robots.txt`'s GPTBot/CCBot/Google-Extended blocks left exactly as they are. Restated here
+for Andre: this keeps the site out of AI-assistant answers (a plausible early-discovery
+channel for a domain with no history) without affecting Google Search ranking itself
+(Google-Extended governs Gemini training only). A live choice, not a default to accept by
+inertia.
+
+### Files
+
+Modified: `index.html`, `method.html`, `about.html`, `coming-soon.html`,
+`live-sessions.html`, `anxiety-reset.html`, `getting-help.html`, `accessibility.html`,
+`privacy.html`, `terms.html`, `refunds.html`, `personal-transformation.html`,
+`relationship-healing.html`, `professional-performance.html`, `protocol.html`,
+`robots.txt`, `sitemap.xml`, `docs/fix-register.md`.
+New: `tools/gen-sitemap.py`.
+
+*Status:* complete and verified live. The `protocol.html` slug-index defect is the one
+finding worth flagging above every other line in this entry — it silently broke every
+`/protocols/{slug}` URL on the site, in a way that produced no console error and no visibly
+broken page (the bare `?track=&protocol=` and no-params paths were unaffected, which is
+almost certainly why it went unnoticed). **Not pushed.**
