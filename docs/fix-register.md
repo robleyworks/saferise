@@ -19656,3 +19656,112 @@ entry changes for this addendum.
 Modified: `docs/fix-register.md`.
 
 *Status:* count reconciled, no functional change. **Not pushed.**
+
+## SR-435 — move the library to the top of the dashboard, and let its track panel
+collapse (PASS-L.md)
+
+SR-434 is PASS-I's own allocated ID (given in that brief's own text, not yet run when
+this pass started) — used SR-435 here instead of the next mechanical increment, to avoid
+a collision before PASS-I lands.
+
+### Part A — library moved above the header
+
+`#srLibrary` (search, chips, rail, carousel, `#srLockCta` — the whole section, unchanged
+internally) now renders first inside `<main>`, in its own new `<div class="shell">`, above
+`<header class="sr-dash-top sr-dash-hideme">`. Confirmed `.sr-dash-hideme` before moving
+anything: it has exactly one live trigger, `body.reading .sr-dash-hideme{display:none}`
+(`css/saferise-dashboard.css:425`), set by `openProtocol()` when a member opens a protocol
+— the header hides, not the library. With the library now ahead of the header in DOM order
+rather than behind it, hiding the header no longer moves the library at all (previously it
+did, and `openProtocol()`'s own `translateY` compensation existed to smooth exactly that
+jump) — a real behaviour change, harmless: the compensation code still runs, its computed
+delta is now ~0, and the `Math.abs(delta) > 1` guard already in place skips the animation
+when there is nothing to smooth.
+
+**The conflict, reported rather than resolved, per the brief:** the order comment at the
+top of the welcome/orientation block claimed new members see welcome → orientation → the
+Clearing, with "the orientation strip retires itself once the three steps are done."
+**Checked directly, not assumed: no code anywhere hides `.sr-begin` once its three cards
+are used.** Grepped the whole file for anything conditionally hiding it, and for the
+`.sr-begin-row`/`.sr-begin-card--panel`/`.sr-begin-card--resume` classes — nothing besides
+event listeners for the panel's own controls (resume/start-new). The self-retiring
+behaviour the old comment described did not exist before this pass and does not exist
+after it; moving the library changes nothing about it, because there was nothing there to
+change. The comment is corrected in the same edit, dated and SR-tagged, rather than left
+to claim an order and a behaviour the file no longer has (or, on the retiring-strip claim,
+never had).
+
+### Part B — collapse toggle
+
+One control, head of `.sr-dash-rail`, above the three track buttons, borderless (inset
+ring, matching `.sr-dash-carbtn`'s own F1 treatment). Drives a single custom property,
+`--sr-dash-railw`, set via JS on `.sr-dash-lib` (`212px` default via the CSS `var(...,
+212px)` fallback, `56px` when collapsed) — not two competing `grid-template-columns`
+rules, per the brief. `--per`/`--gap`/`--peek` on `.sr-dash-carwrap` are untouched; card
+width is already a percentage of the rail's sibling column, so a wider column at the same
+`--per` renders wider covers, confirmed live rather than assumed (see Verify). Persisted
+via the existing `Store` helper (`sr-railcollapsed-v1`, matching F3's saved-protocol-list
+key style) — not a second localStorage wrapper. `Store.get`/`.set` already wrap every read
+and write in try/catch internally; this pass's own code calls through them rather than
+adding a second layer, same rule F3 already follows.
+
+**One hoisting trap avoided on purpose:** `Store` is a `var` assigned by an IIFE call
+partway through this same script. The rail-collapse code is placed *after* that
+assignment (right below it), not beside the rail's click handler near the top of the IIFE
+where the rest of rail setup lives — calling `Store` from there would read it before
+assignment, the exact class of bug SR-417 already named and a later pass in this same
+session re-caught. Placed correctly the first time, not found and fixed after.
+
+Below 1000px: the toggle is hidden (`@media(max-width:1000px)`) and a stored `collapsed`
+is read but not applied — `refreshRailCollapse()` forces expanded whenever
+`matchMedia('(max-width:1000px)').matches`. Two listeners drive re-evaluation
+(`matchMedia`'s own `change` event, plus a plain `window resize` listener, redundant by
+design — matching the carousel's own existing `resize` listener a little earlier in this
+file). **Neither listener could be live-fired in this environment**: the browser tool
+used for verification changes viewport size via an emulation path that this session found
+does not dispatch either event reliably, confirmed by testing (see Verify) — `.matches`
+itself always read correctly when queried directly, only the change notification did not
+arrive. This is backstopped by CSS regardless of whether the JS listener ever fires: the
+existing `@media(max-width:1000px){.sr-dash-lib{grid-template-columns:1fr}}` rule
+(pre-existing, SR-418) overrides `grid-template-columns` outright at that width — a value
+that does not reference `--sr-dash-railw` at all — and the toggle's own hide rule is a
+separate, unconditional media query. So the *visual* requirement ("do not let it apply
+under 1000px") holds even on the (untested-in-this-environment, but standard, widely
+supported) assumption that a real browser's own window resize fires `resize` reliably,
+which every other resize-driven behaviour already shipped on this page (the carousel's
+`sync`) depends on being true.
+
+### Verify
+
+Six widths (1440/1200/1024/900/640/390), covers counts measured by geometry (bounding
+rects against the viewport, not read off `--per` alone) — **5/5/4/4/3/2 exactly, in both
+rail states at the three widths above 1000px**, zero horizontal overflow
+(`scrollWidth − innerWidth`) at every one of the twelve width/state combinations checked.
+Collapsing/expanding: `window.scrollY` and the carousel's `scrollLeft` read identically
+immediately before and after a synchronous click (`0` delta) — an earlier attempt at this
+same check, with real time between the before/after reads, showed drift, traced to the
+carousel's own continuous autoplay ("drift," pre-existing, unrelated) rather than anything
+this pass added; the synchronous same-tick check removes that noise. State survives a
+reload (checked: collapse, reload, still collapsed). **`localStorage` disabled was
+genuinely tested, not reasoned about**: overrode `window.localStorage` to throw
+`SecurityError` on access (matching Safari private browsing) on the already-loaded page,
+then exercised the toggle — it still switched states correctly, zero uncaught errors, zero
+console output. Search, the four filter chips and the saved heart all confirmed working in
+the collapsed state specifically (search debounces at 180ms — an early check at 150ms
+looked broken and was not; corrected and re-run) — the heart in particular measured
+28×28px before and after, the exact regression the brief named. `#srLockCta` confirmed
+live via `?srmock=locked:2` (SR-431's own dev-only hook): still opens with the real copy
+from its new position. The page's `.sr-crisis` modal (unrelated to protocol.html's own
+SR-417 banner, which this pass does not touch — out of scope, per the brief) and
+`#srLockCta` both confirmed present and undisturbed. Zero console errors across every
+check above. `protocol.html` untouched, confirmed by `git status` scoped to this pass's
+two files only.
+
+### Files
+
+Modified: `dashboard.html`, `css/saferise-dashboard.css`, `docs/fix-register.md`.
+
+*Status:* both parts complete and verified live. One thing reported rather than tested to
+certainty: the live-resize-crossing-1000px path for the two JS listeners could not be
+exercised in this environment (see Part B) — backstopped by CSS either way, but flagged
+rather than claimed as directly observed. **Not pushed.**

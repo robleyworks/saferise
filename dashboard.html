@@ -98,13 +98,95 @@
 
 <main id="main" hidden>
 
+<div class="shell">
+
+  <!-- ═══ LIBRARY ═══
+       SR-434 (PASS-L.md Part A) · moved here, above the welcome/orientation
+       header below, per Andre's 21 September request ("the collapse side
+       panel for the dashboard should be up top below saferise"). Needs its
+       own .shell — the header below opens one of its own after itself, so
+       without this wrapper the section would run full-bleed. -->
+  <section class="sr-dash-sec sr-keep" id="srLibrary">
+    <div class="sr-dash-sechead">
+      <p class="eyebrow">Your protocols</p>
+      <h2>Every state has a way through it.</h2>
+    </div>
+    <div class="sr-dash-panel">
+      <div class="sr-dash-carhead">
+        <p class="sr-dash-carkick">Browse all protocols</p>
+        <div class="sr-dash-carnav">
+          <p class="note" id="srTrackNote">Personal Transformation · included with your plan</p>
+          <span class="sr-dash-carcount" id="srCarCount">1 / 10</span>
+          <button class="sr-dash-carbtn sr-dash-carprev" aria-label="Previous protocols"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
+          <button class="sr-dash-carbtn sr-dash-carnext" aria-label="More protocols"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
+        </div>
+      </div>
+
+      <!-- SR-421 (PASS-dashboard-F2-F4.md Part F2) · a second, separate search
+           control — #srArrive above is the state router and is never reused,
+           moved or restyled for this. Searches title, subtitle and track name
+           across all three tracks; see refreshLibrary() in the script below. -->
+      <div class="sr-dash-search">
+        <svg class="sr-dash-searchico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+        <input type="search" id="srLibSearch" class="sr-dash-searchinput" placeholder="Search every track — try &lsquo;overwhelm&rsquo;, &lsquo;sleep&rsquo; or &lsquo;anger&rsquo;" aria-label="Search all protocols">
+      </div>
+      <div class="sr-dash-chips" role="group" aria-label="Filter protocols" id="srLibChips">
+        <button type="button" class="sr-dash-chip on" aria-pressed="true" data-f="all">All protocols</button>
+        <button type="button" class="sr-dash-chip" aria-pressed="false" data-f="inc">In my plan</button>
+        <button type="button" class="sr-dash-chip" aria-pressed="false" data-f="saved">Saved<span class="sr-dash-chipn" id="srSavedCount">0</span></button>
+        <button type="button" class="sr-dash-chip" aria-pressed="false" data-f="recent">Recently used</button>
+      </div>
+
+      <div class="sr-dash-lib">
+        <div class="sr-dash-rail" role="tablist" aria-label="Tracks">
+          <!-- SR-434 (PASS-L.md Part B) · collapse toggle, head of the rail,
+               above the three track buttons. Drives --sr-dash-railw on
+               .sr-dash-lib (set in JS) rather than a second competing
+               grid-template-columns rule. -->
+          <button type="button" class="sr-dash-railtoggle" id="srRailToggle" aria-expanded="true" aria-label="Collapse track list">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5l-7 7 7 7"/></svg>
+          </button>
+          <button class="sr-dash-railbtn on" role="tab" aria-selected="true" data-track="1" aria-label="Personal Transformation">
+            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="12" cy="7.2" r="3.1"/><path d="M5.6 20a6.4 6.4 0 0 1 12.8 0"/></svg>
+            <span><span class="sr-dash-railname">Personal Transformation</span><span class="sr-dash-railmeta">10 protocols</span></span>
+          </button>
+          <button class="sr-dash-railbtn" role="tab" aria-selected="false" data-track="2" aria-label="Relationship Healing">
+            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="8.4" cy="7.6" r="2.7"/><circle cx="15.6" cy="7.6" r="2.7"/><path d="M3 20a5.4 5.4 0 0 1 8.4-4.5"/><path d="M12.6 15.5A5.4 5.4 0 0 1 21 20"/></svg>
+            <span><span class="sr-dash-railname">Relationship Healing</span><span class="sr-dash-railmeta">10 protocols</span></span>
+          </button>
+          <button class="sr-dash-railbtn" role="tab" aria-selected="false" data-track="3" aria-label="Professional Performance">
+            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="8.6" cy="7.4" r="2.9"/><path d="M3 20a5.6 5.6 0 0 1 11.2 0"/><path d="M16.6 17.2V20M19.2 13.8V20M21.8 10.4V20"/></svg>
+            <span><span class="sr-dash-railname">Professional Performance</span><span class="sr-dash-railmeta">10 protocols</span></span>
+          </button>
+        </div>
+        <div class="sr-dash-carwrap">
+          <div class="sr-dash-carviewport" id="srCarViewport"><div class="sr-dash-carrow t-1" id="srCarRow"></div></div>
+        </div>
+      </div>
+
+      <!-- shown only while a track you do not own is selected -->
+      <div class="sr-dash-lockcta" id="srLockCta">
+        <p id="srLockText"></p>
+        <button class="sr-dash-addbtn sr-dash-addbtn--solid" id="srLockBtn"></button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
 <!-- ═══ WELCOME + ORIENTATION — one block. The hero is shorter and the
      orientation rail sits at its base, so the height is earned and the page
      steps down into the cream card rather than hitting it cold. ═══ -->
 <!-- ══════════ UPPER REGION ══════════
-     Order for a new member: welcome, orientation, then the Clearing with
-     "what's next" beside it. The orientation strip retires itself once the
-     three steps are done, at which point the Clearing leads the page. -->
+     SR-434 (PASS-L.md Part A), 23 September 2026 — SUPERSEDES the order this
+     comment used to record. The library (above) now leads the page; this
+     block — welcome, then "Begin here" — follows it. A new member now meets
+     the protocol browser before any orientation, which is a real change in
+     what a first session looks like: Andre asked for the move knowing this,
+     so it stands. The "orientation strip retires itself" line this replaced
+     described behaviour that was checked and does not exist anywhere in this
+     file — no code hides "Begin here" once its three cards are used. There
+     was nothing to break by moving it; see the PASS-L register entry. -->
 <header class="sr-dash-top sr-dash-hideme">
   <div class="shell">
 
@@ -241,66 +323,6 @@
 </header>
 
 <div class="shell">
-
-  <!-- ═══ LIBRARY ═══ -->
-  <section class="sr-dash-sec sr-keep" id="srLibrary">
-    <div class="sr-dash-sechead">
-      <p class="eyebrow">Your protocols</p>
-      <h2>Every state has a way through it.</h2>
-    </div>
-    <div class="sr-dash-panel">
-      <div class="sr-dash-carhead">
-        <p class="sr-dash-carkick">Browse all protocols</p>
-        <div class="sr-dash-carnav">
-          <p class="note" id="srTrackNote">Personal Transformation · included with your plan</p>
-          <span class="sr-dash-carcount" id="srCarCount">1 / 10</span>
-          <button class="sr-dash-carbtn sr-dash-carprev" aria-label="Previous protocols"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
-          <button class="sr-dash-carbtn sr-dash-carnext" aria-label="More protocols"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
-        </div>
-      </div>
-
-      <!-- SR-421 (PASS-dashboard-F2-F4.md Part F2) · a second, separate search
-           control — #srArrive above is the state router and is never reused,
-           moved or restyled for this. Searches title, subtitle and track name
-           across all three tracks; see refreshLibrary() in the script below. -->
-      <div class="sr-dash-search">
-        <svg class="sr-dash-searchico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
-        <input type="search" id="srLibSearch" class="sr-dash-searchinput" placeholder="Search every track — try &lsquo;overwhelm&rsquo;, &lsquo;sleep&rsquo; or &lsquo;anger&rsquo;" aria-label="Search all protocols">
-      </div>
-      <div class="sr-dash-chips" role="group" aria-label="Filter protocols" id="srLibChips">
-        <button type="button" class="sr-dash-chip on" aria-pressed="true" data-f="all">All protocols</button>
-        <button type="button" class="sr-dash-chip" aria-pressed="false" data-f="inc">In my plan</button>
-        <button type="button" class="sr-dash-chip" aria-pressed="false" data-f="saved">Saved<span class="sr-dash-chipn" id="srSavedCount">0</span></button>
-        <button type="button" class="sr-dash-chip" aria-pressed="false" data-f="recent">Recently used</button>
-      </div>
-
-      <div class="sr-dash-lib">
-        <div class="sr-dash-rail" role="tablist" aria-label="Tracks">
-          <button class="sr-dash-railbtn on" role="tab" aria-selected="true" data-track="1">
-            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="12" cy="7.2" r="3.1"/><path d="M5.6 20a6.4 6.4 0 0 1 12.8 0"/></svg>
-            <span><span class="sr-dash-railname">Personal Transformation</span><span class="sr-dash-railmeta">10 protocols</span></span>
-          </button>
-          <button class="sr-dash-railbtn" role="tab" aria-selected="false" data-track="2">
-            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="8.4" cy="7.6" r="2.7"/><circle cx="15.6" cy="7.6" r="2.7"/><path d="M3 20a5.4 5.4 0 0 1 8.4-4.5"/><path d="M12.6 15.5A5.4 5.4 0 0 1 21 20"/></svg>
-            <span><span class="sr-dash-railname">Relationship Healing</span><span class="sr-dash-railmeta">10 protocols</span></span>
-          </button>
-          <button class="sr-dash-railbtn" role="tab" aria-selected="false" data-track="3">
-            <svg class="sr-dash-railico" viewBox="0 0 24 24"><circle cx="8.6" cy="7.4" r="2.9"/><path d="M3 20a5.6 5.6 0 0 1 11.2 0"/><path d="M16.6 17.2V20M19.2 13.8V20M21.8 10.4V20"/></svg>
-            <span><span class="sr-dash-railname">Professional Performance</span><span class="sr-dash-railmeta">10 protocols</span></span>
-          </button>
-        </div>
-        <div class="sr-dash-carwrap">
-          <div class="sr-dash-carviewport" id="srCarViewport"><div class="sr-dash-carrow t-1" id="srCarRow"></div></div>
-        </div>
-      </div>
-
-      <!-- shown only while a track you do not own is selected -->
-      <div class="sr-dash-lockcta" id="srLockCta">
-        <p id="srLockText"></p>
-        <button class="sr-dash-addbtn sr-dash-addbtn--solid" id="srLockBtn"></button>
-      </div>
-    </div>
-  </section>
 
   <!-- ═══ THE JOURNEY WITHIN EACH PROTOCOL ═══
        Structure lifted from the Personal Transformation page (.journey / .jcols / .jopt).
@@ -1749,6 +1771,55 @@
       }
     };
   })();
+
+  /* ══════════ SR-434 (PASS-L.md Part B) · RAIL COLLAPSE ══════════
+     Placed here, after Store's own definition just above, rather than
+     beside the rail's click handler near the top of this IIFE where the
+     rest of the rail setup lives — Store is a `var` assigned by the IIFE
+     call directly above; reading it before that assignment executes is the
+     hoisting trap SR-417 already named and a later pass re-caught, so this
+     block waits until Store genuinely exists. Store.get/set already wrap
+     every read and write in try/catch internally (see above) — matched,
+     not duplicated, same as F3's saved-protocol list already does. */
+  var RAIL_COLLAPSED_KEY = 'sr-railcollapsed-v1';
+  var libEl = document.querySelector('.sr-dash-lib');
+  var railEl = document.querySelector('.sr-dash-rail');
+  var railToggle = document.getElementById('srRailToggle');
+  var RAIL_BREAKPOINT = window.matchMedia('(max-width:1000px)');
+
+  function applyRailCollapsed(collapsed){
+    if(!libEl || !railEl || !railToggle) return;
+    if(collapsed){
+      libEl.style.setProperty('--sr-dash-railw', '56px');
+      railEl.classList.add('sr-dash-railcollapsed');
+    } else {
+      libEl.style.removeProperty('--sr-dash-railw');
+      railEl.classList.remove('sr-dash-railcollapsed');
+    }
+    railToggle.setAttribute('aria-expanded', String(!collapsed));
+    railToggle.setAttribute('aria-label', collapsed ? 'Expand track list' : 'Collapse track list');
+  }
+  // ⚠ below 1000px the toggle is hidden and the rail is the horizontal chip
+  // row SR-418 already builds — read the stored value but do not let it
+  // apply there, so a collapsed desktop session never hands a phone an
+  // icon-only chip row.
+  function refreshRailCollapse(){
+    applyRailCollapsed(RAIL_BREAKPOINT.matches ? false : !!Store.get(RAIL_COLLAPSED_KEY, false));
+  }
+  if(railToggle){
+    railToggle.addEventListener('click', function(){
+      var willCollapse = railToggle.getAttribute('aria-expanded') === 'true';
+      applyRailCollapsed(willCollapse);
+      Store.set(RAIL_COLLAPSED_KEY, willCollapse);
+    });
+  }
+  refreshRailCollapse();
+  RAIL_BREAKPOINT.addEventListener('change', refreshRailCollapse);
+  // Redundant with the listener above by design, same as the carousel's own
+  // window resize listener a little further up this file (`sync` on line
+  // ~1181) — a plain resize is the one signal every resize path is
+  // guaranteed to fire, matchMedia's own "change" event included.
+  window.addEventListener('resize', refreshRailCollapse);
 
   var K_ENTRIES = 'sr.journal.entries';
   var K_RUNS    = 'sr.record.runs';

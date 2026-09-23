@@ -171,7 +171,15 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
 .sr-dash-panel{background:var(--band);border:1px solid var(--hair);border-radius:14px;padding:28px var(--pad)}
 
 /* ============ library ============ */
-.sr-dash-lib{display:grid;grid-template-columns:212px 1fr}
+/* SR-434 (PASS-L.md Part B) · --sr-dash-railw is the single property that
+   drives the rail/carousel split — JS sets it to 56px when collapsed, 212px
+   (or unset, same default) when expanded. One rule, not two competing
+   grid-template-columns declarations. The carousel's own --per/--gap/--peek
+   (below) are untouched: card width is already a % of this column's own
+   width, so a wider 1fr column at the same --per correctly renders wider
+   covers, not more of them — exactly the effect this pass wants. */
+.sr-dash-lib{display:grid;grid-template-columns:var(--sr-dash-railw,212px) 1fr;
+  transition:grid-template-columns .32s cubic-bezier(.22,.61,.36,1)}
 /* SR-418 (PASS-dashboard-panel-and-carousel.md Part F1) · was a 1px
    var(--hair) border, the separation the standing rule now forbids (a
    surface step, never a border — see CLAUDE.md's CSS namespacing rule).
@@ -188,6 +196,31 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
 .sr-dash-railname{display:block;font-size:13px;line-height:1.35}
 .sr-dash-railbtn.on .sr-dash-railname{color:var(--text)}
 .sr-dash-railmeta{display:block;font-size:13px;color:var(--text3);margin-top:3px}
+
+/* SR-434 (PASS-L.md Part B) · the collapse toggle, head of the rail, above
+   the three track buttons. Borderless per the standing rule — inset ring,
+   same treatment F1 already gave .sr-dash-carbtn (line ~257), not a border.
+   Hidden entirely at/below 1000px: the rail becomes a horizontal chip row
+   there (below), and collapsing a chip row means nothing. */
+.sr-dash-railtoggle{align-self:flex-start;width:28px;height:28px;flex:0 0 28px;
+  padding:0;box-sizing:border-box;border-radius:50%;border:0;
+  box-shadow:inset 0 0 0 1px var(--hair);background:rgba(8,8,12,.9);
+  color:var(--text2);cursor:pointer;display:grid;place-items:center;
+  margin-bottom:8px;transition:box-shadow .18s,color .18s}
+.sr-dash-railtoggle:hover{box-shadow:inset 0 0 0 1px var(--gold);color:var(--gold)}
+.sr-dash-railtoggle:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.sr-dash-railtoggle svg{width:12px;height:12px;stroke:currentColor;fill:none;
+  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform .32s cubic-bezier(.22,.61,.36,1)}
+.sr-dash-railtoggle[aria-expanded="false"] svg{transform:rotate(180deg)}
+/* Scoped above 1000px only — below it the rail is the horizontal chip row
+   this file already builds (SR-418), and .sr-dash-railmeta there is already
+   hidden by that breakpoint's own rule regardless of this class. */
+@media(min-width:1001px){
+  .sr-dash-rail.sr-dash-railcollapsed .sr-dash-railname,
+  .sr-dash-rail.sr-dash-railcollapsed .sr-dash-railmeta{display:none}
+}
+@media(max-width:1000px){.sr-dash-railtoggle{display:none}}
 
 /* SR-421 (PASS-dashboard-F2-F4.md Part F2) · library search, a second and
    separate control from #srArrive (the state router — never reused, per the
