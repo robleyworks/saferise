@@ -364,12 +364,21 @@
     document.body.appendChild(rail);
     var railIn = rail.querySelector('.sr-rail-in');
 
+    /* SR-456 (PASS-AK §3) · placed from the nav's RENDERED height, not a
+       constant. .theme-bar is index.html's bar; every other page has .nav,
+       which this used to miss, so the rail sat at a fixed 70px: 17px into
+       a 79px nav on desktop, and across the link rows of the 235px nav a
+       phone wraps to. A ResizeObserver catches the nav changing height
+       without a window resize (fonts landing, the nav re-wrapping). Below
+       640px the rail is hidden in css/saferise-system.css instead — see
+       the #sr-rail rule. */
+    var bar = document.querySelector('.theme-bar') || document.querySelector('.nav');
     function place() {
-      var bar = document.querySelector('.theme-bar');
-      rail.style.top = ((bar ? bar.offsetHeight : 60) + 10) + 'px';
+      rail.style.top = ((bar ? bar.getBoundingClientRect().height : 60) + 10) + 'px';
     }
     place();
     window.addEventListener('resize', place);
+    if (bar && typeof ResizeObserver === 'function') new ResizeObserver(place).observe(bar);
 
     /* The platform writes its section eyebrows inline rather than with a
        shared class, so match on what they look like: short, uppercase,

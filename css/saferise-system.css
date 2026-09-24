@@ -660,6 +660,12 @@ details.sr-q .sr-a a{color:var(--primary2)}
   pointer-events:none;opacity:0;transform:translateY(-8px);
   transition:opacity .35s,transform .35s}
 #sr-rail.sr-on{opacity:1;transform:none}
+/* SR-456 (PASS-AK §3) · hidden at <=640px, the same breakpoint as the
+   pathway underlay. Placed below the nav's rendered height (see place() in
+   js/saferise-system.js) it would sit at 245px on a 390 phone — nav plus
+   pill a third of the screen, permanently. It is a wayfinding convenience;
+   the phone already has the nav. */
+@media(max-width:640px){#sr-rail{display:none}}
 #sr-rail .sr-rail-in{pointer-events:auto;display:flex;gap:4px;padding:5px;
   max-width:min(94vw,940px);overflow-x:auto;scrollbar-width:none;
   border-radius:var(--sr-r-pill);background:rgba(17,17,32,.82);backdrop-filter:blur(18px);
