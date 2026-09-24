@@ -22,9 +22,14 @@
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
 
   /* SR-429 · I11 Manufacturing, I12 Security Operations and R01 People
-     Leadership are missing assets (§4b's "no substitute" rule — reported
-     in the pass, not silently patched with an unrelated photograph). */
-  var MISSING_COVERS = { I11: 1, I12: 1, R01: 1 };
+     Leadership were missing assets (§4b's "no substitute" rule — reported
+     in the pass, not silently patched with an unrelated photograph).
+     SR-447 (PASS-AE §2) · all three were supplied (assets/org/covers/
+     i11, i12, r01, matching content/b2b-protocols.js's own cover paths), so
+     the map is empty. It is kept, not deleted: the typographic-plate
+     fallback below is still the right answer the next time a cover is
+     missing — add its id here rather than pointing at an unrelated photo. */
+  var MISSING_COVERS = {};
   var LAYER_CLASS = {
     Capacity: 'sr-org-elay-capacity', Relational: 'sr-org-elay-relational',
     Application: 'sr-org-elay-application', Substrate: 'sr-org-elay-substrate',
