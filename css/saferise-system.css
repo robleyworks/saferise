@@ -5109,17 +5109,6 @@ p.sr-org-gold-copy{margin-top:32px;color:var(--gold-lt)!important;font-family:'C
    rail + chips design) and .sr-org-pathmeasure. Confirmed dead the same way
    as the block above — zero matches in organisations.html.
 
-/* -- privacy / two-space photo cards -- */
-.sr-org-two-space{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.sr-org-photo-cards article{overflow:hidden}
-.sr-org-photo-cards img{width:100%;aspect-ratio:16/10;object-fit:cover}
-.sr-org-photo-cards>article>div{padding:22px}
-.sr-org-photo-cards h3{font-size:1.4rem;margin:8px 0 14px}
-.sr-org-photo-cards li{padding:8px 0;border-top:1px solid var(--hair);font-size:var(--fs-body);color:var(--text2);
-  transition:padding-left .3s}
-.sr-org-photo-cards li:first-child{border-top:0}
-.sr-org-photo-cards li:hover{padding-left:10px;color:var(--text)}
-@media(max-width:820px){.sr-org-two-space{grid-template-columns:1fr}}
 
 /* -- verticals grid (7, one wide) -- */
 .sr-org-vertical-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -5704,8 +5693,11 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-ermore[aria-expanded="true"]::after{content:" \2013"}
 
 /* -- illustrated benefits (§3a①, three line icons) -- */
-/* SR-436 §4 · now in #sr-org-privacy, above the two photo cards — was
-   margin-top:s2 under the Base head it used to follow. */
+/* SR-436 §4 moved these cards out of the Base (margin-top:s2 under the Base
+   head they used to follow) into "One method, two spaces". SR-442 merged that
+   section into #sr-org-included and kept two of the three cards; they now sit
+   under #sr-org-included's head, above the containment diagram. Two columns
+   there (SR-443, below). */
 .sr-org-ebenefits{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0 0 var(--sr-org-s6)}
 /* SR-443 (PASS-V §8) · the merged pair in #sr-org-included (SR-442) is two
    cards, not three: two columns there, so no empty third column. Scoped by
