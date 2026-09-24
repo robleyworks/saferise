@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — member-record.html · SR-444 (PASS-X.md §1)
+  One template, two routes: ?r=chosen (The Chosen Self, default) and
+  ?r=decisions (Your Decisions); #chosen / #decisions also work.
+  Chrome copied from member-frameworks.html. Page-specific rules are sr-mi-*
+  in css/saferise-system.css.
+
+  DEVICE-ONLY. Entries live in this browser's localStorage under
+  'sr.record.chosen' / 'sr.record.decisions' — never sent anywhere. Same Store
+  as protocol.html's journal and js/saferise-decision.js: a write probe and an
+  in-memory fallback, so a private window or blocked site data (both throw)
+  still renders and still accepts writing for the life of the page.
+  Not the same thing as js/saferise-decision.js's 'sr.decision.<protocol>'
+  keys: those are per-protocol worksheets with named fields, not this list.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first — copied from
+     member-frameworks.html, as is everything above <main>. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#0A0A0F}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Your record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+<link rel="stylesheet" href="css/saferise-rail.css">
+<link rel="stylesheet" href="css/saferise-system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="sr-dash-navrail" id="srRail" aria-label="Sections"></nav>
+
+<main id="main" class="shell">
+
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="dashboard.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Dashboard
+  </a>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<header class="sr-fw-mast sr-mi-mast" style="display:block">
+  <span class="eyebrow">Your record</span>
+  <h1 id="srRecTitle">The Chosen Self</h1>
+  <p class="sr-fw-stance" id="srRecLede">The identity you keep choosing, in your own words. Nothing here was written by SafeRise, and nothing here is scored.</p>
+</header>
+
+<div class="sr-mi-page">
+  <div class="sr-mi-panel sr-mi-panel--sage">
+    <p><strong>This record stays on this device.</strong> It is not uploaded, not backed up and not readable by anyone at SafeRise. Clearing your browser data removes it. Export it if you want to keep it.</p>
+    <p id="srRecVolatile" hidden>Right now this browser is not keeping anything &mdash; a private window or blocked site data &mdash; so what you write here lasts only until this page closes.</p>
+  </div>
+
+  <div id="srRecEmpty" class="sr-mi-panel" hidden>
+    <p><strong>Nothing recorded yet.</strong></p>
+    <div id="srRecEmptyBody"></div>
+  </div>
+
+  <div class="sr-mi-rec" id="srRecList" aria-live="polite"></div>
+  <div class="sr-mi-row" id="srRecMoreRow" hidden><button type="button" class="sr-mi-link" id="srRecMore">Show all</button></div>
+
+  <div class="sr-mi-panel" id="srRecCompose">
+    <label class="eyebrow" for="srRecField" id="srRecFieldLab">Write an entry</label>
+    <textarea class="sr-mi-field" id="srRecField"></textarea>
+    <div class="sr-mi-row">
+      <button type="button" class="sr-mi-btn" id="srRecSave">Write an entry</button>
+    </div>
+    <p class="sr-mi-small">Protocols will offer to bring you here when they end. You can also write one at any time &mdash; nothing has to prompt it.</p>
+  </div>
+
+  <div class="sr-mi-foot sr-mi-row">
+    <button type="button" class="sr-mi-link" id="srRecExport">Export as a text file</button>
+    <button type="button" class="sr-mi-link sr-mi-link--danger" id="srRecDelete">Delete this record</button>
+  </div>
+</div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var ROUTES = {
+    chosen: {
+      key: 'sr.record.chosen', title: 'The Chosen Self',
+      lede: 'The identity you keep choosing, in your own words. Nothing here was written by SafeRise, and nothing here is scored.',
+      button: 'Write an entry', file: 'the-chosen-self',
+      /* the brief's empty-state explainer is written for decisions; nothing
+         is invented for this record in its place (reported, SR-444) */
+      empty: ''
+    },
+    decisions: {
+      key: 'sr.record.decisions', title: 'Your Decisions',
+      lede: 'The choices you made once the pattern was no longer making them. One line each is enough.',
+      button: 'Record a decision', file: 'your-decisions',
+      empty: '<p>A decision goes here when you notice you made one &mdash; not a resolution, and not something you are going to do. Something you already did differently.</p>' +
+             '<p class="sr-mi-quote">“Said no to the Thursday thing and did not explain why.”</p>'
+    }
+  };
+  function routeFromUrl() {
+    var m = /[?&]r=(chosen|decisions)\b/.exec(location.search) || /^#(?:r=)?(chosen|decisions)$/.exec(location.hash);
+    return m ? m[1] : 'chosen';
+  }
+  var R = ROUTES[routeFromUrl()];
+
+  /* same Store as protocol.html's journal and js/saferise-decision.js */
+  var Store = (function () {
+    var mem = {}, ok = false;
+    try { var k = 'sr.probe'; localStorage.setItem(k, '1'); localStorage.removeItem(k); ok = true; } catch (e) { ok = false; }
+    return {
+      persistent: ok,
+      get: function (key) {
+        try { var raw = ok ? localStorage.getItem(key) : mem[key]; var v = raw ? JSON.parse(raw) : []; return Array.isArray(v) ? v : []; }
+        catch (e) { return []; }
+      },
+      set: function (key, val) {
+        var raw = JSON.stringify(val);
+        try { if (ok) localStorage.setItem(key, raw); else mem[key] = raw; } catch (e) { mem[key] = raw; }
+      },
+      remove: function (key) {
+        try { if (ok) localStorage.removeItem(key); } catch (e) {}
+        delete mem[key];
+      }
+    };
+  })();
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function fmt(iso) {
+    var d = new Date(iso);
+    return isNaN(d) ? '' : d.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  document.title = 'SafeRise — ' + R.title;
+  $('srRecTitle').textContent = R.title;
+  $('srRecLede').textContent = R.lede;
+  $('srRecSave').textContent = R.button;
+  $('srRecFieldLab').textContent = R.button;
+  $('srRecEmptyBody').innerHTML = R.empty;
+  $('srRecVolatile').hidden = Store.persistent;
+
+  var showAll = false;
+  function render() {
+    var list = Store.get(R.key).slice().sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
+    $('srRecEmpty').hidden = list.length > 0;
+    var shown = showAll ? list : list.slice(0, 3);
+    $('srRecList').innerHTML = shown.map(function (e) {
+      return '<article class="sr-mi-entry">' +
+        '<div class="sr-mi-entryhead"><span class="eyebrow">' + esc(e.origin || 'Unprompted') + '</span>' +
+        '<span class="sr-mi-entrydate">' + esc(fmt(e.date)) + '</span></div>' +
+        (e.prompt ? '<p class="sr-mi-entryprompt">' + esc(e.prompt) + '</p>' : '') +
+        '<p class="sr-mi-entrytext">' + esc(e.text) + '</p></article>';
+    }).join('');
+    $('srRecMoreRow').hidden = showAll || list.length <= 3;
+  }
+
+  $('srRecSave').addEventListener('click', function () {
+    var text = $('srRecField').value.trim();
+    if (!text) { $('srRecField').focus(); return; }
+    var list = Store.get(R.key);
+    list.push({ date: new Date().toISOString(), origin: 'Unprompted', text: text });
+    Store.set(R.key, list);
+    $('srRecField').value = '';
+    render();
+  });
+  $('srRecMore').addEventListener('click', function () { showAll = true; render(); });
+
+  $('srRecExport').addEventListener('click', function () {
+    var list = Store.get(R.key).slice().sort(function (a, b) { return (a.date || '').localeCompare(b.date || ''); });
+    var lines = [R.title, 'Exported ' + fmt(new Date().toISOString()), ''];
+    list.forEach(function (e) {
+      lines.push(fmt(e.date) + ' · ' + (e.origin || 'Unprompted'));
+      if (e.prompt) lines.push(e.prompt);
+      lines.push(e.text, '');
+    });
+    if (!list.length) lines.push('Nothing recorded yet.');
+    var blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = R.file + '.txt';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+
+  $('srRecDelete').addEventListener('click', function () {
+    if (!window.confirm('Delete ' + R.title + ' from this device? This cannot be undone. Export it first if you want a copy.')) return;
+    Store.remove(R.key);
+    showAll = false;
+    render();
+  });
+
+  render();
+})();
+</script>
+
+<script src="js/saferise-auth.js"></script>
+<script src="js/saferise-access.js"></script>
+<script src="js/saferise-rail.js"></script>
+<script>SafeRiseRail.render('record');</script>
+</body>
+</html>
