@@ -22270,3 +22270,102 @@ under the sandbox (`tools/serve.py: Operation not permitted`), so the images wer
    low-key sets go muddy at `.62`: sex-and-intimacy (mean 0.12, darkest 0.05) and
    sleep-and-recovery (0.15). The others read clearly. This is a tuning pass with an
    in-page visual check, not done here.
+
+## SR-459 — dashboard track rail: height cap, per-track icons, live/dev grading (PASS-AO)
+
+24 September 2026. `css/saferise-dashboard.css` and `dashboard.html` only. No push.
+
+### What changed
+
+- **§1** — `.sr-dash-rail` capped at `calc(4 * 62px)`, with `overflow-y:auto`, the
+  scrollbar hidden, `overscroll-behavior:contain` and the 88% bottom mask.
+- **§2** — `TRACKICON`, `TRACKTK` and `trackIcon()` added beside `addDevTracksToRail()`,
+  which now uses `trackIcon(k)` and sets `--tk` inline on each dev button. The three
+  static live buttons carry their TRACKICON glyph and `style="--tk:var(--sr-track0N)"`.
+- **§3** — the `border-left` stripe became `box-shadow:inset 2px 0 0 var(--tk,var(--accent))`.
+  The flat `opacity:.5` on dev buttons became the brief's graded rules.
+- **§4** — the three `10 protocols` metas are now empty in the markup.
+  `addDevTracksToRail()` fills them from `TRACKMETA[n].state`.
+
+### Differs from the brief, adapted
+
+1. **§1 is scoped in `@media(min-width:1001px)`.** It would leak into the chip row
+   otherwise. The `max-width:1000px` block resets neither `max-height` nor the mask, so
+   the mask would have faded the bottom 12% of every chip.
+2. **`.sr-dash-railtoggle` is made `position:sticky;top:0` in the same block.** The brief
+   doesn't mention that the toggle is a child of the rail. Without sticky, capping and
+   scrolling the rail scrolls the toggle out of view.
+3. **§3a's inset stripe leaked into the chip row.** Before, `.on` set only
+   `border-left-color`, which the chip row's `border:0` made invisible. The new
+   `box-shadow` has nothing to cancel it, so `box-shadow:none` was added to that block's
+   existing `.sr-dash-railbtn.on` rule.
+4. **TRACKMETA has no slug for tracks 1–3.** Its keys are the numbers 1, 2 and 3, so the
+   brief's hardcoded 1→personal-transformation mapping was needed. It lives in the static
+   markup, recorded in an HTML comment above the toggle.
+
+### Verified
+
+Checked in a self-contained harness: the dashboard's CSS, the system `:root` tokens, the
+real `.sr-dash-lib` markup and the real TRACKMETA/TRACKICON/`addDevTracksToRail` source
+extracted verbatim. The preview server can't read the repo under the sandbox, and the pane
+loads pages as bare snapshots. The carousel is a fixed 380px stand-in, since `render()` was
+not run.
+
+- **1440×1000:** the rail computes 248px, `scrollHeight` 868, and scrolls. `.sr-dash-lib`
+  is 388, the same as the carousel column, so the carousel does not grow.
+- **The collapse toggle:** the column goes to 56px, the rail stays 248 and scrolls
+  (`scrollHeight` 636), and dev buttons measure 48px each. While scrolled, the sticky
+  toggle holds at offset 0 inside the rail.
+- **900px:** row direction, `max-height:none`, mask `none`, `.on` `box-shadow:none`,
+  toggle `display:none`.
+- **Contrast**, for `--text3` #83818E on the rail's .012 tint:
+  - over `--band` #0E0E1A (the panel the rail sits in): **4.90:1**
+  - over page `--bg`: 5.00:1
+  - `rd-soft`: 5.01:1
+  - the old `opacity:.5`: 2.12:1
+  - §3c is kept.
+- `grep -n "protocols<"` finds no hit in a `sr-dash-railmeta` span. No added line
+  carries a border.
+
+### Verification miss, kept deliberately
+
+The brief's check that the rail "shows four" **does not hold as written**. The 248px cap
+holds the 36px toggle, then Personal Transformation (96px), Relationship Healing (61.5) and
+the top of Professional Performance (79.1), under the mask. That is about 2½ live rows.
+The cause is report item 2 below, and the brief says not to change the multiplier. §1 was
+kept rather than reverted, since reverting restores the uncapped 868px column. Andre's call.
+
+### Reported, not fixed
+
+1. **Accent collisions.** Confirmed: `--sr-track01` #D4A843 equals money-shift #D4A843, and
+   `--sr-track02` is #E87090 against sex-and-intimacy's #D4879A (raw ΔE76 18). In the rail
+   the grade separates them. A live stroke rendered at .9 is #C0993F, against the dev
+   mix at .72, #7E6F55 (ΔE76 39). Relationship Healing is #D26684 against #7E6472
+   (ΔE76 35). They read as "the same hue, one muted". The two most alike glyph shapes
+   (two linked C's, two overlapping circles) also sit in this same warm pair.
+2. **Button height.** One line: 61.5px. Two lines ("Professional Performance",
+   "Entrepreneur's Journey"): 79.1px. Personal Transformation: **96.1px**, because its name
+   and its new meta both wrap. Collapsed: 48px.
+3. **§4 overflow, and a stale plan state.**
+   - "included with your plan" wraps to two lines at 212px. Nothing overflows, but that
+     wrap is why row 1 is 96px. "not on your plan yet" fits on one line.
+   - `TRACKMETA[n].state` is static, so a member entitled to Track 2 or 3 is still told
+     "not on your plan yet". `#srTrackNote` has had the same issue since before this
+     pass.
+   - The case differs from the dev buttons' "In development".
+4. **Scroll on toggle.** Not reset. The rail was scrolled to 300, then collapsed: 207
+   (clamped to the shorter content). Expanded again: 725. The position is kept or
+   clamped, never returned to the top.
+5. **Glyphs at 23px** (rasterised at true size with the live stroke, colour and opacity,
+   then enlarged):
+   - hold clearly: professional-performance (bars), sleep-and-recovery (moon),
+     embodied-nutrition (leaf), entrepreneurs-journey (flag), elevation-series (the
+     r=1 summit dot is near the limit).
+   - hold: personal-transformation (the inner arc and dot are busy), money-shift (the
+     exchange arrowheads are 2px), executive-presence (reads as a generic person glyph
+     again).
+   - weak: strength-and-return reads as a refresh ring, since the arrowhead is too small
+     to carry the "return". addiction-recovery (two curves over a base) reads as a
+     hanger or tent. relationship-healing and sex-and-intimacy are both "two linked
+     loops" in the same warm pair.
+   - Not redrawn.
