@@ -21861,3 +21861,178 @@ your plan yet"), even when `ENTITLED` says the member owns the track. On localho
        on). Money Shift's `#D4A843` equals `--sr-track01`.
    - If the nine ever take colour on the dashboard, the token set needs twelve
      `--sr-trackNN` values, chosen once and read by all three surfaces.
+
+---
+
+## SR-455 — the Delivery grid, the pathway stack, the plant underlay, the nav over the chapter rail (PASS-AJ.md + §4 from the instruction)
+
+24 September 2026. §1 `d6571bc`, §2 `1bf309b`, §3 `3344931`, §4 `1d5c314`. §1 here supersedes
+PASS-AB §1, which has not run; the rest of PASS-AB still stands.
+
+### §1 — Delivery photo full-viewport: a comment was eating the rule
+
+**Diagnosis at 1440, before any change:**
+
+| Property | Value |
+|---|---|
+| `#sr-org-delivery .sr-org-delivery` `display` | `block` |
+| `grid-template-columns` | `none` |
+| Figure size | 1132×1415 |
+| Figure's actual parent | `div.sr-org-wrap.sr-org-delivery` — correct; `>figure` does match |
+
+Only `.sr-org-delivery img` and the ≤820px media rules were in the CSSOM.
+`.sr-org-delivery{display:grid;grid-template-columns:.7fr 1.3fr…}` was missing entirely.
+
+**Cause.** The SR-434 comment just above the rule listed
+`.sr-org-curriculum-*/.sr-org-track*/…`. The `*/` in `curriculum-*/` closed the comment early.
+The rest of that prose became the selector prefix of the next rule, so the browser discarded
+`.sr-org-delivery{display:grid}`. It was never `.sr-org-wrap` overriding it, and never the
+markup.
+
+**Fix.** The comment is rewritten, with a note on why. No rule changed and no `max-height` was
+added. No other `*/`-inside-a-comment exists in the five stylesheets, found by a scan for a
+star-slash with no space on either side.
+
+| Viewport | Grid | Photo | Text |
+|---|---|---|---|
+| 1440 | 379 / 703px | 379×473 (4:5), left column | starts beside it, same top |
+| 1024 | 318.5 / 591.5px | 319×398 | beside |
+| 390 | one column | 280×350 | stacked beneath |
+
+### §2 — impact pathway: heading, lede, cards, stacked
+
+`.sr-org-pathtop` changed from `flex` / `space-between` to `display:block`.
+
+- The lede sits `--sr-org-s3` (16px) under the heading.
+- The grid sits `--sr-org-s5` (34px) under the lede.
+- The lede keeps `max-width:40ch`, rendered at 403px (14.72px type).
+
+Rhythm is the same at 1440, 1024 and 390: heading bottom → lede 16px, lede → first card 34px.
+Nothing sits beside the heading at any width.
+
+### §3 — the plant underlay, behind the cards
+
+`assets/org/path-underlay.jpg` and `.webp` (2400×1000) were added explicitly; `git ls-files`
+confirms both.
+
+**Layer.** `.sr-org-pathbleed` went from a 42%×30% top-right corner (a striped placeholder
+under a mask) to the whole sheet: `inset:0`, still `z-index:1` under the wrap's `2`. The
+sheet's `border-radius:16px` and `overflow:hidden` clip it; the bleed's rect equals the
+sheet's and its radius inherits 16px. The image is `image-set` webp/jpg at `72% 40% / cover`.
+
+**Scrim** (the page's own `--bg` `#0A0A0F`, vertical):
+
+| Sheet height | Alpha | Why |
+|---|---|---|
+| 0–22% | .96 → .9 | heading and lede end by 24% at every width |
+| 28–44% | .5 | the card band at 1440, 1024 and 390 alike |
+| 46.5% | .95 | the rail labels start at 47–49% at every width |
+| 70% | solid | — |
+
+The stops were chosen by measurement: three candidates, each modelled at all three widths.
+
+**Colour lift (adapted, reported).** `.sr-org-pathn` (the `0N · STAGE` labels) and
+`.sr-org-railcell b` (the rail labels) move from `--text3` to `--text2`.
+
+- Measured with **no image at all**, the 02, 03 and 04 labels were already under 4.5:1 on their
+  own cards: 4.48, 4.35 and 4.20. No scrim could have carried them.
+- The rail labels measured 5.17 on bare `--bg`, but fell to 2.11 over the plant.
+- This uses an existing token, the same kind of lift SR-451 and SR-436 made for failing labels.
+  Gold 01 and the gold rail cell are unchanged.
+
+**How contrast was measured.** Worst pixel under each text run, 27 points per line box. The
+composite is: image pixel (cover geometry reproduced) → scrim at that height → the card's own
+translucent layers at their lightest and least opaque (`--card` .86 plus each card's cream,
+gold or slate overlays). Text colour is composited where it carries alpha.
+
+| Text | 1440 | 1024 | 390 |
+|---|---|---|---|
+| `01 · Input` (gold) | 4.87 | 4.99 | 5.03 |
+| `02 · Capability` | 5.89 | 5.99 | ≥5.5 |
+| `03 · Behaviour` | 5.63 | 5.68 | 5.59 |
+| `04 · Signal` | 4.94 | 5.24 | 5.19 |
+| Card headings | 10.63–13.91 | ≥10 | ≥10 |
+| Card body lines (visible at 390) | — | — | 4.64 min ("Near the moment…") |
+| Rail labels | 6.82–8.79 | ≥6 | ≥6 |
+| Eyebrow / h2 / lede | 8.78 / 16.57 / 6.62+ | ≥6 | ≥6 |
+| Explore chips, measure panel | ≥7.12 | ≥7 | ≥7 |
+| Foot | 5.17 | 5.17 | 5.17 |
+
+**Minimum: 4.87 at 1440, 4.99 at 1024, 4.64 at 390.** Every element clears 4.5:1. No console
+errors.
+
+**How it reads:**
+
+- **1440:** the plant lands behind and to the right of Signal. The leaves show through
+  Signal's translucent card and the gutter to its right, and the lit wall reads as a warm field
+  behind Capability and Behaviour. It reads as intended. No horizontal shift needed.
+- **1024 (2×2 grid):** the plant sits mostly at the sheet's right edge, faint behind Capability
+  and Signal.
+- **390 (cards stacked):** the tall, narrow sheet (322×2536) blows the image up to cover. What
+  shows is a yellow-green smear at the right edge behind Capability and Behaviour, which reads
+  as a colour field, not a plant. **Recommend dropping the image below ~640px**, and leave that
+  call to Andre. Not done here.
+- **The source image has a ~20px black band along its top edge.** At current geometry it sits
+  under the .96 scrim and is invisible. It would show if the image were ever positioned higher.
+
+**Pre-existing, noted:** the rail labels are 10px, under SR-437's 11px floor.
+
+### §4 — the Protocols dropdown vs the chapter rail
+
+**z-index scale above 50, enumerated before any change:**
+
+| z | Element | Where | Must sit |
+|---|---|---|---|
+| 9999 | `#srAuthBanner` | index inline | above everything |
+| 2100 | `.reader-overlay` | index | above the resource modal |
+| 2000 | `.resource-modal-overlay` | index | above page chrome |
+| 1002 | `#sr-thread` (2px, top:0) | system | above the nav, decorative |
+| 1000 | `.theme-bar` | index | index's bar |
+| **999 → 99** | **`#sr-rail`** | system; organisations only | **below `.nav`** |
+| 600 | `.jp5-overlay` | index | modal |
+| 500 | `.sr-home .filmmodal` | system | modal |
+| 200 | skip links (11 places) | system and pages | above the nav on focus |
+| 100 | `.nav` (and `.nmenu`, which has no z of its own) | system, plus 6 pages' inline copies | above rail and content |
+| 80 | `.sr-modal`, `.sr-medplayer-backdrop` | dashboard | no rail there |
+| 60 | dashboard/method skip links, `.sr-tp-skiplink` | — | — |
+
+**Differs from the instruction.** "Dead on six pages" — only `organisations.html` carries
+`[data-sr-rail]`, so `#sr-rail` exists on that one page. Hit-testing the open menu on all ten
+dropdown pages at 1440 found the other nine clear (0/60 points blocked).
+
+The six pages that match the number are about, anxiety-reset, coming-soon, live-sessions,
+method and plans. They carry their own inline `.nmenu`, with the border.
+
+**The defect on /organisations.** The rail pill (pointer-events:auto, y 70–111, x 128–1308)
+lay across the whole path from the trigger (bottom y 61) to the menu (top y 77). The cursor
+left `.ndrop` on the way down and the menu shut. The pill also painted over the menu's first
+rows (5/60 item points blocked).
+
+**Fix.** `#sr-rail` → 99, under `.nav`'s 100. The full order above is commented at `#sr-rail`.
+
+- 0/60 points blocked at 1440 and 1024.
+- The trigger-to-menu path is clear.
+- A real mouse hover from the trigger down into the menu keeps it open.
+
+**`.nmenu` border.** Now `box-shadow: inset 0 0 0 1px var(--hair2)` plus its drop shadow. It
+sets `border:0` explicitly, so the six inline copies lose to the system CSS, which loads last.
+Verified 0px border on all eight pages checked.
+
+**New consequence, reported.** At 390 the nav wraps to 235px tall, but the rail is still placed
+at 70px, because `place()` offsets from `.theme-bar` (index only) or a fixed 60. Before this
+pass the rail covered the nav's link row. Now the nav covers the rail, so the chapter rail is
+not visible on phones. Placing it under `.nav`'s real height would park a pill about 245px down
+a phone screen permanently. That is a design call and is not made here.
+
+### Report only
+
+1. **SR-436 §5d, reversed.** The history is more exact than the brief. SR-436 did not remove a
+   shipped image: its §5d is recorded as "not done — Andre ruled no impact-pathway underlay".
+   The layer only ever held the striped placeholder (`repeating-linear-gradient(42deg,…)` under
+   a two-gradient mask). So there is no removed photograph to recover for use elsewhere. The
+   ruling was against adding one, and it is now reversed by this pass (24 September).
+2. **Does `.sr-org-pathbleed` earn its element?** Not really, now that it covers the whole
+   sheet. It is the same two background layers (scrim plus image) that could sit directly on
+   `.sr-org-pathsheet`, behind the sheet's existing radial and `--bg`. That would remove an
+   element and a z-index pair. It would only be worth keeping if the underlay went back to
+   covering part of the sheet, or needed its own mask. Not restructured here.
