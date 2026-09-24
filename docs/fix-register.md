@@ -21096,3 +21096,142 @@ further right. **Two fixes the rewrites needed:**
    production.** They are served by a 200 rewrite at a nested path, and protocol.html uses
    relative asset URLs with no `<base>`. `curl …/protocols/css/saferise-system.css` → 404
    while the page itself → 200. Out of scope here; offered as a separate task.
+
+## SR-447 — twelve tracks, thirty new image files (PASS-AE.md)
+
+**SR ID:** another session committed into this repo while this pass ran and took SR-445
+(`0e4f520`, investor collateral) and SR-446 (`5969205`, B2B film script). This pass is
+**SR-447**. Its §1 commit `3f6ba96` still carries the label "SR-445 §1": it sits under
+`5969205`, so rewording it would mean rewriting the other session's commit, and that was
+not done. `3f6ba96` belongs to SR-447. That session also had ~60 files staged in the
+shared index when this pass started. **Every commit here uses an explicit pathspec** so
+none of them could be swept in, and none were. The index lock seen at the start was that
+session's live operation; it cleared on its own and was not removed.
+
+Commits: `3f6ba96` §1 · `ff47e4c` §2 · `cb437f7` §3 · `f55863c` §4 · `f976ca5` §5 ·
+`79d20e8` §3b · this entry. §6 needed no code. Not pushed.
+
+### §1
+
+All 30 files were on disk at house sizes: bands 1200×640, covers and f01-v2 1086×1448,
+panels 2400×1000. None were tracked or ignored. They were added by path. VERIFY grep → **33,
+not 30**: the brief's pattern `-v2` also matches three pre-existing files,
+`sr-v21/v22/v23-*.webp`. All 30 new files are tracked.
+
+### §2
+
+`MISSING_COVERS = {}`; the map and the SR-429 comment are kept and amended.
+content/b2b-protocols.js already pointed I11/I12/R01 at `assets/org/covers/i11|i12|r01.webp`.
+No "COVER PENDING" on /organisations. **Now unreachable (report):**
+- `coverOrPlate()`'s plate branch (js/saferise-org-explorer.js, the `sr-org-elay-role/
+  -industry` + "Cover pending" lines)
+- CSS `.sr-org-elay-role`/`.sr-org-elay-industry`
+- CSS `.sr-org-etile .sr-org-eplate`
+- the file header's "three missing covers" line
+
+The F8 plate path (`f8CoverOrPlate`) is still reachable.
+
+### §3 (+ §3b, DIFFERS)
+
+**§3** made 23 replacements, found by search across coming-soon.html,
+member-coming-soon.html, content/f8-tracks.js, index.html and js/saferise-plans.js.
+`f02`/`f03` were not touched.
+
+**§3b:** the four bands §4 introduces (band-10/14/15/16) are **new encodes of the same
+photographs** as band-02/07/05/06, compared side by side. Both coming-soon pages still
+used the old files, so Sex & Intimacy, Addiction Recovery, Entrepreneur's Journey and
+Money Shift each showed two files across surfaces. Both pages were repointed in a
+separate, revertible commit. (band-13 is likewise the same photograph as band-09.)
+
+**Four-surface VERIFY** (`plans` / `org` / `cs` / `mcs`):
+
+| Track | Result |
+|---|---|
+| Executive Presence, Sleep & Recovery, Embodied Nutrition, Strength & Return, Elevation | identical on all four: band-08 / 13 / 12 / 17 / 11 |
+| Sex & Intimacy, Entrepreneur's Journey, Money Shift, Addiction Recovery | identical on plans/cs/mcs: band-10 / 15 / 16 / 14. Not Foundation 8, so not on /organisations |
+| Personal Transformation, Relationship Healing, Professional Performance | **differ by slot shape, not by error**: /plans uses the 2400×1000 panel (`panel-t1/2/3-v2`), /organisations the 1086×1448 portrait (`f01-v2`, `f02`, `f03`). No surface shares both shapes; PASS-AF's registry is where this becomes explicit |
+
+No broken images on any of the four pages.
+
+### §4
+
+Four entries added to `CORE_DEV`, all kicker **Application**:
+
+| Track | Image |
+|---|---|
+| Sex & Intimacy | band-10 |
+| Entrepreneur's Journey | band-15 |
+| Money Shift | band-16 |
+| Addiction Recovery | band-14 |
+
+**Layer source:** docs/SUBSTRATE-CAPACITY-MODEL.md §3 is the only record. It names
+Entrepreneur's Journey and Addiction Recovery exactly, and "Money" and "Intimacy" (Money
+Shift and Sex & Intimacy). The scheme matches /plans' own, where Relationship Healing is
+already "Application". **DIFFERS on colour:** the brief says `ca`/`cglow` follow the layer,
+but the data colours per track (three Substrate entries, three values; Application
+carries `var(--t3)`, `var(--t2)`, `#B9A17A`). The four reuse the one in-development
+Application value, Executive Presence's `#B9A17A` / `rgba(185,161,122,.20)`, rather than
+invented values. Per-track colours are Andre's call.
+
+Rendered: **twelve cards**, in order Personal Transformation, Professional Performance,
+Relationship Healing, Executive Presence, Sleep & Recovery, Embodied Nutrition, Strength &
+Return, Elevation Series, Sex & Intimacy, Entrepreneur's Journey, Money Shift, Addiction
+Recovery. All images load, all cards are 158px, no overlap.
+
+### §5
+
+- "Eight tracks." → "Every track."; the SR-386 comment block is now one line.
+- **Also changed** (it renders on /plans and the VERIFY forbids any count there):
+  plans.html's own nav label "Nine more tracks in development" → "More tracks in
+  development", and a comment count in js/saferise-plans.js. /plans rendered text now
+  has no numeral or spelled-out track count.
+- **Not changed, sitewide sweep needed:** the same nav label is hard-coded as "Nine more
+  tracks in development" in about, anxiety-reset, coming-soon, for-organisations, index,
+  live-sessions, method and pricing. The shared js/saferise-nav.js says "Eight more
+  tracks in development". coming-soon.html's `<title>`/`og:title` ("nine tracks in
+  development") and h2, and member-coming-soon.html's h1 ("Nine tracks…"), also carry
+  counts.
+
+### §6 — Sleep & Recovery 404: cleared by §3, and the cause
+
+The repoint to band-13 clears it on /plans and /organisations, with no overlap. band-09
+itself serves **200** live today (on disk, tracked, a valid 1200×640 WebP). **The likely
+cause is systemic:** `curl -sI …/assets/coming/band-99-does-not-exist.webp` returns
+`404` with `cache-control: public,max-age=31536000,immutable` (Netlify Edge: stored). The
+`/assets/*` rule in `_headers` applies to 404s too. Any browser that requested band-09
+before it deployed would keep the 404 for up to a year, and so would anyone who ever
+requests an asset before it ships. Not changed here.
+
+### Report-only
+
+1. **Superseded files:** band-01/02/03/04/05/06/07, panel-t1/t2/t3 and f8/f01 are
+   referenced by **no live file**. band-09 is named only in SR-430's historical comment
+   in js/saferise-plans.js. None were deleted.
+2. **Card crops** (rendered at slot size):
+   - `/plans` 268×156 at `72% 30%`: **panel-t2-v2 cuts the woman's face at the left
+     edge**; panel-t3-v2 puts the left man at the edge and the marker hand near the
+     right. panel-t1-v2 and all bands are fine.
+   - Coming-soon panes 604 × 442–566, centred:
+     - band-10: the woman's masked face is within ~10px of the left edge.
+     - band-14: the pouring hand is at the left edge.
+     - band-12: the man's arm is cut on the left.
+     - band-15: the shoulder is clipped.
+   - /organisations F8 4:3: f01-v2 is fine, with headroom.
+   - Wall tiles (133×177, the same ratio as the covers): i11, i12 and r01 are uncropped.
+     i11's clipboard hand is clear; r01's crown sits ~12px from the top.
+3. **Against the imagery brief (as supplied):**
+   - i12 — two figures in tactical gear holding rifles; the only weapons on the site. At
+     wall-tile size the rifles are the most legible thing in the frame.
+   - band-16 — stacks of cash and a rising chart dominate the lower third; reads as
+     wealth, not pressure.
+   - band-17 — a peak-condition athlete mid-battle-ropes, against a track about
+     returning.
+   - panel-t3-v2 — a facilitated workshop: marker on glass, sticky notes.
+4. **Lone figure looking off-frame:**
+   - Strongest: r01, band-08 (Executive Presence), panel-t1-v2 / f01-v2 (Personal
+     Transformation).
+   - Also: band-11 (Elevation), band-16 (Money Shift), band-14 (Addiction Recovery),
+     f03 (chef), and covers i01, i03, i06, i09, i10, i14, i15, r03, r04, r06, r09, r11,
+     r14.
+   - About half the wall shares the composition.
+5. **Executive Presence:** unchanged on band-08, identical on all four surfaces.
