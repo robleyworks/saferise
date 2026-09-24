@@ -20930,3 +20930,169 @@ docs/fix-register.md, assets/org/gap-moment.* and twospace-* (6 added) and
 assets/home/panel-t3.jpg (deleted). **Nothing from `claude/`, `docs/org-page/` or
 `docs/business/POSITIONING.md` is in them.** To be pushed by Andre from GitHub Desktop:
 "Push origin" only; do not commit the other session's changed files first.
+
+## SR-444 — the four member page templates (PASS-X.md)
+
+Commits: `04995aa` §1, `19dcc75` §2, `71b0d31` §3, `b07f86a` §4, `8c73395` §5 wiring,
+`83a5960` §6, plus this entry. Not pushed. No git lock this pass.
+
+### Chrome and CSS (DIFFERS)
+
+The chrome is copied from `member-frameworks.html`: head, `noindex`, skiplink, icon rail,
+`main.shell`, back bar with the Midnight/Sunrise toggle, and the `sr-fw-mast sr-mi-mast`
+header. **`member-frameworks.html` has no top-nav render and no footer**, so neither do
+these pages. Stylesheets follow member-coming-soon's stack: `saferise-method.css`,
+`saferise-rail.css`, then `saferise-system.css` last.
+
+**New rules are `sr-mi-*`, not `sr-tp-`/`sr-dash-`:**
+- `sr-mi-` is CLAUDE.md's registered code for member interior pages.
+- `sr-dash-*` components live in `saferise-dashboard.css`, which member pages do not load.
+- `sr-tp-*` rules only apply under `body.sr-tp`.
+- The method file's own panel classes (`sr-fw-panel/-card/-disc/-limit`, `sr-mi-note`)
+  all draw `border:1px`, which the brief forbids.
+
+So these are new `sr-mi-*` rules in `saferise-system.css`, using the method palette so
+Sunrise mode carries through, with no existing `sr-mi-*` rule touched. The one colour
+outside that palette is the sage hairline, 157,179,136, reusing `--sr-org-sage`'s value.
+No borders on any new file; no per-component reduced-motion blocks.
+
+### §1 member-record.html
+
+`?r=chosen` (default) / `?r=decisions` / `#hash`, plus the clean paths (§5). It has the
+device-only strip under the lede; entries newest first, three then "Show all"; compose;
+export (`.txt` built in the browser, oldest first); and delete (one confirm, that key
+only). Storage uses `sr.record.chosen` / `sr.record.decisions`, with the same probe and
+in-memory Store as protocol.html's journal.
+
+**Verified:** write, list, show-all, reload persistence, export text, delete. **With
+localStorage throwing**, tested in an isolated frame, it renders, accepts, lists and deletes
+in memory. No console errors.
+
+- **Added copy:** one sentence, shown only when storage is unavailable ("Right now this
+  browser is not keeping anything…"). No existing page messages that state.
+- **AMBIGUOUS:** the brief's empty-state explainer and example are written for decisions,
+  so on `chosen` the empty state is "Nothing recorded yet." plus the protocols line. No
+  chosen-specific copy was invented.
+- **Not merged:** `js/saferise-decision.js`'s `sr.decision.<protocol>` keys are
+  per-protocol worksheets with named fields, not this one-line list.
+
+### §2 member-reading.html
+
+`faq` / `article` / `podcast`. There is a sticky contents rail on desktop. Below 820px it
+becomes a horizontal pill scroller, 44px tall; at 390×844 the first answer starts at 674px,
+above the fold. Links land each section at its 24px scroll margin; the last section stops
+short at the page end. The page's `scroll-behavior:smooth` cannot animate in the hidden
+test pane, so this was verified with it forced to instant.
+
+- **FAQ copy (report):**
+  - "practisable" is rendered as "can be learned", because PLATFORM-DESCRIPTION still
+    prohibits practice/practise.
+  - Answer 4 omits "cancel from your account page": refunds.html says you can, but
+    account.html's control is disabled until Phase 4. That is a contradiction on
+    refunds.html itself.
+  - Answer 2 keeps the brief's "nothing to… train on". SR-440 removed that claim from
+    legal.html's lede, so the FAQ now says it where the hub no longer does.
+- **article/podcast:** they render "Nothing published yet", with the TOC hidden. h1/lede
+  are the dashboard ROUTES entries ("Article" / "A short written piece from Andre.";
+  "The SafeRise podcast" / "Episode player and the back catalogue."). The podcast lede
+  describes a player that does not exist yet.
+- **What real content needs:** a payload per piece (title, date, body sections for
+  article; episodes with audio src resolved like content/meditation.js for podcast), and
+  a decision on whether the TOC lists sections (article) or episodes (podcast).
+
+### §3 member-clearing.html
+
+- **Audio:** `content/meditation.js` → `MEDITATION['t0-00'].src` =
+  `assets/audio/meditation/t0-00-the-clearing.mp3`, on disk and tracked (plus an .m4a).
+  This is the same resolution the dashboard and protocol players use, and it is wired
+  live.
+- **No time UI:** a bare `<audio>` with no `controls` attribute. No time text, no
+  `progress`/range/progressbar/slider element; nothing reads position or length.
+- **Play/pause:** verified. The first play auto-paused in the hidden pane, which is
+  browser media suspension; later clicks toggle correctly.
+- **Load failure:** the player disables itself and says it is not available yet.
+- **Log:** `sr.clearing.log`, one entry per visit on first play, optional note on the
+  newest entry, time-of-day labels. It persists across reload and works with storage
+  blocked.
+- **Added labels (report):** the note field's "A note on today, if you want one" and the
+  "Nothing logged yet." line.
+- **Cue Card:** **no standalone surface exists**. Each protocol delivers its own Cue Card
+  inside protocol.html (per-protocol "Cue Card" resources in content/t1–t3-resources.js;
+  `content/guidance.js` has only an explanatory audio, `rg-01-cue-card.mp3`). The row
+  renders a disabled "Open" with the added note "Each protocol carries its own Cue Card
+  — open one from inside a protocol."
+
+### §4 member-checkout.html
+
+- **Prices:** €19 / €190 are read from `PRICING.t2`. €29 / €290 are written in the page
+  and cited to SR-414; no PRICING key was added, as that record requires.
+- **Order:** desktop €19 first; ≤820px €29 first (verified 1440 and 390).
+- **Road map:** names are copied from coming-soon.html's headings.
+- **Upgrade:** `aria-disabled` at .5 opacity, no pointer. Its wording is account.html's
+  own: "Upgrading opens once payments (Phase 4) are wired up — not yet."
+- **Counts:** none in the rendered copy (scanned).
+- **Flag, needs a ruling:** the honest note's "today the €29 tier opens the same tracks as
+  the €19 one" conflicts with SR-414's record in content/tracks.js, which says "the €29
+  tier itself is not live — it opens when the library reaches eight tracks". The price
+  (€290) agrees. The control stays disabled either way.
+
+### §5 wiring
+
+`dashboard.html` PAGES and `js/saferise-rail.js` PAGES gain all seven routes, and
+`openRoute()` handles the query strings. `_redirects` gains the seven 200 rewrites. The
+three `?r=` targets are wider than the existing column, so their third column sits
+further right. **Two fixes the rewrites needed:**
+- **The query string is dropped:** a 200 rewrite keeps the clean path, so the pages read
+  the pathname first (`/record/decisions`, `/writing`, `/podcast`). Verified by simulating
+  each path.
+- **Nested path:** `/record/*` is nested, so `member-record.html` has `<base href="/">`.
+  The page has no in-page `#` links a base would break.
+
+**Fourteen-route VERIFY, from /dashboard via `[data-route-link]` → `openRoute()`:**
+
+| route | lands on | h1 |
+|---|---|---|
+| method | member-frameworks.html | Six sources, one sequence |
+| coming | member-coming-soon.html | Nine tracks, already being written |
+| coaching | in-shell Sessions view (`#vSessions`); "Not built yet" modal at 0px | — |
+| account | account.html | Sign in to see your account |
+| clearing | member-clearing.html | The Clearing |
+| checkout | member-checkout.html | Open the whole road map |
+| plans | plans.html | Build more capacity where life asks the… |
+| article | member-reading.html?r=article | Article |
+| podcast | member-reading.html?r=podcast | The SafeRise podcast |
+| reading | about.html | A lot of what runs your life is being de… |
+| faq | member-reading.html?r=faq | Questions people ask |
+| chosen | member-record.html?r=chosen | The Chosen Self |
+| decisions | member-record.html?r=decisions | Your Decisions |
+| legal | legal.html | Terms and privacy |
+
+**None opens "Not built yet".**
+
+### §6 organisations.html
+
+- Capacity panel heading → "Recognise, regulate, release, rise".
+- Hero lede → "…recognise their state, regulate it, release it, and rise with their
+  judgement back." "Release it" rather than "release the struggle", which is the
+  member-facing phrasing SR-443 removed.
+- The 8+2 eyebrow gains `eyebrow`. The rail now lists all 13 sections, and it renders
+  identically to its neighbours (13px, gold).
+- **Left:** "Where recovered choice becomes visible…" (application panel closer) still
+  uses the old vocabulary.
+
+### Report-only
+
+1. **noindex:** all four new pages carry `noindex, nofollow`, and robots.txt already
+   disallows them via `Disallow: /member-`. The clean paths `/record/`, `/faq`,
+   `/writing`, `/podcast`, `/clearing` and `/checkout` are **not** disallowed. The pages
+   they serve still carry noindex, so they will not be indexed. If crawl budget matters,
+   add `Disallow` lines to match `/account` and `/legal`.
+2. **article / podcast:** see §2.
+3. **Clearing audio:** see §3.
+4. **Cue Card:** see §3.
+5. **Also found:** member-coming-soon.html's h1 is "Nine tracks, already being written" —
+   a track count on a member page, in the route table above. Not changed.
+6. **Also found, and serious:** **live `/protocols/<slug>` pages appear unstyled in
+   production.** They are served by a 200 rewrite at a nested path, and protocol.html uses
+   relative asset URLs with no `<base>`. `curl …/protocols/css/saferise-system.css` → 404
+   while the page itself → 200. Out of scope here; offered as a separate task.
