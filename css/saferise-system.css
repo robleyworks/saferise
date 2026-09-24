@@ -5011,7 +5011,11 @@ p.sr-org-hero-note{margin-top:44px;color:var(--text3)!important;font-size:var(--
    line now, not three unconnected columns. h3's own bottom margin drops
    24px → 6px, the actual source of the gap under each title (its 8px top
    margin was already tight against the numeral above it). */
-.sr-org-capacity-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:30px;padding-top:34px}
+/* SR-443 (PASS-V §4) · four columns, not three: the list now carries the
+   four public steps (Recognise / Regulate / Release / Rise, per
+   content/tracks.js SHARED.fourSteps). At repeat(3,1fr) the fourth item
+   wrapped to a second row under the rail line and its node. */
+.sr-org-capacity-grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:30px;padding-top:34px}
 .sr-org-capacity-grid::before{content:"";position:absolute;left:0;top:0;height:1px;width:100%;
   transform-origin:left;
   background:linear-gradient(90deg,rgba(var(--sr-org-gold),.18) 0%,rgba(var(--sr-org-gold),.5) 16.6%,
@@ -5023,6 +5027,7 @@ p.sr-org-hero-note{margin-top:44px;color:var(--text3)!important;font-size:var(--
 .sr-org-capacity-grid article:nth-child(1){animation-delay:.25s}
 .sr-org-capacity-grid article:nth-child(2){animation-delay:.45s}
 .sr-org-capacity-grid article:nth-child(3){animation-delay:.65s}
+.sr-org-capacity-grid article:nth-child(4){animation-delay:.85s}
 @keyframes srOrgStepIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .sr-org-capacity-grid article::before{content:"";position:absolute;left:0;top:-38px;width:8px;height:8px;
   border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(var(--sr-org-gold),.16)}
