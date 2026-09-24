@@ -5158,8 +5158,14 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-sector img{width:100%;aspect-ratio:4/3;object-fit:cover}
 @media(max-width:820px){.sr-org-sector{grid-template-columns:1fr}.sr-org-sector figure{order:-1}}
 
-/* SR-434 (PASS-I.md §4) · the "-- curriculum --" block that used to sit here
-   (.sr-org-curriculum-*/.sr-org-track*/.sr-org-soon-tag, ~50 lines) styled
+/* SR-455 (PASS-AJ §1) · the class list on the next line used to read
+   curriculum-STAR-SLASH-track, and that star-slash closed this comment
+   early: the rest of the prose became the selector prefix of the first
+   rule after it, and the browser dropped .sr-org-delivery{display:grid}
+   whole — the Delivery photo went full-width, three reports running.
+   Spaced apart now. Never write a star directly before a slash in here.
+   SR-434 (PASS-I.md §4) · the "-- curriculum --" block that used to sit here
+   (.sr-org-curriculum-* / .sr-org-track* / .sr-org-soon-tag, ~50 lines) styled
    #sr-org-curriculum, deleted this same pass — merged into #sr-org-explorer.
    Grepped repo-wide first to confirm none of these classes are used
    anywhere else before removing the rules; .sr-org-soon-tag specifically
