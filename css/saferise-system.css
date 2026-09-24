@@ -5084,12 +5084,18 @@ p.sr-org-story-note{margin-top:36px;padding-top:24px;border-top:1px solid var(--
   background:linear-gradient(transparent,rgba(8,8,12,.9));color:var(--text);
   font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:1.02rem}
 .sr-org-large-copy{font-size:1.15rem!important;line-height:1.55;color:var(--text2)!important;margin-top:16px}
-.sr-org-gap-list{display:grid;gap:1px;background:var(--hair);border:1px solid var(--hair);
-  border-radius:4px;overflow:hidden;margin-top:26px}
-.sr-org-gap-list article{display:grid;grid-template-columns:110px 1fr;gap:18px;padding:18px 20px;background:var(--bg)}
-.sr-org-gap-list span{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.14em;
+/* SR-449 (PASS-AG §2, §4) · no border and no 1px-gap divider trick: one
+   inset hairline round the block. The rows share ONE grid cell (grid-area
+   1/1), so the block is always the height of the tallest row and never
+   resizes as the cycle moves; only the active row is visible. Reduced
+   motion un-stacks them (below) so all three are readable. Label 11px
+   (was .68rem, 10.9px): SR-437's floor. */
+.sr-org-gap-list{display:grid;box-shadow:inset 0 0 0 1px var(--hair);border-radius:4px;overflow:hidden;margin-top:26px}
+.sr-org-gap-list article{display:grid;grid-template-columns:110px 1fr;gap:18px;padding:18px 20px;background:var(--bg);grid-area:1/1}
+.sr-org-gap-list span{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--gold)}
 .sr-org-gap-list p{font-size:var(--fs-body);line-height:1.5}
+.sr-org-gap-list p+p{margin-top:8px}
 /* PASS-org-layout.md §5 · was margin-top:24px (below the page's ≥32px
    closing-line floor) and, like .sr-org-pull, a bare class losing to
    .sr-org-page p (line 4707) — rendered gap was 0px, not 24px. */
@@ -6022,34 +6028,45 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
 .sr-org-image-copy .sr-org-gddia figcaption{position:static;inset:auto;margin-top:12px;padding:0;background:none;
   font:400 .86rem/1.55 'DM Sans',sans-serif;color:var(--text3);max-width:58ch}
 .sr-org-gdseg{transition:fill-opacity .9s var(--sr-org-ease),filter .9s var(--sr-org-ease)}
-.sr-org-gdseg.sr-org-gd-a{fill:rgb(var(--sr-org-gold));fill-opacity:.10}
-.sr-org-gdseg.sr-org-gd-b{fill:rgb(var(--sr-org-red));fill-opacity:.10}
-.sr-org-gdseg.sr-org-gd-c{fill:rgb(var(--sr-org-slate));fill-opacity:.08}
+/* SR-449 (PASS-AG §3) · exposure raised, measured: every text element
+   clears 4.5:1 against the shaded section's lighter end (see register).
+   Inactive stages still read as shapes; the active one glows harder. */
+.sr-org-gdseg.sr-org-gd-a{fill:rgb(var(--sr-org-gold));fill-opacity:.2}
+.sr-org-gdseg.sr-org-gd-b{fill:rgb(var(--sr-org-red));fill-opacity:.2}
+.sr-org-gdseg.sr-org-gd-c{fill:rgb(var(--sr-org-slate));fill-opacity:.18}
 .sr-org-gdedge{fill:none;stroke-width:1.6;transition:stroke-opacity .9s var(--sr-org-ease)}
-.sr-org-gdedge.sr-org-gd-a{stroke:rgb(var(--sr-org-gold));stroke-opacity:.32}
-.sr-org-gdedge.sr-org-gd-b{stroke:rgb(var(--sr-org-red));stroke-opacity:.32}
-.sr-org-gdedge.sr-org-gd-c{stroke:rgb(var(--sr-org-slate));stroke-opacity:.28}
-.sr-org-gdann{opacity:.16;transition:opacity .9s var(--sr-org-ease)}
-.sr-org-gdstage{fill-opacity:.34;transition:fill-opacity .9s var(--sr-org-ease)}
-[data-step="1"] .sr-org-gdseg.sr-org-gd-a{fill-opacity:.40;filter:drop-shadow(0 0 16px rgba(212,168,67,.55))}
-[data-step="2"] .sr-org-gdseg.sr-org-gd-b{fill-opacity:.52;filter:drop-shadow(0 0 18px rgba(196,101,90,.6))}
-[data-step="3"] .sr-org-gdseg.sr-org-gd-c{fill-opacity:.38;filter:drop-shadow(0 0 16px rgba(130,152,187,.5))}
+.sr-org-gdedge.sr-org-gd-a{stroke:rgb(var(--sr-org-gold));stroke-opacity:.6}
+.sr-org-gdedge.sr-org-gd-b{stroke:rgb(var(--sr-org-red));stroke-opacity:.6}
+.sr-org-gdedge.sr-org-gd-c{stroke:rgb(var(--sr-org-slate));stroke-opacity:.55}
+/* annotations are legible at rest, not only when their stage is active */
+.sr-org-gdann{opacity:1}
+.sr-org-gddia text[fill^="rgba(245,237,216"]{fill:rgba(245,237,216,.78)}
+.sr-org-gdann.sr-org-gdspan text{fill:rgb(var(--sr-org-gold))}
+/* stage labels: readable cream at rest, their own colour when active
+   (red lifted toward white, as the model panel's headings are — SR-436) */
+.sr-org-gdstage{fill:rgba(245,237,216,.72);fill-opacity:1;transition:fill .6s var(--sr-org-ease)}
+[data-step="1"] .sr-org-gdseg.sr-org-gd-a{fill-opacity:.55;filter:drop-shadow(0 0 16px rgba(212,168,67,.55))}
+[data-step="2"] .sr-org-gdseg.sr-org-gd-b{fill-opacity:.66;filter:drop-shadow(0 0 18px rgba(196,101,90,.6))}
+[data-step="3"] .sr-org-gdseg.sr-org-gd-c{fill-opacity:.52;filter:drop-shadow(0 0 16px rgba(130,152,187,.5))}
 [data-step="1"] .sr-org-gdedge.sr-org-gd-a,[data-step="2"] .sr-org-gdedge.sr-org-gd-b,
 [data-step="3"] .sr-org-gdedge.sr-org-gd-c{stroke-opacity:1}
-[data-step="1"] .sr-org-gdann.sr-org-gd-a,[data-step="2"] .sr-org-gdann.sr-org-gd-b,
-[data-step="3"] .sr-org-gdann.sr-org-gd-c{opacity:1}
-[data-step="1"] .sr-org-gdstage.sr-org-gd-a,[data-step="2"] .sr-org-gdstage.sr-org-gd-b,
-[data-step="3"] .sr-org-gdstage.sr-org-gd-c{fill-opacity:1}
+[data-step="1"] .sr-org-gdstage.sr-org-gd-a{fill:rgb(var(--sr-org-gold))}
+[data-step="2"] .sr-org-gdstage.sr-org-gd-b{fill:color-mix(in srgb, rgb(var(--sr-org-red)) 78%, #fff)}
+[data-step="3"] .sr-org-gdstage.sr-org-gd-c{fill:rgb(var(--sr-org-slate))}
 /* rows: dim until their step; the lit row's label takes its band colour */
-.sr-org-gdseq .sr-org-gap-list article{transition:background .7s var(--sr-org-ease)}
-.sr-org-gdseq .sr-org-gap-list span{color:rgba(245,237,216,.26);transition:color .7s var(--sr-org-ease)}
-.sr-org-gdseq .sr-org-gap-list p{color:var(--text3);transition:color .7s var(--sr-org-ease)}
+/* one row at a time: a 400ms fade is the only motion — no slide, no scale */
+.sr-org-gdseq .sr-org-gap-list article{opacity:0;transition:opacity .4s var(--sr-org-ease)}
+.sr-org-gdseq .sr-org-gap-list span{color:rgba(245,237,216,.26)}
+.sr-org-gdseq .sr-org-gap-list p{color:var(--text3)}
+.sr-org-gdseq .sr-org-gap-list article p.sr-org-gdsr{color:var(--gold-lt)}
+[data-step="1"] .sr-org-gap-list .sr-org-gd-a,[data-step="2"] .sr-org-gap-list .sr-org-gd-b,
+[data-step="3"] .sr-org-gap-list .sr-org-gd-c{opacity:1}
 [data-step="1"] .sr-org-gap-list .sr-org-gd-a,[data-step="2"] .sr-org-gap-list .sr-org-gd-b,
 [data-step="3"] .sr-org-gap-list .sr-org-gd-c{background:rgba(245,237,216,.032)}
 [data-step="1"] .sr-org-gap-list .sr-org-gd-a p,[data-step="2"] .sr-org-gap-list .sr-org-gd-b p,
 [data-step="3"] .sr-org-gap-list .sr-org-gd-c p{color:var(--text)}
 [data-step="1"] .sr-org-gap-list .sr-org-gd-a span{color:var(--gold)}
-[data-step="2"] .sr-org-gap-list .sr-org-gd-b span{color:rgb(var(--sr-org-red))}
+[data-step="2"] .sr-org-gap-list .sr-org-gd-b span{color:color-mix(in srgb, rgb(var(--sr-org-red)) 78%, #fff)}
 [data-step="3"] .sr-org-gap-list .sr-org-gd-c span{color:rgb(var(--sr-org-slate))}
 .sr-org-gddots{display:flex;align-items:center;gap:7px;margin-top:22px}
 .sr-org-gddots button{position:relative;width:26px;height:2px;padding:0;border:0;cursor:pointer;
@@ -6102,11 +6119,18 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
      page script also never starts the cycle under this query). */
   .sr-org-gdseg,.sr-org-gdedge,.sr-org-gdann,.sr-org-gdstage,.sr-org-gdseq .sr-org-gap-list article,
   .sr-org-gdseq .sr-org-gap-list span,.sr-org-gdseq .sr-org-gap-list p,.sr-org-f8card{transition:none!important}
-  .sr-org-gdseg.sr-org-gd-a{fill-opacity:.40}.sr-org-gdseg.sr-org-gd-b{fill-opacity:.52}.sr-org-gdseg.sr-org-gd-c{fill-opacity:.38}
-  .sr-org-gdedge{stroke-opacity:1!important}.sr-org-gdann{opacity:1!important}.sr-org-gdstage{fill-opacity:1!important}
+  .sr-org-gdseg.sr-org-gd-a{fill-opacity:.55}.sr-org-gdseg.sr-org-gd-b{fill-opacity:.66}.sr-org-gdseg.sr-org-gd-c{fill-opacity:.52}
+  .sr-org-gdedge{stroke-opacity:1!important}.sr-org-gdann{opacity:1!important}
+  .sr-org-gdstage.sr-org-gd-a{fill:rgb(var(--sr-org-gold))!important}
+  .sr-org-gdstage.sr-org-gd-b{fill:color-mix(in srgb, rgb(var(--sr-org-red)) 78%, #fff)!important}
+  .sr-org-gdstage.sr-org-gd-c{fill:rgb(var(--sr-org-slate))!important}
+  /* SR-449 · all three rows, un-stacked and visible, never one frozen row */
+  .sr-org-gdseq .sr-org-gap-list article{opacity:1!important;grid-area:auto!important}
+  .sr-org-gdseq .sr-org-gap-list article+article{box-shadow:inset 0 1px 0 var(--hair)}
   .sr-org-gdseq .sr-org-gap-list p{color:var(--text)!important}
+  .sr-org-gdseq .sr-org-gap-list p.sr-org-gdsr{color:var(--gold-lt)!important}
   .sr-org-gap-list .sr-org-gd-a span{color:var(--gold)!important}
-  .sr-org-gap-list .sr-org-gd-b span{color:rgb(var(--sr-org-red))!important}
+  .sr-org-gap-list .sr-org-gd-b span{color:color-mix(in srgb, rgb(var(--sr-org-red)) 78%, #fff)!important}
   .sr-org-gap-list .sr-org-gd-c span{color:rgb(var(--sr-org-slate))!important}
   .sr-org-gddots{display:none}
   .sr-org-f8card:hover{transform:none}
