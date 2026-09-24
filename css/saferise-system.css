@@ -5095,7 +5095,11 @@ p.sr-org-story-note{margin-top:36px;padding-top:24px;border-top:1px solid var(--
    .sr-org-page p (line 4707) — rendered gap was 0px, not 24px. */
 p.sr-org-gold-copy{margin-top:32px;color:var(--gold-lt)!important;font-family:'Cormorant Garamond',Georgia,serif;
   font-style:italic;font-size:1.1rem}
-@media(max-width:820px){.sr-org-image-copy{grid-template-columns:1fr}.sr-org-image-copy figure img{aspect-ratio:16/9}}
+/* SR-443 (PASS-V §6) · 16/9 -> 4/5 below 820px. The gap photo is authored
+   at exactly 4:5 (1086x1358); the 16:9 box cut all three heads and put two
+   pairs of hands under the 79px caption band (SR-441). One crop at every
+   width; at 390 the figure is ~326x408, about half a screen. */
+@media(max-width:820px){.sr-org-image-copy{grid-template-columns:1fr}.sr-org-image-copy figure img{aspect-ratio:4/5}}
 @media(max-width:600px){.sr-org-gap-list article{grid-template-columns:1fr;gap:6px}}
 
 /* PASS-carousel-resume-and-routing.md §5 (cleanup) · .sr-org-pathway (the
