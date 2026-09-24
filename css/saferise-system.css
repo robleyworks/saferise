@@ -5778,6 +5778,12 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 
 
 /* -- the wall (§3c) -- */
+/* SR-438 (PASS-N §6) · the Library block sat flush under the +2 stack
+   (0px — "THE LIBRARY" touched the box above). Same --sr-org-s7 step that
+   separates the Base's Foundation 8 from "The two that vary"
+   (.sr-org-f8root's margin-bottom), so the three explorer blocks share
+   one block-to-block rhythm. */
+#sr-org-wall{margin-top:var(--sr-org-s7)}
 .sr-org-efilters{display:flex;flex-wrap:wrap;gap:7px;margin-top:var(--sr-org-s4)}
 .sr-org-efilters button{padding:8px 14px;border:0;border-radius:3px;cursor:pointer;
   font:700 11px/1 'DM Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);
