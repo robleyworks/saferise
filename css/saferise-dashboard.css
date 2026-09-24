@@ -186,9 +186,24 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
    The step is the rail's own faint raised tint; the shadow is the actual
    division line, replacing the border 1:1. */
 .sr-dash-rail{background:rgba(255,255,255,.012);box-shadow:inset -1px 0 0 rgba(245,237,218,.055);padding-right:20px;display:flex;flex-direction:column;gap:2px}
-.sr-dash-railbtn{display:flex;align-items:flex-start;gap:12px;text-align:left;background:transparent;border:0;border-left:2px solid transparent;padding:12px 10px;cursor:pointer;font-family:inherit;color:var(--text3);transition:color .18s,border-color .18s,background .18s;border-radius:0 4px 4px 0}
+/* SR-459 (PASS-AO §1) · twelve tracks ran the full column; cap at four rows
+   and scroll the rest, the mask fading the last row so it reads as
+   scrollable rather than clipped. Scoped to min-width:1001px: the
+   max-width:1000px block below turns the rail into a horizontal chip row
+   and resets neither max-height nor the mask, so an unscoped cap would
+   fade the bottom of every chip. The toggle lives inside the rail, so it
+   is made sticky — without that it scrolls away with the first rows. */
+@media(min-width:1001px){
+  .sr-dash-rail{max-height:calc(4 * 62px);overflow-y:auto;scrollbar-width:none;
+    overscroll-behavior:contain}
+  .sr-dash-rail::-webkit-scrollbar{display:none}
+  .sr-dash-rail{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 88%,transparent 100%);
+    mask-image:linear-gradient(180deg,#000 0,#000 88%,transparent 100%)}
+  .sr-dash-railtoggle{position:sticky;top:0;z-index:1}
+}
+.sr-dash-railbtn{display:flex;align-items:flex-start;gap:12px;text-align:left;background:transparent;border:0;padding:12px 10px;cursor:pointer;font-family:inherit;color:var(--text3);transition:color .18s,box-shadow .18s,background .18s;border-radius:0 4px 4px 0}
 .sr-dash-railbtn:hover{background:rgba(255,255,255,.02);color:var(--text2)}
-.sr-dash-railbtn.on{border-left-color:var(--accent);background:rgba(255,255,255,.028)}
+.sr-dash-railbtn.on{box-shadow:inset 2px 0 0 var(--tk,var(--accent));background:rgba(255,255,255,.028)}
 .sr-dash-railico{width:23px;height:23px;flex:0 0 auto;stroke:currentColor;fill:none;
   stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round;margin-top:1px;opacity:.9}
 .sr-dash-railbtn.on .sr-dash-railico{opacity:1}
@@ -257,7 +272,18 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
    hovers nor looks pressable. The "In development" line stays visible in
    the chip row too, where the other chips' meta line is hidden; without
    it a greyed chip would be the only signal. */
-.sr-dash-railbtn.sr-dash-raildev{opacity:.5;pointer-events:none;cursor:default}
+.sr-dash-railbtn.sr-dash-raildev{opacity:1;pointer-events:none;cursor:default;
+  color:var(--text3)}
+/* SR-459 (PASS-AO §3c) · the grade replaces SR-454's flat opacity:.5 (the
+   note above describes the old rule), which dimmed the label below 4.5:1.
+   Each button carries its own --tk (set
+   inline in dashboard.html); live tracks stroke in full accent, dev tracks
+   keep their colour identity at roughly half strength against --text3. */
+.sr-dash-raildev .sr-dash-railico{stroke:color-mix(in srgb,var(--tk) 46%,var(--text3));
+  opacity:.72}
+.sr-dash-raildev .sr-dash-railname{color:var(--text3)}
+.sr-dash-railbtn:not(.sr-dash-raildev) .sr-dash-railico{stroke:var(--tk);opacity:.9}
+.sr-dash-railbtn:not(.sr-dash-raildev).on .sr-dash-railico{opacity:1}
 @media(max-width:1000px){.sr-dash-raildev .sr-dash-railmeta{display:block;margin-top:0}}
 
 /* SR-421 (PASS-dashboard-F2-F4.md Part F2) · library search, a second and
@@ -711,7 +737,7 @@ body.reading #srLibrary{margin-top:22px}
   .sr-dash-rail{background:transparent;box-shadow:none;flex-direction:row;overflow-x:auto;padding:0 0 4px;margin-bottom:20px;scrollbar-width:none}
   .sr-dash-rail::-webkit-scrollbar{display:none}
   .sr-dash-railbtn{flex:0 0 auto;align-items:center;border:0;border-radius:99px;padding:9px 16px;background:rgba(255,255,255,.03)}
-  .sr-dash-railbtn.on{background:rgba(212,168,67,.11)}
+  .sr-dash-railbtn.on{background:rgba(212,168,67,.11);box-shadow:none} /* SR-459 · §3a's inset stripe is the column's, not a pill's */
   .sr-dash-railico{width:17px;height:17px}
   .sr-dash-railmeta{display:none}
   .sr-dash-carwrap{padding-left:0}
