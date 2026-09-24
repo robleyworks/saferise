@@ -21375,3 +21375,131 @@ RESULT: every track image on every surface resolves through content/track-images
      index's hero are unchanged, still in markup). Any late start should read as images
      arriving as you scroll, not as a flash above the fold. That is structural reasoning,
      not a measurement.
+
+## SR-451 — the Gap: correct the claim, then make it readable (PASS-AG.md)
+
+**SR IDs, recorded so the history reads straight.** A concurrent session in this working
+tree allocates IDs in commit messages without register entries: SR-445 (investor
+collateral), SR-446 (B2B film script), SR-448 (footage provisioning list, `38403f2`),
+SR-449 (Runway spec, `604571a`) and SR-450 (`d6021bd`).
+- This register's **SR-447** is PASS-AE.
+- This register's **SR-448** is PASS-AF; the other session's `38403f2` also says SR-448.
+- **SR-451** is this pass. Its two commits were first labelled SR-449 and relabelled
+  before anything was pushed; only these two unpushed commits of mine were rewritten.
+
+Commits: `53b2fa6` (organisations.html: correction, copy, rows, timing) and `1f06b70`
+(css), plus this entry. The two files interleave, so there is one commit per file rather
+than one per part. Not pushed.
+
+### Where the brief was wrong (DIFFERS)
+
+- **§1:** `data-step` was already on an ancestor containing both the SVG and
+  `.sr-org-gap-list`. `#srOrgGap` wraps the eyebrow through the gold line, and SR-436
+  verified the rows cycling. The "before" table below shows it: row A reads 14.4:1 when
+  active and 5.17:1 when not. What the brief saw as "never cycles" was the inactive rows
+  being dimmed rather than hidden; §2 fixes that. No rewiring was needed, and it stays
+  one source of truth.
+- **§5:** 5200ms is the three-layer model diagram's timer. The Gap ran at 3400ms, so the
+  Gap now runs at **7000ms** and the model is untouched.
+- **The pinch marker's wording:** the brief says it is "Andre's, below", but no wording is
+  given. The pinch keeps its marker (the red line and ring), **unlabelled**; nothing was
+  invented. The dashed connector and dot that tied the old point label to the pinch were
+  removed with that label's move.
+
+### The correction (applied)
+
+- "SafeRise works here" is now a gold bracket from x 60 to 700 (the channel's full width,
+  BEFORE through AFTER) under the channel, always shown. The label text is unchanged.
+- "EAPs, coaching and training reach here" stays over BEFORE only (x 60–232).
+- "not recovered" is unchanged. Channel paths are unchanged.
+- The SVG's aria-label gains "; SafeRise spans all three."
+
+### Copy applied, verbatim
+
+| row | problem (unchanged) | SafeRise line (new) |
+|---|---|---|
+| BEFORE | Knowledge, policy, coaching and technical skill are already present. | Practice builds the capacity to reach them under pressure. |
+| DURING | Activation narrows attention, interpretation and the range of available responses. | The Cue Card interrupts in the moment, with nothing to sit through. |
+| AFTER | The cost can travel into the next decision, relationship, shift or night of recovery. | Protocols for recovery and repair, so it stops travelling. |
+
+Closing gold line: "SafeRise does not replace existing support. It works before, during
+and after the moment — and it is the only part of that provision that reaches the middle."
+
+**Lines that overstate the product (reported; not softened):**
+- **BEFORE, "Practice builds the capacity…"**
+  - "builds the capacity" is an **outcome claim**. This page's own constraints refuse
+    those: SR-436 §6's standing rule that track copy states *access, not outcome*; the
+    impact pathway's "a pathway to evaluate, not a promise of outcomes"; the trust grid's
+    "No outcomes invented"; and the FAQ's "SafeRise itself has not been trialled".
+  - "Practice" is also prohibited product vocabulary (docs/PLATFORM-DESCRIPTION.md). This
+    is marketing-page copy, which even the proposed narrowing keeps in scope.
+- **AFTER, "…so it stops travelling."** A result promise, the same conflict.
+- **Gold line, "…the only part of that provision that reaches the middle."** An absolute
+  comparative claim that no other provision reaches the moment, and implicitly that
+  SafeRise reliably does. Neither is evidenced on the page.
+- **DURING** describes what the Cue Card is designed to do and does not claim a result.
+  Not flagged.
+
+### §2 — one row at a time
+
+The rows share one grid cell (`grid-area:1/1`), with a 400ms opacity fade only. Inactive
+rows are `opacity:0` and `aria-hidden="true"`; the active row is `aria-hidden="false"`.
+Verified per step: exactly one row visible, matching the glowing segment and showing both
+lines. **Locked height:** 135px at 1440 and 1024; **182px at 390** (the label stacks above
+the text below 600px). The same height held at every step.
+
+### §3 — contrast, measured (DOM computed colour × every ancestor opacity, over the shaded section's lighter end, rgb 22,22,31)
+
+Before is SR-449's pre-change page. Three values are step 1 / step 2 / step 3.
+
+| element | px | before | after |
+|---|---|---|---|
+| svg · FULL RANGE OF RESPONSE | 11 | 2.84 / 2.84 / 2.84 | 9.67 / 9.67 / 9.67 |
+| svg · EAPs, coaching and training reach here | 11 | 10.12 / 1.40 / 1.40 | 9.67 / 9.67 / 9.67 |
+| svg · SafeRise works here | 11 | 1.33 / 8.11 / 1.33 | 8.11 / 8.11 / 8.11 |
+| svg · not recovered | 11 | 1.31 / 1.31 / 7.23 | 9.67 / 9.67 / 9.67 |
+| svg · BEFORE | 11 | 8.11 / 2.01 / 2.01 | 8.11 / 8.39 / 8.39 |
+| svg · DURING | 11 | 1.57 / 4.58 / 1.57 | 8.39 / 6.39 / 8.39 |
+| svg · AFTER | 11 | 1.79 / 1.79 / 6.12 | 8.39 / 8.39 / 6.12 |
+| figcaption | 13.8 | 4.70 | 4.70 |
+| gold closing line | 17.6 | 11.08 | 11.08 |
+| row label (active) | 10.9 → **11** | A 7.59 · B **4.29** · C 5.73 | A 7.59 · B 5.98 · C 5.73 |
+| row problem line (active) | 15.2 | 14.40 | 14.40 |
+| row SafeRise line (active, new) | 15.2 | — | 10.38 |
+
+**After, every text element clears 4.5:1** (lowest: figcaption 4.70). Two things the brief
+missed:
+- **The DURING row label failed when active (4.29).** The red is now lifted with the same
+  `color-mix(… 78%, #fff)` SR-436 used for the model panel headings.
+- **The row labels were 10.9px**, under SR-437's floor; they are now 11px.
+
+Fills, raised:
+- inactive segments `.10 / .10 / .08` → `.2 / .2 / .18`
+- active `.40 / .52 / .38` → `.55 / .66 / .52`, drop-shadows kept
+- inactive edges `.32 / .32 / .28` → `.6 / .6 / .55`
+
+Annotations are at full opacity at rest. Inactive stage labels are cream at .72; the
+active one takes its stage colour.
+
+### §4
+
+`.sr-org-gap-list`: `border` and the `gap:1px;background:var(--hair)` dividers → `box-shadow:
+inset 0 0 0 1px var(--hair)`. No `border` remains in the gap-list rules (`border-radius`
+only).
+
+### §5 — timing and reduced motion
+
+The cycle is 7000ms. The longest row (DURING, 24 words across both lines) takes about 6s
+at an ordinary reading pace, so 7s reads as **comfortable, not slow**, with roughly a
+second's margin. The shortest row (AFTER, 25 words across shorter lines) is similar.
+**Reduced motion:** the pane cannot emulate the media query, so the page's own
+reduced-motion rules were applied directly. Result: **all three rows** visible, un-stacked
+into three grid rows (block 524px at 390, nothing clipped), stage labels in their colours,
+dots hidden. `show()` sets every row `aria-hidden="false"` under reduced motion, and the
+script never starts the cycle.
+
+### At 390 (the narrowest diagram)
+
+The SVG is 326px wide. The SafeRise bracket renders **290×21px on screen, spanning the
+channel's full width**. Its label is at the 11px floor, clear of the stage labels, and
+there is no horizontal scroll. No console errors at 1440, 1024 or 390.
