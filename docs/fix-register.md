@@ -21694,3 +21694,170 @@ deleted.
    - What is lost is the explicit "does not replace existing support". The diagram now
      states SafeRise's reach without disclaiming a substitute. That is Andre's call, and
      it is only noted here.
+
+---
+
+## SR-454 — nav panel scroll and expander; twelve tracks in the library rail (PASS-AI.md)
+
+24 September 2026. §1 `6ebaac2`, §2 `0420fa8`, §3 `0085fad`.
+
+### §1 — the nav panel scrolls
+
+The main routes moved into `.sr-dash-navraillist` (new, `sr-dash-` namespace). It is a
+flex child with `flex:1 1 auto; min-height:0; overflow-y:auto`, and every button is
+`flex-shrink:0`.
+
+**How the foot is pinned:** `.sr-dash-navrailfoot` (account, legal, Log out) sits
+outside the scroll box and keeps its existing `margin-top:auto`, so it never scrolls.
+
+**Bottom bar (≤760px):** the list turns into a row with `overflow-x:auto`.
+`justify-content` changed from `space-around` to `space-between`. With too many
+buttons, `space-around` overflows at both ends, and the first buttons end up past the
+left edge where no scroll can reach them. `space-between` falls back to `flex-start`.
+
+**No scroll-snap.** Neither row the bar resembles uses it: the `.sr-dash-rail` chip row
+and `.sr-dash-navlinks`.
+
+**Scrollbar** is hidden with the dashboard's existing pair, `scrollbar-width:none` plus
+`::-webkit-scrollbar{display:none}` (the same as `.sr-dash-carviewport` and the others).
+
+**Hover label:** a scroll box would clip it. Inside the list it is now `position:fixed`,
+and `js/saferise-rail.js` places it next to its button on `mouseenter` and `focus`.
+Verified unclipped at 1440×660.
+
+| Viewport | Before | After |
+|---|---|---|
+| 1440×900 | 44×44 | 44×44 |
+| 1440×660 | 44×35 (main list) | 44×44; list scrolls 92px, foot pinned (Log out bottom 642) |
+| 390 | 32×44 (10 buttons squeezed in) | 44×44; row scrolls (494 of 374px content) |
+| member-frameworks 1440×660 / 390 | — | 44×44 / 44×44 |
+
+**Keyboard:** a real Tab from FAQ to Your Decisions scrolled the list by 92px. The
+buttons are in the tab order, and focus brings them into view on both axes.
+
+### §2 — nav panel expander (dashboard only)
+
+`#srNavRailToggle` is rendered at the head of `#srRail` by the rail module, but only
+when `dashboard.html` passes `toggle:true`.
+
+Its logic sits beside the track rail's in `dashboard.html`:
+
+- `applyNavCollapsed` and `refreshNavCollapse` are copies of `applyRailCollapsed` and
+  `refreshRailCollapse`.
+- It has its own key, `sr-navrailcollapsed-v1`.
+- It uses the same aria pair ("Expand navigation" / "Collapse navigation") and the
+  same `RAIL_BREAKPOINT` (1000px) guard.
+- The toggle carries `.sr-dash-railtoggle`, so it inherits that treatment: the inset
+  ring, the rotation, and `display:none` at ≤1000px.
+
+**Differs from the track rail — adapted, and reported:**
+
+- **Collapsed is 74px, not 56px.** 74px is the panel's existing icon column. At 56px
+  the gold active bar (at `left:-15px`) would be cropped, and the dashboard's panel
+  would be narrower than on every other member page. Expanded is 212px, the track
+  rail's own open width.
+- **Collapsed is the default.** It is what every member sees today; expanding is
+  opt-in and remembered.
+- **The toggle is 44px, not 28px,** so it clears the tap target §1 holds every panel
+  button to.
+- **Expanding pushes the page**, the same way the track rail pushes its carousel:
+  `--sr-dash-navrailw` on `<body>` drives both the panel width and
+  `html body{padding-left}`. No transition was added.
+
+**Hover labels:** unchanged while collapsed. While expanded, the label is inline
+(`position:static`, 13px like `.sr-dash-railname`), so there is no tooltip.
+
+| | Nav panel (`#srNavRailToggle`) | Track rail (`#srRailToggle`) |
+|---|---|---|
+| 1440 | 74 ⇄ 212px; body padding 74 ⇄ 212; stored `false` survives reload | 212 ⇄ 56px, unchanged, independent |
+| 1024 | Same | Same |
+| 900 | Toggle hidden; stored "expanded" does not apply (74px icons) | Toggle hidden; chip row |
+| 390 | Toggle hidden; bottom bar | Toggle hidden; chip row |
+
+**Other member pages:** none render the toggle, because none passes `toggle:true`. That
+is right for now: the behaviour and its storage live in `dashboard.html`, so a toggle
+anywhere else would do nothing. Extending it means moving `applyNavCollapsed` into
+`js/saferise-rail.js`, and the expanded CSS (now in `saferise-dashboard.css`) into
+`saferise-rail.css`.
+
+### §3 — twelve tracks, three states
+
+**Entitled** — 01. The rail click renders its protocols, as before.
+
+**Locked** — 02 and 03 (checked with `?srmock=locked:2`). The rail click renders locked
+covers, and `#srLockCta` shows the add-track upsell. This is unchanged.
+
+**In development** — the nine, in `coming-soon.html`'s order:
+
+1. Elevation Series
+2. Sex & Intimacy
+3. Executive Presence
+4. Strength & Return
+5. Sleep & Recovery
+6. Embodied Nutrition
+7. Entrepreneur's Journey
+8. Money Shift
+9. Addiction Recovery
+
+- They are keyed by registry slug, not by number. `content/tracks.js` has `TRACKS[4]`
+  (Elevation Series, `visible:false`), so a numeric key 4 would have pulled its
+  protocols into the carousel.
+- The state is `'in development'`. That is the marker `/plans` already renders on
+  these nine (`rCoreCard`'s `<i>In development</i>`), and the phrase `coming-soon.html`
+  uses.
+- Names come from `content/track-images.js`. The registry has run, and is now loaded
+  on the dashboard for names only.
+- **Chose: not clickable, and out of the tab order.** Each is `aria-disabled="true"`
+  with `tabindex="-1"`, and is excluded from the `rail` NodeList, so it has no
+  handler. It uses the account.html disabled pattern: opacity .5, `pointer-events:none`.
+  The state is in the visible text ("In development") and in the accessible name, so
+  browse mode still announces it.
+- In the ≤1000px chip row, the meta line is kept visible for these nine only, since it
+  is their only marker there.
+- Icon: the nav panel's existing "What's coming" mark (SR-333). No new icon.
+- **`buildDashTracks()`** never reads `TRACKS` for a dev track, so it cannot throw. It
+  returns `{dev:true, items:[], unlocked:false}`.
+- **`render()`** refuses a dev track (the guard SR-110 asked for). So a dev track
+  renders a rail entry only, with no carousel row and no protocol list. Clicking one
+  does nothing: the carousel stayed on track 03.
+
+**No protocol list for any of the nine.** That differs from `coming-soon.html`, whose
+cards do carry protocol lists (`.sr-cs-list`). That is worth a look against this
+brief's "nothing is written yet".
+
+Verified with no console errors. `--per` is 5 / 4 / 2 at 1440 / 1024 / 390, unchanged,
+and the carousel viewport scrolls at all three widths.
+
+**Pre-existing, noticed:** `TRACKMETA`'s state copy for 02 and 03 is static ("not on
+your plan yet"), even when `ENTITLED` says the member owns the track. On localhost
+(dev bypass), track 03 reads unlocked under a "not on your plan yet" note.
+
+### Report only
+
+1. **Height at 1440.** The library grid went from 367px to 851px (rail: 3 → 12
+   entries). The `#srLibrary` section went from 715px to 1199px, and the whole
+   dashboard from 4641px to 5125px (+484px).
+   - The carousel itself is not taller: the rail is.
+   - About 480px of empty panel now sits under the covers, next to the nine greyed
+     entries. That is a layout question worth raising before this ships.
+   - Options include collapsing the nine into one "In development" group row, or
+     letting the rail scroll the way §1's panel does.
+2. **Where "which tracks are written" lives.** It is stated at least five times:
+   - `content/tracks.js` (TRACKS 1–3, plus a hidden 4)
+   - `dashboard.html` (TRACKMETA; `ENTITLED`/`TRACKNAME`/`COVERDIR` hard-coded to
+     [1,2,3])
+   - `js/saferise-plans.js` (`CORE_LIVE` vs `CORE_DEV`)
+   - `coming-soon.html` and `member-coming-soon.html` (nine hand-written cards each)
+
+   The image registry already names all twelve. Adding a `status: 'written' | 'dev'`
+   field there would make it the next registry after images.
+3. **Accents.** The nine are given none: greyed, `accent:null`.
+   - **Differs from the brief:** `--sr-track04:#9B7FD4` also exists in
+     `css/saferise-system.css`, not only 01–03.
+   - Two per-track palettes already disagree:
+     - `/plans` `CORE_DEV` uses `#B9A17A` for five tracks, and Elevation is `#AEB7CE`.
+     - `coming-soon.html` / `member-coming-soon.html` give each track its own `--ac`
+       (Elevation `#9B86D6`, Intimacy `#D4879A`, Executive Presence `#7BA3CC`, and so
+       on). Money Shift's `#D4A843` equals `--sr-track01`.
+   - If the nine ever take colour on the dashboard, the token set needs twelve
+     `--sr-trackNN` values, chosen once and read by all three surfaces.
