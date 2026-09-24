@@ -5408,13 +5408,22 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
    Stops were chosen by measurement, not by eye.
    Measured contrast for every text element over it is in the SR-455
    register entry. */
-.sr-org-pathbleed{position:absolute;inset:0;z-index:1;border-radius:inherit;
+.sr-org-pathbleed{position:absolute;inset:0;z-index:1;border-radius:inherit}
+/* SR-456 (PASS-AK §2) · the image (and its scrim) is declared ONLY above
+   640px, so a phone never requests it — a background that is never
+   declared is never fetched, which display:none alone does not promise in
+   every engine. At <=640px the cards stack and the plant became an
+   unreadable colour smear; the layer is gone there and the cards sit on
+   the sheet's own --bg. 640px is this page's existing single-column
+   breakpoint (.sr-org-pathgrid, below). */
+@media(min-width:641px){.sr-org-pathbleed{
   background:
     linear-gradient(180deg,rgba(10,10,15,.96) 0%,rgba(10,10,15,.9) 22%,rgba(10,10,15,.5) 28%,rgba(10,10,15,.5) 44%,rgba(10,10,15,.95) 46.5%,#0A0A0F 70%),
     url(../assets/org/path-underlay.jpg) 72% 40%/cover no-repeat;
   background:
     linear-gradient(180deg,rgba(10,10,15,.96) 0%,rgba(10,10,15,.9) 22%,rgba(10,10,15,.5) 28%,rgba(10,10,15,.5) 44%,rgba(10,10,15,.95) 46.5%,#0A0A0F 70%),
-    image-set(url(../assets/org/path-underlay.webp) type("image/webp"),url(../assets/org/path-underlay.jpg) type("image/jpeg")) 72% 40%/cover no-repeat}
+    image-set(url(../assets/org/path-underlay.webp) type("image/webp"),url(../assets/org/path-underlay.jpg) type("image/jpeg")) 72% 40%/cover no-repeat}}
+@media(max-width:640px){.sr-org-pathbleed{display:none}}
 /* SR-455 (PASS-AJ §2) · was display:flex / space-between, which set the
    lede beside the heading and left the four cards reading at the heading's
    level. Ruled: stacked — heading, then the lede beneath it, then the
