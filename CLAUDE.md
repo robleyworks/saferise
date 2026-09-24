@@ -248,6 +248,20 @@ report its output rather than simulating what the generator would do. Simulated
 verification is not verification — that is exactly how a route stayed silently
 missing from the sitemap before.
 
+### Rule — new imagery ships from `assets/`, never from `pass/`
+
+**New imagery goes straight into `assets/<surface>/`, and the markup is
+repointed to it in the same commit.** Review happens on the deploy preview.
+The commit that adds a file is the commit that uses it, so an image cannot be
+wired in without being staged, and a rejected image is one revert.
+
+**Nothing under `pass/` is ever a deployment source.** `pass/` is gitignored
+(`.gitignore` line 5), so a file staged there can never be committed — the
+gap and two-space photos sat in `pass/` for a day, pointed at by nothing that
+could ship, until SR-441 copied them out. A second gitignored review folder
+repeats the same failure one folder over. `git add` new assets explicitly and
+confirm with `git ls-files` before committing the markup that uses them.
+
 ## Proposed — awaiting Andre's decision, not adopted
 
 Written by SR-385 (`pass/PASS-organisations.md` C2). **Not a standing rule** —
