@@ -36,23 +36,6 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c];
     });
   }
-  /* SR-434 (PASS-I.md §4) · carried across from #sr-org-curriculum
-     (organisations.html) before that section was deleted — one distinct
-     one-line description per track, different wording from F8_TRACKS'
-     own `lead` (which the card and this panel already show, and stays
-     untouched). Kept here rather than added to content/f8-tracks.js,
-     whose own header comment still says "do not edit copy here" for
-     every field but the `cover` path this pass separately added. */
-  var CURRICULUM_NOTE = {
-    '01': 'States that arise within the person: anxiety, anger, overwhelm, grief, shame and shutdown.',
-    '02': 'Conflict, trust, distance, repair and the patterns that keep repeating between people.',
-    '03': 'Pressure, visibility, judgement, belonging, decision load and burnout.',
-    '04': 'Authority, transition, visibility and holding responsibility without losing access to self.',
-    '05': 'The states around eating, nourishment and the body\'s relationship with fuel.',
-    '06': 'Training, rest, interruption and the nervous-system work of returning.',
-    '07': 'The state you are in at eleven, at three, at seven — not a sleep schedule.',
-    '08': 'What becomes available when survival is no longer consuming the whole budget.'
-  };
   function byId(id) {
     for (var i = 0; i < B2B_PROTOCOLS.length; i++) { if (B2B_PROTOCOLS[i].id === id) return B2B_PROTOCOLS[i]; }
     return null;
@@ -157,81 +140,94 @@
   selInd.addEventListener('change', function () { syncRoles(); build(); });
   build();
 
-  /* ---- Foundation 8: same card component as the +2, click to open ---- */
+  /* ---- Foundation 8 ----
+     SR-436 (PASS-J-ORG-BASE-AND-FOUNDATION-8.md §3) · borderless 4:3 cards
+     on their own sr-org-f8* namespace (the +2 cards keep .sr-org-ecard).
+     Selecting one hides the grid and shows the detail in its place — a
+     300px rail (the card's own image, layer, who it serves, the way back)
+     beside the body — the same reading order as the 30-protocol wall.
+     "← All eight tracks" (or Escape) restores the grid, returns focus to
+     the card that opened it and scroll to the top of the block. No
+     outside-click dismissal here, unlike the wall: with the grid hidden,
+     a stray click collapsing the whole block would jump the page. */
+  var F8_LAYER = {
+    Capacity: 'capacity', Relational: 'relational', Application: 'application',
+    Substrate: 'substrate', Beyond: 'beyond'
+  };
+  var f8root = document.getElementById('srOrgF8Root');
   var f8host = document.getElementById('srOrgF8');
-  var f8detail = document.getElementById('srOrgF8Detail'), f8inner = document.getElementById('srOrgF8Inner');
+  var f8detail = document.getElementById('srOrgF8Detail');
   var f8open = null;
 
-  if (f8host && f8detail && f8inner) {
-    F8_TRACKS.forEach(function (t, i) {
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = 'sr-org-ecard sr-org-ecard--f8'; b.dataset.i = i;
-      b.setAttribute('aria-expanded', 'false');
-      var lay = LAYER_CLASS[t.layer] || '';
-      /* SR-434 (PASS-I.md §4) · the eyebrow reads the layer name, not the
-         fixed "Foundation track" label every one of the eight cards used
-         to share (still true, still shown below in the panel's own
-         "Layer" field — this is the retired curriculum section's own
-         layer eyebrow, carried onto the card face where it was visible
-         before, not just one click deeper). */
-      b.innerHTML =
-        '<figure class="sr-org-ecover ' + lay + '">' + f8CoverOrPlate(t) + '</figure>'
-        + '<div class="sr-org-et"><p class="sr-org-ek">' + esc(t.layer) + '</p><h3>' + esc(t.name) + '</h3>'
-        + '<p>' + esc(t.lead) + '</p><span class="sr-org-ef8cue">Read the track</span></div>';
-      f8host.appendChild(b);
-    });
+  function paras(list) {
+    return (list || []).map(function (x) { return '<p>' + esc(x) + '</p>'; }).join('');
+  }
+  function f8art(t) {
+    return '<figure class="sr-org-f8art">' + f8CoverOrPlate(t) + '</figure>';
+  }
 
-    function closeF8() {
-      f8detail.classList.remove('sr-org-eopen'); f8open = null;
-      f8host.querySelectorAll('.sr-org-ecard').forEach(function (x) {
-        x.classList.remove('sr-org-eon'); x.setAttribute('aria-expanded', 'false');
-      });
-    }
+  function closeF8(restoreFocus) {
+    if (f8open === null) return;
+    var card = f8host.querySelector('.sr-org-f8card[data-i="' + f8open + '"]');
+    f8open = null;
+    f8detail.hidden = true; f8detail.innerHTML = '';
+    f8host.hidden = false;
+    if (f8root) f8root.scrollIntoView({ block: 'start', behavior: reduced && reduced.matches ? 'auto' : 'smooth' });
+    if (restoreFocus && card) card.focus({ preventScroll: true });
+  }
 
-    f8host.addEventListener('click', function (e) {
-      var b = e.target.closest('.sr-org-ecard'); if (!b) return;
-      var i = +b.dataset.i, t = F8_TRACKS[i];
-      if (f8open === i) { closeF8(); b.focus(); return; }
-      closeF8(); f8open = i;
-      b.classList.add('sr-org-eon'); b.setAttribute('aria-expanded', 'true');
-      var lay = LAYER_CLASS[t.layer] || '';
-      /* SR-434 (PASS-I.md §1) · f8inner never carried this class — the wall
-         panel a few lines down does (dinner.className, below), and
-         .sr-org-edinner is the only rule holding the panel's 200px/1fr
-         grid. Without it .sr-org-eside ran full-width and the plate (with
-         the handler's own inline width:100%) resolved to ~1500x2000. */
-      f8inner.className = 'sr-org-edinner';
-      /* SR-434 (PASS-I.md §3) · the wall's own <figure class="sr-org-ecover">
-         wrapper, not a bare plate with an inline width — .sr-org-ecover
-         img{width:100%} already covers that, and #srOrgF8Inner's own scoped
-         aspect-ratio rule (css/saferise-system.css) handles the band shape
-         without touching .sr-org-eside/.sr-org-ecover's shared base rules,
-         which the wall's own detail panel also uses. */
-      f8inner.innerHTML =
-        '<button type="button" class="sr-org-eclose" data-f8close>Close</button>'
-        + '<div class="sr-org-eside"><figure class="sr-org-ecover ' + lay + '">' + f8CoverOrPlate(t) + '</figure>'
-        + '<div class="sr-org-eanchor"><span>Layer</span><b>' + esc(t.layer) + '</b></div>'
-        + '<div class="sr-org-ewho"><span>Who it serves</span><p>' + esc(t.audience) + '</p></div></div>'
-        + '<div class="sr-org-etext"><p class="sr-org-ek" style="color:var(--gold)">Track ' + esc(t.n) + ' · Foundation</p>'
-        + '<h3>' + esc(t.name) + '</h3><p class="sr-org-elead">' + esc(t.lead) + '</p>'
-        + '<div class="sr-org-efgrid">'
-        + '<div class="sr-org-erow"><span>Included for every member</span><p>' + esc(CURRICULUM_NOTE[t.n] || '') + '</p></div>'
-        + '<div class="sr-org-erow"><span>What this track works</span><p>' + esc(t.story) + '</p>'
-        + '<span class="sr-org-emt">Depth specific to this track</span><p>' + esc(t.depth) + '</p></div>'
-        + '<div class="sr-org-erow"><span>Ten protocols</span><ol class="sr-org-efp">'
+  function openF8(i) {
+    var t = F8_TRACKS[i]; if (!t) return;
+    f8open = i;
+    var hasPs = t.protocols && t.protocols.length;
+    f8detail.innerHTML =
+      '<div class="sr-org-f8dwrap sr-org-f8--' + (F8_LAYER[t.layer] || 'capacity') + '">'
+      + '<div class="sr-org-f8drail">' + f8art(t)
+      + '<div class="sr-org-f8layer"><span>Layer</span><b>' + esc(t.layer) + '</b></div>'
+      + '<div class="sr-org-f8serves"><span>Who it serves</span><p>' + esc(t.audience) + '</p></div>'
+      + '<button type="button" class="sr-org-f8back" data-f8back>&larr; All eight tracks</button></div>'
+      + '<div class="sr-org-f8dmain">'
+      + '<p class="sr-org-f8kick">Track ' + esc(t.n) + ' · Foundation</p>'
+      + '<h3 tabindex="-1">' + esc(t.name) + '</h3><p class="sr-org-f8dlead">' + esc(t.lead) + '</p>'
+      + '<div class="sr-org-f8pair">'
+      + '<div class="sr-org-f8blk"><span>What people are stuck in</span>' + paras(t.stuck) + '</div>'
+      + '<div class="sr-org-f8blk sr-org-f8blk--win"><span>What becomes reachable</span>' + paras(t.win) + '</div>'
+      + '</div>'
+      + (hasPs ? '<div class="sr-org-f8plist"><span>Ten protocols</span><ol>'
         + t.protocols.map(function (x, j) { return '<li><em>' + (j < 9 ? '0' : '') + (j + 1) + '</em>' + esc(x) + '</li>'; }).join('')
-        + '</ol>'
-        + '<p class="sr-org-eguard">' + esc(t.guard) + '</p></div>'
-        + '</div></div>';
-      f8detail.classList.add('sr-org-eopen');
-      requestAnimationFrame(function () {
-        if (f8detail.getBoundingClientRect().top < 0) f8detail.scrollIntoView({ block: 'start' });
-      });
+        + '</ol></div>' : '')
+      + (t.guard ? '<p class="sr-org-f8guard">' + esc(t.guard) + '</p>' : '')
+      + '</div></div>';
+    f8host.hidden = true;
+    f8detail.hidden = false;
+    var h = f8detail.querySelector('h3');
+    if (h) h.focus({ preventScroll: true });
+    if (f8root && f8root.getBoundingClientRect().top < 0) f8root.scrollIntoView({ block: 'start' });
+  }
+
+  if (f8host && f8detail) {
+    F8_TRACKS.forEach(function (t, i) {
+      /* <article role="button">, not <button> — CLAUDE.md: Chromium leaves
+         a <button> holding an aspect-ratio child at zero height. */
+      var c = document.createElement('article');
+      c.className = 'sr-org-f8card sr-org-f8--' + (F8_LAYER[t.layer] || 'capacity');
+      c.setAttribute('role', 'button'); c.tabIndex = 0; c.dataset.i = i;
+      c.setAttribute('aria-controls', 'srOrgF8Detail');
+      c.innerHTML = f8art(t)
+        + '<p class="sr-org-f8k">' + esc(t.layer) + '</p><h4>' + esc(t.name) + '</h4>'
+        + '<p class="sr-org-f8lead">' + esc(t.lead) + '</p>';
+      f8host.appendChild(c);
+    });
+    f8host.addEventListener('click', function (e) {
+      var c = e.target.closest('.sr-org-f8card'); if (c) openF8(+c.dataset.i);
+    });
+    f8host.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var c = e.target.closest('.sr-org-f8card'); if (!c) return;
+      e.preventDefault(); openF8(+c.dataset.i);
     });
     f8detail.addEventListener('click', function (e) {
-      if (e.target.closest('[data-f8close]')) {
-        var b = f8host.querySelector('.sr-org-ecard[data-i="' + f8open + '"]'); closeF8(); if (b) b.focus();
-      }
+      if (e.target.closest('[data-f8back]')) closeF8(true);
     });
   }
 
@@ -338,25 +334,13 @@
   /* ---- shared: Escape closes whichever panel is open, focus returns ---- */
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
-    if (f8open !== null) { var b1 = f8host.querySelector('.sr-org-ecard[data-i="' + f8open + '"]'); closeF8IfOpen(); if (b1) b1.focus(); }
+    if (f8open !== null) closeF8(true);
     if (openId) { var b2 = wall.querySelector('.sr-org-etile[data-id="' + openId + '"]'); detail.classList.remove('sr-org-eopen'); openId = null; if (b2) b2.focus(); }
   });
-  /* closeF8 is declared inside the f8host guard above; this indirection
-     lets the shared Escape handler call it even when that block ran (f8host
-     exists on every real load — the guard only protects a malformed page). */
-  function closeF8IfOpen() {
-    if (!f8host) return;
-    f8open = null;
-    if (f8detail) f8detail.classList.remove('sr-org-eopen');
-    f8host.querySelectorAll('.sr-org-ecard').forEach(function (x) {
-      x.classList.remove('sr-org-eon'); x.setAttribute('aria-expanded', 'false');
-    });
-  }
 
   /* ---- click anywhere outside an open panel dismisses it, no focus move ---- */
   document.addEventListener('pointerdown', function (e) {
     var t = e.target;
-    if (f8open !== null && !t.closest('#srOrgF8Detail') && !t.closest('#srOrgF8')) closeF8IfOpen();
     if (openId && !t.closest('#srOrgDetail') && !t.closest('#srOrgWall') && !t.closest('.sr-org-efilters')) {
       if (detail) detail.classList.remove('sr-org-eopen'); openId = null;
     }

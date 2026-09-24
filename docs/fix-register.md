@@ -19989,3 +19989,157 @@ wall's own lede (`.sr-org-esecwide`), not part of this pass's resolving instruct
 items remain flagged, not built, from the curriculum merge: the section's own
 industry-access framing lede, and the fuller "wider system... workplace strain" paragraph
 — both prose/positioning decisions for Andre, not carried across. **Not pushed.**
+
+## SR-436 — organisations.html: the Base, the Foundation 8, and four carried fixes (PASS-J-ORG-BASE-AND-FOUNDATION-8.md)
+
+Not `pass/PASS-J.md` (SR-431, unrelated). Reference builds read before editing:
+`RMQ4UUmr7Rc52hbX1Hmdne` (Base + F8) and `SgQMfaZE8H2y2CaBTVkraN` (Gap). Git worked
+normally through this pass; the brief's warning about a broken branch did not reproduce.
+
+### §7a — `_headers` (first, own commit)
+
+Added `/css/*` and `/js/*` → `Cache-Control: public, max-age=0, must-revalidate`; `/assets/*`
+untouched. **Before, measured live:** `curl -sI https://thesaferiseprotocol.com/css/saferise-dashboard.css`
+→ `cache-control: public,max-age=0,must-revalidate` (same for `saferise-system.css` and
+`js/saferise-system.js`). Netlify's default already revalidates, so the missing rule was
+**not** the cause of the stale-page symptom; the rule now makes the policy explicit. "After"
+needs a deploy, and this pass does not push.
+
+### Line anchors — confirmed live, two differ from the brief
+
+§1's anchors (151/153/156/157) and §3's (183/184) matched. **§2's anchor is wrong:** the
+shared-resources sentence is `.sr-org-eresline` (was line 181); `.sr-org-ef8base` at 204 is
+a different sentence inside `#sr-org-plustwo` and was not touched. The ring sat **above**
+`#sr-org-base` as its own `<figure>` (127–149), not inside it.
+
+### §1 — the Base
+
+Two-column head scoped as `#sr-org-base>.sr-org-head` (1.08fr/.92fr, `--sr-org-s7`, centred;
+one column ≤1000px, copy first); the base `.sr-org-head` is untouched. Photograph
+(`.sr-org-eband--base`) and `--band` padding modifier removed from this head. `#srOrgM1` and
+its button removed; all three paragraphs render. **The toggle handler stays** — it is generic
+(`.sr-org-ermore` → `aria-controls`) and still drives `#srOrgM2` and `#srOrgM3`.
+**`.sr-org-eband--base` is now the only orphaned band rule** (`--plustwo` still used); left
+in place as instructed.
+
+Ring lifted verbatim (viewBox 320, r128, stroke 24, pathLength 100, dasharray 8.4/91.6,
+offsets −0.8…−90.8, group rotated −90), colours via `--sr-org-gold/slate/sage` (same
+values as the reference's literals). SR-434's ring CSS removed (`.sr-org-ringwrap`,
+`-ringmid`, `-ringbed`, `-ringseg` + its keyframes and reduced-motion lines). That CSS set
+`stroke-width:15` on every circle, which would have beaten the new SVG's attribute. No count
+anywhere near it.
+
+Copy kept as live: paragraph 2 keeps its colon ("do not vary: the states…"); the reference
+had a full stop.
+
+### §2 — shared-resources line
+
+Hairline above and below, `--sr-org-s5` inside, `--sr-org-s7` outside, 70ch, lead in
+`--text` (`<b>`), list in `--text2`, 1.02rem.
+
+### §3 — the Foundation 8
+
+Own namespace, `sr-org-f8*`: `.sr-org-ecard` is shared with the +2 cards, which keep their
+ring. Cards are `<article role="button" tabindex="0">` with Enter/Space, **not `<button>`**
+as in the reference: CLAUDE.md, an aspect-ratio child inside a button collapses it in
+Chromium. Header is a 1.9rem Cormorant `h3`, with the hint at .86rem `--text3` on the same
+baseline. Card: 4:3 image, 4px radius, layer-tinted corner, layer name in the layer tint, then
+the Cormorant name and the `--text3` lead; hover lifts 4px only. The "Read the track" cue is
+dropped, as in the reference. Layer tints follow the reference: capacity gold, relational
+`--sr-org-red`, application slate, substrate sage, beyond 156,143,196.
+
+Detail replaces the grid (`hidden` on both; `[hidden]{display:none}` added because
+`display:grid` would otherwise override the UA rule). It uses a 300px rail + 1fr grid: the
+card's own image, the Layer chip, Who it serves, and `← All eight tracks`. The body has the
+kicker/name/lead; two equal columns (*What people are stuck in* / *What becomes reachable*,
+`--sr-org-s6` gap); *Ten protocols* above a hairline, two columns, five per column
+(`grid-auto-flow:column`); the guard at 70ch. Rhythm: 12px within blocks, `--sr-org-s6`
+between blocks, 58ch cap. Opening focuses the track heading. Back/Escape restores the grid,
+returns focus to the card, and scrolls to the block top (`scroll-margin-top` matches
+`section[id^="sr-org-"]`, so it clears the fixed nav and the rail).
+
+**SR-434 §1's `.sr-org-edinner` fix:** the F8 detail no longer uses `.sr-org-edinner` (the
+wall still does). The fault cannot recur, because the grid class is now written into the
+markup string rather than applied afterwards. **Outside-click dismissal removed for F8 only**:
+with the grid hidden, a stray click would collapse the block and jump the page. The wall
+keeps it. `CURRICULUM_NOTE` (the SR-434 carry-over line per track) removed with the old body
+it fed. Orphaned `.sr-org-ef8*`, `#srOrgF8Inner` 16:7, `.sr-org-egrouplab`,
+`.sr-org-ef8cue`, `.sr-org-efgrid`, `.sr-org-efp`, `.sr-org-ecard.sr-org-eon` and
+`.sr-org-emt` rules removed.
+
+Found in passing: `.sr-org-page p{margin:0}` (0,1,1) outranks any bare `.class` on a `<p>`.
+The new paragraph classes are written `p.sr-org-f8*`, the same pattern as
+`p.sr-org-gold-copy`.
+
+### §8 — covers
+
+**Only three portrait covers exist**: `pass/_f8-covers/{as-supplied,graded}/f01–f03`
+(1086×1448; Personal Transformation, Relationship Healing, Professional Performance). The
+ruling says "all eight". Tracks 01–03 are repointed to `assets/f8/f01–f03.webp`, copied
+byte-identical from **`graded/`**. At card size graded and as-supplied are nearly
+indistinguishable; graded is slightly warmer and less saturated. **Tracks 04–08 keep their
+1200×640 band covers** (29% of width lost at 4:3) until five more portraits are supplied. The
+ruling's own argument is about t1/t3-band at ratio 3.68, and those two are now solved. Band
+assets untouched. `object-position:50% 22%` keeps every head in frame (f03's sits highest).
+**Verified:** all eight `cover` paths return 200; all eight card images loaded at natural
+size (1086 ×3, 1200 ×5); zero console errors.
+
+### §4 — benefit cards
+
+Moved intact (markup, icons, hover reveal) into `#sr-org-privacy`, between its head and the
+photo cards. Only CSS that assumed the old neighbours: `margin-top:var(--sr-org-s2)` (sat
+under the Base head) → `margin:0 0 var(--sr-org-s6)`. Spacing tokens are on `.sr-org-page`,
+so nothing else broke.
+
+### §5a / §5b
+
+`.sr-org-hero-note` 24 → 44px. **The rule had never applied**: it lost to `.sr-org-page
+p{margin:0}`, so the note sat flush against the buttons. It is now `p.sr-org-hero-note`;
+measured 44 above / 44 below the buttons. The panel copy uses the brief's three lines (DM
+Sans `--text`, `.sr-org-pt` `--text2`, heading `color-mix` 78%); Cormorant kept on
+`.sr-org-ph2`. Panel content still fits `.sr-org-panels` (280/280 at 1024px).
+
+### §5c — the Gap channel
+
+Ported under `sr-org-gd*`. `#srOrgGap[data-step]` lights band, annotation and row together;
+3400ms, starts at IO 0.35, pauses on pointer-enter/focus-within, stops for good on a dot
+press. Verified cycling 3→1→2. Reduced motion: the script never starts and the page's
+existing reduced-motion block lights all three and hides the dots. The axis caption and the
+gold line do not cycle. The reference's "running / paused" hint text is **not** ported, as
+it is mock chrome. `.sr-org-image-copy`'s photo-figure rules are neutralised for this figure
+only (`figure.sr-org-gddia`), not narrowed. **Flag:** at 1024px the SVG is 518px wide, so
+annotation text renders at ~8.3px (axis 7.5px); at 1440 it is ~10px, the reference's own
+proportion. It is legible on desktop and tight on small laptops and tablets in landscape.
+
+### §5d — not done
+
+Andre ruled no impact-pathway underlay. The standfirst move sits under the same heading and
+order-of-work row ("only if the underlay is adopted"), so it was not done either.
+
+### §6 — track copy (`content/f8-tracks.js`)
+
+`stuck` and `win` added as paragraph arrays; `story`/`depth` stay in the data, unrendered. 01
+is the reference's copy verbatim; 02 is §6's ruled copy, and 02's `audience` → "Adults
+navigating recurring patterns in close relationships." The label is **What becomes
+reachable** on all eight. **03–08 drafted in this pass against 01's register:** second person,
+the moment rather than the mechanism, and win as access, not outcome. 05, 06, 07 and 08 make
+no workplace claim. **Awaiting Andre's read.** Other tracks' `audience` is untouched; the
+reference's shortened versions for 01/03 were mock text, not ruled.
+
+### §7b — LG-320
+
+"Fourteen protocols for responsibility, sixteen for environment —" → "Every role protocol and
+every industry protocol in one library —". **Still on screen and not changed** (one string
+was named): the filter chips `All 30` / `Role · 14` / `Industry · 16`, the count line "All 30
+context protocols", and the wall's `aria-label="All 30 protocols"`. These are the same
+substance under the same rule, so they need a decision.
+
+### §7c — LG-318, report only
+
+Confirmed: nothing hides `.sr-begin` (`.sr-dash-hideme` applies only in reading mode). The
+comment the brief cites has **already been corrected** by SR-435 (`dashboard.html:177–187`
+now says the behaviour does not exist). No documentation change is needed. Whether to build
+the retirement is a product decision.
+
+Verified on a local mirror of the site (the preview runner cannot read `~/Documents`) at
+1024px and 375px: no horizontal scroll, tags and comments balanced. **Not pushed.**

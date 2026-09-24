@@ -4959,7 +4959,13 @@ section[id^="sr-org-"]{scroll-margin-top:124px}
 .sr-org-hero-copy h1{font-size:clamp(2.2rem,4.6vw,3.6rem);line-height:1.04;letter-spacing:-.02em;margin:8px 0 24px}
 .sr-org-hero-lead{color:var(--text2)!important;font-size:1.05rem;line-height:1.6;max-width:56ch}
 .sr-org-actions{display:flex;flex-wrap:wrap;gap:18px;margin-top:44px}
-.sr-org-hero-note{margin-top:24px;color:var(--text3)!important;font-size:var(--fs-caption);max-width:52ch}
+/* SR-436 (PASS-J-ORG-BASE §5a) · 24 -> 44: the note is a third statement
+   in the hero, not a caption on the buttons, so it takes FB-13's "large"
+   (group to group) step, not "medium" (label to what it labels).
+   Written p.sr-org-hero-note: as a bare class it lost to .sr-org-page
+   p{margin:0} (0,1,1 > 0,1,0), so the old 24px never applied either —
+   the note had been sitting flush against the buttons. */
+p.sr-org-hero-note{margin-top:44px;color:var(--text3)!important;font-size:var(--fs-caption);max-width:52ch}
 
 /* -- sections -- padding read from method.html's own .sr-mt-sec (SR-384) */
 /* PASS-org-layout.md §5 · was a 6vh-based clamp (40-66px on a real
@@ -5314,8 +5320,14 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
   transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .sr-org-panel.on{opacity:1;transform:none;pointer-events:auto}
 .sr-org-panel .sr-org-ph2{display:block;font:400 1.6rem/1.2 'Cormorant Garamond',serif;color:rgb(var(--c));margin-bottom:18px}
-.sr-org-panel p{margin:0 0 15px;color:var(--text2);font:400 1.06rem/1.68 'Cormorant Garamond',serif;max-width:44ch}
-.sr-org-panel .sr-org-pt{color:var(--text3);font:400 .9rem/1.62 'DM Sans',sans-serif;max-width:46ch}
+/* SR-436 (PASS-J-ORG-BASE §5b) · body copy was Cormorant 400 at 1.06rem —
+   every colour already passed AA; the failure was stroke weight (a display
+   serif's hairlines drop below a pixel at 17px on near-black). Body moves
+   to DM Sans and --text (7.12 -> 16.92:1), closer to --text2 (5.17 ->
+   7.12:1), heading lifted 22% toward white. Cormorant stays on the heading. */
+.sr-org-panel p{margin:0 0 15px;color:var(--text);font:400 1.02rem/1.62 'DM Sans',system-ui,sans-serif;max-width:46ch}
+.sr-org-panel .sr-org-pt{color:var(--text2);font:400 .9rem/1.62 'DM Sans',sans-serif;max-width:46ch}
+.sr-org-panel .sr-org-ph2{color:color-mix(in srgb, rgb(var(--c)) 78%, #fff)}
 .sr-org-dots{display:flex;gap:7px;margin-top:24px}
 .sr-org-dot{position:relative;width:22px;height:2px;border:0;padding:0;cursor:pointer;background:rgba(245,237,218,.13);transition:background .5s}
 .sr-org-dot.on{background:rgb(var(--c))}
@@ -5598,28 +5610,28 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
    anywhere, per the standing rule — every division below is a
    box-shadow. */
 
-/* -- ring, before any heading (§3a①) -- SR-434 (PASS-I.md §2) · replaces
-   the equation strip (.sr-org-eeq*, removed — grepped first to confirm no
-   other reference anywhere in the repo). Ported from
-   pass/PASS-F-assets/PASS-F-reference-explorer.html (CSS lines 294–309),
-   sr-org- prefixed rather than a second namespace. Colour substitution
-   (role/industry segments) reported in the markup's own comment, above
-   the figure. */
-.sr-org-ringfig{margin:0 0 var(--sr-org-s6);display:grid;justify-items:center;gap:20px}
-.sr-org-ringwrap{position:relative;width:min(300px,100%);aspect-ratio:1}
-.sr-org-ring{width:100%;height:100%;overflow:visible;transform:rotate(-90deg)}
-.sr-org-ring circle{fill:none;stroke-width:15;stroke-linecap:butt}
-.sr-org-ring .sr-org-ringbed{stroke:rgba(245,237,218,.05);stroke-width:15}
-.sr-org-ring .sr-org-ringseg{opacity:0;animation:srOrgRingSegIn .5s var(--sr-org-ease) var(--d) both}
-@keyframes srOrgRingSegIn{from{opacity:0;stroke-width:5}to{opacity:1;stroke-width:15}}
-.sr-org-ringmid{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:2px}
-.sr-org-ringmid b{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:64px;line-height:1;color:var(--text)}
-.sr-org-ringmid span{font:700 9.5px/1.45 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--text3)}
-.sr-org-ringcap{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;font-size:11.5px;color:var(--text3)}
-.sr-org-ringkey{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
+/* -- the Base: copy left, ring right -- SR-436 (PASS-J-ORG-BASE §1).
+   Replaces SR-434's ring-above-the-heading block (.sr-org-ringwrap/
+   -ringmid/-ringseg and the segment-in animation, all removed — the new
+   SVG is lifted verbatim from the reference build and carries its own
+   geometry as attributes). Nothing may set stroke-width on these circles
+   in CSS: a CSS stroke-width beats the presentation attribute, and the
+   old rule (stroke-width:15) is exactly what would have thinned them.
+   The two-column head is scoped to #sr-org-base only — .sr-org-head is
+   one column across every other section on the page (SR-429 §5a). */
+#sr-org-base>.sr-org-head{grid-template-columns:1.08fr .92fr;gap:var(--sr-org-s7);align-items:center}
+.sr-org-basecopy h2{margin-bottom:var(--sr-org-s4)}
+.sr-org-basecopy>p:not(.eyebrow){margin:0 0 var(--sr-org-s4);color:var(--text2);font-size:1.02rem;line-height:1.66;max-width:58ch}
+.sr-org-basecopy>p:last-child{margin-bottom:0}
+.sr-org-ringfig{margin:0}
+.sr-org-ring{display:block;width:100%;max-width:420px;height:auto;margin:0 auto}
+.sr-org-ringcap{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--sr-org-s2) var(--sr-org-s4);margin-top:var(--sr-org-s4)}
+.sr-org-ringcap span{display:flex;align-items:center;gap:8px;font-size:.84rem;color:var(--text2)}
+.sr-org-ringkey{display:inline-block;flex:none;width:7px;height:7px;border-radius:50%}
 .sr-org-ringkey--gold{background:rgb(var(--sr-org-gold))}
 .sr-org-ringkey--role{background:rgb(var(--sr-org-slate))}
 .sr-org-ringkey--industry{background:rgb(var(--sr-org-sage))}
+@media(max-width:1000px){#sr-org-base>.sr-org-head{grid-template-columns:1fr;gap:var(--sr-org-s6)}}
 
 /* -- section banner underlays (§4h) — base and plus-two headers only -- */
 .sr-org-head--band{position:relative;z-index:0;padding:var(--sr-org-s5) var(--sr-org-s4) var(--sr-org-s4);
@@ -5669,7 +5681,9 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-ermore[aria-expanded="true"]::after{content:" \2013"}
 
 /* -- illustrated benefits (§3a①, three line icons) -- */
-.sr-org-ebenefits{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:var(--sr-org-s2)}
+/* SR-436 §4 · now in #sr-org-privacy, above the two photo cards — was
+   margin-top:s2 under the Base head it used to follow. */
+.sr-org-ebenefits{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0 0 var(--sr-org-s6)}
 .sr-org-ebenefits article{position:relative;padding:var(--sr-org-s4) var(--sr-org-s3) var(--sr-org-s3);
   cursor:default;outline:0;transition:background .45s var(--sr-org-ease)}
 .sr-org-ebenefits article+article{box-shadow:inset 1px 0 0 0 var(--hair)}
@@ -5688,17 +5702,18 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-ebenefits article:hover .sr-org-emore,.sr-org-ebenefits article:focus-visible .sr-org-emore,
 .sr-org-ebenefits article:focus-within .sr-org-emore{grid-template-rows:1fr}
 
-.sr-org-eresline{margin:var(--sr-org-s4) 0 var(--sr-org-s3);max-width:70ch;font-size:12.5px;line-height:1.55;color:var(--text3)}
+/* SR-436 §2 · was a 12.5px --text3 line tight against the block above
+   and the grid below. Hairline above and below, s5 inside, s7 outside. */
+.sr-org-eresline{margin:var(--sr-org-s7) 0;padding:var(--sr-org-s5) 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.sr-org-eresline p{margin:0;max-width:70ch;font-size:1.02rem;line-height:1.7;color:var(--text2)}
+.sr-org-eresline b{font-weight:400;color:var(--text)}
 
 /* -- Foundation 8 grid + the +2 cards: one shared card component (§4a) -- */
-.sr-org-ef8{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sr-org-s3)}
 .sr-org-eplus{display:grid;grid-template-columns:1fr 1fr;gap:var(--sr-org-s3);margin-top:var(--sr-org-s4)}
 .sr-org-ecard{display:flex;gap:var(--sr-org-s3);width:100%;text-align:left;font:inherit;color:inherit;
   border:0;padding:var(--sr-org-s3);border-radius:4px;background:rgba(245,237,216,.028);cursor:pointer;
   box-shadow:inset 0 0 0 1px var(--hair);transition:box-shadow .4s var(--sr-org-ease),transform .4s var(--sr-org-ease)}
-.sr-org-ef8 .sr-org-ecard{flex-direction:column}
 .sr-org-ecard:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px rgba(var(--sr-org-gold),.48),0 16px 36px rgba(0,0,0,.34)}
-.sr-org-ecard.sr-org-eon{box-shadow:inset 0 0 0 1px var(--gold),0 16px 36px rgba(0,0,0,.4)}
 .sr-org-ecard:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .sr-org-ecard--role{box-shadow:inset 0 0 0 1px rgba(var(--sr-org-slate),.26)}
 .sr-org-ecard--ind{box-shadow:inset 0 0 0 1px rgba(var(--sr-org-sage),.26)}
@@ -5712,31 +5727,12 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-ecard>.sr-org-et>p{margin:6px 0 0;font-size:12.5px;line-height:1.5;color:var(--text2)}
 .sr-org-ea{margin-top:9px;font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;color:var(--text)}
 .sr-org-ea span{display:block;font:700 9px/1 'DM Sans',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-bottom:3px}
-.sr-org-ef8cue{display:block;margin-top:9px;font:700 9px/1 'DM Sans',sans-serif;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--text3);transition:color .3s var(--sr-org-ease)}
-.sr-org-ecard:hover .sr-org-ef8cue,.sr-org-ecard.sr-org-eon .sr-org-ef8cue{color:var(--gold)}
 
 /* -- the typographic plate — real cover art absent for F8 (§4b) and for
    three protocol IDs this pass (§4b's "no substitute" rule) -- */
 .sr-org-eplate{flex:none;width:86px;position:relative;border-radius:3px;overflow:hidden;
   aspect-ratio:1086/1448;display:grid;place-items:center;text-align:center;padding:8px;
   background:linear-gradient(165deg,color-mix(in srgb,var(--lc) 26%,#0d0d14),#0b0b11)}
-/* SR-434 (PASS-I.md §3, option (a)) · F8's own slot moves to the band
-   aspect — the eight cover assets are all bands (two 1400×380 journey
-   bands, six 1200×640 "coming" bands), so a portrait box would either
-   crop hard or leave the two journey bands visibly soft. 16/7 matches
-   the ratio this codebase already uses for the track pages' cost/change
-   images — not invented here. Applies to both the real-cover case
-   (.sr-org-ecover, wraps a plain <img>) and the plate fallback
-   (.sr-org-eplate) so a track with art and a track without render at the
-   same height in the same row. Scoped to .sr-org-ef8 (the grid) and
-   #srOrgF8Inner (the detail panel, by id — .sr-org-eside/.sr-org-ecover
-   are shared with the wall's own detail panel, so an unscoped change
-   here would have reshaped that too; CLAUDE.md's "never modify a shared
-   selector to fix one surface" rule). */
-.sr-org-ef8 .sr-org-eplate,#srOrgF8Inner .sr-org-eplate{width:100%;aspect-ratio:16/7}
-.sr-org-ef8 .sr-org-ecover,#srOrgF8Inner .sr-org-ecover{width:100%;aspect-ratio:16/7}
-.sr-org-ef8 .sr-org-ecover img,#srOrgF8Inner .sr-org-ecover img{aspect-ratio:16/7}
 /* the F8 grid/detail cover has no role/industry split (the wall's own
    .erol/.eind pair) — tinted by layer instead, same --lc every layer
    class already sets for the plate above. */
@@ -5772,9 +5768,6 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-estackline b{color:var(--gold);font-weight:500}
 .sr-org-ef8base{margin:var(--sr-org-s3) 0 0;max-width:70ch;font-size:12.5px;line-height:1.55;color:var(--text3)}
 
-.sr-org-egrouplab{display:flex;align-items:baseline;gap:10px;margin-bottom:11px}
-.sr-org-egrouplab span{font:700 10px/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
-.sr-org-egrouplab em{font-style:normal;font-size:12.5px;color:var(--text3)}
 
 /* -- the wall (§3c) -- */
 .sr-org-efilters{display:flex;flex-wrap:wrap;gap:7px;margin-top:var(--sr-org-s4)}
@@ -5851,7 +5844,6 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-erow span{display:block;margin-bottom:5px;font:700 9px/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--text3)}
 .sr-org-erow p{margin:0;font-size:13.5px;line-height:1.6;color:var(--text2);max-width:58ch}
 .sr-org-erow p+p{margin-top:9px}
-.sr-org-emt{margin-top:var(--sr-org-s3)}
 .sr-org-etwo{position:relative;display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-top:var(--sr-org-s6);align-items:stretch}
 .sr-org-etwo>div{padding:20px 22px;border-radius:4px}
 .sr-org-ewo{background:rgba(var(--sr-org-red),.08);
@@ -5886,21 +5878,148 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-eguard{margin-top:var(--sr-org-s3);padding:12px 14px;border-radius:3px;background:rgba(var(--sr-org-gold),.06);
   box-shadow:inset 0 0 0 1px rgba(var(--sr-org-gold),.2);font-size:12.5px;line-height:1.55;color:var(--text3);max-width:58ch}
 
-/* -- F8 detail panel's two-column body (§4c) -- */
-.sr-org-efgrid{display:grid;grid-template-columns:1.06fr 1fr;gap:26px;margin-top:var(--sr-org-s3);align-items:start}
-.sr-org-efgrid .sr-org-erow{margin-top:0}
-.sr-org-efgrid .sr-org-erow p{max-width:none}
-.sr-org-efp{display:grid;grid-template-columns:1fr;gap:3px;margin:0;padding:0;list-style:none}
-.sr-org-efp li{display:flex;gap:9px;align-items:baseline;font-size:13px;line-height:1.5;color:var(--text2)}
-.sr-org-efp em{flex:none;font-style:normal;font-family:'Cormorant Garamond',Georgia,serif;font-size:12px;color:var(--gold);opacity:.75;min-width:16px}
+
+/* ── SR-436 (PASS-J-ORG-BASE-AND-FOUNDATION-8.md §3) · the Foundation 8 ──
+   Its own namespace (sr-org-f8*), not .sr-org-ecard/.sr-org-edinner: those
+   are shared with the +2 cards and the 30-protocol wall's detail, and this
+   card is borderless while those keep their inset ring. SR-434 §1's
+   missing-class fault (f8inner never given .sr-org-edinner) cannot recur —
+   the grid class is written into the detail's own markup string now, not
+   applied separately afterwards.
+   Cards are <article role="button" tabindex="0">, not <button>: each holds
+   an aspect-ratio child, and Chromium leaves a <button> around one at zero
+   height (CLAUDE.md). Paragraph-level classes are written p.sr-org-f8*
+   so they outrank the page's own .sr-org-page p{margin:0}. */
+/* scroll-margin matches section[id^="sr-org-"] (fixed nav + section
+   rail): "All eight tracks" scrolls the block's top to here, not under them. */
+.sr-org-f8root{margin-bottom:var(--sr-org-s7);scroll-margin-top:124px}
+@media(max-width:600px){.sr-org-f8root{scroll-margin-top:256px}}
+.sr-org-f8head{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--sr-org-s3);margin-bottom:var(--sr-org-s5)}
+.sr-org-f8head h3{margin:0;font:400 1.9rem/1 'Cormorant Garamond',Georgia,serif;color:var(--text)}
+.sr-org-f8head em{font-style:normal;font-size:.86rem;color:var(--text3)}
+.sr-org-f8grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sr-org-s4)}
+.sr-org-f8grid[hidden],.sr-org-f8detail[hidden]{display:none}
+.sr-org-f8--capacity{--f8c:var(--sr-org-gold)} .sr-org-f8--relational{--f8c:var(--sr-org-red)}
+.sr-org-f8--application{--f8c:var(--sr-org-slate)} .sr-org-f8--substrate{--f8c:var(--sr-org-sage)}
+.sr-org-f8--beyond{--f8c:156,143,196}
+.sr-org-f8card{display:block;cursor:pointer;transition:transform .45s var(--sr-org-ease)}
+.sr-org-f8card:hover{transform:translateY(-4px)}
+.sr-org-f8card:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:4px}
+/* 4:3 from the 1086×1448 portrait covers keeps full width and 56% of the
+   height; 22% from the top keeps the head in frame on all three (f03's
+   sits highest). Band covers (tracks 04–08, no portrait supplied yet)
+   crop to 4:3 from centre-ish, losing ~29% of their width. */
+.sr-org-f8art{position:relative;display:block;margin:0;aspect-ratio:4/3;border-radius:4px;overflow:hidden;background:#15151e;line-height:0}
+.sr-org-f8art img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.sr-org-f8art .sr-org-eplate{width:100%;height:100%;aspect-ratio:auto;border-radius:0}
+.sr-org-f8art::after{content:"";position:absolute;right:0;bottom:0;z-index:1;width:22px;height:22px;
+  clip-path:polygon(100% 0,100% 100%,0 100%);background:rgb(var(--f8c))}
+p.sr-org-f8k{margin:var(--sr-org-s3) 0 6px;font:700 9.5px/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:rgb(var(--f8c))}
+.sr-org-f8card h4{margin:0 0 6px;font:400 1.32rem/1.14 'Cormorant Garamond',Georgia,serif;color:var(--text)}
+.sr-org-f8card .sr-org-f8lead{margin:0;font-size:.92rem;line-height:1.5;color:var(--text3)}
+
+/* The detail replaces the grid: 300px rail (the card's own image, layer
+   chip, who it serves, the way back) + the body. */
+.sr-org-f8dwrap{display:grid;grid-template-columns:300px 1fr;gap:var(--sr-org-s7);align-items:start}
+.sr-org-f8layer{margin-top:var(--sr-org-s4);padding:14px 16px;border-radius:4px;
+  background:rgba(var(--f8c),.07);box-shadow:inset 0 0 0 1px rgba(var(--f8c),.22)}
+.sr-org-f8layer span,.sr-org-f8serves span,.sr-org-f8blk>span,.sr-org-f8plist>span{display:block;
+  font:700 9px/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--text3)}
+.sr-org-f8layer span{margin-bottom:5px;color:rgb(var(--f8c))}
+.sr-org-f8layer b{display:block;font:500 1.2rem/1.2 'Cormorant Garamond',Georgia,serif;color:#fff}
+.sr-org-f8serves{margin-top:var(--sr-org-s4)}
+.sr-org-f8serves span{margin-bottom:6px}
+.sr-org-f8serves p{margin:0;font-size:.92rem;line-height:1.6;color:var(--text2)}
+.sr-org-f8back{margin-top:var(--sr-org-s4);padding:12px 0;border:0;background:transparent;cursor:pointer;
+  font:700 9.5px/1 'DM Sans',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);
+  transition:color .3s var(--sr-org-ease)}
+.sr-org-f8back:hover{color:var(--text)}
+.sr-org-f8back:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+p.sr-org-f8kick{margin:0 0 8px;font:700 9.5px/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.sr-org-f8dmain h3{margin:0;font:400 2.1rem/1.08 'Cormorant Garamond',Georgia,serif;color:var(--text)}
+.sr-org-f8dmain h3:focus{outline:0}
+p.sr-org-f8dlead{margin:10px 0 0;font:400 1.25rem/1.35 'Cormorant Garamond',Georgia,serif;color:#fff;max-width:36ch}
+/* §3d rhythm: 12px between paragraphs inside a block, s6 between blocks,
+   no paragraph wider than 58ch. */
+.sr-org-f8pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--sr-org-s6);margin-top:var(--sr-org-s6)}
+.sr-org-f8blk>span{margin-bottom:10px}
+.sr-org-f8blk--win>span{color:var(--gold)}
+.sr-org-f8blk p{margin:0 0 12px;max-width:58ch;font-size:1rem;line-height:1.66;color:var(--text2)}
+.sr-org-f8blk p:last-child{margin-bottom:0}
+.sr-org-f8blk--win p{color:var(--text)}
+.sr-org-f8plist{margin-top:var(--sr-org-s6);padding-top:var(--sr-org-s5);border-top:1px solid var(--hair)}
+.sr-org-f8plist>span{margin-bottom:var(--sr-org-s3)}
+.sr-org-f8plist ol{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,auto);grid-auto-flow:column;
+  gap:7px var(--sr-org-s6);margin:0;padding:0;list-style:none}
+.sr-org-f8plist li{display:flex;gap:11px;align-items:baseline;font-size:.98rem;line-height:1.5;color:var(--text2)}
+.sr-org-f8plist em{flex:none;min-width:16px;font:400 .85rem 'Cormorant Garamond',Georgia,serif;font-style:normal;color:var(--gold);opacity:.75}
+p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px;max-width:70ch;
+  background:rgba(var(--sr-org-gold),.06);box-shadow:inset 0 0 0 1px rgba(var(--sr-org-gold),.2);
+  font-size:.92rem;line-height:1.6;color:var(--text3)}
+@media(max-width:1000px){
+  .sr-org-f8grid{grid-template-columns:repeat(2,1fr)}
+  .sr-org-f8dwrap{grid-template-columns:1fr;gap:var(--sr-org-s5)}
+  .sr-org-f8drail .sr-org-f8art{max-width:420px}
+  .sr-org-f8pair{grid-template-columns:1fr;gap:var(--sr-org-s5)}
+  .sr-org-f8plist ol{grid-template-columns:1fr;grid-template-rows:none;grid-auto-flow:row}
+}
+@media(max-width:560px){.sr-org-f8grid{grid-template-columns:1fr}}
+
+/* ── SR-436 (PASS-J-ORG-BASE §5c) · the Gap: a narrowing channel ──
+   Ported from the reference build under sr-org-gd*. data-step on
+   #srOrgGap lights one band, its annotation and its row together; the
+   axis caption and the closing gold line never take part. The figure sits
+   inside .sr-org-image-copy, whose figure/figcaption rules are written for
+   the photograph (overflow hidden, caption overlaid) — neutralised here
+   for this figure only rather than narrowing those shared rules. */
+.sr-org-image-copy figure.sr-org-gddia{margin:32px 0 0;border-radius:0;overflow:visible}
+.sr-org-gddia svg{display:block;width:100%;height:auto}
+.sr-org-image-copy .sr-org-gddia figcaption{position:static;inset:auto;margin-top:12px;padding:0;background:none;
+  font:400 .86rem/1.55 'DM Sans',sans-serif;color:var(--text3);max-width:58ch}
+.sr-org-gdseg{transition:fill-opacity .9s var(--sr-org-ease),filter .9s var(--sr-org-ease)}
+.sr-org-gdseg.sr-org-gd-a{fill:rgb(var(--sr-org-gold));fill-opacity:.10}
+.sr-org-gdseg.sr-org-gd-b{fill:rgb(var(--sr-org-red));fill-opacity:.10}
+.sr-org-gdseg.sr-org-gd-c{fill:rgb(var(--sr-org-slate));fill-opacity:.08}
+.sr-org-gdedge{fill:none;stroke-width:1.6;transition:stroke-opacity .9s var(--sr-org-ease)}
+.sr-org-gdedge.sr-org-gd-a{stroke:rgb(var(--sr-org-gold));stroke-opacity:.32}
+.sr-org-gdedge.sr-org-gd-b{stroke:rgb(var(--sr-org-red));stroke-opacity:.32}
+.sr-org-gdedge.sr-org-gd-c{stroke:rgb(var(--sr-org-slate));stroke-opacity:.28}
+.sr-org-gdann{opacity:.16;transition:opacity .9s var(--sr-org-ease)}
+.sr-org-gdstage{fill-opacity:.34;transition:fill-opacity .9s var(--sr-org-ease)}
+[data-step="1"] .sr-org-gdseg.sr-org-gd-a{fill-opacity:.40;filter:drop-shadow(0 0 16px rgba(212,168,67,.55))}
+[data-step="2"] .sr-org-gdseg.sr-org-gd-b{fill-opacity:.52;filter:drop-shadow(0 0 18px rgba(196,101,90,.6))}
+[data-step="3"] .sr-org-gdseg.sr-org-gd-c{fill-opacity:.38;filter:drop-shadow(0 0 16px rgba(130,152,187,.5))}
+[data-step="1"] .sr-org-gdedge.sr-org-gd-a,[data-step="2"] .sr-org-gdedge.sr-org-gd-b,
+[data-step="3"] .sr-org-gdedge.sr-org-gd-c{stroke-opacity:1}
+[data-step="1"] .sr-org-gdann.sr-org-gd-a,[data-step="2"] .sr-org-gdann.sr-org-gd-b,
+[data-step="3"] .sr-org-gdann.sr-org-gd-c{opacity:1}
+[data-step="1"] .sr-org-gdstage.sr-org-gd-a,[data-step="2"] .sr-org-gdstage.sr-org-gd-b,
+[data-step="3"] .sr-org-gdstage.sr-org-gd-c{fill-opacity:1}
+/* rows: dim until their step; the lit row's label takes its band colour */
+.sr-org-gdseq .sr-org-gap-list article{transition:background .7s var(--sr-org-ease)}
+.sr-org-gdseq .sr-org-gap-list span{color:rgba(245,237,216,.26);transition:color .7s var(--sr-org-ease)}
+.sr-org-gdseq .sr-org-gap-list p{color:var(--text3);transition:color .7s var(--sr-org-ease)}
+[data-step="1"] .sr-org-gap-list .sr-org-gd-a,[data-step="2"] .sr-org-gap-list .sr-org-gd-b,
+[data-step="3"] .sr-org-gap-list .sr-org-gd-c{background:rgba(245,237,216,.032)}
+[data-step="1"] .sr-org-gap-list .sr-org-gd-a p,[data-step="2"] .sr-org-gap-list .sr-org-gd-b p,
+[data-step="3"] .sr-org-gap-list .sr-org-gd-c p{color:var(--text)}
+[data-step="1"] .sr-org-gap-list .sr-org-gd-a span{color:var(--gold)}
+[data-step="2"] .sr-org-gap-list .sr-org-gd-b span{color:rgb(var(--sr-org-red))}
+[data-step="3"] .sr-org-gap-list .sr-org-gd-c span{color:rgb(var(--sr-org-slate))}
+.sr-org-gddots{display:flex;align-items:center;gap:7px;margin-top:22px}
+.sr-org-gddots button{position:relative;width:26px;height:2px;padding:0;border:0;cursor:pointer;
+  background:rgba(245,237,218,.13);transition:background .5s var(--sr-org-ease)}
+.sr-org-gddots button::after{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+.sr-org-gddots button:focus-visible{outline:1px solid var(--gold);outline-offset:4px}
+[data-step="1"] .sr-org-gddots button:nth-child(1){background:var(--gold)}
+[data-step="2"] .sr-org-gddots button:nth-child(2){background:rgb(var(--sr-org-red))}
+[data-step="3"] .sr-org-gddots button:nth-child(3){background:rgb(var(--sr-org-slate))}
 
 /* -- §7a: 30 protocol names/leads/anchors, present without JS -- */
 .sr-vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
   clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 @media(max-width:820px){
-  .sr-org-ef8{grid-template-columns:repeat(2,1fr)}
-  .sr-org-efgrid{grid-template-columns:1fr;gap:var(--sr-org-s4)}
   .sr-org-etwo{grid-template-columns:1fr;gap:0}
   .sr-org-eturn{width:auto;height:34px}
   .sr-org-eturn::after{transform:rotate(135deg)}
@@ -5908,13 +6027,11 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
   .sr-org-ebenefits{grid-template-columns:1fr}
   .sr-org-ebenefits article+article{box-shadow:inset 0 1px 0 0 var(--hair)}
   .sr-org-ebenefits .sr-org-emore{grid-template-rows:1fr}
-  .sr-org-epickers,.sr-org-eplus,.sr-org-ef8{grid-template-columns:1fr}
-  .sr-org-ef8{grid-template-columns:repeat(2,1fr)}
+  .sr-org-epickers,.sr-org-eplus{grid-template-columns:1fr}
   .sr-org-edinner{grid-template-columns:1fr}
   .sr-org-ecover{max-width:190px}
   .sr-org-eband{background-position:center}
 }
-@media(max-width:600px){.sr-org-ef8{grid-template-columns:1fr}}
 
 /* touch and narrow: nothing hides behind hover (§5g) */
 @media(hover:none),(max-width:900px){
@@ -5933,10 +6050,20 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
      (applyFilter() checks the same media query before ever adding the
      class), so this rule is a backstop, not the only guard. */
   .sr-org-capacity-grid::before,.sr-org-capacity-grid article,
-  .sr-org-pathstage,.sr-org-ewall.sr-org-ereflow .sr-org-etile,
-  .sr-org-ringseg{animation:none!important}
+  .sr-org-pathstage,.sr-org-ewall.sr-org-ereflow .sr-org-etile{animation:none!important}
   .sr-org-hpeel,.sr-org-trust p,.sr-org-pathstage p{transition:none!important}
-  .sr-org-ringseg{opacity:1!important;stroke-width:15!important}
+  /* SR-436 §5c · the Gap: all three steps lit at once, nothing moves (the
+     page script also never starts the cycle under this query). */
+  .sr-org-gdseg,.sr-org-gdedge,.sr-org-gdann,.sr-org-gdstage,.sr-org-gdseq .sr-org-gap-list article,
+  .sr-org-gdseq .sr-org-gap-list span,.sr-org-gdseq .sr-org-gap-list p,.sr-org-f8card{transition:none!important}
+  .sr-org-gdseg.sr-org-gd-a{fill-opacity:.40}.sr-org-gdseg.sr-org-gd-b{fill-opacity:.52}.sr-org-gdseg.sr-org-gd-c{fill-opacity:.38}
+  .sr-org-gdedge{stroke-opacity:1!important}.sr-org-gdann{opacity:1!important}.sr-org-gdstage{fill-opacity:1!important}
+  .sr-org-gdseq .sr-org-gap-list p{color:var(--text)!important}
+  .sr-org-gap-list .sr-org-gd-a span{color:var(--gold)!important}
+  .sr-org-gap-list .sr-org-gd-b span{color:rgb(var(--sr-org-red))!important}
+  .sr-org-gap-list .sr-org-gd-c span{color:rgb(var(--sr-org-slate))!important}
+  .sr-org-gddots{display:none}
+  .sr-org-f8card:hover{transform:none}
 }
 
 /* ═══════════════════════════════════════════════════════════════
