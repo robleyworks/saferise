@@ -307,19 +307,20 @@
     var countEl = document.getElementById('srOrgCount');
     var filterRow = document.querySelector('.sr-org-efilters');
     function applyFilter(f) {
-      var shown = 0;
       if (openId) { detail.classList.remove('sr-org-eopen'); openId = null; }
       wall.querySelectorAll('.sr-org-etile').forEach(function (t) {
         var on = f === 'all' || t.dataset.k === f;
         t.classList.toggle('sr-org-egone', !on);
-        if (on) shown++;
       });
       if (!(reduced && reduced.matches)) {
         wall.classList.remove('sr-org-ereflow'); void wall.offsetWidth; wall.classList.add('sr-org-ereflow');
       }
+      /* SR-437 (PASS-M §2) · no count — "All 30" and "Showing the 14/16"
+         were inventory counts on screen. The sentence that survives is the
+         point the line was making. */
       if (countEl) countEl.textContent = f === 'all'
-        ? 'All 30 context protocols. Each one sits on top of the same Foundation 8.'
-        : 'Showing the ' + shown + ' ' + (f === 'role' ? 'role' : 'industry') + ' protocols. Each one sits on top of the same Foundation 8.';
+        ? 'Every context protocol sits on top of the same Foundation 8.'
+        : 'Showing the ' + (f === 'role' ? 'role' : 'industry') + ' protocols. Each one sits on top of the same Foundation 8.';
     }
     if (filterRow) {
       filterRow.addEventListener('click', function (e) {

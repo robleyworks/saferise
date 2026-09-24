@@ -20143,3 +20143,137 @@ the retirement is a product decision.
 
 Verified on a local mirror of the site (the preview runner cannot read `~/Documents`) at
 1024px and 375px: no horizontal scroll, tags and comments balanced. **Not pushed.**
+
+## SR-437 — three defects from SR-436, and the `.sr-org-page p` reset (PASS-M.md)
+
+Measured on a local mirror (the preview runner cannot read `~/Documents`). The browser pane
+reports `visibilityState: hidden`, so ResizeObserver callbacks do not fire on a live resize
+there. Every §1 figure below comes from a **fresh load at that width**. The observer's
+live-resize path is standard but **not verified in this environment**.
+
+### §1 — Gap annotations: 11px floor (DIFFERS: `max()` + a scale variable, not bare `clamp()`)
+
+SVG `<text>` is sized in viewBox units, so a CSS px inside the SVG scales with the drawing.
+No `clamp()` on its own can set a floor in screen px. The page script publishes `--gd-k` (720
+÷ rendered width) on the figure. The CSS then sets `font-size:max(var(--gd-fs), calc(11px *
+var(--gd-k,1)))`, where `--gd-fs` is each label's authored size. The channel geometry is
+unchanged.
+
+Two annotation positions moved to make room for the larger type; neither is channel
+geometry. *EAPs, coaching and training reach here* is left-aligned at the bracket start
+(x 60) instead of centred at 146: at 390px it would otherwise run off the left edge. The *SafeRise
+works here* marker was lifted (dot 268→258, label 292→286): at 390px it collided with
+DURING.
+
+| viewport | SVG width | all 7 labels, rendered | before this pass |
+|---|---|---|---|
+| 1440 | 616 | 11.00px | 9.0–9.8 |
+| 1280 | 616 | 11.00px | 9.0–9.8 |
+| 1024 | 518 | 11.00px | 7.6–8.3 |
+| 900 | 446 | 11.00px | 6.5–7.1 |
+| 390 | 326 | 11.00px | 4.8–5.2 |
+
+The seven labels are: FULL RANGE OF RESPONSE, EAPs…, SafeRise works here, not recovered,
+BEFORE, DURING, AFTER. At every width, no label falls outside the viewBox and no two label
+boxes overlap. Axis caption (figcaption) 13.76px and gold closing line 17.6px at every width;
+both are above 11 and unchanged.
+
+### §2 — counts
+
+Chips `All 30` / `Role · 14` / `Industry · 16` → `All` / `Role` / `Industry`. The count line
+now reads *Every context protocol sits on top of the same Foundation 8.*, and filtered
+*Showing the role|industry protocols. Each one sits on top of the same Foundation 8.* (the
+unused `shown` counter was removed). The wall's `aria-label` "All 30 protocols" → "Role and
+industry protocols". None of these is load-bearing: `All` beside `Role`/`Industry` is
+unambiguous.
+
+**Verified on the rendered page**, including the JS-rendered strings and every
+`aria-label`. Every remaining numeral or number word, with a judgement:
+
+- **Kept, sequence rather than inventory:** `01–03` (capacity steps), `01 · Input` …
+  `04 · Signal` (pathway), `01–04` (delivery steps), `01–10` numbering inside the F8
+  detail list.
+- **Kept, the model or the promise:** the ring (`10 / tracks per person`, `8 foundation —
+  everyone`, `1 for their role`, `1 for their industry`, and its aria-label); *receives ten
+  tracks*; *The two that vary*; *the last two protocols*; *The 8 + 2 model*; `+1`; *One
+  foundation. Two layers of context.*; *Three layers. Most programmes work one.*
+- **Kept, proper name:** *The Foundation 8* (heading, `aria-label="The Foundation 8
+  tracks"`, and the count line's "same Foundation 8").
+- **Kept, not inventory:** *four steps*, *four hours*, *three in the morning*, *Two
+  things go in*, *one invoice*, prices (€1,800 / €2,400 / €3,500) and headcount bands (to 50
+  / 51–120 / above 120).
+- **For Andre (AMBIGUOUS, not changed):**
+  - The Base: *These eight keep it reachable*, *these eight do not vary*, *These eight
+    are…*.
+  - The F8 detail: *Ten protocols* (label), *← All eight tracks* (back control).
+
+  These are track and protocol counts in the literal sense. But they are the named 8 + 2
+  structure the ring promises, and "eight" in the Base is the argument itself. Removing
+  them is a copy decision, not a sweep.
+
+### §3 — the five band covers (report only; nothing re-pointed or re-cut)
+
+The 4:3 card keeps the full 640px height of each 1200×640 band and crops 173px from each
+side (x 173–1027, 29% of the width lost). Portraits 01–03 lose 44% of their height instead
+and keep full width.
+
+- **04 Executive Presence (band-08): flag.** The face is intact, but its nearest point is
+  ~19 source px (~2%) inside the left crop edge, about 4px at card width. His gaze points
+  straight out of the frame, and the crown is already cut by the source. It is the weakest
+  card of the eight.
+- **05 Embodied Nutrition (band-04):** both faces intact. The man's arm is cut at the
+  elbow where it enters from the left, and the jug stays in frame.
+- **06 Strength & Return (band-03):** subject fully in frame; only the rope ends are cut.
+  The figure sits left, with a large dark field to the right.
+- **07 Sleep & Recovery (band-09):** face and subject intact; the bedside lamp is cut.
+- **08 Elevation Series (band-01):** face and subject intact; the plant and candle are
+  partly cut.
+
+**No face or primary subject is cut on any of the five.** On that test, the five portraits
+can follow after launch. The exception to weigh is 04, which reads as cramped beside the
+three portraits.
+
+### §4 — what `.sr-org-page p{margin:0;color:var(--text2)}` (line 4853) eats
+
+**Method:** open both detail panels, snapshot every `<p>` (157), remove the reset's margin
+and then its colour through CSSOM, snapshot again, and diff. State restored and confirmed
+identical. The reset (0,1,1) beats any bare class (0,1,0). Rules of equal specificity that
+come later (`.sr-org-trust p`, `.sr-org-panel p`, `.sr-org-faq details p`) are **not**
+affected.
+
+**Dead margin declarations (bare class on a `<p>`):**
+
+| selector | line | declared | rendered | visibly missing? |
+|---|---|---|---|---|
+| `.sr-org-ef8base` | 5769 | margin-top 16px | 0 | **yes, flush against the +2 cards → fixed** |
+| `.sr-org-ecount` | 5807 | margin-top 16px | 0 | **yes, flush under the tile grid → fixed** |
+| `.sr-org-eone` | 5698 | margin-top 7px | 0 | tight under the benefit `h4`; reads as a lockup, not fixed |
+| `.sr-org-elead` | 5849 | margin-top 10px | 0 | wall-detail lead tight under the `h3`; not fixed |
+| `.sr-org-esub` | 5850 | margin-top 7px | 0 | tight under the lead; not fixed |
+| `.sr-org-large-copy` | 5067 | margin-top 16px | 0 | Gap lead tight under its `h2`; not fixed |
+| `.sr-org-estackline` | 5766 | margin-bottom 24px | 0 | no, `.sr-org-eplus`' own margin-top 24 supplies it |
+| `.sr-pf-colhead` (footer) | saferise-footer.css:54 | margin-bottom 4px | 0 | footer only, this page only |
+
+The fix restores **margin only**, as `p.sr-org-ef8base` / `p.sr-org-ecount`, measured at 16px
+each after the change. Their colour declarations stay dead on purpose.
+
+**Dead colour declarations, reported and not fixed:** every `.sr-org-eyebrow` (gold →
+renders `--text2` grey, all 12 section eyebrows); `.sr-org-kicker` (gold → grey, the privacy
+cards); `.sr-org-estackline` and `.sr-org-elead` (#fff → grey); `.sr-org-esub`,
+`.sr-org-ecount` and `.sr-org-ef8base` (`--text3` → `--text2`); and **the shared footer on
+this page only**: `.sr-pf-colhead` gold → grey and `.sr-pf-scope` `--text3` → `--text2`. The
+footer looks different on `/organisations` from every other page.
+
+**Recommendation on the reset: don't keep it in this form.** Eleven `p.sr-org-*` rules
+already exist only to beat it, and this pass found eight more dead declarations. Replacing
+it with `:where(.sr-org-page) p{margin:0;color:var(--text2)}` drops its specificity to
+(0,0,1). Unclassed paragraphs keep the reset (it still beats the UA's 1em margin), and every
+class rule starts winning. **Do not do it silently.** It restores every row in both tables at
+once: gold eyebrows page-wide, a gold footer, white stackline and lead, and the four tight
+lockups opening up. It should be its own pass, with this table as its diff.
+
+**Seen in passing, not a `<p>` margin:** `#sr-org-plustwo`, `#sr-org-wall` and
+`#sr-org-base` have no spacing between them. *THE LIBRARY* eyebrow touches the bottom of the
++2 stack box.
+
+**Not pushed.**

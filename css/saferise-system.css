@@ -5805,6 +5805,14 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-etile[data-k="role"]::after{background:rgb(var(--sr-org-slate))}
 .sr-org-etile[data-k="industry"]::after{background:rgb(var(--sr-org-sage))}
 .sr-org-ecount{margin-top:var(--sr-org-s3);font-size:12.5px;color:var(--text3)}
+/* SR-437 (PASS-M §4) · .sr-org-ecount and .sr-org-ef8base never got their
+   margin — .sr-org-page p{margin:0} (0,1,1) outranks a bare class (0,1,0) —
+   and both sat flush against a component edge (the tile grid; the +2
+   cards). Margin restored ONLY: their color declarations are equally dead
+   (they render --text2, not the --text3 declared) but that is not visibly
+   broken, and restoring it would move something nobody asked to move. */
+p.sr-org-ecount{margin-top:var(--sr-org-s3)}
+p.sr-org-ef8base{margin-top:var(--sr-org-s3)}
 
 /* -- detail panels: F8 and wall share the same shape (§3d, §4c) -- */
 .sr-org-edetail{position:relative;margin-top:var(--sr-org-s3);padding:0;border-radius:5px;overflow:hidden;
@@ -5974,6 +5982,13 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
    for this figure only rather than narrowing those shared rules. */
 .sr-org-image-copy figure.sr-org-gddia{margin:32px 0 0;border-radius:0;overflow:visible}
 .sr-org-gddia svg{display:block;width:100%;height:auto}
+/* SR-437 (PASS-M §1) · 11px floor on every label, at every width. --gd-fs is
+   each label's authored size in viewBox units; --gd-k (set by the page
+   script) is viewBox units per screen px. Without the script k falls back
+   to 1 and the authored sizes stand. overflow:visible so an enlarged label
+   near the edge is never clipped by the <svg> box. */
+.sr-org-gddia svg{overflow:visible}
+.sr-org-gddia text{font-size:max(var(--gd-fs), calc(11px * var(--gd-k, 1)))}
 .sr-org-image-copy .sr-org-gddia figcaption{position:static;inset:auto;margin-top:12px;padding:0;background:none;
   font:400 .86rem/1.55 'DM Sans',sans-serif;color:var(--text3);max-width:58ch}
 .sr-org-gdseg{transition:fill-opacity .9s var(--sr-org-ease),filter .9s var(--sr-org-ease)}
