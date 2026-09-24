@@ -5707,6 +5707,12 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 /* SR-436 §4 · now in #sr-org-privacy, above the two photo cards — was
    margin-top:s2 under the Base head it used to follow. */
 .sr-org-ebenefits{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0 0 var(--sr-org-s6)}
+/* SR-443 (PASS-V §8) · the merged pair in #sr-org-included (SR-442) is two
+   cards, not three: two columns there, so no empty third column. Scoped by
+   the section id; the base three-column rule is left as it is. The id
+   outranks the 820px stack rule, so that media block carries a matching
+   scoped 1fr. */
+#sr-org-included .sr-org-ebenefits{grid-template-columns:repeat(2,1fr)}
 .sr-org-ebenefits article{position:relative;padding:var(--sr-org-s4) var(--sr-org-s3) var(--sr-org-s3);
   cursor:default;outline:0;transition:background .45s var(--sr-org-ease)}
 .sr-org-ebenefits article+article{box-shadow:inset 1px 0 0 0 var(--hair)}
@@ -6072,6 +6078,7 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
   .sr-org-eturn::after{transform:rotate(135deg)}
   .sr-org-eres{grid-template-columns:1fr}
   .sr-org-ebenefits{grid-template-columns:1fr}
+  #sr-org-included .sr-org-ebenefits{grid-template-columns:1fr}
   .sr-org-ebenefits article+article{box-shadow:inset 0 1px 0 0 var(--hair)}
   .sr-org-ebenefits .sr-org-emore{grid-template-rows:1fr}
   .sr-org-epickers,.sr-org-eplus{grid-template-columns:1fr}
