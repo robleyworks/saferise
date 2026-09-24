@@ -47,7 +47,7 @@ var TRACK_IMAGES = {
   },
   'executive-presence': {
     name: 'Executive Presence',
-    band: 'assets/coming/band-08.webp', bandJpg: 'assets/coming/band-08.jpg'
+    band: 'assets/coming/band-18.webp', bandJpg: 'assets/coming/band-18.jpg'  /* SR-453 · was band-08 */
   },
   'sleep-and-recovery': {
     name: 'Sleep & Recovery',
