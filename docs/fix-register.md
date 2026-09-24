@@ -20546,3 +20546,80 @@ Now: "…what you write in your record stays on your device and is never sent to
      here. This page is not built yet.
 
 **Not pushed.**
+
+## SR-441 — deploy the three staged org images (PASS-Q.md)
+
+Commits: `2a50055` §1, `9861e71` §2, plus this entry. The Foundation 8 covers were not
+touched, as the brief said.
+
+**Git, third time tonight:** `.git/index.lock` was left behind by the §1 commit itself
+(created 23:48, the same minute; the commit succeeded, then the next write failed). It was
+removed after checking no git process was running. The pattern is now clear: commits on
+this mount can leave the lock. Worth checking whether a sync client (iCloud/Dropbox on
+~/Documents) or GitHub Desktop is touching `.git/`.
+
+### §1
+
+Six files copied byte-identical (verified with `cmp`), mode 644, and added explicitly:
+`git ls-files assets/org/ | grep -c "gap-moment\|twospace"` → **6**.
+- `gap-moment.*` came from `pass/_org-gap/graded/`, as instructed.
+- **`pass/_org-twospace/` has no graded subdirectory**, so the ungraded files are the
+  only version and were used.
+
+### §2
+
+Three `src` attributes repointed. `grep -c` for workshops/guided-session → **2**; no `src`
+repeats on the page.
+
+**Alt text, one change:** the gap photo is a three-panel frame of three different people,
+not one.
+- Before: "A professional pausing before a consequential conversation".
+- After: "Three people in an office corridor, each paused on the way to a meeting: one on
+  a staircase, one standing in the hall, one at the door of a meeting room".
+
+The two-space alts still describe their frames (a remote group call; a man on a sofa with
+headphones) and are unchanged.
+
+### §3 — crops (report; no container touched)
+
+Sources: `gap-moment` **1086×1358** (exactly 4:5). `twospace-shared` and
+`twospace-private` **1600×1000** (exactly 16:10). Measured at 1440, 900 and 390: all three
+load (200) and render at their container ratio (0.800 / 1.778 / 1.600), with no console
+errors.
+
+- **Two-space cards (16/10):** the source is already 16:10, so **nothing is cut** at any
+  width.
+- **Gap figure, 4/5 (above 820px):** the source is 4:5, so no crop. **The caption overlay is
+  79px tall, not ~36px** (36px is only its top padding). At 1440 it covers source y
+  1170–1358 and at 900 it covers y 1098–1358: **the feet of all three figures sit under
+  the gradient.** Faces and hands are clear.
+- **Gap figure, 16/9 (below 820px) — flag, needs a re-crop.** The centred crop keeps source
+  y 374–984.
+  - **The top edge cuts across all three heads.** The left figure's forehead touches the
+    edge, and the middle figure's hair and the right figure's bun are cut. Eyes stay in
+    frame, but each face is within ~10px of the top edge at 326px wide.
+  - **The 79px caption covers y 722–984.** That puts the middle figure's hand with keys
+    and the right figure's hands on her notebook under the gradient.
+
+  A 4:5 portrait triptych has no 16:9 crop that keeps heads and hands. That needs a
+  dedicated 16:9 cut, not a container change.
+
+### Report-only
+
+1. **Staging.** `pass/` is gitignored, so anything staged there can never ship. **Pick:
+   put review copies straight into `assets/<surface>/` and repoint the markup in the same
+   commit.** Review then happens on the deploy preview. The commit that adds the file is
+   the commit that uses it, so an image can't be wired without being staged, and a
+   rejected image is one revert. A separate gitignored review directory would repeat
+   tonight's failure one directory over. If a pre-commit review space is still wanted, it
+   should be tracked and excluded from deploy, not gitignored.
+2. **`assets/home/panel-t3.jpg`** is no longer referenced by any live file (only by
+   `audit/` reports). The **.webp** of the same image is still used, on the home page
+   (`index.html:1543`) and in the plans page's track list (`js/saferise-plans.js:55`).
+3. **`pass/_f8-covers/as-supplied/`:** nothing in live code references it. It is named only
+   in `docs/fix-register.md` (SR-436's history) and in `pass/PASS-Q.md`. Safe to clear.
+4. **Unpushed commits:** after `git fetch`, `origin/main` is at `a61569c` (SR-440's
+   register entry). Everything through SR-440 has been pushed. The unpushed commits are
+   this pass's own: SR-441 §1, §2 and this entry.
+
+**Not pushed.**
