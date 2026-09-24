@@ -5377,8 +5377,14 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
   -webkit-mask-image:linear-gradient(250deg,#000 4%,transparent 58%),linear-gradient(#000 40%,transparent 92%);
   -webkit-mask-composite:source-in;mask-composite:intersect;
   mask-image:linear-gradient(250deg,#000 4%,transparent 58%),linear-gradient(#000 40%,transparent 92%)}
-.sr-org-pathtop{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:28px}
-.sr-org-pathstand{margin:0;color:var(--text2);font-size:.92rem;line-height:1.5;max-width:40ch}
+/* SR-455 (PASS-AJ §2) · was display:flex / space-between, which set the
+   lede beside the heading and left the four cards reading at the heading's
+   level. Ruled: stacked — heading, then the lede beneath it, then the
+   cards. Spacing from the page's own scale: lede sits --sr-org-s3 under
+   the heading, the grid --sr-org-s5 under the lede. The lede keeps its
+   40ch measure. */
+.sr-org-pathtop{display:block;margin-bottom:var(--sr-org-s5)}
+.sr-org-pathstand{margin:var(--sr-org-s3) 0 0;color:var(--text2);font-size:.92rem;line-height:1.5;max-width:40ch}
 .sr-org-pathstand b{color:var(--text2);font-weight:400}
 /* SR-429 (PASS-F §5e) · was 1.18fr 30px 1fr 30px 1fr 30px 1fr — the
    uneven first column and the three 30px arrow-link tracks are exactly
