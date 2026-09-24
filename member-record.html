@@ -17,6 +17,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- SR-444 (PASS-X §5) · base href: this page is also served at the nested
+     clean paths /record/chosen-self and /record/decisions (200 rewrites in
+     _redirects), where every relative css/, js/ and .html URL would otherwise
+     resolve under /record/ and 404. The page has no in-page #links, which a
+     base would redirect to the site root. -->
+<base href="/">
 <!-- SR-164 · the ground colour, inline and first — copied from
      member-frameworks.html, as is everything above <main>. -->
 <meta name="color-scheme" content="dark">
@@ -106,6 +112,10 @@
     }
   };
   function routeFromUrl() {
+    /* the clean paths (/record/chosen-self, /record/decisions) are 200
+       rewrites, so the browser keeps the path and drops the ?r= */
+    if (/\/record\/decisions\/?$/.test(location.pathname)) return 'decisions';
+    if (/\/record\/chosen-self\/?$/.test(location.pathname)) return 'chosen';
     var m = /[?&]r=(chosen|decisions)\b/.exec(location.search) || /^#(?:r=)?(chosen|decisions)$/.exec(location.hash);
     return m ? m[1] : 'chosen';
   }

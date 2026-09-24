@@ -107,8 +107,12 @@
     article: { title: 'Article', lede: 'A short written piece from Andre.', tpl: null },
     podcast: { title: 'The SafeRise podcast', lede: 'Episode player and the back catalogue.', tpl: null }
   };
+  /* /faq, /writing and /podcast are 200 rewrites: the browser keeps the
+     clean path and never sees the ?r=, so the path is read first. */
+  var PATHS = { '/faq': 'faq', '/writing': 'article', '/podcast': 'podcast' };
+  var fromPath = PATHS[location.pathname.replace(/\/$/, '')];
   var m = /[?&]r=(faq|article|podcast)\b/.exec(location.search) || /^#(?:r=)?(faq|article|podcast)$/.exec(location.hash);
-  var key = m ? m[1] : 'faq', P = PAYLOADS[key];
+  var key = fromPath || (m ? m[1] : 'faq'), P = PAYLOADS[key];
   var body = document.getElementById('srReadBody'), toc = document.getElementById('srReadToc');
 
   document.title = 'SafeRise — ' + P.title;

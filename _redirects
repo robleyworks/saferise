@@ -81,6 +81,13 @@
 /plans                /plans.html                 200
 /account              /account.html               200
 /legal                /legal.html                 200
+/record/chosen-self   /member-record.html?r=chosen     200
+/record/decisions     /member-record.html?r=decisions  200
+/faq                  /member-reading.html?r=faq       200
+/writing              /member-reading.html?r=article   200
+/podcast              /member-reading.html?r=podcast   200
+/clearing             /member-clearing.html       200
+/checkout             /member-checkout.html       200
 /live-sessions        /live-sessions.html         200
 /coming-soon          /coming-soon.html           200
 /accessibility        /accessibility.html         200

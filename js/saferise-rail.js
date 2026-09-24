@@ -100,7 +100,17 @@
     dashboard: 'dashboard.html',
     method: 'member-frameworks.html',
     coming: 'member-coming-soon.html',
-    account: 'account.html'
+    account: 'account.html',
+    /* SR-444 (PASS-X §5) · the four member templates, mirrored from
+       dashboard.html's PAGES so a rail click never falls through to
+       dashboard.html#route= (whose resolver ignores PAGES keys). */
+    chosen: 'member-record.html?r=chosen',
+    decisions: 'member-record.html?r=decisions',
+    faq: 'member-reading.html?r=faq',
+    article: 'member-reading.html?r=article',
+    podcast: 'member-reading.html?r=podcast',
+    clearing: 'member-clearing.html',
+    checkout: 'member-checkout.html'
   };
 
   function svg(key) {
