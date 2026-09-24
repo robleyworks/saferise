@@ -20920,4 +20920,13 @@ Decide both with a view of the page.
    neither photo is on the page to compare. I-08's grading question travels with the
    placement decision above.
 
-**§12:** pushed to `origin/main`; the resulting SHA is recorded in the session report.
+**§12 — not pushed from this session (VERIFY-FAIL, nothing reverted).** `git push` failed
+with "could not read Username for 'https://github.com'". The remote is HTTPS, the
+osxkeychain helper has no credential for this shell, and `gh` is not logged in. Checked
+first: `origin/main` = `a61569c`, a clean fast-forward. The 21 commits (SR-441 ×3, SR-442
+×4, SR-443 ×14 including this note) touch only CLAUDE.md, organisations.html,
+css/saferise-system.css, js/saferise-org-explorer.js, content/f8-tracks.js,
+docs/fix-register.md, assets/org/gap-moment.* and twospace-* (6 added) and
+assets/home/panel-t3.jpg (deleted). **Nothing from `claude/`, `docs/org-page/` or
+`docs/business/POSITIONING.md` is in them.** To be pushed by Andre from GitHub Desktop:
+"Push origin" only; do not commit the other session's changed files first.
