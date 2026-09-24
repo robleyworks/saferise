@@ -25,53 +25,63 @@ retake costs forty times an image retake.
 
 ## 2 · The house block
 
-Open every video prompt with this. It is the register the 15 September clips
-proved, tightened for the panels.
+Open every video prompt with this.
 
-> Restrained documentary shot, eye-level, subtly handheld. Muted restrained
-> colour grade, dark overall exposure, warm available light, shallow depth of
-> field. Real-time pacing, no slow motion, no camera push, no crane, no reveal.
+> Cinematic scene, 1080p, shallow depth of field, muted restrained colour
+> grade, dark overall exposure, warm available light. Natural performance,
+> real-time pacing, no slow motion, no camera push, no crane, no reveal.
 
-And close every one with this. Every exclusion below has a reason — most of
-them are failures that already happened.
+Close every one with this. Every exclusion is a failure that already happened.
 
 > No earbuds, no headphones, no phone, no laptop, no visible screen. No
-> signage, no branding, no logos, no readable text anywhere. Nobody smiling.
-> No crying, no hands over the face, no head in hands. No overhead fluorescent
-> light. No stock-photo posing, no looking into the lens, no gesture to camera.
+> signage, no branding, no logos, no readable text anywhere. Nobody smiling
+> except where the script asks for it. No crying, no hands over the face, no
+> head in hands. No overhead fluorescent light. No stock-photo posing, no
+> looking into the lens, no gesture to camera.
 
-**Why each matters.** Earbuds and devices say *already using the product* — the
-panel characters have not found it yet. Smiling is the stock failure mode that
+**Why each matters.** Earbuds and devices say *already using the product* — none
+of these characters has found it yet. Smiling is the stock failure mode that
 killed three candidates in the last sourcing round. Hands over the face and
-crying are theatrical; the strain sits in the body, not in a gesture. Overhead
-fluorescent is the light the grade cannot rescue.
+crying are theatrical; the cost sits in what the scene does to other people.
+Overhead fluorescent is the light the grade cannot rescue.
 
 ---
 
-## 3 · Two rules specific to these panels
+## 3 · The register — the person is in the scene, not observed from it
 
-**Faces are now legible, and that is a change.** The old no-face rule came from
-a structure that no longer exists. A person cannot carry twenty-five seconds of
-first-person confession from the back of the head. But hold the face
-three-quarter and looking off, not locked to the lens — a generated face
-pinned frontally for twenty-five seconds is the single hardest thing to ask of
-any of these models, and obliqueness is what keeps it clean.
+**These are scenes, not portraits.** Each panel shows the character inside the
+event their monologue is describing, with the other people it happens to in
+frame. Not a man stalled at a desk — the meeting going on without him. Not a
+tense father in a kitchen — the daughter in the doorway reading his face before
+she asks.
 
-**Compose vertical.** Every panel spends most of the film as a **384 × 1080
-slice** of the screen. Subject centred, upright, with headroom, nothing
-load-bearing in the outer thirds. A wide composition dies the moment it
-retires into its fifth.
+That is the difference between a picture of a state and the cost of a state,
+and the cost is what the script spent five rewrites getting to.
 
-**Almost no motion.** Breathing. A blink. A small shift of weight. That is the
-whole movement. It suits the register and it is what the models hold best
-across a long take.
+**Three rules follow from it.**
+
+**Faces are legible.** A scene needs faces — the other person's reaction is
+half the shot. Keep the lead three-quarter and looking off rather than locked to
+the lens; a generated face pinned frontally for a long hold is the hardest
+thing to ask of any of these models.
+
+**A panel is a scene cut into moments, not one hold.** Twenty-five seconds is
+four clips. Each is a beat of the same scene, chained from the last frame of
+the one before — not four variations of the same pose.
+
+**Compose vertical anyway.** Every panel ends up a **384 × 1080 slice**. Keep
+the lead centred with headroom and the second person just inside the frame on
+one side, so the slice still reads once it retires.
+
+⚠ **Two people in frame roughly doubles the retake rate.** A second face is a
+second thing that can go wrong, and a reaction is harder to land than
+stillness. Budget for it — this is why P1 is generated end to end first.
 
 ---
 
 ## 4 · Casting
 
-Caribbean first market, per the documented position, with range across the
-five.
+Caribbean first market, per the documented position, with range across the five.
 
 | | who | B2C | B2B |
 |---|---|---|---|
@@ -88,176 +98,173 @@ left to the model's default it comes back white and smiling.
 
 ## 5 · The five panels
 
-Each panel: one casting still, approved before any video. Then the clips in
-order, each starting from the previous clip's last frame so the person, the
-room and the light hold.
-
-Every panel ends on a **held frame** — pull it from the clip, do not generate
-it. It is the freeze the panel keeps once it retires.
+One casting still each, approved before any video. Then the clips in order,
+each chained from the last frame of the one before. Every panel ends on a
+**held frame** — pull it from the clip, do not generate it.
 
 ---
 
 ### P1 · OVERWHELM — Black Caribbean man · 33s · 5 clips
-**B2C 02** (23.5s) *There's so much going on that I cannot even figure out how
-to get started… my team stopped bringing me decisions… we lost a client.*
-**B2B 03** (9.6s) *It's just overwhelming here every day… and then I'm to blame
-for how I react.*
+**B2C 02** *There's so much going on that I cannot even figure out how to get
+started. My team stopped bringing me decisions because I guess I've become a
+roadblock. And lately they've been making bad decisions without me, and we lost
+a client.*
+**B2B 03** *It's just overwhelming here every day… and then I'm to blame for how
+I react.*
+
+**The scene: the meeting that is happening without him.**
 
 **Casting still**
-> Editorial documentary portrait. A Black Caribbean man in his late thirties,
-> short hair, open-collar shirt, sitting at a desk in a small side office late
-> in the working day. Papers and a closed notebook in front of him. He is
-> looking at none of it, turned slightly away, one hand flat on the desk. Not
-> distressed, not crying — stalled. Warm low window light from one side, deep
-> shadow on the other. Muted restrained colour grade, shallow depth of field.
-> Vertical composition, subject centred with headroom. No earbuds, no phone, no
-> laptop, no visible screen, no signage, no branding, no readable text, not
-> smiling.
+> Cinematic scene. A Black Caribbean man in his late thirties, open-collar
+> shirt, sitting alone at his desk in a side office. Through the glass behind
+> him, three colleagues stand around a table mid-discussion, deciding something.
+> Nobody is looking at him. He is not looking at them. Work stacked in front of
+> him, untouched. Late afternoon light from one side, deep shadow. Muted
+> restrained colour grade, shallow depth of field, lead centred with headroom.
 
-**Clip 1 — 8s.** He sits still. One slow breath in and out. His eyes move once
-across the desk and settle on nothing. Nothing else happens.
+**Clip 1.** He is at the desk. Behind the glass the discussion is animated.
+One colleague gestures, another nods. **He does not turn.**
 
-**Clip 2 — 8s.** He lifts a hand as if to start something, then sets it down
-again. The gesture does not complete. He stays looking away.
+**Clip 2.** He starts to rise as if to join them — and sits back down. Behind
+him the group is already moving on.
 
-**Clip 3 — 8s.** Somebody passes the doorway behind him, out of focus, and does
-not stop. He does not turn. The room continues without him.
+**Clip 3.** A colleague walks past his door carrying papers toward the group,
+glances in, and keeps going. **The glance that does not become a stop.**
 
-**Clip 4 — 8s.** He closes his eyes for a long moment and opens them. His
-shoulders drop very slightly.
+**Clip 4.** The meeting breaks up behind the glass. People disperse. He is
+still at the desk, still looking at nothing.
 
-**Clip 5 — 8s · the B2B cut and the freeze.** He is very still, jaw set,
-looking at the middle distance. Hold. **Freeze frame: the last frame of this
-clip.**
+**Clip 5 · the B2B cut and the freeze.** Alone now, the room behind him empty.
+He looks at the stacked work. Jaw set. Hold. **Freeze: the last frame.**
 
 ---
 
 ### P2 · INSECURITY — Latino or mixed-heritage man · 49s · 7 clips
-**B2C 05** (34.6s) *I think I'm just waiting to be found out… I sign things in
-the office, I smile, but I don't understand… I'm just checked out.*
-**B2B 02** (14.3s) *After I got promoted — it was a good thing, but it broke
-me. All my best skills were in my old position.*
+**B2C 05** *I think I'm just waiting to be found out… I sign things in the
+office, I smile, but I don't understand and I'm not really even interested… I
+don't even ask questions… I'm just checked out.*
+**B2B 02** *After I got promoted — it was a good thing, but it broke me. All my
+best skills were in my old position. Now I'm a fish out of water.*
+
+**The scene: being briefed on something he is not following, and signing it.**
 
 **Casting still**
-> Editorial documentary portrait. A Latino or mixed-heritage man in his early
-> thirties, neat shirt, in a meeting room with glass to a wider office. He is
-> holding a pen over a printed document, mid-signature, not reading it. His
-> attention is somewhere else entirely. Colleagues soft and out of focus beyond
-> the glass. Cool daylight from the glass side, warm fill from the room, deep
-> shadow. Muted restrained colour grade, shallow depth of field. Vertical
-> composition, subject centred with headroom. No earbuds, no phone, no laptop,
-> no visible screen, no signage, no branding, no readable text, not smiling.
+> Cinematic scene. A Latino or mixed-heritage man in his early thirties in a
+> meeting room, seated, while a colleague standing beside him points at a
+> printed document on the table and explains it. He is nodding. His eyes are on
+> the page but not moving across it. A second colleague across the table waits.
+> Cool daylight from a window wall, warm fill, deep shadow. Muted restrained
+> colour grade, shallow depth of field, lead centred with headroom.
 
-**Clip 1 — 8s.** He signs. The pen moves, the eyes do not follow it.
+**Clip 1.** The colleague explains, pointing. He nods along.
 
-**Clip 2 — 8s.** He turns a page and rests his hand on it without reading.
+**Clip 2.** The colleague pauses — an opening for a question. **He does not
+take it.** He nods again. The explanation resumes.
 
-**Clip 3 — 8s.** He looks up toward the glass, at the colleagues beyond it,
-and away again.
+**Clip 3.** He is handed a pen. He signs without re-reading.
 
-**Clip 4 — 8s.** A small courteous nod to someone off-frame. The face resets to
-neutral the instant it is done. **This is the beat — the nod that costs him
-nothing and means nothing.**
+**Clip 4.** A brief warm smile to the room as the document is taken away. The
+smile goes the instant they turn. **This is the beat of the whole panel.**
 
-**Clip 5 — 8s.** He sits back. One hand goes to the back of his neck and comes
-down.
+**Clip 5.** The others gather papers and leave, talking to each other. He stays
+seated.
 
-**Clip 6 — 8s.** He is still, looking at the document, unfocused.
+**Clip 6.** Alone at the table. He looks at the door they left through.
 
-**Clip 7 — 8s · the freeze.** Straight ahead, entirely absent behind the eyes.
-Hold. **Freeze frame: the last frame.**
+**Clip 7 · the freeze.** Straight ahead, absent behind the eyes. **Freeze: the
+last frame.**
 
 ---
 
 ### P3 · ANGER — White European man · 35s · 5 clips
-**B2C 03** (25.7s) *Once I feel hurt, anger just comes out of me… even my
-daughter can read my face before she asks me for anything.*
-**B2B 01** (9.1s) *I just speak direct. I don't really care how people feel
-about it.*
+**B2C 03** *Once I feel hurt, anger just comes out of me. Even my daughter can
+read my face before she asks me for anything. And I guess she could just tell
+that I'm just going to blow up.*
+**B2B 01** *I just speak direct. I don't really care how people feel about it.*
 
-Two environments. Clips 1–4 are home; clip 5 is the workplace cut.
+**The scene: the daughter in the doorway, deciding not to ask.**
 
-**Casting still — home**
-> Editorial documentary portrait. A white European man in his late thirties in
-> a kitchen at home in the evening, standing at the counter, both hands resting
-> on it. Jaw tight, looking down at the surface. The room is lived-in — a
-> child's drawing on the fridge, a school bag on a chair, out of focus. Warm
-> low domestic light from one lamp, deep shadow. Muted restrained colour grade,
-> shallow depth of field. Vertical composition, subject centred with headroom.
-> Not distressed, not shouting — contained. No earbuds, no phone, no laptop, no
-> visible screen, no signage, no branding, no readable text, not smiling.
+**Casting still**
+> Cinematic scene. A white European man in his late thirties standing at a
+> kitchen counter in the evening, both hands on the surface, jaw tight, looking
+> down. In the doorway behind him, a girl of about nine has stopped. She is
+> watching his back, holding something she came to show him. She has not spoken.
+> Warm low light from one lamp, deep shadow, a lived-in family kitchen. Muted
+> restrained colour grade, shallow depth of field, both figures in frame, the
+> man centred with headroom.
 
-**Clip 1 — 8s.** Both hands on the counter. One slow breath. The jaw stays set.
+**Clip 1.** He stands at the counter, contained. Behind him the girl appears in
+the doorway and stops.
 
-**Clip 2 — 8s.** His grip tightens on the edge of the counter, then releases.
-That is the only movement.
+**Clip 2.** She takes half a step in, watching his back. **Reading him.**
 
-**Clip 3 — 8s.** He glances toward a doorway, off-frame, where a child would
-be. He does not move toward it. **The held-in part is the beat.**
+**Clip 3.** He turns his head very slightly — not all the way to her. She sees
+enough.
 
-**Clip 4 — 8s.** He looks down again. One long breath out through the nose.
-**Freeze frame: the last frame.**
+**Clip 4.** She lowers what she was holding and steps back out of the doorway.
+He does not see her go. **Freeze: the last frame — the empty doorway behind
+him.**
 
-**Clip 5 — 8s · the B2B cut, workplace.** Same man, now in a workplace
-corridor or a doorway, mid-sentence to someone off-frame, direct and
-unbothered. Not angry — certain. Cool daylight, same grade.
+**Clip 5 · the B2B cut, workplace.** Same man in a workplace corridor,
+mid-sentence to a colleague, direct and unbothered. The colleague's face
+absorbs it. Not angry — certain, which is worse. Cool daylight, same grade.
 
 ---
 
 ### P4 · ANXIETY — Black Caribbean woman · 26s · 4 clips
-**B2C 01** (25.7s) *My mind runs worst case scenarios on a loop… it kept me off
-work for six weeks. But I told him it was my back. They found out, and I got
-fired.*
+**B2C 01** *My mind runs worst case scenarios on a loop… it was so bad it kept
+me off work for six weeks. But I told him it was my back that was injured. They
+found out, and I got fired.*
+
+**The scene: the meeting where she is told.**
 
 **Casting still**
-> Editorial documentary portrait. A Black Caribbean woman in her early
-> thirties, natural hair, at home in a chair by a window, early morning. She is
-> upright rather than relaxed, hands together in her lap, scanning the room
-> rather than resting. Awake and braced before anything has happened. Cool
-> early light through the window, deep shadow in the room. Muted restrained
-> colour grade, shallow depth of field. Vertical composition, subject centred
-> with headroom. No earbuds, no phone, no laptop, no visible screen, no
-> signage, no branding, no readable text, not smiling.
+> Cinematic scene. A Black Caribbean woman in her early thirties sitting across
+> a desk from a manager in a small office, a printed letter on the desk between
+> them facing her. Her hands are in her lap, her back straight. She is not
+> arguing. The manager is mid-sentence, not unkind. A second person sits to one
+> side taking a note. Cool daylight from a window behind them, deep shadow in
+> the room. Muted restrained colour grade, shallow depth of field, lead centred
+> with headroom.
 
-**Clip 1 — 8s.** She sits upright. Her eyes move — window, door, back — without
-her head turning. The scanning is the performance.
+**Clip 1.** She sits upright while the manager speaks. She does not look at the
+letter.
 
-**Clip 2 — 8s.** Her hands tighten in her lap and release. She takes a breath
-that is slightly too shallow.
+**Clip 2.** She nods once. The note-taker writes. Nobody raises their voice.
 
-**Clip 3 — 8s.** She looks toward the door as though she has heard something.
-Nothing happens. She stays looking a beat too long.
+**Clip 3.** The manager stops speaking. A silence she is expected to fill.
+**She does not fill it.**
 
-**Clip 4 — 8s · the freeze.** She holds still, eyes fixed on nothing, braced.
-**Freeze frame: the last frame.**
+**Clip 4 · the freeze.** She looks at the letter for the first time. Hold.
+**Freeze: the last frame.**
 
 ---
 
 ### P5 · SHUTDOWN — East Asian or mixed-heritage woman · 26s · 4 clips
-**B2C 04** (25.7s) *I feel nothing most days… I couldn't tell you one thing
-that happened this week. Maybe that's why my sister stopped calling.*
+**B2C 04** *I feel nothing most days, honestly. I'm numb all the time… maybe
+that's why my sister stopped calling — because I had nothing to say to her.
+Where did my life go?*
+
+**The scene: the phone ringing, and not answering it.**
 
 **Casting still**
-> Editorial documentary portrait. An East Asian or mixed-heritage woman in her
-> early thirties sitting on a sofa in a dim living room in the evening, one
-> lamp on across the room. She is upright but slack, hands loose beside her,
-> looking at the middle of the room at nothing. Present in the room and absent
-> from it. Not sad, not crying — flat. Warm low lamplight, most of the frame in
-> shadow. Muted restrained colour grade, shallow depth of field. Vertical
-> composition, subject centred with headroom. No earbuds, no phone, no laptop,
-> no visible screen, no signage, no branding, no readable text, not smiling.
+> Cinematic scene. An East Asian or mixed-heritage woman in her early thirties
+> sitting on a sofa in a dim living room in the evening, upright but slack,
+> hands loose. On the low table in front of her a phone is lit and ringing,
+> face up but its screen not readable. She is looking at the middle of the room,
+> not at it. One lamp across the room, most of the frame in shadow. Muted
+> restrained colour grade, shallow depth of field, lead centred with headroom.
 
-**Clip 1 — 8s.** She sits. She blinks. Nothing else moves. Hold the stillness —
-**the absence of event is the shot.**
+**Clip 1.** She sits. The phone lights and buzzes on the table. She does not
+look at it.
 
-**Clip 2 — 8s.** Light changes very slightly across the room, as if outside. She
-does not react to it.
+**Clip 2.** It keeps going. Her eyes move to it, once, and away again.
 
-**Clip 3 — 8s.** She shifts her weight once, minimally, and settles back into
-the same position.
+**Clip 3.** It stops. The room is quieter than before it started. **The
+stopping is the beat.**
 
-**Clip 4 — 8s · the freeze.** Eyes open, focused on nothing. **Freeze frame:
-the last frame.**
+**Clip 4 · the freeze.** She has not moved. Eyes open, focused on nothing.
+**Freeze: the last frame.**
 
 ---
 
@@ -411,5 +418,12 @@ picture as well as the cheaper one.
 | Upscale the seven existing | — | — | 620 |
 | **Clean pass** | **30** | **21** | **3,118** |
 
-Against 3,870 before. **Roughly 750 credits saved on the clean pass**, and more
-than that again in avoided retakes.
+⚠ **The retake multiplier is now the whole question.** Scenes with a second
+person in frame miss more often than a single figure nearly still — a reaction
+has to land, and a second face is a second thing that can go wrong. At 2× the
+panels come to about 5,100 credits all in, which fits. At 3× they come to about
+7,100, which does not.
+
+**This is exactly what P1 answers.** Generate its five clips end to end, count
+how many attempts each took, and multiply out from a real number instead of an
+assumed one. 400 credits to remove the largest unknown in the project.
