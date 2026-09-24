@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — member-checkout.html · SR-444 (PASS-X.md §4)
+  Two tiers. Desktop: the released-tracks tier first. Below 820px the €29
+  tier is ordered first (.sr-mi-tier--up), because the upgrade is why the
+  page was opened and the first card is the only one seen without scrolling.
+
+  Prices: €19 / €190 are read from content/tracks.js PRICING.t2 (the source
+  of truth). €29 / €290 are written here because PRICING deliberately has no
+  key for that tier — SR-414's record (content/tracks.js) settles €290 and
+  says the tier is not live yet. The upgrade control does not transact:
+  payments are Phase 4, so it uses account.html's disabled-control pattern
+  and says so in the same words.
+
+  Road-map names are copied from coming-soon.html's own headings. No
+  protocol, resource or track count appears in the copy.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first — copied from
+     member-frameworks.html, as is everything above <main>. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#0A0A0F}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Your plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+<link rel="stylesheet" href="css/saferise-rail.css">
+<link rel="stylesheet" href="css/saferise-system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="sr-dash-navrail" id="srRail" aria-label="Sections"></nav>
+
+<main id="main" class="shell">
+
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="dashboard.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Dashboard
+  </a>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<header class="sr-fw-mast sr-mi-mast" style="display:block">
+  <span class="eyebrow">Your plan</span>
+  <h1>Open the whole road map</h1>
+  <p class="sr-fw-stance">Nothing you already have is removed, replaced or paused, and your record is untouched either way.</p>
+</header>
+
+<div class="sr-mi-page">
+  <div class="sr-mi-tiers">
+    <section class="sr-mi-panel" aria-labelledby="srTier19">
+      <span class="eyebrow" id="srTier19">The released tracks</span>
+      <p class="sr-mi-price" data-sr-price="t2">&euro;19</p>
+      <p class="sr-mi-per">a month, or <span data-sr-price-annual="t2">&euro;190</span> a year</p>
+      <ul class="sr-mi-list"><li>Personal Transformation<em>free with an account</em></li><li>Relationship Healing</li><li>Professional Performance</li></ul>
+      <p class="sr-mi-small">The Clearing and the Cue Cards are included at every tier, free included.</p>
+    </section>
+
+    <section class="sr-mi-panel sr-mi-tier--up" aria-labelledby="srTier29">
+      <span class="eyebrow" id="srTier29">Everything, as it releases</span>
+      <p class="sr-mi-price">&euro;29</p>
+      <p class="sr-mi-per">a month, or &euro;290 a year</p>
+      <ul class="sr-mi-list"><li>Personal Transformation<em>free with an account</em></li><li>Relationship Healing</li><li>Professional Performance</li><li>Elevation Series<em>in development</em></li><li>Sex &amp; Intimacy<em>in development</em></li><li>Executive Presence<em>in development</em></li><li>Strength &amp; Return<em>in development</em></li><li>Sleep &amp; Recovery<em>in development</em></li><li>Embodied Nutrition<em>in development</em></li><li>Entrepreneur&rsquo;s Journey<em>in development</em></li><li>Money Shift<em>in development</em></li><li>Addiction Recovery<em>in development</em></li></ul>
+      <div class="sr-mi-row">
+        <a class="sr-mi-btn" id="srUpgrade" href="#" aria-disabled="true" tabindex="-1" aria-describedby="srUpgradeWhy">Move to &euro;29 a month</a>
+      </div>
+      <p class="sr-mi-small">Charged the difference for the rest of this month, then &euro;29 from your next date.</p>
+      <p class="sr-mi-small" id="srUpgradeWhy">Upgrading opens once payments (Phase 4) are wired up &mdash; not yet.</p>
+    </section>
+  </div>
+
+  <div class="sr-mi-panel sr-mi-panel--gold">
+    <p>Most of the road map is still being written. The price does not change as tracks arrive and nothing new is charged for separately &mdash; but today the &euro;29 tier opens the same tracks as the &euro;19 one. It buys the road map, not extra sessions tonight.</p>
+  </div>
+
+  <div class="sr-mi-panel sr-mi-panel--sage">
+    <p><strong>Moving down, or stopping, never deletes anything you have written.</strong> Your record lives on your device, not on our servers, so a change of plan cannot reach it. Tracks you no longer pay for close; the record of what you did in them does not.</p>
+  </div>
+</div>
+</main>
+
+<script src="content/tracks.js"></script>
+<script>
+(function () {
+  'use strict';
+  /* €19 tier from the pricing record, never typed twice */
+  if (typeof PRICING !== 'undefined' && PRICING.t2) {
+    var m = document.querySelector('[data-sr-price="t2"]');
+    var a = document.querySelector('[data-sr-price-annual="t2"]');
+    if (m && PRICING.t2.amount) m.textContent = PRICING.t2.amount;
+    if (a && PRICING.t2.annual) a.textContent = String(PRICING.t2.annual).split(' ')[0];
+  }
+  var up = document.getElementById('srUpgrade');
+  if (up) up.addEventListener('click', function (e) { e.preventDefault(); });
+})();
+</script>
+
+<script src="js/saferise-auth.js"></script>
+<script src="js/saferise-access.js"></script>
+<script src="js/saferise-rail.js"></script>
+<script>SafeRiseRail.render('checkout');</script>
+</body>
+</html>
