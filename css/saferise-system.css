@@ -4996,7 +4996,13 @@ p.sr-org-hero-note{margin-top:44px;color:var(--text3)!important;font-size:var(--
    redundant at every width and removed with it. */
 .sr-org-head{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:44px}
 .sr-org-head h2{font-size:clamp(1.8rem,3.2vw,2.6rem);line-height:1.08;letter-spacing:-.015em;margin-top:.5rem;max-width:22ch}
-.sr-org-head>p{color:var(--text3)!important;font-size:.95rem;line-height:1.6;max-width:58ch;margin-top:0}
+/* SR-440 (PASS-P §3) · this rule is for the description paragraph in a
+   head block, but three heads (#sr-org-plustwo, #sr-org-wall,
+   #sr-org-model8plus2) place the eyebrow as a direct <p> child too, so it
+   caught them: grey --text3 and .95rem instead of the eyebrow's own gold
+   13px. The :not() pair is what exempts eyebrows and kickers. !important
+   dropped — :where() on the page's p reset (SR-438) removed the need. */
+.sr-org-head>p:not(.sr-org-eyebrow):not(.sr-org-kicker){color:var(--text3);font-size:.95rem;line-height:1.6;max-width:58ch;margin-top:0}
 
 /* -- capacity grid (3, numbered) -- */
 /* SR-429 (PASS-F §5d, §6) · REPLACES the per-article top border (a §6
