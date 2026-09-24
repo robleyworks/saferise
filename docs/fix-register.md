@@ -21503,3 +21503,194 @@ script never starts the cycle.
 The SVG is 326px wide. The SafeRise bracket renders **290×21px on screen, spanning the
 channel's full width**. Its label is at the 11px floor, clear of the stage labels, and
 there is no horizontal scroll. No console errors at 1440, 1024 or 390.
+
+---
+
+## SR-453 — seven defects from the live site, plus about.html img-051 (PASS-AH.md)
+
+24 September 2026. One commit per part: §1 `39f9a42`, §2 `e02b2bd`, §3 `0dbde27`,
+§4 `6d3f26b`, §5 `6ca2fa6`, addition `5e6617f`. §6 and §7 changed no code.
+
+### §1 — the rail renders the SR-444 routes
+
+`js/saferise-rail.js` `ROUTES` gains the seven routes. Labels are copied verbatim from
+`dashboard.html`'s `ROUTES`, in that map's order. `legal` joins `account` in `FOOT_ROUTES`.
+
+**Render order:**
+
+1. Dashboard
+2. Where the method comes from
+3. What's coming
+4. Sessions & workshops
+5. The Clearing
+6. Add a track
+7. Article
+8. The SafeRise podcast
+9. FAQ
+10. The Chosen Self
+11. Your Decisions
+
+Then, in the foot: Account & plan · Terms and privacy · Log out.
+
+- **Icons created: all eight** (`clearing`, `chosen`, `decisions`, `article`, `podcast`,
+  `faq`, `checkout`, `legal`). None existed anywhere in the repo. Each is drawn on the
+  same 24-unit grid and stroke as the existing set.
+- **`legal` was missing from the rail's own `PAGES`.** Without it, a click on a member page
+  lands on `dashboard.html#route=legal`, whose resolver ignores `PAGES` keys, so the member
+  sees the dashboard with nothing opened. Added, for the same reason SR-438 added
+  `account`.
+- **Active highlight.** `member-record.html` passed `'record'` and `member-reading.html`
+  passed `'reading'`, and no button carries either key. Each now passes the key for the
+  payload it is showing.
+- **Verified:** every button opens its rendered page, both from `/dashboard` (through
+  `openRoute`) and from a member page (through `PAGES`). No console errors.
+  - `coaching` stays hidden on the dashboard itself. That is pre-existing, and the button
+    opens its layer.
+- **Density, reported:** 11 buttons plus the foot fit at 1440×900 (Log out bottom at 882px).
+  - At 660px tall, the main buttons shrink to 31px tall.
+  - On the ≤760px bottom bar, all 11 fit at 29px wide. That is under the 44px tap target.
+  - The foot (Account, Terms, Log out) is hidden on mobile, as it already was.
+  - Grouping or overflow is a design call and is not made here.
+- **Proposed order (not applied):** Dashboard · The Clearing · The Chosen Self · Your
+  Decisions — then Where the method comes from · Article · The SafeRise podcast · FAQ —
+  then Sessions & workshops · What's coming · Add a track. That puts practice first,
+  reading second and the plan third.
+
+### §2 — #srLibrary back below the header
+
+The section moved whole with its comment block, and nothing inside it changed. Order is
+now `header.sr-dash-top` → `.shell` → `#srLibrary` → `#srJourney`. Tag balance: 0 errors.
+
+The two things SR-434 added for the top position:
+
+- **The `.shell` wrapper made sense only up there.** The comment gave the reason: the
+  header opens its own `.shell` after itself. It is removed. The section now sits in the
+  same `.shell` as `#srJourney`, which also brings it back under
+  `body.reading .shell > .sr-dash-sec:not(.sr-keep)`, the rule it always matched.
+- **The sub-1000px collapse guard is position-independent, and it stays.** It exists
+  because the rail becomes a chip row there, which has nothing to do with where the
+  section sits.
+
+`--per` is unchanged: 5, 4 and 2 at 1440, 1024 and 390. The viewport scrolls at all three
+widths (`scrollLeft` moves; rAF stepping cannot run in the hidden pane). The collapse
+toggle works. No console errors.
+
+### §3 — two lines removed from /organisations
+
+The figcaption and `p.sr-org-gold-copy` are deleted, with no replacement. The Gap now runs
+figure → row list (26px) → step dots (22px) → section padding, with no hole.
+
+- **Does the diagram stand without a legend?** Mostly.
+  - The vertical axis keeps its own label (FULL RANGE OF RESPONSE).
+  - The horizontal axis is carried only by the BEFORE / DURING / AFTER stage labels. They
+    read as time, but nothing now says the width is "one difficult moment".
+- **Is anything orphaned?** The step dots are now the section's last element, which
+  reads fine.
+- Two CSS rules are now dead and were left in place:
+  - `p.sr-org-gold-copy` (saferise-system.css ~5102)
+  - `.sr-org-image-copy .sr-org-gddia figcaption` (~6028)
+
+### §4 — Executive Presence → band-18
+
+`band-18.jpg` and `.webp` (1200×640) were added explicitly, and `git ls-files` confirms
+both.
+
+- The only live reference was the registry (`content/track-images.js`). `plans`, `f8`,
+  `coming-soon` and member `coming-soon` all resolve through it.
+- `tools/check-track-images.py` passes.
+- All four surfaces load `band-18.webp` in the browser.
+- **band-08 is now referenced by no live surface.** It remains in historical prose only:
+  the `js/saferise-plans.js` SR-386 comment, `docs/image-intrinsic-dims.json`,
+  `docs/UNUSED-IMAGES-REVIEW.md`, and the other session's `docs/business/` and
+  `docs/org-page/`, which were not touched. The files themselves are not deleted.
+
+### §5 — live-sessions: diagnosed, no broken file
+
+On production `/live-sessions`, all four images load as WebP with status 200 and render at
+both widths:
+
+| Image | Size at 1440 | Size at 390 |
+|---|---|---|
+| `assets/sessions/live-hero-remote.webp` | 1440×733 | 390×738 |
+| `calendar.webp` | 1118×369 | 328×107 |
+| `live-premium-1to1.webp` | 260×532 | 328×260 |
+| `live-online-workshop.webp` | 260×387 | 328×260 |
+
+The `<picture>`/`<source>` pairs are correct, and all eight files are in `origin/main`.
+
+The one cause not observable from here is a cached 404. SR-430 wired the markup in
+`d92881b` and staged the files in `b6bead4`, and `_headers` gives `/assets/*`
+`max-age=31536000, immutable`. A 404 served between those two deploys would be held for a
+year.
+
+Adding `?v=453` to all eight URLs gets past that. No Pexels hotlinks were restored.
+
+If Andre meant that the photographs themselves changed (Pexels originals → SR-430's
+copies), that is a content question, not a defect.
+
+### §6 — the two expanders
+
+**Track rail toggle `#srRailToggle`, inside #srLibrary:**
+
+- **At 1440, before and after §2: it works.** A real mouse click collapses the rail from
+  212px to 56px, hides the names, sets `aria-expanded=false` and persists. A second click
+  restores it.
+- **At 390, before and after: hidden by design**, since the rail is a chip row there. The
+  track chips switch tracks.
+
+**Nav panel `#srRail`:**
+
+- **At 1440: it has no expander at all.** It is a fixed 74px icon column with hover
+  tooltips (`span` opacity on `:hover`), and it never had an expand state.
+- **At 390:** a bottom bar, icons only.
+
+Nothing is broken, so nothing was changed. If "the nav panel does not expand" means
+`#srRail`, then an expanding labelled nav panel is new design (width, push or overlay,
+persistence, mobile), not a fix. It is reported rather than built.
+
+The §2 move changes neither control's behaviour. Production differs only in `Store`
+persistence: a member who once collapsed the track rail sees it collapsed on every visit.
+
+### §7 — console errors and failed requests (production, 24 September)
+
+| Page | JS errors | Failed requests | Info-level notices |
+|---|---|---|---|
+| `/dashboard` | none | none | — |
+| `/organisations` | none | none | 5 × `trackImage: <slug> has no portrait; using its own band` (`content/track-images.js`) |
+| `/plans` | none | none | 9 × `… has no panel; using its own band` (`content/track-images.js`) |
+| `/live-sessions` | none | none | — |
+
+- `/dashboard` was checked signed out, where the gate shows. The member view cannot be
+  checked in production without signing in. In the local mirror (dev bypass) it logs no
+  JS errors.
+- The `trackImage` notices are by design (SR-448), not errors.
+- **Every page:** `GET /favicon.ico → 404`. No favicon exists anywhere in the repo.
+  Adding one is new brand imagery, so it is reported rather than made here.
+
+### Addition — about.html img-051 → img-051-v2
+
+Line 891 now uses the v2 files in both the `<source srcset>` and the `<img src>`. The v2
+files are 900×1200, the same as the original, and were added explicitly. The alt text is
+unchanged. `img-051.jpg` and `img-051.webp` are now referenced nowhere; they are not
+deleted.
+
+### Report only
+
+1. **Duplicated `ROUTES`/`PAGES`.** Proposal: `js/saferise-rail.js` becomes the single
+   declaration.
+   - It exposes `SafeRiseRail.ROUTES` (key, label, blurb, clean path) and
+     `SafeRiseRail.PAGES`.
+   - `dashboard.html` reads both instead of declaring its own. Its `LAYERS` and in-shell
+     routes stay local, since they are dashboard behaviour, not navigation data.
+   - The rail's `ROUTES`/`FOOT_ROUTES` then become a list of keys into that one map.
+   - A checker in the style of `tools/check-track-images.py` fails if any
+     `data-route-link`, rail key or `#route=` target names a key the map lacks.
+2. **PASS-AG without its closing line.** The SafeRise span (the bracket under all three
+   stages, "SafeRise works here") now carries the claim the deleted line made, and it
+   carries it alone. It still reads correctly.
+   - The EAP bracket over BEFORE only, set against the full-width SafeRise bracket, is
+     still the argument.
+   - The one-row-at-a-time cycle is unaffected.
+   - What is lost is the explicit "does not replace existing support". The diagram now
+     states SafeRise's reach without disclaiming a substitute. That is Andre's call, and
+     it is only noted here.
