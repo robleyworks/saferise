@@ -1,0 +1,268 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SafeRise · organisations — the impact pathway (mock v2)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0c14; --panel:#12131c; --panel2:#171826;
+  --text:#f5edda; --ink:#ddd5c3; --soft:#99938b; --dim:#7b766f;
+  --gold:#d8aa43; --teal:#4E9AA6; --c1:#d8aa43; --c2:#8FA37B; --c3:#6E86A8; --c4:#6E86A8; --hair:rgba(245,237,218,.07);
+  --serif:"Cormorant Garamond",serif; --sans:"DM Sans",sans-serif; --caps:"Cinzel",serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:1px solid var(--gold);outline-offset:3px;border-radius:4px}
+.wrap{width:min(1240px,calc(100% - 56px));margin:auto;padding:88px 0 96px}
+.eyebrow{color:var(--gold);font:.62rem var(--caps);letter-spacing:.24em;text-transform:uppercase;margin:0 0 15px}
+h2{margin:0 0 16px;color:var(--text);font:400 clamp(2.1rem,3.6vw,3.05rem)/1.06 var(--serif);letter-spacing:-.03em;max-width:22ch}
+.lede{color:var(--soft);max-width:60ch;margin:0 0 50px;font-size:1.02rem;line-height:1.66}
+
+/* ── the chain ─────────────────────────────── */
+.chain{display:grid;grid-template-columns:.92fr 1fr 1fr 1fr 1fr;gap:0;align-items:stretch}
+
+/* anchor */
+.anchor{position:relative;padding:34px 34px 32px;border-radius:14px 0 0 14px;
+  background:linear-gradient(140deg,rgba(216,170,67,.16),rgba(216,170,67,.05)),var(--panel2);
+  border:1px solid rgba(216,170,67,.34);border-right:none;
+  box-shadow:inset 0 1px 0 rgba(245,237,218,.06)}
+.anchor .k{display:block;font:500 .56rem var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.anchor h3{margin:0 0 10px;color:var(--text);font:400 1.72rem/1.08 var(--serif)}
+.anchor p{margin:0;color:var(--soft);font-size:.9rem;line-height:1.62}
+.anchor .seal{position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:26px;height:26px;
+  border-radius:50%;background:var(--bg);border:1px solid rgba(216,170,67,.45);display:grid;place-items:center}
+.anchor .seal:after{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold);opacity:.8}
+
+/* stages */
+.st{position:relative;padding:34px 26px 30px 38px;border:1px solid var(--hair);border-left:none;
+  background:var(--panel);transition:background .4s,border-color .4s}
+.st:last-child{border-radius:0 14px 14px 0}
+.st:hover{background:#15162090;border-color:color-mix(in srgb,var(--c) 40%,transparent)}
+.st.s1{--c:var(--gold)} .st.s2{--c:var(--gold)} .st.s3{--c:var(--teal)} .st.s4{--c:var(--teal)}
+/* confidence gradient: solid where we act, hatched where we only observe */
+.st.s3,.st.s4{background:
+  repeating-linear-gradient(135deg,rgba(245,237,218,.016) 0 6px,transparent 6px 13px),var(--bg)}
+.st.s4{border-style:solid dashed dashed solid}
+.st .n{display:block;font:500 .56rem var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--c);margin-bottom:11px;opacity:.95}
+.st h4{margin:0 0 9px;color:var(--text);font:400 1.36rem/1.16 var(--serif)}
+.st.s3 h4,.st.s4 h4{color:var(--ink)}
+.st p{margin:0;color:var(--soft);font-size:.88rem;line-height:1.6}
+.st .arrow{position:absolute;left:-1px;top:0;bottom:0;width:20px;pointer-events:none}
+.st .arrow svg{width:100%;height:100%;overflow:visible}
+.st .arrow path{fill:var(--bg);stroke:var(--hair);stroke-width:1}
+.st.s1 .arrow path{stroke:rgba(216,170,67,.34)}
+
+/* confidence scale */
+.scale{display:grid;grid-template-columns:.92fr 2fr 2fr;gap:0;margin-top:14px;align-items:center}
+.sc{padding:12px 0 0;font:500 .58rem var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+  border-top:1px solid var(--hair);text-align:center}
+.sc:first-child{border-top-color:rgba(216,170,67,.4);color:var(--gold)}
+.sc:nth-child(3){border-top-style:dashed}
+
+.disclaim{margin:26px 0 0;color:var(--dim);font-size:.86rem;line-height:1.6;max-width:72ch}
+
+/* ── evaluation areas ──────────────────────── */
+.areas{margin-top:58px}
+.ahead{display:flex;align-items:baseline;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.ahead h3{margin:0;color:var(--text);font:400 1.9rem/1.1 var(--serif)}
+.ahead span{color:var(--dim);font-size:.88rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:16px}
+.area{border-radius:14px;overflow:hidden;border:1px solid var(--hair);background:var(--panel);
+  transition:border-color .45s,transform .45s}
+.area:hover{border-color:rgba(78,154,166,.42);transform:translateY(-3px)}
+.area .img{aspect-ratio:16/10;background:
+  linear-gradient(180deg,rgba(10,12,20,0),rgba(10,12,20,.85)),
+  repeating-linear-gradient(45deg,#1a1b28 0 10px,#161722 10px 20px);
+  display:grid;place-items:center;color:#3f4150;font:500 .58rem var(--sans);letter-spacing:.2em}
+.area .in{padding:20px 22px 22px}
+.area .k{display:block;font:500 .55rem var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:9px}
+.area h4{margin:0 0 9px;color:var(--text);font:400 1.3rem/1.16 var(--serif)}
+.area p{margin:0 0 16px;color:var(--soft);font-size:.87rem;line-height:1.58}
+.area ul{margin:0;padding:14px 0 0;list-style:none;border-top:1px solid var(--hair)}
+.area li{font:400 .98rem var(--serif);color:var(--dim);padding:4px 0}
+
+.principle{margin-top:24px;padding:24px 28px;border-radius:14px;border:1px solid rgba(216,170,67,.2);
+  background:rgba(216,170,67,.03)}
+.principle p{margin:0;color:var(--ink);font:400 1.1rem/1.62 var(--serif);max-width:86ch}
+.principle b{color:var(--text);font-weight:400}
+
+@media(max-width:1100px){
+  .chain{grid-template-columns:1fr 1fr}
+  .anchor{border-radius:14px;border-right:1px solid rgba(216,170,67,.34);grid-column:1/-1}
+  .anchor .seal{display:none}
+  .st{border-left:1px solid var(--hair);border-radius:14px;margin-top:12px}
+  .st .arrow{display:none}
+  .scale{display:none}
+}
+@media(max-width:640px){.chain{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ── certainty as colour temperature ── */
+.st{--sc-col:var(--c3)}
+.st.s1{--sc-col:var(--c1)}
+.st.s2{--sc-col:var(--c2)}
+.st.s3{--sc-col:var(--c3)}
+.st.s4{--sc-col:var(--c4)}
+.st .k{color:var(--sc-col)!important;opacity:.95}
+.st h3{color:var(--text)}
+.st{position:relative;transition:background .45s}
+.st:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2.5px;
+  background:linear-gradient(to right,var(--sc-col),transparent 88%);opacity:.75;transition:opacity .45s}
+.st:hover:after{opacity:1}
+.st:hover{background:rgba(245,237,218,.016)}
+
+/* soften the hard divider into a density step */
+.st.s4{box-shadow:inset 1px 0 0 rgba(110,134,168,.22)}
+.st.s3,.st.s4{background:linear-gradient(180deg,rgba(110,134,168,.035),transparent 70%)}
+
+/* the anchor reads as the lit claim */
+.anchor{background:
+  radial-gradient(circle at 18% 0,rgba(216,170,67,.14),transparent 58%),
+  linear-gradient(180deg,rgba(216,170,67,.05),transparent 62%),var(--panel2)!important;
+  border-color:rgba(216,170,67,.3)!important}
+.anchor .k{color:var(--c1)!important}
+.anchor p{color:var(--ink)!important;font-size:13.5px!important;line-height:1.66!important}
+
+/* scale legend takes the three temperatures */
+.scale .sc:nth-child(1){color:var(--c1)}
+.scale .sc:nth-child(2){color:var(--c2)}
+.scale .sc:nth-child(3){color:var(--c3)}
+.scale .sc:before{background:currentColor!important;opacity:.6}
+
+/* indicator cards — colour-keyed, no internal hairlines */
+.area{--ac:var(--c3);border-radius:14px!important;transition:border-color .4s,transform .4s}
+.area:nth-child(1){--ac:#d8aa43} .area:nth-child(2){--ac:#C9856B}
+.area:nth-child(3){--ac:#8FA37B} .area:nth-child(4){--ac:#6E86A8} .area:nth-child(5){--ac:#B07A9A}
+.area .k{color:var(--ac)!important}
+.area:hover{border-color:var(--ac)!important;transform:translateY(-2px)}
+.area ul,.area .list,.area hr{border:0!important}
+.area li{padding:9px 13px!important;margin:0 -13px!important;border:0!important;
+  border-radius:8px;transition:background .35s,padding-left .35s}
+.area li:hover{background:rgba(245,237,218,.03);padding-left:19px!important}
+.area .img{border-radius:10px!important}
+
+/* global bezel softening */
+.chain,.area,.principle,.anchor{border-radius:14px!important}
+
+</style></head><body>
+
+<div class="wrap">
+  <p class="eyebrow">The impact pathway</p>
+  <h2>From an internal shift to an organisational signal.</h2>
+  <p class="lede">One thing here is trained directly. Everything to the right of it is something to
+  evaluate, in that order, with decreasing certainty at every step.</p>
+
+  <div class="chain">
+    <div class="anchor">
+      <span class="k">What SafeRise trains</span>
+      <h3>State recognition and regulation</h3>
+      <p>This is the claim. It is the only part of the chain SafeRise acts on directly, and the only
+      part it will stand behind.</p>
+      <span class="seal" aria-hidden="true"></span>
+    </div>
+
+    <div class="st s1">
+      <span class="arrow" aria-hidden="true"><svg viewBox="0 0 20 400" preserveAspectRatio="none"><path d="M0 0 L20 200 L0 400 Z"/></svg></span>
+      <span class="n">01 · Input</span>
+      <h4>Private, usable support</h4>
+      <p>Available near the moment, without disclosure or completion pressure.</p>
+    </div>
+
+    <div class="st s2">
+      <span class="arrow" aria-hidden="true"><svg viewBox="0 0 20 400" preserveAspectRatio="none"><path d="M0 0 L20 200 L0 400 Z"/></svg></span>
+      <span class="n">02 · Capability</span>
+      <h4>More room to choose</h4>
+      <p>Earlier recognition, regulation and recovery after pressure.</p>
+    </div>
+
+    <div class="st s3">
+      <span class="arrow" aria-hidden="true"><svg viewBox="0 0 20 400" preserveAspectRatio="none"><path d="M0 0 L20 200 L0 400 Z"/></svg></span>
+      <span class="n">03 · Behaviour</span>
+      <h4>Better access to skill</h4>
+      <p>Pause, judgement, communication, repair and return.</p>
+    </div>
+
+    <div class="st s4">
+      <span class="arrow" aria-hidden="true"><svg viewBox="0 0 20 400" preserveAspectRatio="none"><path d="M0 0 L20 200 L0 400 Z"/></svg></span>
+      <span class="n">04 · Signal</span>
+      <h4>Workplace indicators</h4>
+      <p>Patterns a team can assess ethically, at an aggregate level.</p>
+    </div>
+  </div>
+
+  <div class="scale" aria-hidden="true">
+    <div class="sc">Trained</div>
+    <div class="sc">Reasonably expected</div>
+    <div class="sc">Observed, never promised</div>
+  </div>
+
+  <p class="disclaim">The hatching is not decoration. Stages three and four are areas to evaluate,
+  not outcomes SafeRise claims, and the page should not let them look like the same kind of statement
+  as stage one.</p>
+
+  <div class="areas">
+    <div class="ahead">
+      <h3>Where a signal would show up.</h3>
+      <span>Five areas an organisation can assess without looking at any individual.</span>
+    </div>
+
+    <div class="grid">
+      <article class="area">
+        <div class="img">IMG · DECISION</div>
+        <div class="in">
+          <span class="k">Decision quality</span>
+          <h4>Judgement under pressure</h4>
+          <p>Can people create enough pause to tell urgency from importance, and respond rather than react?</p>
+          <ul><li>Decision confidence</li><li>Avoidable rework</li><li>Escalation quality</li></ul>
+        </div>
+      </article>
+
+      <article class="area">
+        <div class="img">IMG · SUPPORT</div>
+        <div class="in">
+          <span class="k">People experience</span>
+          <h4>Sense of support</h4>
+          <p>Does support feel private, relevant and usable before strain becomes a crisis?</p>
+          <ul><li>Perceived support</li><li>Psychological safety</li><li>Help-seeking confidence</li></ul>
+        </div>
+      </article>
+
+      <article class="area">
+        <div class="img">IMG · RECOVERY</div>
+        <div class="in">
+          <span class="k">Sustainable output</span>
+          <h4>Performance and recovery</h4>
+          <p>Can people regain useful attention after disruption and re-enter the work with more choice?</p>
+          <ul><li>Recovery time</li><li>Focus quality</li><li>Error and rework patterns</li></ul>
+        </div>
+      </article>
+
+      <article class="area">
+        <div class="img">IMG · STABILITY</div>
+        <div class="in">
+          <span class="k">Workforce stability</span>
+          <h4>Capacity to stay</h4>
+          <p>Does the environment become more supportable when pressure can be met without silence or stigma?</p>
+          <ul><li>Intent to stay</li><li>Regretted attrition</li><li>Absence patterns</li></ul>
+        </div>
+      </article>
+
+      <article class="area">
+        <div class="img">IMG · REPAIR</div>
+        <div class="in">
+          <span class="k">Relational health</span>
+          <h4>Communication and repair</h4>
+          <p>Can a person notice activation before it becomes the entire conversation?</p>
+          <ul><li>Conflict recurrence</li><li>Manager confidence</li><li>Team climate</li></ul>
+        </div>
+      </article>
+    </div>
+
+    <div class="principle">
+      <p><b>Measure the environment, not the individual.</b> Use the aggregate people and performance
+      measures already in place, optional anonymous pulse questions, and qualitative learning. Private
+      protocol use does not become a productivity score, and named activity is never exposed.</p>
+    </div>
+  </div>
+</div>
+
+</body></html>

@@ -62,7 +62,7 @@ table first.
 >
 > Recognise what is running. Regulate it. Get your judgement back, and make the choice you would have made anyway.
 >
-> One session will not rearrange your life.
+> One session is where it begins.
 >
 > It changes the state you are in — which changes what you can do next.
 >

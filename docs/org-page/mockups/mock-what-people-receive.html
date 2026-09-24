@@ -1,0 +1,135 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c14;--panel:#12131c;--text:#f5edda;--ink:#ddd5c3;--muted:#a69f94;
+ --dim:#6f6b66;--gold:#d8aa43;--teal:#4E9AA6;--line:rgba(245,237,218,.07);
+ --serif:"Cormorant Garamond",serif;--sans:"DM Sans",sans-serif;--caps:"Cinzel",serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{width:min(1240px,calc(100% - 56px));margin:auto;padding:84px 0 96px}
+.eyebrow{color:var(--gold);font:.62rem var(--caps);letter-spacing:.24em;text-transform:uppercase;margin:0 0 15px}
+h2{margin:0 0 16px;color:var(--text);font:400 clamp(2.2rem,4vw,3.2rem)/1.04 var(--serif);letter-spacing:-.03em;max-width:24ch}
+.lede{color:#98928a;max-width:66ch;margin:0 0 44px;font-size:1.02rem;line-height:1.66}
+
+.split{display:grid;grid-template-columns:1fr 132px 1fr;gap:0;align-items:stretch;position:relative}
+
+.side{padding:30px 0}
+.shead{display:flex;align-items:baseline;gap:12px;margin-bottom:22px}
+.shead .k{font:500 .6rem var(--sans);letter-spacing:.24em;text-transform:uppercase}
+.shead .s{font:italic 1rem var(--serif);color:#857f78}
+.left .shead{justify-content:flex-end;text-align:right}
+.left .k{color:var(--gold)} .right .k{color:var(--teal)}
+
+.rc{padding:22px 26px;border-radius:14px;border:1px solid rgba(245,237,218,.06);background:var(--panel);
+ box-shadow:inset 0 1px 0 rgba(245,237,218,.04);margin-bottom:16px;transition:border-color .4s;
+ opacity:0;animation:rise .85s cubic-bezier(.16,.8,.3,1) forwards}
+.rc.l{--c:var(--gold)} .rc.r{--c:var(--teal)}
+.rc:nth-of-type(1){animation-delay:.15s} .rc:nth-of-type(2){animation-delay:.32s}
+.rc:hover{border-color:var(--c)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.rn{display:block;font:500 .56rem var(--sans);letter-spacing:.2em;color:var(--c);margin-bottom:8px}
+.rc h4{margin:0 0 9px;color:var(--text);font:400 1.42rem/1.15 var(--serif)}
+.rc p{margin:0;color:#99938b;font-size:.9rem;line-height:1.62}
+
+/* the membrane */
+.mem{position:relative}
+.mem svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.memline{stroke:rgba(245,237,218,.13);stroke-width:1;stroke-dasharray:4 7}
+.flowdot{fill:var(--teal)}
+.memlbl{font:500 9.5px var(--sans);letter-spacing:.22em;fill:#7f7a73}
+.blocked{stroke:#5b4247;stroke-width:1.2}
+
+.legend{display:flex;gap:26px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+.lg{display:flex;align-items:center;gap:9px;font-size:.84rem;color:#8d8880}
+.lg i{width:26px;height:1px;background:var(--teal);display:block}
+.lg.no i{background:#5b4247;position:relative}
+.lg.no i:after{content:"";position:absolute;left:11px;top:-4px;width:1px;height:9px;
+ background:#7d5a60;transform:rotate(38deg)}
+
+.note{margin-top:34px;padding:22px 26px;border-radius:14px;border:1px solid rgba(216,170,67,.2);
+ background:rgba(216,170,67,.028)}
+.note p{margin:0;color:var(--ink);font:400 1.08rem/1.6 var(--serif)}
+.note b{color:var(--text);font-weight:400}
+
+@media(max-width:960px){.split{grid-template-columns:1fr}.mem{height:96px}
+ .left .shead{justify-content:flex-start;text-align:left}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;opacity:1!important;transform:none!important}}
+</style></head><body><div class="wrap">
+
+<p class="eyebrow">What people receive</p>
+<h2>A private tool in the moment. A shared method over time.</h2>
+<p class="lede">Organisational access uses the same core method as individual membership, then
+adds implementation, facilitated delivery and organisational boundaries.</p>
+
+<div class="split">
+  <div class="side left">
+    <div class="shead"><span class="s">used by the person</span><span class="k">PRIVATE</span></div>
+    
+      <div class="rc l" data-i="01">
+        <span class="rn">01</span>
+        <h4>State-led platform</h4>
+        <p>Guided audio, video and resources organised around what is happening now, not a course to complete.</p>
+      </div>
+      <div class="rc l" data-i="02">
+        <span class="rn">02</span>
+        <h4>Complete curriculum</h4>
+        <p>The full current library, the organisation's industry route, and scheduled series as they arrive — used privately, on the member's own device.</p>
+      </div>
+  </div>
+
+  <div class="mem">
+    <svg viewBox="0 0 132 420" preserveAspectRatio="none" aria-hidden="true">
+      <line class="memline" x1="66" y1="0" x2="66" y2="420"/>
+      <g>
+        <path class="memline" style="stroke-dasharray:none;stroke:#4E9AA6;stroke-opacity:.45"
+              d="M118 132 L74 132"/>
+        <path d="M82 125 L70 132 L82 139" fill="none" stroke="#4E9AA6" stroke-opacity=".7" stroke-width="1.2"/>
+        <circle class="flowdot" cx="118" cy="132" r="2.6" opacity=".8">
+          <animate attributeName="cx" values="118;74;74" dur="3.4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;.9;0" dur="3.4s" repeatCount="indefinite"/>
+        </circle>
+        <path class="memline" style="stroke-dasharray:none;stroke:#4E9AA6;stroke-opacity:.45"
+              d="M118 292 L74 292"/>
+        <path d="M82 285 L70 292 L82 299" fill="none" stroke="#4E9AA6" stroke-opacity=".7" stroke-width="1.2"/>
+        <circle class="flowdot" cx="118" cy="292" r="2.6" opacity=".8">
+          <animate attributeName="cx" values="118;74;74" dur="3.4s" begin="1.7s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;.9;0" dur="3.4s" begin="1.7s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <g>
+        <path class="blocked" d="M50 212 L14 212"/>
+        <path class="blocked" d="M44 204 L32 220"/>
+      </g>
+      <text class="memlbl" x="66" y="392" text-anchor="middle">BOUNDARY</text>
+    </svg>
+  </div>
+
+  <div class="side right">
+    <div class="shead"><span class="k">ORGANISATIONAL</span><span class="s">configured by you</span></div>
+    
+      <div class="rc r" data-i="03">
+        <span class="rn">03</span>
+        <h4>Facilitated entry</h4>
+        <p>A live session gives the team a common reference point without requiring personal disclosure.</p>
+      </div>
+      <div class="rc r" data-i="04">
+        <span class="rn">04</span>
+        <h4>Context curation</h4>
+        <p>Relevant states and resources are surfaced first, without removing the wider library.</p>
+      </div>
+  </div>
+</div>
+
+<div class="legend">
+  <span class="lg"><i></i> Curation and facilitation cross inward</span>
+  <span class="lg no"><i></i> Nothing about an individual crosses back</span>
+</div>
+
+<div class="note">
+  <p><b>The boundary is the product.</b> You shape the route your people take through the
+  library and you bring them into the room together. What any one person opens, writes or
+  returns to stays on their device — not withheld from you by policy, but never collected in
+  the first place.</p>
+</div>
+
+</div></body></html>

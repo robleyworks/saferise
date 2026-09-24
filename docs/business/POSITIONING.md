@@ -119,8 +119,8 @@ The upstream claim licenses every domain. **The product does not cover them yet.
 | Personal | Live |
 | Relationships | Live |
 | Professional performance | Live |
-| Nutrition | Not built |
-| Fitness | Not built |
+| Embodied Nutrition | Not built |
+| Strength & Return | Not built |
 | Money, intimacy, recovery, parenting, elevation | Not built |
 
 ⚠ **Do not sell "your nutrition, your fitness goals" today.** The record already states
