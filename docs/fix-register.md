@@ -20623,3 +20623,104 @@ errors.
    this pass's own: SR-441 §1, §2 and this entry.
 
 **Not pushed.**
+
+## SR-442 — organisations.html: cut the repetition (PASS-R.md)
+
+Commits: `acd42a0` §1, `fe597fb` §2, `a4df2a2` §3; §4 is report-only. The brief's line
+numbers matched the file at start. No git lock this pass.
+
+### §1 — "One method, two spaces" merged into `#sr-org-included`
+
+`#sr-org-privacy` deleted. "One vocabulary" and "Nobody nominated" (with their expansions,
+icons and hover reveal) now sit under `#sr-org-included`'s head, above the containment
+diagram. That uses the same `.sr-org-ebenefits` markup SR-436 carried. Dropped: its h2
+and lede, "Private by construction", and the shared-space / private-space photo pair.
+`grep -c sr-org-privacy organisations.html` → **0**. Tag balance clean (no errors, none
+unclosed, 12/12 comments). Both cards render.
+
+**Reported, not restyled:**
+- `.sr-org-ebenefits` is `repeat(3,1fr)`, so two cards leave the third 320px column
+  empty at 1024.
+- The deleted photo pair was the only use of **`assets/org/twospace-shared.*` and
+  `twospace-private.*`, deployed one pass ago in SR-441**. All four files are now
+  unreferenced.
+- Band rhythm: no two `-alt` sections are adjacent. But capacity → model → gap → impact →
+  explorer → 8+2 is now **six plain sections in a row** before the first `-alt`
+  (`#sr-org-included`).
+
+### §2 — the promise twice inside `#sr-org-included` (DIFFERS)
+
+The h2 is kept. The lede now ends "…You add two things to it from the outside." **"Two things
+go in. Nothing comes out." was not a standalone line.** It was the bold lead of the closing
+paragraph the brief says to keep unchanged. That sentence alone was removed; the rest of
+the paragraph ("You choose the route and you call the room…never collected in the first
+place.") is intact. The "Sealed" label is unchanged. **Still present, not named by the
+brief:** the seal line "No name, journal, score or session history leaves the sealed
+space". It is a third statement. Spacing measured after the transition settled: **26px
+above the closing panel, 64px from it to the section end**, identical to before. The panel
+is still 107px at 1024 because the text wraps to the same lines.
+
+### §3 — L32 lede
+
+Now: "SafeRise works one layer earlier than a framework or a leadership model: the state a
+person is in while the moment is happening." L34 and L65 unchanged. **Read as one run, it
+now builds:**
+- capacity: what SafeRise does and its steps
+- model: three layers, and the page's one comparative line
+- gap: support stops before the moment
+
+Two residual echoes remain. The capacity **h2** "Training only works when people can reach
+it." is still the Gap claim in miniature, and the model section says "most programmes" in
+both its h2 and its lede.
+
+### §4 — three or four steps (report only)
+
+- **L32** (capacity grid): "01 Recognise / 02 Regulate / 03 Recover choice".
+- **L52** (model, capacity panel): "The guided session runs the same four steps every time —
+  recognise the state, regulate it, release the struggle, return to deliberate response."
+- **L280 today (L123 in the brief)**: "The same four steps in every department."
+
+**The rest of the site supports four:**
+- `content/tracks.js` `SHARED.fourSteps` gives **Recognise / Regulate / Release / Rise**.
+  Its header notes: "SHARED.fourSteps holds the PUBLIC-FACING step names (Recognise /
+  Regulate / Release / Rise). The member-facing method names stay inside the product, not
+  on sales pages."
+- `method.html:888` draws the same four ("RECOGNISE REGULATE / RELEASE RISE"), and
+  `:895` says "Each of those four steps rests on something."
+- `about.html` names no method steps. Its "four-step loop" (`:1177`) is a different idea.
+
+So L32's three is the outlier, and L52's phrasing ("release the struggle, return to
+deliberate response") looks like the member-facing names that tracks.js says stay off
+sales pages. A ruling is needed on both.
+
+### Report-only
+
+1. **"Read more":** I-17c (the Base rebuild) is done; `#srOrgM1` was removed in SR-436.
+   The remaining two are **`#srOrgM2`** ("The two that vary", L219) and **`#srOrgM3`**
+   ("The library", L242). They are the same `.sr-org-ermore` button toggling a
+   `.sr-org-emore` span, outside I-17c's scope. The copy §1 kept uses **a different
+   control**: `.sr-org-ebenefits .sr-org-emore` is a CSS hover/focus reveal with no button.
+2. **Delivery vs Workshop tier:**
+   - *Delivery:* "01 Discover — Map the workforce, recurring strain, existing support and
+     the boundary of self-guided work." / "02 Introduce — A remote or in-person session
+     teaches the method through experience, not a slide deck." / 03 Make it available /
+     04 Return deliberately.
+   - *Workshop or retreat (Offers):* "A founder-led format shaped around the audience and
+     the environment." … "Remote or in person. Short intake and boundaries agreed first.
+     Travel and venue excluded."
+   - Overlap: Discover ≈ "short intake and boundaries agreed first"; Introduce ≈
+     "founder-led format … remote or in person". Neither was cut.
+3. **F8 card crops** (4:3 from 1086×1448, `object-position:50% 22%`): full width kept,
+   source y **139–954** (139px lost at the top, 494 at the bottom).
+   - **f01:** face fully in; loses the chest and the "SAFERISE" watermark (good).
+   - **f02:** both faces in; **loses the couple's joined hands**.
+   - **f03:** **chef's crown ~40 source px (~10px at card size) from the top edge**;
+     loses the hand holding the phone.
+4. **Orphaned CSS:** no rule was scoped to `.sr-org-privacy`, since the section used shared
+   classes. Newly orphaned: `.sr-org-two-space` (`css/saferise-system.css:5104`, `:5113`
+   media), `.sr-org-photo-cards` (5105–5112). `.sr-org-private-card` had no CSS. The
+   comment at **5698** ("now in #sr-org-privacy") is stale. `.sr-org-kicker` is still used.
+5. **Word count** (rendered text): `<main>` **3,075 → 2,917** (−158); whole page 3,206 →
+   3,044 (−162).
+
+**Not pushed. PASS-S not started.**
