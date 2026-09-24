@@ -66,7 +66,25 @@
     { name: 'Strength & Return', kicker: 'Substrate', ca: '#C08A5E', cglow: 'rgba(192,138,94,.20)',
       img: 'assets/coming/band-17.webp', alt: 'Strength & Return' },
     { name: 'Elevation Series', kicker: 'Beyond', ca: '#AEB7CE', cglow: 'rgba(174,183,206,.20)',
-      img: 'assets/coming/band-11.webp', alt: 'Elevation Series' }
+      img: 'assets/coming/band-11.webp', alt: 'Elevation Series' },
+    /* SR-447 (PASS-AE §4) · the four road-map tracks the plans page was
+       missing. Layer from docs/SUBSTRATE-CAPACITY-MODEL.md §3, the only
+       record of it: all four sit in APPLICATION ("Money" and "Intimacy" there
+       are Money Shift and Sex & Intimacy) — the same scheme this page already
+       uses (Relationship Healing is 'Application' in CORE_LIVE above).
+       Colours: this page's existing colours are per track, not per layer, so
+       there is no layer value to reuse; these carry the one existing
+       in-development Application value (Executive Presence's) rather than
+       invented ones. Per-track colours are Andre's call. Order follows
+       coming-soon.html. */
+    { name: 'Sex & Intimacy', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
+      img: 'assets/coming/band-10.webp', alt: 'Sex & Intimacy' },
+    { name: 'Entrepreneur\u2019s Journey', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
+      img: 'assets/coming/band-15.webp', alt: 'Entrepreneur\u2019s Journey' },
+    { name: 'Money Shift', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
+      img: 'assets/coming/band-16.webp', alt: 'Money Shift' },
+    { name: 'Addiction Recovery', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
+      img: 'assets/coming/band-14.webp', alt: 'Addiction Recovery' }
   ];
 
   /* SR-386 §5 (rTP) · four stages, three real SHARED.resources each,
