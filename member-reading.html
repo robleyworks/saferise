@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — member-reading.html · SR-444 (PASS-X.md §2)
+  One template, three payloads: ?r=faq (default), ?r=article, ?r=podcast
+  (#hash also works). Structure is identical; only the contents rail
+  differs. Desktop: contents rail left, answers right. Below 820px the rail
+  becomes a horizontal scroller above the answers (css/saferise-system.css,
+  .sr-mi-read / .sr-mi-toc).
+
+  article and podcast render "Nothing published yet" until content exists.
+  No copy is invented for them: the h1 and lede are the dashboard's own
+  ROUTES entries for those two routes.
+
+  FAQ answers are written from the brief's substance and from the pages it
+  names as sources — refunds.html (stopping), organisations.html and
+  getting-help.html (not a replacement for care). No terms are invented.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first — copied from
+     member-frameworks.html, as is everything above <main>. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#0A0A0F}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — Reading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+<link rel="stylesheet" href="css/saferise-rail.css">
+<link rel="stylesheet" href="css/saferise-system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="sr-dash-navrail" id="srRail" aria-label="Sections"></nav>
+
+<main id="main" class="shell">
+
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="dashboard.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Dashboard
+  </a>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<header class="sr-fw-mast sr-mi-mast" style="display:block">
+  <span class="eyebrow">Reading</span>
+  <h1 id="srReadTitle">Questions people ask</h1>
+  <p class="sr-fw-stance" id="srReadLede">Where an answer has a limit, the limit is stated rather than smoothed over.</p>
+</header>
+
+<div class="sr-mi-page">
+  <div class="sr-mi-read">
+    <nav class="sr-mi-toc" id="srReadToc" aria-label="Contents"></nav>
+    <div id="srReadBody"></div>
+  </div>
+</div>
+
+<!-- The faq payload. Kept as markup rather than a JS string so it reads
+     without script and is easy to edit. article/podcast render in place of
+     it. -->
+<template id="srReadFaq">
+  <section class="sr-mi-readsec" id="evidence">
+    <h2>What the evidence shows</h2>
+    <p>The frameworks SafeRise draws on are supported by research of varying strength, and it is not all the same quality. <a href="member-frameworks.html">The method page</a> says which is which for each one &mdash; including where a framework is better described as a useful account than as a settled finding.</p>
+    <p>SafeRise itself has not been trialled. There is no outcome study, no control group and no effect size, and any claim elsewhere that there is should be treated as wrong.</p>
+    <p>What is claimed is narrower: that a regulated state makes judgement more reachable, and that regulating is something that can be learned.</p>
+  </section>
+  <section class="sr-mi-readsec" id="journal">
+    <h2>Is my journal private</h2>
+    <p>Yes &mdash; and not as a policy, but as a construction. What you write stays in the browser on the device you wrote it on. It is not sent to a server, so there is nothing to breach, subpoena or train on.</p>
+    <p>The cost is real. It does not follow you between devices, and clearing your browser data deletes it. Export is the only backup.</p>
+  </section>
+  <section class="sr-mi-readsec" id="mid-episode">
+    <h2>What to do mid-episode</h2>
+    <p>Stop the audio. Nothing is lost, and nothing needs finishing.</p>
+    <p>The Cue Card is the shorter way in &mdash; not an abridged session, but the part that interrupts.</p>
+    <p>If it is more than a hard hour, the crisis pathway sits on every protocol that could reach it, and <a href="getting-help.html">getting help</a> sets out where to turn wherever you are.</p>
+  </section>
+  <section class="sr-mi-readsec" id="stopping">
+    <h2>What happens if I stop</h2>
+    <p>Track 01 is free, permanently. If you subscribe and change your mind within 14 days, you can have your money back. After that you can cancel at any time and keep access until the end of the period you have paid for.</p>
+    <p>Stopping never reaches your record. Your journal and session record live on your own device, and a refund or a cancellation does not delete them. The full terms are in the <a href="refunds.html">refund policy</a>.</p>
+  </section>
+  <section class="sr-mi-readsec" id="care">
+    <h2>Is this a replacement for care</h2>
+    <p>No. SafeRise is self-guided regulation and coaching. It does not diagnose, assess or replace clinical care, an EAP or emergency support. It sits alongside professional support and routes outward when needed.</p>
+    <p>If you are in immediate danger, contact your local emergency service now. A GP or family doctor is the most direct route into everything else, and <a href="getting-help.html">getting help</a> sets out how to find support where you are.</p>
+  </section>
+</template>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  /* article and podcast: h1 and lede are the dashboard's ROUTES copy for
+     those routes, not new writing. */
+  var PAYLOADS = {
+    faq:     { title: 'Questions people ask', lede: 'Where an answer has a limit, the limit is stated rather than smoothed over.', tpl: 'srReadFaq' },
+    article: { title: 'Article', lede: 'A short written piece from Andre.', tpl: null },
+    podcast: { title: 'The SafeRise podcast', lede: 'Episode player and the back catalogue.', tpl: null }
+  };
+  var m = /[?&]r=(faq|article|podcast)\b/.exec(location.search) || /^#(?:r=)?(faq|article|podcast)$/.exec(location.hash);
+  var key = m ? m[1] : 'faq', P = PAYLOADS[key];
+  var body = document.getElementById('srReadBody'), toc = document.getElementById('srReadToc');
+
+  document.title = 'SafeRise — ' + P.title;
+  document.getElementById('srReadTitle').textContent = P.title;
+  document.getElementById('srReadLede').textContent = P.lede;
+
+  if (!P.tpl) {
+    toc.hidden = true;
+    body.innerHTML = '<div class="sr-mi-panel"><p><strong>Nothing published yet.</strong></p></div>';
+    return;
+  }
+  body.appendChild(document.getElementById(P.tpl).content.cloneNode(true));
+
+  var secs = [].slice.call(body.querySelectorAll('.sr-mi-readsec'));
+  toc.innerHTML = secs.map(function (s) {
+    return '<a href="#' + s.id + '">' + s.querySelector('h2').textContent + '</a>';
+  }).join('');
+  var links = [].slice.call(toc.querySelectorAll('a'));
+  function mark(id) { links.forEach(function (a) { a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + id)); }); }
+  mark(secs[0].id);
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) mark(e.target.id); });
+    }, { rootMargin: '0px 0px -70% 0px' });
+    secs.forEach(function (s) { io.observe(s); });
+  }
+})();
+</script>
+
+<script src="js/saferise-auth.js"></script>
+<script src="js/saferise-access.js"></script>
+<script src="js/saferise-rail.js"></script>
+<script>SafeRiseRail.render('reading');</script>
+</body>
+</html>
