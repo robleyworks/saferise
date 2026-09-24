@@ -146,7 +146,7 @@
      Selecting one hides the grid and shows the detail in its place — a
      300px rail (the card's own image, layer, who it serves, the way back)
      beside the body — the same reading order as the 30-protocol wall.
-     "← All eight tracks" (or Escape) restores the grid, returns focus to
+     "← All tracks" (or Escape) restores the grid, returns focus to
      the card that opened it and scroll to the top of the block. No
      outside-click dismissal here, unlike the wall: with the grid hidden,
      a stray click collapsing the whole block would jump the page. */
@@ -185,7 +185,7 @@
       + '<div class="sr-org-f8drail">' + f8art(t)
       + '<div class="sr-org-f8layer"><span>Layer</span><b>' + esc(t.layer) + '</b></div>'
       + '<div class="sr-org-f8serves"><span>Who it serves</span><p>' + esc(t.audience) + '</p></div>'
-      + '<button type="button" class="sr-org-f8back" data-f8back>&larr; All eight tracks</button></div>'
+      + '<button type="button" class="sr-org-f8back" data-f8back>&larr; All tracks</button></div>'
       + '<div class="sr-org-f8dmain">'
       + '<p class="sr-org-f8kick">Track ' + esc(t.n) + ' · Foundation</p>'
       + '<h3 tabindex="-1">' + esc(t.name) + '</h3><p class="sr-org-f8dlead">' + esc(t.lead) + '</p>'
@@ -193,7 +193,7 @@
       + '<div class="sr-org-f8blk"><span>What people are stuck in</span>' + paras(t.stuck) + '</div>'
       + '<div class="sr-org-f8blk sr-org-f8blk--win"><span>What becomes reachable</span>' + paras(t.win) + '</div>'
       + '</div>'
-      + (hasPs ? '<div class="sr-org-f8plist"><span>Ten protocols</span><ol>'
+      + (hasPs ? '<div class="sr-org-f8plist"><span>Protocols</span><ol>'
         + t.protocols.map(function (x, j) { return '<li><em>' + (j < 9 ? '0' : '') + (j + 1) + '</em>' + esc(x) + '</li>'; }).join('')
         + '</ol></div>' : '')
       + (t.guard ? '<p class="sr-org-f8guard">' + esc(t.guard) + '</p>' : '')

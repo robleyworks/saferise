@@ -140,7 +140,7 @@
           '<h3>Personal Transformation</h3>' +
           '<p class="sr-pl-quote">What happens inside me?</p>' +
           '<p class="sr-pl-d"><b>Your inner life.</b> Work with the states that pull attention away from you — fear, anger, overwhelm, grief, insecurity and shutdown — so you have more room to decide what deserves your attention and what you do next.</p>' +
-          '<p class="sr-pl-d">Ten protocols, each with the full resource set.</p>' +
+          '<p class="sr-pl-d">A protocol for each state, each with the full resource set.</p>' +
           '<p class="sr-pl-note">No card required. Your journal stays on your device.</p>' +
           '<a class="sr-pl-cta" href="signup.html">Create an account</a>' +
         '</article>' +

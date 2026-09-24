@@ -599,7 +599,7 @@ var TRACKS = {
     heroRule: 'You are the same nervous system at nine in the morning that you are at home.',
     heroBody: [
       'Pressure, exposure, conflict and self-doubt do not become different problems because they happen at work. They become the same problems with a professional face on.',
-      'Ten protocols for the states that follow high performers into every room \u2014 run before the meeting, not discussed after it.'
+      'A protocol for each state that follows high performers into every room \u2014 run before the meeting, not discussed after it.'
     ],
     relation: 'run at work',
     price: PRICING.t3,
