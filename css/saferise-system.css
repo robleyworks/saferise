@@ -5372,11 +5372,27 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
   box-shadow:inset 0 1px 0 rgba(245,237,218,.04),0 22px 54px rgba(0,0,0,.3)}
 .sr-org-pathsheet .sr-org-wrap{position:relative;z-index:2;width:100%!important;padding:46px 34px 34px!important}
 @media(max-width:760px){.sr-org-pathsheet .sr-org-wrap{padding:34px 22px 26px!important}}
-.sr-org-pathbleed{position:absolute;top:0;right:0;width:42%;height:30%;z-index:1;border-radius:0 16px 0 0;
-  background:repeating-linear-gradient(42deg,#171a24 0 16px,#12141d 16px 32px);
-  -webkit-mask-image:linear-gradient(250deg,#000 4%,transparent 58%),linear-gradient(#000 40%,transparent 92%);
-  -webkit-mask-composite:source-in;mask-composite:intersect;
-  mask-image:linear-gradient(250deg,#000 4%,transparent 58%),linear-gradient(#000 40%,transparent 92%)}
+/* SR-455 (PASS-AJ §3) · the plant underlay, restored (SR-436 §5d had left
+   it out on Andre's instruction, 23 September; reversed 24 September).
+   Was a top-right corner accent (42% x 30%, a striped placeholder under a
+   mask). Now the whole sheet, still z-index:1 under .sr-org-wrap's 2, so
+   the four cards and every line of text stay on top; the sheet's own
+   border-radius:16px + overflow:hidden do the clipping (border-radius:
+   inherit only matches it). The scrim is the page's own --bg (#0A0A0F):
+   .96/.9 behind the heading and lede (they end by 24% of the sheet at
+   every width), open to .5 from 28% to 44% — the band the cards occupy at
+   1440, 1024 and 390 alike — and back to .95 by 46.5%, just above the
+   rail labels (which start at 47-49% at all three widths), solid by 70%.
+   Stops were chosen by measurement, not by eye.
+   Measured contrast for every text element over it is in the SR-455
+   register entry. */
+.sr-org-pathbleed{position:absolute;inset:0;z-index:1;border-radius:inherit;
+  background:
+    linear-gradient(180deg,rgba(10,10,15,.96) 0%,rgba(10,10,15,.9) 22%,rgba(10,10,15,.5) 28%,rgba(10,10,15,.5) 44%,rgba(10,10,15,.95) 46.5%,#0A0A0F 70%),
+    url(../assets/org/path-underlay.jpg) 72% 40%/cover no-repeat;
+  background:
+    linear-gradient(180deg,rgba(10,10,15,.96) 0%,rgba(10,10,15,.9) 22%,rgba(10,10,15,.5) 28%,rgba(10,10,15,.5) 44%,rgba(10,10,15,.95) 46.5%,#0A0A0F 70%),
+    image-set(url(../assets/org/path-underlay.webp) type("image/webp"),url(../assets/org/path-underlay.jpg) type("image/jpeg")) 72% 40%/cover no-repeat}
 /* SR-455 (PASS-AJ §2) · was display:flex / space-between, which set the
    lede beside the heading and left the four cards reading at the heading's
    level. Ruled: stacked — heading, then the lede beneath it, then the
@@ -5421,7 +5437,13 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
   box-shadow:inset 0 0 0 1px rgba(var(--c),.4);transition:box-shadow .45s var(--ease),transform .45s var(--ease)}
 .sr-org-pathstage:hover .sr-org-pathico{transform:scale(1.08);box-shadow:inset 0 0 0 1px rgba(var(--c),.8),0 0 20px -8px rgba(var(--c),.8)}
 .sr-org-pathico svg{width:18px;height:18px;stroke:rgb(var(--c));stroke-width:1.4;fill:none}
-.sr-org-pathn{font:500 13px 'DM Sans',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--text3)}
+/* SR-455 (PASS-AJ §3) · --text3 -> --text2 here and on .sr-org-railcell b
+   below. Measured with NO underlay, 02/03/04's labels were already under
+   4.5:1 on their own cards (4.48 / 4.35 / 4.20), so no scrim could have
+   carried them; the rail labels were 5.17 on bare --bg but fell to 2.11
+   over the plant. Existing token, same lift SR-451/SR-436 used for a
+   failing label. The gold 01 label and gold rail cell are untouched. */
+.sr-org-pathn{font:500 13px 'DM Sans',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--text2)}
 .sr-org-pathstage.s1 .sr-org-pathn{color:rgba(var(--sr-org-gold),.9)}
 /* SR-429 (PASS-F §5e) · min-height equalises every card to the tallest
    title regardless of how many words it wraps to, bottom-aligned so the
@@ -5461,7 +5483,7 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 .sr-org-railcell.c1{--c:var(--sr-org-gold)} .sr-org-railcell.c2{--c:var(--sr-org-sage)}
 .sr-org-railcell.c3,.sr-org-railcell.c4{--c:var(--sr-org-slate)}
 .sr-org-railcell.c1::after{box-shadow:0 0 10px rgba(var(--sr-org-gold),.9)}
-.sr-org-railcell b{font:500 10px/1.4 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--text3)}
+.sr-org-railcell b{font:500 10px/1.4 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--text2)}
 .sr-org-railcell.c1 b{color:var(--gold)}
 
 .sr-org-explore{margin-top:var(--sr-org-s6);padding-top:var(--sr-org-s4);
