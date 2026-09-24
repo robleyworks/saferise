@@ -50,23 +50,23 @@
      exists — wired below instead of the hatch. */
   var CORE_LIVE = [
     { id: 1, kicker: 'Capacity', ca: 'var(--t1)', cglow: 'rgba(201,123,90,.22)',
-      img: 'assets/home/panel-t1.webp', alt: 'Personal Transformation' },
+      img: 'assets/home/panel-t1-v2.webp', alt: 'Personal Transformation' },
     { id: 3, kicker: 'Application', ca: 'var(--t3)', cglow: 'rgba(110,144,128,.22)',
-      img: 'assets/home/panel-t3.webp', alt: 'Professional Performance' },
+      img: 'assets/home/panel-t3-v2.webp', alt: 'Professional Performance' },
     { id: 2, kicker: 'Application', ca: 'var(--t2)', cglow: 'rgba(122,143,168,.22)',
-      img: 'assets/home/panel-t2.webp', alt: 'Relationship Healing' }
+      img: 'assets/home/panel-t2-v2.webp', alt: 'Relationship Healing' }
   ];
   var CORE_DEV = [
     { name: 'Executive Presence', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
       img: 'assets/coming/band-08.webp', alt: 'Executive Presence' },
     { name: 'Sleep & Recovery', kicker: 'Substrate', ca: '#7B87A8', cglow: 'rgba(123,135,168,.20)',
-      img: 'assets/coming/band-09.webp', alt: 'Sleep & Recovery' },
+      img: 'assets/coming/band-13.webp', alt: 'Sleep & Recovery' },
     { name: 'Embodied Nutrition', kicker: 'Substrate', ca: '#8FA37B', cglow: 'rgba(143,163,123,.20)',
-      img: 'assets/coming/band-04.webp', alt: 'Embodied Nutrition' },
+      img: 'assets/coming/band-12.webp', alt: 'Embodied Nutrition' },
     { name: 'Strength & Return', kicker: 'Substrate', ca: '#C08A5E', cglow: 'rgba(192,138,94,.20)',
-      img: 'assets/coming/band-03.webp', alt: 'Strength & Return' },
+      img: 'assets/coming/band-17.webp', alt: 'Strength & Return' },
     { name: 'Elevation Series', kicker: 'Beyond', ca: '#AEB7CE', cglow: 'rgba(174,183,206,.20)',
-      img: 'assets/coming/band-01.webp', alt: 'Elevation Series' }
+      img: 'assets/coming/band-11.webp', alt: 'Elevation Series' }
   ];
 
   /* SR-386 §5 (rTP) · four stages, three real SHARED.resources each,

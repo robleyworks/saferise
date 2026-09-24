@@ -50,7 +50,7 @@ var F8_TRACKS = [
     "n": "01",
     "name": "Personal Transformation",
     "layer": "Capacity",
-    "cover": "assets/f8/f01.webp",
+    "cover": "assets/f8/f01-v2.webp",
     "lead": "Everyday emotional states. A steadier place to choose.",
     "story": "Family life, schooling, culture and repeated adversity can teach us to anticipate rejection, hide emotion or remain on guard. Those responses can persist as anxiety, anger, shame or shutdown, shaping what feels possible long after the circumstances change. Knowing the pattern does not always make another response accessible. SafeRise helps members notice the state beneath the reaction, explore its learned meaning and practise regulation with compassion. Attention becomes awareness, and awareness becomes authorship: resources support healing, behaviour change, consistency and sound judgment in pursuit of a life and accomplishments that feel personally meaningful.",
     "protocols": [
@@ -175,7 +175,7 @@ var F8_TRACKS = [
     "n": "05",
     "name": "Embodied Nutrition",
     "layer": "Substrate",
-    "cover": "assets/coming/band-04.webp",
+    "cover": "assets/coming/band-12.webp",
     "lead": "Awareness, enjoyment and sustainable food choices.",
     "story": "Stress, time pressure and social expectations can change how people notice hunger, organise meals and choose food or drink. Learned associations with comfort, scarcity, control or belonging may turn those choices into automatic habits, guilt or intentions that repeatedly collapse. SafeRise develops attention to these patterns and a proactive approach to nutritional balance. Members practise gradual change, enjoyment with balance and confidence in environments that challenge their choices. Qualified nutritional insight supports informed meal and beverage choices, with individual needs and practical circumstances shaping the approach.",
     "protocols": [
@@ -206,7 +206,7 @@ var F8_TRACKS = [
     "n": "06",
     "name": "Strength & Return",
     "layer": "Substrate",
-    "cover": "assets/coming/band-03.webp",
+    "cover": "assets/coming/band-17.webp",
     "lead": "Movement goals, changing bodies and recovery.",
     "story": "A fitness goal meets a real body and life: fatigue, overstimulation, embarrassment, insecurity, injury, parenthood, available time and support. Ignoring that context can turn ambition into overreaching, avoidance or shame; a disrupted routine can become a verdict on personal worth. SafeRise works with the mental and emotional transition required to begin, return or pursue a higher level. Members practise recognising their state, adapting expectations and establishing habits that support their chosen goal, including changes in timing, social movement and recovery alongside appropriate specialist guidance.",
     "protocols": [
@@ -237,7 +237,7 @@ var F8_TRACKS = [
     "n": "07",
     "name": "Sleep & Recovery",
     "layer": "Substrate",
-    "cover": "assets/coming/band-09.webp",
+    "cover": "assets/coming/band-13.webp",
     "lead": "Purposeful sleep, daytime rest and restoration.",
     "story": "Sleep and rest happen within real demands: night shifts, active households, unfinished work and beliefs that stopping means falling behind. Vigilance, frustration or guilt can make recovery another performance test; depletion can spill into patience, judgment and the next day's choices. SafeRise helps members recognise these states and separate practical constraints from learned pressure. The track supports settling, daytime-sleep boundaries and purposeful time away from work or conflict, building consistent restoration habits. Waking rest complements sufficient sleep, helping members resource the life and goals they want to sustain.",
     "protocols": [
@@ -268,7 +268,7 @@ var F8_TRACKS = [
     "n": "08",
     "name": "Elevation Series",
     "layer": "Beyond",
-    "cover": "assets/coming/band-01.webp",
+    "cover": "assets/coming/band-11.webp",
     "lead": "Attention, meaning and life beyond survival.",
     "story": "When life is organised around safety, approval or inherited expectations, accomplishment can coexist with flatness, comparison and a sense of postponing oneself. Attention stays occupied by what must be protected or proven; personally meaningful interests remain unexplored. SafeRise helps members notice how these patterns shape their state, interpretation and choices, then explore what matters beyond them. Paced inquiry, regulation and reflection support clearer values and chosen direction, translating awareness into consistent action toward a life and achievements that feel their own.",
     "protocols": [
