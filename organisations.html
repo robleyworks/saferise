@@ -72,7 +72,7 @@
      band, its annotation and its row of copy together; the axis caption
      and the closing gold line do not cycle. Behaviour in the page script. -->
 <figure class="sr-org-gddia">
-  <svg viewBox="0 0 720 330" role="img" aria-label="The range of response a person can reach is wide before pressure, collapses during it, and returns only partly afterwards. Existing support reaches only the part before.">
+  <svg viewBox="0 0 720 330" role="img" aria-label="The range of response a person can reach is wide before pressure, collapses during it, and returns only partly afterwards. Existing support reaches only the part before; SafeRise spans all three.">
     <line x1="60" y1="96" x2="700" y2="96" stroke="rgba(245,237,216,.18)" stroke-width="1" stroke-dasharray="2 5"/>
     <line x1="60" y1="224" x2="700" y2="224" stroke="rgba(245,237,216,.18)" stroke-width="1" stroke-dasharray="2 5"/>
     <text x="60" y="86" font-family="'DM Sans',sans-serif" font-size="10.5" style="--gd-fs:10.5px" letter-spacing="1.6" fill="rgba(245,237,216,.34)">FULL RANGE OF RESPONSE</text>
@@ -90,11 +90,20 @@
       <text x="60" y="40" text-anchor="start" font-family="'DM Sans',sans-serif" font-size="11.5" style="--gd-fs:11.5px" fill="rgba(245,237,216,.8)">EAPs, coaching and training reach here</text>
     </g>
     <g class="sr-org-gdann sr-org-gd-b">
+      <!-- SR-449 (PASS-AG) · the pinch keeps its own marker. No label: the
+           brief says its wording is Andre's and gives none, so none is
+           invented here. The old dashed connector and dot to "SafeRise works
+           here" went with that label's move to the span below. -->
       <line x1="360" y1="150" x2="360" y2="170" stroke="rgb(196,101,90)" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="360" cy="160" r="16" fill="none" stroke="rgba(196,101,90,.5)" stroke-width="1"/>
-      <line x1="360" y1="184" x2="360" y2="258" stroke="rgba(212,168,67,.5)" stroke-width="1" stroke-dasharray="3 4"/>
-      <circle cx="360" cy="258" r="3.4" fill="rgb(212,168,67)"/>
-      <text x="360" y="286" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11.5" style="--gd-fs:11.5px" fill="rgb(212,168,67)">SafeRise works here</text>
+      <circle cx="360" cy="160" r="16" fill="none" stroke="rgba(196,101,90,.7)" stroke-width="1"/>
+    </g>
+    <!-- SR-449 (PASS-AG) · the correction: SafeRise spans BEFORE through AFTER,
+         not a point at DURING. One bracket the full width of the channel,
+         always shown (not part of the cycle). The EAPs bracket above stays
+         over BEFORE only — that asymmetry is the argument. -->
+    <g class="sr-org-gdann sr-org-gdspan">
+      <path fill="none" stroke="rgb(212,168,67)" stroke-width="1.4" d="M60,242 L60,252 L700,252 L700,242"/>
+      <text x="380" y="280" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11.5" style="--gd-fs:11.5px" fill="rgb(212,168,67)">SafeRise works here</text>
     </g>
     <g class="sr-org-gdann sr-org-gd-c">
       <line x1="688" y1="96" x2="688" y2="128" stroke="rgba(245,237,216,.4)" stroke-width="1"/>
@@ -107,9 +116,9 @@
   </svg>
   <figcaption>Vertical is how much of a person&rsquo;s judgement, language and skill is reachable. Horizontal is one difficult moment, and what follows it.</figcaption>
 </figure>
-<div class="sr-org-gap-list"><article class="sr-org-gd-a"><span>Before</span><p>Knowledge, policy, coaching and technical skill are already present.</p></article><article class="sr-org-gd-b"><span>During</span><p>Activation narrows attention, interpretation and the range of available responses.</p></article><article class="sr-org-gd-c"><span>After</span><p>The cost can travel into the next decision, relationship, shift or night of recovery.</p></article></div>
+<div class="sr-org-gap-list"><article class="sr-org-gd-a"><span>Before</span><div><p>Knowledge, policy, coaching and technical skill are already present.</p><p class="sr-org-gdsr">Practice builds the capacity to reach them under pressure.</p></div></article><article class="sr-org-gd-b"><span>During</span><div><p>Activation narrows attention, interpretation and the range of available responses.</p><p class="sr-org-gdsr">The Cue Card interrupts in the moment, with nothing to sit through.</p></div></article><article class="sr-org-gd-c"><span>After</span><div><p>The cost can travel into the next decision, relationship, shift or night of recovery.</p><p class="sr-org-gdsr">Protocols for recovery and repair, so it stops travelling.</p></div></article></div>
 <div class="sr-org-gddots" role="group" aria-label="Step through the sequence"><button type="button" data-s="1" aria-label="Before"></button><button type="button" data-s="2" aria-label="During"></button><button type="button" data-s="3" aria-label="After"></button></div>
-<p class="sr-org-gold-copy">SafeRise does not replace existing support. It helps make more of it reachable when state is the barrier.</p></div></div></div></section>
+<p class="sr-org-gold-copy">SafeRise does not replace existing support. It works before, during and after the moment &mdash; and it is the only part of that provision that reaches the middle.</p></div></div></div></section>
 
 <section class="sr-org-section" id="sr-org-explorer"><div class="sr-org-wrap">
 
@@ -493,8 +502,17 @@
   function gdScale(){ var w = gdSvg.getBoundingClientRect().width; if (w) gdFig.style.setProperty('--gd-k', (720 / w).toFixed(4)); }
   if (gdSvg) { gdScale(); if ('ResizeObserver' in window) new ResizeObserver(gdScale).observe(gdSvg); else window.addEventListener('resize', gdScale); }
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var STEP = 3400, timer = null, step = 1, held = false, manual = false;
-  function show(n){ step = n; seq.setAttribute('data-step', String(n)); }
+  var STEP = 7000, timer = null, step = 1, held = false, manual = false;
+  /* SR-449 (PASS-AG §2) · one row at a time: the rows share one grid cell
+     (css), so the block never resizes; the inactive two are opacity 0 and
+     aria-hidden. Reduced motion shows all three (css) and never hides one. */
+  var rows = [].slice.call(seq.querySelectorAll('.sr-org-gap-list article'));
+  function show(n){
+    step = n; seq.setAttribute('data-step', String(n));
+    var reducedNow = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    rows.forEach(function (r, i) { r.setAttribute('aria-hidden', String(!reducedNow && i !== n - 1)); });
+  }
+  show(1);
   function tick(){ if (!held && !manual) show(step % 3 + 1); }
   function start(){ if (timer || reduced || manual) return; timer = setInterval(tick, STEP); }
   function stop(){ if (timer) { clearInterval(timer); timer = null; } }
