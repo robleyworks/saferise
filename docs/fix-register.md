@@ -20724,3 +20724,200 @@ sales pages. A ruling is needed on both.
    3,044 (−162).
 
 **Not pushed. PASS-S not started.**
+
+## SR-443 — organisations journey, the four steps, crops and cleanup (PASS-V.md)
+
+Consolidates PASS-S/T/U (moved to `pass/_superseded/`). Commits, in order: `796b93e` §1,
+`a974b3b` §2, `c1a769c` §3, `540859e` §4a, `36e2e4e` §4b, `d1ec71a` §5, `0a45fdd` §6,
+`1df0716` §7, `d126e2f` §8, `fc58fb9` §9, `eb30687` §10, `9bf8953` §11, then this
+entry and the §12 push. No git lock appeared during this pass.
+
+### §1 — sections moved
+
+`#sr-org-impact` 5 → 11 and `#sr-org-trust` 11 → 8, each cut whole. **Both are
+byte-identical to HEAD** (same length and md5: impact 5310 / `60cb4a73`, trust 2443 /
+`7e4c8787`). Neither had a comment block directly above it. Tag balance clean (no errors,
+none unclosed, 12/12 comments). Rendered order: hero, capacity, model, gap, explorer, 8+2,
+included, trust, delivery, offers, impact, faq, contact. No console errors at
+1440/1024/390.
+
+### §2 — bands
+
+Shaded: **capacity, gap, 8+2, trust, offers, faq**. Plain: model, explorer, included,
+delivery, impact. No adjacent `-alt`; the longest plain run is 1. Two of the three existing
+`-alt` classes were kept (offers, faq); the alternative pattern kept one. **Visible
+consequence:** the Gap's step rows use `background:var(--bg)`, so on the now-shaded Gap
+section they read as darker inset rows. That is an existing rule showing through, not
+changed.
+
+### §3 — transition
+
+`.sr-org-pathstand` now opens "Before you take this to a budget holder, here is what can
+honestly be measured and what cannot." The two existing sentences follow.
+- **Offers → Impact lands:** Offers closes on "Start with a session or a short pilot…
+  Discuss a pilot →" and Impact picks it up as the case for that pilot.
+- **Gap → Explorer needs nothing:** "…reachable when state is the barrier." → "The
+  expertise is already paid for." reads as the answer. Agreed.
+
+### §4 — four steps (DIFFERS in 4b)
+
+- **4a:** the model panel now reads "…the same four steps every time — Recognise, Regulate,
+  Release, Rise." The rest of the paragraph is unchanged.
+- **4b:** 03 Release ("Let the struggle with the state go, rather than fighting it down.")
+  and 04 Rise (inherits "Return with room to judge what is really there."). **The markup
+  did not take a fourth item without a layout change.** `.sr-org-capacity-grid` was
+  `repeat(3,1fr)`, so 04 wrapped under the rail line and its node. Now `repeat(4,1fr)`,
+  plus `nth-child(4){animation-delay:.85s}` continuing .25/.45/.65. Committed separately so
+  it can be reverted alone. Measured: one row at 1440 (4×261px) and 1024 (4×218px), stacked
+  at 390, no console errors. **Not changed:** the rail gradient stops (16.6% / 83.3%) were
+  tuned to three column centres; at four, the end nodes sit slightly into the faded ends.
+- No other live page uses "release the struggle", "return to deliberate response" or
+  "Recover choice".
+
+### §5 — opening echoes
+
+Capacity h2 → "One capability, trained the same way every time." The model lede drops
+"Most workplace programmes begin at the third layer." **Hero → Gap now builds:** the
+capability, the four steps, three layers said once, then the gap. **Residual (report):**
+- The model panel heading still reads "Noticing, regulating, recovering choice", and the
+  panel closes on "recovered choice": old three-step vocabulary.
+- The hero lede "recognise their state, regulate it, and get their judgement back" is also
+  a three-part phrasing.
+
+### §6 — gap figure 4/5 below 820px
+
+The rule was at **5098, not 5093**. `.sr-org-image-copy` occurs once, confirmed. 16/9 → 4/5.
+
+| width | figure | caption covers (source y) |
+|---|---|---|
+| 390 | 326×408 | 1095–1358, feet only |
+| 600 | 536×670 | 1198–1358 |
+| 900 | 330×412, unchanged | — |
+| 1440 | 456×569, unchanged | — |
+
+All three heads and all hands are clear (the hands sit at source y ~790–980).
+
+### §7 — Foundation 8 focus
+
+`content/f8-tracks.js` has an optional `focus`. The explorer passes it as `--f8focus`,
+validated as two percentages before it reaches a style attribute.
+`.sr-org-f8art img{object-position:var(--f8focus,50% 22%)}`. Measured edges and a 59-src-px
+headroom target (12px at the narrowest 222px card, four-up at 1024):
+
+- **f03 → `50% 19%`.** Window y 120–935; hair starts y≈197, so 77 src px headroom (15.7px
+  at 222, 18.7 at 265, 23.0 at 326), up from 58 (11.8px). **Relaxed: the phone hand.** It
+  runs to y≈1170, and 197→1170 plus margins is 1091px against an 815px window. The hand
+  becomes a re-crop.
+- **f02 → unset (default `50% 22%`).** **No position keeps both heads and hands.** The
+  man's hair starts at y≈263 and the joined hands end at y≈1150: 887px even with zero
+  margin. **Relaxed: the hands**, which becomes a re-crop. The heads already have ~141 src
+  px (29px) headroom at the default.
+- f01 and covers 04–08: `50% 22%`, same box (265×199 at 1440, 326×245 at 390); computed
+  style identical, so pixel-identical. All eight load; no console errors.
+
+### §8 — two columns
+
+`#sr-org-included .sr-org-ebenefits{grid-template-columns:repeat(2,1fr)}`, plus
+`#sr-org-included .sr-org-ebenefits{grid-template-columns:1fr}` inside the existing 820px
+block. The id outranks the base stack rule, so without the second rule the pair would not
+stack. 1440: 2×566; 1024: 2×480; 390: stacked. **DIFFERS:** the brief says the base rule
+"still serves three-card groups elsewhere". It does not: `.sr-org-ebenefits` occurs once on
+the page. It was left unchanged anyway, as instructed. Capacity (4), F8 (4) and trust (2)
+grids are unchanged.
+
+### §9 — dead CSS
+
+The `.sr-org-two-space` / `.sr-org-photo-cards` block was deleted: header comment, 9 rules
+and the 820px override, re-checked unreferenced first. The VERIFY grep is empty. The
+SR-436 comment above `.sr-org-ebenefits` was rewritten to say where the cards live now.
+
+### §10
+
+A standing rule was added to `CLAUDE.md`: "new imagery ships from `assets/`, never from
+`pass/`".
+
+### §11
+
+`assets/home/panel-t3.jpg` was removed with `git rm`. `panel-t3.webp` was kept and verified
+rendering on index.html and plans.html. **`pass/_f8-covers/as-supplied/` was moved to the
+macOS Trash**, as `~/.Trash/as-supplied-f8-covers-SR-443`, rather than hard-deleted. It is
+gitignored, so git cannot restore it, and these were the supplied originals. Empty the
+Trash to finish.
+
+### Held, not fixed
+
+Two items are **deployed but unplaced**:
+- the four `assets/org/twospace-*` images (SR-441, orphaned by SR-442)
+- the I-05 HR banner
+
+Decide both with a view of the page.
+
+### Report-only
+
+1. **`mailto:` — 10 links, not 6.**
+   - 7 in the page: hero "Start a conversation"; five in `#sr-org-offers` ("Discuss a
+     session", "Ask about your rate", "Shape the programme", "Enquire", "Discuss a pilot");
+     `#sr-org-contact` "Contact SafeRise".
+   - 3 in the shared footer ("Contact", "Support", "Talk to us").
+   - Five of the seven page links now sit in one section, Offers, at position 10.
+   - **No contact endpoint exists anywhere in the repo:** no Netlify form attributes, no
+     `netlify.toml` or functions directory, no `supabase/functions`, and no form service
+     (Formspree, Getform and others). The only `<form>`s are auth (login, signup,
+     reset-password) plus one in protocol.html.
+   - The CSP already allows `form-action 'self'`, so a Netlify form posting to the same
+     origin would not need a header change.
+2. **`.git/index.lock` — the cause is almost certainly iCloud.**
+   - `~/Documents` is under **iCloud Drive "Desktop & Documents" sync**:
+     `FXICloudDriveDocuments = 1`; the folder carries a
+     `com.apple.file-provider-domain-id: com.apple.CloudDocs.iCloudDriveFileProvider/…`
+     xattr; `~/Library/Mobile Documents/com~apple~CloudDocs/Documents` exists; `bird` and
+     `fileproviderd` are running.
+   - **GitHub Desktop is running** too. `.git/FETCH_HEAD` was written at 02:04 by a
+     background fetch that was not this session.
+   - No Dropbox or OneDrive process is running.
+   - Two writers are therefore touching `.git/` under this session: iCloud's file provider
+     syncing it, and Desktop's periodic git operations. Either explains a lock outliving
+     its commit, and a sync client evicting or re-materialising `.git/index` would explain
+     13 September.
+   - Fix: move the repo out of `~/Documents` (e.g. `~/Developer/saferise`) and re-clone or
+     move it. Excluding a folder from iCloud Desktop & Documents is not supported short of
+     turning the feature off.
+3. **`claude/` and `docs/org-page/`.**
+   - `claude/` has 3 tracked files and 9 untracked working notes: video scripts, shot
+     brief, frame manifest, cost-of-inaction copy, the org-page handover, a records index.
+     `claude/VIDEO-SCRIPTS-THREE-SURFACES-V2.md` has local modifications.
+   - `docs/org-page/` has 114 untracked files: a README, 5 mockups, 19 archived pass
+     briefs, reference HTML/JSON (explorer reference builds, `b2b-protocols.json`,
+     `f8-tracks.json`) and `source-images/cover-remediation/*`.
+   - **Nothing in live code uses either.** The only mentions are two HTML comments in
+     organisations.html citing `claude/VIDEO-SCRIPTS-THREE-SURFACES-V2.md` as the source of
+     the counts rule.
+   - `docs/` is served, though noindex / Disallow, so committing them would deploy them
+     under `/docs/`.
+   - All of it is left untracked, together with `docs/business/POSITIONING.md`, which is
+     also locally modified and not this pass's.
+4. **Delivery vs Workshop:** still adjacent (trust now sits before Delivery, not between),
+   and it still reads as repetition. Delivery's "Discover" (map the workforce…) is followed
+   within a screen by the Workshop card's "Short intake and boundaries agreed first", and
+   "Introduce" by "founder-led format… remote or in person".
+5. **"Explore industries" as a cold entry.** It lands on "The base / The expertise is
+   already paid for. The Foundation 8 keeps it reachable." That reads coherently, since it
+   is the answer to the Gap and a reader skipping the Gap still gets the claim. **But the
+   label promises industries**, and the industry picker is **2,034px below the jump
+   target** at 1440 (about 2.3 screens); the 30-protocol wall is 2,532px below.
+6. **Scroll depth to `#sr-org-offers`:** 1440: **12,279 → 12,071** (−208); 390: **21,864 →
+   21,065** (−799). Measured with all images eager-loaded. Document height at 390 grew
+   (28,994 → 29,450) because the gap figure is now 4:5 there.
+7. **Nav rail:** `js/saferise-system.js` builds it from section order at load, so it
+   reorders with the page. Labels in order: For organisations · The operating layer · The
+   model · The gap · The base · What people receive · Data, scope & trust · Delivery · Ways
+   to work together · The impact pathway · Procurement questions · Next step. None is out of
+   sequence. **The 8+2 section has no rail entry** (12 labels for 13 sections). Its eyebrow
+   is `<p class="sr-org-eyebrow">` without the `eyebrow` class. Not changed.
+8. **`.sr-tp-band` border:** still at `css/saferise-system.css:2749`,
+   `border-top:1px solid var(--hair)`.
+9. **Two-space grading:** moot. SR-442 removed the only section that placed them, so
+   neither photo is on the page to compare. I-08's grading question travels with the
+   placement decision above.
+
+**§12:** pushed to `origin/main`; the resulting SHA is recorded in the session report.
