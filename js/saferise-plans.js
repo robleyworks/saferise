@@ -132,7 +132,7 @@
     return '<section id="plans"><div class="wrap">' +
       '<div class="sr-pl-shead rv"><div><p class="eyebrow">What it costs</p>' +
       '<h2>Track 01 is free.<br>One price opens the rest.</h2></div>' +
-      '<p>You make an account and the ten protocols in Personal Transformation are yours — not a trial, not a sample, not a countdown. Everything below is what funds the rest of it.</p></div>' +
+      '<p>You make an account and the protocols in Personal Transformation are yours — not a trial, not a sample, not a countdown. Everything below is what funds the rest of it.</p></div>' +
       '<div class="sr-pl-plans rv">' +
         '<article class="sr-pl-plan">' +
           '<p class="sr-pl-tag">Track 01 · Personal</p>' +

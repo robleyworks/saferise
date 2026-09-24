@@ -227,7 +227,7 @@ var CHANGE_PROPOSALS = {
    resolved here. Everything else here matches its mockup verbatim. */
 var LANDING_COPY = {
   1: {
-    support: 'All ten protocols. No trial and no card required. Your journal stays private.',
+    support: 'Every protocol. No trial and no card required. Your journal stays private.',
     protocolsEyebrow: 'Find your starting point',
     protocolsH2: 'What has hold of<br>you right now?',
     protocolsIntro: 'Choose the state you recognise. Each protocol includes a guided session, a quick-use cue and practical tools for what comes next.',
@@ -252,7 +252,7 @@ var LANDING_COPY = {
     proofIntro: 'One session can shift a state. Your private record shows what repetition changes.',
     proofSteps: ['Record your state before and after', 'See recurring patterns become visible', 'Notice what helps arriving sooner'],
     priceEyebrow: 'Start Personal Transformation',
-    priceH2: 'All ten protocols.<br>Free, from day one.',
+    priceH2: 'Every protocol.<br>Free, from day one.',
     upgradeTitle: 'Want to work with relationships and professional pressure too?',
     upgradeBody: 'One €19 monthly membership opens every other SafeRise track, and every track added after them — at no change to what you already pay.',
     stickyText: 'All 10 Personal Transformation protocols · free with an account'
@@ -283,7 +283,7 @@ var LANDING_COPY = {
     proofIntro: 'One session can change how a conversation goes. Your private record shows what repetition changes between you.',
     proofSteps: ['Record where the conversation went', 'See the loop you both keep entering', 'Notice repair arriving earlier'],
     priceEyebrow: 'Start Relationship Healing',
-    priceH2: 'All ten protocols.<br>Inside one membership.',
+    priceH2: 'Every protocol.<br>Inside one membership.',
     upgradeTitle: 'Want to work with your inner life and professional pressure too?',
     upgradeBody: 'One €19 monthly membership opens every other SafeRise track—now and as the library grows.',
     stickyText: 'All 10 Relationship Healing protocols · €19 a month'
@@ -314,7 +314,7 @@ var LANDING_COPY = {
     proofIntro: 'One session can change how you walk into a room. Your private record shows what repetition changes under pressure.',
     proofSteps: ['Record your state before the room', 'See which pressures repeat', 'Notice clarity arriving sooner'],
     priceEyebrow: 'Start Professional Performance',
-    priceH2: 'All ten protocols.<br>Inside one membership.',
+    priceH2: 'Every protocol.<br>Inside one membership.',
     upgradeTitle: 'Want to work with your inner life and relationships too?',
     upgradeBody: 'One €19 monthly membership opens every other SafeRise track—now and as the library grows.',
     stickyText: 'All 10 Professional Performance protocols · €19 a month'
@@ -855,7 +855,7 @@ var CONDITIONAL_RESOURCES = { 'Attention Advisory': 'advisory', 'Invitation to R
 
 /* SR-253 · THE SET COMES FROM THE INVENTORY, THE LOOK COMES FROM THE TABLE.
    SHARED.resources was both, and being both is how `raising` went missing from
-   three shipping surfaces while Track 03 shipped it on all ten protocols.
+   three shipping surfaces while Track 03 shipped it on every protocol.
    content/inventory.js is generated from the authored files by
    tools/build-inventory.py; a type present there and absent here renders
    nothing and is visible, where the old shape under-reported in silence. */

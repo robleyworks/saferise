@@ -14,8 +14,8 @@
 
    Track-level type counts are DERIVED below (see the per-track lists), not
    fixed here — Track 03 uniquely carries `raising`; Track 01 uniquely carries
-   `crisis` (one protocol only, t1-10); Track 02 uniquely carries `safety` (all
-   ten protocols); `decision` is universal, last in every one of the 30. There
+   `crisis` (one protocol only, t1-10); Track 02 uniquely carries `safety` (every
+   protocol); `decision` is universal, last in every one of the 30. There
    is no single library size across the three.
    ====================================================================== */
 

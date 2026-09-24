@@ -1132,7 +1132,7 @@
     if(!t || t.unlocked || !t.items.length){ lock.classList.remove('show'); return; }
     document.getElementById('srLockText').innerHTML =
       '<b>' + TRACKNAME[n] + ' is not on your plan yet.</b> ' +
-      'Adding it opens all ten protocols and every resource inside them. Your existing access stays exactly as it is.';
+      'Adding it opens all its protocols and every resource inside them. Your existing access stays exactly as it is.';
     var up = TRACKS[n] && TRACKS[n].price;
     document.getElementById('srLockBtn').innerHTML =
       'Add for ' + (up ? up.amount + ' ' + up.per : '') + ' ' + ARROW;
@@ -1152,7 +1152,7 @@
 
     /* SR-110 · The empty-track branch that used to sit here rendered the
        Track 04 placeholder, and it was the only thing that could reach it —
-       every shipping track carries ten protocols. It went with the series.
+       every shipping track carries protocols. It went with the series.
        If a future track ever ships with no protocols, restore a guard here with
        that track's own copy, not the retired one's. */
 
@@ -2401,12 +2401,12 @@
      kick:'BETWEEN US', art:'assets/coming/band-relationship-healing.jpg',
      title:'The person who can <em>reach you fastest</em>',
      sub:'Conflict, trust, distance, repair. A protocol for each state that happens in you in the presence of someone who matters — and which version of you turns up when it does.',
-     cta:'Open Relationship Healing', ghost:'See the ten protocols', meta:''},
+     cta:'Open Relationship Healing', ghost:'See the protocols', meta:''},
     {key:'professional-performance', track:'t3', theme:'dark', layout:'panel', accent:'var(--t3)',
      kick:'AT WORK', art:'assets/coming/band-professional-performance.jpg',
      title:'You still have to work with them <em>all week</em>',
      sub:'Some people leave you feeling overwhelmed and numb at the same time. This track is not about fixing them. It’s about what happens in you, and what you can do about it.',
-     cta:'Open Professional Performance', ghost:'See the ten protocols', meta:''},
+     cta:'Open Professional Performance', ghost:'See the protocols', meta:''},
     {key:'clearing', track:'t0-00', theme:'dark', layout:'panel', accent:'var(--gold)',
      kick:'CLEARING', art:'assets/coming/band-clearing.jpg',
      title:'Before it <em>all gets started</em>',
