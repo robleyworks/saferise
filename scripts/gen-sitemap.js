@@ -7,7 +7,11 @@ const ORIGIN = 'https://thesaferiseprotocol.com';
    match, not a prefix like the rest of this list) — it now only 301s to
    /organisations (_redirects), so listing it in the sitemap would send
    crawlers to a page that immediately redirects away. */
-const EXCLUDE = /^(dashboard|account|signup|login|member-|404|pass|mock)|^for-organisations$/;
+/* SR-440 (PASS-P §4) · legal excluded (exact match): ruled noindex — an
+   index of four links for the member rail, each document already listed
+   here on its own. Without this the next regeneration would add /legal
+   back to the sitemap against its own noindex tag. */
+const EXCLUDE = /^(dashboard|account|signup|login|member-|404|pass|mock)|^for-organisations$|^legal$/;
 
 const pages = fs.readdirSync('.')
   .filter(f => f.endsWith('.html'))

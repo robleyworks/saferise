@@ -19,6 +19,9 @@ Disallow: /login
 Disallow: /reset-password
 Disallow: /member-
 Disallow: /*?resource=
+# /legal: an index of four links for the member rail. The documents it
+# points to (terms, privacy, refunds, accessibility) are indexed on their own.
+Disallow: /legal
 
 # Internal working documents — trackers, registers, valuations, briefs.
 # These are in the repository and therefore served. They must not be indexed.
