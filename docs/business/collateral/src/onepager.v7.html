@@ -1,0 +1,231 @@
+<!doctype html><html><head><meta charset="utf-8"><title>SafeRise Protocol — one page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<style>
+@page{size:A4;margin:0}
+:root{
+ --bg:#08080C; --panel:#111017; --ink:#F5EDD8; --ink2:#A7A4AE; --ink3:#7E7B88;
+ --gold:#D4A843; --hair:rgba(245,237,216,.10);
+ --green:#6E9080; --blue:#7BA3CC;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:210mm;height:297mm;background:var(--bg);color:var(--ink);overflow:hidden;
+ font-family:"DM Sans","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+
+.banner{position:relative;width:210mm;height:29mm;overflow:hidden}
+.banner img{width:100%;height:100%;object-fit:cover;object-position:center 42%}
+.banner::after{content:"";position:absolute;inset:0;
+ background:linear-gradient(180deg,rgba(8,8,12,.30) 0%,rgba(8,8,12,.12) 45%,rgba(8,8,12,.96) 100%)}
+
+.page{padding:0 16mm 1mm}
+
+header{display:flex;justify-content:space-between;align-items:flex-end;
+ margin-top:-8mm;position:relative;z-index:2;padding-bottom:6mm;
+ box-shadow:inset 0 -1px 0 0 var(--hair)}
+.brand{font-family:"Cormorant Garamond",Georgia,serif;font-size:27pt;line-height:1;
+ font-weight:500;letter-spacing:-.01em;color:#fff}
+.brand b{font-weight:600}
+.kicker{margin-top:2.5mm;font-size:6.8pt;letter-spacing:.26em;text-transform:uppercase;
+ color:var(--gold);font-weight:700}
+.meta{text-align:right;font-size:7.4pt;line-height:1.75;color:var(--ink3)}
+.meta b{color:var(--ink2);font-weight:500}
+
+.lede{margin:5mm 0 0;font-family:"Cormorant Garamond",Georgia,serif;font-size:17pt;
+ line-height:1.26;color:#fff;max-width:150mm}
+.sub{margin-top:3mm;font-size:8.8pt;line-height:1.62;color:var(--ink2);max-width:160mm}
+
+h2{margin:0 0 2.5mm;font-size:6.6pt;letter-spacing:.24em;text-transform:uppercase;
+ color:var(--gold);font-weight:700}
+
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2mm;margin-top:1mm}
+.steps div{padding:3.5mm 2.5mm;border-radius:1mm;background:var(--panel);
+ box-shadow:inset 0 0 0 .3mm var(--hair);text-align:center}
+.steps b{display:block;font-size:9.4pt;color:#fff}
+.steps span{display:block;margin-top:1.2mm;font-size:6.4pt;line-height:1.38;color:var(--ink3)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm 9mm;margin-top:5mm}
+.full{grid-column:1/-1}
+p.b{font-size:8.5pt;line-height:1.62;color:var(--ink2)}
+strong{color:var(--ink);font-weight:700}
+
+ul{list-style:none;columns:2;column-gap:9mm}
+li{break-inside:avoid}
+li{position:relative;padding-left:4.5mm;font-size:8.4pt;line-height:1.55;color:var(--ink2)}
+li{margin-bottom:2.4mm}
+li::before{content:"";position:absolute;left:0;top:1.5mm;width:1.4mm;height:1.4mm;
+ border-radius:50%;background:var(--gold)}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:1mm;align-items:start}
+.two > div{padding:4mm 4.5mm;border-radius:1mm;background:var(--panel);
+ box-shadow:inset 0 0 0 .3mm var(--hair)}
+.two strong{display:block;font-size:9.4pt;margin-bottom:1.5mm;color:#fff}
+.two p{font-size:8.2pt;line-height:1.55;color:var(--ink2)}
+.mk{display:flex;align-items:baseline;gap:2.5mm;margin-bottom:1.5mm;
+ font-size:9.4pt;color:#fff;font-weight:700}
+.mk em{font-style:normal;padding:1mm 2mm;border-radius:.8mm;font-size:6.4pt;font-weight:700;
+ letter-spacing:.16em;color:var(--gold);background:rgba(212,168,67,.14);
+ box-shadow:inset 0 0 0 .25mm rgba(212,168,67,.3)}
+.mini{display:grid;grid-template-columns:repeat(6,1fr);gap:1.2mm;margin-top:3mm}
+.mini figure{position:relative;border-radius:.6mm;overflow:hidden;line-height:0;
+ box-shadow:inset 0 0 0 .25mm var(--hair)}
+.mini img{width:100%;aspect-ratio:1086/1448;object-fit:cover;display:block;filter:saturate(.85)}
+.mini figure::after{content:"";position:absolute;right:0;bottom:0;width:2.6mm;height:2.6mm;
+ clip-path:polygon(100% 0,100% 100%,0 100%);z-index:2}
+.mini .ind::after{background:var(--green)}
+.mini .rol::after{background:var(--blue)}
+.mkfoot{margin-top:2mm;font-size:6.4pt;letter-spacing:.06em;color:var(--ink3)}
+.mkfoot span{color:var(--ink3);opacity:.75}
+
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:2mm;margin-top:.5mm}
+.facts div{display:flex;align-items:baseline;gap:2.5mm;flex-wrap:wrap;
+ padding:2.6mm 3mm;border-radius:1mm;background:var(--panel);
+ box-shadow:inset 0 0 0 .3mm var(--hair)}
+.facts .now{flex:1 0 100%;margin-bottom:1.2mm;font-size:5.8pt;font-weight:700;letter-spacing:.2em;
+ text-transform:uppercase;color:var(--gold)}
+.facts b{font-family:"Cormorant Garamond",Georgia,serif;font-size:16pt;line-height:1;color:#fff}
+.facts span{flex:1;font-size:6.2pt;line-height:1.35;color:var(--ink3)}
+
+.carousel{margin-top:2mm;display:grid;grid-template-columns:repeat(9,1fr);gap:1.8mm}
+.carousel figure{position:relative;border-radius:.8mm;overflow:hidden;line-height:0;
+ box-shadow:inset 0 0 0 .3mm var(--hair)}
+.carousel img{width:100%;aspect-ratio:1086/1448;object-fit:cover;display:block;filter:saturate(.85)}
+.carousel figure::after{content:"";position:absolute;right:0;bottom:0;width:4.4mm;height:4.4mm;
+ clip-path:polygon(100% 0,100% 100%,0 100%);z-index:2}
+.carousel .ind::after{background:var(--green)}
+.carousel .rol::after{background:var(--blue)}
+.carline{display:flex;justify-content:space-between;align-items:baseline;margin-top:2mm;
+ font-size:7pt;color:var(--ink3)}
+.carline b{color:var(--gold);font-weight:700;letter-spacing:.1em;font-size:6.6pt;
+ text-transform:uppercase}
+
+.ask{margin-top:3.5mm;padding:4mm 6mm;border-radius:1mm;
+ background:linear-gradient(150deg,#14121a 0%,#0e0d14 100%);
+ box-shadow:inset 0 0 0 .3mm rgba(212,168,67,.24)}
+.ask h2{color:var(--gold)}
+.ask p{font-size:8.3pt;line-height:1.55;color:var(--ink2)}
+
+footer{margin-top:auto;padding-top:4mm;box-shadow:inset 0 1px 0 0 var(--hair);
+ display:flex;justify-content:space-between;align-items:baseline;font-size:7.4pt;color:var(--ink3)}
+footer b{color:var(--ink)}
+footer .link{font-size:8.6pt;color:var(--gold);font-weight:700;letter-spacing:.01em}
+
+.banner{height:26mm}
+.lede{margin-top:4mm}
+</style></head><body>
+
+<div class="banner"><img src="img/banner.jpg" alt=""></div>
+
+<div class="page">
+
+<header>
+  <div>
+    <p class="brand">SafeRise <b>Protocol</b></p>
+    <p class="kicker">Self-guided nervous-system regulation</p>
+  </div>
+  <div class="meta">
+    <b>Andre Robley</b> · Founder<br>
+    Kenor International B.V.<br>
+    thesaferiseprotocol.com
+  </div>
+</header>
+
+<p class="lede">A finished product in an unconsolidated market, looking for reach.</p>
+<p class="sub">SafeRise teaches people to recognise the state they are in, regulate it, and
+recover the capacity to choose what happens next — on their own, in the moment, without a
+clinician in the room. Thirty protocols are built and the platform enters beta on
+30 September 2026.</p>
+
+<div class="grid">
+
+  <div class="full">
+    <h2>The method — one sequence, every protocol</h2>
+    <div class="steps">
+      <div><b>Recognise</b><span>Bring the experience into view, without diagnosis</span></div>
+      <div><b>Regulate</b><span>Enough steadiness to regain command of attention</span></div>
+      <div><b>Release</b><span>Loosen struggle and the demand to resolve it now</span></div>
+      <div><b>Rise</b><span>Return to deliberate participation and caring action</span></div>
+    </div>
+    <p class="b" style="margin-top:3mm">The same four steps run in every protocol, on every
+    track. <strong>That consistency is the product.</strong> Beneath it sits a three-layer
+    model — capacity, the substrate it depends on (sleep, nutrition, training load), and the
+    application where it lands. Most wellbeing spend touches only the third.</p>
+  </div>
+
+  <div class="full">
+    <h2>Why it survives scrutiny</h2>
+    <ul>
+      <li><strong>Six frameworks, tiered by evidence.</strong> Porges, HeartMath and Kross
+      lead and stand independently; Maté, Jung and Watts are labelled clinical-practice or
+      interpretive and never presented as mechanism.</li>
+      <li><strong>Clinical governance is a gate, not a footnote.</strong> Four tracks stay
+      unbuilt until a licensed clinician is contracted.</li>
+      <li><strong>Defined by refusal.</strong> Not therapy, not a course, not gamified
+      self-improvement, not an outcome promise.</li>
+      <li><strong>Privacy is structural.</strong> The organisation funds access and never
+      sees what happens inside an account.</li>
+    </ul>
+  </div>
+
+  <div class="full">
+    <h2>Two markets, one library</h2>
+    <div class="two">
+      <div>
+        <p class="mk"><em>B2C</em>Individuals</p>
+        <p>The first track is free permanently — the acquisition engine, not a promotion.
+        Everything above it sits behind a single all-access tier.</p>
+        <div class="mini">
+          <figure><img src="img/b2c-1.jpg" alt=""></figure>
+          <figure><img src="img/b2c-2.jpg" alt=""></figure>
+          <figure><img src="img/b2c-3.jpg" alt=""></figure>
+          <figure><img src="img/b2c-4.jpg" alt=""></figure>
+          <figure><img src="img/b2c-5.jpg" alt=""></figure>
+          <figure><img src="img/b2c-6.jpg" alt=""></figure>
+        </div>
+        <p class="mkfoot">Personal Transformation · Relationship Healing</p>
+      </div>
+      <div>
+        <p class="mk"><em>B2B</em>Organisations</p>
+        <p>Eight foundation tracks every employee receives, plus one protocol for their role
+        and one for their industry.</p>
+        <div class="mini">
+          <figure class="ind"><img src="img/b2b-1.jpg" alt=""></figure>
+          <figure class="rol"><img src="img/b2b-2.jpg" alt=""></figure>
+          <figure class="ind"><img src="img/b2b-3.jpg" alt=""></figure>
+          <figure class="rol"><img src="img/b2b-4.jpg" alt=""></figure>
+          <figure class="ind"><img src="img/b2b-5.jpg" alt=""></figure>
+          <figure class="rol"><img src="img/b2b-6.jpg" alt=""></figure>
+        </div>
+        <p class="mkfoot">Fourteen roles · sixteen industries · <span>green industry, blue role</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="full">
+    <h2>What we are building toward</h2>
+    <div class="facts">
+      <div><span class="now">Live now</span><b>30</b><span>protocols, three tracks, plus the free Foundation Protocol</span></div>
+      <div><span class="now">B2C build-out</span><b>120</b><span>protocols across the consumer library</span></div>
+      <div><span class="now">B2B build-out</span><b>110</b><span>the Foundation 8 plus thirty role and industry protocols</span></div>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="ask">
+  <h2>What I am raising</h2>
+  <p><strong>Capital, and the two things that make capital work.</strong> Three cases, each
+  sized to what it unlocks: a <strong>catalytic</strong> amount that completes launch and
+  puts the first paying members through; a <strong>validation</strong> amount that adds
+  clinical governance and two corporate pilots; and a <strong>pre-seed</strong> that opens
+  B2B distribution. Alongside it, an introduction to the right employer or a pilot inside an
+  organisation you can influence moves this as far as the cheque does.</p>
+</div>
+
+<footer>
+  <span><b>Andre Robley</b> · Founder, SafeRise Protocol · Kenor International B.V.</span>
+  <span class="link">thesaferiseprotocol.com</span>
+</footer>
+
+</div></body></html>
