@@ -113,6 +113,7 @@ var F8_TRACKS = [
     "name": "Professional Performance",
     "layer": "Application",
     "cover": "assets/f8/f03.webp",
+    "focus": "50% 19%",
     "lead": "Access to judgment when the stakes rise.",
     "story": "Work occupies much of waking life within rules, hierarchy, scrutiny and obligations we cannot always choose. These demands can bring up threat, self-doubt or overload, narrowing judgment, silencing useful contributions and making conflict, decisions or performance harder to manage. SafeRise focuses on the person carrying out the work: recognising the state beneath task pressure, role uncertainty, belonging concerns or decision fatigue. The resources support regulation, adaptive habits and clearer communication so existing skills remain more accessible, alongside boundaries and action on working conditions that need to change.",
     "protocols": [

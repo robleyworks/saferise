@@ -5947,7 +5947,10 @@ p.sr-org-ef8base{margin-top:var(--sr-org-s3)}
    sits highest). Band covers (tracks 04–08, no portrait supplied yet)
    crop to 4:3 from centre-ish, losing ~29% of their width. */
 .sr-org-f8art{position:relative;display:block;margin:0;aspect-ratio:4/3;border-radius:4px;overflow:hidden;background:#15151e;line-height:0}
-.sr-org-f8art img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+/* SR-443 (PASS-V §7) · per-cover focus: content/f8-tracks.js `focus`, passed
+   in as --f8focus by js/saferise-org-explorer.js. Unset -> 50% 22%, so the
+   band-derived covers (04-08) and f01 render exactly as before. */
+.sr-org-f8art img{width:100%;height:100%;object-fit:cover;object-position:var(--f8focus,50% 22%);display:block}
 .sr-org-f8art .sr-org-eplate{width:100%;height:100%;aspect-ratio:auto;border-radius:0}
 .sr-org-f8art::after{content:"";position:absolute;right:0;bottom:0;z-index:1;width:22px;height:22px;
   clip-path:polygon(100% 0,100% 100%,0 100%);background:rgb(var(--f8c))}

@@ -58,7 +58,10 @@
      gets the layer-tinted typographic plate, never a broken <img>. */
   function f8CoverOrPlate(t) {
     if (t.cover) {
-      return '<img src="' + esc(t.cover) + '" alt="" loading="lazy">';
+      /* SR-443 (PASS-V §7) · optional per-cover focus ("50% 19%"), validated
+         to two percentages before it reaches a style attribute. */
+      var focus = /^\d{1,3}% \d{1,3}%$/.test(t.focus || '') ? ' style="--f8focus:' + t.focus + '"' : '';
+      return '<img src="' + esc(t.cover) + '" alt="" loading="lazy"' + focus + '>';
     }
     var lay = LAYER_CLASS[t.layer] || '';
     return '<div class="sr-org-eplate ' + lay + '"><div><i>' + esc(t.n) + '</i><u>' + esc(t.layer) + '</u></div></div>';
