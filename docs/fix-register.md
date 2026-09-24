@@ -22036,3 +22036,172 @@ a phone screen permanently. That is a design call and is not made here.
    `.sr-org-pathsheet`, behind the sheet's existing radial and `--bg`. That would remove an
    element and a z-index pair. It would only be worth keeping if the underlay went back to
    covering part of the sheet, or needed its own mask. Not restructured here.
+
+---
+
+## SR-456 — three follow-ons from SR-455 (PASS-AK.md)
+
+24 September 2026. §1 `4be7d98`, §2 `65bec2d`, §3 `ad3e0b6`. No push.
+
+### §1 — underlay re-exported without the letterbox
+
+**Differs from the brief:** only the `.webp` had been replaced on disk. The `.jpg` was
+byte-identical to the committed file, and still had its letterbox.
+
+Measured by mean brightness of the leading rows (below 20 counts as dark):
+
+| File | Leading dark rows | Top rows' brightness |
+|---|---|---|
+| committed `.webp` | 21 | 6–8 |
+| new `.webp` (Andre's re-export from y=47) | 0 | 48–60 |
+| `.jpg` on disk | 21 | unchanged |
+
+**Adapted:** the `.jpg` was regenerated from the corrected `.webp` (PIL, 2400×1000, q86,
+121KB) and now has 0 dark rows. If Andre prefers his own export for the fallback, it can
+simply replace this one. Both files were added, and `git ls-files -s` confirms them.
+
+**Scrim off** (layer overridden to the image alone):
+
+- At 1440, 1024 and 390, image row 0 lands exactly on the sheet's top edge.
+- The top six rows there average brightness 57, the wall's own tone.
+- There is no dark band anywhere along the top.
+- At 1440 the whole plant and the lit wall read cleanly behind the cards.
+
+### §2 — underlay gone below 640px, and not requested
+
+- The image and its scrim are now declared **only** inside `@media(min-width:641px)`.
+- At ≤640px the layer is `display:none`.
+- **A background that is never declared is never fetched.**
+- The page had no existing hidden-image mechanism for CSS backgrounds to reuse (only `<img
+  loading>` exists elsewhere), so this is plain media scoping, not a new mechanism.
+- 640px is the page's own single-column breakpoint.
+
+**At 390, fresh load:**
+
+- `display:none`, `background-image:none`.
+- **No `path-underlay` request** in the resource timeline.
+- At 1440 the `.webp` is still requested (200).
+
+**Contrast at 390 with no layer** (the cards sit on the sheet's `--bg` `#0A0A0F`):
+
+| Text | Ratio |
+|---|---|
+| Stage labels | 5.07 (gold 01) / 6.18 / 6.00 / 5.79 |
+| Card headings | 11.14–14.67 |
+| Card body lines | 4.69 (01, gold-tinted card) / 6.18 / 6.00 / 5.79 |
+| Rail labels | 7.12–8.92 |
+| Explore chips | 6.93 / 16.47 |
+| Measure panel | 7.12 / 16.92 |
+| Foot | 5.17 |
+| Eyebrow / h2 / lede | 8.92 / 16.92 / 7.12 |
+
+**Minimum 4.69.** The cards read correctly on the plain sheet.
+
+### §3 — chapter rail vs nav: measured, then both
+
+**Measured first:**
+
+| Viewport | `.nav` rendered height | Rail pill (old, fixed 70px top) | Overlap |
+|---|---|---|---|
+| 1440 | 79px | 62–103 | ~17px into the nav |
+| 1024 | 79px | 62–103 | ~17px |
+| 760 | 80px | 62–103 | ~18px |
+| 640 | 127px | — | — |
+| 390 | 235px | 70–111 | pill across the nav's link rows (under it since SR-455) |
+
+The old `place()` read only `.theme-bar` (index.html's bar) and fell back to 60, so on every
+other page the rail ignored the nav. It overlapped on desktop too, not only on phones.
+
+**Applied, both halves of the ruling:**
+
+1. **Offset from the rendered nav, at every width.** `place()` now reads `.theme-bar` or
+   `.nav` (`getBoundingClientRect().height + 10`). It reruns on resize and on a
+   `ResizeObserver` of the nav.
+
+   | Viewport | Rendered rail top | Overlap |
+   |---|---|---|
+   | 1440 | 89px | 0 |
+   | 1024 | 89px | 0 |
+   | 700 | 89px | 0 |
+   | 645 | 89.9px | 0 |
+
+2. **Hidden at ≤640px**, the same breakpoint as the underlay. Placed from the nav, the rail
+   would sit at 245px on a 390 phone: nav plus pill (286px) is 34% of an 844px screen,
+   permanently. It is a wayfinding convenience, and the phone already has the nav.
+
+**Dropdown, retested with the real mouse at 1440:**
+
+- Moving from the Protocols trigger down into the menu keeps it open.
+- 0/60 item points are blocked.
+- Where the menu (77–459) now overlaps the rail pill (89–130), the menu is on top.
+- A real click on "Track 01 · Personal Transformation" navigated to
+  `/personal-transformation.html`.
+
+### Report only
+
+**1. `--text3` audit (nothing changed).**
+
+**Scope.** `var(--text3)` appears 239 times in the stylesheets (system 138, dashboard 55,
+method 30, sr-resource-read 14, rail 1, footer 1), plus 248 more in page `<style>` blocks. Not
+every use is a text colour: some are stroke, fill, border or background, and some rules use it
+twice.
+
+**Method.**
+
+- 32 pages were loaded at 1440 in the default Midnight theme, with reveal animations forced on.
+- For every CSS rule whose `color` is `var(--text3)`, every rendered element it matches whose
+  colour really resolves to that element's `--text3` was measured. index.html redefines it to
+  `#A09080` in one scope, and that was honoured.
+- The background was composited up the ancestor chain: the nearest opaque colour, then each
+  translucent layer, with each gradient's lightest stop as the worst case. Element and ancestor
+  opacity were applied to the text.
+- The worst ratio per rule is reported.
+
+**Coverage, stated plainly.** 348 rule-selectors were found (218 from stylesheets, 130 inline).
+**132 rendered on at least one page and were measured** (94 from stylesheets). The rest do not
+render in default state: hover/focus states, closed modals, the reader in
+`sr-resource-read.css` (needs a resource opened, 0/11 rendered), JS-only states and Sunrise.
+They are **not measured**, and this is not a clean bill for them.
+
+**Under 4.5:1 — 10 rules:**
+
+| Ratio | Where | Selector | Text (size) | Page |
+|---|---|---|---|---|
+| **1.66** | resource.html inline :821 | `.sr-theme button` | "Sunrise" (13px) | /resource |
+| **2.12** | saferise-dashboard.css:198 | `.sr-dash-railmeta` | "In development" (13px) | /dashboard |
+| 4.04 | saferise-system.css:6263 | `.sr-pl-tag` | "Membership · everything else" (13px) | /plans |
+| 4.04 | saferise-system.css:6267 | `.sr-pl-price small` | "a month" (13.6px) | /plans |
+| 4.04 | saferise-system.css:6283 | `.sr-pl-toggle button` | "Annual" (13px) | /plans |
+| 4.04 | saferise-system.css:6287 | `.sr-pl-toggle span` | "Billed monthly…" (12.5px) | /plans |
+| 4.13 | anxiety-reset.html inline :145 | `.video-title` | "SafeRise Protocol — Foundati…" (11px) | /anxiety-reset |
+| 4.19 | saferise-system.css:5634 | `.sr-org-med4 span` | "per session" (13px) | /organisations |
+| 4.24 | saferise-system.css:3301 | `.sr-tp .sr-tp-ph span` | "one person alone…" (13px) | all three track pages |
+| 4.43 | saferise-system.css:5827 | `.sr-org-ea span` | "Anchor" (**9px**) | /organisations |
+
+**Notes on the list:**
+
+- **2.12 is SR-454's own work.** The in-development rail entries use account.html's disabled
+  pattern (opacity .5). WCAG exempts inactive components, but this text is the only statement
+  of their state, so it matters more than an exemption suggests. Worth a decision.
+- **1.66 `.sr-theme button`** is the inactive option of the reading-mode toggle. Very likely
+  the same inactive-control case, but it is the lowest on the site.
+- The four `/plans` rules share one surface: the lighter plan-card background.
+- `.sr-org-ea span` is also 9px, under SR-437's 11px floor.
+
+The list is short, so the answer is probably the call sites, not the token. `--text3` passes on
+every plain surface measured. It fails on specific lighter or tinted surfaces (the plan cards,
+the Gap media cells, the track-page panels) and in two deliberately dimmed controls. No photo
+background produced any of the failures.
+
+**2. `.sr-org-pathbleed` — cleanup candidate (not done).**
+
+It no longer earns an element: it covers the whole sheet, and at ≤640px it is `display:none`.
+
+**Proposed shape:**
+
+- Delete the `<div class="sr-org-pathbleed">` and its rule.
+- Put the scrim and image layers first in `.sr-org-pathsheet`'s own `background`, inside
+  `@media(min-width:641px)`, above the existing radial and `var(--bg)`.
+- Drop `.sr-org-pathsheet .sr-org-wrap`'s `position:relative; z-index:2`, which then has
+  nothing to sit above.
+- The contrast figures above hold unchanged, because the composite is identical.
