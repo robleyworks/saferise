@@ -20278,3 +20278,150 @@ lockups opening up. It should be its own pass, with this table as its diff.
 +2 stack box.
 
 **Not pushed.**
+
+## SR-438 — nav wiring, legal index, the paragraph reset, the counts (PASS-N.md)
+
+Six commits, one per part (`c75096d` §1, `4dc355d` §2, `2fbdab7` §3, `e031121` §4,
+`2eeca1d` §5, `a358e32` §6). Measured on a local mirror; the browser pane runs hidden.
+**Git:** a stale, empty `.git/index.lock` (21:13, no git process running) blocked the first
+commit. It was removed after checking; no other git fault.
+
+### §1 — PAGES (DIFFERS: one extra file)
+
+`dashboard.html` PAGES → method/coming/plans/reading/account/legal, comment kept.
+**Added `account` to `js/saferise-rail.js`'s own PAGES too.** Member-*.html rails hand
+unknown keys to `dashboard.html#route=`, and the dashboard's hash resolver deliberately
+ignores PAGES keys. Without it, Account from any other member page would have landed on
+the dashboard with nothing opened, a regression from today's modal. **Verified:** from
+/dashboard, Account & plan → account.html; the `plans` / `reading` / `legal` text-map
+triggers → plans.html / about.html / legal.html; Method → member-frameworks.html. From
+member-frameworks.html, Account → account.html and What's coming →
+member-coming-soon.html. No modal on any. On /dashboard today only Account has a
+visible trigger. The Plans and Understanding text-map entries have no matching element in
+the current DOM, and the visible "Terms"/"Privacy" are real footer links straight to
+terms.html/privacy.html. So those routes were exercised with injected elements carrying
+the exact text-map strings.
+
+### §2 — legal.html (DIFFERS ×2)
+
+Chrome verbatim from terms.html. **terms.html has no `noindex`**, so neither does
+legal.html; the brief expected one. **Entries are `<div style="display:flow-root">`, not
+`<section>`:** the global `section{padding-block:clamp(72px,9vw,128px)}` rule made each
+one a 92px-padded band. `flow-root` keeps the paragraph's existing 20px margin inside the
+hairline, so no new value is needed. `grep border legal.html` → nothing; all four links
+200. **Links render in the UA dark-scheme link colour `rgb(158,158,255)`, the same as
+terms.html's own links.** Styling them would be a design decision, so it was left.
+**Lede check:** privacy.html states that the record stays on the device and is not sent to
+us, but **never states "never used to train anything"**. It follows from "not sent", but
+the document does not say it. The four one-liners match their documents.
+
+### §3 — `:where(.sr-org-page) p`
+
+Comment added above it; workarounds and `!important` flags left. **Layout unmoved:**
+ring, wall, Gap SVG, +2 cards and F8 grid identical in size to the pre-change baseline at
+1440/1280/1024/900/390. (A first re-measure ran on a cached stylesheet; it was discarded
+and redone after confirming the `:where()` rule was loaded.) No console errors. Footer
+`.sr-pf-colhead` gold, 4px, 13px, and `.sr-pf-scope` `--text3`: identical to /about.
+`ef8base`/`ecount` still 16px.
+
+| SR-437 row | now | reads |
+|---|---|---|
+| `.sr-org-eone` | 7px under the h4 | **better**: heading and line separate without breaking the pair |
+| `.sr-org-elead` | 10px under the h3, white | **better**: hierarchy clearer |
+| `.sr-org-esub` | 7px, `--text3` | **better** |
+| `.sr-org-large-copy` | 16px under the Gap h2 | **better** |
+| `.sr-org-estackline` | margin 24px (no net change, `.sr-org-eplus` supplied it), white | colour as intended |
+| `.sr-org-ef8base` / `.sr-org-ecount` | 16px, now `--text3` | as declared |
+
+**VERIFY-FAIL on one clause, not reverted (not caused by the reset):** 14 of 17
+`.sr-org-eyebrow` render gold. **"The two that vary", "The library" and "The 8 + 2 model"
+stay `--text3`.** In those three heads the eyebrow is a direct child of `.sr-org-head`, so
+`.sr-org-head>p{color:var(--text3)!important;font-size:.95rem…}` applies. Excluding
+eyebrows from that rule would also change their font size, which is a type-scale change
+this pass forbids. Left for a decision. Privacy kickers are now gold. "Not a fit" stays
+`--text3` via its own rule, as designed.
+
+### §4 — counts (12 of 13; one AMBIGUOUS skip)
+
+Applied as tabled; every surface renders a whole sentence. Organisations' third paragraph
+takes "it reaches". pricing.html's list is now lower-cased after the colon ("One for each
+state: anxiety, anger…"). **Skipped: `js/saferise-org-explorer.js:136`**, "Someone in
+**X**, working in **Y**, receives ten tracks." The brief's replacement "…receives every
+track." would be **false**: under the 8 + 2 model a person receives the Foundation 8 plus
+one role and one industry protocol, not every track. The twelve-track road map is the
+consumer catalogue, not this promise. "10 tracks per person" is the ring's promise, which
+SR-437 ruled stays. **Not in the brief's list, so not touched:** a third count on
+/organisations, "Which is why **these eight** do not vary" (lower-case, missed by the
+case-sensitive grep). Also about twenty lower-case "ten protocols" in product copy:
+- the track pages' `<title>`/`og:title` ×3
+- pricing.html:125
+- dashboard.html:1135, and the ghost buttons "See the ten protocols" ×2
+- content/tracks.js:230/255/286/317
+- js/saferise-plans.js:135
+
+### §5 — `_redirects`
+
+Added, aligned. **Live before:** `/account` → **200 already** (Netlify pretty URLs serve
+account.html, title "SafeRise — Your account"); `/legal` → 404 (legal.html not deployed).
+The post-deploy curl is still owed.
+
+### §6
+
+account.html: both hairlines are inset box-shadow now, and `grep border` → nothing. The
+signed-in template cannot render without a session, so this was verified by grep only.
+**Note:** the whole block sits in `.sr-tp-band`, which still draws `border-top` (item 4
+below). `#sr-org-wall{margin-top:var(--sr-org-s7)}` matches the s7 step
+(`.sr-org-f8root`'s margin-bottom) between the Base's Foundation 8 and "The two that
+vary". Measured 64/64 at 1440 and 64/64 at 390. These are blocks inside one section; the
+section-to-section gap (~154px to the next section's head) is a different rhythm.
+
+### Report-only
+
+1. **`p.sr-org-pull` and `p.sr-org-story-note` both render a 1px solid `--hair` top
+   border at every width**, measured at 1440 (511 / 620px wide) and 390 (326px). The
+   compound selectors already won before §3, so both rendered before and after.
+2. **The three `!important` flags:** with priority stripped live, no computed colour
+   changed. `p.sr-org-hero-note` and `p.sr-org-gold-copy` still win at (0,1,1) over
+   `:where()`. `p.sr-org-vertical-note` matches **no element** on the page; it is a dead
+   rule.
+3. **The eleven workarounds:** all eleven classes appear only on `<p>`; `vertical-note`
+   appears on nothing, so delete rather than convert.
+   - **Safe to make bare:** `f8k`, `f8kick`, `f8dlead`, `f8guard`, `gold-copy`,
+     `story-note` (single definition each).
+   - **Leave or merge deliberately:** `hero-note`, `pull`, `ecount`, `ef8base`. Each also
+     has a separate bare `.sr-org-*` rule, so converting creates two equal-specificity
+     rules decided by order. `ecount`/`ef8base`'s margin-only rules can simply go now,
+     because the bare rules apply after §3.
+4. **`.sr-tp-band` border:** still at `css/saferise-system.css:2749`,
+   `border-top:1px solid var(--hair)`.
+   - In markup on 4 pages: login, signup, reset-password, account.
+   - Rendered by JS on the 3 track pages (`js/saferise-track.js`, ×3 per page).
+   - On every page using the `js/saferise-access.js` gate (the signed-out panel).
+5. **Legal dates:** terms, privacy and refunds all say "Last updated: 23 October 2026"
+   (a month ahead). accessibility.html says "Last reviewed 9 September 2026" (past, fine).
+   Not corrected.
+6. **The seven modal routes:** the kicker is always **"Not built yet"**, then the ROUTES
+   title, body and path. It names the path; the kicker is the only "does not exist"
+   statement, and the bodies describe the destination as if present. Exact entries:
+   - `clearing`: *The Clearing* / *The guided session, with the player and the log that
+     records it.* / `/clearing`
+   - `checkout`: *Add a track* / *Checkout. Adds to your plan without touching your
+     existing access.* / `/checkout`
+   - `article`: *Article* / *A short written piece from Andre.* / `/writing`
+   - `podcast`: *The SafeRise podcast* / *Episode player and the back catalogue.* /
+     `/podcast`
+   - `faq`: *FAQ* / *What the evidence shows, whether your journal is private, what to do
+     mid-episode, and what happens if you stop.* / `/faq`
+   - `chosen`: *The Chosen Self* / *The identity you keep choosing, in your own words.* /
+     `/record/chosen-self`
+   - `decisions`: *Your Decisions* / *The choices you made once the pattern was no longer
+     making them.* / `/record/decisions`
+7. **account.html, under the disabled Manage subscription:**
+   - entitled: "Manage subscription opens once payments (Phase 4) are wired up — not yet."
+   - otherwise: "Upgrading opens once payments (Phase 4) are wired up — not yet."
+8. **ResizeObserver:** it cannot be exercised here. A fresh observer on a test element
+   fired **0** times across a width change (`visibilityState: hidden`), so no observer in
+   this pane runs. **Goes on the launch checklist as a manual check:** on /organisations,
+   drag the window from wide to ~900px; the Gap labels should stay at 11px throughout.
+
+**Not pushed.**
