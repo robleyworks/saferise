@@ -48,25 +48,34 @@
      this stale: coming-soon.html now carries a Sleep & Recovery card
      (band-09.webp, "NIGHT & RECOVERY"), and assets/coming/band-09.webp
      exists — wired below instead of the hatch. */
+  /* SR-448 (PASS-AF §3) · card images come from content/track-images.js
+     (the one registry), never from a path typed here. /plans asks for the
+     'panel' shape; trackImage() falls back to that track's own band when
+     it has no panel (the road-map tracks) and returns null — card renders
+     without an image, and the console says why — if the registry is
+     missing. content/track-images.js loads before this file (plans.html). */
+  function planImage(slug) {
+    return typeof trackImage === 'function' ? trackImage(slug, 'panel') : null;
+  }
   var CORE_LIVE = [
     { id: 1, kicker: 'Capacity', ca: 'var(--t1)', cglow: 'rgba(201,123,90,.22)',
-      img: 'assets/home/panel-t1-v2.webp', alt: 'Personal Transformation' },
+      slug: 'personal-transformation', img: planImage('personal-transformation'), alt: 'Personal Transformation' },
     { id: 3, kicker: 'Application', ca: 'var(--t3)', cglow: 'rgba(110,144,128,.22)',
-      img: 'assets/home/panel-t3-v2.webp', alt: 'Professional Performance' },
+      slug: 'professional-performance', img: planImage('professional-performance'), alt: 'Professional Performance' },
     { id: 2, kicker: 'Application', ca: 'var(--t2)', cglow: 'rgba(122,143,168,.22)',
-      img: 'assets/home/panel-t2-v2.webp', alt: 'Relationship Healing' }
+      slug: 'relationship-healing', img: planImage('relationship-healing'), alt: 'Relationship Healing' }
   ];
   var CORE_DEV = [
     { name: 'Executive Presence', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      img: 'assets/coming/band-08.webp', alt: 'Executive Presence' },
+      slug: 'executive-presence', img: planImage('executive-presence'), alt: 'Executive Presence' },
     { name: 'Sleep & Recovery', kicker: 'Substrate', ca: '#7B87A8', cglow: 'rgba(123,135,168,.20)',
-      img: 'assets/coming/band-13.webp', alt: 'Sleep & Recovery' },
+      slug: 'sleep-and-recovery', img: planImage('sleep-and-recovery'), alt: 'Sleep & Recovery' },
     { name: 'Embodied Nutrition', kicker: 'Substrate', ca: '#8FA37B', cglow: 'rgba(143,163,123,.20)',
-      img: 'assets/coming/band-12.webp', alt: 'Embodied Nutrition' },
+      slug: 'embodied-nutrition', img: planImage('embodied-nutrition'), alt: 'Embodied Nutrition' },
     { name: 'Strength & Return', kicker: 'Substrate', ca: '#C08A5E', cglow: 'rgba(192,138,94,.20)',
-      img: 'assets/coming/band-17.webp', alt: 'Strength & Return' },
+      slug: 'strength-and-return', img: planImage('strength-and-return'), alt: 'Strength & Return' },
     { name: 'Elevation Series', kicker: 'Beyond', ca: '#AEB7CE', cglow: 'rgba(174,183,206,.20)',
-      img: 'assets/coming/band-11.webp', alt: 'Elevation Series' },
+      slug: 'elevation-series', img: planImage('elevation-series'), alt: 'Elevation Series' },
     /* SR-447 (PASS-AE §4) · the four road-map tracks the plans page was
        missing. Layer from docs/SUBSTRATE-CAPACITY-MODEL.md §3, the only
        record of it: all four sit in APPLICATION ("Money" and "Intimacy" there
@@ -78,13 +87,13 @@
        invented ones. Per-track colours are Andre's call. Order follows
        coming-soon.html. */
     { name: 'Sex & Intimacy', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      img: 'assets/coming/band-10.webp', alt: 'Sex & Intimacy' },
+      slug: 'sex-and-intimacy', img: planImage('sex-and-intimacy'), alt: 'Sex & Intimacy' },
     { name: 'Entrepreneur\u2019s Journey', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      img: 'assets/coming/band-15.webp', alt: 'Entrepreneur\u2019s Journey' },
+      slug: 'entrepreneurs-journey', img: planImage('entrepreneurs-journey'), alt: 'Entrepreneur\u2019s Journey' },
     { name: 'Money Shift', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      img: 'assets/coming/band-16.webp', alt: 'Money Shift' },
+      slug: 'money-shift', img: planImage('money-shift'), alt: 'Money Shift' },
     { name: 'Addiction Recovery', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      img: 'assets/coming/band-14.webp', alt: 'Addiction Recovery' }
+      slug: 'addiction-recovery', img: planImage('addiction-recovery'), alt: 'Addiction Recovery' }
   ];
 
   /* SR-386 §5 (rTP) · four stages, three real SHARED.resources each,
@@ -121,6 +130,11 @@
   };
   var TRACK_KICKER = { 1: '--t1', 2: '--t2', 3: '--t3' };
   var TRACK_GLOW = { 1: 'rgba(201,123,90,.11)', 2: 'rgba(122,143,168,.11)', 3: 'rgba(110,144,128,.11)' };
+  /* SR-448 (PASS-AF §3) · deliberately NOT in content/track-images.js: these
+     are the 1400x380 journey bands, a fourth shape the registry's three
+     (band 1200x640, panel 2400x1000, portrait 1086x1448) do not define.
+     Moving them in would mean inventing a shape — reported for a ruling.
+     tools/check-track-images.py allow-lists exactly these three paths. */
   var TRACK_BAND = {
     1: { src: 'assets/journey/t1-band.webp', alt: 'Personal Transformation' },
     2: { src: 'assets/journey/t2-band.webp', alt: 'Relationship Healing' },

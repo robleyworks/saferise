@@ -167,6 +167,7 @@
   .sr-cs-land{font-size:15px}
 }
 </style>
+<script src="content/track-images.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -203,7 +204,7 @@
      (same 8 cards, same order, same sr-cs- classes, same accents). -->
   <div class="tstack">
     <article class="tb" style="--ac:#9B86D6" tabindex="0">
-      <div class="sr-cs-pane"><img src="assets/coming/band-11.webp" alt="">
+      <div class="sr-cs-pane"><img data-track-img="elevation-series" data-shape="band" alt="">
         <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
         <span class="sr-cs-scrim"></span>
         <div class="sr-cs-over">
@@ -222,7 +223,7 @@
               </div>
     </article>
     <article class="tb" style="--ac:#D4879A" tabindex="0">
-      <div class="sr-cs-pane sr-cs-dark"><img src="assets/coming/band-10.webp" alt="">
+      <div class="sr-cs-pane sr-cs-dark"><img data-track-img="sex-and-intimacy" data-shape="band" alt="">
         <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
         <span class="sr-cs-scrim"></span>
         <div class="sr-cs-over">
@@ -241,7 +242,7 @@
               </div>
     </article>
     <article class="tb" style="--ac:#7BA3CC" tabindex="0">
-      <div class="sr-cs-pane"><img src="assets/coming/band-08.webp" alt="">
+      <div class="sr-cs-pane"><img data-track-img="executive-presence" data-shape="band" alt="">
         <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
         <span class="sr-cs-scrim"></span>
         <div class="sr-cs-over">
@@ -260,7 +261,7 @@
               </div>
     </article>
     <article class="tb" style="--ac:#7FA88C" tabindex="0">
-      <div class="sr-cs-pane"><img src="assets/coming/band-17.webp" alt="">
+      <div class="sr-cs-pane"><img data-track-img="strength-and-return" data-shape="band" alt="">
         <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
         <span class="sr-cs-scrim"></span>
         <div class="sr-cs-over">
@@ -279,7 +280,7 @@
         <p class="sr-cs-guard">No numbers, targets or programmes anywhere. States only.</p>      </div>
     </article>
     <article class="tb" style="--ac:#5D7BB5" tabindex="0">
-      <div class="sr-cs-pane"><img src="assets/coming/band-13.webp" alt="">
+      <div class="sr-cs-pane"><img data-track-img="sleep-and-recovery" data-shape="band" alt="">
         <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
         <span class="sr-cs-scrim"></span>
         <div class="sr-cs-over">
@@ -299,7 +300,7 @@
         <p class="sr-cs-guard">No schedules, hygiene rules or tracking anywhere. States only.</p>      </div>
     </article>
     <article class="tb" style="--ac:#A8B87A" tabindex="0">
-      <div class="sr-cs-pane"><img src="assets/coming/band-12.webp" alt="">
+      <div class="sr-cs-pane"><img data-track-img="embodied-nutrition" data-shape="band" alt="">
         <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
         <span class="sr-cs-scrim"></span>
         <div class="sr-cs-over">
@@ -318,7 +319,7 @@
         <p class="sr-cs-guard">Disordered-eating adjacency. No numbers of any kind. Clinical review is a gate on this track.</p>      </div>
     </article>
     <article class="tb" style="--ac:#C9885A" tabindex="0">
-      <div class="sr-cs-pane"><img src="assets/coming/band-15.webp" alt="">
+      <div class="sr-cs-pane"><img data-track-img="entrepreneurs-journey" data-shape="band" alt="">
         <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
         <span class="sr-cs-scrim"></span>
         <div class="sr-cs-over">
@@ -338,7 +339,7 @@
       </div>
     </article>
     <article class="tb" style="--ac:#D4A843" tabindex="0">
-      <div class="sr-cs-pane"><img src="assets/coming/band-16.webp" alt="">
+      <div class="sr-cs-pane"><img data-track-img="money-shift" data-shape="band" alt="">
         <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
         <span class="sr-cs-scrim"></span>
         <div class="sr-cs-over">
@@ -357,7 +358,7 @@
         <p class="sr-cs-guard">No financial advice, products or strategy anywhere.</p>      </div>
     </article>
     <article class="tb" style="--ac:#4E9AA6" tabindex="0">
-      <div class="sr-cs-pane"><img src="assets/coming/band-14.webp" alt="">
+      <div class="sr-cs-pane"><img data-track-img="addiction-recovery" data-shape="band" alt="">
         <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
         <span class="sr-cs-scrim"></span>
         <div class="sr-cs-over">
@@ -376,6 +377,11 @@
         <p class="sr-cs-guard">Requires clinical governance and crisis routing before any of it ships.</p>      </div>
     </article>
   </div>
+<!-- SR-448 (PASS-AF §3) · the band panes above carry no src of their own:
+     content/track-images.js (loaded in <head>) is the one place a track image
+     is declared. Filled here, straight after the markup, so fetching starts as
+     soon as the parser reaches it. -->
+<script>applyTrackImages();</script>
 
 <div class="sr-mi-claim">
   <p>The subject changes. What remains familiar underneath: notice where attention goes,
