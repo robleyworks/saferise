@@ -133,7 +133,7 @@
   function build() {
     var r = byId(selRole.value), i = byId(selInd.value);
     if (!r || !i) return;
-    if (stackline) stackline.innerHTML = 'Someone in <b>' + esc(r.title) + '</b>, working in <b>' + esc(i.title) + '</b>, receives ten tracks.';
+    if (stackline) stackline.innerHTML = 'Someone in <b>' + esc(r.title) + '</b>, working in <b>' + esc(i.title) + '</b>, receives the Foundation 8, plus the protocol for their role and the one for their industry.';
     if (plusHost) plusHost.innerHTML = twoCard(r) + twoCard(i);
   }
   selRole.addEventListener('change', build);
