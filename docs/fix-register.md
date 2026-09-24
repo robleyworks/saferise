@@ -20257,8 +20257,9 @@ affected.
 The fix restores **margin only**, as `p.sr-org-ef8base` / `p.sr-org-ecount`, measured at 16px
 each after the change. Their colour declarations stay dead on purpose.
 
-**Dead colour declarations, reported and not fixed:** every `.sr-org-eyebrow` (gold →
-renders `--text2` grey, all 12 section eyebrows); `.sr-org-kicker` (gold → grey, the privacy
+**Dead colour declarations, reported and not fixed:** `.sr-org-eyebrow` (gold →
+renders `--text2` grey on 14 eyebrows; the three that are direct children of `.sr-org-head`
+render `--text3` via that rule's own `!important`, so none of the page's eyebrows is gold); `.sr-org-kicker` (gold → grey, the privacy
 cards); `.sr-org-estackline` and `.sr-org-elead` (#fff → grey); `.sr-org-esub`,
 `.sr-org-ecount` and `.sr-org-ef8base` (`--text3` → `--text2`); and **the shared footer on
 this page only**: `.sr-pf-colhead` gold → grey and `.sr-pf-scope` `--text3` → `--text2`. The
