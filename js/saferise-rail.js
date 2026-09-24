@@ -87,13 +87,20 @@
     { key: 'account', label: 'Account &amp; plan' }
   ];
 
-  /* the ONLY routes with a real page today — same three destinations
+  /* the rail routes with a real page — began as the same three destinations
      every host page's own PAGES map already agreed on before this file
      existed, confirmed identical across all nine before merging them here */
+  /* SR-438 (PASS-N §1) · account added. Without it, a rail click on any
+     member-*.html page hands off to dashboard.html#route=account, and the
+     dashboard's hash resolver deliberately ignores PAGES keys (so a stray
+     #route= cannot bounce a member back out) — once account joined the
+     dashboard's own PAGES map the member would land on the dashboard with
+     nothing opened. account.html carries no rail, so there is no bounce. */
   var PAGES = {
     dashboard: 'dashboard.html',
     method: 'member-frameworks.html',
-    coming: 'member-coming-soon.html'
+    coming: 'member-coming-soon.html',
+    account: 'account.html'
   };
 
   function svg(key) {
