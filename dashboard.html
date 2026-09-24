@@ -1641,7 +1641,7 @@
      this page wires its own, richer theme toggle below (it also
      broadcasts the mode via postMessage for embedded iframes); the module
      would otherwise attach a second click listener to the same buttons. */
-  SafeRiseRail.render('dashboard', { onRoute: openRoute, theme: false });
+  SafeRiseRail.render('dashboard', { onRoute: openRoute, theme: false, toggle: true });
 
   /* SR-104 · a rail route can arrive from another page. member-frameworks.html
      and member-porges.html carry the same rail but none of the modals it opens, so
@@ -1839,6 +1839,50 @@
   // ~1181) — a plain resize is the one signal every resize path is
   // guaranteed to fire, matchMedia's own "change" event included.
   window.addEventListener('resize', refreshRailCollapse);
+
+  /* SR-454 (PASS-AI §2) · the nav panel's expander — a copy of the track
+     rail pattern directly above, not a new one: same apply/refresh pair,
+     same 1000px guard, same aria pair, its OWN storage key (the two are
+     independent controls; a member may want different answers). Two
+     deliberate differences, both from what the nav panel already was:
+       - collapsed is the panel's existing 74px icon column, not 56px
+         (56 would crop the gold active bar at left:-15px and make the
+         dashboard's rail narrower than every other member page's);
+       - collapsed is the DEFAULT, because it is what every member sees
+         today — expanding is opt-in, remembered once chosen.
+     Expanded = 212px (the track rail's own open width), labels inline.
+     Below 1000px the stored state does not apply: the panel stays the
+     icon column (761–1000px) or the bottom bar (≤760px). Hover labels are
+     untouched while collapsed. */
+  var NAV_COLLAPSED_KEY = 'sr-navrailcollapsed-v1';
+  var navEl = document.getElementById('srRail');
+  var navToggle = document.getElementById('srNavRailToggle');
+
+  function applyNavCollapsed(collapsed){
+    if(!navEl || !navToggle) return;
+    if(collapsed){
+      document.body.style.removeProperty('--sr-dash-navrailw');
+      navEl.classList.remove('sr-dash-navrailopen');
+    } else {
+      document.body.style.setProperty('--sr-dash-navrailw', '212px');
+      navEl.classList.add('sr-dash-navrailopen');
+    }
+    navToggle.setAttribute('aria-expanded', String(!collapsed));
+    navToggle.setAttribute('aria-label', collapsed ? 'Expand navigation' : 'Collapse navigation');
+  }
+  function refreshNavCollapse(){
+    applyNavCollapsed(RAIL_BREAKPOINT.matches ? true : Store.get(NAV_COLLAPSED_KEY, true) !== false);
+  }
+  if(navToggle){
+    navToggle.addEventListener('click', function(){
+      var willCollapse = navToggle.getAttribute('aria-expanded') === 'true';
+      applyNavCollapsed(willCollapse);
+      Store.set(NAV_COLLAPSED_KEY, willCollapse);
+    });
+  }
+  refreshNavCollapse();
+  RAIL_BREAKPOINT.addEventListener('change', refreshNavCollapse);
+  window.addEventListener('resize', refreshNavCollapse);
 
   var K_ENTRIES = 'sr.journal.entries';
   var K_RUNS    = 'sr.record.runs';

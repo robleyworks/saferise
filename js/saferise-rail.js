@@ -187,6 +187,15 @@
     /* SR-454 (PASS-AI §1) · the main routes sit in their own scroll box so
        the panel scrolls instead of shrinking them below 44px; the foot
        (account, legal, Log out) stays outside it, pinned to the bottom. */
+    /* SR-454 (PASS-AI §2) · opts.toggle — dashboard.html only. Renders the
+       expander at the head of the panel; its behaviour (state, storage,
+       breakpoint guard) lives in dashboard.html beside the track rail's
+       own toggle, which it copies. No other page passes it. */
+    if (opts.toggle) {
+      html += '<button type="button" class="sr-dash-railtoggle sr-dash-navrailtoggle" id="srNavRailToggle"' +
+        ' aria-expanded="false" aria-label="Expand navigation">' +
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5l-7 7 7 7"/></svg></button>';
+    }
     html += '<div class="sr-dash-navraillist">';
     ROUTES.forEach(function (r) { html += btnHTML(r, activeRoute); });
     html += '</div>';

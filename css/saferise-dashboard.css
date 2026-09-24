@@ -222,6 +222,35 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
 }
 @media(max-width:1000px){.sr-dash-railtoggle{display:none}}
 
+/* SR-454 (PASS-AI §2) · the nav panel (#srRail) gets the same toggle. It
+   carries .sr-dash-railtoggle, so it inherits that treatment — inset ring,
+   rotation on aria-expanded="false", and display:none at/below 1000px —
+   and .sr-dash-navrailtoggle scopes the two changes the panel needs:
+   centred in the 74px column rather than flex-start, and 44px, the
+   panel's own button size, so it clears the tap target §1 holds every
+   rail button to. Dashboard only (js/saferise-rail.js renders it only
+   when dashboard.html asks). --sr-dash-navrailw is set on <body> by
+   dashboard.html's applyNavCollapsed(): unset = the existing 74px,
+   212px open. Everything below is scoped to min-width:1001px so the
+   stored state can never reach the icon column or the bottom bar.
+   "html body" outranks css/saferise-rail.css's bare body{padding-left},
+   which loads after this file. */
+.sr-dash-navrail .sr-dash-navrailtoggle{align-self:center;width:44px;height:44px;flex:0 0 44px;margin-bottom:6px}
+@media(min-width:1001px){
+  html body{padding-left:var(--sr-dash-navrailw,74px)}
+  .sr-dash-navrail.sr-dash-navrailopen{width:var(--sr-dash-navrailw,74px);align-items:stretch;padding-left:15px;padding-right:15px}
+  .sr-dash-navrail.sr-dash-navrailopen .sr-dash-navrailmark{align-self:flex-start}
+  .sr-dash-navrail.sr-dash-navrailopen .sr-dash-navrailtoggle{align-self:flex-start}
+  .sr-dash-navrail.sr-dash-navrailopen .sr-dash-navraillist,
+  .sr-dash-navrail.sr-dash-navrailopen .sr-dash-navrailfoot{align-items:stretch}
+  .sr-dash-navrail.sr-dash-navrailopen .sr-dash-navrailbtn{width:auto;height:auto;min-height:44px;display:flex;align-items:center;
+    justify-content:flex-start;gap:12px;padding:0 12px;text-align:left}
+  .sr-dash-navrail.sr-dash-navrailopen .sr-dash-navrailbtn svg{flex:0 0 auto}
+  .sr-dash-navrail.sr-dash-navrailopen .sr-dash-navrailbtn span{position:static;opacity:1;pointer-events:auto;background:none;
+    border:0;padding:0;white-space:normal;font-size:13px;line-height:1.35;letter-spacing:0;color:var(--text2)}
+  .sr-dash-navrail.sr-dash-navrailopen .sr-dash-navrailbtn.on span{color:var(--text)}
+}
+
 /* SR-421 (PASS-dashboard-F2-F4.md Part F2) · library search, a second and
    separate control from #srArrive (the state router — never reused, per the
    brief). Borderless per the standing constraint: a surface step
