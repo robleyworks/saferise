@@ -251,6 +251,15 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
   .sr-dash-navrail.sr-dash-navrailopen .sr-dash-navrailbtn.on span{color:var(--text)}
 }
 
+/* SR-454 (PASS-AI §3) · the nine in-development tracks in the rail.
+   account.html's disabled-control pattern (css/saferise-system.css,
+   .sr-mi-btn[aria-disabled]): half opacity, no pointer — so it neither
+   hovers nor looks pressable. The "In development" line stays visible in
+   the chip row too, where the other chips' meta line is hidden; without
+   it a greyed chip would be the only signal. */
+.sr-dash-railbtn.sr-dash-raildev{opacity:.5;pointer-events:none;cursor:default}
+@media(max-width:1000px){.sr-dash-raildev .sr-dash-railmeta{display:block;margin-top:0}}
+
 /* SR-421 (PASS-dashboard-F2-F4.md Part F2) · library search, a second and
    separate control from #srArrive (the state router — never reused, per the
    brief). Borderless per the standing constraint: a surface step
