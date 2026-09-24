@@ -344,3 +344,72 @@ deciding, depleted. The decision is not visible. The state that produced it is.
 
 ⚠ Chain every clip from the **last frame of the one before**, never from the
 casting still again. Restarting from the still drifts the room.
+
+---
+
+## 8 · Where a still does the job instead of a clip
+
+**The rule.** Generate video only where **a person must be alive in frame**, or
+where **the motion is the argument**. Everywhere the subject is a room, an
+object or an aftermath, generate a still and move it in the edit.
+
+**The saving is not the still — it is that the move is free.** A 2% scale drift
+or a slow drift across a still, done in the editor, costs nothing and looks
+identical to a Runway clip that held almost motionless anyway. Paying 80 credits
+for eight seconds of a room where nothing happens buys nothing but noise.
+
+### Swap these six clips for stills
+
+| beat | was | why a still is enough |
+|---|---|---|
+| B2B 00 · before anyone arrives | 2 clips | Nobody is in it. The whole point is that nothing is happening yet |
+| B2B 01b · the empty desk | 1 clip | Make the neighbouring desk empty too, and nothing needs to move |
+| B2B 01b · the phone face down | 1 clip | An object on a counter |
+| B2B 02b · the room after it ended | 1 clip | Two chairs, one pushed back. An aftermath |
+| B2B 03b · the desk at end of day | 1 clip | Work stacked, chair empty, one lamp on |
+| B2B 03b · the corridor, one light on | 1 clip | Nothing moves in it |
+
+**Seven clips become seven stills.** 560 credits becomes 56 — and because an
+image retake costs 2 credits against 80, the retake exposure on these
+effectively disappears. Counting realistic iteration, this is **roughly 700
+credits back**, or about 11% of the balance.
+
+### Where a still is actually better, not just cheaper
+
+**An empty room on video draws attention to the fact that nothing is
+happening.** Eight seconds of a still corridor with a faint camera wobble reads
+as a mistake. The same frame held and drifted slowly reads as deliberate — as a
+held look. For every aftermath beat in the B2B film, the still is the stronger
+picture as well as the cheaper one.
+
+### Where video is not negotiable
+
+- **All five character panels.** A person held for twenty-five seconds as a
+  still is a photograph, and the film's whole claim is that these are living
+  people in a state. This is what the budget is for.
+- **B2C 11, the walk.** The motion *is* the meaning — one session is where it
+  begins, movement outward.
+- **B2B 04b, the feedback and the decision.** Both have a person close enough to
+  read. A held still of somebody depleted looks posed; the involuntary stillness
+  of a real hold is what sells it.
+
+### Stills the spec does not yet list, and should
+
+| | why |
+|---|---|
+| **Poster frame, each film** | What shows before play. Never a random first frame — choose it |
+| **End card, each film** | Type over a still, not over motion |
+| **Five held frames** | Already covered — pull from the panel clips, do not generate. They must match the clip exactly or the freeze jumps |
+
+### Revised clip count
+
+| | clips | stills | credits |
+|---|---|---|---|
+| Five character panels | 25 | 5 casting + 5 pulled freezes | 2,000 + 10 |
+| B2B narrator | 5 | 7 | 400 + 56 |
+| Poster and end cards | — | 4 | 32 |
+| Upscale the seven existing | — | — | 620 |
+| **Clean pass** | **30** | **21** | **3,118** |
+
+Against 3,870 before. **Roughly 750 credits saved on the clean pass**, and more
+than that again in avoided retakes.
