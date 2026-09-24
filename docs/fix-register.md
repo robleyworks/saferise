@@ -22205,3 +22205,68 @@ It no longer earns an element: it covers the whole sheet, and at ≤640px it is 
 - Drop `.sr-org-pathsheet .sr-org-wrap`'s `position:relative; z-index:2`, which then has
   nothing to sit above.
 - The contrast figures above hold unchanged, because the composite is identical.
+
+## SR-458 — protocol covers into the coming-soon strips (PASS-AM-PROTOCOL-COVERS.md)
+
+24 September 2026. No push.
+
+### What changed
+
+- **§1** — `coming-soon.html` and `member-coming-soon.html`, each in its own inline
+  `<style>`, directly after the `.sr-cs-cover{…}` rule: `.sr-cs-cover>img` (absolute,
+  `inset:0`, `object-fit:cover`, `object-position:50% 38%`, `z-index:0`). The gradient,
+  `filter`, `::after` hatch and `.sr-cs-lock` plate are untouched. Inline rather than in
+  `saferise-system.css` because every other `.sr-cs-*` rule lives in the page block
+  (the system CSS's own comment at the reduced-motion block says so).
+- **§2** — 180 `<img src="assets/coming/protocol/SLUG-NN.webp" loading="lazy"
+  decoding="async" alt="">` inserted as the first child of each `.sr-cs-cover`. Each
+  article's slug was read from its own `data-track-img`, and its ten spans numbered
+  01–10 in DOM order. Done by script over the files as read. Removing the inserted
+  strings gives files byte-identical to the originals, in both pages.
+- **§3** — `.webp` only. No `<picture>`, `<source>` or `onerror`.
+
+### Differs from the brief
+
+- **The assets were not committed.** The brief says they are. `git status` showed
+  `assets/coming/protocol/` untracked (not ignored). Under the standing rule for
+  `assets/`, the 180 files are `git add`ed in the commit that references them.
+- **Two of the brief's checks contradict each other.** §1's new rule contains the
+  string `sr-cs-cover`, so `grep -c "sr-cs-cover"` goes 15 → 16 in each file.
+  That is a line count, and §1 adds one line. The count the check is meant to protect
+  (`class="sr-cs-cover"`) is 90 before and 90 after, in both files.
+
+### Verified
+
+Per file: `sr-cs-cover>img` has 1 hit; 90 unique `.webp` paths, each with a count of 1;
+every path passes `test -f`; 0 added lines contain `border`; `git diff --numstat` gives
+11 added and 9 removed lines. The 9 removed lines are the nine strip lines, which were
+rewritten with only insertions.
+
+In the browser, via a static snapshot of `coming-soon.html`: 90 imgs; img box 56×75,
+the same as the cover; the img computes `z-index:0` and the lock `z-index:1`; the filter
+computes `brightness(.62) saturate(.72)`; each article's `.sr-cs-list` has 10 items.
+The snapshot could not load relative images. The preview server can't read the repo
+under the sandbox (`tools/serve.py: Operation not permitted`), so the images were
+**not** seen rendering in-page.
+
+### Reported, not fixed
+
+1. **Directory weight.** `assets/coming/protocol/` holds 180 files in 2.9 MB (du):
+   `.webp` 1,260 KB and `.jpg` 1,692 KB. The `.jpg` half is unreferenced.
+2. **Track order.** Both pages give `elevation-series, sex-and-intimacy,
+   executive-presence, strength-and-return, sleep-and-recovery, embodied-nutrition,
+   entrepreneurs-journey, money-shift, addiction-recovery`, so the order is identical.
+   Note that `.sr-cs-list` renders as two columns and its DOM order interleaves
+   (01, 06, 02, 07 …). The covers map to the NN labels, not to the list's DOM order.
+   Nobody has checked that each photograph fits its protocol.
+3. **Strip weight.** Each strip is 99–137 KB (money-shift 127 KB; all nine total 1.11 MB).
+   At 1440×1000 the first strip sits at y=1725, below the fold, so no cover is in the
+   first-paint critical path. Chrome's lazy-load margin is about 1250 px on fast
+   connections, so strips 1–2 (≈235 KB) likely start fetching at load, not
+   render-blocking. That comes from Chrome's documented threshold. It was not measured.
+4. **Filter at rest.** The photographs are opaque, so once loaded the track-accent
+   gradient no longer shows through the hatch. The brief expects it to. A render of the
+   CSS filter maths gives a mean rest luminance of 0.20 (raw 0.33, hover 0.26). The
+   low-key sets go muddy at `.62`: sex-and-intimacy (mean 0.12, darkest 0.05) and
+   sleep-and-recovery (0.15). The others read clearly. This is a tuning pass with an
+   in-page visual check, not done here.
