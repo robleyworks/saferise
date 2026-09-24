@@ -21235,3 +21235,143 @@ requests an asset before it ships. Not changed here.
      r14.
    - About half the wall shares the composition.
 5. **Executive Presence:** unchanged on band-08, identical on all four surfaces.
+
+## SR-448 — one image registry, every surface reads from it (PASS-AF.md)
+
+Commits: `759b941` §1–2 (registry and resolver, one file), `8cc2774` §3 (five surfaces),
+`a583970` §4 (checker), this entry. All are pathspec commits. Not pushed.
+
+### §1 — content/track-images.js
+
+12 tracks and 30 paths, all on disk at their shape's size. Each shape key holds the .webp,
+with a `<shape>Jpg` key where a .jpg sibling exists. Where a shape exists only as .jpg, the
+key holds the .jpg.
+
+| track (slug) | band 1200×640 | panel 2400×1000 | portrait 1086×1448 |
+|---|---|---|---|
+| personal-transformation | — (no 1200×640 file; `journey/t1-band` is 1400×380) | home/panel-t1-v2 (+jpg) | f8/f01-v2 (+jpg) |
+| relationship-healing | coming/band-relationship-healing.jpg (jpg only; used by dashboard) | home/panel-t2-v2 (+jpg) | f8/f02 (webp only) |
+| professional-performance | coming/band-professional-performance.jpg (jpg only) | home/panel-t3-v2 (+jpg) | f8/f03 (webp only) |
+| executive-presence | coming/band-08 (+jpg) | — | — |
+| sleep-and-recovery | coming/band-13 (+jpg) | — | — |
+| embodied-nutrition | coming/band-12 (+jpg) | — | — |
+| strength-and-return | coming/band-17 (+jpg) | — | — |
+| elevation-series | coming/band-11 (+jpg) | — | — |
+| sex-and-intimacy | coming/band-10 (+jpg) | — | — |
+| entrepreneurs-journey | coming/band-15 (+jpg) | — | — |
+| money-shift | coming/band-16 (+jpg) | — | — |
+| addiction-recovery | coming/band-14 (+jpg) | — | — |
+
+**Not recorded:**
+- `assets/org/track-t2.webp/.jpg` (1200×640) is a *different* photograph from
+  band-relationship-healing (mean pixel difference ~80/255) and is used nowhere. Recording
+  it would put two bands on one track.
+- Relationship Healing's band is the one in use (dashboard hero).
+
+### §2 — trackImage(slug, shape)
+
+The fallback order is fixed and stays within the same track: portrait > panel > band;
+band > panel > portrait; panel > band > portrait. The brief did not specify panel's
+order; landscape shapes come first. The resolver returns null and warns when a track or
+shape is unknown, and logs `info` for every fallback it uses. Per track:
+
+| track | asked portrait | asked panel | asked band |
+|---|---|---|---|
+| the three live tracks | their portrait | their panel | Personal Transformation: **panel (fallback, no band)**; Relationship Healing and Professional Performance: their band |
+| the nine road-map tracks | **band (fallback)** | **band (fallback)** | their band |
+
+`applyTrackImages()` fills markup images. If a lookup fails it hides the `<img>` and never
+substitutes.
+
+### §3 — surfaces
+
+- `/plans`: 12 `planImage(slug)` → panel.
+- `/organisations`: 8 `f8Cover(slug)` → portrait; `focus` kept, and a null cover renders
+  the existing plate.
+- `/coming-soon` and the member page: 9 `data-track-img` band panes each, filled inline
+  right after `.tstack`.
+- `/`: 3 panels.
+
+The registry loads before every consumer. **Surfaces stopped:** none. **Deliberately left
+typed:** `TRACK_BAND` in js/saferise-plans.js, the 1400×380 journey bands. That is a fourth
+shape; it is documented in place and allow-listed in the checker, and needs a ruling.
+
+**Twelve-row VERIFY**, from the browser, which the checker agrees with:
+
+| track | / | /plans | /organisations | /coming-soon | member |
+|---|---|---|---|---|---|
+| personal-transformation | panel-t1-v2 | panel-t1-v2 | f01-v2 | — | — |
+| relationship-healing | panel-t2-v2 | panel-t2-v2 | f02 | — | — |
+| professional-performance | panel-t3-v2 | panel-t3-v2 | f03 | — | — |
+| executive-presence | — | band-08 | band-08 | band-08 | band-08 |
+| sleep-and-recovery | — | band-13 | band-13 | band-13 | band-13 |
+| embodied-nutrition | — | band-12 | band-12 | band-12 | band-12 |
+| strength-and-return | — | band-17 | band-17 | band-17 | band-17 |
+| elevation-series | — | band-11 | band-11 | band-11 | band-11 |
+| sex-and-intimacy | — | band-10 | — | band-10 | band-10 |
+| entrepreneurs-journey | — | band-15 | — | band-15 | band-15 |
+| money-shift | — | band-16 | — | band-16 | band-16 |
+| addiction-recovery | — | band-14 | — | band-14 | band-14 |
+
+**Read literally, three rows "differ", and this is reported, not claimed as a pass.** The
+three live tracks render a panel on / and /plans and a portrait on /organisations. That is
+the brief's own design (those surfaces ask for different shapes), and each file is the
+registry's single value for its shape. Per shape, every row is identical. No broken
+images on any of the five surfaces; no console errors (fallback `info` lines only).
+
+### §4 — tools/check-track-images.py
+
+Passes (exit 0). It was negative-tested: pointing money-shift at a missing file, and typing
+`band-06` back into coming-soon.html, fail it with both problems named (exit 1). Output
+(abridged; the full run is in the session report):
+
+```
+Registry: content/track-images.js — 12 tracks
+Fallback order read from the file: portrait -> portrait > panel > band; panel -> panel > band > portrait; band -> band > panel > portrait
+=== registry paths ===            (30 lines, all "ok" at shape size)
+=== registry loaded by each page ===   index / plans / organisations / coming-soon / member-coming-soon: ok
+=== surfaces ===  / 3 · /plans 12 · /organisations 8 · /coming-soon 9 · member 9
+RESULT: every track image on every surface resolves through content/track-images.js, and every registry path is on disk at its shape's size.
+```
+
+### Report-only
+
+1. **Files under assets/coming, home, f8 that no longer resolve through the registry:**
+   - **Unused anywhere:** band-01…07 (.webp and .jpg), band-09.jpg,
+     band-anxiety-reset-wide.jpg, band-howto-ep02.jpg, coming-hero.jpg, f8/f01.webp,
+     home/door-t1/t2/t3.jpg, home/hero-film.jpg, home/panel-t1.webp/.jpg,
+     home/panel-t2.webp/.jpg, home/panel-t3.webp.
+   - **band-09.webp:** named only in SR-430's historical comment in js/saferise-plans.js.
+   - **Non-track images still used elsewhere:**
+     - dashboard: band-anxiety-reset-dark, band-clearing (also content/galaxy.js),
+       band-live-session, band-welcome-corridor
+     - coming-soon: coming-hero.webp
+     - index: door-t1/t2/t3.webp, hero-film.webp, film-poster.webp
+     - method.html: film-poster.jpg
+   - Nothing was deleted.
+2. **Slug scheme:** keyed on the track pages' filename slugs, which dashboard.html's slide
+   `key`s already use. The road-map tracks had no slug anywhere, so they were extended the
+   same way ("&" → "and", apostrophe dropped).
+   - `/protocols/{slug}` is protocol-level, a different namespace.
+   - The explorer keys tracks by `n` ("01"–"08") and b2b protocols by id (I01/R01).
+   - So one track-slug scheme exists, plus the explorer's ordinals. **No fourth scheme was
+     added.**
+3. **Shape gaps (the provisioning brief):**
+   - **Portrait** is missing for all nine road-map tracks; five are Foundation 8 and fall
+     back to band on /organisations.
+   - **Panel** is missing for the same nine, which fall back to band on /plans.
+   - **Band (1200×640)** is missing for Personal Transformation, which falls back to its
+     panel. No surface asks for it today.
+4. **Load order:**
+   - The registry is a small synchronous `<head>` script on /, /coming-soon and the member
+     page: one extra same-origin request before first paint.
+   - The band and panel images are no longer in the markup, so the browser's preload
+     scanner cannot find them. They start fetching when the parser reaches the inline
+     `applyTrackImages()` call directly after their markup, not at preload-scan time.
+   - Locally the band's fetch start was indistinguishable (8–22 ms before and after), but
+     the local server cannot show network effects. **First paint could not be measured**:
+     the test pane is hidden, so no paint entry is recorded.
+   - Every affected image is below the fold (coming-soon's hero `coming-hero.webp` and
+     index's hero are unchanged, still in markup). Any late start should read as images
+     arriving as you scroll, not as a flash above the fold. That is structural reasoning,
+     not a measurement.
