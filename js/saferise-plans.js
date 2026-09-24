@@ -24,7 +24,7 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  /* SR-386 §4 · eight core-library cards. The three live tracks read their
+  /* SR-386 §4 · the core-library cards. The three live tracks read their
      name from TRACKS[id].name and their accent from the REAL system
      --t1/--t2/--t3 tokens (css/saferise-system.css) — not the mock's own
      standalone preview colours (--t1:#D4A843 etc in mock-plans-final.html),
@@ -234,7 +234,7 @@
     })).join('');
     return '<section id="core"><div class="wrap">' +
       '<div class="sr-pl-shead rv"><div><p class="eyebrow">The core library</p>' +
-      '<h2>Eight tracks.<br>One membership.</h2></div>' +
+      '<h2>Every track.<br>One membership.</h2></div>' +
       '<p>Every track sits inside the same membership. When a new one opens it is simply there — no upgrade, no new tier, no change to what you already pay.</p></div>' +
       '<div class="sr-pl-coregrid rv">' + cards + '</div>' +
       '</div></section>';
