@@ -54,6 +54,21 @@ body{padding-left:74px}
   padding-top:16px;position:relative}
 .sr-dash-navrailfoot:before{content:"";position:absolute;top:0;left:12px;right:12px;height:1px;background:var(--hair)}
 
+/* SR-454 (PASS-AI §1) · the panel scrolls rather than shrinking its
+   buttons. Buttons keep their 44px (flex-shrink:0); the main routes scroll
+   inside .sr-dash-navraillist; .sr-dash-navrailfoot stays outside it and
+   keeps its margin-top:auto, so it is pinned to the bottom of the panel.
+   Scrollbar hidden the way the dashboard already hides one on every
+   scrolling row (scrollbar-width:none + ::-webkit-scrollbar{display:none},
+   e.g. .sr-dash-carviewport). The hover label is position:fixed inside the
+   list so the scroll box does not clip it — placed by js/saferise-rail.js. */
+.sr-dash-navrailbtn{flex-shrink:0}
+.sr-dash-navraillist{flex:1 1 auto;min-height:0;min-width:0;width:100%;display:flex;flex-direction:column;align-items:center;gap:6px;
+  overflow-x:hidden;overflow-y:auto;scrollbar-width:none}
+.sr-dash-navraillist::-webkit-scrollbar{display:none}
+.sr-dash-navraillist .sr-dash-navrailbtn span{position:fixed}
+.sr-dash-navrailfoot{flex-shrink:0}
+
 body.rd-soft .sr-dash-navrail{background:#3C4B78}
 
 /* SR-335 · breakpoint reconciliation. saferise-dashboard.css used 760px,
@@ -69,4 +84,12 @@ body.rd-soft .sr-dash-navrail{background:#3C4B78}
   .sr-dash-navrailmark,.sr-dash-navrailfoot{display:none}
   .sr-dash-navrailbtn.on:before{left:12px;right:12px;top:-1px;bottom:auto;width:auto;height:2px;border-radius:0 0 2px 2px}
   .sr-dash-navrailbtn span{display:none}
+  /* SR-454 (PASS-AI §1) · the bottom bar scrolls sideways at full tap size.
+     space-between, not space-around: with more buttons than room,
+     space-around overflows both ends and strands the first ones off the
+     left edge where no scroll can reach them; space-between falls back to
+     flex-start. No scroll-snap — neither scrolling row on the dashboard
+     that this bar resembles (.sr-dash-rail chip row, .sr-dash-navlinks)
+     uses it. */
+  .sr-dash-navraillist{flex-direction:row;height:100%;justify-content:space-between;overflow-x:auto;overflow-y:hidden}
 }

@@ -184,7 +184,12 @@
     if (!mount) return;
 
     var html = '<span class="sr-dash-navrailmark">◈</span>';
+    /* SR-454 (PASS-AI §1) · the main routes sit in their own scroll box so
+       the panel scrolls instead of shrinking them below 44px; the foot
+       (account, legal, Log out) stays outside it, pinned to the bottom. */
+    html += '<div class="sr-dash-navraillist">';
     ROUTES.forEach(function (r) { html += btnHTML(r, activeRoute); });
+    html += '</div>';
     html += '<div class="sr-dash-navrailfoot">';
     FOOT_ROUTES.forEach(function (r) { html += btnHTML(r, activeRoute); });
     html += btnHTML({ key: 'signout', label: 'Log out' }, null, ' id="srSignOut" type="button"');
@@ -206,6 +211,22 @@
         if (opts.onRoute) { opts.onRoute(key); return; }
         global.location.href = 'dashboard.html#route=' + encodeURIComponent(key);
       });
+    });
+
+    /* SR-454 (PASS-AI §1) · a scroll box clips anything that leaves it, and
+       the hover label sits outside the 74px panel. Inside the list the label
+       is position:fixed (css/saferise-rail.css) and placed here, against its
+       button, each time it is about to show. */
+    function placeLabel(b) {
+      var span = b.querySelector('span');
+      if (!span || getComputedStyle(span).position !== 'fixed') return;
+      var r = b.getBoundingClientRect();
+      span.style.left = (r.left + 56) + 'px';
+      span.style.top = (r.top + (r.height - span.offsetHeight) / 2) + 'px';
+    }
+    mount.querySelectorAll('.sr-dash-navraillist .sr-dash-navrailbtn').forEach(function (b) {
+      b.addEventListener('mouseenter', function () { placeLabel(b); });
+      b.addEventListener('focus', function () { placeLabel(b); });
     });
 
     if (signOutBtn) {
