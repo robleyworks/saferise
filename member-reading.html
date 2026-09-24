@@ -145,6 +145,13 @@
 <script src="js/saferise-auth.js"></script>
 <script src="js/saferise-access.js"></script>
 <script src="js/saferise-rail.js"></script>
-<script>SafeRiseRail.render('reading');</script>
+<script>
+  /* SR-453 (PASS-AH §1) · light the rail button for the payload on show
+     (same reading as the PATHS/?r= logic above; 'reading' matched no button) */
+  (function () {
+    var u = location.pathname + location.search + location.hash;
+    SafeRiseRail.render(/writing|article/.test(u) ? 'article' : /podcast/.test(u) ? 'podcast' : 'faq');
+  })();
+</script>
 </body>
 </html>

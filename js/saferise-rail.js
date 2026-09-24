@@ -69,6 +69,44 @@
          'A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9.8 3a2 2 0 1 1 4 0v.1' +
          'A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a2 2 0 1 1 0 4h-.1"/>'
     },
+    /* SR-453 (PASS-AH §1) · icons for the eight routes SR-444 wired into
+       PAGES but never rendered. None existed anywhere in the repo, so each
+       is new, drawn on the same 24-unit grid and stroke as the rest. */
+    clearing: {
+      /* a still point inside an open field */
+      round: true,
+      d: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/>'
+    },
+    chosen: {
+      round: true,
+      d: '<path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/>'
+    },
+    decisions: {
+      /* signpost */
+      round: true,
+      d: '<path d="M12 3v18"/><path d="M5 6h11l2 2-2 2H5z"/><path d="M19 13H8l-2 2 2 2h11z"/>'
+    },
+    article: {
+      round: true,
+      d: '<path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h4"/>'
+    },
+    podcast: {
+      round: true,
+      d: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/>'
+    },
+    faq: {
+      round: true,
+      d: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7"/><path d="M12 17h.01"/>'
+    },
+    checkout: {
+      round: true,
+      d: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M12 8v8M8 12h8"/>'
+    },
+    legal: {
+      /* shield */
+      round: true,
+      d: '<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/>'
+    },
     signout: {
       /* door + exit arrow — SR-333 */
       round: true,
@@ -81,10 +119,20 @@
     { key: 'dashboard', label: 'Dashboard' },
     { key: 'method',    label: 'Where the method comes from' },
     { key: 'coming',    label: 'What’s coming' },
-    { key: 'coaching',  label: 'Sessions &amp; workshops' }
+    { key: 'coaching',  label: 'Sessions &amp; workshops' },
+    /* SR-453 (PASS-AH §1) · SR-444's seven, labels copied from
+       dashboard.html's own ROUTES map, in that map's order */
+    { key: 'clearing',  label: 'The Clearing' },
+    { key: 'checkout',  label: 'Add a track' },
+    { key: 'article',   label: 'Article' },
+    { key: 'podcast',   label: 'The SafeRise podcast' },
+    { key: 'faq',       label: 'FAQ' },
+    { key: 'chosen',    label: 'The Chosen Self' },
+    { key: 'decisions', label: 'Your Decisions' }
   ];
   var FOOT_ROUTES = [
-    { key: 'account', label: 'Account &amp; plan' }
+    { key: 'account', label: 'Account &amp; plan' },
+    { key: 'legal',   label: 'Terms and privacy' }
   ];
 
   /* the rail routes with a real page — began as the same three destinations
@@ -110,7 +158,11 @@
     article: 'member-reading.html?r=article',
     podcast: 'member-reading.html?r=podcast',
     clearing: 'member-clearing.html',
-    checkout: 'member-checkout.html'
+    checkout: 'member-checkout.html',
+    /* SR-453 (PASS-AH §1) · legal, for the same reason as account above:
+       it is in dashboard.html's PAGES, so without it here a rail click on a
+       member page would land on the dashboard with nothing opened */
+    legal: 'legal.html'
   };
 
   function svg(key) {
