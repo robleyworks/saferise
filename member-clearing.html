@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — member-clearing.html · SR-444 (PASS-X.md §3)
+  The Clearing, t0-00. Audio path read from content/meditation.js
+  (MEDITATION['t0-00'].src) — the same place the protocol and dashboard
+  players read it; the path never lives in markup. The master is on disk and
+  tracked (assets/audio/meditation/t0-00-the-clearing.mp3). If it fails to
+  load, the player switches to a disabled "not available yet" state rather
+  than pointing anywhere else.
+
+  Play and pause only. The <audio> element carries no controls attribute and
+  nothing on this page reads its position or length.
+
+  Log: device-only, 'sr.clearing.log', same probe + in-memory Store as
+  member-record.html. One entry per visit, written the first time play is
+  pressed; an optional note attaches to the newest entry.
+
+  Cue Card: there is no standalone Cue Card surface — each protocol delivers
+  its own inside protocol.html — so the row renders disabled with a note.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- SR-164 · the ground colour, inline and first — copied from
+     member-frameworks.html, as is everything above <main>. -->
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#0A0A0F}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise — The Clearing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saferise-method.css">
+<link rel="stylesheet" href="css/saferise-rail.css">
+<link rel="stylesheet" href="css/saferise-system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="sr-dash-navrail" id="srRail" aria-label="Sections"></nav>
+
+<main id="main" class="shell">
+
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="dashboard.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Dashboard
+  </a>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<header class="sr-fw-mast sr-mi-mast" style="display:block">
+  <span class="eyebrow">Included with every plan</span>
+  <h1>The Clearing</h1>
+  <p class="sr-fw-stance">The session to use when you do not know which state you are in. It does not ask you to decide first.</p>
+</header>
+
+<div class="sr-mi-page">
+  <div class="sr-mi-panel sr-mi-play">
+    <button type="button" class="sr-mi-playbtn" id="srClrBtn" aria-label="Play">
+      <svg viewBox="0 0 24 24" aria-hidden="true" id="srClrIcon"><path d="M8 5.5v13l11-6.5z"/></svg>
+    </button>
+    <p class="sr-mi-playlabel" id="srClrLabel">Begin where you are</p>
+    <p class="sr-mi-small" id="srClrSub">Headphones if you have them. Sitting or lying down both work.</p>
+    <p class="sr-mi-hairnote">There is no clock on this player and no progress bar. Watching time pass is the opposite of what the session is for. It ends when it ends.</p>
+    <audio id="srClrAudio" preload="none"></audio>
+  </div>
+
+  <div class="sr-mi-panel">
+    <span class="eyebrow">Cue Card</span>
+    <p>The Cue Card is not the short version of this session. It is the part that interrupts, for when there is no time to listen.</p>
+    <div class="sr-mi-row">
+      <a class="sr-mi-btn sr-mi-btn--ghost" href="#" aria-disabled="true" tabindex="-1">Open</a>
+    </div>
+    <p class="sr-mi-small">Each protocol carries its own Cue Card &mdash; open one from inside a protocol.</p>
+  </div>
+
+  <div class="sr-mi-panel">
+    <span class="eyebrow">Your log</span>
+    <div id="srClrLatest"></div>
+    <ul class="sr-mi-log" id="srClrLog"></ul>
+    <div id="srClrNoteWrap" hidden>
+      <label class="eyebrow" for="srClrNote">A note on today, if you want one</label>
+      <textarea class="sr-mi-field" id="srClrNote"></textarea>
+      <div class="sr-mi-row"><button type="button" class="sr-mi-btn sr-mi-btn--ghost" id="srClrNoteSave">Save the note</button></div>
+    </div>
+    <p class="sr-mi-small">The log records that you came, not how it went &mdash; unless you wrote something.</p>
+    <p class="sr-mi-small" id="srClrVolatile" hidden>Right now this browser is not keeping anything &mdash; a private window or blocked site data &mdash; so this log lasts only until this page closes.</p>
+  </div>
+</div>
+</main>
+
+<script src="content/meditation.js"></script>
+<script>
+(function () {
+  'use strict';
+  var KEY = 'sr.clearing.log';
+  var Store = (function () {
+    var mem = {}, ok = false;
+    try { var k = 'sr.probe'; localStorage.setItem(k, '1'); localStorage.removeItem(k); ok = true; } catch (e) { ok = false; }
+    return {
+      persistent: ok,
+      get: function () {
+        try { var raw = ok ? localStorage.getItem(KEY) : mem[KEY]; var v = raw ? JSON.parse(raw) : []; return Array.isArray(v) ? v : []; }
+        catch (e) { return []; }
+      },
+      set: function (val) {
+        var raw = JSON.stringify(val);
+        try { if (ok) localStorage.setItem(KEY, raw); else mem[KEY] = raw; } catch (e) { mem[KEY] = raw; }
+      }
+    };
+  })();
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function day(iso) { var d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' }); }
+  function part(iso) {
+    var h = new Date(iso).getHours();
+    return h < 5 ? 'Night' : h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : h < 22 ? 'Evening' : 'Night';
+  }
+
+  $('srClrVolatile').hidden = Store.persistent;
+
+  function render() {
+    var log = Store.get().slice().sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
+    if (!log.length) {
+      $('srClrLatest').innerHTML = '<p>Nothing logged yet.</p>';
+      $('srClrLog').innerHTML = '';
+      return;
+    }
+    var top = log[0];
+    $('srClrLatest').innerHTML = '<p><strong>' + esc(day(top.date)) + '</strong> &middot; ' + esc(part(top.date)) + '</p>' +
+      (top.note ? '<p class="sr-mi-entrytext">' + esc(top.note) + '</p>' : '');
+    $('srClrLog').innerHTML = log.slice(1).map(function (e) {
+      return '<li><span>' + esc(day(e.date)) + '</span><span>' + esc(part(e.date)) + '</span></li>';
+    }).join('');
+  }
+
+  var logged = false;
+  function logVisit() {
+    if (logged) return;
+    logged = true;
+    var log = Store.get();
+    log.push({ date: new Date().toISOString() });
+    Store.set(log);
+    $('srClrNoteWrap').hidden = false;
+    render();
+  }
+  $('srClrNoteSave').addEventListener('click', function () {
+    var note = $('srClrNote').value.trim(), log = Store.get();
+    if (!log.length) return;
+    log.sort(function (a, b) { return (a.date || '').localeCompare(b.date || ''); });
+    if (note) log[log.length - 1].note = note; else delete log[log.length - 1].note;
+    Store.set(log);
+    render();
+  });
+
+  /* The player. Play and pause only; nothing here reads position or length. */
+  var audio = $('srClrAudio'), btn = $('srClrBtn'), icon = $('srClrIcon');
+  var PLAY = 'M8 5.5v13l11-6.5z', PAUSE = 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z';
+  function unavailable() {
+    btn.disabled = true;
+    btn.setAttribute('aria-label', 'Not available yet');
+    icon.firstChild.setAttribute('d', PLAY);
+    $('srClrLabel').textContent = 'Not available yet';
+    $('srClrSub').textContent = 'The Clearing’s audio could not be loaded. Nothing is wrong with your record.';
+  }
+  var src = (typeof MEDITATION !== 'undefined' && MEDITATION['t0-00']) ? MEDITATION['t0-00'].src : '';
+  if (!src) { unavailable(); }
+  else {
+    audio.src = src;
+    audio.addEventListener('error', unavailable);
+    audio.addEventListener('play', function () { icon.firstChild.setAttribute('d', PAUSE); btn.setAttribute('aria-label', 'Pause'); logVisit(); });
+    audio.addEventListener('pause', function () { icon.firstChild.setAttribute('d', PLAY); btn.setAttribute('aria-label', 'Resume'); });
+    btn.addEventListener('click', function () {
+      if (audio.paused) { var p = audio.play(); if (p && p.catch) p.catch(function () {}); }
+      else audio.pause();
+    });
+  }
+  render();
+})();
+</script>
+
+<script src="js/saferise-auth.js"></script>
+<script src="js/saferise-access.js"></script>
+<script src="js/saferise-rail.js"></script>
+<script>SafeRiseRail.render('clearing');</script>
+</body>
+</html>
