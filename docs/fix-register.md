@@ -20425,3 +20425,26 @@ section-to-section gap (~154px to the next section's head) is a different rhythm
    drag the window from wide to ~900px; the Gap labels should stay at 11px throughout.
 
 **Not pushed.**
+
+## SR-439 — SEO: the four "noindex" pages in sitemap.xml (no code change)
+
+**The brief's premise did not reproduce. Nothing was removed, because there is nothing to
+remove.** `index.html`, `organisations.html`, `plans.html` and `accessibility.html` carry
+**no** `<meta name="robots">` tag. Each file's only "noindex" string is inside an HTML
+comment recording the removal already made by SR-432 (index, accessibility), SR-385
+(organisations) and SR-386 (plans). `grep -l noindex *.html` returns 20 because it matches
+those four comments. Live check: all four serve no robots meta and no `X-Robots-Tag`
+header, so they are already indexable.
+
+**The intended end state already holds:** exactly 16 files carry a real `<meta
+name="robots" … noindex>`: the eight member pages, dashboard, account, login, signup,
+reset-password, for-organisations, pricing and resource. **None of the 16 appears as a
+`<loc>` in sitemap.xml.** The comments were not reworded just to make the grep read 16:
+they are the record.
+
+**Found, not changed:** `legal.html` (new in SR-438) is indexable and not in sitemap.xml.
+`tools/check-sitemap.py` now lists `/legal` under "expected but missing". Everything else
+in that report predates both passes: 30 `/protocols/*` URLs not expected by the generator's
+rule; `galaxy-journey*`, `/pricing`, `/protocol`, `/reset-password` expected but absent.
+Decision needed: add `/legal` to the sitemap, or give it noindex.
+**Not pushed.**
