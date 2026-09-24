@@ -4850,7 +4850,15 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
   letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
 .sr-org-page h1,.sr-org-page h2,.sr-org-page h3{font-family:'Cormorant Garamond',Georgia,serif;
   font-weight:400;color:var(--text);margin:0}
-.sr-org-page p{margin:0;color:var(--text2)}
+/* SR-438 (PASS-N §3, SR-437's recommendation) · was .sr-org-page p (0,1,1),
+   which outranked every bare class rule on a paragraph (0,1,0): margins and
+   colours written for .sr-org-eyebrow, .sr-org-ef8base, .sr-org-elead and
+   others never applied, and the footer's .sr-pf-colhead lost its gold on this
+   page only. Eleven p.sr-org-* compound selectors and three !important flags
+   exist only to defeat it. :where() keeps the reset for unclassed paragraphs
+   (0,0,1 still beats the UA's 1em margin) without the specificity, so every
+   class rule wins again. The workarounds are left in place — they still win. */
+:where(.sr-org-page) p{margin:0;color:var(--text2)}
 .sr-org-page ul{margin:0;padding:0;list-style:none}
 
 /* PASS-org-layout.md §4 · #sr-rail is the shared chapter rail
