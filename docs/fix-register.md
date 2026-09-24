@@ -20448,3 +20448,101 @@ in that report predates both passes: 30 `/protocols/*` URLs not expected by the 
 rule; `galaxy-journey*`, `/pricing`, `/protocol`, `/reset-password` expected but absent.
 Decision needed: add `/legal` to the sitemap, or give it noindex.
 **Not pushed.**
+
+## SR-440 — the counts sweep, the three eyebrows, four rulings (PASS-P.md)
+
+Five commits: `09efe7e` §1, `6c514aa` §2, `c8d4080` §3, `d0f3d23` §4, `5dcfa89` §5.
+**Git:** a second stale, empty `.git/index.lock` appeared (22:40, no git process running)
+and blocked the §4 commit. It was removed. That makes two in one evening on this mount,
+both apparently left by a commit.
+
+### §1 — counts (DIFFERS: the count)
+
+**The brief says 27; its own table sums to 20, and 20 is what exists.** All 20 were
+rewritten, none skipped. Two were added: `content/inventory.js:18` (a comment, not in the
+table) and /organisations' third "these eight" → "Which is why **the Foundation 8 does**
+not vary".
+
+| where | now |
+|---|---|
+| track pages' `<title>` + `og:title` ×3 | "— protocols for your own nervous system / for what keeps happening between you / for when the stakes rise" (pattern 4) |
+| pricing.html:125, saferise-plans.js:135 | "…the protocols in Personal Transformation are yours…" (4) |
+| dashboard lock copy | "Adding it opens all its protocols and every resource inside them." (4) |
+| dashboard ghost buttons ×2 | "See the protocols" (4, not 3: a bare "Protocols" beside "Open Relationship Healing" would lose the verb) |
+| tracks.js `support`, `priceH2` ×3 | "Every protocol." ("All protocols." is clipped; same assertion) |
+| comments: index.html, dashboard.html, protocol.html ×2, tracks.js, inventory.js | count word dropped |
+
+Rendered: all three track pages, pricing, plans, the dashboard (ghost buttons and lock
+text) and /organisations read as whole sentences, with no console errors. The track pages'
+"Every protocol." H2 does not sit next to the "Every protocol includes…" paragraph; it opens
+the pricing block. VERIFY grep → only `archive/` and `docs/`.
+
+### §2 — stack line
+
+Rendered: "Someone in **Frontline Service**, working in **Hospitality**, receives the
+Foundation 8, plus the protocol for their role and the one for their industry." Also
+People Leadership/Technology and Athletic Performance/Sport Performance.
+
+### §3 — `.sr-org-head>p:not(.sr-org-eyebrow):not(.sr-org-kicker)`
+
+17/17 eyebrows gold at 1440 and 390 (14 before). All 11 description paragraphs are
+identical before and after in font-size, line-height, max-width, margin-top and colour.
+Measured at 1440 against a pre-change snapshot, and at 390 by swapping the old selector
+back in live through CSSOM. Sample: 15.2px / 24.32px / 603px / 0 / `rgb(131,129,142)` both
+ways. **Reported plainly:** the three affected eyebrows go **15.2px → 13px** and line-height
+24.32 → 21.45. That is the eyebrow's own declared size and matches the other 14, but it is
+a size change, and those three heads are 3px shorter. No other element moved.
+
+### §4 — /legal noindex (DIFFERS: one extra file)
+
+`<meta name="robots" content="noindex, nofollow">` added (same form as the other 16), and
+`Disallow: /legal` added to robots.txt under the member block with a comment. **VERIFY
+failed as written:** the checker reads its exclusions from `scripts/gen-sitemap.js`, and a
+noindex tag does not change them. `/legal` stayed "expected but missing", and the next
+regeneration would have re-added it. **Added `|^legal$` to `EXCLUDE`**, and the checker no
+longer lists it. The rest of the checker's mismatch predates SR-438. **Caveat:** Disallow
+stops crawlers from reading the noindex tag. That is the same pattern robots.txt already
+uses for every member page, so it is consistent, but the tag only works for crawlers that
+reach the page despite the Disallow.
+
+### §5 — lede
+
+Now: "…what you write in your record stays on your device and is never sent to us."
+`grep train legal.html` → nothing. Rendered.
+
+### Report-only
+
+1. **`.sr-tp-band`** is still at `css/saferise-system.css:2749`; §1 did not change its
+   reach.
+   - In markup on: account, login, signup, reset-password.
+   - Via `js/saferise-track.js` on: personal-transformation, relationship-healing,
+     professional-performance, protocol.
+   - Via the `js/saferise-access.js` signed-out gate on every page that loads it
+     (17 pages: those above plus dashboard, resource and the eight member-*.html pages).
+2. **Dead:** `p.sr-org-vertical-note` is lines **5128–5131**, comment included. **The whole
+   verticals block is dead**, lines **5116–5133**: `.sr-org-vertical-grid`,
+   `.sr-org-vertical-wide`, `.sr-org-vertical-note` and their two media queries. None of
+   these classes appears in any live file (the section was retired in SR-429). Delete them
+   together.
+3. **Still holds after §3.** Safe to make bare: `p.sr-org-f8k` (5945), `f8kick` (5966),
+   `f8dlead` (5969), `f8guard` (5984), `gold-copy` (5091), `story-note` (5070). Each has one
+   real rule; the extra story-note hits are comments. The three do-nothing `!important`
+   flags are now at **4976** (hero-note), **5091** (gold-copy) and **5130** (vertical-note,
+   dead). §3 removed a fourth, on `.sr-org-head>p`.
+4. **Legal dates:** unchanged, as ruled.
+5. **Draft modal lines** (not applied); each keeps the ROUTES description's substance and
+   says the page is absent:
+   - `clearing`: The guided session and the log that records it will live here. Neither
+     is built yet.
+   - `checkout`: Adding a track will happen here, without touching your existing access.
+     Checkout is not built yet.
+   - `article`: Short written pieces from Andre will appear here. None is published yet.
+   - `podcast`: The episode player and back catalogue will live here. Not built yet.
+   - `faq`: Answers on the evidence, journal privacy, stopping mid-episode and stopping
+     altogether will be collected here. Not written yet.
+   - `chosen`: The identity you keep choosing, in your own words, will be kept here. This
+     page is not built yet.
+   - `decisions`: The choices you made once the pattern stopped making them will be kept
+     here. This page is not built yet.
+
+**Not pushed.**
