@@ -22369,3 +22369,135 @@ kept rather than reverted, since reverting restores the uncapped 868px column. A
      hanger or tent. relationship-healing and sex-and-intimacy are both "two linked
      loops" in the same warm pair.
    - Not redrawn.
+
+## SR-460 — in-development tracks browsable in the dashboard carousel (PASS-AQ)
+
+24 September 2026. `dashboard.html`, `css/saferise-dashboard.css`, `content/dev-protocols.js`
+(new, committed unmodified). No push.
+
+### What changed
+
+- **§1** — `content/dev-protocols.js` loads after `track-images.js`. Every read of it is
+  behind `typeof DEV_PROTOCOLS === 'object'`.
+- **§2** — the dev branch of `buildDashTracks()` carries `kick` and the ten titles as a
+  flat **string** array. It does not fake the live `[label, slug]` pairs. The accent is
+  `TRACKTK[k]`, the same nine values the rail's `--tk` uses (see Differs 1).
+- **§3** — `render()` renders a dev track as ten locked cards.
+  - Its guard is now `!t` or `t.dev && !t.items.length`.
+  - `CURRENT_TRACK` holds the slug for a dev track, since `+n` would give NaN.
+  - The row class is `sr-dash-carrow sr-dash-cardev`.
+  - `hideLockCta()` runs in place of `showLockCta()`.
+- **§4** — `devCardHTML(n, i)` is as briefed: no `data-open`, no heart, the kicker as
+  the label, "In development", and the `.webp` from `assets/coming/protocol/`.
+- **§5**
+  - `rail` now holds all twelve buttons. `railKey()` routes by `data-track` or
+    `data-dev`. `aria-disabled` and `tabindex="-1"` are no longer written.
+  - `pointer-events:none` is gone. A dev tab takes `.on` and its own `--tk` stripe.
+  - `.sr-dash-raildev.on .sr-dash-railico` strokes in `--tk` at full strength. Without
+    that rule, `.on`'s `stroke:var(--accent)` outranks the grade and paints the
+    inherited gold.
+- **§6** — the delegated card click (`row` listener, just above `render(1)` at the foot of
+  the main IIFE) returns on `.sr-dash-devcard` straight after `if(!card) return`. That
+  is before both the `.sr-dash-locked` → `showLockCta()` branch and `data-open`.
+- **§7** — the three brief rules sit beside `.sr-dash-locked .sr-pcover`. There is no
+  filter or opacity on the card.
+
+### Differs from the brief, adapted
+
+1. **DEVACCENT would have been a duplicate.** SR-459's `TRACKTK` held the same nine
+   values but was declared beside `TRACKICON`, after `DASHTRACKS` is built. It was
+   hoisted but still `undefined` when `buildDashTracks()` ran. It moved up beside
+   `devTrackName()` and both uses read it, so there is one map, not two.
+2. **There was no arrow-key handler to adapt.** Before this pass the rail had no roving
+   tabindex, and Tab walked every button. It now has one:
+   - one tab stop, on the selected tab, or the first when search or a filter deselects
+     them all;
+   - either arrow axis (a column above 1000px, a chip row below), plus Home and End,
+     moves focus and wraps;
+   - Enter and Space activate through the native button click;
+   - `focusout` from the rail resets the stop to the selected tab.
+3. **The missing-file fallback kept SR-454's behaviour.** A dev button with no titles
+   still gets `aria-disabled="true"`. The click handler returns on it before touching
+   `.on`, and CSS keeps `pointer-events:none` for `[aria-disabled="true"]`. Otherwise
+   the rail would select a track the carousel refuses to show.
+4. **`.sr-dash-lock` is 10.5px.** That is below the pass's 11px floor.
+   `.sr-dash-devcard .sr-dash-lock` sets 11px for this card only. The shared rule,
+   which governs every Locked chip, is unchanged.
+5. **A dev track does not call `renderJourney()`.** `JOURNEY` is keyed 1–3, so the
+   journey section stays on the last written track.
+6. The brief credits the 2.12:1 rail figure to SR-458. It was SR-454's `opacity:.5`,
+   measured in SR-459.
+
+### `content/dev-protocols.js`
+
+It loads (evaluated with JXA) into 9 tracks × 10 titles plus a kicker. Checked against
+`.sr-cs-list` sorted by its NN labels, **`coming-soon.html` matches 90/90**, and every
+kicker matches. **`member-coming-soon.html` differs at addiction-recovery 10.** The
+member page has "The Long Middle"; the file and `coming-soon.html` have "Staying with
+Recovery". That is a divergence between the two coming-soon pages, not in this file,
+and the rename rule applies to whichever is wrong.
+
+### Verified
+
+The harness was the real `dashboard.html` run in the preview pane, with its data and card
+scripts inlined (`inventory`, `tracks`, `track-images`, `dev-protocols`, `saferise-card`,
+`meditation`, `galaxy`, `saferise-rail`). The media and auth scripts were stubbed, and
+`SafeRiseAccess` was stubbed as dev with track 1 owned. The preview server still can't
+read the repo. A `Storage.setItem` spy and an `error` listener ran from `<head>`.
+
+- **All twelve are clickable, and all twelve are keyboard-reachable.** 11 real
+  ArrowDown presses from track 1 land on addiction-recovery, which then holds the only
+  `tabindex="0"`. Enter selects it, and ArrowDown wraps to track 1. Focus moved to
+  search leaves the stop on the selected tab.
+- **Each of the nine dev tracks** renders 10 cards, doubled to 20 for the loop.
+  - The titles equal `DEV_PROTOCOLS[slug].items` in order.
+  - The label is the kicker, the note reads "<name> · in development", and the row
+    accent is the track's `--tk`.
+  - `data-open`: 0. Hearts: 0. The word "Locked": absent. `#srLockCta`: never shown.
+- **Covers.** Every `data-src` is `assets/coming/protocol/<slug>-NN.webp`. All 90 pass
+  `test -f` and are tracked. The `<img>` removed itself on the snapshot page, because
+  `SafeRiseCover`'s `onerror` fires when nothing can load there.
+- **Card clicks.** Clicking every card, its cover and its title on all nine tracks
+  produced no navigation, no panel, no error and no storage write.
+- **Back to live.** Track 1 restores `t-1`, `var(--sr-track01)` and its note, with 20
+  hearts, 20 Begin links and 20 `data-open`. Track 2 restores the locked row, and the
+  upsell still opens on a locked card, as before.
+- **Filters from a dev track.** "All protocols" keeps the dev row. "In my plan" gives
+  track 1's 10. Clearing back returns the dev row with the rail still on it.
+- **No writes.** `Storage.setItem` was called 0 times across the whole session.
+- **Contrast.**
+  - Dev `.sr-dash-cardname` (`--text2` #9C9AA4): **6.91:1** on `--band`, 7.03:1 on
+    `--bg`.
+  - "In development" (`--text3`): 5.01:1.
+  - The kicker on the cover sits over a photograph under
+    `.sr-dash-locked`'s `saturate(.3) brightness(.62)`. It was not measurable here.
+
+### Reported, not fixed
+
+1. **Kicker repetition.** At 1440 (cards 187px), 8 of the 9 kickers wrap to **two
+   lines**, in uppercase at 3.38px tracking. Only "URGE & REBUILD" fits on one. Live
+   labels are one word on one line ("Regulate"). Ten identical two-line kickers make a
+   heavy, repetitive band across the row. The fix the brief names, dropping the
+   label, would remove it. At about 140px card width, "INTIMACY & EMBODIMENT"
+   overflowed its box (scrollWidth 120 against 112).
+2. **Live-only helpers.** `devCardHTML()` never calls `currentProtocol()`, `isSaved()`
+   or `ribbonFor()`, and none of them ran during dev browsing. `step()`, `updateCount()`
+   and `markInCarousel()` are shape-agnostic: they count cards and read `data-open`.
+   One gap: `openProtocol()` (from the resume card or the begin panel) calls
+   `render(+track)` and never re-syncs the rail. From a dev track, the row switches
+   to the live track while the rail still highlights the dev one. The same happens
+   between two live tracks, and did before this pass.
+3. **"All protocols" chip.** It sets `libFilter='all'`, which is not combined mode, so
+   it re-renders `CURRENT_TRACK`: the dev row if a dev track is selected. It never
+   reaches `renderCombined()`. `collectList()` iterates `[1,2,3]` only, so search, Saved,
+   Recently used and In my plan never include dev titles ("urge" gave 0 results).
+   Two side notes:
+   - `renderCombined()` does not reset the row's `--accent`, so a filtered list reached
+     from a dev track keeps that track's tint. The same happens from live tracks.
+   - The "In my plan" head reads "In my plan · 10 protocols". That copy predates this
+     pass.
+4. **Row weight.** A dev row is 98.8–136.7 KB across its ten `.webp`, 135.2 KB for
+   addiction-recovery. The row is doubled for the loop, but it shares the same ten URLs.
+5. **Hover implies clickable.** `.sr-dash-card:hover .sr-pcover` still raises the gold
+   hover edge on a dev card. `cursor:default` was already present. `.sr-dash-locked`
+   does **not** apply it (it sets only the cover filter); §7's rule does.
