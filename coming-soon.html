@@ -566,11 +566,20 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 46%,rgba(0,0,0,.35) 76%,transparent 97%);
   mask-image:linear-gradient(90deg,#000 0%,#000 46%,rgba(0,0,0,.35) 76%,transparent 97%)}
 .sr-cs-cover{flex:none;width:56px;aspect-ratio:3/4;border-radius:4px;position:relative;overflow:hidden;
-  filter:brightness(.62) saturate(.72);
+  filter:brightness(.82) saturate(.86);
   transition:filter .55s var(--ease)}
 .sr-cs-cover>img{position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:50% 38%;display:block;z-index:0}
-.tb:hover .sr-cs-cover,.tb:focus-within .sr-cs-cover{filter:brightness(.78) saturate(.92)}
+  object-fit:cover;object-position:50% 38%;display:block;z-index:-1}
+/* SR-461 (PASS-AS A2) · the track accent over the photograph. The img
+   drops to z-index:-1 so this tint paints ABOVE it: at an equal z-index
+   ::before (first in tree order) would sit under the opaque photo. -1 stays
+   inside the cover, whose filter makes it a stacking context. */
+.sr-cs-cover::before{content:"";position:absolute;inset:0;z-index:0;
+  background:linear-gradient(158deg,color-mix(in srgb,var(--ac) 34%,transparent),
+  color-mix(in srgb,var(--ac) 10%,transparent));mix-blend-mode:color;
+  transition:opacity .55s var(--ease)}
+.tb:hover .sr-cs-cover::before,.tb:focus-within .sr-cs-cover::before{opacity:.35}
+.tb:hover .sr-cs-cover,.tb:focus-within .sr-cs-cover{filter:brightness(1) saturate(1)}
 .sr-cs-cover::after{content:"";position:absolute;inset:0;
   background:repeating-linear-gradient(58deg,rgba(245,237,216,.045) 0 1px,transparent 1px 5px)}
 .sr-cs-cover .sr-cs-lock{position:absolute;right:5px;bottom:6px;display:flex;align-items:center;gap:1.5px;z-index:1}
@@ -839,7 +848,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
         <p class="sr-cs-guard">No business advice, funding strategy or growth tactics. States only.</p>
       </div>
     </article>
-    <article class="tb" style="--ac:#D4A843" tabindex="0">
+    <article class="tb" style="--ac:#C08A2E" tabindex="0">
       <div class="sr-cs-pane"><img data-track-img="money-shift" data-shape="band" alt="">
         <span class="sr-cs-tint"></span><span class="sr-cs-tint2"></span>
         <span class="sr-cs-scrim"></span>

@@ -303,7 +303,7 @@
                professional-performance, copied here because these three
                buttons are static markup (data-track, no slug). --tk is
                each track's own accent. The empty .sr-dash-railmeta is
-               filled from TRACKMETA[n].state by addDevTracksToRail() —
+               filled from DASHTRACKS[n].state (SR-461: from entitlement) by paintRailMeta() —
                it held a protocol count, which product copy never states. -->
           <button type="button" class="sr-dash-railtoggle" id="srRailToggle" aria-expanded="true" aria-label="Collapse track list">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5l-7 7 7 7"/></svg>
@@ -313,7 +313,7 @@
             <span><span class="sr-dash-railname">Personal Transformation</span><span class="sr-dash-railmeta"></span></span>
           </button>
           <button class="sr-dash-railbtn" role="tab" aria-selected="false" data-track="2" style="--tk:var(--sr-track02)" aria-label="Relationship Healing">
-            <svg class="sr-dash-railico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 8.4a4.4 4.4 0 1 0 0 7.2"/><path d="M13.5 8.4a4.4 4.4 0 1 1 0 7.2"/></svg>
+            <svg class="sr-dash-railico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h4.2"/><path d="M15.3 12h4.2"/><path d="M9.6 8.2a5 5 0 0 0 0 7.6"/><path d="M14.4 8.2a5 5 0 0 1 0 7.6"/></svg>
             <span><span class="sr-dash-railname">Relationship Healing</span><span class="sr-dash-railmeta"></span></span>
           </button>
           <button class="sr-dash-railbtn" role="tab" aria-selected="false" data-track="3" style="--tk:var(--sr-track03)" aria-label="Professional Performance">
@@ -954,10 +954,18 @@
      SR-459 (PASS-AO §3) · the rail now gives each dev button a graded
      accent (TRACKTK, by addDevTracksToRail()); accent:null here is
      unchanged, so nothing else that reads DASHTRACKS picks it up. */
+  /* SR-461 (PASS-AS D1) · LAUNCH BLOCKER fixed. state was fixed text per
+     track number, so a member who owns Track 2 or 3 was told "not on your
+     plan yet" in the rail and the note. The two plan strings now live once,
+     here, and buildDashTracks() picks between them from ENTITLED — the same
+     source t.unlocked already read. The live entries' own state is gone;
+     dev tracks keep 'in development' (entitlement does not apply to a track
+     that is not written). */
+  var PLANSTATE = { on:'included with your plan', off:'not on your plan yet' };
   var TRACKMETA = {
-    1:{accent:'var(--sr-track01)', cls:'t-1', state:'included with your plan'},
-    2:{accent:'var(--sr-track02)', cls:'t-2', state:'not on your plan yet'},
-    3:{accent:'var(--sr-track03)', cls:'t-3', state:'not on your plan yet'},
+    1:{accent:'var(--sr-track01)', cls:'t-1'},
+    2:{accent:'var(--sr-track02)', cls:'t-2'},
+    3:{accent:'var(--sr-track03)', cls:'t-3'},
     'elevation-series':      {dev:true, state:'in development'},
     'sex-and-intimacy':      {dev:true, state:'in development'},
     'executive-presence':    {dev:true, state:'in development'},
@@ -974,11 +982,12 @@
      was hoisted but still undefined when DASHTRACKS was built. One map for
      the rail button's --tk and the carousel row's --accent, so the row
      tints to match the track just clicked — PASS-AQ's DEVACCENT would
-     have been a second copy of these nine values. */
+     have been a second copy of these nine values. SR-461 (PASS-AS D3) ·
+     money-shift #D4A843 -> #C08A2E: it was --sr-track01's own gold. */
   var TRACKTK = {
    'elevation-series':'#9B86D6', 'sex-and-intimacy':'#D4879A', 'executive-presence':'#7BA3CC',
    'strength-and-return':'#7FA88C', 'sleep-and-recovery':'#5D7BB5', 'embodied-nutrition':'#A8B87A',
-   'entrepreneurs-journey':'#C9885A', 'money-shift':'#D4A843', 'addiction-recovery':'#4E9AA6'
+   'entrepreneurs-journey':'#C9885A', 'money-shift':'#C08A2E', 'addiction-recovery':'#4E9AA6'
   };
   function devTrackName(slug){
     var rec = (typeof TRACK_IMAGES === 'object' && TRACK_IMAGES) ? TRACK_IMAGES[slug] : null;
@@ -1001,17 +1010,20 @@
       if(m.dev){
         var dp = (typeof DEV_PROTOCOLS === 'object' && DEV_PROTOCOLS) ? DEV_PROTOCOLS[k] : null;
         out[k] = { dev: true, slug: k, name: devTrackName(k), accent: TRACKTK[k] || null, cls: '',
-                   kick: dp ? dp.kick : '',
+                   kick: dp ? dp.kick : '', state: m.state,
                    note: devTrackName(k) + ' \u00B7 ' + m.state, unlocked: false,
                    items: (dp && Array.isArray(dp.items)) ? dp.items : [] };
         return;
       }
       var src = TRACKS[k] || {};
+      var unlocked = !!ENTITLED[k];
+      var state = unlocked ? PLANSTATE.on : PLANSTATE.off;
       out[k] = {
         accent: m.accent,
         cls: m.cls,
-        note: (src.name || '') + ' \u00B7 ' + m.state,
-        unlocked: !!ENTITLED[k],
+        state: state,
+        note: (src.name || '') + ' \u00B7 ' + state,
+        unlocked: unlocked,
         items: (src.protocols || []).map(function(p){ return [p[1], p[2]]; })
       };
     });
@@ -1097,36 +1109,44 @@
      hears it. Icon: the nav panel's own "What's coming" mark (SR-333,
      js/saferise-rail.js ICONS.coming), not a new one.
      SR-459 (PASS-AO §2) supersedes that last line: one glyph per track
-     (TRACKICON, below), and each button carries its own --tk accent
+     (TRACKICON, below; SR-461 / PASS-AS B2 replaced four of them:
+     strength-and-return, addiction-recovery, executive-presence,
+     relationship-healing — the last also in the static markup), and each
+     button carries its own --tk accent
      (TRACKTK) — the nine from the coming-soon pages' own --ac. */
   var TRACKICON = {
    'personal-transformation':'<path d="M19.5 12A7.5 7.5 0 1 1 12 4.5"/><path d="M12 8.6A3.4 3.4 0 1 0 15.4 12"/><circle cx="12" cy="12" r="1.1"/>',
-   'relationship-healing':'<path d="M10.5 8.4a4.4 4.4 0 1 0 0 7.2"/><path d="M13.5 8.4a4.4 4.4 0 1 1 0 7.2"/>',
+   'relationship-healing':'<path d="M4.5 12h4.2"/><path d="M15.3 12h4.2"/><path d="M9.6 8.2a5 5 0 0 0 0 7.6"/><path d="M14.4 8.2a5 5 0 0 1 0 7.6"/>',
    'professional-performance':'<path d="M4 19h16"/><path d="M6.5 19v-3.4M11 19v-6.6M15.5 19v-9.4M20 19v-12"/>',
    'elevation-series':'<path d="M3 18h18"/><path d="M5.5 18l5-8 3 4.2 2-2.6 3 6.4"/><circle cx="10.5" cy="10" r="1"/>',
    'sex-and-intimacy':'<circle cx="9.6" cy="12" r="4.6"/><circle cx="14.4" cy="12" r="4.6"/>',
-   'executive-presence':'<circle cx="12" cy="6.6" r="2.6"/><path d="M7.6 15.4a4.4 4.4 0 0 1 8.8 0"/><path d="M4.5 18.8h15"/>',
-   'strength-and-return':'<path d="M19 12A7 7 0 1 0 7.6 17.4"/><path d="M4.4 13.2L7.6 17.4l4.2-3.2"/>',
+   'executive-presence':'<path d="M12 4.5v15"/><path d="M6 8.5h12"/><path d="M6 8.5l-2 6.4h4z"/><path d="M18 8.5l2 6.4h-4z"/><path d="M8 19.5h8"/>',
+   'strength-and-return':'<path d="M4.5 19.5h15"/><path d="M7 16.2V9.4M17 16.2V9.4"/><path d="M4.6 12.8h2.4M17 12.8h2.4"/><path d="M7 12.8h10"/>',
    'sleep-and-recovery':'<path d="M18.4 14.6A7.2 7.2 0 0 1 9.4 5.6a7.2 7.2 0 1 0 9 9z"/>',
    'embodied-nutrition':'<path d="M5.6 18.4C5.6 11 10 6.4 18.4 5.6c.8 8.4-3.8 12.8-11.2 12.8z"/><path d="M8 16l7-7"/>',
    'entrepreneurs-journey':'<path d="M6.5 20V4.6"/><path d="M6.5 5.6l8.8 2.4-8.8 3.2z"/>',
    'money-shift':'<circle cx="12" cy="12" r="7.2"/><path d="M8.8 10.6h6.4l-2-2"/><path d="M15.2 13.4H8.8l2 2"/>',
-   'addiction-recovery':'<path d="M6 18c5-2 7-5 7-9"/><path d="M18 18c-5-2-7-5-7-9"/><path d="M4.5 20.5h15"/>'
+   'addiction-recovery':'<path d="M10.2 13.8l-2 2a3.4 3.4 0 0 1-4.8-4.8l2-2"/><path d="M13.8 10.2l2-2a3.4 3.4 0 0 1 4.8 4.8l-2 2"/><path d="M12 4.8v2M12 17.2v2"/>'
   };
   function trackIcon(slug){
     return '<svg class="sr-dash-railico" viewBox="0 0 24 24" aria-hidden="true">' +
       (TRACKICON[slug] || TRACKICON['elevation-series']) + '</svg>';
   }
+  /* SR-459 (PASS-AO §4) · the three written tracks' meta line is their plan
+     state. SR-461 (PASS-AS D1) · read from DASHTRACKS[n].state, which is
+     derived from ENTITLED, not TRACKMETA's old fixed text; called again
+     wherever DASHTRACKS is rebuilt so the rail and the note never disagree. */
+  function paintRailMeta(){
+    document.querySelectorAll('.sr-dash-railbtn[data-track]').forEach(function(b){
+      var t = DASHTRACKS[b.getAttribute('data-track')];
+      var meta = b.querySelector('.sr-dash-railmeta');
+      if(t && meta) meta.textContent = t.state;
+    });
+  }
   (function addDevTracksToRail(){
     var railBox = document.querySelector('.sr-dash-rail');
     if(!railBox) return;
-    /* SR-459 (PASS-AO §4) · the three written tracks' meta line is their
-       plan state, read from TRACKMETA rather than retyped. */
-    railBox.querySelectorAll('.sr-dash-railbtn[data-track]').forEach(function(b){
-      var m = TRACKMETA[b.getAttribute('data-track')];
-      var meta = b.querySelector('.sr-dash-railmeta');
-      if(m && meta) meta.textContent = m.state;
-    });
+    paintRailMeta();
     var html = '';
     Object.keys(DASHTRACKS).forEach(function(k){
       var t = DASHTRACKS[k];
@@ -1256,8 +1276,9 @@
 
   /* SR-460 (PASS-AQ §4) · a card for a track that is not written. Differs
      from cardHTML() on purpose: no data-open (no page to open), no heart
-     (saving would write a record pointing at nothing), the track kicker as
-     the label on all ten, "In development" rather than "Locked" (locked is
+     (saving would write a record pointing at nothing), no label (SR-461 /
+     PASS-AS C1: the kicker was the same on all ten and wrapped to two
+     uppercase lines on eight of nine tracks; t.kick stays on the record), "In development" rather than "Locked" (locked is
      bought-but-not-yours; this is not built), and the 240x320 .webp from
      assets/coming/protocol/ — there is no -640 derivative and none is
      needed at 176px. t.items[i] is a plain string here, not a pair. */
@@ -1266,7 +1287,7 @@
     var src = 'assets/coming/protocol/' + n + '-' + no + '.webp';
     return '<article class="sr-dash-card sr-dash-locked sr-dash-devcard"' +
       ' data-track="' + n + '" data-no="' + no + '" data-src="' + src + '">' +
-      SafeRiseCover.art({ src: src, no: no, label: t.kick, extra: '' }) +
+      SafeRiseCover.art({ src: src, no: no, label: '', extra: '' }) +
       '<h3 class="sr-dash-cardname">' + esc(t.items[i]) + '</h3>' +
       '<span class="sr-dash-lock">' + LOCK + 'In development</span></article>';
   }
@@ -1357,9 +1378,7 @@
       libQuery = ''; libFilter = 'all';
       if(searchInput) searchInput.value = '';
       setChip('all');
-      rail.forEach(function(x){ x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
-      b.classList.add('on'); b.setAttribute('aria-selected','true');
-      syncRailTabindex();
+      selectRail(railKey(b));
       var n = railKey(b);
       /* SR-460 (PASS-AQ §5) · a dev track has no JOURNEY entry (it is keyed
          1-3), so the journey section is left on the last written track
@@ -1381,6 +1400,19 @@
      1000px and a chip row below it), Home and End move focus; Enter/Space
      activate through the button's own click. Leaving the rail resets the
      stop to the selected tab, so Tab back in lands on it. */
+  /* SR-461 (PASS-AS D4) · extracted from the rail click handler, where it
+     was inline: the one place a rail selection is written (.on,
+     aria-selected, roving tabindex). The click handler, refreshLibrary()
+     and openProtocol() — the path the resume card and the begin panel
+     take — all call it, so the highlight follows the row however it moved. */
+  function selectRail(key){
+    rail.forEach(function(x){
+      var on = railKey(x) === String(key);
+      x.classList.toggle('on', on);
+      x.setAttribute('aria-selected', String(on));
+    });
+    syncRailTabindex();
+  }
   function syncRailTabindex(){
     var sel = null;
     rail.forEach(function(x){ if(x.classList.contains('on')) sel = x; });
@@ -1500,12 +1532,7 @@
 
   function refreshLibrary(){
     if(!inCombinedMode()){
-      rail.forEach(function(x){
-        var on = railKey(x) === String(CURRENT_TRACK);
-        x.classList.toggle('on', on);
-        x.setAttribute('aria-selected', String(on));
-      });
-      syncRailTabindex();
+      selectRail(CURRENT_TRACK);
       render(CURRENT_TRACK);
       updateSavedCount();
       return;
@@ -2032,10 +2059,49 @@
   function refreshRailCollapse(){
     applyRailCollapsed(RAIL_BREAKPOINT.matches ? false : !!Store.get(RAIL_COLLAPSED_KEY, false));
   }
+  /* SR-461 (PASS-AS B3) · the rail's scroll position across the toggle.
+     SR-459 measured 300 -> 207 on collapse -> 725 on expand: past the
+     content, so the rail landed on blank space. Adapted from the brief's
+     pixel restore: row heights change across the toggle (48px collapsed,
+     61-79px open), so the same scrollTop shows different tracks. Instead
+     the first row visible below the sticky toggle is the anchor, and it is
+     put back at the same offset, then clamped with
+     Math.min(saved, scrollHeight - clientHeight). Done on the grid's
+     transitionend (the width animates .32s and rows reflow throughout it,
+     so an early read clamps against the wrong maximum), with a timeout
+     fallback for when no transition runs (reduced motion, or a value that
+     does not change). */
+  function railAnchor(){
+    var top = railEl.getBoundingClientRect().top + (railToggle ? railToggle.offsetHeight : 0);
+    var btns = railEl.querySelectorAll('.sr-dash-railbtn');
+    for(var i = 0; i < btns.length; i++){
+      var r = btns[i].getBoundingClientRect();
+      if(r.bottom > top + 1) return { el: btns[i], off: r.top - railEl.getBoundingClientRect().top };
+    }
+    return null;
+  }
+  function restoreRailScroll(anchor){
+    if(!anchor || !railEl) return;
+    var done = false;
+    function go(){
+      if(done) return; done = true;
+      var saved = railEl.scrollTop + (anchor.el.getBoundingClientRect().top - railEl.getBoundingClientRect().top) - anchor.off;
+      railEl.scrollTop = Math.max(0, Math.min(saved, railEl.scrollHeight - railEl.clientHeight));
+    }
+    function onEnd(e){
+      if(e.target !== libEl || e.propertyName !== 'grid-template-columns') return;
+      libEl.removeEventListener('transitionend', onEnd);
+      go();
+    }
+    libEl.addEventListener('transitionend', onEnd);
+    setTimeout(function(){ libEl.removeEventListener('transitionend', onEnd); go(); }, 450);
+  }
   if(railToggle){
     railToggle.addEventListener('click', function(){
       var willCollapse = railToggle.getAttribute('aria-expanded') === 'true';
+      var anchor = railAnchor();
       applyRailCollapsed(willCollapse);
+      restoreRailScroll(anchor);
       Store.set(RAIL_COLLAPSED_KEY, willCollapse);
     });
   }
@@ -3152,7 +3218,7 @@
     // structure needed. Drift's own target/stopped state is untouched by
     // render(), so autoplay keeps running (or stays off, if a manual stop
     // was already in effect) exactly as it was before the switch.
-    if(track && +track !== CURRENT_TRACK) render(+track);
+    if(track && +track !== CURRENT_TRACK){ render(+track); selectRail(+track); }   /* SR-461 · D4 */
     var lib = document.getElementById('srLibrary');
 
     var start = lib ? lib.getBoundingClientRect().top : 0;
@@ -3304,6 +3370,7 @@
     SafeRiseAccess.ready.then(function () {
       ENTITLED = computeEntitled();
       DASHTRACKS = buildDashTracks();
+      paintRailMeta();            /* SR-461 · D1 */
       render(CURRENT_TRACK);
     });
   }

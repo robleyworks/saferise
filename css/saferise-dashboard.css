@@ -194,8 +194,16 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
    fade the bottom of every chip. The toggle lives inside the rail, so it
    is made sticky — without that it scrolls away with the first rows. */
 @media(min-width:1001px){
-  .sr-dash-rail{max-height:calc(4 * 62px);overflow-y:auto;scrollbar-width:none;
+  /* SR-461 (PASS-AS B1b) · a flat cap, not a multiplier: rows run 48 to
+     79px, which is what made 4 * 62px wrong. Includes the sticky toggle,
+     which sits inside this scroll box, not outside it. */
+  .sr-dash-rail{max-height:316px;overflow-y:auto;scrollbar-width:none;
     overscroll-behavior:contain}
+  /* SR-461 (PASS-AS B1a) · the meta line holds one line; it wrapping is
+     what made Personal Transformation's row 96px. Scoped through
+     .sr-dash-rail: the base .sr-dash-railmeta rule (font-size:13px) comes
+     later in this file and would otherwise win at equal specificity. */
+  .sr-dash-rail .sr-dash-railmeta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
   .sr-dash-rail::-webkit-scrollbar{display:none}
   .sr-dash-rail{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 88%,transparent 100%);
     mask-image:linear-gradient(180deg,#000 0,#000 88%,transparent 100%)}
@@ -389,13 +397,13 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
 .sr-dash-locked .sr-pcover{filter:saturate(.3) brightness(.62)}
 /* SR-460 (PASS-AQ §7) · a card for a track that is not written. No filter
    or opacity on the whole card — the cover is already graded by
-   .sr-dash-locked above. font-size:11px lifts the shared .sr-dash-lock's
-   10.5px to the type floor for this card only (the shared rule is left
-   alone; it governs every Locked chip). */
+   .sr-dash-locked above. SR-461 (PASS-AS D2) · the 11px override that
+   stood here is gone: .sr-dash-lock itself is 11px now, below. */
 .sr-dash-devcard{cursor:default}
 .sr-dash-devcard .sr-dash-cardname{color:var(--text2)}
-.sr-dash-devcard .sr-dash-lock{color:var(--text3);font-size:11px}
-.sr-dash-lock{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);min-height:32px}
+.sr-dash-devcard .sr-dash-lock{color:var(--text3)}
+/* SR-461 (PASS-AS D2) · 10.5px -> 11px, the SR-437 floor, for every Locked chip. */
+.sr-dash-lock{display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);min-height:32px}
 .sr-dash-lock svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.4}
 /* current-step ribbon, the only overlay a cover ever carries */
 .sr-dash-ribbon{position:absolute;left:0;right:0;bottom:0;padding:20px 11px 9px;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--gold);
