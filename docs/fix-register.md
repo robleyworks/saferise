@@ -22501,3 +22501,224 @@ read the repo. A `Storage.setItem` spy and an `error` listener ran from `<head>`
 5. **Hover implies clickable.** `.sr-dash-card:hover .sr-pcover` still raises the gold
    hover edge on a dev card. `cursor:default` was already present. `.sr-dash-locked`
    does **not** apply it (it sets only the cover filter); §7's rule does.
+
+## SR-461 — final pass: strip grading, rail, dev cards, plan state (PASS-AS; supersedes PASS-AN and PASS-AR, neither run)
+
+24 September 2026. `coming-soon.html`, `member-coming-soon.html`, `dashboard.html`,
+`css/saferise-dashboard.css`. No push.
+
+### Correction to SR-460's register entry
+
+SR-460 recorded "`Storage.setItem` called 0 times across the whole session". **That check
+was blind.** Storage is disabled on the `data:` page the harness ran on. `Store` probes
+`localStorage`, fails, and falls back to its in-memory `mem`, so nothing could ever reach
+`setItem`. This pass installs a recording fake `localStorage`/`sessionStorage` before any
+script runs, and it catches real writes: a heart click logs `sr-saved-v1`. Re-run with it,
+browsing all nine dev tracks and clicking every dev card writes **nothing**. SR-460's
+conclusion holds, but only now is it verified.
+
+### Part One — coming-soon strip (both pages)
+
+- **A1** — rest filter `brightness(.82) saturate(.86)`, hover/focus `brightness(1) saturate(1)`.
+- **A2** — `.sr-cs-cover::before` accent tint, as briefed, directly after the img rule.
+  **Differs:** at the brief's stacking (img and `::before` both at z-index 0) the tint
+  paints **under** the photo, because `::before` comes first in tree order and the photo
+  is opaque. **Adapted:** the img is `z-index:-1`, which stays inside the cover (the
+  cover's filter makes it a stacking context). Computed stack: img −1, `::before` 0,
+  `::after` hatch auto (after `::before` in tree order), lock 1. The lock was not moved.
+- **A3** — member-coming-soon addiction-recovery 10: "The Long Middle" → "Staying with
+  Recovery". A 90/90 position-by-position comparison with `coming-soon.html` found no
+  other mismatch.
+- **D3 (strip half)** — the money-shift article's `--ac` is now `#C08A2E` on both pages.
+- **Verified:**
+  - `brightness(.62)` 0 hits and `brightness(.82)` 1, per file.
+  - `.sr-cs-cover::before{` matches twice: the declaration, and the hover rule's
+    `:focus-within .sr-cs-cover::before{`. It is declared once.
+  - No added line contains `border`.
+  - Outside `<style>`, both files are byte-identical to before, apart from the A3 `<li>`
+    and the one `--ac`.
+
+### Part Two — dashboard rail (≥1001px only)
+
+- **B1a** — `.sr-dash-rail .sr-dash-railmeta{nowrap; ellipsis; 11px}`. It is scoped through
+  `.sr-dash-rail`, because the base `.sr-dash-railmeta` (13px) comes later in the file and
+  won at equal specificity. The first attempt measured 13px, and that is how this was
+  caught.
+- **B1b** — `max-height:316px`. **Differs:** the brief says the toggle sits outside the
+  scroll area. It does not: SR-459 made it sticky *inside* the rail, so the 316px includes
+  the 28px toggle and its 8px margin.
+- **B2** — the four glyphs are replaced in `TRACKICON`. relationship-healing is also
+  replaced in the static markup: both copies of the old path were swapped, and the count
+  was checked at 2.
+- **B3** — **Differs:** the brief restores the saved scrollTop. Rows are 48px collapsed and
+  58.5–76px open, so the same pixel offset shows different tracks. **Adapted:**
+  - The anchor is the first row visible below the sticky toggle.
+  - That row is put back at the same offset, then clamped with
+    `Math.min(saved, scrollHeight - clientHeight)`.
+  - This runs on the grid's `transitionend` (`grid-template-columns`), with a 450 ms
+    timeout fallback for when no transition runs.
+
+### Part Three — dev cards
+
+- **C1** — `label:''`. `SafeRiseCover.art()` simply omits the label span for `''`. The
+  number still renders ("01"), and there was no layout fault. A dev card is 357px, the
+  same as a live **locked** card (357px). A live Begin card is 359px, because the Begin
+  link is 33.7px against the lock chip's 32px `min-height`. That predates this pass and
+  is not caused by the label.
+- **C2 — not applied; reported as the brief directs.** The hover edge is a **border**,
+  not a shadow:
+  - `.sr-dash-card .sr-pcover{border:1px solid var(--hair)}`
+  - `.sr-dash-card:hover .sr-pcover{border-color:rgba(212,168,67,.5)}`
+  - Both are shared rules, and a no-borders violation that needs its own fix.
+  - `box-shadow:none` on `.sr-dash-devcard` would have been a dead rule, so it was not
+    added.
+
+### Part Four
+
+- **D1 — launch blocker fixed.**
+  - `PLANSTATE = {on, off}` holds the two strings once. TRACKMETA's live entries no
+    longer carry `state`.
+  - `buildDashTracks()` derives `state` from `ENTITLED` (the same source as `unlocked`),
+    and `note` reads it.
+  - The rail meta comes from `paintRailMeta()` (reading `DASHTRACKS[n].state`). It runs
+    at build time and again after the `SafeRiseAccess.ready` rebuild.
+  - Dev tracks keep `'in development'`.
+- **D2** — `.sr-dash-lock` is 11px. The dev-scoped override lost its `font-size` and
+  kept its `color`.
+- **D3** — money-shift is `#C08A2E` in `TRACKTK` (the one map; its comment is updated) and
+  in both coming-soon `--ac` values.
+- **D4** — `selectRail(key)` was **extracted** from the rail click handler, where it was
+  inline. It sets `.on`, `aria-selected` and the roving tabindex. The click handler,
+  `refreshLibrary()` and `openProtocol()` all call it. `openProtocol()` is the path the
+  resume card and the begin panel both take, and it now calls it after `render(+track)`.
+
+### How it was verified
+
+Harnesses were run in the preview pane, and all of them have since been deleted:
+
+- the real `dashboard.html` with its data and card scripts inlined, auth and media
+  stubbed, and a recording fake storage;
+- the real coming-soon `<style>` with all nine strips, the photos embedded at 84×112.
+
+The preview server still cannot read the repo, and the pane only loads `data:` snapshots.
+
+- **Entitlement was faked** with a stub `SafeRiseAccess.hasAccess` returning true for ids
+  matching `/^t[12]-/` (track 2 owned) or `/^t1-/` (track 1 only).
+  - **Track 2 owned:** the rail meta for 2 reads "included with your plan". Selecting 2
+    gives the note "Relationship Healing · included with your plan", 20 Begin links, 0
+    locked and no upsell. Track 3 reads "not on your plan yet" and shows the upsell.
+  - **Track 1 only:** 2 and 3 read "not on your plan yet", as today.
+  - **Late entitlement** (a stub resolving `ready` after 10 s): first paint gives "not on
+    your plan yet". After `ready`, the rail meta, note and row all flip to "included"
+    together.
+  - Nothing was written in any of these runs.
+- **D4:** `sr.resume` was seeded in the fake storage (The Safe Conversation Protocol,
+  track 2). From money-shift, the resume card moves the rail to 2 (`aria-selected`,
+  `tabindex="0"`), row `t-2`, and note "Relationship Healing · …". Then from
+  sleep-and-recovery, the begin panel ("wired" + "self" → Open protocol) moves the rail
+  to 1, row `t-1`, and the Personal Transformation note. No errors.
+- **B1 at 1440×1000:**
+  - Row heights:
+
+    | Tracks | Height |
+    |---|---|
+    | Personal Transformation, Professional Performance, Entrepreneur's Journey | 76.1px |
+    | The other nine | 58.5px |
+
+    Personal Transformation was 96.1 before B1a.
+  - No meta truncates. `.sr-dash-lib` is 366.9px, equal to the carousel, which does not
+    grow.
+  - Content starts at 38, and the fade starts at 278 (88% of 316).
+  - Rows 1–3 sit entirely above the fade (38–253). Row 4 (elevation-series, 255–313) is
+    inside the box, but its name (267–284) straddles the fade start and its meta
+    (287–301) is in the fade.
+  - **The "at least four before the fade" check therefore fails as written.** The fourth
+    row needs `max-height ≥ 356px` to clear an 88% fade. B1 was kept rather than
+    reverted: reverting B1b restores the 248px cap (about 2½ rows) and fails the same
+    check worse. Andre's call.
+- **B3** was tested with `transition:none` on the grid: the harness pane is hidden, and
+  hidden pages do not run CSS transitions, so this exercised the timeout path.
+  - Scrolled to the middle, 250: collapse gives 183 and expand gives 250. The same six
+    tracks (elevation → embodied-nutrition) are in view throughout.
+  - Scrolled to the bottom, 499: collapse gives 320 (= max) and expand gives 418 (max
+    499). There is no blank space at any step.
+- **Dev browsing, re-run with the working spy:** all nine tracks, every card clicked, 0
+  writes, 0 errors, no upsell. The spy's own control, a heart click, logged
+  `sr-saved-v1`.
+
+### Reported, not fixed
+
+1. **Rail rows** — listed above. 3 rows fit fully inside the 316px cap before the fade,
+   and a 4th sits in it.
+2. **The mask fade lands mid-label** — at 278px, inside elevation-series' name
+   (267–284). It does not fall on a row edge.
+3. **The four new glyphs at 23px** (rasterised at true size with the live stroke, colour
+   and opacity, then enlarged):
+   - addiction-recovery — reads as a broken chain link (an "unlink" icon). **Holds.**
+   - executive-presence — reads as a balance scale. **Holds.**
+   - relationship-healing — reads as two brackets facing across a gap, `‹ ›` with tails.
+     It separates clearly from sex-and-intimacy's two rings. It could also be taken for
+     a code-bracket or "collapse" icon. **Holds, weakly.**
+   - strength-and-return — two uprights and a bar over a floor line. It reads more as a
+     hurdle or squat rack than a barbell, because the plates are single strokes.
+     **Weakest of the four. Not redrawn, per the brief.**
+4. **Blend with the filter** — correct. The cover's `filter` makes an isolated group, and
+   the img (z −1) is inside it, so `mix-blend-mode:color` blends with the photograph, as
+   intended. What it does not reach is the page behind the cover, which is irrelevant
+   here. A side-by-side with and without the tint showed a visible per-track cast
+   (violet, rose, blue, green). No wrapper is needed.
+5. **Post-filter mean brightness**, measured with the SR-458 method (filter maths over the
+   covers):
+
+   | Set | Mean at .62 | Mean at .82 | Darkest at .82 |
+   |---|---|---|---|
+   | sex-and-intimacy | 0.117 | 0.154 | 0.071 |
+   | sleep-and-recovery | 0.150 | 0.198 | 0.106 |
+
+   For reference, elevation-series goes 0.226 → 0.299.
+6. **Nine strip accents at 34%** — they read as **warm or cool families, not nine hues**.
+   The photographs are mostly golden-hour, so the colour blend is subtle.
+   - Separable: elevation (violet), sex-and-intimacy (rose), sleep (blue), embodied
+     (olive).
+   - Hard to tell apart: executive-presence vs sleep-and-recovery (two blues),
+     entrepreneurs-journey vs money-shift (two ambers), strength-and-return vs
+     embodied-nutrition (two greens).
+7. **Not verified in a real page** (harness only, or not at all):
+   - Every dashboard check above ran in a harness page with stubbed auth and media
+     scripts, not the served site, and all the pixel reads came from the harness.
+   - B3's `transitionend` path — only the timeout fallback ran (see above).
+   - The strip images at their real 240×320 resolution; the harness embedded 84×112.
+   - The coming-soon lock plate: on `coming-soon.html` it is 13px, while
+     `member-coming-soon.html` has 4px. In the harness it overflowed the 56px cover and
+     was clipped to "ERISE". Its layout context in the real page was not checked, and
+     it predates this pass.
+   - The 23px glyph and colour judgements are visual reads of enlarged rasters.
+
+### D3 contrast and distinctness
+
+- `#C08A2E` on the rail: **6.17:1** (#D4A843 was 8.46; entrepreneurs-journey #C9885A is
+  6.38).
+- ΔE2000 against entrepreneurs-journey is 11.3 at full strength and 8.4 in the graded
+  dev state. Against track 1's `#D4A843` it is 9.2 (it was 0).
+- At 23px, selected, the two read as amber vs copper, and the glyphs differ entirely
+  (circle-arrows vs flag). At rest both grade to muted browns, and money-shift's
+  #C08A2E and #D4A843 look nearly the same. There, identity rests on the glyph.
+- Judged not a collision, so D3 was applied.
+- **Left:** the 20 inline fallback gradients on the money-shift strip spans (10 per
+  page) still hardcode `#D4A843`. They show only if a cover fails to load. The brief
+  lists `--ac` as the page declaration, and these are separate literals, so they are a
+  follow-up.
+
+### D2 — other font sizes under 11px in `saferise-dashboard.css` (23, not changed)
+
+Lines 91 (8px), 135 (9.5), 139 (10), 409 (9.5), 442 (10.5), 443 (9), 459 (10.5), 511
+(10.5), 520 (10), 685 (10), 710 (10.5), 720 (10.5), 727 (10.5), 841 (10), 847 (9.5), 1011
+(10), 1015 (10), 1065 (10.5), 1103 (10), 1106 (10.5), 1117 (9), 1162 (10.5), 1338 (10).
+Most are uppercase tracked kickers (`-kick`, `-label`, `-date`). None is in the rail or the
+dev card.
+
+### C2, restated for the next pass
+
+A no-borders fix to `.sr-dash-card .sr-pcover` should convert it to an inset ring and make
+the hover a `box-shadow`. At that point a `.sr-dash-devcard` hover override becomes
+meaningful.
