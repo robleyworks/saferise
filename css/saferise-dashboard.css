@@ -272,8 +272,11 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
    hovers nor looks pressable. The "In development" line stays visible in
    the chip row too, where the other chips' meta line is hidden; without
    it a greyed chip would be the only signal. */
-.sr-dash-railbtn.sr-dash-raildev{opacity:1;pointer-events:none;cursor:default;
-  color:var(--text3)}
+.sr-dash-railbtn.sr-dash-raildev{opacity:1;color:var(--text3)}
+/* SR-460 (PASS-AQ §5) · dev buttons are selectable now (pointer-events and
+   cursor:default dropped). One left inert only when its titles failed to
+   load, which is when addDevTracksToRail() still writes aria-disabled. */
+.sr-dash-railbtn.sr-dash-raildev[aria-disabled="true"]{pointer-events:none;cursor:default}
 /* SR-459 (PASS-AO §3c) · the grade replaces SR-454's flat opacity:.5 (the
    note above describes the old rule), which dimmed the label below 4.5:1.
    Each button carries its own --tk (set
@@ -284,6 +287,10 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
 .sr-dash-raildev .sr-dash-railname{color:var(--text3)}
 .sr-dash-railbtn:not(.sr-dash-raildev) .sr-dash-railico{stroke:var(--tk);opacity:.9}
 .sr-dash-railbtn:not(.sr-dash-raildev).on .sr-dash-railico{opacity:1}
+/* SR-460 (PASS-AQ §5) · a selected dev tab strokes in its own --tk at full
+   strength, like a live one; without this .on's stroke:var(--accent)
+   outranks the grade and paints it the inherited gold. */
+.sr-dash-railbtn.sr-dash-raildev.on .sr-dash-railico{stroke:var(--tk);opacity:1}
 @media(max-width:1000px){.sr-dash-raildev .sr-dash-railmeta{display:block;margin-top:0}}
 
 /* SR-421 (PASS-dashboard-F2-F4.md Part F2) · library search, a second and
@@ -380,6 +387,14 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
    always lands on the same baseline. Already its own class, not a shared token. */
 .sr-dash-cardname{font-size:1.05rem;color:var(--text);line-height:1.3;letter-spacing:.01em;margin-top:14px;height:2.6em;overflow:hidden}
 .sr-dash-locked .sr-pcover{filter:saturate(.3) brightness(.62)}
+/* SR-460 (PASS-AQ §7) · a card for a track that is not written. No filter
+   or opacity on the whole card — the cover is already graded by
+   .sr-dash-locked above. font-size:11px lifts the shared .sr-dash-lock's
+   10.5px to the type floor for this card only (the shared rule is left
+   alone; it governs every Locked chip). */
+.sr-dash-devcard{cursor:default}
+.sr-dash-devcard .sr-dash-cardname{color:var(--text2)}
+.sr-dash-devcard .sr-dash-lock{color:var(--text3);font-size:11px}
 .sr-dash-lock{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);min-height:32px}
 .sr-dash-lock svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.4}
 /* current-step ribbon, the only overlay a cover ever carries */

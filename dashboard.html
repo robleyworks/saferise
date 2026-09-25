@@ -852,6 +852,12 @@
      every track's name is written; the nine in-development tracks in the
      library rail read their names from it. No image is taken from it here. -->
 <script src="content/track-images.js"></script>
+<!-- SR-460 (PASS-AQ §1) · the ten protocol titles and the kicker for each of
+     the nine in-development tracks, lifted from coming-soon.html's
+     .sr-cs-list. Read by buildDashTracks() behind a typeof guard: if this
+     file fails to load, those tracks fall back to SR-454's empty,
+     non-rendering state rather than throwing. -->
+<script src="content/dev-protocols.js"></script>
 <!-- SR-393 · meditation player data + engine, supplied verbatim. Must load
      before the inline script below, which calls SRMedPlayer.open(). -->
 <script src="content/meditation.js"></script>
@@ -962,6 +968,18 @@
     'money-shift':           {dev:true, state:'in development'},
     'addiction-recovery':    {dev:true, state:'in development'}
   };
+  /* SR-459 (PASS-AO §3b) · each dev track's accent, from the coming-soon
+     pages' own --ac. SR-460 (PASS-AQ §2) moved it up here from beside
+     TRACKICON so buildDashTracks() can read it too: declared down there, it
+     was hoisted but still undefined when DASHTRACKS was built. One map for
+     the rail button's --tk and the carousel row's --accent, so the row
+     tints to match the track just clicked — PASS-AQ's DEVACCENT would
+     have been a second copy of these nine values. */
+  var TRACKTK = {
+   'elevation-series':'#9B86D6', 'sex-and-intimacy':'#D4879A', 'executive-presence':'#7BA3CC',
+   'strength-and-return':'#7FA88C', 'sleep-and-recovery':'#5D7BB5', 'embodied-nutrition':'#A8B87A',
+   'entrepreneurs-journey':'#C9885A', 'money-shift':'#D4A843', 'addiction-recovery':'#4E9AA6'
+  };
   function devTrackName(slug){
     var rec = (typeof TRACK_IMAGES === 'object' && TRACK_IMAGES) ? TRACK_IMAGES[slug] : null;
     return rec && rec.name ? rec.name : slug;
@@ -973,9 +991,19 @@
       /* SR-454 · never read TRACKS for a dev track (see TRACKMETA above) —
          items stays an empty list so nothing iterating it can throw, and
          dev:true is what every consumer checks; render() refuses it. */
+      /* SR-460 (PASS-AQ §2) · a dev track now carries its ten titles and
+         kicker when content/dev-protocols.js is loaded. items stays a flat
+         list of STRINGS, not the live [label, slug] pairs: a dev protocol
+         has no page and so no slug, and a fake one would make an
+         unreachable route look real. devCardHTML() reads this shape;
+         cardHTML() is never handed it. Missing file or slug: items:[] and
+         render() refuses it, exactly as before. */
       if(m.dev){
-        out[k] = { dev: true, slug: k, name: devTrackName(k), accent: null, cls: '',
-                   note: devTrackName(k) + ' \u00B7 ' + m.state, unlocked: false, items: [] };
+        var dp = (typeof DEV_PROTOCOLS === 'object' && DEV_PROTOCOLS) ? DEV_PROTOCOLS[k] : null;
+        out[k] = { dev: true, slug: k, name: devTrackName(k), accent: TRACKTK[k] || null, cls: '',
+                   kick: dp ? dp.kick : '',
+                   note: devTrackName(k) + ' \u00B7 ' + m.state, unlocked: false,
+                   items: (dp && Array.isArray(dp.items)) ? dp.items : [] };
         return;
       }
       var src = TRACKS[k] || {};
@@ -1062,9 +1090,9 @@
   var note = document.getElementById('srTrackNote');
   /* SR-454 (PASS-AI §3) · the nine in-development tracks join the rail,
      after the three written ones, built from TRACKMETA rather than typed
-     out. Not clickable and out of the tab order: aria-disabled, tabindex
-     -1, no click handler (they are excluded from `rail` below), and the
-     account.html disabled pattern in CSS. Their state is in the visible
+     out. SR-460 (PASS-AQ §5) · now selectable tabs like the other three:
+     aria-disabled and tabindex -1 are gone, `rail` below takes all twelve,
+     and choosing one browses its ten titles as locked cards. Their state is in the visible
      text and the accessible name, so a screen reader in browse mode still
      hears it. Icon: the nav panel's own "What's coming" mark (SR-333,
      js/saferise-rail.js ICONS.coming), not a new one.
@@ -1085,11 +1113,6 @@
    'money-shift':'<circle cx="12" cy="12" r="7.2"/><path d="M8.8 10.6h6.4l-2-2"/><path d="M15.2 13.4H8.8l2 2"/>',
    'addiction-recovery':'<path d="M6 18c5-2 7-5 7-9"/><path d="M18 18c-5-2-7-5-7-9"/><path d="M4.5 20.5h15"/>'
   };
-  var TRACKTK = {
-   'elevation-series':'#9B86D6', 'sex-and-intimacy':'#D4879A', 'executive-presence':'#7BA3CC',
-   'strength-and-return':'#7FA88C', 'sleep-and-recovery':'#5D7BB5', 'embodied-nutrition':'#A8B87A',
-   'entrepreneurs-journey':'#C9885A', 'money-shift':'#D4A843', 'addiction-recovery':'#4E9AA6'
-  };
   function trackIcon(slug){
     return '<svg class="sr-dash-railico" viewBox="0 0 24 24" aria-hidden="true">' +
       (TRACKICON[slug] || TRACKICON['elevation-series']) + '</svg>';
@@ -1109,14 +1132,18 @@
       var t = DASHTRACKS[k];
       if(!t.dev) return;
       html += '<button type="button" class="sr-dash-railbtn sr-dash-raildev" role="tab" aria-selected="false"' +
-        ' aria-disabled="true" tabindex="-1" data-dev="' + k + '" style="--tk:' + (TRACKTK[k] || 'var(--text3)') + '"' +
+        (t.items.length ? '' : ' aria-disabled="true"') +
+        ' data-dev="' + k + '" style="--tk:' + (TRACKTK[k] || 'var(--text3)') + '"' +
         ' aria-label="' + esc(t.name) + ', in development">' +
         trackIcon(k) + '<span><span class="sr-dash-railname">' + esc(t.name) + '</span>' +
         '<span class="sr-dash-railmeta">In development</span></span></button>';
     });
     railBox.insertAdjacentHTML('beforeend', html);
   })();
-  var rail = document.querySelectorAll('.sr-dash-railbtn:not(.sr-dash-raildev)');
+  /* SR-460 (PASS-AQ §5) · all twelve — the :not(.sr-dash-raildev) is gone.
+     A button's key is data-track (1-3) or data-dev (the slug). */
+  var rail = document.querySelectorAll('.sr-dash-railbtn');
+  function railKey(b){ return b.getAttribute('data-track') || b.getAttribute('data-dev'); }
   var prev = document.querySelector('.sr-dash-carprev');
   var next = document.querySelector('.sr-dash-carnext');
   var ARROW = '<svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg>';
@@ -1227,6 +1254,23 @@
       '<h3 class="sr-dash-cardname">'+esc(cardTitle(it[1]))+'</h3>'+action+'</article>';
   }
 
+  /* SR-460 (PASS-AQ §4) · a card for a track that is not written. Differs
+     from cardHTML() on purpose: no data-open (no page to open), no heart
+     (saving would write a record pointing at nothing), the track kicker as
+     the label on all ten, "In development" rather than "Locked" (locked is
+     bought-but-not-yours; this is not built), and the 240x320 .webp from
+     assets/coming/protocol/ — there is no -640 derivative and none is
+     needed at 176px. t.items[i] is a plain string here, not a pair. */
+  function devCardHTML(n, i){
+    var t = DASHTRACKS[n], no = String(i+1).padStart(2,'0');
+    var src = 'assets/coming/protocol/' + n + '-' + no + '.webp';
+    return '<article class="sr-dash-card sr-dash-locked sr-dash-devcard"' +
+      ' data-track="' + n + '" data-no="' + no + '" data-src="' + src + '">' +
+      SafeRiseCover.art({ src: src, no: no, label: t.kick, extra: '' }) +
+      '<h3 class="sr-dash-cardname">' + esc(t.items[i]) + '</h3>' +
+      '<span class="sr-dash-lock">' + LOCK + 'In development</span></article>';
+  }
+
   /* Extracted from render() unchanged, so a locked-card click (F2/F3: "still
      opens the upsell on click", in any mode, not only when the whole track
      is being browsed) can show the same panel for whichever track the
@@ -1257,9 +1301,14 @@
        rail entries carry no handler); if anything ever does, the carousel
        stays on the track it was showing rather than rendering an empty
        row as though the track were empty. */
-    if(!t || t.dev) return;
-    CURRENT_TRACK = +n;
-    row.className = 'sr-dash-carrow ' + t.cls;
+    /* SR-460 (PASS-AQ §3) · a dev track with titles now renders, as ten
+       locked cards; the guard above survives only for the empty case
+       (dev-protocols.js missing, or no entry for that slug). CURRENT_TRACK
+       holds the slug for a dev track — `+n` would make it NaN. */
+    if(!t) return;
+    if(t.dev && !t.items.length) return;
+    CURRENT_TRACK = t.dev ? n : +n;
+    row.className = t.dev ? 'sr-dash-carrow sr-dash-cardev' : 'sr-dash-carrow ' + t.cls;
     row.style.setProperty('--accent', t.accent);
     note.textContent = t.note;
 
@@ -1269,14 +1318,16 @@
        If a future track ever ships with no protocols, restore a guard here with
        that track's own copy, not the retired one's. */
 
-    var CARDS = t.items.map(function(it,i){ return cardHTML(n, i); }).join('');
+    var CARDS = t.items.map(function(it,i){ return t.dev ? devCardHTML(n, i) : cardHTML(n, i); }).join('');
     // Two identical sets. The flow runs forward only; when it has travelled the
     // width of one set we subtract that width with no animation, so the loop is
     // seamless — no reversal, no jump back, nothing that reads as a dip.
     row.innerHTML = t.items.length > 3 ? CARDS + CARDS : CARDS;
     row.setAttribute('data-doubled', t.items.length > 3 ? '1' : '0');
 
-    showLockCta(n);
+    /* SR-460 · never the upsell for a dev track: that panel offers to add
+       the track to the plan, and these cannot be bought at any price. */
+    if(t.dev) hideLockCta(); else showLockCta(n);
     pos = 0; apply();
     sync();
     if(typeof updateCount === 'function') updateCount();
@@ -1295,6 +1346,9 @@
 
   rail.forEach(function(b){
     b.addEventListener('click', function(){
+      /* SR-460 · a dev track with no titles (dev-protocols.js absent) keeps
+         SR-454's behaviour: not selectable, nothing moves. */
+      if(b.getAttribute('aria-disabled') === 'true') return;
       /* SR-421 · a direct track pick is an explicit "back to normal
          browsing" action — clears whatever search/filter state was active
          rather than leaving the rail's own selection out of sync with it.
@@ -1305,7 +1359,12 @@
       setChip('all');
       rail.forEach(function(x){ x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
       b.classList.add('on'); b.setAttribute('aria-selected','true');
-      var n = b.getAttribute('data-track');
+      syncRailTabindex();
+      var n = railKey(b);
+      /* SR-460 (PASS-AQ §5) · a dev track has no JOURNEY entry (it is keyed
+         1-3), so the journey section is left on the last written track
+         rather than handed a slug it cannot render. */
+      if(DASHTRACKS[n].dev){ render(n); return; }
       b.style.setProperty('--accent', DASHTRACKS[n].accent);
       document.getElementById('srJourney').style.setProperty('--accent', DASHTRACKS[n].accent);
       render(n);
@@ -1313,6 +1372,42 @@
       paintFoldTitle();           /* SR-373 · no longer track-dependent — see its own definition */
     });
   });
+
+  /* SR-460 (PASS-AQ §5) · roving tabindex + arrow keys across all twelve.
+     There was no arrow-key handler before this pass: every rail button sat
+     in the tab order and Tab walked through them one by one. Now one stop
+     only — the selected tab (or the first, when a search/filter has
+     deselected them all). Arrows (either axis: the rail is a column above
+     1000px and a chip row below it), Home and End move focus; Enter/Space
+     activate through the button's own click. Leaving the rail resets the
+     stop to the selected tab, so Tab back in lands on it. */
+  function syncRailTabindex(){
+    var sel = null;
+    rail.forEach(function(x){ if(x.classList.contains('on')) sel = x; });
+    if(!sel) sel = rail[0];
+    rail.forEach(function(x){ x.setAttribute('tabindex', x === sel ? '0' : '-1'); });
+  }
+  var railBoxEl = document.querySelector('.sr-dash-rail');
+  if(railBoxEl){
+    railBoxEl.addEventListener('keydown', function(e){
+      var list = Array.prototype.slice.call(rail);
+      var i = list.indexOf(document.activeElement);
+      if(i === -1) return;
+      var j = null;
+      if(e.key === 'ArrowDown' || e.key === 'ArrowRight') j = (i + 1) % list.length;
+      else if(e.key === 'ArrowUp' || e.key === 'ArrowLeft') j = (i - 1 + list.length) % list.length;
+      else if(e.key === 'Home') j = 0;
+      else if(e.key === 'End') j = list.length - 1;
+      if(j === null) return;
+      e.preventDefault();
+      list.forEach(function(x, k){ x.setAttribute('tabindex', k === j ? '0' : '-1'); });
+      list[j].focus();
+    });
+    railBoxEl.addEventListener('focusout', function(e){
+      if(!railBoxEl.contains(e.relatedTarget)) syncRailTabindex();
+    });
+  }
+  syncRailTabindex();
 
   // ══════════ SR-421/SR-422 (PASS-dashboard-F2-F4.md Parts F2/F3) ══════════
   // Search across every track, the Saved/Recently-used/In-my-plan filter
@@ -1406,15 +1501,17 @@
   function refreshLibrary(){
     if(!inCombinedMode()){
       rail.forEach(function(x){
-        var on = x.getAttribute('data-track') === String(CURRENT_TRACK);
+        var on = railKey(x) === String(CURRENT_TRACK);
         x.classList.toggle('on', on);
         x.setAttribute('aria-selected', String(on));
       });
+      syncRailTabindex();
       render(CURRENT_TRACK);
       updateSavedCount();
       return;
     }
     rail.forEach(function(x){ x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
+    syncRailTabindex();
     var list = collectList();
     if(!list.length){
       row.className = 'sr-dash-carrow';
@@ -3166,6 +3263,10 @@
     }
     var card = e.target.closest('.sr-dash-card');
     if(!card) return;
+    /* SR-460 (PASS-AQ §6) · a dev card is inert: no page, no upsell, no
+       state. Returns before the locked branch (showLockCta) and before
+       data-open, which it does not carry anyway. */
+    if(card.classList.contains('sr-dash-devcard')) return;
     /* SR-421 · "locked cards do nothing" above was true before this pass —
        F2/F3 need a locked cover (which can now belong to a track other than
        CURRENT_TRACK, in a mixed search/filter result) to open the upsell
