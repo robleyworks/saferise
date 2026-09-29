@@ -10,6 +10,10 @@
 /docs/*     /404.html   404!
 /pass/*     /404.html   404!
 /scripts/*  /404.html   404!
+# SR-469 · server code and its unit tests are not pages: the function's
+# source (and the reading's prompt contract) must not be served as static files.
+/netlify/*  /404.html   404!
+/tests/*    /404.html   404!
 
 # SR-370 (PASS-split-execute.md §4) started this file. SR-372
 # (PASS-split-portals.md §§1/3) added the slug-based protocol route and

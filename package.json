@@ -1,0 +1,8 @@
+{
+  "name": "saferise",
+  "private": true,
+  "description": "Static site. Dependencies here are for Netlify Functions only (netlify/functions/); nothing is built for the pages.",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
