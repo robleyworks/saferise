@@ -25,7 +25,9 @@
              mastering chain at the shared peak target before installing.
    ═════════════════════════════════════════════════════════════════════════ */
 
-var MEDITATION_BASE = 'assets/audio/meditation/';
+/* SR-468 · root-relative: on the nested /protocols/{slug} route a relative
+   base resolved under /protocols/ and the meditation did not load at all. */
+var MEDITATION_BASE = '/assets/audio/meditation/';
 
 var MEDITATION = {
   't0-00': {
