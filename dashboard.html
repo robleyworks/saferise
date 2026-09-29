@@ -2934,7 +2934,7 @@
     strip.querySelectorAll('.sr-dash-chipres').forEach(function(b){
       var i = +b.getAttribute('data-i');
       if(RES[i] && RES[i][2] === 'Cue Card'){
-        b.addEventListener('click', function(e){ e.preventDefault(); openModal('crisis'); });
+        b.addEventListener('click', function(e){ e.preventDefault(); if(window.srFillCue) window.srFillCue(null); openModal('crisis'); });
       }
       var go = function(){ readRes(+b.getAttribute('data-i')); };
       b.addEventListener('click', go);
@@ -3172,6 +3172,41 @@
   }
 
   // the frame tells us how tall it is, so there is never a scrollbar inside it
+  /* SR-464 D2 [MR-25] · #mCrisis shows the Cue Card of the protocol that asked
+     for it: protocol.html posts that protocol's own four lines and cover with
+     open-cue. Without a protocol (the dashboard's own "Cue Card" tile, which
+     belongs to no protocol) the card's original generic lines and art are
+     restored, so nothing from a previous protocol lingers. The cover is used
+     only if it is a same-origin /assets/ URL. */
+  var srCueDefault = null;
+  function srFillCue(d){
+    var box = document.getElementById('mCrisis');
+    if(!box) return;
+    var art = box.querySelector('.sr-crisis-art img'), steps = box.querySelector('.sr-crisis-steps'), kick = box.querySelector('.sr-crisis-kick');
+    if(!srCueDefault) srCueDefault = { art: art && art.getAttribute('src'), steps: steps && steps.innerHTML, kick: kick && kick.textContent };
+    var lines = d && d.lines && d.lines.length ? d.lines.slice(0, 4) : null;
+    if(!lines){
+      if(art) { art.setAttribute('src', srCueDefault.art); art.style.display = ''; }
+      if(steps) steps.innerHTML = srCueDefault.steps;
+      if(kick) kick.textContent = srCueDefault.kick;
+      return;
+    }
+    var coverOk = typeof d.cover === 'string' && d.cover.indexOf(location.origin + '/assets/') === 0;
+    if(art && coverOk) { art.setAttribute('src', d.cover); art.style.display = ''; }
+    if(steps){
+      steps.innerHTML = '';
+      lines.forEach(function(l, k){
+        var li = document.createElement('li'), b = document.createElement('b'), span = document.createElement('span'), em = document.createElement('em');
+        b.textContent = (k < 9 ? '0' : '') + (k + 1);
+        em.textContent = l.name ? l.name + '.' : '';
+        span.appendChild(em);
+        span.appendChild(document.createTextNode((l.name ? ' ' : '') + (l.text || '')));
+        li.appendChild(b); li.appendChild(span); steps.appendChild(li);
+      });
+    }
+    if(kick) kick.textContent = srCueDefault.kick + (d.protocol ? ' \u00b7 ' + d.protocol : '');
+  }
+  window.srFillCue = srFillCue;
   window.addEventListener('message', function(e){
     var d = e.data;
     if(!d || !d.sr) return;
@@ -3181,7 +3216,7 @@
     if(d.type === 'open-resource')    loadResource(d.name);
     if(d.type === 'resource-opened')  crumb(d.name);
     if(d.type === 'back-to-protocol') loadProtocol();
-    if(d.type === 'open-cue')          openModal('crisis');
+    if(d.type === 'open-cue')          { srFillCue(d); openModal('crisis'); }
     // PASS-CLAUDE-CODE-shapes-and-nav.md, Part B2 · resource.html's own
     // "Open the journal" link, embedded — same view the dashboard's own
     // "Read everything you have written" button opens (openModal('journal')

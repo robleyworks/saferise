@@ -2030,10 +2030,38 @@ seedArrivalState();calcDelta();
     if(d && d.sr && d.type === 'theme') applyTheme(d.mode);
   });
 
+  /* SR-464 D2 [MR-25] · the Cue Card is this protocol's own. It used to post
+     open-cue with no protocol at all, so the shell could only ever show its
+     one static card — Anxiety Reset's art and lines — for every protocol.
+     Resolved here, where the page already knows its protocol and has the
+     track's resources loaded: the <proto>-crisiscard record's front lines
+     (.sr-cue-line) and the protocol's own cover. */
+  function cueCard(){
+    var P = (typeof PAGE_PROTOCOL !== 'undefined') ? PAGE_PROTOCOL : null;
+    var m = P && /^t(\d)-p(\d+)$/.exec(P.protocolId);
+    if(!m) return {};
+    var track = +m[1], n = +m[2], no = (n < 10 ? '0' : '') + n;
+    var R = window['T' + track + '_RESOURCES'];
+    var rec = R && R['t' + track + 'p' + n + '-crisiscard'];
+    var lines = [];
+    if(rec && rec.body){
+      var tmp = document.createElement('div');
+      tmp.innerHTML = [].concat(rec.body).join('');
+      Array.prototype.forEach.call(tmp.querySelectorAll('.sr-cue-line'), function(line){
+        var head = line.querySelector('strong');
+        var name = head ? head.textContent.trim() : '';
+        if(head) head.parentNode.removeChild(head);
+        lines.push({ name: name, text: line.textContent.replace(/^\s*[\u2014\u2013-]\s*/, '').trim() });
+      });
+    }
+    var cover = (window.SafeRiseCover && SafeRiseCover.coverPath) ? SafeRiseCover.coverPath(track, no) : '';
+    return { protocolId: P.protocolId, protocol: P.protocol || '', cover: cover ? new URL(cover, location.href).href : '', lines: lines };
+  }
+
   // resource links inside the protocol page open the reader in the shell
   document.addEventListener('click', function(e){
     var cue = e.target.closest('[data-sr-open="cue"]');
-    if(cue){ e.preventDefault(); post('open-cue'); return; }
+    if(cue){ e.preventDefault(); post('open-cue', cueCard()); return; }
     var go = e.target.closest('.res .go, .resource-item, [data-resource]');
     if(go){
       var row  = go.closest('.res') || go;
