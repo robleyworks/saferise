@@ -36,8 +36,9 @@
     stage.appendChild(el('div', 'sr-medplayer__vig'));
     stage.appendChild(el('div', 'sr-medplayer__grain'));
 
-    var close = el('button', 'sr-medplayer__close', '&#10005;');
-    close.setAttribute('aria-label', 'Close');
+    /* SR-464 D5 [MR-18] · labelled, not a bare X (see sr-clearing-player.css). */
+    var close = el('button', 'sr-medplayer__close', '<span aria-hidden="true">&#10005;</span><span>Close</span>');
+    close.setAttribute('aria-label', 'Close The Clearing');
     stage.appendChild(close);
 
     var play = el('button', 'sr-medplayer__play');
