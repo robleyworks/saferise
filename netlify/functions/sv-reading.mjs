@@ -76,6 +76,9 @@ export default async (req) => {
       model: env('SR_READING_MODEL'),
       timeoutMs: +env('SR_READING_TIMEOUT_MS', 8000)
     }, payload, { fetch, AbortController, contract }),
+    /* Token counts only — never content — so per-reading cost can be read
+       from the function log (V13). */
+    onUsage: (u) => console.log('sv-reading usage', JSON.stringify({ input_tokens: u.input_tokens, output_tokens: u.output_tokens })),
     now: () => Date.now(),
     limits: { perDay: +env('SR_READING_LIMIT_DAY', 4), per30Days: +env('SR_READING_LIMIT_30D', 40) }
   };

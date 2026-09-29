@@ -155,6 +155,7 @@
           return Promise.resolve(deps.limitStore.set(key, c.record)).then(function () {
             return deps.callModel(shaped.payload).then(function (r) {
               if (!r || !r.ok) return { status: 200, body: { status: 'unavailable', reason: classifyProviderFailure(r) } };
+              if (deps.onUsage && r.usage) { try { deps.onUsage(r.usage); } catch (e) {} }
               var v = validateReading(r.text, shaped.payload);
               if (v.error) return { status: 200, body: { status: 'unavailable', reason: 'malformed' } };
               return { status: 200, body: { status: 'ok', reading: v.reading, bridge: v.bridge, dropped: v.dropped.length } };

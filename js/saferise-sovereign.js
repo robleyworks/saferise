@@ -196,7 +196,10 @@
 
   /* ── Flag ──────────────────────────────────────────────────────────────── */
   var flagOn = !!(global.SR_FLAGS && global.SR_FLAGS.sovereign === true);
-  var devHost = /^(localhost|127\.0\.0\.1|\[::1\])$|\.(localhost|test)$/.test(location.hostname);
+  /* SR-469 · also Netlify deploy previews (deploy-preview-N--<site>.netlify.app),
+     so the live verification can run before the real flag flips. Never the
+     production hostname. */
+  var devHost = /^(localhost|127\.0\.0\.1|\[::1\])$|\.(localhost|test)$|^deploy-preview-\d+--[a-z0-9-]+\.netlify\.app$/.test(location.hostname);
   if (!flagOn && devHost) {
     var q = /[?&]sovereign=([01])/.exec(location.search);
     if (q) LocalStore.set(KEYS.enabled, q[1] === '1');
