@@ -1990,13 +1990,10 @@
       var wrap = btn.closest('.sr-sum-acts, .sr-cadence');
       (wrap || btn).style.display = 'none';
     });
-    var resumeCard = document.getElementById('srResumeSlot');
-    resumeCard = resumeCard && resumeCard.closest('.sr-begin-card--panel');
-    if(resumeCard){
-      resumeCard.style.display = 'none';
-      var row = resumeCard.closest('.sr-begin-row');
-      if(row) row.classList.add('sr-begin-row--2');
-    }
+    /* SR-464 D1 [MR-05] · the "Carry on" Resume card is no longer hidden
+       here by the flag: buildResume() below renders it exactly when
+       sr.resume holds a protocol, and removes it (never an empty or disabled
+       state) when it does not. */
   }
   srHideDeadViews();
 
@@ -3269,13 +3266,21 @@
     var act  = document.getElementById('srResumeAct');
     if(!slot) return;
     var r = Store.get('sr.resume', null);
+    /* SR-464 D1 [MR-05] · Resume renders only when the pointer holds a
+       protocol. Empty pointer: the card is not shown at all and the row
+       closes up to two columns — no empty or disabled state. (Nothing in the
+       repo writes sr.resume yet — SR-165 / SR-292 — so today that is every
+       visitor.) */
+    var card = slot.closest('.sr-begin-card--panel');
+    var row = card && card.closest('.sr-begin-row');
     if(!r || !r.protocol){
-      slot.innerHTML = srEmpty('Nothing to pick up yet',
-        'Once you leave a protocol part-way through, it waits for you here.',
-        'Choose a protocol', 'protocol.html');
+      if(card) card.style.display = 'none';
+      if(row) row.classList.add('sr-begin-row--2');
       if(act) act.hidden = true;
       return;
     }
+    if(card) card.style.display = '';
+    if(row) row.classList.remove('sr-begin-row--2');
     /* SR-191 · the resume card names where you left off, it does not measure it.
        The test is WHAT THE STRING COUNTS, not which page it sits on: a count of
        the member is prohibited on every surface, a count of the library is not.
