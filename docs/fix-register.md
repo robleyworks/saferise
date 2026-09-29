@@ -22978,3 +22978,50 @@ file modified.
   the rail or the gate are identical at root depth (requests and every resolved link)
   before and after.
 - **Not verified on a Netlify deploy preview** — that needs a push.
+
+## SR-469 — SOV-4: the framework reading (flag still off)
+
+29 September 2026. Commits `c9f7c1b` (A), `e309f31` (B–E), `d4a756b` (F1), `00edba7`
+(E1 settings), `1fa5eaa` (usage log, preview override). No push. **The flag is not
+flipped**: live verification needs a Netlify deploy preview — handover in
+`docs/SOV-4-PREVIEW-HANDOVER.md`.
+
+- **Provider:** Anthropic, `claude-haiku-4-5`, Messages API over plain `fetch`
+  behind one interface; endpoint, key and model are each an environment variable
+  (`SR_READING_ENDPOINT`, `SR_READING_API_KEY`, `SR_READING_MODEL`); another wire
+  format is one added style in `lib/provider.js`.
+- **Zero retention — UNVERIFIED.** Governed by the Anthropic organisation/workspace
+  data-retention setting, arranged with Anthropic; not a request parameter. Pending
+  the founder's confirmation on the account. No copy claims it; the privacy
+  paragraph (handover §3) leaves the retention sentence as a placeholder.
+- **A1** key only in `process.env`; no key, key header or `process.env` in any
+  client-delivered file; `/netlify/*` and `/tests/*` 404 as static files.
+- **A3** request payload: `{pre, post, transcript:[{phase, text}]}` — nothing else.
+- **A4** 4 readings per member per rolling 24 h, 40 per rolling 30 days, enforced in
+  the function against Netlify Blobs, keyed by a salted SHA-256 of the
+  Supabase-verified member id. Client fields cannot lift it (unit-tested).
+- **A5/B5** one call, hard timeout, no retry, no second provider; a block whose
+  quotes are not verbatim in the transcript, not from its claimed phase, quoting
+  unsaid words in its text, or using ruled-out phrasing is dropped. Unit tests:
+  52/52 (browser runner; no Node here). Forced bad response: 5 of 7 blocks dropped
+  — invented quote, text quoting unsaid words, wrong source phase, therapy
+  register, duplicate lens.
+- **B1/R12** `machine.readingPayload()` throws in every state before SYNTHESIS.
+- **C** device-only record (`sr.sv.records`), editable and deletable in full, deleted
+  blocks tombstoned by lens; earlier sessions listed on the invite screen.
+- **D1** device-only footer claim removed; **D2** the four facts as ruled; **D3**
+  nothing found that said the reading was off by default; **D4** drafted, not
+  published.
+- **E** switch on the invite and close screens and in account settings; ON by
+  default; off = no request.
+- **F1** `allow="microphone"` on the dashboard protocol frame.
+- **Verified locally** (reading endpoint stubbed, since functions cannot run here):
+  V1, V2, V3, V5, V7 (down, timeout, limit), V8, V9, V10, V11, V12; V4 and V6 by unit
+  test. **Deferred to the preview:** V2/V3/V6/V7/V9 against the real function, V13
+  cost (logged token counts; estimate ≈ $0.003–0.005 per reading at Haiku 4.5
+  rates for a ~2–3k-token transcript).
+- **Not in the product yet:** an "Addressing the Issue" resource — the bridge names
+  it without a link.
+- **Noted for TIER-1:** that brief expects a shared `js/saferise-voice.js` "extracted
+  in SOV-4". SOV-4's brief did not ask for it and it does not exist; the voice
+  service is `js/saferise-sovereign-stt.js` (engine) used by `js/saferise-sovereign.js`.
