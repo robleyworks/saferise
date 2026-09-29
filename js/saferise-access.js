@@ -61,6 +61,94 @@
     return m ? m[1] : null;
   }
 
+  /* ── SR-470 (TIER-1) · the tier resolver — the single source of truth for
+     "what can this member do". Every gate calls it: hasAccess() below, the
+     voice service (js/saferise-sovereign-stt.js), the Sovereign session and
+     its reading (js/saferise-sovereign.js), the dashboard and account page.
+
+     The ladder (founder-set): free < standard < premium < sovereign.
+       free       the first track only
+       standard   the tracks released so far (STANDARD_TRACKS, fixed at the
+                  ladder's date — later releases are Premium's)
+       premium    every track, as it releases (every live track)
+       sovereign  premium + voice + the AI reading
+
+     WHERE THE TIER COMES FROM. There is no plan column yet: members has only
+     `entitled` (supabase/migrations/0001). Storing a tier is a schema change
+     and belongs to ORG-1, so until it lands:
+       - srAuth.plan(), if ORG-1 provides it, is read first;
+       - otherwise a signed-in, entitled member resolves to STANDARD — exactly
+         what €19 buys today — and everyone else to FREE.
+     Unknown or missing always resolves to FREE; an entitled member never
+     resolves below STANDARD, so a paying member is never locked out by a
+     missing or malformed tier. Premium and Sovereign become reachable when
+     ORG-1 records them.
+
+     ?srtier=free|standard|premium|sovereign simulates a tier for testing on
+     local hosts only (srIsDev) — like srmock, never on a public URL. Without
+     it the local bypass resolves to SOVEREIGN (everything), as hasAccess()
+     always has. */
+  var TIERS = ['free', 'standard', 'premium', 'sovereign'];
+  var FIRST_TRACK = 1;
+  var STANDARD_TRACKS = [1, 2, 3];   // released when the ladder was set, 29 September 2026
+
+  function liveTracks() {
+    var T = global.TRACKS, out = [];
+    if (T) Object.keys(T).forEach(function (k) { if (T[k] && T[k].status === 'live' && +k > 0) out.push(+k); });
+    return out.length ? out.sort(function (a, b) { return a - b; }) : STANDARD_TRACKS.slice();
+  }
+  function devTier() {
+    if (!srIsDev()) return null;
+    var m = /[?&]srtier=(free|standard|premium|sovereign)\b/.exec(global.location ? global.location.search : '');
+    try {
+      if (m) global.sessionStorage.setItem('sr.tier.dev', m[1]);
+      var kept = global.sessionStorage.getItem('sr.tier.dev');
+      return TIERS.indexOf(kept) >= 0 ? kept : null;
+    } catch (e) { return m ? m[1] : null; }
+  }
+  function storedTier() {
+    var p = global.srAuth && typeof global.srAuth.plan === 'function' ? global.srAuth.plan() : null;
+    return TIERS.indexOf(p) >= 0 ? p : null;
+  }
+  function resolve() {
+    var dt = devTier(), tier, source;
+    if (dt) { tier = dt; source = 'simulated'; }
+    else if (srIsDev()) { tier = 'sovereign'; source = 'local'; }
+    else {
+      var user = global.srAuth ? global.srAuth.user() : null;
+      var entitled = !!(global.srAuth && global.srAuth.entitled && global.srAuth.entitled());
+      var st = storedTier();
+      tier = user ? (st || 'free') : 'free';
+      if (user && entitled && TIERS.indexOf(tier) < 1) tier = 'standard';
+      source = !user ? 'none' : st ? 'plan' : (entitled ? 'entitlement' : 'none');
+    }
+    var rank = TIERS.indexOf(tier);
+    return {
+      tier: tier, rank: rank, source: source,
+      tracks: rank <= 0 ? [FIRST_TRACK] : rank === 1 ? STANDARD_TRACKS.slice() : liveTracks(),
+      voice: tier === 'sovereign',
+      reading: tier === 'sovereign'
+    };
+  }
+  function canAccessTrack(n) { return resolve().tracks.indexOf(+n) >= 0; }
+
+  /* SR-470 2.3 · a locked track is presented as locked — named, with the
+     membership that opens it and the way there — never as broken or empty.
+     One wording for every page that shows a lock. No counts. */
+  function lockedCopy(trackNumber) {
+    var n = +trackNumber, T = global.TRACKS && global.TRACKS[n];
+    var name = T && T.name ? T.name : 'This track';
+    var level = STANDARD_TRACKS.indexOf(n) >= 0 ? 'Standard' : 'Premium';
+    return {
+      title: name + ' is part of the membership.',
+      body: name + ' opens with ' + level + ' or above. The first track, Personal Transformation, is yours in full already.',
+      level: level,
+      href: '/checkout',
+      cta: 'See the memberships'
+    };
+  }
+  function can(capability) { return !!resolve()[capability]; }
+
   function currentUser() {
     if (!global.srAuth) return null;
     var u = global.srAuth.user();
@@ -72,10 +160,10 @@
   function hasAccess(id) {
     var mockTrack = srMockLockedTrack();
     if (mockTrack && typeof id === 'string' && id.indexOf('t' + mockTrack + '-') === 0) return false;
-    if (srIsDev()) return true;
-    if (isFree(id)) return true;
-    if (!global.srAuth) return false;
-    return !!currentUser() && !!global.srAuth.entitled();
+    if (srIsDev() && !devTier()) return true;
+    if (isFree(id)) return true;          // the first track stays open, signed in or not, as before
+    var m = /^t(\d+)-/.exec(typeof id === 'string' ? id : '');
+    return !!m && canAccessTrack(+m[1]);   // SR-470 · the resolver decides
   }
 
   /* PASS-protocol-access, Section B4 · one prompt, one place. Every gated
@@ -112,6 +200,12 @@
     currentUser: currentUser,
     isFree: isFree,
     hasAccess: hasAccess,
+    /* SR-470 · the tier resolver. */
+    TIERS: TIERS,
+    resolve: resolve,
+    canAccessTrack: canAccessTrack,
+    can: can,
+    lockedCopy: lockedCopy,
     isDev: srIsDev,
     gateHTML: gateHTML,
     signIn: signIn,
