@@ -796,8 +796,15 @@ body.reading #srLibrary{margin-top:22px}
 .sr-proto-allres:hover{color:var(--gold)}
 
 /* ── embedded design pane ── */
-.sr-proto-frame{width:100%;border:0;display:block;min-height:900px;background:var(--bg);
-  color-scheme:dark}
+/* SR-464 D4 [MR-22] · no color-scheme on the frame element. It was dark
+   while the frame's own document starts as about:blank (and is reset to it
+   on close), a light-scheme document. When the two differ, Chrome paints an
+   opaque canvas in the document's scheme behind it: a white rectangle on
+   every protocol open and close. With the element's scheme left as the
+   default, about:blank matches and stays transparent over this dark
+   background; protocol.html/resource.html declare their own dark scheme and
+   paint #0B0B11 from their first frame. */
+.sr-proto-frame{width:100%;border:0;display:block;min-height:900px;background:var(--bg)}
 .sr-proto-backbar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:20px var(--pad) 16px}
 .sr-theme--bar{margin-left:auto}
 /* SR-381 (PASS-live-site-defects.md Part F) · Dashboard/Protocol stacked,
