@@ -55,9 +55,16 @@
 
   var status = srAuth.status(); // {subscription_status, entitled_until} or null
   var entitled = srAuth.entitled();
-  var planLine = entitled
-    ? 'Full plan &mdash; status: ' + esc((status && status.subscription_status) || 'active')
-    : 'Personal Transformation only (free). No paid plan yet.';
+  /* SR-470 · the plan line comes from the tier resolver, not from a page-level yes/no. */
+  var TIER_LINE = {
+    free: 'Free &mdash; the first track, in full',
+    standard: 'Standard &mdash; the tracks released so far',
+    premium: 'Premium &mdash; every track, as it releases',
+    sovereign: 'Sovereign &mdash; every track, and your own voice'
+  };
+  var tier = SafeRiseAccess.resolve ? SafeRiseAccess.resolve().tier : (entitled ? 'standard' : 'free');
+  var planLine = (TIER_LINE[tier] || TIER_LINE.free) +
+    (entitled ? ' &mdash; status: ' + esc((status && status.subscription_status) || 'active') : '');
   var untilLine = (status && status.entitled_until)
     ? '<p class="sr-tp-body" style="margin-top:6px">Renews or ends: ' + esc(new Date(status.entitled_until).toLocaleDateString()) + '</p>'
     : '';
@@ -82,6 +89,9 @@
           ? 'Manage subscription opens once payments (Phase 4) are wired up &mdash; not yet.'
           : 'Upgrading opens once payments (Phase 4) are wired up &mdash; not yet.') +
       '</p>' +
+      /* SR-470 5.3 · said before any change of plan, so nobody assumes their words go with it. */
+      '<p class="sr-tp-body" style="margin-top:10px">If you move to a smaller plan: everything you have already said stays yours. You keep every session, transcript and reading &mdash; you just can&rsquo;t make new ones.</p>' +
+      '<p class="sr-tp-body" style="margin-top:6px"><a href="/checkout">See the memberships</a></p>' +
       '<div id="srSovereignSetting" style="margin-top:26px"></div>' +
       '<p style="margin-top:30px;padding-top:20px;box-shadow:inset 0 1px 0 var(--hair)">' +
         '<button type="button" class="sr-tp-pill" id="srSignOut">Sign out</button>' +

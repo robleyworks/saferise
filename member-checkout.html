@@ -57,34 +57,52 @@
 </header>
 
 <div class="sr-mi-page">
+  <!-- SR-470 (TIER-1) · the four-step ladder, founder-set, monthly. Scope in
+       words, never counts. The buttons stay disabled: this page takes no
+       payment yet (no rail is wired — see the SR-470 register entry). -->
   <div class="sr-mi-tiers">
-    <section class="sr-mi-panel" aria-labelledby="srTier19">
-      <span class="eyebrow" id="srTier19">The released tracks</span>
+    <section class="sr-mi-panel" aria-labelledby="srTierFree" data-sr-tier="free">
+      <span class="eyebrow" id="srTierFree">Free</span>
+      <p class="sr-mi-price">&euro;0</p>
+      <p class="sr-mi-per">with an account</p>
+      <ul class="sr-mi-list"><li>The first track, in full<em>Personal Transformation</em></li></ul>
+    </section>
+
+    <section class="sr-mi-panel" aria-labelledby="srTierStandard" data-sr-tier="standard">
+      <span class="eyebrow" id="srTierStandard">Standard</span>
       <p class="sr-mi-price" data-sr-price="t2">&euro;19</p>
-      <p class="sr-mi-per">a month, or <span data-sr-price-annual="t2">&euro;190</span> a year</p>
-      <ul class="sr-mi-list"><li>Personal Transformation<em>free with an account</em></li><li>Relationship Healing</li><li>Professional Performance</li></ul>
-      <p class="sr-mi-small">The Clearing and the Cue Cards are included at every tier, free included.</p>
+      <p class="sr-mi-per">a month</p>
+      <ul class="sr-mi-list"><li>The tracks released so far<em>Personal Transformation, Relationship Healing, Professional Performance</em></li></ul>
     </section>
 
-    <section class="sr-mi-panel sr-mi-tier--up" aria-labelledby="srTier29">
-      <span class="eyebrow" id="srTier29">Everything, as it releases</span>
+    <section class="sr-mi-panel sr-mi-tier--up" aria-labelledby="srTierPremium" data-sr-tier="premium">
+      <span class="eyebrow" id="srTierPremium">Premium</span>
       <p class="sr-mi-price">&euro;29</p>
-      <p class="sr-mi-per">a month, or &euro;290 a year</p>
-      <ul class="sr-mi-list"><li>Personal Transformation<em>free with an account</em></li><li>Relationship Healing</li><li>Professional Performance</li><li>Elevation Series<em>in development</em></li><li>Sex &amp; Intimacy<em>in development</em></li><li>Executive Presence<em>in development</em></li><li>Strength &amp; Return<em>in development</em></li><li>Sleep &amp; Recovery<em>in development</em></li><li>Embodied Nutrition<em>in development</em></li><li>Entrepreneur&rsquo;s Journey<em>in development</em></li><li>Money Shift<em>in development</em></li><li>Addiction Recovery<em>in development</em></li></ul>
-      <div class="sr-mi-row">
-        <a class="sr-mi-btn" id="srUpgrade" href="#" aria-disabled="true" tabindex="-1" aria-describedby="srUpgradeWhy">Move to &euro;29 a month</a>
-      </div>
-      <p class="sr-mi-small">Charged the difference for the rest of this month, then &euro;29 from your next date.</p>
-      <p class="sr-mi-small" id="srUpgradeWhy">Upgrading opens once payments (Phase 4) are wired up &mdash; not yet.</p>
+      <p class="sr-mi-per">a month</p>
+      <ul class="sr-mi-list"><li>Every track, as it releases<em>everything in Standard, and each new track the day it opens</em></li></ul>
+    </section>
+
+    <section class="sr-mi-panel sr-mi-tier--up" aria-labelledby="srTierSovereign" data-sr-tier="sovereign">
+      <span class="eyebrow" id="srTierSovereign">Sovereign</span>
+      <p class="sr-mi-price">&euro;39</p>
+      <p class="sr-mi-per">a month</p>
+      <ul class="sr-mi-list">
+        <li>Every track, and your own voice<em>everything in Premium</em></li>
+        <li>Speak instead of type<em>sessions, journal, statements, decisions, ratings</em></li>
+        <li>Transcription that never leaves your device<em>the audio is discarded as it is transcribed</em></li>
+        <li>An AI reading of what you said<em>what you returned to, what shifted, how you moved through Recognise, Regulate, Release and Rise</em></li>
+      </ul>
     </section>
   </div>
 
-  <div class="sr-mi-panel sr-mi-panel--gold">
-    <p>Most of the road map is still being written. The price does not change as tracks arrive and nothing new is charged for separately &mdash; but today the &euro;29 tier opens the same tracks as the &euro;19 one. It buys the road map, not extra sessions tonight.</p>
+  <div class="sr-mi-row">
+    <a class="sr-mi-btn" id="srUpgrade" href="#" aria-disabled="true" tabindex="-1" aria-describedby="srUpgradeWhy">Change membership</a>
   </div>
+  <p class="sr-mi-small" id="srUpgradeWhy">Changing membership opens once payments are wired up &mdash; not yet.</p>
+  <p class="sr-mi-small">The Clearing and the Cue Cards are included at every tier, free included.</p>
 
   <div class="sr-mi-panel sr-mi-panel--sage">
-    <p><strong>Moving down, or stopping, never deletes anything you have written.</strong> Your record lives on your device, not on our servers, so a change of plan cannot reach it. Tracks you no longer pay for close; the record of what you did in them does not.</p>
+    <p><strong>Everything you have already said stays yours.</strong> You keep every session, transcript and reading &mdash; you just can&rsquo;t make new ones. Tracks you no longer have close; the record of what you did in them does not.</p>
   </div>
 </div>
 </main>
@@ -96,9 +114,7 @@
   /* €19 tier from the pricing record, never typed twice */
   if (typeof PRICING !== 'undefined' && PRICING.t2) {
     var m = document.querySelector('[data-sr-price="t2"]');
-    var a = document.querySelector('[data-sr-price-annual="t2"]');
     if (m && PRICING.t2.amount) m.textContent = PRICING.t2.amount;
-    if (a && PRICING.t2.annual) a.textContent = String(PRICING.t2.annual).split(' ')[0];
   }
   var up = document.getElementById('srUpgrade');
   if (up) up.addEventListener('click', function (e) { e.preventDefault(); });
@@ -109,5 +125,16 @@
 <script src="/js/saferise-access.js"></script>
 <script src="/js/saferise-rail.js"></script>
 <script>SafeRiseRail.render('checkout');</script>
+<script>
+/* SR-470 · mark the member's own tier, from the resolver (never decided here). */
+(function () {
+  if (!window.SafeRiseAccess || !SafeRiseAccess.resolve) return;
+  Promise.resolve(SafeRiseAccess.ready).catch(function () {}).then(function () {
+    var t = SafeRiseAccess.resolve().tier;
+    var el = document.querySelector('[data-sr-tier="' + t + '"] .eyebrow');
+    if (el) el.insertAdjacentHTML('beforeend', ' &middot; your plan');
+  });
+})();
+</script>
 </body>
 </html>
