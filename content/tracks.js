@@ -172,7 +172,7 @@ var SHARED = {
   /* SR-213 · the one image slot that is not per-track. Four moments in
      sequence with no track cues, rendered identically on all three pages,
      so it is held once here rather than three times in TRACKS. */
-  art: { fourSteps: { src: 'assets/shared/four-steps.webp',
+  art: { fourSteps: { src: '/assets/shared/four-steps.webp',
                       ratio: '16/5',
                       brief: 'shared \u2014 four moments, no track cues' } },
   scope: 'SafeRise is a self-guided nervous-system tool, not a replacement for therapy or crisis care \u2014 many members use both together. It is a practical nervous-system tool you can use in daily life, alongside any other support you are receiving.'
@@ -344,12 +344,12 @@ var TRACKS = {
          sampled and the stops set so the worst case clears 4.5:1 against
          --text #F5EDD8. Re-measure if the image is replaced; a new photograph
          invalidates these numbers. */
-      hero:   { src: 'assets/t1/hero.webp',
+      hero:   { src: '/assets/t1/hero.webp',
                 ratio: '2400/1000',
                 brief: 'one person, right third \u2014 soft dark left half for type',
                 scrim: 'linear-gradient(96deg, rgba(11,11,18,.92) 0%, rgba(11,11,18,.84) 34%, rgba(11,11,18,.56) 62%, rgba(11,11,18,.22) 80%, transparent 94%)' },
 
-      band:   { src: 'assets/journey/t1-band.webp',
+      band:   { src: '/assets/journey/t1-band.webp',
                 ratio: '1400/380',
                 brief: 'one person alone: listening with headphones, writing, reading' },
       /* SR-415 (PASS-track-image-swap.md \u00a71) \u00b7 22 September 2026 \u2014 the
@@ -357,13 +357,13 @@ var TRACKS = {
          art on 22 Sep; these briefs described the retired images and are
          now corrected to describe what actually renders. ratio and src are
          unchanged and correct. */
-      cost:   { src: 'assets/t1/cost.webp',
+      cost:   { src: '/assets/t1/cost.webp',
                 ratio: '16/7',
                 brief: 'one woman across three settings \u2014 a kitchen argument, a dinner table she has gone quiet at, and a call she is not answering' },
-      range:  { src: 'assets/t1/range.webp',
+      range:  { src: '/assets/t1/range.webp',
                 ratio: '16/6',
                 brief: 'the same person three times \u2014 braced, settled, absent' },
-      change: { src: 'assets/t1/change.webp',
+      change: { src: '/assets/t1/change.webp',
                 ratio: '16/7',
                 brief: 'the same woman mid-sentence at an outdoor lunch, the table listening' }
     },
@@ -471,21 +471,21 @@ var TRACKS = {
          sampled and the stops set so the worst case clears 4.5:1 against
          --text #F5EDD8. Re-measure if the image is replaced; a new photograph
          invalidates these numbers. */
-      hero:   { src: 'assets/t2/hero.webp',
+      hero:   { src: '/assets/t2/hero.webp',
                 ratio: '2400/1000',
                 brief: 'two people, right third \u2014 soft dark left half for type',
                 scrim: 'linear-gradient(96deg, rgba(11,11,18,.88) 0%, rgba(11,11,18,.78) 36%, rgba(11,11,18,.48) 64%, rgba(11,11,18,.16) 82%, transparent 94%)' },
 
-      band:   { src: 'assets/journey/t2-band.webp',
+      band:   { src: '/assets/journey/t2-band.webp',
                 ratio: '1400/380',
                 brief: 'two people: one listening alone, one writing, both reading together' },
-      cost:   { src: 'assets/t2/cost.webp',
+      cost:   { src: '/assets/t2/cost.webp',
                 ratio: '16/7',
                 brief: 'two people in one room not looking at each other \u2014 evening, night, morning' },
-      range:  { src: 'assets/t2/range.webp',
+      range:  { src: '/assets/t2/range.webp',
                 ratio: '16/6',
                 brief: 'the same pair three times \u2014 one pressing, both settled, one gone' },
-      change: { src: 'assets/t2/change.webp',
+      change: { src: '/assets/t2/change.webp',
                 ratio: '16/7',
                 brief: 'two people at ease in a shared space, facing each other' }
       },
@@ -612,7 +612,7 @@ var TRACKS = {
          sampled and the stops set so the worst case clears 4.5:1 against
          --text #F5EDD8. Re-measure if the image is replaced; a new photograph
          invalidates these numbers. */
-      hero:   { src: 'assets/t3/hero.webp',
+      hero:   { src: '/assets/t3/hero.webp',
                 ratio: '2400/1000',
                 brief: 'one professional, right third \u2014 soft dark left half for type',
                 scrim: 'linear-gradient(96deg, rgba(11,11,18,.90) 0%, rgba(11,11,18,.84) 38%, rgba(11,11,18,.58) 66%, rgba(11,11,18,.22) 84%, transparent 94%)' },
@@ -628,7 +628,7 @@ var TRACKS = {
          is kept as the art note rather than as rendered placeholder text.
          The same file also fills dashboard.html's BAND[3], which until now fell
          through to three "band photograph pending" panels. */
-      band:   { src: 'assets/journey/t3-band.webp',
+      band:   { src: '/assets/journey/t3-band.webp',
                 ratio: '1400/380',
                 brief: 'corridor moments before the room, desk log, reading at day\u2019s end' },
       /* SR-415 (PASS-track-image-swap.md \u00a71) \u00b7 22 September 2026 \u2014 the
@@ -636,13 +636,13 @@ var TRACKS = {
          art on 22 Sep; these briefs described the retired images and are
          now corrected to describe what actually renders. ratio and src are
          unchanged and correct. */
-      cost:   { src: 'assets/t3/cost.webp',
+      cost:   { src: '/assets/t3/cost.webp',
                 ratio: '16/7',
                 brief: 'one man across three office moments \u2014 a confrontation, a conversation he is outside of, and a review he is being given' },
-      range:  { src: 'assets/t3/range.webp',
+      range:  { src: '/assets/t3/range.webp',
                 ratio: '16/6',
                 brief: 'the same professional before a meeting \u2014 braced, settled, absent' },
-      change: { src: 'assets/t3/change.webp',
+      change: { src: '/assets/t3/change.webp',
                 ratio: '16/7',
                 brief: 'the same man presenting, the room turned towards him' }
       },
