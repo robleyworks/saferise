@@ -434,8 +434,13 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
 
 /* ============ journey triptych — .journey / .jcols / .jopt from v29 ============ */
 .sr-dash-jpanel{padding:0;overflow:hidden}
-.sr-dash-jband{line-height:0;position:relative}
-.sr-dash-jband img{width:100%;height:auto;display:block}
+.sr-dash-jband{line-height:0;position:relative;aspect-ratio:1400/380}
+/* SR-464 D9 [MR-03] · the band's box is fixed at the photographs' ratio
+   (every band is 1400x380) and the image fills it, so swapping the band on a
+   track change — or falling back to the placeholder (which was 1400/230) —
+   no longer changes the height of everything below. */
+.sr-dash-jband img{width:100%;height:100%;object-fit:cover;display:block}
+.sr-dash-jband .sr-dash-jplaceholder{aspect-ratio:auto;height:100%}
 .sr-dash-jrule{height:2px;background:linear-gradient(90deg,var(--gold) 0%,var(--gold) 34%,#6E8E93 62%,var(--teal) 100%)}
 /* NEEDS ART — no triptych photograph for Tracks 02/03 yet */
 .sr-dash-jplaceholder{aspect-ratio:1400/230;display:grid;grid-template-columns:repeat(3,1fr);place-items:center;position:relative}
@@ -823,10 +828,17 @@ body.reading #srLibrary{margin-top:22px}
 
 /* ══════════ HERO SLIDER — the upper section itself rotates ══════════ */
 .sr-dash-hero{position:relative;border-radius:18px;overflow:hidden;isolation:isolate;background:#0C0C14}
-.sr-dash-hero-track{position:relative}
-.sr-dash-hero-slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .8s ease;
+/* SR-464 D9 [MR-03] · one height for every slide. The active slide used to
+   be the only one in flow (position:relative), so the hero took each slide's
+   own height and every rotation moved the page below it — by up to 299px on
+   a phone (slides measured 280-579px at 375px wide; 280-467 at 760; 320-355
+   at 1440). All slides now share one grid cell: the hero is always as tall
+   as its tallest slide at the current width, and the art (picture, absolute,
+   inset 0) fills whatever that is. Only opacity changes on rotation. */
+.sr-dash-hero-track{position:relative;display:grid}
+.sr-dash-hero-slide{grid-area:1/1;position:relative;opacity:0;pointer-events:none;transition:opacity .8s ease;
   display:grid;grid-template-columns:minmax(0,560px) 1fr;align-items:center;min-height:320px}
-.sr-dash-hero-slide.on{position:relative;opacity:1;pointer-events:auto}
+.sr-dash-hero-slide.on{opacity:1;pointer-events:auto}
 /* SR-369 (PASS-hero-v3.md §3) · the <picture> wrapper added for the WebP
    source has no position of its own, so — unlike the plain <img> this
    replaced — it was a real, in-flow grid item, pushing .sr-dash-hero-body
