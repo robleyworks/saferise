@@ -47,6 +47,7 @@
 (function (global) {
   'use strict';
 
+  var SELF_SRC = document.currentScript && document.currentScript.src;
   var STATES = ['PRE_STATE', 'RECOGNISE', 'REGULATE', 'RELEASE', 'RISE', 'POST_STATE', 'SYNTHESIS'];
   var PHASES = ['RECOGNISE', 'REGULATE', 'RELEASE', 'RISE'];
   var KEYS = {
@@ -232,6 +233,64 @@
     };
   })();
 
+  /* ── Voice prompts (SR-464 B2) ─────────────────────────────────────────
+     sv-prestate asks the opening rating question, sv-poststate the closing
+     one. Each plays once per session, when its screen first opens, and
+     never automatically again; the screen carries one replay control.
+     Nothing is fetched until the member presses Begin Sovereign session,
+     when both elements are primed inside that click so the later, async
+     play() is allowed. A failed play() changes nothing: the screen works
+     exactly as it does without a voice. Paths resolve from this script's
+     own URL, not the page's, so they hold under the /protocols/{slug}
+     rewrite. */
+  var Voice = (function () {
+    var files = { pre: 'sv-prestate.mp3', post: 'sv-poststate.mp3' };
+    var els = {}, played = {}, playing = null, listeners = [];
+    function changed() { listeners.forEach(function (f) { f(playing); }); }
+    function el(k) {
+      if (!els[k]) {
+        var a = new Audio();
+        a.preload = 'auto';
+        a.src = new URL('../assets/audio/sovereign/' + files[k], SELF_SRC || location.href).href;
+        var done = function () { if (playing === k) { playing = null; changed(); } };
+        a.addEventListener('ended', done);
+        a.addEventListener('error', done);
+        els[k] = a;
+      }
+      return els[k];
+    }
+    return {
+      prime: function () {
+        Object.keys(files).forEach(function (k) {
+          var a = el(k);
+          if (playing === k) return;
+          a.muted = true;
+          var p;
+          try { p = a.play(); } catch (e) { a.muted = false; return; }
+          var settle = function () { if (a.muted) { a.pause(); try { a.currentTime = 0; } catch (e) {} } a.muted = false; };
+          if (p && p.then) p.then(settle, function () { a.muted = false; }); else settle();
+        });
+      },
+      play: function (k) {
+        var a = el(k);
+        try { a.pause(); a.currentTime = 0; } catch (e) {}
+        a.muted = false;
+        playing = k; changed();
+        var p;
+        try { p = a.play(); } catch (e) { playing = null; changed(); return; }
+        if (p && p.catch) p.catch(function () { if (playing === k) { playing = null; changed(); } });
+      },
+      playOnce: function (k) { if (played[k]) return; played[k] = true; this.play(k); },
+      stop: function () {
+        Object.keys(els).forEach(function (k) { try { els[k].pause(); } catch (e) {} });
+        if (playing) { playing = null; changed(); }
+      },
+      reset: function () { played = {}; this.stop(); },
+      playing: function () { return playing; },
+      onChange: function (f) { listeners.push(f); }
+    };
+  })();
+
   /* ── Microphone · opened only after PERMISSION is accepted ─────────────── */
   var Mic = { stream: null, status: 'idle' };
   function openMic() {
@@ -317,6 +376,7 @@
   function inSession() { return machine && machine.state() !== 'SYNTHESIS' && machine.state() !== 'PRE_STATE'; }
 
   function teardown() {
+    Voice.stop();
     if (dl && dl.abort) dl.abort.abort();
     dl = null;
     dropEngine(); closeMic(); Soundbed.pause();
@@ -382,6 +442,10 @@
       '<span class="sr-sv-wave" aria-hidden="true">' + bars + '</span>' +
       '<span class="sr-sv-listen"' + (voice ? '' : ' hidden') + '>Listening</span>' +
       '</div>';
+  }
+
+  function replayBtn(k) {
+    return '<button type="button" class="sr-sv-link sr-sv-replay" data-sv="voice-replay" data-sv-voice="' + k + '">Hear the question again</button>';
   }
 
   function soundbedBtn() {
@@ -577,7 +641,7 @@
     PRE_STATE: function () {
       var pre = machine.preState();
       return '<div class="sr-sv-stage">' +
-        '<p class="sr-sv-label">Where you are starting</p>' +
+        '<p class="sr-sv-label">Where you are starting</p>' + replayBtn('pre') +
         '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">How activated does your system feel right now?</h2>' +
         scale('pre', pre) +
         '<p class="sr-sv-say"><span class="sr-sv-gdot" aria-hidden="true"></span>Or just say it — ‘I’m agitated, about a seven.’</p>' +
@@ -616,7 +680,7 @@
       var post = machine.postState();
       return '<div class="sr-sv-stage">' +
         phaseRow(true) +
-        '<p class="sr-sv-label">Where you are now</p>' +
+        '<p class="sr-sv-label">Where you are now</p>' + replayBtn('post') +
         '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">And how activated does your system feel now?</h2>' +
         scale('post', post) +
         '<p class="sr-sv-began sr-sv-began--big">You began at <span class="sr-sv-chip">' + machine.preState() + '</span></p>' +
@@ -643,6 +707,7 @@
   };
 
   function go(v) {
+    if (v !== view && Voice.playing()) Voice.stop();
     view = v;
     var key = PHASES.indexOf(v) > -1 ? 'PHASE' : v;
     root.innerHTML = SCREENS[key]();
@@ -726,7 +791,9 @@
     ensureEngine().prepare().catch(function (err) {
       if (machine && machine.state() === 'PRE_STATE') showFail('load');
     });
+    Voice.reset();
     go('PRE_STATE');
+    Voice.playOnce('pre');
   }
 
   function pick(btn) {
@@ -748,7 +815,7 @@
     var b = e.target.closest('[data-sv]');
     if (!b || b.disabled) return;
     switch (b.getAttribute('data-sv')) {
-      case 'invite-begin': beginFlow(); break;
+      case 'invite-begin': Voice.prime(); beginFlow(); break;
       case 'allow':
         LocalStore.set(KEYS.micIntroSeen, true);
         requestMic();
@@ -770,6 +837,7 @@
         });
         break;
       case 'soundbed': Soundbed.toggle(); go(machine.state()); break;
+      case 'voice-replay': Voice.play(b.getAttribute('data-sv-voice')); break;
       case 'begin':
         if (machine.begin()) {
           deeperShown = 0;
@@ -790,6 +858,7 @@
           else { transcriptDone = engine.stop(); voice = false; interim = null; closeMic(); }
         }
         go(machine.state());
+        if (machine.state() === 'POST_STATE') Voice.playOnce('post');
         break;
       case 'pre-dn': machine.correctPre(machine.preState() - 1); go(machine.state()); break;
       case 'pre-up': machine.correctPre(machine.preState() + 1); go(machine.state()); break;

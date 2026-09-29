@@ -50,6 +50,7 @@
 .sr-sv-btn:focus-visible,.sr-sv-num:focus-visible,.sr-sv-step:focus-visible,.sr-sv-bed:focus-visible,.sr-sv-link:focus-visible{
   outline:2px solid #D4A843;outline-offset:3px}
 .sr-sv-link{all:unset;cursor:pointer;color:#C9C4B8;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(201,196,184,.4)}
+.sr-sv-replay{display:inline-block;margin:0 0 14px;font-size:13px;color:#9A96A6}
 
 /* ── Permission facts ────────────────────────────────────────────────── */
 .sr-sv-facts{list-style:none;margin:6px 0 30px;padding:0;max-width:680px;width:100%}
