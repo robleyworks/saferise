@@ -1581,6 +1581,25 @@ document.getElementById('cover').style.backgroundImage=
   }
 })();
 renderRail();renderMain();
+
+/* SR-464 D7 [MR-31] · "Open the journal" goes to a surface where an entry can
+   be written — this protocol's own journal on protocol.html, opened and
+   focused — carrying the resource being read as context (&from=<title>;
+   protocol.html re-resolves it against its own data). It used to go to the
+   top of dashboard.html standalone, and to the journals index embedded. */
+function srJournalTarget(){
+  var r = visible()[current];
+  return { track: ACTIVE_TRACK, protocol: ACTIVE_PROTOCOL, from: r && r.title ? String(r.title) : '' };
+}
+(function(){
+  var link = document.getElementById('openJournal');
+  if(!link) return;
+  link.addEventListener('click', function(){
+    var t = srJournalTarget();
+    link.setAttribute('href', 'protocol.html?track=' + t.track + '&protocol=' + t.protocol +
+      '&journal=1' + (t.from ? '&from=' + encodeURIComponent(t.from) : ''));
+  });
+})();
 </script>
 
 <!-- ══════════ EMBED BRIDGE (added for dashboard embedding) ══════════
@@ -1675,7 +1694,7 @@ renderRail();renderMain();
     // PASS-CLAUDE-CODE-shapes-and-nav.md, Part B2 · embedded, this asks the
     // shell to open its own journal view instead of navigating the iframe
     // to dashboard.html (the href every standalone visit still uses).
-    if(e.target.closest('#openJournal')){ e.preventDefault(); post('open-journal'); return; }
+    if(e.target.closest('#openJournal')){ e.preventDefault(); post('open-journal', srJournalTarget()); return; }
     // Part B3 · embedded, open the shell's own 1:1 booking modal instead of
     // navigating the iframe to live-sessions.html, which has no ?embed=1
     // support and would render full-page inside the embed pane.

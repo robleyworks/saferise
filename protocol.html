@@ -1904,6 +1904,39 @@ function todayISO(){
 
 /* read, push, write — never assign a fresh array over the key, or one write
    from this page wipes every entry made from another. */
+/* SR-464 D7 [MR-31] · ?journal=1 (from a resource's "Open the journal"):
+   open this protocol's journal and put the cursor in it. &from names the
+   resource; it is shown and stored only if it matches one of this
+   protocol's own resource titles, so a URL cannot put arbitrary text here. */
+var JOURNAL_FROM = null;
+(function(){
+  if(!/[?&]journal=1(&|$)/.test(location.search)) return;
+  var j = document.querySelector('details.journal');
+  var field = document.getElementById('journalentry');
+  if(!j || !field) return;
+  var q = /[?&]from=([^&]*)/.exec(location.search), want = '';
+  try { want = q ? decodeURIComponent(q[1]) : ''; } catch(e) { want = ''; }
+  var m = /^t(\d)-p(\d+)$/.exec(PAGE_PROTOCOL.protocolId || '');
+  if(want && m && window.SafeRiseResources && SafeRiseResources.resolveSet && SafeRiseResources.normTitle){
+    var set = SafeRiseResources.resolveSet(m[1], m[2]) || [];
+    var norm = SafeRiseResources.normTitle(want);
+    for(var i = 0; i < set.length; i++){
+      if(SafeRiseResources.normTitle(set[i].title) === norm){ JOURNAL_FROM = String(set[i].title); break; }
+    }
+  }
+  if(JOURNAL_FROM){
+    var from = document.createElement('p');
+    from.className = 'empty';
+    from.textContent = 'From ' + JOURNAL_FROM;
+    field.parentNode.insertBefore(from, field);
+  }
+  j.open = true;
+  setTimeout(function(){
+    j.scrollIntoView({ block: 'start' });
+    try { field.focus({ preventScroll: true }); } catch(e) { field.focus(); }
+  }, 60);
+})();
+
 function appendJournalEntry(text){
   var entries = Store.get(K_ENTRIES, []);
   if(!Array.isArray(entries)) entries = [];
@@ -1920,7 +1953,10 @@ function appendJournalEntry(text){
        for an entry without them. */
     before:     null,
     after:      null,
-    text:       text
+    text:       text,
+    /* SR-464 D7 · the resource the member came from, when they arrived via
+       a resource's "Open the journal"; absent otherwise. */
+    resource:   JOURNAL_FROM || undefined
   });
   Store.set(K_ENTRIES, entries);
   return entries.length;
@@ -1960,7 +1996,8 @@ function seedArrivalState(){
   document.getElementById('logresultcount').textContent='No sessions recorded yet';
   document.getElementById('journalresultcount').textContent='No entries yet';
   journey.open=true;
-  jr.removeAttribute('open');
+  /* SR-464 D7 · arriving from a resource's "Open the journal" keeps it open. */
+  if(/[?&]journal=1(&|$)/.test(location.search)) jr.open=true; else jr.removeAttribute('open');
 }
 
 function copyProtocol(btn){

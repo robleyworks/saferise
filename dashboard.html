@@ -3163,6 +3163,21 @@
     crumb('');
     inResourceView = false;
   }
+  /* SR-464 D7 [MR-31] · "Open the journal" from a resource: the protocol's own
+     journal (protocol.html opens and focuses it), not the journals index, with
+     the resource carried through as &from. Returns false if the message does
+     not name a valid protocol, so the caller can fall back. */
+  function loadProtocolJournal(d){
+    var t = +d.track, no = String(d.protocol || '');
+    if(!(t >= 1 && t <= 3) || !/^\d{2}$/.test(no)) return false;
+    pOpen = { name: pOpen && pOpen.name, no: no, track: t };
+    resetFrame('900px');
+    frame.src = PROTOCOL_PAGE + '?embed=1&track=' + t + '&protocol=' + no + '&journal=1' +
+      (d.from ? '&from=' + encodeURIComponent(String(d.from).slice(0, 160)) : '') + themeParam();
+    crumb('');
+    inResourceView = false;
+    return true;
+  }
   function loadResource(name){
     resetFrame('700px');
     frame.src = RESOURCE_PAGE + '?embed=1&track=' + pOpen.track +
@@ -3221,7 +3236,7 @@
     // "Open the journal" link, embedded — same view the dashboard's own
     // "Read everything you have written" button opens (openModal('journal')
     // below, MODALS.journal -> mLayer -> VIEWS.journal), not a second one.
-    if(d.type === 'open-journal')      openModal('journal');
+    if(d.type === 'open-journal')      { if(!loadProtocolJournal(d)) openModal('journal'); }
     // Part B3 · resource.html's own "Request a 1:1 session" link, embedded —
     // same modal every "Book a session" button on this page already opens.
     if(d.type === 'open-oneone')       openModal('oneone');
