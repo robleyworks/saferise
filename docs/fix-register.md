@@ -22893,3 +22893,47 @@ file modified.
   unreferenced `.jpg` sibling still shows the previous frame. Every reference in the
   repo is `.webp`, so no member sees it, but the pairs no longer agree. See SR-458's
   "The `.jpg` half is unreferenced".
+
+## SR-467 — /protocols/{slug} served a broken page
+
+29 September 2026. Commit `44025cc`, `protocol.html` only. No push.
+
+- **Paths** — 32 local references made root-relative (3 stylesheets, 16 scripts, the
+  journey image, 10 page links, 2 inline-built links). No `<base href="/">`: it would
+  turn `#anchors` into `/#anchors`.
+- **Slug (found while verifying)** — a Netlify 200 rewrite keeps the clean URL, so on
+  `/protocols/{slug}` `location.search` is empty and `?slug=` never arrives. With the
+  paths fixed, every slug would have rendered Anxiety Reset (the no-request fallback).
+  `PAGE_PROTOCOL` now reads the slug from the pathname when there is no `?slug=`.
+- **Why it was silent** — Netlify answers a missing asset with its 404 **HTML** page. A
+  script or stylesheet that 404s this way throws nothing and logs nothing a casual
+  audit reads as broken; the page simply renders its un-scripted default (here, the
+  not-found `<h1>`). **A clean console proves nothing on a rewritten route** — check the
+  network status of every request.
+- **Rewrite inventory** (`_redirects`; there is no `netlify.toml`): 21 rules with status
+  200, 66 redirects. Only two serve a page at a nested path: `/protocols/:slug`
+  (fixed here) and `/record/chosen-self`, `/record/decisions` → `member-record.html`,
+  which already carries `<base href="/">`. The other 18 serve at root depth, where
+  relative paths resolve correctly. Subfolder HTML exists only in `docs/` and `archive/`.
+- **Verified** against a local stand-in that reproduces Netlify's behaviour (rewrite
+  keeps the URL; missing file → 404 HTML). The pre-fix file reproduced the production
+  defect exactly (not-found `<h1>`, `TRACKS` undefined, 22 of 23 requests 404). Fixed:
+  anxiety-reset (t1-01), overwhelm-threshold (t1-03), resentment-release (t2-04),
+  conflict-navigation (t3-02) each render their own title, `TRACKS` defined, every
+  script and stylesheet 200; an unknown slug shows not-found; anchors and details
+  work; `/protocol.html?track=&protocol=`, `?slug=` and bare `/protocol.html` are
+  unchanged. **Not** verified on a Netlify deploy preview — that needs a push.
+
+### Reported, not fixed
+
+1. **Remaining 404s on the route**, from paths built in shared scripts outside
+   `protocol.html`: protocol covers (`js/saferise-track.js` `coverPath`), journey bands
+   (`content/tracks.js` `art`), galaxy art (`content/galaxy.js`), meditation audio
+   (`content/meditation.js`). Each is relative, so on `/protocols/{slug}` it resolves
+   under `/protocols/`. Making them root-relative touches files many pages load.
+2. **`member-record.html`'s skip link** `href="#main"` resolves to `/#main` under its
+   `<base href="/">`, so on `/record/*` it navigates to the homepage — exactly the
+   failure the base tag risks.
+3. **Trailing slash** — `/method/`, `/about/` and the other root-depth rewrites would
+   resolve relative paths under the slash-path if Netlify serves them with a trailing
+   slash. Check on a deploy preview.
