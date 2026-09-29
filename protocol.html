@@ -75,8 +75,8 @@ transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
      click-to-open control), but its lockup is still wanted -- reusing
      css/sr-clearing-player.css's existing .sr-medplayer__lockup rather
      than writing a second one, so only that one stylesheet is added. -->
-<link rel="stylesheet" href="css/sr-clearing-player.css">
-<link rel="stylesheet" href="css/saferise-poster.css">
+<link rel="stylesheet" href="/css/sr-clearing-player.css">
+<link rel="stylesheet" href="/css/saferise-poster.css">
 <style>
 :root{
   /* SR-380 (PASS-pricing-contact-typescale.md Part C) · raised per the
@@ -753,7 +753,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"SafeRise Protocol","url":"https://thesaferiseprotocol.com","logo":"https://thesaferiseprotocol.com/assets/brand/logo.png","parentOrganization":{"@type":"Organization","name":"Kenor International B.V."},"contactPoint":{"@type":"ContactPoint","email":"contact@thesaferiseprotocol.com","contactType":"customer support"}}
 </script>
-<link rel="stylesheet" href="css/saferise-sovereign.css">
+<link rel="stylesheet" href="/css/saferise-sovereign.css">
 </head>
 <body>
 
@@ -762,7 +762,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
 <!-- SR-182 · the record loads before every inline script on this page, because
      PAGE_PROTOCOL resolves ?track= and ?protocol= against TRACKS at parse time.
      Placed here rather than in <head> to match the other pages that read it. -->
-<script src="content/tracks.js"></script>
+<script src="/content/tracks.js"></script>
 <!-- SR-420 (PASS-dashboard-F2-F4.md Part F4) · js/saferise-card.js was never
      loaded on this page before — SafeRiseCover carried only .coverPath (from
      js/saferise-track.js, below), not .art(), so nothing here could render an
@@ -770,7 +770,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
      below ("loads first wherever both are present"): it sets window.SafeRiseCover
      = {art}, and saferise-track.js's `window.SafeRiseCover = window.SafeRiseCover
      || {}` merges .coverPath onto it rather than replacing it. -->
-<script src="js/saferise-card.js"></script>
+<script src="/js/saferise-card.js"></script>
 <!-- SR-379 (PASS-reader-and-protocol-pages.md Part A) · SafeRiseCover.coverPath
      is the same protocol-to-cover-image mapping the carousels already use
      (js/saferise-track.js, dashboard.html's own copy). Loaded so this page's
@@ -778,24 +778,24 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
      real per-protocol cover instead of a hardcoded one — this file's own
      SafeRiseTrack.render() is never called here, so nothing else it defines
      runs on this page. -->
-<script src="js/saferise-track.js"></script>
+<script src="/js/saferise-track.js"></script>
 <!-- SR-311 · content migration Stage 3 — SR-127 found this page loaded none of
      the three heavy resource stores (not just t3-resources.js, though that was
      the specific gap SR-127 named). This page has no reader/RESOURCE_CONTENT
      code of its own yet — these make the data available for whichever track's
      protocol is resolved above, ready for that reader to be built. -->
-<script src="content/t1-resources.js"></script>
-<script src="content/t2-resources.js"></script>
-<script src="content/t3-resources.js"></script>
+<script src="/content/t1-resources.js"></script>
+<script src="/content/t2-resources.js"></script>
+<script src="/content/t3-resources.js"></script>
 <!-- PASS-protocol-access, Section A · srResolveSet(), the same resolver
      resource.html already uses. Never loaded on this page before this
      pass, which is why the resource library below was static markup
      instead of real per-protocol data. -->
-<script src="js/saferise-resources.js"></script>
+<script src="/js/saferise-resources.js"></script>
 <!-- SR-326 · the access gate. Loaded before the resolution IIFE below, which
      calls SafeRiseAccess.hasAccess() once PAGE_PROTOCOL has resolved. -->
-<script src="js/saferise-auth.js"></script>
-<script src="js/saferise-access.js"></script>
+<script src="/js/saferise-auth.js"></script>
+<script src="/js/saferise-access.js"></script>
 <!-- SR-406 · the guided-session player (SR-401-405), previously wired only
      into dashboard.html's own #srClearingPlay/t0-00. content/meditation.js
      and content/galaxy.js are the same per-id data stores; js/saferise-
@@ -806,10 +806,10 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
      visual.js is loaded first for the same reason dashboard.html loads it
      first — saferise-poster.js's own window.SRClearing assignment is the
      one that answers, by load order. -->
-<script src="content/meditation.js"></script>
-<script src="content/galaxy.js"></script>
-<script src="js/sr-clearing-visual.js"></script>
-<script src="js/saferise-poster.js"></script>
+<script src="/content/meditation.js"></script>
+<script src="/content/galaxy.js"></script>
+<script src="/js/sr-clearing-visual.js"></script>
+<script src="/js/saferise-poster.js"></script>
 
 <!-- SR-182 · shown only when a protocol was ASKED FOR and could not be found.
      A member who follows a card to a protocol that does not resolve gets told
@@ -823,7 +823,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
     <p>The link asked for a protocol that is not in the library. Nothing has been
        opened and nothing has been recorded.</p>
     <p id="sr-notfound-req" class="sr-notfound-req"></p>
-    <p><a href="dashboard.html">Back to your dashboard</a></p>
+    <p><a href="/dashboard.html">Back to your dashboard</a></p>
   </div>
 </section>
 
@@ -841,8 +841,8 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
          if you would rather see how this works before deciding.</p>
       <div class="sr-gate-acts">
         <button type="button" class="sr-gate-pill" id="sr-gate-signup-open">Get free access</button>
-        <a class="sr-gate-ghost" id="sr-gate-signin" href="login.html">Already have an account? Sign in</a>
-        <a class="sr-gate-ghost" id="sr-gate-open-free" href="protocol.html?track=1&amp;protocol=01">Open the Anxiety Reset instead</a>
+        <a class="sr-gate-ghost" id="sr-gate-signin" href="/login.html">Already have an account? Sign in</a>
+        <a class="sr-gate-ghost" id="sr-gate-open-free" href="/protocol.html?track=1&amp;protocol=01">Open the Anxiety Reset instead</a>
       </div>
       <p class="sr-gate-note">Email only. No card. Nothing to install.</p>
     </div>
@@ -869,8 +869,8 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
       <nav class="bnavlinks">
         <!-- SR-156 · four of these five now resolve. "My Practice" keeps href="#":
              no page answers to it and inventing one would be worse than a dead link. -->
-        <a href="member-frameworks.html" class="on">The Journey</a><a href="personal-transformation.html">Personal Transformation</a>
-        <a href="relationship-healing.html">Relationship Healing</a><a href="professional-performance.html">Professional</a><a href="#">My Practice</a>
+        <a href="/member-frameworks.html" class="on">The Journey</a><a href="/personal-transformation.html">Personal Transformation</a>
+        <a href="/relationship-healing.html">Relationship Healing</a><a href="/professional-performance.html">Professional</a><a href="#">My Practice</a>
       </nav>
     </div></div>
   </div>
@@ -999,7 +999,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
              (content/tracks.js TRACKS[t].art.band), the nearest real asset
              that exists, and removes the image entirely (CSS fallback
              degrades gracefully) on the one track whose band has no src. -->
-        <img class="journey-new" id="pp-journey-img" src="assets/pt/protocols/anxiety-journey.webp" alt="A woman moving through a spacious guided meditation journey from inward stillness to an open, grounded return">
+        <img class="journey-new" id="pp-journey-img" src="/assets/pt/protocols/anxiety-journey.webp" alt="A woman moving through a spacious guided meditation journey from inward stillness to an open, grounded return">
 
         </div>
       </figure>
@@ -1294,7 +1294,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
       </nav>
       <nav class="footer-col" aria-label="Legal">
         <h4>Legal</h4>
-        <a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refund Policy</a>
+        <a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/refunds.html">Refund Policy</a>
       </nav>
     </div>
     <div class="footer-bottom">
@@ -1511,6 +1511,14 @@ var PAGE_PROTOCOL = (function () {
      searches every visible track, since a slug alone doesn't say which
      one, unlike ?track=&protocol= below. */
   var slugParam = param('slug');
+  /* SR-467 · a Netlify 200 rewrite keeps the clean URL: on /protocols/{slug}
+     the browser's location.search is empty, so ?slug= never arrives and every
+     protocol fell back to Anxiety Reset. Read the slug from the path too
+     (the same lesson member-record.html's /record/* routes already follow). */
+  if (!slugParam) {
+    var pm = /^\/protocols\/([a-z0-9-]+)\/?$/.exec(location.pathname);
+    if (pm) slugParam = pm[1];
+  }
   var t = param('track'), p = param('protocol');
   if (!slugParam && !t && !p) return FALLBACK;       /* no request, no failure */
 
@@ -1732,7 +1740,7 @@ function renderProtocolContent(pp) {
      against (js/saferise-resources.js's normTitle). */
   var decisionLink = document.querySelector('.decision-link');
   if (decisionLink && row[0]) {
-    decisionLink.href = 'resource.html?track=' + pp.trackId + '&protocol=' + row[0] + '&resource=' + encodeURIComponent('The Decision');
+    decisionLink.href = '/resource.html?track=' + pp.trackId + '&protocol=' + row[0] + '&resource=' + encodeURIComponent('The Decision');
   }
 
   /* the journey figure's image is Anxiety Reset's own commissioned art —
@@ -1860,7 +1868,7 @@ function renderProtocolContent(pp) {
   /* PASS-protocol-access, Section B4 · return the visitor to this exact
      protocol after they sign in — login.html already redirects to `next`. */
   var signinLink = document.getElementById('sr-gate-signin');
-  if (signinLink) signinLink.href = 'login.html?next=' + encodeURIComponent(location.pathname + location.search);
+  if (signinLink) signinLink.href = '/login.html?next=' + encodeURIComponent(location.pathname + location.search);
   if (openBtn) openBtn.addEventListener('click', function () {
     offer.hidden = true;
     signup.hidden = false;
@@ -2113,9 +2121,9 @@ seedArrivalState();calcDelta();
 })();
 </script>
 
-<script src="js/saferise-flags.js"></script>
-<script src="js/saferise-sovereign-stt.js"></script>
-<script src="js/saferise-sovereign.js"></script>
+<script src="/js/saferise-flags.js"></script>
+<script src="/js/saferise-sovereign-stt.js"></script>
+<script src="/js/saferise-sovereign.js"></script>
 
 </body>
 </html>
