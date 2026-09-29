@@ -161,7 +161,7 @@
     var ctx = null, modP = null, src = null, node = null, track = null, onTrackEnd = null;
     var phase = null, uttId = 0;
     var utt = [], uttLen = 0, sinceInterim = 0, preroll = [];
-    var speaking = false, voiceRun = 0, silentMs = 0, noise = 0.004;
+    var speaking = false, voiceRun = 0, silentMs = 0, noise = 0.004, held = false;
     var interimBusy = false, pendingFinals = 0, finalWaiters = [];
     var finalized = {};
     var dbg = { maxBuffered: 0, commits: 0 };
@@ -277,6 +277,15 @@
       var blockMs = b.length / RATE * 1000;
       if (cb.onLevel) cb.onLevel(rms);
 
+      /* Held (SR-464 B3): SafeRise's own voice prompt is playing. Nothing is
+         buffered and anything in progress is dropped, not committed, so the
+         prompt's words can never be transcribed as the member's. */
+      if (held) {
+        if (speaking && cb.onVoice) cb.onVoice(false);
+        speaking = false; utt = []; uttLen = 0; preroll = []; voiceRun = 0; silentMs = 0; sinceInterim = 0;
+        return;
+      }
+
       var voiced = rms > Math.max(0.012, noise * 3.5);
       if (!speaking && !voiced) noise = noise * 0.95 + rms * 0.05;
 
@@ -336,6 +345,16 @@
 
     function setPhase(ph) { endUtterance(); phase = ph; }
 
+    function hold(on) {
+      held = !!on;
+      if (held) {
+        if (speaking && cb.onVoice) cb.onVoice(false);
+        speaking = false; utt = []; uttLen = 0; preroll = []; voiceRun = 0; silentMs = 0; sinceInterim = 0;
+        finalized[uttId] = true; uttId++;
+        if (cb.onInterim) cb.onInterim(phase, '');
+      }
+    }
+
     function stopCapture() {
       if (node) { node.port.onmessage = null; try { node.disconnect(); } catch (e) {} node = null; }
       if (src) { try { src.disconnect(); } catch (e) {} src = null; }
@@ -363,7 +382,7 @@
     }
 
     return {
-      prepare: prepare, start: start, setPhase: setPhase, stop: stop, destroy: destroy,
+      prepare: prepare, start: start, setPhase: setPhase, hold: hold, stop: stop, destroy: destroy,
       failed: function () { return failed; },
       _debug: function () { return { buffered: uttLen, preroll: preroll.length, maxBuffered: dbg.maxBuffered, commits: dbg.commits, pendingFinals: pendingFinals }; }
     };

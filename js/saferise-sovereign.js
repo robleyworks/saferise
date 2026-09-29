@@ -149,7 +149,26 @@
     };
   }
 
-  global.SafeRiseSovereign = { STATES: STATES, PHASES: PHASES, KEYS: KEYS, createMachine: createMachine };
+  /* ── Spoken rating (SR-464 B3) ─────────────────────────────────────────
+     A plain word-to-number match against the transcript of what was said
+     on a rating screen. No model call, no inference. The first number
+     word or digit from one to ten wins: "seven", "7", "a seven", "about a
+     seven", "maybe three", "seven out of ten" (7), "a three or four" (3).
+     Anything longer than twelve words is ignored — a rating is short, and
+     a long answer that happens to contain "one" is not a rating. No match
+     means nothing happens. */
+  var NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+  function parseRating(text) {
+    var words = String(text || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean);
+    if (!words.length || words.length > 12) return null;
+    for (var k = 0; k < words.length; k++) {
+      if (/^(10|[1-9])$/.test(words[k])) return +words[k];
+      if (NUMBER_WORDS.hasOwnProperty(words[k])) return NUMBER_WORDS[words[k]];
+    }
+    return null;
+  }
+
+  global.SafeRiseSovereign = { STATES: STATES, PHASES: PHASES, KEYS: KEYS, createMachine: createMachine, parseRating: parseRating };
 
   /* ── Flag ──────────────────────────────────────────────────────────────── */
   var flagOn = !!(global.SR_FLAGS && global.SR_FLAGS.sovereign === true);
@@ -329,8 +348,19 @@
     engine = STT.createEngine({
       onFinal: function (phase, text) {
         if (!machine) return;
-        /* Speech on the two rating screens is never part of the transcript. */
-        if (PHASES.indexOf(phase) < 0) return;
+        /* Speech on the two rating screens is never part of the transcript.
+           It can only select a button — exactly as a tap would — and only
+           while that screen is still showing. It never advances. */
+        if (PHASES.indexOf(phase) < 0) {
+          var n = parseRating(text);
+          if (n && machine.state() === phase && (phase === 'PRE_STATE' || phase === 'POST_STATE')) {
+            if (phase === 'PRE_STATE') machine.choosePre(n); else machine.choosePost(n);
+            var active = document.activeElement, onScale = active && active.classList && active.classList.contains('sr-sv-num');
+            go(phase);
+            if (onScale) { var sel = root.querySelector('.sr-sv-num[data-sv-num="' + n + '"]'); if (sel) sel.focus(); }
+          }
+          return;
+        }
         words[phase].push(text);
         machine.appendTranscript(phase, text);
         domFinal(phase, text);
@@ -357,6 +387,10 @@
     });
     return engine;
   }
+  /* While SafeRise's own prompt is playing, capture is held so the prompt's
+     words ("…from one to ten") can never be read as the member's rating. */
+  Voice.onChange(function (p) { if (engine) engine.hold(!!p); });
+
   function dropEngine() {
     if (engine) engine.destroy();
     engine = null;
