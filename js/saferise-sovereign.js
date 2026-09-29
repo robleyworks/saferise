@@ -329,6 +329,8 @@
     engine = STT.createEngine({
       onFinal: function (phase, text) {
         if (!machine) return;
+        /* Speech on the two rating screens is never part of the transcript. */
+        if (PHASES.indexOf(phase) < 0) return;
         words[phase].push(text);
         machine.appendTranscript(phase, text);
         domFinal(phase, text);
@@ -791,6 +793,10 @@
     ensureEngine().prepare().catch(function (err) {
       if (machine && machine.state() === 'PRE_STATE') showFail('load');
     });
+    /* SR-464 B4: capture runs from here until the close-screen rating is
+       confirmed, so both ratings can be spoken. It starts now even if the
+       model is still loading; committed audio waits in the worker. */
+    if (Mic.stream) ensureEngine().start(Mic.stream, 'PRE_STATE').catch(function () { tFailed = true; });
     Voice.reset();
     go('PRE_STATE');
     Voice.playOnce('pre');
@@ -830,7 +836,7 @@
         openMic().then(function (ok) {
           if (!ok || !machine) return;
           micLost = false;
-          if (PHASES.indexOf(machine.state()) > -1 && engine && !engine.failed()) {
+          if (machine.state() !== 'SYNTHESIS' && engine && !engine.failed()) {
             engine.start(Mic.stream, machine.state()).catch(function () { tFailed = true; rerender(); });
           }
           rerender();
@@ -841,9 +847,7 @@
       case 'begin':
         if (machine.begin()) {
           deeperShown = 0;
-          if (engine && Mic.stream && !engine.failed()) {
-            engine.start(Mic.stream, 'RECOGNISE').catch(function () { tFailed = true; rerender(); });
-          }
+          if (engine && !engine.failed()) engine.setPhase('RECOGNISE');
           go(machine.state());
         }
         break;
@@ -854,8 +858,8 @@
       case 'next':
         machine.next(); deeperShown = 0;
         if (engine) {
-          if (PHASES.indexOf(machine.state()) > -1) engine.setPhase(machine.state());
-          else { transcriptDone = engine.stop(); voice = false; interim = null; closeMic(); }
+          engine.setPhase(machine.state());
+          if (machine.state() === 'POST_STATE') { voice = false; interim = null; }
         }
         go(machine.state());
         if (machine.state() === 'POST_STATE') Voice.playOnce('post');
@@ -865,6 +869,10 @@
       case 'close':
         if (machine.postState() === null) break;
         b.disabled = true;
+        /* The rating is confirmed: the microphone closes now, before the
+           remaining transcription settles and before anything is shown. */
+        transcriptDone = engine ? engine.stop() : Promise.resolve();
+        closeMic();
         (transcriptDone || Promise.resolve()).then(function () {
           if (!machine || machine.state() !== 'POST_STATE') return;
           machine.setTranscriptStatus(tFailed ? (hasWords() ? 'incomplete' : 'none') : (hasWords() ? 'complete' : 'none'));
