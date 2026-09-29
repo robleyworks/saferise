@@ -36,6 +36,8 @@
 
 <script src="js/saferise-auth.js"></script>
 <script src="js/saferise-access.js"></script>
+<script src="/js/saferise-flags.js"></script>
+<script src="/js/saferise-sovereign-settings.js"></script>
 <script>
 (async function () {
   var root = document.getElementById('srAccountRoot');
@@ -80,10 +82,14 @@
           ? 'Manage subscription opens once payments (Phase 4) are wired up &mdash; not yet.'
           : 'Upgrading opens once payments (Phase 4) are wired up &mdash; not yet.') +
       '</p>' +
+      '<div id="srSovereignSetting" style="margin-top:26px"></div>' +
       '<p style="margin-top:30px;padding-top:20px;box-shadow:inset 0 1px 0 var(--hair)">' +
         '<button type="button" class="sr-tp-pill" id="srSignOut">Sign out</button>' +
       '</p>' +
     '</div>';
+
+  /* SR-469 E1 · the AI reading switch, when Sovereign is enabled. */
+  if (window.SafeRiseSovereignSettings) SafeRiseSovereignSettings.mount(document.getElementById('srSovereignSetting'), user);
 
   document.getElementById('srSignOut').addEventListener('click', function () {
     srAuth.signOut().then(function () { location.href = 'index.html'; });
