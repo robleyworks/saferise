@@ -23025,3 +23025,59 @@ flipped**: live verification needs a Netlify deploy preview — handover in
 - **Noted for TIER-1:** that brief expects a shared `js/saferise-voice.js` "extracted
   in SOV-4". SOV-4's brief did not ask for it and it does not exist; the voice
   service is `js/saferise-sovereign-stt.js` (engine) used by `js/saferise-sovereign.js`.
+
+## SR-470 — TIER-1: four membership tiers (resolver live; storage and payments wait)
+
+**Ladder (founder-set, monthly):** Free — the first track, in full · Standard €19 —
+the tracks released so far · Premium €29 — every track, as it releases · Sovereign
+€39 — every track, and your own voice (voiced sessions and journal, on-device
+transcription, the AI reading, on by default).
+
+- **§0 report.** Membership was one yes/no: `members.entitled` (plus
+  `subscription_status`, `entitled_until`, `paddle_*`). **No plan/tier column.**
+  Access was decided in `js/saferise-access.js` `hasAccess` (protocol.html, the
+  dashboard), a second local bypass in `resource.html`, and nowhere for voice.
+- **0.2 STOPPED (ORG-1 owns the schema).** Tiers are not stored. Adapted: an
+  entitled member resolves to **Standard**, everyone else signed in to **Free**;
+  `srAuth.plan()` is the hook a stored tier plugs into, validated against the four
+  names. Consequence: until ORG-1, no real member resolves to Premium or Sovereign.
+- **§1** `SafeRiseAccess.resolve()` → `{tier, rank, source, tracks, voice, reading}`
+  is the single source of truth; `hasAccess`, `canAccessTrack`, `can()`,
+  `lockedCopy()` all call it. Unknown/missing → Free; entitled floor → Standard.
+  `?srtier=` simulates a tier on **local development hosts only** (not deploy
+  previews, not production — verified by loading the module under a production
+  and a deploy-preview hostname: override ignored).
+- **§2** Standard's set is fixed as tracks 1–3 (released when the ladder was set,
+  29 Sept 2026); Premium/Sovereign read live tracks from `TRACKS`. Locked tracks
+  show named, with the level that opens them and a route to `/checkout`.
+- **§3** Gate applied in `js/saferise-sovereign-stt.js` (`probe` → `'tier'`,
+  `download` rejects `{code:'tier'}`, `createEngine` throws) and in
+  `js/saferise-sovereign.js` (no reading request; Sovereign offered, not hidden;
+  earlier records still listed). **DIFFERS:** the brief names `js/saferise-voice.js`
+  "extracted in SOV-4"; it does not exist (see SR-469).
+- **§4 STOPPED.** Checkout has no payment rail — no Paddle integration, price IDs or
+  webhook — so four recurring products cannot be wired without a rail change.
+  Checkout shows the four tiers and the member's own; "Change membership" is
+  disabled with a plain note. The PO rail was not touched.
+- **§5** Downgrade wording on checkout and account before any change: everything
+  already said stays yours; sessions, transcripts and readings kept; no new ones.
+- **§6** /plans rebuilt as four monthly tiers with the scope lines verbatim and the
+  three Sovereign parts; annual toggle and "no new tier" copy removed; counts
+  removed from plans, track-landing (`content/tracks.js`), pricing.html and
+  for-organisations.html. **6.4 PR-16 removed** (not rewritten) from /plans and
+  pricing.html. No zero-retention claim anywhere.
+- **Server side:** `sv-reading` does not check tier — it cannot until the tier is
+  stored (ORG-1). The client never calls it below Sovereign.
+- **Verified locally** (stand-in server, `?srtier=`): V1 resolver across nine auth
+  states; V2 free: track 1 open, 2 and 3 locked; V3 standard/premium/sovereign:
+  Personal Transformation, Relationship Healing, Professional Performance; V4
+  Premium opening Sovereign: zero `/assets/vendor/speech/*`, zero `sv-reading`,
+  download refused `tier`; V5 Sovereign: engine prepares from cache (~2 s), invite
+  shows Begin + AI reading; V6 unknown/garbage plan → Free, entitled → Standard;
+  V7 records written as Sovereign stay listed, openable and byte-identical after a
+  simulated drop to Standard; V8 no counts in tier/pricing copy.
+- **Not verified:** the signed-in wall and dashboard/account copy with a real
+  account (no account creation here) — by inspection and `lockedCopy()` output.
+- **Pre-existing, not touched:** `resource.html`'s `<title>` and first `<h1>` are
+  static "Anxiety Reset" on every track; count phrases remain in framework pages
+  (member-watts/heartmath/mate) and business collateral, outside tier copy.
