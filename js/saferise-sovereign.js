@@ -4,8 +4,8 @@
 
    OFF BY DEFAULT. With the flag off this file defines window.SafeRiseSovereign
    (pure functions, no DOM) and returns: no toggle, no listeners, no
-   getUserMedia. The flag is window.SR_FLAGS.sovereign === true. SR-463: that
-   object is not defined anywhere in the tree yet, so the flag is off
+   getUserMedia. The flag is window.SR_FLAGS.sovereign === true, defined false
+   in js/saferise-flags.js (SR-464 A3), which protocol.html loads first, so off
    everywhere. On a local development host only (localhost, 127.0.0.1,
    *.localhost, *.test) ?sovereign=1 turns it on for testing and remembers it
    under sr.sv.enabled; ?sovereign=0 forgets it. Neither works on any other
