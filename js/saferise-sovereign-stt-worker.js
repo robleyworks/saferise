@@ -7,10 +7,11 @@
    by transformers.js 3.8.1 on ONNX Runtime's WASM backend, single-threaded.
    All of it self-hosted under assets/vendor/speech/ (SR-464 A2).
 
-   THIS WORKER NEVER FETCHES. fetch is replaced below, before anything else
-   loads, with one that refuses every URL except blob: and data:. The model
-   weights and the WASM binary are read out of the Cache Storage entry the
-   main thread filled during the one-time download. The two JS modules are
+   THIS WORKER NEVER REACHES THE NETWORK. fetch is replaced below, before
+   anything else loads, with one that answers only from the Cache Storage
+   entry the main thread filled during the one-time download (and blob:/
+   data:), and refuses everything else. The model weights and the WASM
+   binary come from that cache. The two JS modules are
    imported from their same-origin URLs — the production CSP allows scripts
    from 'self' only, so blob: modules are not an option — and are covered by
    /assets/* immutable HTTP caching. A cache miss is an error, never a quiet
@@ -19,11 +20,18 @@
    Audio arrives as a Float32Array at 16 kHz, one utterance at a time, is
    transcribed, and is dropped. Nothing here keeps it. */
 
+/* fetch answers from the model's Cache Storage entry and nowhere else:
+   blob:/data: pass through, a URL the one-time download cached is served
+   from the cache, and everything else is refused. This is how ONNX Runtime
+   gets its WASM by URL — which lets it compile while streaming — without
+   the worker ever reaching the network. */
 const netFetch = self.fetch.bind(self);
+let modelCache = null;
 self.fetch = function (input, init) {
   const url = typeof input === 'string' ? input : (input && input.url) || String(input);
   if (/^(blob|data):/.test(url)) return netFetch(input, init);
-  return Promise.reject(new TypeError('sr-sv: the speech worker does not use the network'));
+  if (!modelCache) return Promise.reject(new TypeError('sr-sv: the speech worker does not use the network'));
+  return modelCache.match(url).then((r) => r || Promise.reject(new TypeError('sr-sv: not in the model cache; the speech worker does not use the network')));
 };
 
 let asr = null;
@@ -40,12 +48,13 @@ self.addEventListener('unhandledrejection', (e) => {
 async function load(msg) {
   const t0 = performance.now();
   const cache = await caches.open(msg.cacheName);
+  modelCache = cache;
   async function get(url) {
     const r = await cache.match(url);
     if (!r) { const e = new Error('model file missing from cache'); e.code = 'evicted'; throw e; }
     return r;
   }
-  const wasm = await (await get(msg.lib.ortWasm)).arrayBuffer();
+  await get(msg.lib.ortWasm);   // present, or fail now with 'evicted'
 
   const T = await import(msg.lib.transformers);
   T.env.allowLocalModels = false;
@@ -65,11 +74,12 @@ async function load(msg) {
   const wa = T.env.backends.onnx.wasm;
   wa.numThreads = 1;
   wa.proxy = false;
-  /* The loader module comes from its same-origin URL; the binary is handed
-     over from the cache so it is never fetched again. (SR-463 used blob:
-     URLs here; the production CSP does not allow blob: scripts.) */
+  /* The loader module comes from its same-origin URL. The binary is named
+     by URL too, so it compiles while streaming; the fetch above serves it
+     from the cache. Handing it over as wasmBinary instead took cold start
+     from ~1.4 s to ~12.5 s (non-streaming compile of 21.6 MB) — SR-464 B4.
+     (SR-463 used blob: URLs; the production CSP allows 'self' scripts only.) */
   wa.wasmPaths = { mjs: msg.lib.ortMjs, wasm: msg.lib.ortWasm };
-  wa.wasmBinary = wasm;
 
   asr = await T.pipeline('automatic-speech-recognition', msg.model, {
     dtype: 'q8', device: 'wasm', revision: msg.revision
