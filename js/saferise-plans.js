@@ -130,15 +130,17 @@
   };
   var TRACK_KICKER = { 1: '--t1', 2: '--t2', 3: '--t3' };
   var TRACK_GLOW = { 1: 'rgba(201,123,90,.11)', 2: 'rgba(122,143,168,.11)', 3: 'rgba(110,144,128,.11)' };
-  /* SR-448 (PASS-AF §3) · deliberately NOT in content/track-images.js: these
-     are the 1400x380 journey bands, a fourth shape the registry's three
-     (band 1200x640, panel 2400x1000, portrait 1086x1448) do not define.
-     Moving them in would mean inventing a shape — reported for a ruling.
-     tools/check-track-images.py allow-lists exactly these three paths. */
+  /* SR-464 C2 [PR-14] · the library sections' underlay photographs
+     (2400x1000, from the founder's panel set), replacing SR-448's 1400x380
+     journey bands here. Like those bands they stay outside
+     content/track-images.js: an underlay is decorative, per-page art, not a
+     track image the registry's shapes describe. Before this pass the photo
+     sat at z-index -3, beneath the opaque .sr-pl-ph-fill hatch (-2), so the
+     sections rendered as empty placeholders. */
   var TRACK_BAND = {
-    1: { src: 'assets/journey/t1-band.webp', alt: 'Personal Transformation' },
-    2: { src: 'assets/journey/t2-band.webp', alt: 'Relationship Healing' },
-    3: { src: 'assets/journey/t3-band.webp', alt: 'Professional Performance' }
+    1: { src: 'assets/plans/panel-t1.webp', alt: 'Personal Transformation' },
+    2: { src: 'assets/plans/panel-t2.webp', alt: 'Relationship Healing' },
+    3: { src: 'assets/plans/panel-t3.webp', alt: 'Professional Performance' }
   };
 
   function rHero() {
@@ -211,7 +213,7 @@
       : '<b>' + esc(t.protocols.length) + ' protocols</b> · <b>Included with membership</b>';
     return '<div class="sr-pl-tsec" style="--tc:var(' + TRACK_KICKER[id] + ');--tglow:' + TRACK_GLOW[id] + '">' +
       '<div class="sr-pl-ph-fill"></div><div class="sr-pl-ph-scrim"></div>' +
-      (band ? '<img src="' + band.src + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-3;opacity:.5" aria-hidden="true">' : '') +
+      (band ? '<img src="' + band.src + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.5" aria-hidden="true">' : '') +
       '<div class="wrap"><div class="sr-pl-tinner rv">' +
       '<div><div class="sr-pl-thead">' + TRACK_ICON[id] + 'Track 0' + id + '</div>' +
       '<h3 class="sr-pl-ttitle">' + esc(first) + '<i>' + esc(rest) + '</i></h3>' +
