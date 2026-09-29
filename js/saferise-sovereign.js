@@ -1,0 +1,460 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   SafeRise — js/saferise-sovereign.js · SR-462 (SOV-2)
+   The Sovereign player shell and its state machine, on protocol.html.
+
+   OFF BY DEFAULT. With the flag off this file defines window.SafeRiseSovereign
+   (pure functions, no DOM) and returns: no toggle, no listeners, no
+   getUserMedia. The flag is on when the URL carries ?sovereign=1, which also
+   remembers it under sr.sv.enabled; ?sovereign=0 forgets it again.
+
+   THE MACHINE. Seven states, strictly in order, advanced only by a member's
+   own click — there is no timer anywhere in this file, so nothing can
+   auto-advance:
+
+     PRE_STATE → RECOGNISE → REGULATE → RELEASE → RISE → POST_STATE → SYNTHESIS
+
+   INVITE and PERMISSION sit in front of the machine. PERMISSION renders
+   once ever (sr.sv.micIntroSeen), so a second session goes INVITE → PRE_STATE.
+   getUserMedia is never called before PERMISSION has been shown and accepted.
+
+   WRITE ORDER (binding). preState is written when the member leaves
+   PRE_STATE, before RECOGNISE exists. postState is written when the member
+   closes the session, before SYNTHESIS renders. No synthesis is generated in
+   this pass at all — SYNTHESIS is the settling screen and nothing else.
+
+   STORE. js/saferise-decision.js keeps its Store inside its own closure and
+   never exports it (checked, SR-462), and that file is owned by another
+   session. So this file carries a local adapter of the identical shape —
+   same write probe, same silent in-memory fallback. createMachine() takes
+   any object with get/set, which is how the verification drives it with a
+   recording fake rather than a spy on localStorage (a spy proves nothing
+   when the fallback is silently in play).
+
+   NOT HERE: speech recognition of any kind, AI synthesis, Supabase writes,
+   entitlement checks. The transcript panel is an empty collapsed shell. */
+(function (global) {
+  'use strict';
+
+  var STATES = ['PRE_STATE', 'RECOGNISE', 'REGULATE', 'RELEASE', 'RISE', 'POST_STATE', 'SYNTHESIS'];
+  var PHASES = ['RECOGNISE', 'REGULATE', 'RELEASE', 'RISE'];
+  var KEYS = {
+    enabled: 'sr.sv.enabled',
+    micIntroSeen: 'sr.sv.micIntroSeen',
+    session: 'sr.sv.session',
+    soundbed: 'sr.sv.soundbed'
+  };
+
+  var LocalStore = (function () {
+    var mem = {}, ok = false;
+    try { var k = 'sr.probe'; window.localStorage.setItem(k, '1'); window.localStorage.removeItem(k); ok = true; }
+    catch (e) { ok = false; }
+    return {
+      persistent: ok,
+      get: function (key, fallback) {
+        try {
+          var raw = ok ? window.localStorage.getItem(key) : mem[key];
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (e) { return fallback; }
+      },
+      set: function (key, val) {
+        var raw = JSON.stringify(val);
+        try { if (ok) window.localStorage.setItem(key, raw); else mem[key] = raw; }
+        catch (e) { mem[key] = raw; }
+      }
+    };
+  })();
+
+  /* ── The machine — no DOM, no timers ───────────────────────────────────── */
+  function createMachine(store, ctx) {
+    ctx = ctx || {};
+    var i = 0, pre = null, post = null;
+
+    function state() { return STATES[i]; }
+    function must(s) { if (STATES[i] !== s) throw new Error('sovereign: ' + s + ' expected, in ' + STATES[i]); }
+    function valid(n) { return typeof n === 'number' && n >= 1 && n <= 10 && Math.floor(n) === n; }
+
+    return {
+      state: state,
+      preState: function () { return pre; },
+      postState: function () { return post; },
+      choosePre: function (n) { must('PRE_STATE'); if (valid(n)) pre = n; },
+      /* PRE_STATE → RECOGNISE. preState is on the record before RECOGNISE. */
+      begin: function () {
+        must('PRE_STATE');
+        if (!valid(pre)) return false;
+        store.set(KEYS.session, {
+          protocolId: ctx.protocolId || null,
+          trackId: ctx.trackId || null,
+          startedAt: new Date().toISOString(),
+          preState: { activation: pre }
+        });
+        i++;
+        return true;
+      },
+      /* "You can correct this at any point during the session." */
+      correctPre: function (n) {
+        if (i === 0 || i > 5 || !valid(n)) return;
+        pre = n;
+        var s = store.get(KEYS.session, null) || {};
+        s.preState = { activation: n, corrected: true };
+        store.set(KEYS.session, s);
+      },
+      /* RECOGNISE → REGULATE → RELEASE → RISE → POST_STATE, one step a click. */
+      next: function () {
+        if (i < 1 || i > 4) throw new Error('sovereign: next() outside the four phases, in ' + STATES[i]);
+        i++;
+      },
+      choosePost: function (n) { must('POST_STATE'); if (valid(n)) post = n; },
+      /* POST_STATE → SYNTHESIS. postState is on the record before SYNTHESIS. */
+      close: function () {
+        must('POST_STATE');
+        if (!valid(post)) return false;
+        var s = store.get(KEYS.session, null) || {};
+        s.postState = { activation: post };
+        s.closedAt = new Date().toISOString();
+        store.set(KEYS.session, s);
+        i++;
+        return true;
+      },
+      discard: function () { store.set(KEYS.session, null); }
+    };
+  }
+
+  global.SafeRiseSovereign = { STATES: STATES, PHASES: PHASES, KEYS: KEYS, createMachine: createMachine };
+
+  /* ── Flag ──────────────────────────────────────────────────────────────── */
+  var q = /[?&]sovereign=([01])/.exec(location.search);
+  if (q) LocalStore.set(KEYS.enabled, q[1] === '1');
+  if (LocalStore.get(KEYS.enabled, false) !== true) return;
+
+  var root = document.getElementById('sr-sv-root');
+  var guided = document.getElementById('pane-listen');
+  var player = document.querySelector('.player');
+  if (!root || !guided || !player) return;
+
+  /* ── Copy ──────────────────────────────────────────────────────────────── */
+  /* Main and deeper prompts per phase. Keep going reveals the next deeper
+     prompt, one at a time, never all at once; when they run out it offers
+     the soft-maximum line instead of moving on. */
+  var PROMPTS = {
+    RECOGNISE: { lead: '', main: 'What is present right now?',
+      deeper: ['Where do you notice it in the body?', 'What emotion seems closest to it?',
+               'What thoughts are moving with it?', 'What does this seem to mean to you?'] },
+    REGULATE: { lead: 'You’ve noticed what is here. Let’s give your system somewhere to settle.',
+      main: 'Where are you carrying this most strongly?',
+      deeper: ['Let the out-breath be a little longer than the in-breath.',
+               'What changes when you stop trying to solve it for a moment?',
+               'What would help your system feel a little more supported here?'] },
+    RELEASE: { lead: 'You don’t have to carry every part of what you found forward.',
+      main: 'What are you ready to put down?',
+      deeper: ['Is there something you’ve been judging yourself for carrying?',
+               'What belongs to this circumstance, and what no longer needs to belong to you?',
+               'Is there something here that still needs a decision, conversation or action rather than release?'] },
+    RISE: { lead: '', main: 'Who are you choosing to be from here?',
+      deeper: ['What do you know now?', 'What are you choosing?', 'What do you want to carry forward?',
+               'If there is an “I AM” statement here, speak it.', 'Is there a next action?'] }
+  };
+  var SOFT_MAX = 'Stay here if there is more. When you’re ready, we can move forward.';
+
+  var ICON = {
+    voice: '<path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/>',
+    record: '<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
+    edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+    shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    dot: '<circle cx="12" cy="12" r="4"/>'
+  };
+  function svg(name, size) {
+    return '<svg class="sr-sv-ico" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" aria-hidden="true">' + ICON[name] + '</svg>';
+  }
+
+  /* ── Soundbed · generated, no file, no track name, no duration ─────────── */
+  var Soundbed = (function () {
+    var ac = null, gain = null, src = null, want = LocalStore.get(KEYS.soundbed, false) === true, live = false;
+    function build() {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return false;
+      ac = new AC();
+      var len = ac.sampleRate * 4, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0), last = 0;
+      for (var n = 0; n < len; n++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[n] = last * 3.2; }
+      src = ac.createBufferSource(); src.buffer = buf; src.loop = true;
+      var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 420;
+      gain = ac.createGain(); gain.gain.value = 0;
+      src.connect(lp); lp.connect(gain); gain.connect(ac.destination);
+      src.start();
+      return true;
+    }
+    function fade(to) { if (gain) { gain.gain.cancelScheduledValues(ac.currentTime); gain.gain.setTargetAtTime(to, ac.currentTime, 0.6); } }
+    return {
+      on: function () { return want; },
+      toggle: function () { want = !want; LocalStore.set(KEYS.soundbed, want); if (want) this.resume(); else this.pause(); return want; },
+      resume: function () {
+        if (!want) return;
+        if (!ac && !build()) return;
+        if (ac.state === 'suspended') ac.resume();
+        if (!live) { gain.gain.value = 0; fade(0.09); }
+        live = true;
+      },
+      pause: function () { if (ac && live) { live = false; ac.suspend(); } }
+    };
+  })();
+
+  /* ── Microphone · opened only after PERMISSION is accepted ─────────────── */
+  var Mic = { stream: null, status: 'idle' };
+  function openMic() {
+    if (Mic.stream) return Promise.resolve(true);
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { Mic.status = 'off'; return Promise.resolve(false); }
+    return navigator.mediaDevices.getUserMedia({ audio: true }).then(function (s) {
+      Mic.stream = s; Mic.status = 'on'; return true;
+    }, function () { Mic.status = 'off'; return false; });
+  }
+  function closeMic() {
+    if (Mic.stream) Mic.stream.getTracks().forEach(function (t) { t.stop(); });
+    Mic.stream = null; Mic.status = 'idle';
+  }
+
+  /* ── View ──────────────────────────────────────────────────────────────── */
+  var ctx = (typeof PAGE_PROTOCOL !== 'undefined' && PAGE_PROTOCOL) ? PAGE_PROTOCOL : {};
+  var machine = null, view = 'INVITE', deeperShown = 0;
+
+  var toggle = document.createElement('div');
+  toggle.className = 'sr-sv-toggle';
+  toggle.setAttribute('role', 'group');
+  toggle.setAttribute('aria-label', 'Session mode');
+  toggle.innerHTML =
+    '<button type="button" class="sr-sv-tbtn" data-sv-mode="guided" aria-pressed="true">Guided protocol</button>' +
+    '<button type="button" class="sr-sv-tbtn" data-sv-mode="sovereign" aria-pressed="false">Sovereign</button>';
+  player.parentNode.insertBefore(toggle, player);
+
+  function inSession() { return machine && machine.state() !== 'SYNTHESIS' && machine.state() !== 'PRE_STATE'; }
+
+  function setMode(mode) {
+    if (mode === 'guided' && inSession() &&
+        !window.confirm('Leave this Sovereign session? The starting point you rated stays on this device.')) return;
+    var sov = mode === 'sovereign';
+    Array.prototype.forEach.call(toggle.querySelectorAll('.sr-sv-tbtn'), function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-sv-mode') === mode));
+    });
+    guided.hidden = sov;
+    root.hidden = !sov;
+    if (sov) {
+      var a = guided.querySelector('audio');
+      if (a && !a.paused) a.pause();
+      go('INVITE');
+    } else {
+      Soundbed.pause(); closeMic(); machine = null; view = 'INVITE';
+      root.innerHTML = '';
+    }
+  }
+
+  function scale(kind, chosen) {
+    var h = '<div class="sr-sv-scalewrap"><div class="sr-sv-scale sr-sv-scale--' + kind + '" role="radiogroup" aria-label="Activation, 1 settled to 10 at its loudest">';
+    for (var n = 1; n <= 10; n++) {
+      var on = chosen === n;
+      h += '<button type="button" class="sr-sv-num" role="radio" aria-checked="' + on + '" tabindex="' +
+           (on || (!chosen && n === 1) ? '0' : '-1') + '" data-sv-num="' + n + '">' + n + '</button>';
+    }
+    return h + '</div><div class="sr-sv-ends"><span>Settled</span><span>At its loudest</span></div></div>';
+  }
+
+  function phaseRow(allDone) {
+    var cur = machine ? machine.state() : '';
+    var ci = PHASES.indexOf(cur);
+    return '<ol class="sr-sv-phases" aria-label="The four movements">' + PHASES.map(function (p, k) {
+      var st = allDone || (ci > -1 && k < ci) || ci === -1 && STATES.indexOf(cur) > 4 ? 'done' : (k === ci ? 'now' : 'next');
+      return '<li class="sr-sv-ph sr-sv-ph--' + st + '"' + (st === 'now' ? ' aria-current="step"' : '') + '>' +
+        (st === 'done' ? svg('check', 12) : '') + '<span>' + p.charAt(0) + p.slice(1).toLowerCase() + '</span>' +
+        '<span class="sr-sv-vh">' + (st === 'done' ? ', done' : st === 'now' ? ', now' : '') + '</span></li>';
+    }).join('') + '</ol>';
+  }
+
+  function micLine() {
+    if (Mic.status === 'on') return '<p class="sr-sv-mic">' + '<span class="sr-sv-gdot" aria-hidden="true"></span>Microphone on</p>';
+    return '<p class="sr-sv-mic sr-sv-mic--off">Microphone off — you can still move through every step with the buttons. ' +
+           '<button type="button" class="sr-sv-link" data-sv="mic-retry">Try the microphone again</button></p>';
+  }
+
+  function soundbedBtn() {
+    var on = Soundbed.on();
+    return '<button type="button" class="sr-sv-bed" data-sv="soundbed" aria-pressed="' + on + '">' +
+           '<span class="sr-sv-bedpip" aria-hidden="true"></span>Soundbed ' + (on ? 'on' : 'off') + '</button>';
+  }
+
+  var SCREENS = {
+    INVITE: function () {
+      return '<div class="sr-sv-stage sr-sv-stage--invite">' +
+        '<p class="sr-sv-kick">Sovereign practice</p>' +
+        '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">Your voice, your record. SafeRise holds the pathway.</h2>' +
+        '<p class="sr-sv-body">You move through Recognise, Regulate, Release and Rise in your own words, out loud. ' +
+        'SafeRise offers one question at a time and keeps the order. Nothing rushes you from one movement to the next — you decide when you are ready.</p>' +
+        '<div class="sr-sv-acts"><button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="invite-begin">Begin Sovereign session</button></div>' +
+        '<p class="sr-sv-quiet">Prefer to be guided? Switch back at any time.</p>' +
+        '</div>' +
+        '<p class="sr-sv-outer">Nothing is recorded until you begin, and you will be told exactly what happens first.</p>';
+    },
+    PERMISSION: function () {
+      var facts = [
+        ['voice', 'Your voice is turned into text on this device. The recording itself is not sent anywhere.'],
+        ['record', 'Only the written record is kept — what surfaced, what you chose, what you decided.'],
+        ['edit', 'You can read, edit or delete any part of it afterwards, including the transcript.'],
+        ['shield', 'Nobody at your organisation can see any of it. Not a summary, not a statement, not a word.']
+      ];
+      return '<div class="sr-sv-stage">' +
+        '<p class="sr-sv-kick">Before you speak</p>' +
+        '<h2 class="sr-sv-h sr-sv-h--30" tabindex="-1">SafeRise needs your microphone, and you should know exactly what happens to what you say.</h2>' +
+        '<ul class="sr-sv-facts">' + facts.map(function (f, k) {
+          return '<li class="sr-sv-fact' + (k === 3 ? ' sr-sv-fact--gold' : '') + '">' + svg(f[0], 17) + '<span>' + f[1] + '</span></li>';
+        }).join('') + '</ul>' +
+        '<div class="sr-sv-acts">' +
+          '<button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="allow">Allow microphone</button>' +
+          '<button type="button" class="sr-sv-btn sr-sv-btn--ghost" data-sv="to-guided">Use the guided version instead</button>' +
+        '</div>' +
+        '<p class="sr-sv-right"><a class="sr-sv-link" href="privacy.html">How your record is stored</a></p>' +
+        '</div>';
+    },
+    PRE_STATE: function () {
+      var pre = machine.preState();
+      return '<div class="sr-sv-stage">' +
+        '<p class="sr-sv-label">Where you are starting</p>' +
+        '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">How activated does your system feel right now?</h2>' +
+        scale('pre', pre) +
+        '<p class="sr-sv-say"><span class="sr-sv-gdot" aria-hidden="true"></span>Or just say it — ‘I’m agitated, about a seven.’</p>' +
+        '<p class="sr-sv-quiet">You can correct this at any point during the session.</p>' +
+        '<div class="sr-sv-acts"><button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="begin"' + (pre ? '' : ' disabled') + '>Begin</button></div>' +
+        '<div class="sr-sv-foot"><span>' + soundbedBtn() + '</span>' +
+        '<span class="sr-sv-footr">We will ask again at the end, before you see anything written.</span></div>' +
+        '</div>';
+    },
+    PHASE: function () {
+      var st = machine.state(), P = PROMPTS[st];
+      var deeper = P.deeper.slice(0, deeperShown);
+      var more = deeperShown >= P.deeper.length;
+      return '<div class="sr-sv-stage sr-sv-stage--phase">' +
+        phaseRow(false) +
+        '<div class="sr-sv-centre">' +
+          (P.lead ? '<p class="sr-sv-lead">' + P.lead + '</p>' : '') +
+          '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">' + P.main + '</h2>' +
+          '<div class="sr-sv-deeper" aria-live="polite">' + deeper.map(function (d) { return '<p>' + d + '</p>'; }).join('') +
+          (more && deeperShown > 0 ? '<p class="sr-sv-soft">' + SOFT_MAX + '</p>' : '') + '</div>' +
+        '</div>' +
+        '<div class="sr-sv-meta">' + micLine() +
+          '<p class="sr-sv-began">You began at <span class="sr-sv-mini">' + machine.preState() + '</span>' +
+          '<button type="button" class="sr-sv-step" data-sv="pre-dn" aria-label="Lower your starting point">−</button>' +
+          '<button type="button" class="sr-sv-step" data-sv="pre-up" aria-label="Raise your starting point">+</button></p>' +
+          soundbedBtn() +
+        '</div>' +
+        '<details class="sr-sv-transcript"><summary>Transcript</summary>' +
+          '<div class="sr-sv-tbody"><p>Transcription is not switched on yet. Nothing you say is being written down.</p></div></details>' +
+        '<div class="sr-sv-dock">' +
+          '<button type="button" class="sr-sv-btn sr-sv-btn--ghost" data-sv="keep">Keep going</button>' +
+          '<button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="next">Next →</button>' +
+        '</div>' +
+        '</div>';
+    },
+    POST_STATE: function () {
+      var post = machine.postState();
+      return '<div class="sr-sv-stage">' +
+        phaseRow(true) +
+        '<p class="sr-sv-label">Where you are now</p>' +
+        '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">And how activated does your system feel now?</h2>' +
+        scale('post', post) +
+        '<p class="sr-sv-began sr-sv-began--big">You began at <span class="sr-sv-chip">' + machine.preState() + '</span></p>' +
+        '<p class="sr-sv-say"><span class="sr-sv-gdot" aria-hidden="true"></span>Or say it — ‘a lot quieter, maybe a three.’</p>' +
+        '<div class="sr-sv-acts"><button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="close"' + (post ? '' : ' disabled') + '>Close the session</button></div>' +
+        '<div class="sr-sv-foot"><span>' + soundbedBtn() + '</span>' +
+        '<span class="sr-sv-footr sr-sv-footr--430">Nothing has been written up yet. You are rating your own state, not a summary of it.</span></div>' +
+        '</div>';
+    },
+    SYNTHESIS: function () {
+      return '<div class="sr-sv-stage sr-sv-stage--settle">' +
+        '<div class="sr-sv-breath" aria-hidden="true"><span class="sr-sv-ring sr-sv-ring--o"></span><span class="sr-sv-ring sr-sv-ring--i"></span><span class="sr-sv-core"></span></div>' +
+        '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">Creating your record.</h2>' +
+        '<p class="sr-sv-body">Your words are being gathered into a written record on this device. Sit for a moment before you read it.</p>' +
+        '<ul class="sr-sv-status">' +
+          '<li class="sr-sv-st sr-sv-st--done">' + svg('check', 15) + '<span>Transcript written</span><span class="sr-sv-vh">, done</span></li>' +
+          '<li class="sr-sv-st sr-sv-st--done">' + svg('check', 15) + '<span>What you chose, in your own words</span><span class="sr-sv-vh">, done</span></li>' +
+          '<li class="sr-sv-st sr-sv-st--now">' + svg('dot', 15) + '<span>Gathering the decisions you named</span><span class="sr-sv-vh">, in progress</span></li>' +
+        '</ul>' +
+        '<div class="sr-sv-foot"><span class="sr-sv-footl">Nothing leaves this device.</span>' +
+        '<button type="button" class="sr-sv-btn sr-sv-btn--ghost" data-sv="leave">Leave without saving</button></div>' +
+        '</div>';
+    }
+  };
+
+  function go(v) {
+    view = v;
+    var key = PHASES.indexOf(v) > -1 ? 'PHASE' : v;
+    root.innerHTML = SCREENS[key]();
+    root.setAttribute('data-sv-view', v);
+    var h = root.querySelector('.sr-sv-h');
+    if (h) h.focus({ preventScroll: true });
+    var inBed = v === 'PRE_STATE' || v === 'POST_STATE' || PHASES.indexOf(v) > -1;
+    if (inBed) Soundbed.resume(); else Soundbed.pause();
+  }
+
+  function startMachine() {
+    machine = createMachine(LocalStore, { protocolId: ctx.protocolId, trackId: ctx.trackId });
+    deeperShown = 0;
+    go('PRE_STATE');
+  }
+
+  function pick(btn) {
+    var n = +btn.getAttribute('data-sv-num');
+    if (machine.state() === 'PRE_STATE') machine.choosePre(n); else machine.choosePost(n);
+    go(machine.state());
+    var sel = root.querySelector('.sr-sv-num[data-sv-num="' + n + '"]');
+    if (sel) sel.focus();
+  }
+
+  toggle.addEventListener('click', function (e) {
+    var b = e.target.closest('.sr-sv-tbtn');
+    if (b && b.getAttribute('aria-pressed') !== 'true') setMode(b.getAttribute('data-sv-mode'));
+  });
+
+  root.addEventListener('click', function (e) {
+    var num = e.target.closest('.sr-sv-num');
+    if (num) { pick(num); return; }
+    var b = e.target.closest('[data-sv]');
+    if (!b || b.disabled) return;
+    switch (b.getAttribute('data-sv')) {
+      case 'invite-begin':
+        if (LocalStore.get(KEYS.micIntroSeen, false) === true) { openMic().then(startMachine); }
+        else go('PERMISSION');
+        break;
+      case 'allow':
+        LocalStore.set(KEYS.micIntroSeen, true);
+        openMic().then(startMachine);
+        break;
+      case 'to-guided': setMode('guided'); break;
+      case 'mic-retry': openMic().then(function () { go(machine.state()); }); break;
+      case 'soundbed': Soundbed.toggle(); go(machine.state()); break;
+      case 'begin': if (machine.begin()) { deeperShown = 0; go(machine.state()); } break;
+      case 'keep':
+        deeperShown = Math.min(deeperShown + 1, PROMPTS[machine.state()].deeper.length);
+        go(machine.state());
+        break;
+      case 'next': machine.next(); deeperShown = 0; go(machine.state()); break;
+      case 'pre-dn': machine.correctPre(machine.preState() - 1); go(machine.state()); break;
+      case 'pre-up': machine.correctPre(machine.preState() + 1); go(machine.state()); break;
+      case 'close': if (machine.close()) { closeMic(); go(machine.state()); } break;
+      case 'leave': machine.discard(); closeMic(); machine = null; go('INVITE'); break;
+    }
+  });
+
+  /* Radiogroup arrow keys — the ten-button row is one tab stop. */
+  root.addEventListener('keydown', function (e) {
+    var num = e.target.closest && e.target.closest('.sr-sv-num');
+    if (!num) return;
+    var d = (e.key === 'ArrowRight' || e.key === 'ArrowUp') ? 1 : (e.key === 'ArrowLeft' || e.key === 'ArrowDown') ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    var n = Math.max(1, Math.min(10, +num.getAttribute('data-sv-num') + d));
+    pick(root.querySelector('.sr-sv-num[data-sv-num="' + n + '"]'));
+  });
+
+  /* The soundbed pauses with the session — and with the page. */
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) Soundbed.pause();
+    else if (!root.hidden && machine && machine.state() !== 'SYNTHESIS') Soundbed.resume();
+  });
+})(window);
