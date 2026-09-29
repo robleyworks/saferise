@@ -122,8 +122,10 @@
      width for real headroom on a retina display. */
   function coverPath(trackId, no, size) {
     var suffix = size ? ('-' + size) : '';
-    return trackId === 1 ? 'assets/covers/' + no + suffix + '.jpg'
-                         : 'assets/covers/t' + trackId + '-' + no + suffix + '.jpg';
+    /* SR-468 · root-relative: this path is also resolved on the nested
+       /protocols/{slug} route, where a relative one lands under /protocols/. */
+    return trackId === 1 ? '/assets/covers/' + no + suffix + '.jpg'
+                         : '/assets/covers/t' + trackId + '-' + no + suffix + '.jpg';
   }
   /* SR-379 (PASS-reader-and-protocol-pages.md Part A) · exported so protocol.html
      can resolve its own per-protocol cover art from this one place, instead of
