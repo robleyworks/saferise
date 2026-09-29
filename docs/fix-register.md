@@ -22937,3 +22937,44 @@ file modified.
 3. **Trailing slash** — `/method/`, `/about/` and the other root-depth rewrites would
    resolve relative paths under the slash-path if Netlify serves them with a trailing
    slash. Check on a deploy preview.
+
+## SR-468 — root-relative paths in shared scripts; /record/* skip link; trailing slashes
+
+29 September 2026. Follows SR-467. One commit per file. No push.
+
+- **Item 1 — the four shared files**, each its own commit: `js/saferise-track.js` covers
+  `bb30dc4`; `content/tracks.js` art, 16 paths `a64f425`; `content/galaxy.js`, 61 paths
+  `1b494fc`; `content/meditation.js` `MEDITATION_BASE` `6620da0`. No tool reads these
+  strings as file paths, and no code inspects them (`startsWith('assets')` etc.).
+  **V1:** `/protocols/anxiety-reset` — zero 404s in the full request list; cover
+  `/assets/covers/01.jpg`, band `/assets/journey/t1-band.webp` and audio
+  `/assets/audio/meditation/t1-01-anxiety-reset.mp3` all 200. Also zero 404s on
+  resentment-release (t2-04), conflict-navigation (t3-02, with its three galaxy layers)
+  and shutdown-recovery (t1-07).
+  **Root depth, proved not assumed** — baseline and after-snapshots of every page that
+  loads any of the four files (dashboard, index, member-checkout, member-clearing,
+  member-frameworks, member-heartmath, -jung, -kross, -mate, -porges, -watts,
+  personal-transformation, plans, professional-performance, protocol,
+  relationship-healing): 14 identical in requests, image srcs, backgrounds and audio;
+  dashboard and index identical in every resolved image src, differing only in which
+  lazy covers had finished loading at the snapshot (all 200). 0 404s throughout.
+- **Item 2 — /record/* skip link** `8c4b608`. Kept `<base href="/">` and gave the skip
+  link its own route at load (`location.pathname + location.search + '#main'`).
+  Dropping the base would have broken `js/saferise-rail.js` and
+  `js/saferise-access.js` links on `/record/*` (both relative, both shared by every
+  member page). Pre-fix, the link from `/record/decisions` navigated to `/`; fixed, it
+  stays on the page with `#main`.
+- **Item 3 — trailing slashes, checked on production (read-only)**. Root pages backed by
+  a real `.html` (/method/, /about/, /plans/, /account/, /legal/, /live-sessions/,
+  /coming-soon/, /accessibility/, the three track pages, /anxiety-reset/,
+  /organisations/) **301 to the no-slash URL — not exposed**. Five rewrite to a
+  differently named file and are **served at the slash URL with 200, and were broken**:
+  /faq/, /writing/, /podcast/ (6/6 relative refs 404) and /clearing/, /checkout/ (7/7).
+  Fixed: `member-reading.html`, `member-clearing.html`, `member-checkout.html`
+  root-relative `f42cea8`; the rail's routes `d5acc5c` and the access gate's sign-in
+  links `ba62d41` root-relative so navigation works from those URLs too. Verified on the
+  local Netlify stand-in: all five plus `/record/decisions` load with zero 404s, render
+  the right view, and a rail click lands on `/dashboard.html`. All 21 pages that load
+  the rail or the gate are identical at root depth (requests and every resolved link)
+  before and after.
+- **Not verified on a Netlify deploy preview** — that needs a push.
