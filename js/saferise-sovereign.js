@@ -680,7 +680,7 @@
         '<p class="sr-sv-label">Where you are starting</p>' + replayBtn('pre') +
         '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">How activated does your system feel right now?</h2>' +
         scale('pre', pre) +
-        '<p class="sr-sv-say"><span class="sr-sv-gdot" aria-hidden="true"></span>Or just say it — ‘I’m agitated, about a seven.’</p>' +
+        '<p class="sr-sv-say"><span class="sr-sv-gdot" aria-hidden="true"></span>Say the number, or tap it.</p>' +
         '<p class="sr-sv-quiet">You can correct this at any point during the session.</p>' +
         '<div class="sr-sv-acts"><button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="begin"' + (pre ? '' : ' disabled') + '>Begin</button></div>' +
         '<div class="sr-sv-foot"><span>' + soundbedBtn() + '</span>' +
@@ -720,7 +720,7 @@
         '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">And how activated does your system feel now?</h2>' +
         scale('post', post) +
         '<p class="sr-sv-began sr-sv-began--big">You began at <span class="sr-sv-chip">' + machine.preState() + '</span></p>' +
-        '<p class="sr-sv-say"><span class="sr-sv-gdot" aria-hidden="true"></span>Or say it — ‘a lot quieter, maybe a three.’</p>' +
+        '<p class="sr-sv-say"><span class="sr-sv-gdot" aria-hidden="true"></span>Say the number, or tap it.</p>' +
         '<div class="sr-sv-acts"><button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="close"' + (post ? '' : ' disabled') + '>Close the session</button></div>' +
         '<div class="sr-sv-foot"><span>' + soundbedBtn() + '</span>' +
         '<span class="sr-sv-footr sr-sv-footr--430">Nothing has been written up yet. You are rating your own state, not a summary of it.</span></div>' +
