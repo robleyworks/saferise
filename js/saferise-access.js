@@ -91,8 +91,8 @@
     return '<div class="sr-tp-band" style="max-width:640px;margin:0 auto;text-align:center">' +
       '<h1 style="margin-bottom:10px">' + (opts.title || 'Sign in to continue') + '</h1>' +
       '<p class="sr-tp-body">' + (opts.body || '') + '</p>' +
-      '<p style="margin-top:24px"><a class="sr-tp-pill" href="login.html?next=' + next + '">Sign in</a></p>' +
-      '<p class="sr-tp-body" style="margin-top:16px"><a href="signup.html?next=' + next + '">Create an account</a></p>' +
+      '<p style="margin-top:24px"><a class="sr-tp-pill" href="/login.html?next=' + next + '">Sign in</a></p>' +
+      '<p class="sr-tp-body" style="margin-top:16px"><a href="/signup.html?next=' + next + '">Create an account</a></p>' +
     '</div>';
   }
   function signIn(email, password) {
