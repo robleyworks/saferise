@@ -231,7 +231,7 @@ var LANDING_COPY = {
     protocolsEyebrow: 'Find your starting point',
     protocolsH2: 'What has hold of<br>you right now?',
     protocolsIntro: 'Choose the state you recognise. Each protocol includes a guided session, a quick-use cue and practical tools for what comes next.',
-    railCta: 'Open all 10 free',
+    railCta: 'Open them free',
     railSupport: 'Guided sessions, cue cards and practical tools included.',
     storyEyebrow: 'One continuous sequence',
     storyH3: 'Experience it.<br>Record what shifts.<br>Go deeper.',
@@ -254,15 +254,16 @@ var LANDING_COPY = {
     priceEyebrow: 'Start Personal Transformation',
     priceH2: 'Every protocol.<br>Free, from day one.',
     upgradeTitle: 'Want to work with relationships and professional pressure too?',
-    upgradeBody: 'One €19 monthly membership opens every other SafeRise track, and every track added after them — at no change to what you already pay.',
-    stickyText: 'All 10 Personal Transformation protocols · free with an account'
+    /* SR-470 · the four-tier ladder: €19 no longer opens tracks added later. */
+    upgradeBody: 'Standard, at €19 a month, opens the tracks released so far. Premium and Sovereign open every track as it releases.',
+    stickyText: 'Personal Transformation, in full · free with an account'
   },
   2: {
-    support: 'Every track, including the ones still coming. Cancel whenever — your journal stays private.',
+    support: 'Every track released so far, from Standard. Cancel whenever — your journal stays private.',
     protocolsEyebrow: 'Find your starting point',
     protocolsH2: 'What keeps happening<br>between you?',
     protocolsIntro: 'Choose the pattern you recognise. Each protocol includes a guided session, a quick-use cue and language for the conversation itself.',
-    railCta: 'See all 10 protocols',
+    railCta: 'See every protocol',
     railSupport: 'Track 01 is free with an account if you would rather begin there.',
     storyEyebrow: 'One continuous sequence',
     storyH3: 'Steady yourself.<br>Say it plainly.<br>Repair it sooner.',
@@ -283,17 +284,17 @@ var LANDING_COPY = {
     proofIntro: 'One session can change how a conversation goes. Your private record shows what repetition changes between you.',
     proofSteps: ['Record where the conversation went', 'See the loop you both keep entering', 'Notice repair arriving earlier'],
     priceEyebrow: 'Start Relationship Healing',
-    priceH2: 'Every protocol.<br>Inside one membership.',
+    priceH2: 'Every protocol.<br>From Standard up.',
     upgradeTitle: 'Want to work with your inner life and professional pressure too?',
-    upgradeBody: 'One €19 monthly membership opens every other SafeRise track—now and as the library grows.',
-    stickyText: 'All 10 Relationship Healing protocols · €19 a month'
+    upgradeBody: 'Standard, at €19 a month, opens every track released so far. Premium adds each new track as it releases.',
+    stickyText: 'Relationship Healing, in full · from €19 a month'
   },
   3: {
-    support: 'Every track, including the ones still coming. Cancel whenever — your journal stays private.',
+    support: 'Every track released so far, from Standard. Cancel whenever — your journal stays private.',
     protocolsEyebrow: 'Find your starting point',
     protocolsH2: 'What changes when<br>the stakes rise?',
     protocolsIntro: 'Choose the pressure you recognise. Each protocol includes a guided session, a quick-use cue and something to use before the room.',
-    railCta: 'See all 10 protocols',
+    railCta: 'See every protocol',
     railSupport: 'Track 01 is free with an account if you would rather begin there.',
     storyEyebrow: 'One continuous sequence',
     storyH3: 'Settle before it.<br>Record what held.<br>Go in again.',
@@ -314,10 +315,10 @@ var LANDING_COPY = {
     proofIntro: 'One session can change how you walk into a room. Your private record shows what repetition changes under pressure.',
     proofSteps: ['Record your state before the room', 'See which pressures repeat', 'Notice clarity arriving sooner'],
     priceEyebrow: 'Start Professional Performance',
-    priceH2: 'Every protocol.<br>Inside one membership.',
+    priceH2: 'Every protocol.<br>From Standard up.',
     upgradeTitle: 'Want to work with your inner life and relationships too?',
-    upgradeBody: 'One €19 monthly membership opens every other SafeRise track—now and as the library grows.',
-    stickyText: 'All 10 Professional Performance protocols · €19 a month'
+    upgradeBody: 'Standard, at €19 a month, opens every track released so far. Premium adds each new track as it releases.',
+    stickyText: 'Professional Performance, in full · from €19 a month'
   }
 };
 
@@ -443,7 +444,7 @@ var TRACKS = {
     ],
     /* SR-126 · the introductory line comes first because it qualifies the number
        directly above it. All three segments are conditions of sale. */
-    priceNote: 'Free for as long as you have an account \u2014 no trial, no countdown<br>Relationship and Professional build on this track \u00B7 \u20AC19 a month, or \u20AC190 a year, for both together.',
+    priceNote: 'Free for as long as you have an account \u2014 no trial, no countdown<br>Relationship and Professional build on this track \u00B7 from \u20AC19 a month.',
     /* SR-381 (PASS-live-site-defects.md Part O) · was '€19 a month, cancel
        anytime' -- Track 01 is free, not €19. The SR-126/SR-368 comments
        above described a paid entry tier that no longer applies. */
@@ -578,7 +579,7 @@ var TRACKS = {
       close: 'Fewer fights, faster repair, and time together that stops costing you.' },
 
     priceList: [
-      'All thirty protocols \u2014 Relationship Healing, Professional Performance and Personal Transformation',
+      'Every protocol in Relationship Healing, Professional Performance and Personal Transformation',
       'Solo and shared versions of every guided session',
       'Invitation to Repair and Disclosure scripts throughout',
       'Journal and progress tracking, private to you \u2014 not shared with a partner',
@@ -765,7 +766,7 @@ var TRACKS = {
       close: 'Clearer decisions, weeks you recover from, and reactions that stop costing you.' },
 
     priceList: [
-      'All thirty protocols \u2014 Professional, Relationship Healing and Personal Transformation',
+      'Every protocol in Professional Performance, Relationship Healing and Personal Transformation',
       'Full sessions plus short versions built for a working day',
       /* SR-374 (PASS-advisory-and-token.md \u00a71f) \u00b7 was 'Attention Advisory
          and conflict scripts throughout' -- same reasoning as deeper:

@@ -154,46 +154,43 @@
       '</div></header>';
   }
 
+  /* SR-470 (TIER-1) · the four-step ladder, founder-set, all prices monthly.
+     Scope in words, never counts (standing rule). The Sovereign card names all
+     three parts of what it is, and makes no zero-retention claim: the written
+     record is read by an AI (SR-469 wording). Free's price comes from the
+     pricing record; the rest are the founder's ladder, which has no keys in
+     content/tracks.js yet. */
   function rPlans() {
     var t1 = PRICING.t1, t2 = PRICING.t2;
-    /* t2.annual is one combined string ("€190 / year") — content/tracks.js
-       has no separate amount/period split for the annual rate the way it
-       does for the monthly one, so it's parsed here rather than read as
-       two fields that don't exist. The amount half is still 100% data —
-       only "a month"/"a year" as connecting words are authored here, the
-       same way "with an account" is for Track 01's free plan. */
-    var annualAmount = String(t2.annual).split('/')[0].trim();
+    function card(o) {
+      return '<article class="sr-pl-plan' + (o.paid ? ' sr-pl-plan-paid' : '') + '">' +
+        '<p class="sr-pl-tag">' + o.tag + '</p>' +
+        '<p class="sr-pl-price' + (o.free ? ' sr-pl-free' : '') + '">' + esc(o.price) + '<small>' + o.per + '</small></p>' +
+        '<h3>' + o.scope + '</h3>' +
+        o.body.map(function (b) { return '<p class="sr-pl-d">' + b + '</p>'; }).join('') +
+        '<a class="sr-pl-cta' + (o.paid ? ' sr-pl-cta-solid' : '') + '" href="signup.html">' + o.cta + '</a>' +
+      '</article>';
+    }
     return '<section id="plans"><div class="wrap">' +
       '<div class="sr-pl-shead rv"><div><p class="eyebrow">What it costs</p>' +
-      '<h2>Track 01 is free.<br>One price opens the rest.</h2></div>' +
-      '<p>You make an account and the protocols in Personal Transformation are yours — not a trial, not a sample, not a countdown. Everything below is what funds the rest of it.</p></div>' +
-      '<div class="sr-pl-plans rv">' +
-        '<article class="sr-pl-plan">' +
-          '<p class="sr-pl-tag">Track 01 · Personal</p>' +
-          '<p class="sr-pl-price sr-pl-free">' + esc(t1.amount) + '<small>with an account</small></p>' +
-          '<h3>Personal Transformation</h3>' +
-          '<p class="sr-pl-quote">What happens inside me?</p>' +
-          '<p class="sr-pl-d"><b>Your inner life.</b> Work with the states that pull attention away from you — fear, anger, overwhelm, grief, insecurity and shutdown — so you have more room to decide what deserves your attention and what you do next.</p>' +
-          '<p class="sr-pl-d">A protocol for each state, each with the full resource set.</p>' +
-          '<p class="sr-pl-note">No card required. Your journal stays on your device.</p>' +
-          '<a class="sr-pl-cta" href="signup.html">Create an account</a>' +
-        '</article>' +
-        '<article class="sr-pl-plan sr-pl-plan-paid">' +
-          '<p class="sr-pl-tag">Membership · everything else</p>' +
-          '<p class="sr-pl-price" id="srPlPrice">' + esc(t2.amount) + '<small id="srPlPer">a month</small></p>' +
-          '<div class="sr-pl-toggle" aria-label="Billing period">' +
-            '<button class="sr-pl-on" type="button" data-p="' + esc(t2.amount) + '" data-per="a month" ' +
-              'data-note="Billed monthly. Cancel whenever.">Monthly</button>' +
-            '<button type="button" data-p="' + esc(annualAmount) + '" data-per="a year" ' +
-              'data-note="Ten months for twelve. No discount code, no deadline.">Annual</button>' +
-            '<span id="srPlToggleNote">Billed monthly. Cancel whenever.</span>' +
-          '</div>' +
-          '<h3>Every other track, and every track added after</h3>' +
-          '<p class="sr-pl-quote">What keeps happening between us — and what changes when the stakes rise?</p>' +
-          '<p class="sr-pl-d"><b>One membership, the whole library.</b> Relationship Healing and Professional Performance now, and every track that follows — at no change to what you already pay.</p>' +
-          '<p class="sr-pl-d">Cancel whenever. Nothing expires, nothing locks, and nothing gets taken away mid-month.</p>' +
-          '<a class="sr-pl-cta sr-pl-cta-solid" href="signup.html">Start</a>' +
-        '</article>' +
+      '<h2>The first track is free.<br>Four ways in.</h2></div>' +
+      '<p>You make an account and Personal Transformation is yours — not a trial, not a sample, not a countdown. Every price is monthly; cancel whenever.</p></div>' +
+      '<div class="sr-pl-plans sr-pl-plans-4 rv">' +
+        card({ tag: 'Free', free: true, price: t1.amount, per: 'with an account', scope: 'The first track, in full',
+          body: ['<b>Personal Transformation.</b> Fear, anger, overwhelm, grief, insecurity and shutdown — a protocol for each state, each with the full resource set.', 'No card required.'],
+          cta: 'Create an account' }) +
+        card({ tag: 'Standard', paid: true, price: t2.amount, per: 'a month', scope: 'The tracks released so far',
+          body: ['<b>Personal Transformation, Relationship Healing and Professional Performance.</b>'],
+          cta: 'Start' }) +
+        card({ tag: 'Premium', paid: true, price: '€29', per: 'a month', scope: 'Every track, as it releases',
+          body: ['<b>Everything in Standard,</b> and each new track the day it opens.'],
+          cta: 'Start' }) +
+        card({ tag: 'Sovereign', paid: true, price: '€39', per: 'a month', scope: 'Every track, and your own voice',
+          body: ['<b>Everything in Premium, and:</b>',
+            'Speak instead of type — sessions, journal, statements, decisions, ratings.',
+            'Transcription that never leaves your device; the audio is discarded as it is transcribed.',
+            'An AI reading of what you said: what you returned to, what shifted, how you moved through Recognise, Regulate, Release and Rise.'],
+          cta: 'Start' }) +
       '</div></div></section>';
   }
 
@@ -209,8 +206,8 @@
       return '<li tabindex="0"><em>' + p[0] + '</em><div class="sr-pl-t"><b>' + esc(title) + '</b>' +
         '<i>' + esc(state) + '</i><span>' + esc(desc) + '</span></div></li>';
     }).join('');
-    var meta = id === 1 ? '<b>' + esc(t.protocols.length) + ' protocols</b> · <b>Free with an account</b>'
-      : '<b>' + esc(t.protocols.length) + ' protocols</b> · <b>Included with membership</b>';
+    /* SR-470 · no protocol count in plan copy (standing rule). */
+    var meta = id === 1 ? '<b>Free with an account</b>' : '<b>Standard and above</b>';
     return '<div class="sr-pl-tsec" style="--tc:var(' + TRACK_KICKER[id] + ');--tglow:' + TRACK_GLOW[id] + '">' +
       '<div class="sr-pl-ph-fill"></div><div class="sr-pl-ph-scrim"></div>' +
       (band ? '<img src="' + band.src + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.5" aria-hidden="true">' : '') +
@@ -250,8 +247,8 @@
     })).join('');
     return '<section id="core"><div class="wrap">' +
       '<div class="sr-pl-shead rv"><div><p class="eyebrow">The core library</p>' +
-      '<h2>Every track.<br>One membership.</h2></div>' +
-      '<p>Every track sits inside the same membership. When a new one opens it is simply there — no upgrade, no new tier, no change to what you already pay.</p></div>' +
+      '<h2>Every track,<br>as it releases.</h2></div>' +
+      '<p>Premium and Sovereign open every track as it releases: when a new one opens it is simply there, at no change to what you already pay.</p></div>' +
       '<div class="sr-pl-coregrid rv">' + cards + '</div>' +
       '</div></section>';
   }
@@ -311,27 +308,9 @@
       '</div></div></section>';
   }
 
-  function rClose() {
-    return '<section class="sr-pl-close"><div class="wrap" style="width:auto">' +
-      '<h4>What the price is for</h4>' +
-      '<p>Research, protocol design, production, hosting, and keeping the whole thing maintained. It is what lets Track 01 stay free and stay good.</p>' +
-      '<p>We do not run sales, streaks, scores or countdowns. If the work is worth paying for, it should be worth paying for on an ordinary day.</p>' +
-      '</div></section>';
-  }
-
-  function bindToggle() {
-    var out = document.getElementById('srPlPrice'), per = document.getElementById('srPlPer'),
-      note = document.getElementById('srPlToggleNote'),
-      bs = document.querySelectorAll('.sr-pl-toggle button');
-    [].forEach.call(bs, function (b) {
-      b.addEventListener('click', function () {
-        [].forEach.call(bs, function (x) { x.classList.toggle('sr-pl-on', x === b); });
-        out.childNodes[0].nodeValue = b.dataset.p;
-        per.textContent = b.dataset.per;
-        note.textContent = b.dataset.note;
-      });
-    });
-  }
+  /* SR-470 6.4 (PR-16) · the "What the price is for" section is removed: the
+     founder did not write it and questioned why it was there, and this pass
+     does not rewrite it. */
 
   function bindReveal() {
     var els = [].slice.call(document.querySelectorAll('.sr-pl-page .rv'));
@@ -353,8 +332,7 @@
     var mount = typeof opts.mount === 'string' ? document.getElementById(opts.mount)
       : (opts.mount || document.getElementById('srPlans'));
     if (!mount) return;
-    mount.innerHTML = rHero() + rPlans() + rLibrary() + rCore() + rInside() + rLive() + rClose();
-    bindToggle();
+    mount.innerHTML = rHero() + rPlans() + rLibrary() + rCore() + rInside() + rLive();
     bindReveal();
   }
 

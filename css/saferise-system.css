@@ -6286,6 +6286,10 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
 .sr-pl-toggle button.sr-pl-on{border-color:var(--gold);color:var(--gold);background:rgba(216,170,67,.07)}
 .sr-pl-toggle span{color:var(--text3);font-family:'DM Sans',sans-serif;font-size:.78rem}
 @media(max-width:1000px){.sr-pl-plans{grid-template-columns:1fr;gap:22px}}
+/* SR-470 · the four-tier ladder: four columns, two, then one. */
+.sr-pl-plans.sr-pl-plans-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1180px){.sr-pl-plans.sr-pl-plans-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.sr-pl-plans.sr-pl-plans-4{grid-template-columns:1fr}}
 
 /* the library — track index */
 /* SR-386 · the mock's own .tsec used margin:0 -9999px;padding:0 9999px to
