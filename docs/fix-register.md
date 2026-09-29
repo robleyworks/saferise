@@ -22761,8 +22761,8 @@ tags and an empty `#sr-sv-root`. No push.
 
 ## SR-464 — consolidation pass: CSP, Sovereign voice, imagery install, member defect sweep
 
-29 September 2026. One commit per item, each tagged with its item number. **In
-progress** — this entry is opened by A4 and completed by the pass's closing commit.
+29 September 2026. One commit per item, each tagged with its item number and MR/PR
+ID. Run alone after SR-465 cleaned the tree. No push. Completed below.
 
 - **A1** `fe3763b` — `'wasm-unsafe-eval'` added to `script-src`. connect-src unchanged.
 - **A1b** `1ecbf4b` — **Differs (adapted):** `Permissions-Policy` had `microphone=()`,
@@ -22776,6 +22776,108 @@ progress** — this entry is opened by A4 and completed by the pass's closing co
   system JS is not loaded on `protocol.html`, the flag's only reader.
 - **A4** — this entry, and `sr-sv-` claimed in `CLAUDE.md`. SR-465 registered below
   too: allocated this session, no entry otherwise.
+- **A2 (fix)** `7add252` — A2 handed ONNX Runtime its WASM as `wasmBinary`; that forces a
+  non-streaming compile (cold start 1.4 s → 12.5 s). WASM is named by URL again and the
+  worker's closed fetch serves it from Cache Storage: 12.5 s → 6.3 s on a machine then
+  running ~3.7× slower than the SOV-3 measurement.
+
+### Part B — Sovereign voice
+
+- **B1** `e98f713` — `sv-prestate.mp3` (7.5 s) and `sv-poststate.mp3` (6.6 s) copied
+  byte-for-byte to `assets/audio/sovereign/`.
+- **B2** `96b53b5` — each plays once when its screen opens, never automatically again;
+  one "Hear the question again" control per screen; primed muted inside the Begin
+  click; a failed play changes nothing. Paths resolve from the script's own URL.
+- **B4** `2ed0389` (before B3, which needs it) — the microphone runs from the pre-state
+  screen until "Close the session", then closes in that click. Retention is unchanged in
+  kind (per-utterance, 15 s cap, transferred and dropped); the window now includes both
+  rating screens. **E5:** 60 s of unbroken input across all six capture phases held at
+  most **10.07 s**; 0 samples after stop.
+- **B3** `bf2017c` — spoken rating by plain word-to-number match (first 1–10 digit or
+  word; ≤12 words); selects the button like a tap, never advances. Engine `hold()` drops
+  capture while a prompt plays. **E4:** "about a seven" → 7 and "Four." → 4 on the
+  pre-state screen, "maybe a three" → 3 on the close screen; none advanced; speech during
+  the prompt selected nothing; rating speech never enters the transcript.
+- **B5** `884da18` — both screens: "Say the number, or tap it."
+
+### Part C — imagery
+
+- **C1** PR-04 `4c5fba6` (`assets/home/door-t3`, 1086×1448); covers `4da2391`
+  (`life-and-load-10.{jpg,webp}` 240×320 + `life-and-load-10-1086.jpg` master); PR-11
+  `d88fe43` (`assets/method/m-lineage-hall`, 8:3 band in section 04); MR-36 `68e8f42`
+  (`assets/frameworks/method-lab`; `range-photograph` now unreferenced, kept).
+- **C1 skipped — PR-07:** no closing triptych exists on any track landing page; adding
+  one is a new section with new copy. **PR-13:** four 2.4:1 blocks would be a new pattern
+  beside 1:1 labelled cells whose caption promises "no recognisable faces"; the frames
+  show faces, and per-block copy would be invented.
+- **C2** PR-14 `4ba6883` — `assets/plans/panel-t{1,2,3}` as the library underlays; the
+  photo sat at z −3 beneath the opaque hatch, now −2. MR-15 `bcaae65` —
+  `assets/dashboard/{state,journal}-banner.{webp,jpg}` replaced in place.
+- **C3 skipped — PR-25/26.** The duplicate pair is `assets/about/img-057` (line 1153) and
+  `img-052` (line 1257): 057 is the left 900 px of 052 (diff 0.52). The replacement is the
+  same table scene wider; the pen is bottom-left, and a right-hand crop that removes the
+  cup also removes the headphones. Instruction does not fit the image.
+- **C4** `ebb893b` — flipped `band-17` and `band-15` (.webp + .jpg). Not flipped: band-18
+  (handshake), 10/11/13/14/16 (figure central), 12 (faces already clear), coming-hero.
+  Both files also render on /plans and /organisations.
+
+### Part D — member defects
+
+- **D0** — no prior pass cites MR-16 or MR-25. Action row before D1: "02 Carry on"
+  hidden unconditionally by SR-292's flag, row at two columns.
+- **D1** `e6e5e30` — Resume renders iff `sr.resume` holds a protocol. **Differs:** nothing
+  writes `sr.resume` (SR-165), so it stays hidden for every member today.
+- **D2** `01f7cdb` — each protocol's own Cue Card (record front lines + own cover), posted
+  with open-cue. **E6:** t1-03, t1-08, t2-04, t3-02 verified. The dashboard's own generic
+  tile keeps the generic card (Anxiety Reset art — it belongs to no protocol).
+- **D3** `7e45c15` — not the D2 lookup: `.sr-fw-cardslug` art notes rendered visible, and
+  cards were never resolved. Notes hidden; `js/saferise-fw-cards.js` resolves protocol
+  cards by title on all six framework pages. **Copy mismatch left as is:** Maté's
+  "Abandonment Wound" card says Track 02; the data says Track 01 #04.
+- **D4** `c8db712` — the white flash was the frame's `color-scheme:dark` over a
+  light-scheme `about:blank`; removed. First paint #0B0B11 on dashboard/protocol/resource.
+  Flash itself not observed (hidden preview pane).
+- **D5** `ed0f21a` — "× Close" pill, 90×44, Escape still closes. The player has no note
+  field to lose.
+- **D6** `314e81a` — Cue Card panel removed from `member-clearing.html` only.
+- **D7** `52e09f2` — "Open the journal" → the originating protocol's journal, open and
+  focused, "From <resource>" stored on the entry; standalone and embedded verified.
+- **D8 stopped** — content has per-protocol resource sets, no per-track mapping. The
+  dashboard strip's labels ("Breathwork", "Progress Tracking", "Proximity Guide") are not
+  content resource types either.
+- **D9** `be379c8` — hero slides share one grid cell; journey band fixed at 1400/380.
+  **E9:** hero height constant across all six slides at 375/760/1440, section below does
+  not move; band 334 px with photo, placeholder, or while loading.
+- **D10** `2e18073` — 3fr 2fr on both splits (0.600 measured).
+- **D11 audit, no change** — Book a session / Reserve a place / See the full calendar all
+  open and close (Escape and close button). Their final buttons ("Book this time · €129",
+  "Reserve my place · €29", "Continue to booking") have no handler; every listed date is
+  past.
+- **D12 click-through, report only** — 16 member pages: every local link and asset
+  resolves. Dashboard, 112 controls: all open/navigate/change as expected except dead
+  ends — "Waitlist" (no handler), the eight hero-slide CTAs (`href="#"`, no listener),
+  and the D11 submit stubs. Also found: `protocol.html` has no `<base href="/">`, so on
+  the `/protocols/{slug}` rewrite every relative script and stylesheet would resolve
+  under `/protocols/` (the fix `member-record.html` already uses) — check on a deploy
+  preview; `resource.html`'s `<title>` says "Anxiety Reset · Resource Reader" for every
+  protocol; `saveJournalResult()` stores a stock sentence as the entry when the field is
+  empty; the standalone protocol page's Cue Card link does nothing (embed-only bridge);
+  `js/saferise-plans.js` states protocol counts in copy.
+
+### Part E — verify
+
+- **E1** — every commit carries its item number and ID; every installed asset shows in
+  `git ls-files` (checked after each install commit).
+- **E2** — flag off: `protocol.html` renders byte-identical to before the pass (29,674
+  chars), no toggle, no worker, no cache activity, no speech or voice file fetched. Only
+  the brief's first-paint colour differs.
+- **E3** — flag on, empty cache: setup requests are all same-origin (HEAD + GET for the
+  10 vendor files, two primed prompts, the worker); a complete session then requested
+  only the two prompts and the worker. Zero cross-origin in both. The page's only
+  cross-origin hosts are Google Fonts at page load — one via the `@import` in
+  `css/saferise-sovereign.css` (SR-462).
+- **E7** — no border added anywhere in the diff (`border:0` on the new close button is a
+  UA reset). **E8** — `SpeechRecognition` does not occur in the diff.
 
 ## SR-465 — commit the orphaned coming-soon covers and the dev-protocols draft
 
