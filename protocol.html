@@ -1860,6 +1860,22 @@ function renderProtocolContent(pp) {
     }
   }
   wall.hidden = false;
+
+  /* SR-470 2.3 · signed in, but the member's tier does not open this track:
+     say it is locked — which track, what opens it, where to go — instead of
+     asking them to create the account they already have. */
+  if (SafeRiseAccess.currentUser() && SafeRiseAccess.lockedCopy) {
+    var lc = SafeRiseAccess.lockedCopy(PAGE_PROTOCOL.trackId);
+    var offer = document.getElementById('sr-gate-offer');
+    if (offer) {
+      offer.querySelector('h1').textContent = lc.title;
+      offer.querySelector('p').textContent = lc.body;
+      var up = offer.querySelector('#sr-gate-signup-open');
+      if (up) { var a = document.createElement('a'); a.className = 'sr-gate-pill'; a.href = lc.href; a.textContent = lc.cta; up.parentNode.replaceChild(a, up); }
+      var si = offer.querySelector('#sr-gate-signin'); if (si) si.hidden = true;
+      var note = offer.querySelector('.sr-gate-note'); if (note) note.hidden = true;
+    }
+  }
   document.title = 'SafeRise \u2014 Create an account to open this one';
 
   var offer  = document.getElementById('sr-gate-offer');

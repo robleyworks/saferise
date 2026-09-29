@@ -1301,12 +1301,18 @@
     var lock = document.getElementById('srLockCta');
     if(!lock) return;
     if(!t || t.unlocked || !t.items.length){ lock.classList.remove('show'); return; }
+    /* SR-470 · the ladder is tiered, not per track: the lock names the
+       membership that opens this track (SafeRiseAccess.lockedCopy — one
+       wording on every surface) and leads to /checkout. */
+    var lc = window.SafeRiseAccess && SafeRiseAccess.lockedCopy ? SafeRiseAccess.lockedCopy(n) : null;
     document.getElementById('srLockText').innerHTML =
-      '<b>' + TRACKNAME[n] + ' is not on your plan yet.</b> ' +
-      'Adding it opens all its protocols and every resource inside them. Your existing access stays exactly as it is.';
-    var up = TRACKS[n] && TRACKS[n].price;
-    document.getElementById('srLockBtn').innerHTML =
-      'Add for ' + (up ? up.amount + ' ' + up.per : '') + ' ' + ARROW;
+      '<b>' + TRACKNAME[n] + ' is not on your plan yet.</b> ' + (lc ? 'It opens with ' + lc.level + ' or above.' : '');
+    var btn = document.getElementById('srLockBtn');
+    btn.innerHTML = (lc ? lc.cta : 'See the memberships') + ' ' + ARROW;
+    if (!btn.getAttribute('data-sr-wired')) {
+      btn.setAttribute('data-sr-wired', '1');
+      btn.addEventListener('click', function () { location.href = '/checkout'; });
+    }
     lock.classList.add('show');
   }
   function hideLockCta(){
@@ -1683,8 +1689,10 @@
       markInCarousel(name);
     } else {
       document.getElementById('srResultKick').textContent = 'Opens next \u00B7 ' + TRACKNAME[track];
-      act.innerHTML = '<button class="sr-dash-pill sr-dash-pill--ghost">Add ' + TRACKNAME[track] + ' \u00B7 ' + TRACKPRICE[track] + ' ' + ARROW + '</button>' +
-        '<span class="sr-dash-locknote">Adds to your plan. Your Personal Transformation access stays as it is.</span>';
+      /* SR-470 · tiered, not per track: name the membership that opens it, and go there. */
+      var lcr = window.SafeRiseAccess && SafeRiseAccess.lockedCopy ? SafeRiseAccess.lockedCopy(track) : null;
+      act.innerHTML = '<a class="sr-dash-pill sr-dash-pill--ghost" href="/checkout">See the memberships ' + ARROW + '</a>' +
+        '<span class="sr-dash-locknote">' + TRACKNAME[track] + (lcr ? ' opens with ' + lcr.level + ' or above.' : ' is part of the membership.') + ' Your Personal Transformation access stays as it is.</span>';
     }
     document.getElementById('srResult').classList.add('show');
     var hint = document.getElementById('srBeginHint');

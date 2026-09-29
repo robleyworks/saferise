@@ -1173,10 +1173,26 @@ if (!RESOURCES) { ACTIVE_TRACK = '1'; ACTIVE_PROTOCOL = '01'; RESOURCES = window
   var gate = document.getElementById('srResGate');
   var access = window.SafeRiseAccess;
   var protocolId = 't' + ACTIVE_TRACK + '-p' + ACTIVE_PROTOCOL;
-  if (access && access.isDev && access.isDev()) { if (main) main.hidden = false; return; }
+  /* SR-470 · no separate local bypass here: hasAccess() already opens
+     everything locally, unless ?srtier= is simulating a tier. */
   if (access && access.ready) { try { await access.ready; } catch (e) {} }
   if (access && access.hasAccess(protocolId)) {
     if (main) main.hidden = false;
+    return;
+  }
+  if (gate && access && access.currentUser() && access.lockedCopy) {
+    /* SR-470 2.3 · signed in, but the tier does not open this track: locked, not a sign-up prompt. */
+    var lc = access.lockedCopy(ACTIVE_TRACK);
+    gate.innerHTML =
+      '<div class="sr-gate"><div class="sr-gate-in">' +
+        '<h1>' + lc.title + '</h1>' +
+        '<p>' + lc.body + '</p>' +
+        '<div class="sr-gate-acts">' +
+          '<a class="sr-gate-pill" href="' + lc.href + '">' + lc.cta + '</a>' +
+          '<a class="sr-gate-ghost" href="/protocol.html?track=1&amp;protocol=01">Open the Anxiety Reset instead</a>' +
+        '</div>' +
+      '</div></div>';
+    gate.hidden = false;
     return;
   }
   if (gate) {
