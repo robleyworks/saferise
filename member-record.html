@@ -20,8 +20,10 @@
 <!-- SR-444 (PASS-X §5) · base href: this page is also served at the nested
      clean paths /record/chosen-self and /record/decisions (200 rewrites in
      _redirects), where every relative css/, js/ and .html URL would otherwise
-     resolve under /record/ and 404. The page has no in-page #links, which a
-     base would redirect to the site root. -->
+     resolve under /record/ and 404. A base sends in-page #links to the site
+     root: SR-468 found one — the skip link — and gives it this page's own
+     route at load (below) rather than dropping the base, which would break
+     the rail's and access gate's relative links on /record/*. -->
 <base href="/">
 <!-- SR-164 · the ground colour, inline and first — copied from
      member-frameworks.html, as is everything above <main>. -->
@@ -39,6 +41,12 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<script>
+/* SR-468 · under <base href="/"> a bare "#main" resolves to /#main and takes a
+   keyboard user to the homepage. Pointing it at this page's own route keeps
+   it a same-document jump on /record/* and on member-record.html?r=… alike. */
+(function(){ var a = document.querySelector('a.skip'); if (a) a.setAttribute('href', location.pathname + location.search + '#main'); })();
+</script>
 
 <nav class="sr-dash-navrail" id="srRail" aria-label="Sections"></nav>
 
