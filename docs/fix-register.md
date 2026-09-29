@@ -22722,3 +22722,72 @@ dev card.
 A no-borders fix to `.sr-dash-card .sr-pcover` should convert it to an inset ring and make
 the hover a `box-shadow`. At that point a `.sr-dash-devcard` hover override becomes
 meaningful.
+
+## SR-462 — Sovereign player shell and state machine, flag-gated (SOV-2)
+
+29 September 2026. Commit `c5be15d`. New `js/saferise-sovereign.js`,
+`css/saferise-sovereign.css` (surface `sr-sv-`); `protocol.html` gained only the two
+tags and an empty `#sr-sv-root`. No push.
+
+- Deterministic machine PRE_STATE → RECOGNISE → REGULATE → RELEASE → RISE →
+  POST_STATE → SYNTHESIS, advanced by member clicks only; no timers. INVITE and a
+  once-ever PERMISSION screen (`sr.sv.micIntroSeen`) sit in front.
+- `preState` written before RECOGNISE, `postState` before SYNTHESIS, both under
+  `sr.sv.session`; verified with a recording fake Store.
+- **Differs:** `js/saferise-decision.js` never exports its `Store`; a local adapter of
+  the same shape is used instead.
+- Mobile stage fills the player box, not the viewport: `.player`/`.experience-box`
+  clip overflow.
+
+## SR-463 — on-device transcription, live transcript, silence detection (SOV-3)
+
+29 September 2026. Commit `fa023f3`. New `js/saferise-sovereign-stt.js` (engine),
+`js/saferise-sovereign-stt-worker.js` (module worker), `js/saferise-sovereign-capture.js`
+(AudioWorklet). No push.
+
+- Model: moonshine-tiny q8 (`onnx-community`, pinned `a6da124`) on transformers.js
+  3.8.1 / ONNX Runtime WASM, single-threaded, SIMD required. Chosen over
+  whisper-tiny.en: 28 MB vs 41 MB of weights; 0.12 s vs 1.1 s on a 3 s chunk
+  (Whisper pads every call to 30 s). Cold start from cache 1.36 s.
+- MODEL (one-time download, the only screen with a progress bar) and FAIL screens.
+  Every failure ends on "told plainly, offered guided"; no cloud fallback.
+- Silence is a display signal and chunk boundary only; 15 s of silence at each phase
+  changed nothing. Audio held per utterance, capped at 15 s, transferred and dropped
+  on commit; 44 s of continuous speech peaked at 15.02 s held.
+- Transcript per phase under `sr.sv.session.transcript`; `transcriptStatus`
+  complete / incomplete / none drives the settling line.
+- **Found:** the production CSP blocked WebAssembly and any model host, and
+  `Permissions-Policy` blocked the microphone. Fixed in SR-464 A1/A1b/A2.
+
+## SR-464 — consolidation pass: CSP, Sovereign voice, imagery install, member defect sweep
+
+29 September 2026. One commit per item, each tagged with its item number. **In
+progress** — this entry is opened by A4 and completed by the pass's closing commit.
+
+- **A1** `fe3763b` — `'wasm-unsafe-eval'` added to `script-src`. connect-src unchanged.
+- **A1b** `1ecbf4b` — **Differs (adapted):** `Permissions-Policy` had `microphone=()`,
+  which blocks the microphone for this origin too. Now `microphone=(self)`. Separate
+  commit so it can be reverted alone.
+- **A2** `2dfc2ea` — speech model + runtime self-hosted under `assets/vendor/speech/`
+  (10 files, 54 MB; README records pins and SHA-256). Verified under the committed
+  headers: first download and transcription work, all requests same-origin.
+- **A3** `0c11a24` — **Differs (adapted):** `window.SR_FLAGS = { sovereign: false }`
+  lives in a new `js/saferise-flags.js`, not `js/saferise-system.js`, because the
+  system JS is not loaded on `protocol.html`, the flag's only reader.
+- **A4** — this entry, and `sr-sv-` claimed in `CLAUDE.md`. SR-465 registered below
+  too: allocated this session, no entry otherwise.
+
+## SR-465 — commit the orphaned coming-soon covers and the dev-protocols draft
+
+29 September 2026. Committed as found for two closed sessions, before SR-464 ran. No
+file modified.
+
+- `f526c91` — 30 rematched `.webp` covers (embodied-nutrition, sleep-and-recovery,
+  strength-and-return 01–10). 27 are new frames; 3 are pixel-identical re-encodes.
+- `d4c7b4c` — `life-and-load-01…09` (`.jpg` + `.webp`) and `_spare-woman-at-desk.webp`.
+- `fbfa781` — `content/dev-protocols.v2.js`, additive draft: 9 tracks × 10 = 90
+  protocols, no duplicate titles (evaluated). Nothing imports it; not swapped in.
+- **Reported, not fixed:** in 28 pairs (the 27 rematches + `life-and-load-01`) the
+  unreferenced `.jpg` sibling still shows the previous frame. Every reference in the
+  repo is `.webp`, so no member sees it, but the pairs no longer agree. See SR-458's
+  "The `.jpg` half is unreferenced".
