@@ -144,25 +144,27 @@
      #route= cannot bounce a member back out) — once account joined the
      dashboard's own PAGES map the member would land on the dashboard with
      nothing opened. account.html carries no rail, so there is no bounce. */
+  /* SR-468 · root-relative, so the rail works from a nested or trailing-slash
+     URL (/record/*, /faq/, /clearing/ …), not only from the site root. */
   var PAGES = {
-    dashboard: 'dashboard.html',
-    method: 'member-frameworks.html',
-    coming: 'member-coming-soon.html',
-    account: 'account.html',
+    dashboard: '/dashboard.html',
+    method: '/member-frameworks.html',
+    coming: '/member-coming-soon.html',
+    account: '/account.html',
     /* SR-444 (PASS-X §5) · the four member templates, mirrored from
        dashboard.html's PAGES so a rail click never falls through to
        dashboard.html#route= (whose resolver ignores PAGES keys). */
-    chosen: 'member-record.html?r=chosen',
-    decisions: 'member-record.html?r=decisions',
-    faq: 'member-reading.html?r=faq',
-    article: 'member-reading.html?r=article',
-    podcast: 'member-reading.html?r=podcast',
-    clearing: 'member-clearing.html',
-    checkout: 'member-checkout.html',
+    chosen: '/member-record.html?r=chosen',
+    decisions: '/member-record.html?r=decisions',
+    faq: '/member-reading.html?r=faq',
+    article: '/member-reading.html?r=article',
+    podcast: '/member-reading.html?r=podcast',
+    clearing: '/member-clearing.html',
+    checkout: '/member-checkout.html',
     /* SR-453 (PASS-AH §1) · legal, for the same reason as account above:
        it is in dashboard.html's PAGES, so without it here a rail click on a
        member page would land on the dashboard with nothing opened */
-    legal: 'legal.html'
+    legal: '/legal.html'
   };
 
   function svg(key) {
@@ -218,7 +220,7 @@
         if (key === activeRoute) { if (opts.onRoute) opts.onRoute(key); return; }
         if (PAGES[key]) { global.location.href = PAGES[key]; return; }
         if (opts.onRoute) { opts.onRoute(key); return; }
-        global.location.href = 'dashboard.html#route=' + encodeURIComponent(key);
+        global.location.href = '/dashboard.html#route=' + encodeURIComponent(key);
       });
     });
 
@@ -241,7 +243,7 @@
     if (signOutBtn) {
       signOutBtn.addEventListener('click', function () {
         if (global.SafeRiseAccess) global.SafeRiseAccess.signOut();
-        global.location.href = 'index.html';
+        global.location.href = '/index.html';
       });
     }
 
