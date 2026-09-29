@@ -42,8 +42,18 @@
    recording fake rather than a spy on localStorage (a spy proves nothing
    when the fallback is silently in play).
 
-   NOT HERE: any hosted speech service (never), AI synthesis, Supabase
-   writes, record editing, entitlement checks. */
+   THE READING (SR-469 · SOV-4). After the close rating is committed — and
+   only then: machine.readingPayload() throws before SYNTHESIS (R12) — the
+   written transcript and the two ratings are sent to the framework reading
+   function (/.netlify/functions/sv-reading), which holds the provider key
+   and returns validated blocks, each with its verbatim quotes and source
+   phase. ON by default (R14); switched off, no request is made. Audio never
+   leaves the device under any setting (R11). The record — ratings,
+   transcript, reading — is written on this device and is editable and
+   deletable in full; earlier sessions are listed on the invite screen.
+
+   NOT HERE: any hosted speech service (never), any model deciding anything
+   about the session, Supabase writes (ORG-1), entitlement checks. */
 (function (global) {
   'use strict';
 
@@ -54,6 +64,7 @@
     enabled: 'sr.sv.enabled',
     micIntroSeen: 'sr.sv.micIntroSeen',
     session: 'sr.sv.session',
+    records: 'sr.sv.records',
     soundbed: 'sr.sv.soundbed'
   };
 
@@ -144,6 +155,19 @@
         store.set(KEYS.session, s);
         i++;
         return true;
+      },
+      /* SR-469 B1 · R12 enforced here, in the machine, not by the order of
+         UI calls: the reading's payload does not exist until the close
+         rating is committed. Before SYNTHESIS this throws. It carries the
+         phase-tagged transcript and the two ratings — nothing else (A3). */
+      readingPayload: function () {
+        if (STATES[i] !== 'SYNTHESIS') throw new Error('sovereign: no reading before the close rating is committed (R12), in ' + STATES[i]);
+        var s = store.get(KEYS.session, null) || {};
+        return {
+          pre: s.preState && s.preState.activation,
+          post: s.postState && s.postState.activation,
+          transcript: (s.transcript || []).map(function (t) { return { phase: t.phase, text: t.text }; })
+        };
       },
       discard: function () { store.set(KEYS.session, null); }
     };
@@ -603,6 +627,179 @@
     return '';
   }
 
+  /* ── The record and the reading (SR-469 · SOV-4) ────────────────────────
+     C1 · the session record is written on this page the moment the close
+     rating is committed: ratings, per-phase transcript, and — once it comes
+     back — the reading. Device-only (sr.sv.records); nothing here syncs.
+     C2 · every part is editable and deletable, and a deleted reading block
+     stays deleted. C3 · earlier sessions for this protocol are listed on
+     the invite screen and open into the same view.
+
+     R14 · the reading is ON by default; the member can switch it off, here
+     (invite and close screens) and in account settings. Off means no request
+     is made at all. The preference is per member, on this device.
+     R11 · audio never leaves the device: the request carries the written
+     transcript and the two ratings only (machine.readingPayload()). */
+  var READING_URL = '/.netlify/functions/sv-reading';
+  var READING_TIMEOUT_MS = 12000;
+  var LENS_ORDER = ['carried', 'body', 'shift', 'self', 'gap', 'measure'];
+  var currentRecordId = null, openRecordId = null, editing = null;
+
+  var Records = {
+    all: function () { var r = LocalStore.get(KEYS.records, []); return Array.isArray(r) ? r : []; },
+    save: function (list) { LocalStore.set(KEYS.records, list); },
+    get: function (id) { return Records.all().filter(function (r) { return r.id === id; })[0] || null; },
+    add: function (rec) { var l = Records.all(); l.unshift(rec); Records.save(l); },
+    update: function (id, fn) { var l = Records.all(); l.forEach(function (r) { if (r.id === id) fn(r); }); Records.save(l); },
+    remove: function (id) { Records.save(Records.all().filter(function (r) { return r.id !== id; })); }
+  };
+
+  function memberKey() {
+    var u = global.srAuth && typeof global.srAuth.user === 'function' ? global.srAuth.user() : null;
+    return 'sr.sv.reading.' + (u && u.id ? u.id : 'anon');
+  }
+  function readingOn() { return LocalStore.get(memberKey(), 'on') !== 'off'; }
+  function setReadingOn(on) { LocalStore.set(memberKey(), on ? 'on' : 'off'); }
+  global.SafeRiseSovereign.reading = { isOn: readingOn, set: setReadingOn };
+
+  function recordFromSession(s, readingState) {
+    return {
+      id: 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      protocolId: s.protocolId || null,
+      protocol: (ctx && ctx.protocol) || null,
+      createdAt: s.closedAt || new Date().toISOString(),
+      pre: s.preState && s.preState.activation,
+      post: s.postState && s.postState.activation,
+      transcriptStatus: s.transcriptStatus || 'none',
+      transcript: (s.transcript || []).map(function (t, k) { return { id: 'u' + k, phase: t.phase, text: t.text, at: t.at }; }),
+      reading: { status: readingState, blocks: [], bridge: null },
+      deletedLenses: []
+    };
+  }
+
+  function normaliseReading(b) {
+    if (!b || typeof b !== 'object') return { status: 'unavailable' };
+    if (b.status === 'ok') {
+      var blocks = (Array.isArray(b.reading) ? b.reading : []).map(function (x, k) {
+        return { id: 'b' + k, lens: x.lens, text: x.text, quotes: x.quotes || [], sourcePhase: x.sourcePhase };
+      });
+      return { status: blocks.length ? 'ok' : 'empty', blocks: blocks, bridge: b.bridge && b.bridge.shown ? { shown: true, target: b.bridge.target } : null };
+    }
+    if (b.status === 'sparse') return { status: 'sparse', blocks: [], bridge: null };
+    if (b.status === 'withheld') return { status: 'withheld', reason: b.reason === 'signin' ? 'signin' : 'limit', blocks: [], bridge: null };
+    return { status: 'unavailable', blocks: [], bridge: null };
+  }
+
+  /* One request, one answer. No retry loop and nothing that sits: a hard
+     client timeout ends it, and every outcome resolves to plain copy. */
+  function requestReading(recId) {
+    var payload;
+    try { payload = machine.readingPayload(); } catch (e) { return Promise.resolve(); }
+    var token = global.srAuth && typeof global.srAuth.accessToken === 'function' ? global.srAuth.accessToken() : null;
+    var headers = { 'content-type': 'application/json' };
+    if (token) headers.authorization = 'Bearer ' + token;
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, READING_TIMEOUT_MS);
+    return fetch(READING_URL, { method: 'POST', headers: headers, body: JSON.stringify(payload), signal: ctrl.signal, credentials: 'same-origin' })
+      .then(function (res) {
+        return res.json().catch(function () { return null; }).then(function (b) {
+          if (res.status === 401) return { status: 'withheld', reason: 'signin' };
+          return b;
+        });
+      }, function () { return { status: 'unavailable' }; })
+      .then(function (b) {
+        clearTimeout(timer);
+        Records.update(recId, function (r) {
+          var got = normaliseReading(b);
+          got.blocks = got.blocks.filter(function (x) { return (r.deletedLenses || []).indexOf(x.lens) < 0; });
+          r.reading = got;
+        });
+        if (view === 'SYNTHESIS' || (view === 'RECORD' && openRecordId === recId)) rerender();
+      });
+  }
+
+  function fmtDate(iso) {
+    try { return new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; }
+  }
+
+  function readingToggle() {
+    var on = readingOn();
+    return '<button type="button" class="sr-sv-bed sr-sv-rtoggle" data-sv="reading-toggle" aria-pressed="' + on + '">' +
+      '<span class="sr-sv-bedpip" aria-hidden="true"></span>AI reading ' + (on ? 'on' : 'off') + '</button>';
+  }
+
+  function readingLine(rec) {
+    var r = rec && rec.reading, st = r ? r.status : 'off';
+    var line = function (cls, icon, text, vh) { return '<li class="sr-sv-st sr-sv-st--' + cls + '">' + svg(icon, 15) + '<span>' + text + '</span>' + (vh ? '<span class="sr-sv-vh">' + vh + '</span>' : '') + '</li>'; };
+    if (st === 'pending') return line('now', 'dot', 'Reading what you said', ', in progress');
+    if (st === 'ok') return line('done', 'check', 'Your reading is ready', ', done');
+    if (st === 'off') return line('none', 'dot', 'AI reading switched off');
+    if (st === 'sparse' || st === 'empty') return line('none', 'dot', 'Not enough to read this time');
+    if (st === 'withheld' && r.reason === 'signin') return line('none', 'dot', 'The reading needs you to be signed in');
+    if (st === 'withheld') return line('none', 'dot', 'No more readings for now');
+    return line('none', 'dot', 'The reading isn’t available this time');
+  }
+
+  function previousRuns() {
+    var mine = Records.all().filter(function (r) { return r.protocolId && r.protocolId === ctx.protocolId; }).slice(0, 8);
+    if (!mine.length) return '';
+    return '<div class="sr-sv-prev"><p class="sr-sv-label">Your earlier sessions</p><ul class="sr-sv-prevlist">' +
+      mine.map(function (r) {
+        return '<li><button type="button" class="sr-sv-prevbtn" data-sv="open-record" data-sv-id="' + esc(r.id) + '">' +
+          '<span>' + esc(fmtDate(r.createdAt)) + '</span><span class="sr-sv-prevnums">' + esc(r.pre) + ' → ' + esc(r.post) + '</span></button></li>';
+      }).join('') + '</ul></div>';
+  }
+
+  function editBox(kind, id, value) {
+    return '<div class="sr-sv-editbox"><textarea class="sr-sv-edit" data-sv-kind="' + kind + '" data-sv-id="' + esc(id) + '" aria-label="Edit">' + esc(value) + '</textarea>' +
+      '<p class="sr-sv-editacts"><button type="button" class="sr-sv-link" data-sv="edit-save">Save</button>' +
+      '<button type="button" class="sr-sv-link" data-sv="edit-cancel">Cancel</button></p></div>';
+  }
+  function itemActs(kind, id) {
+    return '<p class="sr-sv-itemacts"><button type="button" class="sr-sv-link" data-sv="edit" data-sv-kind="' + kind + '" data-sv-id="' + esc(id) + '">Edit</button>' +
+      '<button type="button" class="sr-sv-link" data-sv="delete" data-sv-kind="' + kind + '" data-sv-id="' + esc(id) + '">Delete</button></p>';
+  }
+
+  function readingSection(rec) {
+    var r = rec.reading || { status: 'off' };
+    var msg = {
+      pending: 'Your reading is still being made. It will appear here.',
+      off: 'The AI reading was switched off for this session. Your record is complete without it.',
+      sparse: 'There wasn’t enough to work from this time. The record is still yours.',
+      empty: 'There wasn’t enough to work from this time. The record is still yours.',
+      unavailable: 'The reading isn’t available this time. Your record is saved and complete.',
+      withheld: r.reason === 'signin' ? 'The reading needs you to be signed in. Your record is saved and complete.' : 'You have reached the number of readings available for now. Your record is saved and complete.'
+    };
+    var body;
+    if (r.status === 'ok' && r.blocks.length) {
+      body = r.blocks.slice().sort(function (a, b) { return LENS_ORDER.indexOf(a.lens) - LENS_ORDER.indexOf(b.lens); }).map(function (bl) {
+        var isEditing = editing && editing.kind === 'block' && editing.id === bl.id;
+        return '<article class="sr-sv-rb">' +
+          (isEditing ? editBox('block', bl.id, bl.text) : '<p class="sr-sv-rbtext">' + esc(bl.text) + '</p>') +
+          '<ul class="sr-sv-rbquotes" aria-label="Your words this came from">' + bl.quotes.map(function (q) { return '<li>“' + esc(q) + '”</li>'; }).join('') + '</ul>' +
+          '<p class="sr-sv-rbsrc">From ' + esc(phaseName(String(bl.sourcePhase).toUpperCase())) + '</p>' +
+          (isEditing ? '' : itemActs('block', bl.id)) +
+          '</article>';
+      }).join('') +
+      (r.bridge && r.bridge.shown ? '<p class="sr-sv-bridge">Addressing the Issue is the resource for what still needs a conversation or an action.</p>' : '');
+    } else {
+      body = '<p class="sr-sv-quiet">' + (msg[r.status] || msg.unavailable) + '</p>';
+    }
+    return '<section class="sr-sv-recsec"><p class="sr-sv-label">Your reading</p>' + body + '</section>';
+  }
+
+  function wordsSection(rec) {
+    var parts = PHASES.map(function (P) {
+      var ph = P.toLowerCase(), items = rec.transcript.filter(function (t) { return t.phase === ph; });
+      if (!items.length) return '';
+      return '<div class="sr-sv-recph"><p class="sr-sv-tphn">' + phaseName(P) + '</p>' + items.map(function (t) {
+        var isEditing = editing && editing.kind === 'utt' && editing.id === t.id;
+        return '<div class="sr-sv-recutt">' + (isEditing ? editBox('utt', t.id, t.text) : '<p class="sr-sv-ttext"><span class="sr-sv-tset">' + esc(t.text) + '</span></p>' + itemActs('utt', t.id)) + '</div>';
+      }).join('') + '</div>';
+    }).join('');
+    return '<section class="sr-sv-recsec"><p class="sr-sv-label">Your words</p>' + (parts || '<p class="sr-sv-quiet">No transcript for this session.</p>') + '</section>';
+  }
+
   var SCREENS = {
     INVITE: function () {
       return '<div class="sr-sv-stage sr-sv-stage--invite">' +
@@ -612,14 +809,18 @@
         'SafeRise offers one question at a time and keeps the order. Nothing rushes you from one movement to the next — you decide when you are ready.</p>' +
         '<div class="sr-sv-acts"><button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="invite-begin">Begin Sovereign session</button></div>' +
         '<p class="sr-sv-quiet">Prefer to be guided? Switch back at any time.</p>' +
+        '<div class="sr-sv-foot"><span>' + readingToggle() + '</span></div>' +
+        previousRuns() +
         '</div>' +
         '<p class="sr-sv-outer">Nothing is recorded until you begin, and you will be told exactly what happens first.</p>';
     },
     PERMISSION: function () {
       var facts = [
-        ['voice', 'Your voice is turned into text on this device. The recording itself is not sent anywhere.'],
-        ['record', 'Only the written record is kept — what surfaced, what you chose, what you decided.'],
-        ['edit', 'You can read, edit or delete any part of it afterwards, including the transcript.'],
+        /* SR-469 D2 · the four facts, as ruled. The second and third changed:
+           the written record is now read by an AI (R14), and it can be switched off. */
+        ['voice', 'Your voice is turned into text on this device. The recording itself is never sent anywhere.'],
+        ['record', 'The written record is read by an AI, which gives you back what it found in your own words.'],
+        ['edit', 'You can read, edit or delete any part of it, and you can switch the reading off.'],
         ['shield', 'Nobody at your organisation can see any of it. Not a summary, not a statement, not a word.']
       ];
       return '<div class="sr-sv-stage">' +
@@ -722,22 +923,41 @@
         '<p class="sr-sv-began sr-sv-began--big">You began at <span class="sr-sv-chip">' + machine.preState() + '</span></p>' +
         '<p class="sr-sv-say"><span class="sr-sv-gdot" aria-hidden="true"></span>Say the number, or tap it.</p>' +
         '<div class="sr-sv-acts"><button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="close"' + (post ? '' : ' disabled') + '>Close the session</button></div>' +
-        '<div class="sr-sv-foot"><span>' + soundbedBtn() + '</span>' +
+        '<div class="sr-sv-foot"><span class="sr-sv-footpair">' + soundbedBtn() + readingToggle() + '</span>' +
         '<span class="sr-sv-footr sr-sv-footr--430">Nothing has been written up yet. You are rating your own state, not a summary of it.</span></div>' +
         '</div>';
     },
+    /* SR-469 D1 · the footer line claiming that everything stayed on the
+       device is gone: with the reading on, the written record is sent to be read. The third line is now the
+       reading itself, which is what it was promising. */
     SYNTHESIS: function () {
+      var rec = currentRecordId ? Records.get(currentRecordId) : null;
       return '<div class="sr-sv-stage sr-sv-stage--settle">' +
         '<div class="sr-sv-breath" aria-hidden="true"><span class="sr-sv-ring sr-sv-ring--o"></span><span class="sr-sv-ring sr-sv-ring--i"></span><span class="sr-sv-core"></span></div>' +
         '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">Creating your record.</h2>' +
-        '<p class="sr-sv-body">Your words are being gathered into a written record on this device. Sit for a moment before you read it.</p>' +
+        '<p class="sr-sv-body">Your record is saved on this device. Sit for a moment before you read it.</p>' +
         '<ul class="sr-sv-status">' +
           transcriptLine() +
           '<li class="sr-sv-st sr-sv-st--done">' + svg('check', 15) + '<span>What you chose, in your own words</span><span class="sr-sv-vh">, done</span></li>' +
-          '<li class="sr-sv-st sr-sv-st--now">' + svg('dot', 15) + '<span>Gathering the decisions you named</span><span class="sr-sv-vh">, in progress</span></li>' +
+          readingLine(rec) +
         '</ul>' +
-        '<div class="sr-sv-foot"><span class="sr-sv-footl">Nothing leaves this device.</span>' +
+        '<div class="sr-sv-acts sr-sv-acts--centre"><button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="open-record" data-sv-id="' + esc(currentRecordId || '') + '">Open your record</button></div>' +
+        '<div class="sr-sv-foot"><span></span>' +
         '<button type="button" class="sr-sv-btn sr-sv-btn--ghost" data-sv="leave">Leave without saving</button></div>' +
+        '</div>';
+    },
+    RECORD: function () {
+      var rec = openRecordId ? Records.get(openRecordId) : null;
+      if (!rec) return '<div class="sr-sv-stage"><h2 class="sr-sv-h sr-sv-h--30" tabindex="-1">This record is no longer here.</h2>' +
+        '<div class="sr-sv-acts"><button type="button" class="sr-sv-btn sr-sv-btn--ghost" data-sv="record-back">Back</button></div></div>';
+      return '<div class="sr-sv-stage sr-sv-stage--record">' +
+        '<p class="sr-sv-kick">Your record</p>' +
+        '<h2 class="sr-sv-h sr-sv-h--30" tabindex="-1">' + esc(rec.protocol || 'Sovereign session') + '</h2>' +
+        '<p class="sr-sv-quiet sr-sv-recmeta">' + esc(fmtDate(rec.createdAt)) + ' · you began at ' + esc(rec.pre) + ' and finished at ' + esc(rec.post) + '</p>' +
+        readingSection(rec) +
+        wordsSection(rec) +
+        '<div class="sr-sv-foot"><button type="button" class="sr-sv-btn sr-sv-btn--ghost" data-sv="record-back">Back</button>' +
+        '<button type="button" class="sr-sv-link" data-sv="record-delete">Delete this record</button></div>' +
         '</div>';
     }
   };
@@ -910,10 +1130,70 @@
         (transcriptDone || Promise.resolve()).then(function () {
           if (!machine || machine.state() !== 'POST_STATE') return;
           machine.setTranscriptStatus(tFailed ? (hasWords() ? 'incomplete' : 'none') : (hasWords() ? 'complete' : 'none'));
-          if (machine.close()) { dropEngine(); closeMic(); go(machine.state()); }
+          if (machine.close()) {
+            dropEngine(); closeMic();
+            /* C1 · the record is written now, on this page, before anything
+               else. B1 · only then — the post-state committed, the machine in
+               SYNTHESIS — can the reading be asked for; readingPayload()
+               refuses otherwise. E1 · switched off, no request is made. */
+            var s = LocalStore.get(KEYS.session, null) || {};
+            var want = readingOn(), spoke = hasWords();
+            var rec = recordFromSession(s, !want ? 'off' : (spoke ? 'pending' : 'sparse'));
+            Records.add(rec);
+            currentRecordId = rec.id;
+            go(machine.state());
+            if (want && spoke) requestReading(rec.id);
+          }
         });
         break;
-      case 'leave': machine.discard(); teardown(); go('INVITE'); break;
+      case 'leave':
+        if (currentRecordId && view === 'SYNTHESIS') Records.remove(currentRecordId);
+        currentRecordId = null;
+        if (machine) machine.discard();
+        teardown(); go('INVITE');
+        break;
+      case 'reading-toggle': setReadingOn(!readingOn()); rerender(); break;
+      case 'open-record':
+        openRecordId = b.getAttribute('data-sv-id'); editing = null;
+        if (openRecordId) go('RECORD');
+        break;
+      case 'record-back': editing = null; openRecordId = null; teardown(); go('INVITE'); break;
+      case 'record-delete':
+        if (openRecordId && window.confirm('Delete this record? Its reading and transcript go with it, and it cannot be undone.')) {
+          Records.remove(openRecordId); openRecordId = null; editing = null; teardown(); go('INVITE');
+        }
+        break;
+      case 'edit': editing = { kind: b.getAttribute('data-sv-kind'), id: b.getAttribute('data-sv-id') }; rerender();
+        var ta = root.querySelector('.sr-sv-edit'); if (ta) ta.focus();
+        break;
+      case 'edit-cancel': editing = null; rerender(); break;
+      case 'edit-save': (function () {
+        var ta = root.querySelector('.sr-sv-edit');
+        if (!ta || !openRecordId) return;
+        var kind = ta.getAttribute('data-sv-kind'), id = ta.getAttribute('data-sv-id'), val = ta.value.replace(/\s+/g, ' ').trim();
+        Records.update(openRecordId, function (r) {
+          var list = kind === 'block' ? (r.reading && r.reading.blocks) || [] : r.transcript;
+          list.forEach(function (x) { if (x.id === id) { x.text = val; x.edited = true; } });
+        });
+        editing = null; rerender();
+      })(); break;
+      case 'delete': (function () {
+        var kind = b.getAttribute('data-sv-kind'), id = b.getAttribute('data-sv-id');
+        if (!openRecordId) return;
+        Records.update(openRecordId, function (r) {
+          if (kind === 'block' && r.reading) {
+            /* A deleted block stays deleted: its lens is remembered, so a late
+               reading response for this record can never bring it back. */
+            r.reading.blocks = (r.reading.blocks || []).filter(function (x) {
+              if (x.id === id) { (r.deletedLenses = r.deletedLenses || []).push(x.lens); return false; }
+              return true;
+            });
+          } else {
+            r.transcript = r.transcript.filter(function (x) { return x.id !== id; });
+          }
+        });
+        editing = null; rerender();
+      })(); break;
     }
   });
 

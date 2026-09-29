@@ -301,6 +301,10 @@
   global.srAuth = {
     ready: ready,
     user: currentUser,
+    /* SR-469 · the bearer token for a same-origin function that must verify
+       who is asking (the framework reading's per-member allowance). Null when
+       signed out or expired — the same test currentUser() applies. */
+    accessToken: function () { return currentUser() && session ? session.access_token : null; },
     entitled: function () { return entitledCache; },
     status: function () { return statusCache; }, // {subscription_status, entitled_until} or null — memory-only, same as entitled()
     refreshEntitlement: checkEntitlement,
