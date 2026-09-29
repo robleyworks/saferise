@@ -319,10 +319,12 @@ a.sr-fw-card:hover{border-color:rgba(212,168,67,.5);background:var(--band2)}
 .sr-fw-cardart--none{display:none}
 .sr-fw-cardbody{padding:24px var(--pad)}
 .sr-fw-cardbody p{font-size:16px}
-.sr-fw-cardslug{position:absolute;left:14px;bottom:12px;font-size:13px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--text3);border:1px dashed rgba(212,168,67,.4);border-radius:3px;
-  padding:5px 8px;background:rgba(8,8,12,.55)}
-.sr-fw-cardslug b{color:var(--gold);font-weight:700}
+/* SR-464 D3 [MR-37] · .sr-fw-cardslug is an art-direction note ("Art cover 01
+   · 16:9", "Tonal fallback no cover exists") left in the markup from the
+   mockup. It was styled visible, so members read it as raw tokens on every
+   framework page. Kept in the source for whoever commissions the art; never
+   rendered. (The old rule also drew a dashed border.) */
+.sr-fw-cardslug{display:none}
 
 /* ── D · tile reuse ────────────────────────────────────────────────────*/
 .sr-fw-pager a{display:grid;grid-template-columns:64px minmax(0,1fr);gap:20px;align-items:center}
