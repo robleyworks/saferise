@@ -665,6 +665,12 @@
   function setReadingOn(on) { LocalStore.set(memberKey(), on ? 'on' : 'off'); }
   global.SafeRiseSovereign.reading = { isOn: readingOn, set: setReadingOn };
 
+  /* SR-470 · capabilities come from the tier resolver (js/saferise-access.js),
+     never decided here. No resolver, no capability. */
+  function tierCan(cap) {
+    return !!(global.SafeRiseAccess && typeof global.SafeRiseAccess.can === 'function' && global.SafeRiseAccess.can(cap));
+  }
+
   function recordFromSession(s, readingState) {
     return {
       id: 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
@@ -697,6 +703,7 @@
      client timeout ends it, and every outcome resolves to plain copy. */
   function requestReading(recId) {
     var payload;
+    if (!tierCan('reading')) return Promise.resolve();   // SR-470 · Sovereign only; no call
     try { payload = machine.readingPayload(); } catch (e) { return Promise.resolve(); }
     var token = global.srAuth && typeof global.srAuth.accessToken === 'function' ? global.srAuth.accessToken() : null;
     var headers = { 'content-type': 'application/json' };
@@ -805,6 +812,20 @@
 
   var SCREENS = {
     INVITE: function () {
+      /* SR-470 3.3 · offered, not hidden. Without the Sovereign tier the
+         practice is still described, with the way to it — and the member's
+         earlier records stay listed and openable (the records remain). */
+      if (!tierCan('voice')) {
+        return '<div class="sr-sv-stage sr-sv-stage--invite">' +
+          '<p class="sr-sv-kick">Sovereign practice</p>' +
+          '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">Your voice, your record. SafeRise holds the pathway.</h2>' +
+          '<p class="sr-sv-body">You move through Recognise, Regulate, Release and Rise in your own words, out loud, and SafeRise keeps the order.</p>' +
+          '<p class="sr-sv-body">Sovereign practice is part of the Sovereign membership: speak instead of type, transcription that happens on your own device, and an AI reading of what you said.</p>' +
+          '<div class="sr-sv-acts"><a class="sr-sv-btn sr-sv-btn--pri" href="/checkout">See the Sovereign membership</a></div>' +
+          '<p class="sr-sv-quiet">The guided version of this protocol is yours already.</p>' +
+          previousRuns() +
+          '</div>';
+      }
       return '<div class="sr-sv-stage sr-sv-stage--invite">' +
         '<p class="sr-sv-kick">Sovereign practice</p>' +
         '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">Your voice, your record. SafeRise holds the pathway.</h2>' +
@@ -994,8 +1015,10 @@
 
   /* INVITE → (PERMISSION, once) → microphone → (MODEL, if not cached) → PRE_STATE */
   function beginFlow() {
+    if (!tierCan('voice')) { go('INVITE'); return; }        // SR-470 · the offer, not the flow
     if (!STT) { showFail('unavailable'); return; }
     var why = STT.probe();
+    if (why === 'tier') { go('INVITE'); return; }
     if (why) { showFail(why); return; }
     if (LocalStore.get(KEYS.micIntroSeen, false) === true) requestMic();
     else go('PERMISSION');
@@ -1140,7 +1163,7 @@
                SYNTHESIS — can the reading be asked for; readingPayload()
                refuses otherwise. E1 · switched off, no request is made. */
             var s = LocalStore.get(KEYS.session, null) || {};
-            var want = readingOn(), spoke = hasWords();
+            var want = readingOn() && tierCan('reading'), spoke = hasWords();
             var rec = recordFromSession(s, !want ? 'off' : (spoke ? 'pending' : 'sparse'));
             Records.add(rec);
             currentRecordId = rec.id;

@@ -68,9 +68,20 @@
   var INTERIM_EVERY = 1.0;  // seconds of new speech between interim passes
   var PREROLL_BLOCKS = 8;   // ~340 ms kept before voice onset
 
+  /* ── SR-470 · the one voice gate ────────────────────────────────────────
+     Voice is a Sovereign capability. The gate lives here, in the shared
+     voice service, not in each caller: probe() reports 'tier', download()
+     refuses before a single request, createEngine() refuses before any
+     worker, audio graph or model file. The decision is SafeRiseAccess's
+     (js/saferise-access.js resolve()); without it, voice is refused. */
+  function voiceAllowed() {
+    return !!(global.SafeRiseAccess && typeof global.SafeRiseAccess.can === 'function' && global.SafeRiseAccess.can('voice'));
+  }
+
   /* ── Capability probe ──────────────────────────────────────────────── */
   var SIMD_TEST = new Uint8Array([0,97,115,109,1,0,0,0,1,5,1,96,0,1,123,3,2,1,0,10,10,1,8,0,65,0,253,15,253,98,11]);
   function probe() {
+    if (!voiceAllowed()) return 'tier';
     if (typeof WebAssembly !== 'object') return 'wasm';
     try { new WebAssembly.Module(new Uint8Array([0,97,115,109,1,0,0,0])); } catch (e) { return 'wasm'; }
     if (!WebAssembly.validate(SIMD_TEST)) return 'simd';
@@ -107,6 +118,7 @@
      partial entry — a half-cached model is never mistaken for a whole one. */
   function download(opts) {
     opts = opts || {};
+    if (!voiceAllowed()) return Promise.reject({ code: 'tier' });
     var signal = opts.signal;
     var sizes = [];
     return dropStale().then(function () {
@@ -157,6 +169,7 @@
   /* ── Engine ────────────────────────────────────────────────────────── */
   function createEngine(cb) {
     cb = cb || {};
+    if (!voiceAllowed()) throw new Error('sr-sv: voice is a Sovereign capability');
     var worker = null, readyP = null, failed = false;
     var ctx = null, modP = null, src = null, node = null, track = null, onTrackEnd = null;
     var phase = null, uttId = 0;
@@ -390,6 +403,6 @@
 
   global.SafeRiseSTT = {
     MODEL: MODEL, REVISION: REVISION, CACHE: CACHE, FILES: FILES, LIB: LIB, MODEL_BASE: HF,
-    probe: probe, isCached: isCached, download: download, createEngine: createEngine
+    probe: probe, isCached: isCached, download: download, createEngine: createEngine, voiceAllowed: voiceAllowed
   };
 })(window);
