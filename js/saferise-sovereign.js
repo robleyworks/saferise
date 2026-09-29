@@ -1,11 +1,15 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   SafeRise — js/saferise-sovereign.js · SR-462 (SOV-2)
+   SafeRise — js/saferise-sovereign.js · SR-462 (SOV-2), SR-463 (SOV-3)
    The Sovereign player shell and its state machine, on protocol.html.
 
    OFF BY DEFAULT. With the flag off this file defines window.SafeRiseSovereign
    (pure functions, no DOM) and returns: no toggle, no listeners, no
-   getUserMedia. The flag is on when the URL carries ?sovereign=1, which also
-   remembers it under sr.sv.enabled; ?sovereign=0 forgets it again.
+   getUserMedia. The flag is window.SR_FLAGS.sovereign === true. SR-463: that
+   object is not defined anywhere in the tree yet, so the flag is off
+   everywhere. On a local development host only (localhost, 127.0.0.1,
+   *.localhost, *.test) ?sovereign=1 turns it on for testing and remembers it
+   under sr.sv.enabled; ?sovereign=0 forgets it. Neither works on any other
+   host.
 
    THE MACHINE. Seven states, strictly in order, advanced only by a member's
    own click — there is no timer anywhere in this file, so nothing can
@@ -16,6 +20,14 @@
    INVITE and PERMISSION sit in front of the machine. PERMISSION renders
    once ever (sr.sv.micIntroSeen), so a second session goes INVITE → PRE_STATE.
    getUserMedia is never called before PERMISSION has been shown and accepted.
+   SR-463 adds MODEL (the one-time speech-model download, shown only when the
+   model is not cached) between the microphone and PRE_STATE, and FAIL, which
+   every unrecoverable condition ends on: told plainly, offered guided.
+
+   TRANSCRIPTION (SR-463). js/saferise-sovereign-stt.js runs speech-to-text
+   on the device during the four phases. It can report text, input level and
+   voice on/off to this file; it has no handle on the machine. Silence never
+   advances, ends or changes anything here — only a member's click does.
 
    WRITE ORDER (binding). preState is written when the member leaves
    PRE_STATE, before RECOGNISE exists. postState is written when the member
@@ -30,8 +42,8 @@
    recording fake rather than a spy on localStorage (a spy proves nothing
    when the fallback is silently in play).
 
-   NOT HERE: speech recognition of any kind, AI synthesis, Supabase writes,
-   entitlement checks. The transcript panel is an empty collapsed shell. */
+   NOT HERE: any hosted speech service (never), AI synthesis, Supabase
+   writes, record editing, entitlement checks. */
 (function (global) {
   'use strict';
 
@@ -86,7 +98,8 @@
           protocolId: ctx.protocolId || null,
           trackId: ctx.trackId || null,
           startedAt: new Date().toISOString(),
-          preState: { activation: pre }
+          preState: { activation: pre },
+          transcript: []
         });
         i++;
         return true;
@@ -103,6 +116,21 @@
       next: function () {
         if (i < 1 || i > 4) throw new Error('sovereign: next() outside the four phases, in ' + STATES[i]);
         i++;
+      },
+      /* Record-only writes. Neither moves the machine. A chunk can resolve
+         after RISE → POST_STATE, so both are accepted up to POST_STATE, and
+         the phase is passed in rather than read from the current state. */
+      appendTranscript: function (phase, text) {
+        if (i < 1 || i > 5 || PHASES.indexOf(phase) < 0 || !text) return;
+        var s = store.get(KEYS.session, null) || {};
+        (s.transcript = s.transcript || []).push({ phase: phase.toLowerCase(), text: text, at: new Date().toISOString() });
+        store.set(KEYS.session, s);
+      },
+      setTranscriptStatus: function (status) {
+        if (i < 1 || i > 5) return;
+        var s = store.get(KEYS.session, null) || {};
+        s.transcriptStatus = status;
+        store.set(KEYS.session, s);
       },
       choosePost: function (n) { must('POST_STATE'); if (valid(n)) post = n; },
       /* POST_STATE → SYNTHESIS. postState is on the record before SYNTHESIS. */
@@ -123,9 +151,14 @@
   global.SafeRiseSovereign = { STATES: STATES, PHASES: PHASES, KEYS: KEYS, createMachine: createMachine };
 
   /* ── Flag ──────────────────────────────────────────────────────────────── */
-  var q = /[?&]sovereign=([01])/.exec(location.search);
-  if (q) LocalStore.set(KEYS.enabled, q[1] === '1');
-  if (LocalStore.get(KEYS.enabled, false) !== true) return;
+  var flagOn = !!(global.SR_FLAGS && global.SR_FLAGS.sovereign === true);
+  var devHost = /^(localhost|127\.0\.0\.1|\[::1\])$|\.(localhost|test)$/.test(location.hostname);
+  if (!flagOn && devHost) {
+    var q = /[?&]sovereign=([01])/.exec(location.search);
+    if (q) LocalStore.set(KEYS.enabled, q[1] === '1');
+    flagOn = LocalStore.get(KEYS.enabled, false) === true;
+  }
+  if (!flagOn) return;
 
   var root = document.getElementById('sr-sv-root');
   var guided = document.getElementById('pane-listen');
@@ -204,13 +237,68 @@
   function openMic() {
     if (Mic.stream) return Promise.resolve(true);
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { Mic.status = 'off'; return Promise.resolve(false); }
-    return navigator.mediaDevices.getUserMedia({ audio: true }).then(function (s) {
+    return navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+    }).then(function (s) {
       Mic.stream = s; Mic.status = 'on'; return true;
     }, function () { Mic.status = 'off'; return false; });
   }
   function closeMic() {
     if (Mic.stream) Mic.stream.getTracks().forEach(function (t) { t.stop(); });
     Mic.stream = null; Mic.status = 'idle';
+  }
+
+  /* ── Transcription state ───────────────────────────────────────────────── */
+  var STT = global.SafeRiseSTT || null;
+  var engine = null, transcriptDone = null;
+  var words = null, interim = null, voice = false, levels = [], tFailed = false, micLost = false;
+  var wordsOpen = null;
+  var dl = null, failReason = null;
+  var reduceMotion = !!(global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var WAVE_BARS = 9;
+
+  function resetWords() {
+    words = { RECOGNISE: [], REGULATE: [], RELEASE: [], RISE: [] };
+    interim = null; voice = false; levels = []; tFailed = false; micLost = false; transcriptDone = null;
+  }
+  function hasWords() {
+    return !!words && PHASES.some(function (p) { return words[p].length > 0; });
+  }
+
+  function ensureEngine() {
+    if (engine) return engine;
+    engine = STT.createEngine({
+      onFinal: function (phase, text) {
+        if (!machine) return;
+        words[phase].push(text);
+        machine.appendTranscript(phase, text);
+        domFinal(phase, text);
+      },
+      onInterim: function (phase, text) {
+        interim = text ? { phase: phase, text: text } : null;
+        domInterim(phase, text);
+      },
+      onVoice: function (on) { voice = on; domVoice(); },
+      onLevel: function (rms) {
+        levels.push(rms); if (levels.length > WAVE_BARS) levels.shift();
+        domLevels();
+      },
+      onError: function (kind) {
+        if (kind === 'mic-ended') {
+          micLost = true; closeMic(); Mic.status = 'off';
+          if (machine && PHASES.indexOf(machine.state()) > -1) rerender();
+          return;
+        }
+        tFailed = true; interim = null; voice = false;
+        if (machine && machine.state() === 'PRE_STATE') { showFail('load'); return; }
+        if (machine && PHASES.indexOf(machine.state()) > -1) rerender();
+      }
+    });
+    return engine;
+  }
+  function dropEngine() {
+    if (engine) engine.destroy();
+    engine = null;
   }
 
   /* ── View ──────────────────────────────────────────────────────────────── */
@@ -228,6 +316,13 @@
 
   function inSession() { return machine && machine.state() !== 'SYNTHESIS' && machine.state() !== 'PRE_STATE'; }
 
+  function teardown() {
+    if (dl && dl.abort) dl.abort.abort();
+    dl = null;
+    dropEngine(); closeMic(); Soundbed.pause();
+    machine = null; failReason = null;
+  }
+
   function setMode(mode) {
     if (mode === 'guided' && inSession() &&
         !window.confirm('Leave this Sovereign session? The starting point you rated stays on this device.')) return;
@@ -242,7 +337,7 @@
       if (a && !a.paused) a.pause();
       go('INVITE');
     } else {
-      Soundbed.pause(); closeMic(); machine = null; view = 'INVITE';
+      teardown(); view = 'INVITE';
       root.innerHTML = '';
     }
   }
@@ -257,27 +352,155 @@
     return h + '</div><div class="sr-sv-ends"><span>Settled</span><span>At its loudest</span></div></div>';
   }
 
+  function phaseName(p) { return p.charAt(0) + p.slice(1).toLowerCase(); }
+
   function phaseRow(allDone) {
     var cur = machine ? machine.state() : '';
     var ci = PHASES.indexOf(cur);
     return '<ol class="sr-sv-phases" aria-label="The four movements">' + PHASES.map(function (p, k) {
       var st = allDone || (ci > -1 && k < ci) || ci === -1 && STATES.indexOf(cur) > 4 ? 'done' : (k === ci ? 'now' : 'next');
       return '<li class="sr-sv-ph sr-sv-ph--' + st + '"' + (st === 'now' ? ' aria-current="step"' : '') + '>' +
-        (st === 'done' ? svg('check', 12) : '') + '<span>' + p.charAt(0) + p.slice(1).toLowerCase() + '</span>' +
+        (st === 'done' ? svg('check', 12) : '') + '<span>' + phaseName(p) + '</span>' +
         '<span class="sr-sv-vh">' + (st === 'done' ? ', done' : st === 'now' ? ', now' : '') + '</span></li>';
     }).join('') + '</ol>';
   }
 
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  /* Microphone status in text, the live waveform, and LISTENING — which
+     shows while the member is speaking and is simply absent otherwise. */
   function micLine() {
-    if (Mic.status === 'on') return '<p class="sr-sv-mic">' + '<span class="sr-sv-gdot" aria-hidden="true"></span>Microphone on</p>';
-    return '<p class="sr-sv-mic sr-sv-mic--off">Microphone off — you can still move through every step with the buttons. ' +
-           '<button type="button" class="sr-sv-link" data-sv="mic-retry">Try the microphone again</button></p>';
+    if (micLost || Mic.status !== 'on') {
+      return '<div class="sr-sv-note" role="status"><p>The microphone has stopped. Your session is still here — you can carry on with the buttons, try the microphone again, or switch to the guided version.</p>' +
+        '<p class="sr-sv-noteacts"><button type="button" class="sr-sv-link" data-sv="mic-retry">Try the microphone again</button>' +
+        '<button type="button" class="sr-sv-link" data-sv="to-guided">Switch to the guided version</button></p></div>';
+    }
+    var bars = '';
+    for (var k = 0; k < WAVE_BARS; k++) bars += '<i class="sr-sv-bar"></i>';
+    return '<div class="sr-sv-live">' +
+      '<p class="sr-sv-mic"><span class="sr-sv-gdot" aria-hidden="true"></span>Microphone on</p>' +
+      '<span class="sr-sv-wave" aria-hidden="true">' + bars + '</span>' +
+      '<span class="sr-sv-listen"' + (voice ? '' : ' hidden') + '>Listening</span>' +
+      '</div>';
   }
 
   function soundbedBtn() {
     var on = Soundbed.on();
     return '<button type="button" class="sr-sv-bed" data-sv="soundbed" aria-pressed="' + on + '">' +
            '<span class="sr-sv-bedpip" aria-hidden="true"></span>Soundbed ' + (on ? 'on' : 'off') + '</button>';
+  }
+
+  /* "Your words". Open by default on desktop, collapsed on mobile, and never
+     opened for the member once they have chosen. Read-only while the session
+     runs; interim text is quieter and settles in place — settled text is
+     never rewritten. */
+  function wordsHTML() {
+    var open = wordsOpen === null ? !!(global.matchMedia && global.matchMedia('(min-width: 761px)').matches) : wordsOpen;
+    var cur = PHASES.indexOf(machine.state());
+    var body = '';
+    PHASES.forEach(function (p, k) {
+      if (k > cur) return;
+      var said = words[p], live = interim && interim.phase === p ? interim.text : '';
+      if (!said.length && !live) return;
+      body += '<section class="sr-sv-tph" data-ph="' + p + '"><p class="sr-sv-tphn">' + phaseName(p) + '</p><p class="sr-sv-ttext">' +
+        said.map(function (t) { return '<span class="sr-sv-tset">' + esc(t) + ' </span>'; }).join('') +
+        (live ? '<span class="sr-sv-tint">' + esc(live) + '</span>' : '') + '</p></section>';
+    });
+    if (!body) body = '<p class="sr-sv-tempty">Your words will appear here as you speak.</p>';
+    return '<details class="sr-sv-words"' + (open ? ' open' : '') + '><summary>Your words</summary>' +
+      '<div class="sr-sv-tlist" tabindex="0" role="log" aria-live="off" aria-label="Your words, transcribed on this device">' + body + '</div>' +
+      (tFailed ? '<p class="sr-sv-tnote">The transcript has stopped, but your session hasn’t. Keep going — saying it out loud has value with or without a written record.</p>' : '') +
+      '</details>';
+  }
+
+  function tlist() { return root.querySelector('.sr-sv-tlist'); }
+  function nearBottom(el) { return el.scrollHeight - el.scrollTop - el.clientHeight < 24; }
+  function phaseLine(phase) {
+    var list = tlist();
+    if (!list) return null;
+    var sec = list.querySelector('.sr-sv-tph[data-ph="' + phase + '"]');
+    if (!sec) {
+      var empty = list.querySelector('.sr-sv-tempty');
+      if (empty) empty.remove();
+      sec = document.createElement('section');
+      sec.className = 'sr-sv-tph'; sec.setAttribute('data-ph', phase);
+      sec.innerHTML = '<p class="sr-sv-tphn">' + phaseName(phase) + '</p><p class="sr-sv-ttext"></p>';
+      list.appendChild(sec);
+    }
+    return sec.querySelector('.sr-sv-ttext');
+  }
+  function domFinal(phase, text) {
+    var list = tlist(), line = phaseLine(phase);
+    if (!line) return;
+    var stick = nearBottom(list);
+    var old = line.querySelector('.sr-sv-tint');
+    if (old) old.remove();
+    var span = document.createElement('span');
+    span.className = 'sr-sv-tset'; span.textContent = text + ' ';
+    line.appendChild(span);
+    if (stick) list.scrollTop = list.scrollHeight;
+  }
+  function domInterim(phase, text) {
+    var list = tlist();
+    if (!list) return;
+    if (!text) { Array.prototype.forEach.call(list.querySelectorAll('.sr-sv-tint'), function (n) { n.remove(); }); return; }
+    var line = phaseLine(phase), stick = nearBottom(list);
+    var span = line.querySelector('.sr-sv-tint');
+    if (!span) { span = document.createElement('span'); span.className = 'sr-sv-tint'; line.appendChild(span); }
+    span.textContent = text;
+    if (stick) list.scrollTop = list.scrollHeight;
+  }
+  function domVoice() {
+    var el = root.querySelector('.sr-sv-listen');
+    if (el) el.hidden = !voice;
+  }
+  function domLevels() {
+    if (reduceMotion) return;
+    var bars = root.querySelectorAll('.sr-sv-bar');
+    for (var k = 0; k < bars.length; k++) {
+      var v = levels[levels.length - bars.length + k] || 0;
+      bars[k].style.height = (3 + Math.pow(Math.min(1, v * 14), 0.6) * 23).toFixed(1) + 'px';
+    }
+  }
+
+  function transcriptLine() {
+    var s = machine && LocalStore.get(KEYS.session, null);
+    var status = s && s.transcriptStatus;
+    if (status === 'complete') return '<li class="sr-sv-st sr-sv-st--done">' + svg('check', 15) + '<span>Transcript written</span><span class="sr-sv-vh">, done</span></li>';
+    if (status === 'incomplete') return '<li class="sr-sv-st sr-sv-st--done">' + svg('check', 15) + '<span>Transcript written, up to where it stopped</span><span class="sr-sv-vh">, done</span></li>';
+    return '<li class="sr-sv-st sr-sv-st--none">' + svg('dot', 15) + '<span>No transcript this time</span></li>';
+  }
+
+  function failCopy(r) {
+    if (r === 'mic') return {
+      h: 'A Sovereign session needs your microphone.',
+      b: 'Your browser didn’t allow it. You can allow the microphone for this site in your browser’s settings and try again, or use the guided version now.',
+      retry: true };
+    if (r === 'load') return {
+      h: 'The speech model couldn’t be started.',
+      b: 'Nothing you said was recorded or sent anywhere. You can try again — if the model has been cleared from this device it will download once more — or use the guided version now.',
+      retry: true };
+    if (r === 'unavailable') return {
+      h: 'Sovereign sessions aren’t available on this page right now.',
+      b: 'The part of SafeRise that turns your voice into text didn’t load. Nothing was recorded. The guided version works here.',
+      retry: false };
+    return {
+      h: 'This device can’t run the speech model.',
+      b: 'A Sovereign session turns your voice into text on the device itself, and this browser can’t do that. SafeRise won’t send your voice anywhere else instead. The guided version works here.',
+      retry: false };
+  }
+
+  function mb(bytes) { return Math.max(1, Math.round(bytes / 1e6)); }
+
+  function dlBody() {
+    if (!dl || dl.state === 'sizing') return 'Checking the size of the download…';
+    return 'This is a one-time download of about ' + mb(dl.total) + ' MB. It is what lets SafeRise turn your voice into text here, on this device, so your voice is never sent anywhere. Once it is here, Sovereign sessions work offline.';
+  }
+  function dlStatus() {
+    if (!dl) return '';
+    if (dl.state === 'loading') return 'Downloaded. Getting it ready…';
+    if (dl.state === 'ready') return 'Ready.';
+    return '';
   }
 
   var SCREENS = {
@@ -312,6 +535,45 @@
         '<p class="sr-sv-right"><a class="sr-sv-link" href="privacy.html">How your record is stored</a></p>' +
         '</div>';
     },
+    /* Not a practice surface: the one place a progress indicator is allowed. */
+    MODEL: function () {
+      if (dl && dl.state === 'failed') {
+        return '<div class="sr-sv-stage">' +
+          '<p class="sr-sv-kick">One-time setup</p>' +
+          '<h2 class="sr-sv-h sr-sv-h--30" tabindex="-1">The speech model didn’t finish downloading.</h2>' +
+          '<p class="sr-sv-body">Nothing you said has been recorded or sent anywhere — the session hasn’t started. SafeRise won’t use an online speech service instead. You can try the download again, or use the guided version now.</p>' +
+          '<div class="sr-sv-acts">' +
+            '<button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="dl-retry">Retry</button>' +
+            '<button type="button" class="sr-sv-btn sr-sv-btn--ghost" data-sv="to-guided">Use the guided version instead</button>' +
+          '</div></div>';
+      }
+      var pct = dl ? Math.round((dl.state === 'loading' || dl.state === 'ready' ? 1 : dl.frac) * 100) : 0;
+      return '<div class="sr-sv-stage">' +
+        '<p class="sr-sv-kick">One-time setup</p>' +
+        '<h2 class="sr-sv-h sr-sv-h--30" tabindex="-1">SafeRise is downloading the speech model to your device.</h2>' +
+        '<p class="sr-sv-body sr-sv-dlbody">' + dlBody() + '</p>' +
+        '<div class="sr-sv-dl">' +
+          '<div class="sr-sv-dlbar" role="progressbar" aria-label="Speech model download" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '">' +
+            '<span class="sr-sv-dlfill" style="width:' + pct + '%"></span></div>' +
+          '<span class="sr-sv-dlpct">' + pct + '%</span>' +
+        '</div>' +
+        '<p class="sr-sv-quiet sr-sv-dlstatus" role="status">' + dlStatus() + '</p>' +
+        '<div class="sr-sv-acts">' +
+          '<button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="dl-continue"' + (dl && dl.state === 'ready' ? '' : ' disabled') + '>Continue</button>' +
+          '<button type="button" class="sr-sv-btn sr-sv-btn--ghost" data-sv="to-guided">Use the guided version instead</button>' +
+        '</div></div>';
+    },
+    FAIL: function () {
+      var c = failCopy(failReason);
+      return '<div class="sr-sv-stage">' +
+        '<p class="sr-sv-kick">Sovereign practice</p>' +
+        '<h2 class="sr-sv-h sr-sv-h--30" tabindex="-1">' + c.h + '</h2>' +
+        '<p class="sr-sv-body">' + c.b + '</p>' +
+        '<div class="sr-sv-acts">' +
+          '<button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="to-guided">Use the guided version</button>' +
+          (c.retry ? '<button type="button" class="sr-sv-btn sr-sv-btn--ghost" data-sv="retry">Try again</button>' : '') +
+        '</div></div>';
+    },
     PRE_STATE: function () {
       var pre = machine.preState();
       return '<div class="sr-sv-stage">' +
@@ -343,8 +605,7 @@
           '<button type="button" class="sr-sv-step" data-sv="pre-up" aria-label="Raise your starting point">+</button></p>' +
           soundbedBtn() +
         '</div>' +
-        '<details class="sr-sv-transcript"><summary>Transcript</summary>' +
-          '<div class="sr-sv-tbody"><p>Transcription is not switched on yet. Nothing you say is being written down.</p></div></details>' +
+        wordsHTML() +
         '<div class="sr-sv-dock">' +
           '<button type="button" class="sr-sv-btn sr-sv-btn--ghost" data-sv="keep">Keep going</button>' +
           '<button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="next">Next →</button>' +
@@ -371,7 +632,7 @@
         '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">Creating your record.</h2>' +
         '<p class="sr-sv-body">Your words are being gathered into a written record on this device. Sit for a moment before you read it.</p>' +
         '<ul class="sr-sv-status">' +
-          '<li class="sr-sv-st sr-sv-st--done">' + svg('check', 15) + '<span>Transcript written</span><span class="sr-sv-vh">, done</span></li>' +
+          transcriptLine() +
           '<li class="sr-sv-st sr-sv-st--done">' + svg('check', 15) + '<span>What you chose, in your own words</span><span class="sr-sv-vh">, done</span></li>' +
           '<li class="sr-sv-st sr-sv-st--now">' + svg('dot', 15) + '<span>Gathering the decisions you named</span><span class="sr-sv-vh">, in progress</span></li>' +
         '</ul>' +
@@ -388,13 +649,83 @@
     root.setAttribute('data-sv-view', v);
     var h = root.querySelector('.sr-sv-h');
     if (h) h.focus({ preventScroll: true });
+    var d = root.querySelector('.sr-sv-words');
+    if (d) {
+      d.addEventListener('toggle', function () { wordsOpen = d.open; });
+      var list = tlist(); if (list) list.scrollTop = list.scrollHeight;
+    }
+    domLevels();
     var inBed = v === 'PRE_STATE' || v === 'POST_STATE' || PHASES.indexOf(v) > -1;
     if (inBed) Soundbed.resume(); else Soundbed.pause();
+  }
+  function rerender() { go(view); }
+
+  function showFail(reason) {
+    if (dl && dl.abort) dl.abort.abort();
+    dl = null;
+    dropEngine(); closeMic();
+    machine = null; failReason = reason;
+    go('FAIL');
+  }
+
+  /* INVITE → (PERMISSION, once) → microphone → (MODEL, if not cached) → PRE_STATE */
+  function beginFlow() {
+    if (!STT) { showFail('unavailable'); return; }
+    var why = STT.probe();
+    if (why) { showFail(why); return; }
+    if (LocalStore.get(KEYS.micIntroSeen, false) === true) requestMic();
+    else go('PERMISSION');
+  }
+  function requestMic() {
+    openMic().then(function (ok) {
+      if (!ok) { showFail('mic'); return; }
+      STT.isCached().then(function (cached) { if (cached) startMachine(); else startDownload(); });
+    });
+  }
+
+  function startDownload() {
+    var abort = new AbortController();
+    dl = { state: 'sizing', total: 0, frac: 0, abort: abort };
+    var mine = dl;
+    go('MODEL');
+    function paint() {
+      if (dl !== mine || view !== 'MODEL') return;
+      var pct = Math.round((mine.state === 'loading' || mine.state === 'ready' ? 1 : mine.frac) * 100);
+      var body = root.querySelector('.sr-sv-dlbody'), bar = root.querySelector('.sr-sv-dlbar'),
+          fill = root.querySelector('.sr-sv-dlfill'), num = root.querySelector('.sr-sv-dlpct'),
+          status = root.querySelector('.sr-sv-dlstatus'), cont = root.querySelector('[data-sv="dl-continue"]');
+      if (body) body.textContent = dlBody();
+      if (bar) bar.setAttribute('aria-valuenow', pct);
+      if (fill) fill.style.width = pct + '%';
+      if (num) num.textContent = pct + '%';
+      if (status) status.textContent = dlStatus();
+      if (cont) cont.disabled = mine.state !== 'ready';
+    }
+    STT.download({
+      signal: abort.signal,
+      onSize: function (bytes) { mine.total = bytes; mine.state = 'downloading'; paint(); },
+      onProgress: function (f) { mine.frac = f; paint(); }
+    }).then(function () {
+      mine.state = 'loading'; paint();
+      return ensureEngine().prepare();
+    }).then(function () {
+      mine.state = 'ready'; paint();
+    }, function (err) {
+      if (dl !== mine || abort.signal.aborted) return;
+      if (engine) { dropEngine(); }
+      if (err && err.code) { showFail('load'); return; }
+      mine.state = 'failed'; go('MODEL');
+    });
   }
 
   function startMachine() {
     machine = createMachine(LocalStore, { protocolId: ctx.protocolId, trackId: ctx.trackId });
     deeperShown = 0;
+    resetWords();
+    dl = null;
+    ensureEngine().prepare().catch(function (err) {
+      if (machine && machine.state() === 'PRE_STATE') showFail('load');
+    });
     go('PRE_STATE');
   }
 
@@ -417,27 +748,61 @@
     var b = e.target.closest('[data-sv]');
     if (!b || b.disabled) return;
     switch (b.getAttribute('data-sv')) {
-      case 'invite-begin':
-        if (LocalStore.get(KEYS.micIntroSeen, false) === true) { openMic().then(startMachine); }
-        else go('PERMISSION');
-        break;
+      case 'invite-begin': beginFlow(); break;
       case 'allow':
         LocalStore.set(KEYS.micIntroSeen, true);
-        openMic().then(startMachine);
+        requestMic();
         break;
       case 'to-guided': setMode('guided'); break;
-      case 'mic-retry': openMic().then(function () { go(machine.state()); }); break;
+      case 'retry':
+        if (failReason === 'mic' || failReason === 'load') { failReason = null; beginFlow(); }
+        break;
+      case 'dl-retry': startDownload(); break;
+      case 'dl-continue': startMachine(); break;
+      case 'mic-retry':
+        openMic().then(function (ok) {
+          if (!ok || !machine) return;
+          micLost = false;
+          if (PHASES.indexOf(machine.state()) > -1 && engine && !engine.failed()) {
+            engine.start(Mic.stream, machine.state()).catch(function () { tFailed = true; rerender(); });
+          }
+          rerender();
+        });
+        break;
       case 'soundbed': Soundbed.toggle(); go(machine.state()); break;
-      case 'begin': if (machine.begin()) { deeperShown = 0; go(machine.state()); } break;
+      case 'begin':
+        if (machine.begin()) {
+          deeperShown = 0;
+          if (engine && Mic.stream && !engine.failed()) {
+            engine.start(Mic.stream, 'RECOGNISE').catch(function () { tFailed = true; rerender(); });
+          }
+          go(machine.state());
+        }
+        break;
       case 'keep':
         deeperShown = Math.min(deeperShown + 1, PROMPTS[machine.state()].deeper.length);
         go(machine.state());
         break;
-      case 'next': machine.next(); deeperShown = 0; go(machine.state()); break;
+      case 'next':
+        machine.next(); deeperShown = 0;
+        if (engine) {
+          if (PHASES.indexOf(machine.state()) > -1) engine.setPhase(machine.state());
+          else { transcriptDone = engine.stop(); voice = false; interim = null; closeMic(); }
+        }
+        go(machine.state());
+        break;
       case 'pre-dn': machine.correctPre(machine.preState() - 1); go(machine.state()); break;
       case 'pre-up': machine.correctPre(machine.preState() + 1); go(machine.state()); break;
-      case 'close': if (machine.close()) { closeMic(); go(machine.state()); } break;
-      case 'leave': machine.discard(); closeMic(); machine = null; go('INVITE'); break;
+      case 'close':
+        if (machine.postState() === null) break;
+        b.disabled = true;
+        (transcriptDone || Promise.resolve()).then(function () {
+          if (!machine || machine.state() !== 'POST_STATE') return;
+          machine.setTranscriptStatus(tFailed ? (hasWords() ? 'incomplete' : 'none') : (hasWords() ? 'complete' : 'none'));
+          if (machine.close()) { dropEngine(); closeMic(); go(machine.state()); }
+        });
+        break;
+      case 'leave': machine.discard(); teardown(); go('INVITE'); break;
     }
   });
 
