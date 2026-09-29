@@ -13,9 +13,14 @@
    one transformers.js release; the Cache Storage entry is named for both, so
    a new version downloads once and the old entry is deleted.
 
+   SELF-HOSTED (SR-464 A2). Every file is served from this origin, from
+   assets/vendor/speech/ (see its README for pins and checksums). No member's
+   IP address reaches a third party, and _headers needs no model host in
+   connect-src.
+
    NO CLOUD, EVER. Nothing in this file or the worker calls
    the browser's built-in speech API or any hosted speech service. The only network use is
-   the one-time download below, which carries no audio and no text. Any
+   the one-time same-origin download below, which carries no audio and no text. Any
    failure — no WASM, no SIMD, worker blocked, download failed, model
    evicted — is reported to the caller, which offers the guided version.
 
@@ -38,13 +43,14 @@
   var MODEL = 'onnx-community/moonshine-tiny-ONNX';
   var REVISION = 'a6da1241cd305dcd64eab1edbd615f2bb9aabb95';
   var CACHE_PREFIX = 'sr-sv-stt-';
-  var CACHE = CACHE_PREFIX + 'moonshine-tiny-q8@' + REVISION.slice(0, 7) + '+tjs' + TJS;
-  var CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@' + TJS + '/dist/';
-  var HF = 'https://huggingface.co/' + MODEL + '/resolve/' + REVISION + '/';
+  var CACHE = CACHE_PREFIX + 'moonshine-tiny-q8@' + REVISION.slice(0, 7) + '+tjs' + TJS + '+self';
+  var VENDOR = sibling('../assets/vendor/speech/');
+  var RUNTIME = VENDOR + 'transformers-' + TJS + '/';
+  var HF = VENDOR + 'moonshine-tiny-onnx-' + REVISION.slice(0, 7) + '/';
   var LIB = {
-    transformers: CDN + 'transformers.min.js',
-    ortMjs: CDN + 'ort-wasm-simd-threaded.jsep.mjs',
-    ortWasm: CDN + 'ort-wasm-simd-threaded.jsep.wasm'
+    transformers: RUNTIME + 'transformers.min.js',
+    ortMjs: RUNTIME + 'ort-wasm-simd-threaded.jsep.mjs',
+    ortWasm: RUNTIME + 'ort-wasm-simd-threaded.jsep.wasm'
   };
   var FILES = [
     LIB.transformers, LIB.ortMjs, LIB.ortWasm,
@@ -105,7 +111,7 @@
     var sizes = [];
     return dropStale().then(function () {
       return Promise.all(FILES.map(function (u) {
-        return fetch(u, { method: 'HEAD', signal: signal, credentials: 'omit' }).then(function (r) {
+        return fetch(u, { method: 'HEAD', signal: signal, credentials: 'same-origin' }).then(function (r) {
           if (!r.ok) throw new Error('size check failed');
           return +r.headers.get('content-length') || 0;
         });
@@ -119,7 +125,7 @@
         function nextFile() {
           if (k === FILES.length) return cache.put(COMPLETE, new Response('ok'));
           var url = FILES[k], size = sizes[k];
-          return fetch(url, { signal: signal, credentials: 'omit' }).then(function (r) {
+          return fetch(url, { signal: signal, credentials: 'same-origin' }).then(function (r) {
             if (!r.ok || !r.body) throw new Error('download failed');
             var reader = r.body.getReader(), parts = [], read = 0;
             function pump() {
@@ -209,7 +215,7 @@
           }
           if (m.type === 'result') onResult(m);
         };
-        worker.postMessage({ type: 'init', cacheName: CACHE, model: MODEL, revision: REVISION, lib: LIB });
+        worker.postMessage({ type: 'init', cacheName: CACHE, model: MODEL, revision: REVISION, modelBase: HF, lib: LIB });
       });
       return readyP;
     }
@@ -364,7 +370,7 @@
   }
 
   global.SafeRiseSTT = {
-    MODEL: MODEL, REVISION: REVISION, CACHE: CACHE, FILES: FILES,
+    MODEL: MODEL, REVISION: REVISION, CACHE: CACHE, FILES: FILES, LIB: LIB, MODEL_BASE: HF,
     probe: probe, isCached: isCached, download: download, createEngine: createEngine
   };
 })(window);
