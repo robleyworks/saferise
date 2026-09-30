@@ -23845,8 +23845,7 @@ the whole `.sr-home .hero/.heroart/.heroin/.filmhero/.filmcopy/.filmfooter` set,
   (79px) down to about 768, so 112 keeps a band of air proportionate to the smaller
   screen (33px vs 53px, roughly the same share of the viewport). 360 keeps the
   artwork-to-viewport ratio at 1024×768 close to 440 at 1440×900, so the first
-  section still clears the fold (measured: organisations 531, plans 512, index 570,
-  all under 768).
+  section still clears the fold.
 - **DIFFERS, the nav:** the brief puts the nav at about 60px, but it measures **79px** at
   1440, so the founder's 132 leaves 53px of air, not 72. Below about 768 the nav wraps to
   181px (at 560–767) or 235px (≤480, SR-385's minimal wrap), so **no fixed page top can
@@ -23892,25 +23891,30 @@ untouched.
 **VERIFY 1** (iframes at the stated widths, 900px tall; top = viewport to the first element
 of the page top; a2c = artwork to the first line of copy)
 
-| page | arch | 1440 top / a2c | 1024 top / a2c | 375 top / a2c |
-|---|---|---|---|---|
-| index | A | 131 / 40 | 111 / 40 | 267 / 40 |
-| organisations | A | 131 / 40 | 111 / 40 | 267 / 40 |
-| plans | A | 132 / 40 | 112 / 40 | 268 / 40 |
-| coming-soon | C | 132 / 40 | 112 / 40 | 268 / 40 |
-| live-sessions | C | 132 / 40 | 112 / 40 | 268 / 40 |
-| about | D | 132 / – | 112 / – | 268 / – |
-| method | D | 132 / – | 112 / – | 268 / – |
-| legal, terms, privacy, refunds, accessibility | D | 133 / – | 113 / – | 269 / – |
-| getting-help (no nav) | D | 132 / – | 112 / – | 112 / – |
+*Corrected in SR-487:* the first run of this table was taken in a browser tab emulating
+a scaled viewport, where a 1024px frame fell into the below-1024 rule. The table below
+is re-measured in an unemulated tab, and adds 1023 to show the scaled values.
+Format: top / art→copy / artwork height.
+
+| page | arch | 1440 | 1024 | 1023 | 375 |
+|---|---|---|---|---|---|
+| index | A | 131/40/440 | 131/40/440 | 111/40/360 | 267/40/360 |
+| organisations | A | 131/40/440 | 131/40/440 | 111/40/360 | 267/40/360 |
+| plans | A | 132/40/440 | 132/40/440 | 112/40/360 | 268/40/360 |
+| coming-soon | C | 132/40/440 | 132/40/422 | 112/40/360 | 268/40/138 |
+| live-sessions | C | 132/40/440 | 132/40/422 | 112/40/360 | 268/40/138 |
+| about, method | D | 132 | 132 | 112 | 268 |
+| legal, terms, privacy, refunds, accessibility | D | 133 | 133 | 113 | 269 |
+| getting-help (no nav) | D | 132 | 132 | 112 | 112 |
+| the private seat sheet (SR-487) | A | 131/40/440 | 131/40/440 | 111/40/360 | 267/40/360 |
 
 P1 **pass** (every nav page within 2px at each width; getting-help at 375 is the stated
 exception) · block→next 40 on every page (method 38: its underlay's own −2px) ·
 P2 **pass** (gutter 30px, copy left 158/30/30 on every page) · P3 **pass** (nothing under
 the nav at any width, Midnight and Sunrise) · P4 **pass**: tallest artwork **440px** (A
-and C at 1440); 360 at 1024; C 136 at 375 · P5 **pass** (first section's top / first h2 at
-1440×900: organisations 611/730, plans 612/684; at 1024×768: organisations 531/651,
-plans 512/568; screenshots) · P6 **pass** (no sideways scroll at 375, either theme) ·
+and C at 1440 and 1024); 360 below 1024; C 138 at 375 · P5 **pass** (first section's top / first h2 at
+1440×900: organisations 616/735, plans 612/684; at 1024×768: organisations 611/730,
+plans 612/668, all above the fold; screenshots) · P6 **pass** (no sideways scroll at 375, either theme) ·
 P7 **partial**: `.chero`, `.livehero` and `.pghead` are gone from every converted page.
 `.sr-pr-hero` remains in for-organisations.html and pricing.html; those are Part 2
 (SR-487). **`.sr-mt-reghead` is kept, DIFFERS:** it is not method.html's page top, but
@@ -23924,3 +23928,53 @@ at 1440. There is no B page.
 
 Also: the three throwaway contact sheets in `_incoming/` (sheet2, sheet-downloads,
 sheet-org-dash-home) deleted; they were untracked.
+
+## SR-487 — Pricing retired in principle; the seat sheet made private (for-organisations → an unlisted URL)
+
+Brief: "Five parts", Part 2. Not pushed.
+
+- **The private sheet:** `for-organisations.html` is moved (`git mv`) to
+  **`proposal-7kq3m9x2.html`**, served at **`/proposal-7kq3m9x2`** (`_redirects` 200).
+  *Proposed, not final.* The token means nothing in the site's vocabulary. Rename it by
+  moving the file and editing that one `_redirects` line.
+  **This page is unlisted, not access-controlled. Anyone with the link can open it.**
+  - It keeps `<meta name="robots" content="noindex, nofollow">`. Its canonical and og:url
+    (both pointed at /for-organisations) are removed.
+  - `scripts/gen-sitemap.js` EXCLUDE gains `^proposal-`, matched by prefix so the
+    generator does not repeat the URL. `tools/check-sitemap.py` confirms: 22 expected
+    pages, the sheet not among them. The same pre-existing sitemap mismatch as SR-484 is
+    reported, not regenerated.
+  - It is linked from no nav, footer or public page (grep: the only reference is its own
+    `_redirects` line).
+  - `/for-organisations` still 301s to `/organisations`. The old file no longer exists, so
+    nothing shadows the redirect, and `/for-organisations.html` 404s.
+  - Page top: `sr-pt--a` on `assets/dashboard/banner-org-pricing.{webp,jpg}`, committed
+    here. Its sections are unchanged.
+- **Pricing alignment: AMBIGUOUS, skipped.** `claude/B2B-PORTAL-DECISIONS.md` and
+  `claude/MEMBERSHIP-TIERS.md` are **not in the repo** (searched the whole tree). With no
+  source to align to, **no figure was changed**. The sheet still reads: Pilot €1,800 ·
+  Programme €4,200 · Partner €9,500 · seats €15 (25–99) / €13 (100–299) / €11 (300–749).
+  No `[SEAT PRICE]` placeholder was inserted either, because replacing stated figures
+  needs the document that supersedes them. Supply the two documents and this is a
+  short follow-up.
+- **pricing.html is NOT deleted.** Its sections were checked against their successors:
+  - What it costs / Personal Transformation / Everything else → **/plans**: has a home
+    (the four-tier ladder supersedes "€19 a month, or €190 a year").
+    **Without a home:** "Cancel whenever. Nothing expires, nothing locks, and nothing gets
+    taken away mid-month." and "The annual rate is ten months for twelve…". /plans states
+    neither, and the second conflicts with /plans' own annual figures.
+  - **Work with someone directly** (€129 a session · €349 for three): **no home.**
+    live-sessions.html describes Premium 1:1 but states no price anywhere.
+  - **Guided workshops** (€39 a person, ninety minutes, remote): **no home.**
+    live-sessions.html states no price or length.
+  - **Retreats** (dates and pricing on enquiry, with an enquiry link): **no home.**
+    live-sessions.html mentions retreats only inside the "Remote by default" note.
+  - Bringing this into an organisation → **/organisations**: has a home.
+  So the file stays. `/pricing` and `/pricing.html` still 301 to `/plans`, so it is
+  unreachable.
+- **VERIFY 2:** X1 pass: reachable at `/proposal-7kq3m9x2` only (local preview; the
+  Netlify rewrite was not exercised) · X2 pass: noindex, nofollow present; the generator
+  excludes it · X3 **partial**: the /for-organisations and /pricing 301s are unchanged in
+  `_redirects`, but **pricing.html is kept** (X4) · X4 above · X5: **no figure changed**
+  (the documents are missing) · X6 pass: 131/131/111/267 at 1440/1024/1023/375,
+  art→copy 40, gutter 30, no sideways scroll (table in SR-486).

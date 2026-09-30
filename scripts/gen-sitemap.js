@@ -13,7 +13,9 @@ const ORIGIN = 'https://thesaferiseprotocol.com';
    back to the sitemap against its own noindex tag. */
 /* SR-478 · records excluded (exact match): My Records is a member page,
    noindex, replacing member-record.html, which member- already excluded. */
-const EXCLUDE = /^(dashboard|account|signup|login|member-|404|pass|mock)|^for-organisations$|^legal$|^records$/;
+/* SR-487 · ^proposal- : the private seat sheet (unlisted; matched by prefix so
+   its URL is not repeated here) */
+const EXCLUDE = /^(dashboard|account|signup|login|member-|404|pass|mock)|^for-organisations$|^legal$|^records$|^proposal-/;
 
 const pages = fs.readdirSync('.')
   .filter(f => f.endsWith('.html'))

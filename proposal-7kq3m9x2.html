@@ -10,12 +10,10 @@
      redirect is confirmed working — same treatment as SR-386's /pricing below. -->
 <title>For teams and organisations — SafeRise Protocol</title>
 <meta name="description" content="Delivered programmes for teams, and platform access priced per seat. Pilot from €1,800, seats from €15/mo, seats-used reporting only — never individual usage.">
-<link rel="canonical" href="https://thesaferiseprotocol.com/for-organisations">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SafeRise Protocol">
 <meta property="og:title" content="For teams and organisations — SafeRise Protocol">
 <meta property="og:description" content="Delivered programmes for teams, and platform access priced per seat. Pilot from €1,800, seats from €15/mo, seats-used reporting only — never individual usage.">
-<meta property="og:url" content="https://thesaferiseprotocol.com/for-organisations">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,14 +29,12 @@ body{background:var(--bg);color:var(--text);font-family:'Cormorant Garamond',Geo
 .skip{position:absolute;left:-9999px}
 .skip:focus{left:20px;top:20px;z-index:200;background:var(--gold);color:#000;padding:10px 16px;border-radius:6px}
 
-.sr-pr-hero{padding:78px 0 44px;border-bottom:1px solid var(--hair)}
+
 .sr-pr-eyebrow{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;
   letter-spacing:.3em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:13px}
 .sr-pr-eyebrow::before{content:'';width:26px;height:1px;background:var(--gold-dim)}
-.sr-pr-hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;
-  font-size:clamp(34px,4.6vw,54px);line-height:1.1;letter-spacing:-.018em;margin:22px 0 0;max-width:22ch}
-.sr-pr-hero p{font-size:clamp(17px,1.5vw,19px);line-height:1.62;color:var(--text2);
-  max-width:56ch;margin:20px 0 0}
+
+
 
 .sr-pr-seq{padding:54px 0}
 .sr-pr-block{border-top:1px solid var(--hair);padding:44px 0}
@@ -69,7 +65,7 @@ body{background:var(--bg);color:var(--text);font-family:'Cormorant Garamond',Geo
 .sr-pr-close p{font-size:16.5px;line-height:1.65;color:var(--text2);max-width:62ch;margin:0 0 12px}
 
 @media(max-width:640px){
-  .sr-pr-hero{padding:56px 0 34px}
+  
   .sr-pr-seq{padding:34px 0}
   .sr-pr-block{padding:32px 0}
   .sr-pr-table td{font-size:15px}
@@ -112,12 +108,20 @@ body{background:var(--bg);color:var(--text);font-family:'Cormorant Garamond',Geo
 </nav>
 <main id="main">
 
-<section class="sr-pr-hero"><div class="wrap">
-  <p class="sr-pr-eyebrow">For organisations</p>
-  <h1>For teams and organisations</h1>
-  <p>Two things, and you can take either on its own.</p>
-  <p>A programme delivered to your people. And access to the platform for employees to use on their own.</p>
-</div></section>
+<!-- SR-487 · the private seat and pricing sheet. UNLISTED, NOT ACCESS-CONTROLLED:
+     not in the nav or any footer, linked from no public page, noindex/nofollow,
+     excluded from the sitemap generator. Anyone with the link can open it. It was
+     for-organisations.html; /for-organisations still 301s to /organisations. Page
+     top: sr-pt- archetype A, on the founder's banner-org-pricing plate. -->
+<header class="sr-pt sr-pt--a">
+  <picture class="sr-pt-art"><source type="image/webp" srcset="assets/dashboard/banner-org-pricing.webp"><img src="assets/dashboard/banner-org-pricing.jpg" alt=""></picture>
+  <div class="sr-pt-in"><div class="sr-pt-copy">
+    <p class="sr-pt-kick">For organisations</p>
+    <h1 class="sr-pt-h">For teams and organisations</h1>
+    <p class="sr-pt-lead">Two things, and you can take either on its own.</p>
+    <p class="sr-pt-lead">A programme delivered to your people. And access to the platform for employees to use on their own.</p>
+  </div></div>
+</header>
 
 <section class="sr-pr-seq"><div class="wrap">
 

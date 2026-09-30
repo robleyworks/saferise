@@ -119,6 +119,9 @@
 # page under this same route.
 /organisations         /organisations.html        200
 /for-organisations      /organisations              301
+# SR-487 · the private seat and pricing sheet (was for-organisations.html).
+# Unlisted, not access-controlled: reachable only by this URL.
+/proposal-7kq3m9x2     /proposal-7kq3m9x2.html     200
 
 # SR-386 (PASS-plans-final.md §1) · /plans absorbs /pricing. /pricing had
 # the correct prices but no traffic (nothing linked to it except one
