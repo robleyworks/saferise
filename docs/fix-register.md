@@ -24062,3 +24062,73 @@ Brief: "Five parts", Part 4. Not pushed.
   with the pre-pass rail and CSS measures 379 too. It is not fixed here (a founder-ruled
   index page, out of scope); worth a one-line fix · D5 screenshots: FAQ, /records and
   checkout at 1440; FAQ at 375.
+
+## SR-490 — Privacy copy held to the reconciled standard everywhere
+
+Brief: "Five parts", Part 5 (the founder's standing rule, 30 September). Not pushed.
+
+**Y1 · the sweep.** Every tracked `.html`/`.js` product file outside privacy.html, terms.html
+and legal.html (and outside pass/, archive/, docs/, claude/, audit/, tests/, netlify/)
+was searched for: stays on / on this / on your device, never sent, not sent, nothing
+leaves/sent, never leaves, leaves the device, yours alone, sent anywhere, device-only,
+stored on your device, doesn't leave, in the browser, to a/our server, not uploaded,
+stays/kept private, private by, only you / nobody else can, never / not shared.
+**174 matches.**
+- **116 in `content/t1|t2|t3-resources.js`:** 110 are "Written on your device and kept
+  there" / "only on this device" about typed worksheets and the journal (true). 5 are
+  ordinary prose ("doesn't leave the room", "stays private and gets bigger", "work that
+  never leaves your hands"). None concerns Sovereign.
+- **The rest, one by one:** content/tracks.js:230/262/293 ("Your journal stays private"),
+  :585, :1007 · dashboard.html:498, :2167 (DEVICE_ONLY) · js/saferise-decision.js:228,
+  :241 · js/saferise-plans.js:62 · js/saferise-track.js:353, :411 ·
+  js/saferise-sovereign-settings.js:38–39 · js/saferise-sovereign.js:452, :542, :612,
+  :628, :854, :880–881, :904, :997 · js/saferise-upsell.js:35 · member-checkout.html:94 ·
+  member-reading.html:59, :91, :103 · protocol.html:1145 · records.html:90 ·
+  refunds.html:85 · coming-soon.html:862 / member-coming-soon.html:368 (prose about a
+  topic, not a product claim) · plus code comments only (js/saferise-records.js:7,
+  records.html:8/88, js/sr-voice.js:8, member-clearing.html:14, organisations.html:243,
+  js/saferise-poster.js:341, dashboard.html:1444/2165).
+
+**Y2 · changed:**
+- `member-checkout.html:94` "Transcription that never leaves your device *(the audio is
+  discarded as it is transcribed)*" → "Transcription on your device *(your voice is never
+  sent anywhere; the audio is discarded as it is transcribed)*". The old line can
+  reasonably be read as "the transcript never leaves", which is false for a Sovereign
+  record with AI feedback on.
+- `member-reading.html` (FAQ, "Is my journal private", the page behind the banner's
+  "YOUR PRIVACY" rail item): a closing paragraph is added, built from the three
+  reconciled claims: "The one exception is a Sovereign session with AI feedback switched
+  on. That session's written record leaves your device to be read by Anthropic, our model
+  provider, and it is never used to train anything. You can switch AI feedback off at any
+  time, and your voice is never sent anywhere."
+
+**Y3 · left, and why:**
+- *True as written:* every typed-entry claim (journal, The Decision, worksheets,
+  dashboard DEVICE_ONLY, the protocol page's "Entries are saved on this device"); the
+  Sovereign screens (voice never sent; the fact 2 and settings wording from SR-482; "Your
+  record is saved on this device", which states where it is saved, not that it is not
+  sent; line 452's pre-state, which is never sent when a member leaves mid-session);
+  "Transcription on your device" on /plans; the upsell's PRIVATE BY DESIGN; refunds.html
+  and FAQ "live on your own device" (a statement about storage, which is true);
+  /records' "Kept on this device" (storage, not exclusivity).
+- *Not obvious, reported for the founder:*
+  1. **content/tracks.js:1007**, the track pages' FAQ answer to "Is my journal private?":
+     "Your entries and your progress data are yours. They are not shared, not sold…". This
+     is true of the journal. Whether "entries" should also carry the Sovereign exception
+     is the founder's call, and it is track-page FAQ copy.
+  2. **dashboard.html:498**, "Summaries are generated from your own logs and entries. They
+     are never shared…". The privacy claim is true: the summary is built in the browser
+     (dashboard.html:2564–2578). But "Summaries" is N2-forbidden vocabulary. That is a
+     copy fix, not a privacy one.
+  3. **The FAQ banner's "YOUR PRIVACY — What is yours and what stays yours."** (DASHBOARD-
+     BANNERS.md §5, verbatim). It is true in the sense of ownership. The page behind it
+     now states the Sovereign exception (Y2). Whether "stays yours" reads as "stays on the
+     device" is worth the founder's eye.
+
+**Y4 · pass:** no surface claims a Sovereign session record stays on the device. The
+closest is /records' "Kept on this device", which is about storage and is true.
+
+**Suite (end of SR-486–490):** tests/sv-reading **52/52** · tier harness 15/15 · settings
+harness 6/6 · check-track-images PASS · check-hand-to-heart PASS · check-sitemap shows the
+same pre-existing mismatch (22 expected; the new member-* pages and the private sheet are
+correctly excluded).
