@@ -23426,3 +23426,49 @@ Part B is not applied, so there is nothing on the server to read.
   30 unexpected — the protocol slugs and others), unchanged by this pass.
 - **Not done here:** the device-to-server migration and its recording-fake verification
   (SR-475 C5) — the founder ruled no sync in this pass.
+
+## SR-479 — Go-live prep: the privacy copy reconciled with AI feedback (flag stays off)
+
+Brief: `claude/PASS-GO-LIVE-SOVEREIGN-AND-RECORDS.md` (committed with this pass; the
+first copy read was a stale Bedrock/Frankfurt draft — the founder replaced it; nothing was
+changed against the stale version). Provider founder-ruled: **Anthropic, direct API,
+Claude Haiku 4.5**. `SR_FLAGS.sovereign` stays `false`.
+
+- **Copy, verbatim from the brief:** privacy.html — the short version (three lines), "What
+  you write" (the Sovereign exception added), "Technical information"/§3 bold run
+  (typed vs voice), §5 subprocessor row (Anthropic, United States) and the sentence under
+  it, §6 the US-processing exception, §7 retention in its **before-ZDR** form ("held …
+  for up to 30 days for their own abuse monitoring, then deleted"), §11 automated
+  decisions; terms.html §10 lines 99–100; legal.html intro.
+- **Adapted, reported:** (1) privacy §3's paragraph kept its closing sentence ("If you
+  clear your browser data or change device, what you have written can be lost.") — the
+  brief replaces "the bold sentence run", and that sentence is still true of typed
+  entries; terms.html lines 99–100 are replaced whole as briefed, so terms no longer
+  carries that warning. (2) §6's `[TRANSFER MECHANISM — see note]` now covers two
+  transfers — Sint Maarten access and US processing of a Sovereign record — in wording
+  this pass wrote ("…Processing a Sovereign session record in the United States for AI
+  feedback is a second one. We rely on [TRANSFER MECHANISM — see note] to make both
+  lawful."). Placeholder and review note untouched; no mechanism named. (3) §4 legal
+  basis for the Sovereign record: not obvious from the table (contract vs Article 9
+  explicit consent for health-adjacent content) — `[LEGAL BASIS — see note]` with a
+  review note in the existing style.
+- **Code:** `netlify/functions/lib/provider.js` anthropic body now carries
+  `inference_geo: 'us'` (the Messages API offers us|global; there is no EU option).
+  `tests/sv-reading/tests.js`: the body-shape whitelist assertion gains `inference_geo`,
+  plus one assertion that it is `'us'` — 53/53 pass (52 existing + 1), fetch stubbed, no
+  live endpoint. Whether Haiku 4.5 accepts `inference_geo` is not documented model by
+  model: confirm on the deploy preview before the flag (a 400 would fail every reading).
+- **Also corrected:** `/records` footer (SR-478) said "Nothing here is sent anywhere" —
+  false for a Sovereign record with AI feedback on. Now "Kept on this device, and no
+  employer sees any of it."
+- **VERIFY G:** G1 pass · **G2 FAIL** — privacy.html §4, under the legal-basis table, still
+  says "…and why nothing you write is ever transmitted." (not one of the six lines; left
+  unrewritten per the brief; needs founder wording — e.g. "…and why nothing you type is
+  ever transmitted.") · G3 pass · G4 pass (375/1024/1440, no sideways scroll; console
+  clean on direct loads at 1440) · G5 pass (row present; table 291px in a 291px box at
+  375) · G6 pass · G7 pass · G8 pass (with the whitelist update above) · G9 screenshots
+  taken.
+- **Placeholders still open:** `[TRANSFER MECHANISM — see note]` (now two transfers),
+  `[EMAIL PROVIDER]`, `[LEGAL BASIS — see note]` (new).
+- **Not in this pass:** the flag; ZDR (the after-ZDR §7 line is in the brief, a one-line
+  change); the B2B DPA; `SOVEREIGN-ARCHITECTURE-DECISIONS.md` (claude.ai Project only).

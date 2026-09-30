@@ -97,7 +97,9 @@
       var req = x.calls[0], sent = JSON.parse(req.init.body);
       ok('provider: request goes to {endpoint}/v1/messages', req.url === 'https://api.example.test/v1/messages', req.url);
       ok('provider: key only in the x-api-key header', req.init.headers['x-api-key'] === FAKE_KEY && req.init.body.indexOf(FAKE_KEY) < 0);
-      ok('provider: body is model, max_tokens, system, messages, output_config only', JSON.stringify(Object.keys(sent).sort()) === '["max_tokens","messages","model","output_config","system"]', Object.keys(sent));
+      /* SR-479 · inference_geo joins the whitelist — a location pin, carrying no member data */
+      ok('provider: body is model, max_tokens, system, messages, output_config, inference_geo only', JSON.stringify(Object.keys(sent).sort()) === '["inference_geo","max_tokens","messages","model","output_config","system"]', Object.keys(sent));
+      ok('provider: processing pinned to the United States (inference_geo "us")', sent.inference_geo === 'us', sent.inference_geo);
       ok('provider: the member message holds only pre, post and transcript', JSON.stringify(Object.keys(JSON.parse(sent.messages[0].content.replace(/^[^\n]*\n/, ''))).sort()) === '["post","pre","transcript"]');
       ok('provider: success returns the text', x.r.ok && typeof x.r.text === 'string');
       ok('provider: exactly one call', x.calls.length === 1);

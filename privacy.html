@@ -38,7 +38,9 @@ Operated by Kenor International B.V., Sint Maarten<br>
 Last updated: 23 October 2026</p>
 
 <h2>The short version</h2>
-<p class="section-body">Your journal entries and session notes stay on your own device. We never receive them and cannot read them.</p>
+<p class="section-body">Your voice is never sent anywhere. Speech becomes text on your own device and the recording is discarded as it goes.</p>
+<p class="section-body">What you type — journal entries, decisions, your own statements — stays on your device. We never receive it and cannot read it.</p>
+<p class="section-body">If you use a Sovereign session with AI feedback on, the written record of that session is sent to be read, and the reflection comes back to you. It is never used to train anything, and nobody at your organisation can see it. You can switch it off.</p>
 <p class="section-body">What we do hold is small: your email address, whether your subscription is active, and anonymous counts of which material is being opened. That last part tells us which protocols people find useful. It does not tell us anything about what you wrote or what you were feeling.</p>
 <p class="section-body">We do not sell data. We do not run advertising. We do not share your information with anyone except the small number of services listed below that are needed to run the platform.</p>
 <p class="section-body">The rest of this page explains all of that properly.</p>
@@ -72,6 +74,7 @@ Contact: <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferisepro
 
 <h3>What you write</h3>
 <p class="section-body">Your journal entries, session notes and personal record are stored <strong>on your device only</strong>. They are not uploaded, not backed up by us, and not readable by us.</p>
+<p class="section-body">The one exception is a Sovereign session with AI feedback switched on. That session's written record — the transcript and your two ratings — is sent to our model provider to be read. Your name, email and account id are not sent with it. See section 5.</p>
 <p class="section-body">The consequence is worth being clear about: if you clear your browser data, or lose the device, that record is gone and we cannot recover it. We think that trade is the right one, but it is your decision to make knowingly.</p>
 
 <h3>Technical information</h3>
@@ -82,7 +85,8 @@ Contact: <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferisepro
 <p class="section-body">We want to be explicit, because of what this platform is about.</p>
 <p class="section-body">We do not collect health data. We do not ask about diagnoses, conditions, medication or treatment, and there is nowhere on the platform to enter them. We do not infer a health condition from which protocols you open, and we do not attempt to.</p>
 <p class="section-body">Which protocol you opened is, of course, suggestive. We treat that information as sensitive for exactly that reason, keep it aggregated, and never look at it person by person.</p>
-<p class="section-body"><strong>Your journal stays on your device.</strong> What you write in SafeRise is stored on the device you wrote it on. It is not sent to us. We cannot read it, we do not back it up, and we could not recover it for you. If you clear your browser data or change device, what you have written can be lost.</p>
+<p class="section-body"><strong>What you type stays on your device.</strong> Journal entries, decisions and statements you write are stored on the device you wrote them on. We cannot read them, we do not back them up, and we could not recover them for you. If you clear your browser data or change device, what you have written can be lost.</p>
+<p class="section-body"><strong>Your voice is never sent anywhere.</strong> In a Sovereign session, speech becomes text in your own browser and the audio is discarded as it goes. It is not uploaded, not stored, and not recoverable — by us or by anyone.</p>
 
 <h2>4. Why we hold it, and on what legal basis</h2>
 <div style="overflow-x:auto">
@@ -95,9 +99,17 @@ Contact: <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferisepro
 <tr><td>Server logs</td><td>Security, fraud prevention, keeping the site up</td><td>Legitimate interests</td></tr>
 <tr><td>Emails about your account</td><td>Billing notices, service changes</td><td>Performance of our contract</td></tr>
 <tr><td>Marketing emails, if you ask for them</td><td>To send you what you asked for</td><td>Consent — withdrawable at any time</td></tr>
+<tr><td>The written record of a Sovereign session, when AI feedback is on</td><td>To deliver the AI feedback you asked for</td><td>[LEGAL BASIS — see note]</td></tr>
 </tbody>
 </table>
 </div>
+<!-- Note for review (SR-479, PASS-GO-LIVE-SOVEREIGN-AND-RECORDS.md §6) — a note
+     to Andre, not to the reader. Not rendered.
+     "The legal basis for sending a Sovereign session record to the model
+     provider is not asserted here. It is not obvious from the rows above: the
+     member asks for the feedback (which points to contract), but a transcript
+     can contain health-adjacent content (which may need explicit consent under
+     Article 9). A lawyer should confirm it before publication." -->
 <p class="section-body">Where we rely on legitimate interests, we have weighed that against your privacy. It is why usage data is aggregated, why no one drills into an individual record, and why nothing you write is ever transmitted.</p>
 
 <h2>5. Who else is involved</h2>
@@ -111,16 +123,21 @@ Contact: <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferisepro
 <tr><td><strong>Netlify</strong></td><td>Website hosting</td><td>Server logs</td></tr>
 <tr><td><strong>Wistia</strong></td><td>Audio and video delivery</td><td>Playback requests</td></tr>
 <tr><td>[EMAIL PROVIDER]</td><td>Account emails</td><td>Your email address</td></tr>
+<tr><td><strong>Anthropic</strong> (United States)</td>
+    <td>Reads the written record of a Sovereign session and returns the reflection</td>
+    <td>The session transcript and your two ratings. Not your name, email or account id</td></tr>
 </tbody>
 </table>
 </div>
+<p class="section-body">What is sent for AI feedback is never used to train any model. If you switch AI feedback off, nothing is ever sent.</p>
 <p class="section-body">Paddle is the <strong>merchant of record</strong> for your purchase, which means Paddle is the seller and an independent controller of your payment data. Their own privacy policy applies to it.</p>
 <p class="section-body">We do not sell your data, and we do not share it with anyone for their own marketing.</p>
 <p class="section-body">We may disclose information if the law requires it, or to protect someone's safety.</p>
 
 <h2>6. Where your data is held</h2>
 <p class="section-body">Your account and usage data are stored in the European Union, in Frankfurt, Germany.</p>
-<p class="section-body">Kenor International B.V. is based in Sint Maarten, which sits outside the European Economic Area and is not covered by an EU adequacy decision. When we access data from there, that is an international transfer, and we rely on [TRANSFER MECHANISM — see note] to make it lawful.</p>
+<p class="section-body">One exception: if you turn on AI feedback, that session's written record is processed in the United States by Anthropic, our model provider. Your account data does not leave Frankfurt.</p>
+<p class="section-body">Kenor International B.V. is based in Sint Maarten, which sits outside the European Economic Area and is not covered by an EU adequacy decision. When we access data from there, that is an international transfer. Processing a Sovereign session record in the United States for AI feedback is a second one. We rely on [TRANSFER MECHANISM — see note] to make both lawful.</p>
 <!-- Note for review (source: PRIVACY.md §6 blockquote) — a note to Andre, not
      to the reader, per pass/legal/LEGAL-PAGES-BRIEF.md Task 1. Not rendered.
      Kept verbatim so it isn't lost:
@@ -139,7 +156,7 @@ Contact: <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferisepro
 <li><strong>Marketing list:</strong> until you withdraw consent, plus 30 days.</li>
 <li><strong>Server logs:</strong> 30 days.</li>
 <li><strong>Billing and financial records:</strong> kept by Paddle for as long as tax law requires — typically seven years — because that is a legal obligation, not our choice. This period overrides the ones above for the transaction record only.</li>
-<li><strong>Your journal:</strong> on your device, under your control. Deleting it there deletes it entirely.</li>
+<li><strong>What you write:</strong> on your device, under your control. Deleting it there deletes it entirely. A Sovereign session record sent for AI feedback is held by our model provider for up to 30 days for their own abuse monitoring, then deleted. It is never used to train anything.</li>
 </ul>
 <p class="section-body">Backups can hold data for a short time after it is deleted everywhere else, while the backup itself ages out on its own schedule. We would rather tell you that than have you find out by asking.</p>
 
@@ -167,7 +184,8 @@ Contact: <a href="mailto:contact@thesaferiseprotocol.com">contact@thesaferisepro
 <p class="section-body">SafeRise is for adults. You must be 18 or over to create an account. We do not knowingly collect data from children, and will delete it promptly if we discover we have.</p>
 
 <h2>11. Automated decisions</h2>
-<p class="section-body">We do not make automated decisions about you that have legal or similarly significant effects. There is no profiling and no algorithmic recommendation of protocols based on your behaviour.</p>
+<p class="section-body">We do not make automated decisions about you that have legal or similarly significant effects. There is no profiling. We do not recommend protocols based on your behaviour.</p>
+<p class="section-body">AI feedback is not a decision about you and not an assessment of you. It reads back what you said in your own words — what you returned to, what changed between the start and the end — and it is bound to what is actually in the record. It does not diagnose, it does not infer a condition, and it never adds a statement you did not make. Nothing follows from it automatically: no score, no flag, no change to your account, and nothing sent to anyone.</p>
 
 <h2>12. Changes</h2>
 <p class="section-body">If we change this policy in a way that materially affects you, we will email you at least 14 days before it takes effect. The date at the top always shows the current version.</p>

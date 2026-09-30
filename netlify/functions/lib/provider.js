@@ -33,7 +33,11 @@
           max_tokens: 1500,
           system: contract.SYSTEM,
           messages: [{ role: 'user', content: contract.userMessage(payload) }],
-          output_config: { format: { type: 'json_schema', schema: contract.SCHEMA } }
+          output_config: { format: { type: 'json_schema', schema: contract.SCHEMA } },
+          /* SR-479 · processing pinned to the United States, so the location is
+             known and matches privacy.html §6 rather than "wherever capacity is".
+             The API offers us | global only; there is no EU option. */
+          inference_geo: 'us'
         },
         read: function (data) {
           if (!data || data.stop_reason === 'refusal' || data.stop_reason === 'max_tokens') return null;
