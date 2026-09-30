@@ -950,6 +950,7 @@ body.rd-soft .sr-lit:before{background:radial-gradient(60% 70% at 50% 50%, rgba(
      DM Sans are already loaded above (the Google Fonts link); no font link
      added here. -->
 <link rel="stylesheet" href="css/sr-resource-read.css">
+<link rel="stylesheet" href="css/saferise-viz.css">
 </head>
 <body>
 
@@ -1145,6 +1146,7 @@ document.write('<scr' + 'ipt src="content/t' + SR_TRACK_NUM + '-resources.js"></
      writes into #rbody, so renderMain() also calls SRResourceShapes.init()
      explicitly once the body is in the DOM — see below. -->
 <script src="js/sr-resource-shapes.js"></script>
+<script src="js/saferise-viz.js"></script>
 <script src="js/saferise-auth.js"></script>
 <script src="js/saferise-access.js"></script>
 <script>
@@ -1532,10 +1534,9 @@ function light(el){
   },{passive:true});
 })();
 
-/* waveform */
-(function(){var w=document.getElementById('wave'),h='';
-  for(var i=0;i<44;i++){h+='<i style="height:'+(5+Math.round(Math.abs(Math.sin(i*0.7))*20))+'px"></i>';}
-  w.innerHTML=h;})();
+/* SR-472 §1 · #wave was 44 static gold bars in a sine shape — a picture of
+   a waveform, the same whether anything was playing or not. It is now the
+   live visualiser (js/saferise-viz.js), bound to guideAudio below. */
 /* ── SR-247 · resource guidance ────────────────────────────────────────
    ONE <audio>, created once and reused as the rail moves between resources.
    Never one per resource: seven elements would each hold a decoded buffer and
@@ -1549,6 +1550,7 @@ function light(el){
 var guideAudio = new Audio();
 guideAudio.preload = 'none';
 var playBtn = document.getElementById('play');
+if (window.SRViz) SRViz.attach(guideAudio, document.getElementById('wave'));
 
 function guidanceSrcFor(r){
   if (typeof guidanceFor !== 'function' || !r || !r.gtype) return null;

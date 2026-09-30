@@ -121,6 +121,18 @@
      over the time-domain RMS -- reads as breath, not a level meter, per
      the brief's own instruction not to feed a raw FFT bin. */
   function makeAura(audio) {
+    /* SR-472 §1 · with js/saferise-viz.js present the aura reads the one
+       shared tap for this element (an element can have only one
+       MediaElementSource, and the visualiser needs it too). The local
+       graph below is kept only for a page that does not load that file. */
+    if (root.SRViz && root.SRViz.available && root.SRViz.available()) {
+      return {
+        connectAnalyser: function () { root.SRViz.tap(audio); },
+        disconnectAnalyser: function () {},
+        read: function () { return root.SRViz.level(audio); },
+        teardown: function () {}
+      };
+    }
     var ctx = null, analyser = null, source = null, data = null, smoothed = 0, connected = false;
     function ensure() {
       if (ctx) return;
@@ -182,10 +194,13 @@
      mount()'s own frame loop (see below), reusing the same aura.read()
      analyser value --amp already consumes -- one AnalyserNode, two
      readouts, not a second audio graph per player. */
+  /* SR-472 §1 · the four gold bars were a fraction of the aura level plus
+     a sine wobble, so they moved even on silence. Replaced by the shared
+     visualiser (js/saferise-viz.js), attached in mount() once the audio
+     element is known. */
   function buildVoice() {
-    var voice = el('div', 'sr-ps-voice');
+    var voice = el('div', 'sr-av sr-av--stage');
     voice.setAttribute('aria-hidden', 'true');
-    for (var i = 0; i < 4; i++) voice.appendChild(el('i'));
     return voice;
   }
 
@@ -265,8 +280,9 @@
   function buildSteps(stage) {
     var bar = el('div', 'sr-ps-steps');
     var segs = STEPS.map(function (name) {
+      /* SR-472 §1 · no fill line: each segment's <i> filled with the time
+         elapsed in that quarter — a progress bar. The step names stay. */
       var seg = el('span', 'sr-ps-seg');
-      seg.appendChild(el('i'));
       var b = el('b');
       b.textContent = name;
       seg.appendChild(b);
@@ -414,7 +430,16 @@
     if (opts.buildControl) stage.classList.add('sr-ps-player');
 
     var aura = makeAura(audio);
-    var voiceBars = voiceEl ? voiceEl.querySelectorAll('i') : null;
+    /* SR-472 §1 · the live visualiser. In the overlay when this mount builds
+       one (protocol.html); otherwise floated in the stage, which is how the
+       dashboard's Clearing modal (js/sr-medplayer.js, no overlay) gets it. */
+    var viz = null;
+    if (root.SRViz && hasAudio) {
+      if (!voiceEl) { voiceEl = el('div', 'sr-av sr-av--float'); stage.appendChild(voiceEl); }
+      viz = root.SRViz.attach(audio, voiceEl);
+    } else if (voiceEl) {
+      voiceEl.hidden = true;
+    }
 
     /* GALAXY-PLAYER-COMPLETE.md #3 -- the --p driver. Confirmed this file
        already had a working one before this pass (an rAF loop polling
@@ -446,8 +471,6 @@
         stepSegs.forEach(function (seg, i) {
           seg.classList.toggle('on', i === idx);
           seg.classList.toggle('done', i < idx);
-          var w = i < idx ? '100%' : (i === idx ? (within * 100).toFixed(1) + '%' : '0%');
-          seg.querySelector('i').style.setProperty('--w', w);
         });
       }
       var release = (idx === 2) ? Math.sin(within * Math.PI) : 0;
@@ -475,18 +498,6 @@
         if (!reduced) {
           var level = aura.read();
           stage.style.setProperty('--amp', level.toFixed(3));
-          /* FB-07 -- four bars, each a fixed fraction of the same level
-             plus a small per-bar offset so they don't move in lockstep
-             (reads as "speaking", not a single meter needle). Still when
-             paused: frame() only runs while running is true (see start/
-             stop below), so --v simply stops being written. */
-          if (voiceBars) {
-            for (var vi = 0; vi < voiceBars.length; vi++) {
-              var off = [0, .12, .05, .18][vi] || 0;
-              var v = Math.max(0, Math.min(1, level * (1 - off) + (Math.sin(now / (240 + vi * 70)) * .08)));
-              voiceBars[vi].style.setProperty('--v', v.toFixed(3));
-            }
-          }
         }
       }
       raf = requestAnimationFrame(frame);
@@ -520,11 +531,7 @@
       if (stepSegs) {
         stepSegs.forEach(function (seg) {
           seg.classList.remove('on', 'done');
-          seg.querySelector('i').style.setProperty('--w', '0%');
         });
-      }
-      if (voiceBars) {
-        for (var vr = 0; vr < voiceBars.length; vr++) voiceBars[vr].style.setProperty('--v', 0);
       }
     }
 
@@ -547,6 +554,7 @@
 
     function teardown() {
       stop();
+      if (viz) viz.destroy();
       audio.removeEventListener('play', start);
       audio.removeEventListener('pause', stop);
       audio.removeEventListener('timeupdate', onTimeupdate);

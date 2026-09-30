@@ -1,0 +1,23 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   SafeRise — css/saferise-viz.css · SR-472 §1
+   The live audio visualiser (js/saferise-viz.js). Surface code sr-av-.
+   Matches the Sovereign waveform (css/saferise-sovereign.css .sr-sv-bar):
+   3px bars in #7FB59B, heights written per frame from the real output
+   level. Nothing here animates on its own — no keyframes, no transition
+   that could move a bar when the audio is silent.
+
+   Its own file because the pages that host a player do not share one
+   stylesheet: protocol.html and resource.html do not load
+   css/saferise-system.css.
+   ═══════════════════════════════════════════════════════════════════════ */
+.sr-av{display:inline-flex;align-items:center;gap:3px;height:28px;vertical-align:middle}
+.sr-av[hidden]{display:none}
+.sr-av i{display:block;flex:none;width:3px;height:3px;border-radius:2px;background:#7FB59B;opacity:.85}
+
+/* Inside the galaxy stage (the meditation player and the dashboard's
+   Clearing modal): centred under the control, over the artwork. */
+.sr-av--stage{display:flex;justify-content:center;margin:0 auto .3cqw}
+.sr-av--float{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:3;pointer-events:none}
+
+/* Next to a spoken question in the Sovereign session. */
+.sr-av--inline{height:20px}

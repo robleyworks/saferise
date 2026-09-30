@@ -61,6 +61,7 @@
      js/sr-clearing-visual.js's abstract particle canvas inside the same
      player. Loads after it for the same reason -- ahead of the system sheet. -->
 <link rel="stylesheet" href="css/saferise-poster.css">
+<link rel="stylesheet" href="css/saferise-viz.css">
 <link rel="stylesheet" href="css/saferise-system.css">
 </head>
 <body>
@@ -872,6 +873,7 @@
      medplayer.js (below, still unmodified) only ever checks SRClearing at
      mount time, well after page load, so load order here is what decides
      which implementation answers. -->
+<script src="js/saferise-viz.js"></script>
 <script src="js/saferise-poster.js"></script>
 <script src="js/sr-medplayer.js"></script>
 <!-- SR-162 · the protocol cover, shared with the track pages. Must load

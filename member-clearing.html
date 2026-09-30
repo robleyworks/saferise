@@ -33,6 +33,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/saferise-method.css">
 <link rel="stylesheet" href="/css/saferise-rail.css">
+<link rel="stylesheet" href="/css/saferise-viz.css">
 <link rel="stylesheet" href="/css/saferise-system.css">
 </head>
 <body>
@@ -64,6 +65,8 @@
     <button type="button" class="sr-mi-playbtn" id="srClrBtn" aria-label="Play">
       <svg viewBox="0 0 24 24" aria-hidden="true" id="srClrIcon"><path d="M8 5.5v13l11-6.5z"/></svg>
     </button>
+    <!-- SR-472 §1 · the live visualiser: real output level, still on silence. Not a clock. -->
+    <span id="srClrViz"></span>
     <p class="sr-mi-playlabel" id="srClrLabel">Begin where you are</p>
     <p class="sr-mi-small" id="srClrSub">Headphones if you have them. Sitting or lying down both work.</p>
     <p class="sr-mi-hairnote">There is no clock on this player and no progress bar. Watching time pass is the opposite of what the session is for. It ends when it ends.</p>
@@ -86,6 +89,7 @@
 </main>
 
 <script src="/content/meditation.js"></script>
+<script src="/js/saferise-viz.js"></script>
 <script>
 (function () {
   'use strict';
@@ -163,6 +167,7 @@
   if (!src) { unavailable(); }
   else {
     audio.src = src;
+    if (window.SRViz) SRViz.attach(audio, $('srClrViz'));
     audio.addEventListener('error', unavailable);
     audio.addEventListener('play', function () { icon.firstChild.setAttribute('d', PAUSE); btn.setAttribute('aria-label', 'Pause'); logVisit(); });
     audio.addEventListener('pause', function () { icon.firstChild.setAttribute('d', PLAY); btn.setAttribute('aria-label', 'Resume'); });

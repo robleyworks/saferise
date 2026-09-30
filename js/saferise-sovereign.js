@@ -333,6 +333,7 @@
       },
       reset: function () { played = {}; this.stop(); },
       playing: function () { return playing; },
+      element: function (k) { return files[k] ? el(k) : null; },   /* SR-472 §1 · for the visualiser */
       onChange: function (f) { listeners.push(f); }
     };
   })();
@@ -507,8 +508,11 @@
       '</div>';
   }
 
+  /* SR-472 §1 · the live visualiser beside the spoken question: it moves
+     with the question's real output level while it plays, still otherwise. */
   function replayBtn(k) {
-    return '<button type="button" class="sr-sv-link sr-sv-replay" data-sv="voice-replay" data-sv-voice="' + k + '">Hear the question again</button>';
+    return '<span class="sr-sv-replayrow"><button type="button" class="sr-sv-link sr-sv-replay" data-sv="voice-replay" data-sv-voice="' + k + '">Hear the question again</button>' +
+      '<span class="sr-av--inline" data-sv-viz="' + k + '"></span></span>';
   }
 
   function soundbedBtn() {
@@ -1000,6 +1004,12 @@
       var list = tlist(); if (list) list.scrollTop = list.scrollHeight;
     }
     domLevels();
+    if (global.SRViz) {
+      Array.prototype.forEach.call(root.querySelectorAll('[data-sv-viz]'), function (h) {
+        var a = Voice.element(h.getAttribute('data-sv-viz'));
+        if (a) global.SRViz.attach(a, h);
+      });
+    }
     var inBed = v === 'PRE_STATE' || v === 'POST_STATE' || PHASES.indexOf(v) > -1;
     if (inBed) Soundbed.resume(); else Soundbed.pause();
   }
