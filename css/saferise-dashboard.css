@@ -810,7 +810,17 @@ body.reading #srLibrary{margin-top:22px}
    default, about:blank matches and stays transparent over this dark
    background; protocol.html/resource.html declare their own dark scheme and
    paint #0B0B11 from their first frame. */
-.sr-proto-frame{width:100%;border:0;display:block;min-height:900px;background:var(--bg)}
+/* SR-472 §3 [MR-22, second attempt] · the SR-464 note above is half right:
+   the mismatch is real, but an unset scheme does NOT match about:blank. This
+   page's <meta name="color-scheme" content="dark"> makes an unset (normal)
+   element resolve to dark, so the blank frame still differed and Chrome
+   painted it opaque white — seen in a screenshot, full frame, on every open
+   until protocol.html committed. An explicit light scheme on the ELEMENT
+   matches about:blank (transparent, this page's #0B0B11 shows through).
+   protocol.html/resource.html then differ from it and get an opaque canvas
+   in their own (dark) scheme, which their #0B0B11 first paint covers anyway;
+   their own controls keep their own dark scheme. */
+.sr-proto-frame{width:100%;border:0;display:block;min-height:900px;background:var(--bg);color-scheme:light}
 .sr-proto-backbar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:20px var(--pad) 16px}
 .sr-theme--bar{margin-left:auto}
 /* SR-381 (PASS-live-site-defects.md Part F) · Dashboard/Protocol stacked,
@@ -1332,13 +1342,9 @@ body .sr-cover{position:relative;display:block;width:100%;height:100%;min-height
 .sr-resume-rail{position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(245,237,216,.14)}
 .sr-resume-rail i{display:block;height:100%;background:var(--gold)}
 
-/* the shift: everything but the carousel dims out of the way first */
-body.shifting .shell > .sr-dash-sec:not(.sr-keep),
-body.shifting .shell > .sr-dash-faq,
-body.shifting .shell > .sr-dash-close,
-body.shifting .sr-dash-top{opacity:0;transition:opacity .42s ease}
-.sr-proto{animation:srRise .6s cubic-bezier(.22,.61,.36,1) both}
-@keyframes srRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+/* SR-472 §4 · the protocol-select transition is removed: the 'shifting'
+   fade of the other sections and the .sr-proto rise-in (srRise). Selecting a
+   protocol now shows it immediately (dashboard.html openProtocol). */
 
 /* ── Cue Card ──
    SR-335 · .sr-dash-navrailbtn--crisis (three rules, a rail-button variant
