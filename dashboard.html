@@ -3284,43 +3284,29 @@
     // render(), so autoplay keeps running (or stays off, if a manual stop
     // was already in effect) exactly as it was before the switch.
     if(track && +track !== CURRENT_TRACK){ render(+track); selectRail(+track); }   /* SR-461 · D4 */
-    var lib = document.getElementById('srLibrary');
-
-    var start = lib ? lib.getBoundingClientRect().top : 0;
-    document.body.classList.add('shifting');            // fades the other sections
-    window.scrollTo({top: Math.max(0, window.scrollY + start - 22), behavior:'smooth'});
-
-    setTimeout(function(){
-      document.body.classList.add('reading');           // sections leave the flow
-      if(lib){                                          // carousel glides into place
-        var delta = start - lib.getBoundingClientRect().top;
-        if(Math.abs(delta) > 1){
-          lib.style.transition = 'none';
-          lib.style.transform  = 'translateY(' + delta + 'px)';
-          requestAnimationFrame(function(){
-            lib.style.transition = 'transform .78s cubic-bezier(.22,.61,.36,1)';
-            lib.style.transform  = 'translateY(0)';
-          });
-          setTimeout(function(){ lib.style.transition = ''; lib.style.transform = ''; }, 900);
-        }
-      }
-      /* PASS-CLAUDE-CODE-shapes-and-nav.md, Part B1 · a member switching
-         protocol from a resources page should land on the NEW protocol's
-         resources page, not silently back on its overview — the view is
-         what the member chose, switching protocol shouldn't change it back.
-         resource still wins when a caller asks for one by name (the resume
-         card); stayOnResources only applies when no specific resource was
-         requested — loadResource() with no name is exactly what happens
-         when a member opens a resource directly, and resource.html's own
-         empty-`resource=` handling already falls back to its first item
-         with no console warning (confirmed in source before relying on it:
-         the warning only fires when the param is non-empty). */
-      if (resource) loadResource(resource);
-      else if (stayOnResources) loadResource();
-      else loadProtocol();
-      window.scrollTo({top:0});
-      document.body.classList.remove('shifting');
-    }, 460);
+    /* SR-472 §4 · selecting a protocol opens it immediately. The transition
+       that used to run here is removed: a 'shifting' fade of the other
+       sections, a smooth scroll to the carousel, a 460ms wait before the
+       frame was even pointed at the page, and a translateY glide of the
+       carousel into its new position. It delayed every launch by ~0.5s and
+       its two scrolls and transform read as a jerk. The carousel's own
+       drift and scrolling are separate code and untouched. */
+    document.body.classList.add('reading');             // sections leave the flow
+    /* PASS-CLAUDE-CODE-shapes-and-nav.md, Part B1 · a member switching
+       protocol from a resources page should land on the NEW protocol's
+       resources page, not silently back on its overview — the view is
+       what the member chose, switching protocol shouldn't change it back.
+       resource still wins when a caller asks for one by name (the resume
+       card); stayOnResources only applies when no specific resource was
+       requested — loadResource() with no name is exactly what happens
+       when a member opens a resource directly, and resource.html's own
+       empty-`resource=` handling already falls back to its first item
+       with no console warning (confirmed in source before relying on it:
+       the warning only fires when the param is non-empty). */
+    if (resource) loadResource(resource);
+    else if (stayOnResources) loadResource();
+    else loadProtocol();
+    window.scrollTo({top:0, behavior:'instant'});
   }
 
   /* ── return to your path ──
