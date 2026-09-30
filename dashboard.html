@@ -783,7 +783,11 @@
 <div class="sr-modal" id="mCrisis" role="dialog" aria-modal="true" aria-label="Cue Card">
   <div class="sr-modalbox sr-crisis">
     <div class="sr-crisis-art">
-      <img src="assets/covers/01.jpg" alt="" onerror="this.style.display='none'">
+      <!-- SR-471 · the generic card (no protocol context: the resource strip's
+           Cue Card chip, #route=cue) used Anxiety Reset's own cover, so every
+           protocol-less route read as Anxiety Reset. It now uses the shared
+           four-steps art, cropped to its hand-to-heart panel. -->
+      <img class="sr-dash-cuegeneric" src="/assets/shared/four-steps.jpg" alt="" onerror="this.style.display='none'">
       <span class="sr-crisis-scrim"></span>
       <span class="sr-crisis-label">Cue Card<em>Four lines. Always here.</em></span>
     </div>
@@ -1827,7 +1831,7 @@
      PAGES and before ROUTES, so the rail reaches them without carrying a
      data-modal of its own — the rail's own listener would otherwise fire
      openRoute() alongside the modal handler and open two layers at once. */
-  var LAYERS = { coaching: 'sessions' };
+  var LAYERS = { coaching: 'sessions', cue: 'crisis' };   /* SR-471 · #route=cue: the generic Cue Card, for pages with no protocol */
   /* SR-156 · "Dashboard" is not a destination to describe, it is the view you
      come back to. It used to open a modal reading "You are here" — over a
      protocol that stayed open behind it — which is a control reporting success
@@ -3209,13 +3213,19 @@
     if(!srCueDefault) srCueDefault = { art: art && art.getAttribute('src'), steps: steps && steps.innerHTML, kick: kick && kick.textContent };
     var lines = d && d.lines && d.lines.length ? d.lines.slice(0, 4) : null;
     if(!lines){
-      if(art) { art.setAttribute('src', srCueDefault.art); art.style.display = ''; }
+      if(art) { art.setAttribute('src', srCueDefault.art); art.classList.add('sr-dash-cuegeneric'); art.style.display = ''; }
       if(steps) steps.innerHTML = srCueDefault.steps;
       if(kick) kick.textContent = srCueDefault.kick;
       return;
     }
     var coverOk = typeof d.cover === 'string' && d.cover.indexOf(location.origin + '/assets/') === 0;
-    if(art && coverOk) { art.setAttribute('src', d.cover); art.style.display = ''; }
+    /* SR-471 · a protocol whose cover cannot be used gets the generic art, not
+       whatever the previous protocol left behind. */
+    if(art) {
+      art.setAttribute('src', coverOk ? d.cover : srCueDefault.art);
+      art.classList.toggle('sr-dash-cuegeneric', !coverOk);
+      art.style.display = '';
+    }
     if(steps){
       steps.innerHTML = '';
       lines.forEach(function(l, k){

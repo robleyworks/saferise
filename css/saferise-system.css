@@ -6607,3 +6607,11 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
   .sr-mi-tier--up{order:-1}
   .sr-mi-list--split{columns:1}
 }
+
+/* ── SR-471 · the dashboard Cue Card's generic art ──
+   The generic card (no protocol context: the resource strip's Cue Card chip,
+   #route=cue) uses the shared four-steps art, a wide four-panel image; this
+   crop holds its second panel, hand to heart — the card's own second line.
+   protocol.html's standalone Cue Card is styled in css/saferise-cue.css:
+   that page does not load this file. */
+.sr-crisis-art img.sr-dash-cuegeneric{object-position:34% 30%}

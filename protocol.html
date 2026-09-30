@@ -754,6 +754,7 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
 {"@context":"https://schema.org","@type":"Organization","name":"SafeRise Protocol","url":"https://thesaferiseprotocol.com","logo":"https://thesaferiseprotocol.com/assets/brand/logo.png","parentOrganization":{"@type":"Organization","name":"Kenor International B.V."},"contactPoint":{"@type":"ContactPoint","email":"contact@thesaferiseprotocol.com","contactType":"customer support"}}
 </script>
 <link rel="stylesheet" href="/css/saferise-sovereign.css">
+<link rel="stylesheet" href="/css/saferise-cue.css">
 </head>
 <body>
 
@@ -2039,6 +2040,121 @@ function shareProtocol(){
 seedArrivalState();calcDelta();
 </script>
 
+<!-- ══════════ SR-471 · CUE CARD, OUTSIDE THE DASHBOARD ══════════
+     Resolves this protocol's own Cue Card (its <proto>-crisiscard record's
+     front lines and its own cover) for both routes. Embedded, the bridge
+     below posts it to the dashboard's modal. Standalone (/protocols/{slug},
+     protocol.html?track=&protocol=), "Open" used to do nothing at all:
+     the only handler lived inside the embed-only block. It now opens the
+     card here, in a native dialog. -->
+<script>
+(function(){
+  function srCueCard(){
+    var P = (typeof PAGE_PROTOCOL !== 'undefined') ? PAGE_PROTOCOL : null;
+    var m = P && /^t(\d)-p(\d+)$/.exec(P.protocolId);
+    if(!m) return {};
+    var track = +m[1], n = +m[2], no = (n < 10 ? '0' : '') + n;
+    var R = window['T' + track + '_RESOURCES'];
+    var rec = R && R['t' + track + 'p' + n + '-crisiscard'];
+    var lines = [];
+    if(rec && rec.body){
+      var tmp = document.createElement('div');
+      tmp.innerHTML = [].concat(rec.body).join('');
+      Array.prototype.forEach.call(tmp.querySelectorAll('.sr-cue-line'), function(line){
+        var head = line.querySelector('strong');
+        var name = head ? head.textContent.trim() : '';
+        if(head) head.parentNode.removeChild(head);
+        lines.push({ name: name, text: line.textContent.replace(/^\s*[\u2014\u2013-]\s*/, '').trim() });
+      });
+    }
+    var cover = (window.SafeRiseCover && SafeRiseCover.coverPath) ? SafeRiseCover.coverPath(track, no) : '';
+    return { protocolId: P.protocolId, protocol: P.protocol || '', cover: cover ? new URL(cover, location.href).href : '', lines: lines };
+  }
+  window.srCueCard = srCueCard;
+
+  if (/[?&]embed=1/.test(location.search)) return;
+
+  var dlg = null;
+  /* The generic card's lines, the same four the dashboard's card carries —
+     used only if this protocol has no Cue Card record. */
+  var GENERIC = [
+    { name: 'Name it', text: 'Out loud if you can. Finish the sentence: I am afraid that ______.' },
+    { name: 'Hand to heart', text: 'In for four. Out for six. Six times. The out-breath is the part that works.' },
+    { name: 'Stop fighting it', text: 'Let it be in the room with you. You are not agreeing with it. You are stopping the second fight.' },
+    { name: 'One breath as the person on the other side', text: 'Not a plan. One breath.' }
+  ];
+  function el(tag, cls, text){
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+  function build(card){
+    dlg = el('dialog', 'sr-pp-cue');
+    dlg.setAttribute('aria-label', 'Cue Card');
+    var art = el('div', 'sr-pp-cueart');
+    var img = el('img');
+    img.alt = '';
+    img.onerror = function(){ img.style.display = 'none'; };
+    art.appendChild(img);
+    art.appendChild(el('span', 'sr-pp-cuescrim'));
+    var label = el('span', 'sr-pp-cuelabel', 'Cue Card');
+    label.appendChild(el('em', null, 'Four lines. Always here.'));
+    art.appendChild(label);
+    var body = el('div', 'sr-pp-cuebody');
+    var close = el('button', 'sr-pp-cueclose');
+    close.type = 'button';
+    close.setAttribute('aria-label', 'Close Cue Card');
+    close.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>';
+    close.addEventListener('click', function(){ dlg.close(); });
+    body.appendChild(close);
+    body.appendChild(el('p', 'sr-pp-cuekick'));
+    body.appendChild(el('h3', null, 'You do not have to remember anything. Read the four lines and follow them.'));
+    body.appendChild(el('ol', 'sr-pp-cuesteps'));
+    var foot = el('div', 'sr-pp-cuefoot');
+    foot.appendChild(el('p', null, 'Then stop. Nothing else is required of you today. Log it later if you want to \u2014 it still counts.'));
+    var ok = el('button', 'sr-pp-cta sr-pp-cueok', 'I have got it');
+    ok.type = 'button';
+    ok.addEventListener('click', function(){ dlg.close(); });
+    foot.appendChild(ok);
+    body.appendChild(foot);
+    var safety = el('p', 'sr-pp-cuesafety');
+    safety.innerHTML = '<b>If you are in immediate danger</b>, contact your local emergency service. SafeRise is self-guided practice, not crisis care.';
+    body.appendChild(safety);
+    dlg.appendChild(art);
+    dlg.appendChild(body);
+    /* a click on the backdrop (the dialog element itself, outside its box) closes it */
+    dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
+    document.body.appendChild(dlg);
+  }
+  function open(){
+    var card = srCueCard();
+    if (!dlg) build();
+    var img = dlg.querySelector('.sr-pp-cueart img');
+    img.style.display = '';
+    if (card.cover) { img.src = card.cover; img.classList.remove('sr-pp-cuegeneric'); }
+    else { img.src = '/assets/shared/four-steps.jpg'; img.classList.add('sr-pp-cuegeneric'); }
+    dlg.querySelector('.sr-pp-cuekick').textContent = 'In the moment' + (card.protocol ? ' \u00b7 ' + card.protocol : '');
+    var ol = dlg.querySelector('.sr-pp-cuesteps');
+    ol.innerHTML = '';
+    var lines = card.lines && card.lines.length ? card.lines : GENERIC;
+    lines.slice(0, 4).forEach(function(l, k){
+      var li = el('li'), b = el('b', null, '0' + (k + 1)), span = el('span'), em = el('em', null, l.name ? l.name + '.' : '');
+      span.appendChild(em);
+      span.appendChild(document.createTextNode((l.name ? ' ' : '') + (l.text || '')));
+      li.appendChild(b); li.appendChild(span); ol.appendChild(li);
+    });
+    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+  }
+  document.addEventListener('click', function(e){
+    var cue = e.target.closest('[data-sr-open="cue"]');
+    if (!cue) return;
+    e.preventDefault();
+    open();
+  });
+})();
+</script>
+
 <!-- ══════════ EMBED BRIDGE (added for dashboard embedding) ══════════
      With ?embed=1 the page drops its own top navigation and footer, reports its
      height to the parent, and routes resource links back to the dashboard shell
@@ -2091,33 +2207,11 @@ seedArrivalState();calcDelta();
     if(d && d.sr && d.type === 'theme') applyTheme(d.mode);
   });
 
-  /* SR-464 D2 [MR-25] · the Cue Card is this protocol's own. It used to post
-     open-cue with no protocol at all, so the shell could only ever show its
-     one static card — Anxiety Reset's art and lines — for every protocol.
-     Resolved here, where the page already knows its protocol and has the
-     track's resources loaded: the <proto>-crisiscard record's front lines
-     (.sr-cue-line) and the protocol's own cover. */
-  function cueCard(){
-    var P = (typeof PAGE_PROTOCOL !== 'undefined') ? PAGE_PROTOCOL : null;
-    var m = P && /^t(\d)-p(\d+)$/.exec(P.protocolId);
-    if(!m) return {};
-    var track = +m[1], n = +m[2], no = (n < 10 ? '0' : '') + n;
-    var R = window['T' + track + '_RESOURCES'];
-    var rec = R && R['t' + track + 'p' + n + '-crisiscard'];
-    var lines = [];
-    if(rec && rec.body){
-      var tmp = document.createElement('div');
-      tmp.innerHTML = [].concat(rec.body).join('');
-      Array.prototype.forEach.call(tmp.querySelectorAll('.sr-cue-line'), function(line){
-        var head = line.querySelector('strong');
-        var name = head ? head.textContent.trim() : '';
-        if(head) head.parentNode.removeChild(head);
-        lines.push({ name: name, text: line.textContent.replace(/^\s*[\u2014\u2013-]\s*/, '').trim() });
-      });
-    }
-    var cover = (window.SafeRiseCover && SafeRiseCover.coverPath) ? SafeRiseCover.coverPath(track, no) : '';
-    return { protocolId: P.protocolId, protocol: P.protocol || '', cover: cover ? new URL(cover, location.href).href : '', lines: lines };
-  }
+  /* SR-464 D2 [MR-25] · the Cue Card is this protocol's own; resolved by
+     window.srCueCard (the standalone cue script, above), which both this
+     embedded path and the standalone modal use. SR-471 moved it out of this
+     embed-only block. */
+  function cueCard(){ return window.srCueCard ? window.srCueCard() : {}; }
 
   // resource links inside the protocol page open the reader in the shell
   document.addEventListener('click', function(e){
