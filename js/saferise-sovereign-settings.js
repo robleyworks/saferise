@@ -6,12 +6,20 @@
    ON by default (R14). Off means the session makes no reading request;
    earlier records are untouched.
 
-   Renders only when Sovereign is enabled: window.SR_FLAGS.sovereign === true,
-   or the local-development override js/saferise-sovereign.js honours. */
+   Renders only when Sovereign is enabled (window.SR_FLAGS.sovereign === true,
+   or the local-development override js/saferise-sovereign.js honours) AND the
+   member holds the Sovereign tier. SR-483, founder Ruling 1: a member without
+   the tier has no voiced session and nothing of theirs is ever sent, so the
+   switch would misdescribe their own privacy. The caller mounts after
+   SafeRiseAccess.ready, so the tier is known by then. */
 (function (global) {
   'use strict';
 
+  function tierHasReading() {
+    return !!(global.SafeRiseAccess && typeof global.SafeRiseAccess.can === 'function' && global.SafeRiseAccess.can('reading'));
+  }
   function enabled() {
+    if (!tierHasReading()) return false;
     if (global.SR_FLAGS && global.SR_FLAGS.sovereign === true) return true;
     var dev = /^(localhost|127\.0\.0\.1|\[::1\])$|\.(localhost|test)$|^deploy-preview-\d+--[a-z0-9-]+\.netlify\.app$/.test(location.hostname);
     try { return dev && global.localStorage.getItem('sr.sv.enabled') === 'true'; } catch (e) { return false; }

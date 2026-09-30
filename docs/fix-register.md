@@ -23026,6 +23026,28 @@ flipped**: live verification needs a Netlify deploy preview — handover in
   in SOV-4". SOV-4's brief did not ask for it and it does not exist; the voice
   service is `js/saferise-sovereign-stt.js` (engine) used by `js/saferise-sovereign.js`.
 
+### SR-469 condition WAIVED by the founder (recorded by SR-483, 2026-09-30)
+
+SR-469 and `docs/SOV-4-PREVIEW-HANDOVER.md` §2 held the flag until the deploy-preview
+checks in §1 had passed. The founder lifted that condition **for this one change**
+(turning `SR_FLAGS.sovereign` on), with this reason, recorded so a later pass does not
+assume the condition was forgotten:
+
+> The condition existed because production had no route to the sovereign tier, so
+> turning the flag on would have exposed an unverified feature to anyone who qualified.
+> That is no longer the case. The Part B schema is applied, `members.tier` exists, and
+> exactly one row carries 'sovereign' — the founder's. No other member has a tier and
+> none can set their own: the paywall trigger blocks it. Turning the flag on therefore
+> exposes the Sovereign session to one person, which is what the preview was for.
+
+**Not waived:** the AI feedback has still never been checked against a real session. That
+check now happens live, by the founder, as the only member who can reach it. The §1 items
+(status code and round-trip time, reading bound to the transcript, post-state before
+reading, off means no request, limit shown plainly, mic inside the dashboard embed) remain
+open until the founder records them. **The waiver's reasoning holds only while the
+founder's row is the only one carrying 'sovereign'.** Before any other member is given
+the tier, whether by sale, grant or organisation, those checks must be recorded as passed.
+
 ## SR-470 — TIER-1: four membership tiers (resolver live; storage and payments wait)
 
 **Ladder (founder-set, monthly):** Free — the first track, in full · Standard €19 —
@@ -23583,3 +23605,40 @@ Parts 1 and 2 applied and verified locally. **Part 3 not applied, so
   Sovereign toggle and an upsell (SR-470 3.3, "offered, not hidden"). That is correct per
   SR-470, but it contradicts the earlier go-live brief's T9 ("a free-tier member does NOT
   [see it]"). One of the two needs ruling.
+
+## SR-483 — Sovereign flag ON (founder waiver); AI feedback setting gated on tier; T9 withdrawn
+
+Brief: two founder rulings and a waiver (pasted 2026-09-30). This supersedes SR-482's "flag
+held". Not pushed.
+
+- **Flag:** `js/saferise-flags.js` now defaults `SR_FLAGS.sovereign` to `true`. The header
+  is rewritten: on by founder ruling, waiver recorded beside SR-469, the tier decides
+  who can use it, and false withdraws the surface. The waiver and its reason are recorded
+  as a subsection directly under the SR-469 entry, with what is NOT waived and the
+  condition under which the waiver stops holding.
+- **Ruling 1 (MATCH):** `js/saferise-sovereign-settings.js` `enabled()` first requires
+  `SafeRiseAccess.can('reading')`, then the flag (or the local/preview override). No
+  SafeRiseAccess means not shown. account.html mounts after `SafeRiseAccess.ready`, so
+  the tier is known when it runs. account.html itself is unchanged.
+- **Ruling 2:** SR-470 stands. The earlier go-live brief's T9 is **WITHDRAWN**: a
+  non-sovereign member sees the Sovereign option, locked, with "See the Sovereign
+  membership" → /checkout. No code change.
+- **VERIFY** (local preview served from a scratch copy, as in SR-482; `?srtier=` simulates
+  the tier on localhost only):
+  W1 pass (the served flags.js sets `true`; the page reads `SR_FLAGS.sovereign === true`
+  with the override key cleared) · W2 pass · W3 pass (a harness mounts the settings with
+  `can()` stubbed per tier on a production hostname: free, standard and premium render
+  nothing; sovereign renders the switch. Flag off plus sovereign on a production host
+  renders nothing, and so does a missing SafeRiseAccess: 6/6) · W4 pass (free, standard
+  and premium: toggle present, the upsell link to /checkout, no "Begin Sovereign
+  session". Sovereign: Begin present, no upsell. Screenshot taken for free) · W5 pass
+  (zero sv-reading requests in any tier's page load. By code: the reading call returns
+  early without `tierCan('reading')` (l.~716), and a non-sovereign INVITE has no begin
+  control, so no flow can start) · W6 pass (tests/sv-reading 52/52) · W7 pass (waiver
+  under SR-469).
+- **Not verified here:** anything live. The founder's session on production is now the
+  §1 check (see the waiver).
+- **Noted, not changed:** the INVITE screen reads the tier when the toggle is clicked. A
+  sovereign member who clicks before `srAuth.ready` resolves (the `my_tier` call in
+  flight) would see the upsell until they toggle again. The window is one round trip
+  after load; it is not repainted on `onChange`.

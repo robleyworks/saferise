@@ -9,7 +9,11 @@
    is a switch wired to nothing — flipping it would silently do nothing.
 
    sovereign — the Sovereign session on protocol.html (SR-462/463/464).
-   Stays false until the founder rules otherwise. On a local development
-   host only, ?sovereign=1 turns it on for testing (see saferise-sovereign.js). */
+   ON since SR-483, by founder ruling. The deploy-preview condition in SR-469
+   was waived, and the fix register records why beside SR-469. The flag only
+   opens the surface: the tier decides who can use it (js/saferise-access.js
+   resolve()). A member without the Sovereign tier sees the option locked,
+   with the membership that opens it (SR-470), and never reaches sv-reading.
+   Set it back to false to withdraw the surface for everyone. */
 window.SR_FLAGS = window.SR_FLAGS || {};
-if (typeof window.SR_FLAGS.sovereign !== 'boolean') window.SR_FLAGS.sovereign = false;
+if (typeof window.SR_FLAGS.sovereign !== 'boolean') window.SR_FLAGS.sovereign = true;
