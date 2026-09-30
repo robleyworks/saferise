@@ -23186,3 +23186,55 @@ transcription, the AI reading, on by default).
   (~1.3 MB) to read one — fixed, loads only its own (output identical on 5 URLs);
   (3) **structural, not attempted:** every protocol/resource change reloads a whole
   document in the iframe, re-parsing its scripts and content store each time.
+
+## SR-473 — Track migration live, four method scenes, About right column
+
+- **§1.1** `content/dev-protocols.v2.js` (SR-465 draft) now IS `content/dev-protocols.js`;
+  the v2 file is gone. One consumer: `dashboard.html` (carousel dev tracks).
+- **§1.2 references found before changing anything** (85 lines, 26 tracked files +
+  20 images): surfaces — `coming-soon.html` 832/837/840, `member-coming-soon.html`
+  333/338/341, `dashboard.html` 981/996/1133, `js/saferise-plans.js` 91-92,
+  `content/track-images.js` 72-73, `content/dev-protocols.js` 109; images —
+  `assets/coming/protocol/entrepreneurs-journey-01…10.{jpg,webp}`; documents —
+  this register (43), `docs/business/MASTER-TRACK-REGISTER.md`,
+  `INDUSTRY-PROTOCOL-ROADMAP.md`, `B2B-PROTOCOL-REGISTER.md`,
+  `docs/SUBSTRATE-CAPACITY-MODEL.md`, `docs/PHILOSOPHY.md`, `docs/tracker-v23…v41.html`,
+  `claude/PROTOCOL-NAME-CONFLICTS.md`, `claude/VIDEO-SCRIPTS-THREE-SURFACES-V2.md`.
+  Documents left as records.
+- **§1.3** Life & Load now on both coming-soon pages (kicker and titles from
+  dev-protocols.js, band-19, its ten covers, accent #C7A58A, **side copy drafted
+  by this pass — founder to review**), the dashboard carousel (its own rail icon and
+  accent), `/plans` (band-19 via track-images.js). Accent and icon are
+  placeholders — per-track colours are the founder's call. The retired covers moved
+  to `assets/retired/coming-protocol/`; band-15 is now unreferenced, left in place.
+  `tools/check-track-images.py`: pass.
+- **Foundation 8 — skipped (AMBIGUOUS).** The brief lists it as needing Life & Load.
+  Foundation 8 is organisations.html's fixed set of eight B2B tracks (PT, RH, PP,
+  Executive Presence, Embodied Nutrition, Strength & Return, Sleep & Recovery,
+  Elevation). It has never held the retired track (git history, `-S`), so there is
+  no slot to replace; adding Life & Load makes it nine under the name "Foundation 8".
+  Founder decision.
+- **§1.4** all ten `life-and-load-NN.webp` resolve on the coming-soon grid (240×320);
+  slot 10 is "When the Direction Reverses".
+- **§1.5 conflict, reported not resolved:** v2 retitles all 30 protocols of Embodied
+  Nutrition, Strength & Return and Sleep & Recovery. The coming-soon pages and
+  Foundation 8 (`content/f8-tracks.js`) still carry the old titles — the dashboard
+  carousel now disagrees with them. Carrying 30 renames across those surfaces is a
+  rename pass (CLAUDE.md), not part of this brief. Also: the covers for those three
+  tracks were numbered to the old titles; whether each image still suits its new
+  title is unchecked.
+- **§2** Input was in `~/Downloads`, not `_incoming/` (DIFFERS). Installed as
+  `assets/method/m-arena-{emergency,surgery,military,clinical}.{webp,jpg}`, 800×800,
+  tracked. Ten cells; each already reserves a square (`aspect-ratio:1/1`), and every
+  `<img>` now carries 800×800: grid height and the next section's position identical
+  with 0 and 10 images loaded. Caption: "SIX SCENES" removed (§2.4). **§2.3:**
+  `m-arena-clinical` shows a man's face, partly visible, head bowed — the caption
+  still says "no recognisable faces"; both left for the founder.
+- **§3** About, first argument band's right column (scoped with
+  `:has(.tript--side)`): column gap 54→72px (method page's), text to edge @1024
+  30→61px / @1440 160→192px / @375 30px (page gutter), block padding 22/24→30/32px,
+  figure gap 24→28px, kicker gap 14→16px, heading 21px/1.22 mb 9→21px/1.35 mb 12,
+  body 15px/1.68→15px/1.8, list-to-photo 34→48px (inline style removed). No
+  horizontal scroll at 375/1024/1440.
+- **Pre-existing counts, not touched:** coming-soon's `<title>` "nine tracks in
+  development"; method's `<title>` "six frameworks".
