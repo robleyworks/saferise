@@ -1199,8 +1199,8 @@ body,.sr-dash-panel,.sr-dash-navrail,.sr-dash-tpanel,.sr-dash-fold,.sr-dash-faq,
 /* SR-069 · the LIFE LABORATORY header that stood here is gone with the feature.
    It had drifted: most of the rules that followed it (.sr-dash-readsrc,
    .sr-cadence) are unrelated and live, so only the Life Laboratory ones were
-   removed — .sr-lab from the selector list below, .sr-dash-identity--three
-   and .sr-dash-idcard--lab further down. */
+   removed — the retired records-hub card's class from the selector list below,
+   .sr-dash-identity--three and that card's own modifier further down. */
 
 @media(max-width:1000px){
   .sr-sum,.sr-use{grid-template-columns:1fr}

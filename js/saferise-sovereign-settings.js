@@ -25,11 +25,11 @@
     function paint() {
       var on = isOn(user);
       el.innerHTML =
-        '<p class="sr-tp-body"><strong style="color:var(--text)">AI reading after Sovereign sessions:</strong> ' + (on ? 'on' : 'off') + '</p>' +
+        '<p class="sr-tp-body"><strong style="color:var(--text)">AI feedback after Sovereign sessions:</strong> ' + (on ? 'on' : 'off') + '</p>' +
         '<p class="sr-tp-body" style="margin-top:6px">' + (on
           ? 'After a Sovereign session, the written record is read by an AI, which gives you back what it found in your own words. Your voice is never sent anywhere.'
-          : 'No reading is made. Your sessions, transcripts and ratings are still saved on this device, and your earlier readings stay where they are.') + '</p>' +
-        '<p style="margin-top:12px"><button type="button" class="sr-tp-pill" aria-pressed="' + on + '">' + (on ? 'Switch the reading off' : 'Switch the reading on') + '</button></p>';
+          : 'No AI feedback is made. Your sessions, transcripts and ratings are still saved on this device, and your earlier feedback stays where it is.') + '</p>' +
+        '<p style="margin-top:12px"><button type="button" class="sr-tp-pill" aria-pressed="' + on + '">' + (on ? 'Switch AI feedback off' : 'Switch AI feedback on') + '</button></p>';
       el.querySelector('button').addEventListener('click', function () { set(user, !isOn(user)); paint(); });
     }
     paint();

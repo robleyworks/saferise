@@ -189,7 +189,7 @@
           body: ['<b>Everything in Premium, and:</b>',
             'Speak instead of type — sessions, journal, statements, decisions, ratings.',
             'Transcription that never leaves your device; the audio is discarded as it is transcribed.',
-            'An AI reading of what you said: what you returned to, what shifted, how you moved through Recognise, Regulate, Release and Rise.'],
+            'AI feedback. An AI reading of your own words: what you returned to, what shifted, and how you moved through Recognise, Regulate, Release and Rise.'],
           cta: 'Start' }) +
       '</div></div></section>';
   }

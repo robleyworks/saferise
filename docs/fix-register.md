@@ -23238,3 +23238,32 @@ transcription, the AI reading, on by default).
   horizontal scroll at 375/1024/1440.
 - **Pre-existing counts, not touched:** coming-soon's `<title>` "nine tracks in
   development"; method's `<title>` "six frameworks".
+
+## SR-475 — SR-475 Part 0: naming — MY RECORDS and AI FEEDBACK
+
+SR-474 (plans rebuild) was superseded by SR-475 before it ran; its content is Part A
+(SR-476). IDs: Part 0 SR-475 · Part A SR-476 · Part B SR-477 · Part C SR-478.
+
+- **0.1 found** (before changing anything). SURFACE — `js/saferise-sovereign.js`
+  (toggle "AI reading on/off", status lines "Reading what you said" / "Your reading is
+  ready" / "The reading needs…" / "No more readings…" / "The reading isn't
+  available…", the record section label "Your reading" and its five messages, the
+  offer line, the permission fact "switch the reading off", the delete confirm),
+  `js/saferise-sovereign-settings.js` (switch label, off text, button),
+  `account.html:93`, `member-checkout.html:93`, `js/saferise-plans.js:192`; and
+  `css/saferise-dashboard.css:1202-1203`, a comment naming the retired records-hub
+  classes (`.sr-lab`, `--lab`) — N1 bans the name in comments. "The Lab" and "Your
+  Saved Records" appear on no surface. "synthesis" appears only as the Sovereign
+  state identifier `SYNTHESIS` and in comments — never shown. DOCUMENT —
+  `docs/fix-register.md`, `docs/SOV-4-PREVIEW-HANDOVER.md` (including the unpublished
+  privacy draft), `docs/business/BRIDGE-PLAN-15K.md`,
+  `docs/MEDITATION-PRODUCTION-ROADMAP.md`: left, working language.
+- **0.2** every surface now says "AI feedback"; where a line is needed it is the
+  mandated one ("An AI reading of your own words: …"), which itself contains "AI
+  reading" by the brief's own wording. Not surfaces, left: code comments
+  (`js/saferise-access.js:74`, `js/saferise-sovereign-settings.js:3`,
+  `account.html:101`, the SOV-4 comments in `js/saferise-sovereign.js`), identifiers
+  (`readingPayload`, `sv-reading`, `SYNTHESIS`), the function's own messages.
+  `method-lab` (frameworks page) is a research-laboratory photograph, not the
+  records hub — left. "Not a summary" (the privacy fact) and "not a summary of it"
+  (ratings) do not name the feature — left.

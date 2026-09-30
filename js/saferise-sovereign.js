@@ -739,19 +739,19 @@
   function readingToggle() {
     var on = readingOn();
     return '<button type="button" class="sr-sv-bed sr-sv-rtoggle" data-sv="reading-toggle" aria-pressed="' + on + '">' +
-      '<span class="sr-sv-bedpip" aria-hidden="true"></span>AI reading ' + (on ? 'on' : 'off') + '</button>';
+      '<span class="sr-sv-bedpip" aria-hidden="true"></span>AI feedback ' + (on ? 'on' : 'off') + '</button>';
   }
 
   function readingLine(rec) {
     var r = rec && rec.reading, st = r ? r.status : 'off';
     var line = function (cls, icon, text, vh) { return '<li class="sr-sv-st sr-sv-st--' + cls + '">' + svg(icon, 15) + '<span>' + text + '</span>' + (vh ? '<span class="sr-sv-vh">' + vh + '</span>' : '') + '</li>'; };
-    if (st === 'pending') return line('now', 'dot', 'Reading what you said', ', in progress');
-    if (st === 'ok') return line('done', 'check', 'Your reading is ready', ', done');
-    if (st === 'off') return line('none', 'dot', 'AI reading switched off');
+    if (st === 'pending') return line('now', 'dot', 'Preparing your AI feedback', ', in progress');
+    if (st === 'ok') return line('done', 'check', 'Your AI feedback is ready', ', done');
+    if (st === 'off') return line('none', 'dot', 'AI feedback switched off');
     if (st === 'sparse' || st === 'empty') return line('none', 'dot', 'Not enough to read this time');
-    if (st === 'withheld' && r.reason === 'signin') return line('none', 'dot', 'The reading needs you to be signed in');
-    if (st === 'withheld') return line('none', 'dot', 'No more readings for now');
-    return line('none', 'dot', 'The reading isn’t available this time');
+    if (st === 'withheld' && r.reason === 'signin') return line('none', 'dot', 'AI feedback needs you to be signed in');
+    if (st === 'withheld') return line('none', 'dot', 'No more AI feedback for now');
+    return line('none', 'dot', 'AI feedback isn’t available this time');
   }
 
   function previousRuns() {
@@ -777,12 +777,12 @@
   function readingSection(rec) {
     var r = rec.reading || { status: 'off' };
     var msg = {
-      pending: 'Your reading is still being made. It will appear here.',
-      off: 'The AI reading was switched off for this session. Your record is complete without it.',
+      pending: 'Your AI feedback is still being prepared. It will appear here.',
+      off: 'AI feedback was switched off for this session. Your record is complete without it.',
       sparse: 'There wasn’t enough to work from this time. The record is still yours.',
       empty: 'There wasn’t enough to work from this time. The record is still yours.',
-      unavailable: 'The reading isn’t available this time. Your record is saved and complete.',
-      withheld: r.reason === 'signin' ? 'The reading needs you to be signed in. Your record is saved and complete.' : 'You have reached the number of readings available for now. Your record is saved and complete.'
+      unavailable: 'AI feedback isn’t available this time. Your record is saved and complete.',
+      withheld: r.reason === 'signin' ? 'AI feedback needs you to be signed in. Your record is saved and complete.' : 'You have reached the AI feedback available for now. Your record is saved and complete.'
     };
     var body;
     if (r.status === 'ok' && r.blocks.length) {
@@ -799,7 +799,7 @@
     } else {
       body = '<p class="sr-sv-quiet">' + (msg[r.status] || msg.unavailable) + '</p>';
     }
-    return '<section class="sr-sv-recsec"><p class="sr-sv-label">Your reading</p>' + body + '</section>';
+    return '<section class="sr-sv-recsec"><p class="sr-sv-label">AI feedback</p>' + body + '</section>';
   }
 
   function wordsSection(rec) {
@@ -824,7 +824,7 @@
           '<p class="sr-sv-kick">Sovereign practice</p>' +
           '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">Your voice, your record. SafeRise holds the pathway.</h2>' +
           '<p class="sr-sv-body">You move through Recognise, Regulate, Release and Rise in your own words, out loud, and SafeRise keeps the order.</p>' +
-          '<p class="sr-sv-body">Sovereign practice is part of the Sovereign membership: speak instead of type, transcription that happens on your own device, and an AI reading of what you said.</p>' +
+          '<p class="sr-sv-body">Sovereign practice is part of the Sovereign membership: speak instead of type, transcription that happens on your own device, and AI feedback &mdash; an AI reading of your own words: what you returned to, what shifted, and how you moved through Recognise, Regulate, Release and Rise.</p>' +
           '<div class="sr-sv-acts"><a class="sr-sv-btn sr-sv-btn--pri" href="/checkout">See the Sovereign membership</a></div>' +
           '<p class="sr-sv-quiet">The guided version of this protocol is yours already.</p>' +
           previousRuns() +
@@ -848,7 +848,7 @@
            the written record is now read by an AI (R14), and it can be switched off. */
         ['voice', 'Your voice is turned into text on this device. The recording itself is never sent anywhere.'],
         ['record', 'The written record is read by an AI, which gives you back what it found in your own words.'],
-        ['edit', 'You can read, edit or delete any part of it, and you can switch the reading off.'],
+        ['edit', 'You can read, edit or delete any part of it, and you can switch AI feedback off.'],
         ['shield', 'Nobody at your organisation can see any of it. Not a summary, not a statement, not a word.']
       ];
       return '<div class="sr-sv-stage">' +
@@ -1195,7 +1195,7 @@
         break;
       case 'record-back': editing = null; openRecordId = null; teardown(); go('INVITE'); break;
       case 'record-delete':
-        if (openRecordId && window.confirm('Delete this record? Its reading and transcript go with it, and it cannot be undone.')) {
+        if (openRecordId && window.confirm('Delete this record? Its AI feedback and transcript go with it, and it cannot be undone.')) {
           Records.remove(openRecordId); openRecordId = null; editing = null; teardown(); go('INVITE');
         }
         break;
