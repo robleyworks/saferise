@@ -23081,3 +23081,48 @@ transcription, the AI reading, on by default).
 - **Pre-existing, not touched:** `resource.html`'s `<title>` and first `<h1>` are
   static "Anxiety Reset" on every track; count phrases remain in framework pages
   (member-watts/heartmath/mate) and business collateral, outside tier copy.
+
+## SR-471 — Cue cards, the reader's title, The Decision's cut-off, guidance audio report
+
+- **§1 Cue Card [MR-25, second attempt].** Routes that open a Cue Card, found
+  before changing anything:
+  (a) protocol.html inside the dashboard frame → `open-cue` with its own card
+  (SR-464 D2) — worked; (b) protocol.html standalone (`/protocols/{slug}`,
+  `?track=&protocol=`) — **"Open" did nothing**: its only handler lived in the
+  embed-only block; (c) the dashboard resource strip's Cue Card chip — no
+  protocol context (the strip is hidden while a protocol is open), generic
+  card **on Anxiety Reset's own cover, `assets/covers/01.jpg`**; (d)
+  member-kross.html's Cue Card card → bare `resource.html` → Anxiety Reset's
+  reader (which does not list the Cue Card at all). Not live: index.html's
+  `#reader-overlay` (`pk-crisiscard`, per-protocol already, unreachable per
+  SR-381); a `resource.html?resource=Cue Card` deep link opens the first
+  visible resource (Cue Card is excluded from the reader list by LG-134).
+  Fixed: (b) opens the protocol's own card in a native `<dialog>`
+  (`css/saferise-cue.css` — **DIFFERS**: protocol.html does not load
+  `css/saferise-system.css`, so a system-CSS rule would never reach it; same
+  reason as `saferise-sovereign.css`). The resolver moved out of the
+  embed-only block so both paths share it. (c) and the new
+  `dashboard.html#route=cue` use `assets/shared/four-steps.jpg` cropped to its
+  hand-to-heart panel. (d) → `dashboard.html#route=cue`. A protocol with an
+  unusable cover now gets the generic art, not the previous protocol's.
+  Verified: dashboard frame t1-04, t2-03, t3-07, t1-10; standalone
+  abandonment-wound, trust-betrayal, career-transition, powerlessness-despair
+  and t2-08 by query string; strip chip and #route=cue generic; 375px width.
+- **§2** resource.html's `<title>`, cover `<h1>` and lede resolve from
+  `content/tracks.js` (now loaded there) against the protocol rendered.
+- **§3 The Decision.** Cause: the dashboard's `#srProtoFrame` (`scrolling="no"`)
+  is sized by height reports from the page inside it; protocol.html's Decision
+  link was a plain href that loaded resource.html **without `?embed=1`**, so no
+  height was ever reported and the frame kept the protocol page's height
+  (t1-03: 5610px frame, 7636px content). Not a CSS rule or a sticky element.
+  Now posts `open-resource` like every other resource. Verified t1-03, t2-06,
+  t3-02: frame height = content height. No other resource shares it.
+- **§4 Guidance audio — report only, nothing changed.** 10 keys → 10 files,
+  all present; no orphan file. Types without an entry: `meditation` (by
+  design), `decision` (all protocols), `safety` "Safety Score" (Track 02
+  only), `crisis` "Support Resources" (t1-10 only). "Addressing the Issue"
+  exists only as copy in the Sovereign reading's bridge — no resource type,
+  no content, no guidance.
+- **Pre-existing, not touched:** `resource.html?track=2&protocol=99` falls back
+  to Track 01 / 01 while only the Track 02 store is loaded, renders an empty
+  reader and throws in `renderMain`.
