@@ -6784,3 +6784,56 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
   .sr-su-points{grid-template-columns:minmax(0,1fr)}
   .sr-su-dlgfoot .sr-su-btn{width:100%}
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   sr-or- · START HERE, /start-here (member-start-here.html) — SR-485.
+   "Orientation" internally; "Start Here" is all a member sees. The help
+   videos are not supplied yet, so the page is its structure plus an honest
+   empty state. Theme tokens throughout (plain var), so Midnight and Sunrise
+   carry through. No borders: inset ring or shadow only. No durations, no
+   timers, no progress.
+   ═══════════════════════════════════════════════════════════════ */
+.sr-or-page{overflow-x:hidden}
+.sr-or-head{padding:40px 0 8px;max-width:720px}
+.sr-or-kick{margin:0;font-family:'Cinzel',serif;font-weight:500;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+.sr-or-head .sr-or-h{margin:14px 0 0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(40px,4.6vw,64px);line-height:1.02;color:var(--text)}
+.sr-or-lede{margin:16px 0 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(19px,1.8vw,24px);line-height:1.4;color:var(--text2);max-width:40ch}
+/* the system CSS pads every <section>; this one states its own */
+.sr-or-videos{padding:36px 0 72px;max-width:860px}
+.sr-or-vh{margin:0 0 16px;font-family:'Cinzel',serif;font-weight:500;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--text3)}
+.sr-or-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.sr-or-list[hidden]{display:none}
+.sr-or-empty{padding:32px 30px 30px;border-radius:16px;background:var(--bg2);box-shadow:inset 0 0 0 1px var(--hair)}
+.sr-or-emptyicon{width:28px;height:28px;fill:none;stroke:var(--gold);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.sr-or-emptyh{margin:16px 0 0;font-family:'Cormorant Garamond',serif;font-size:26px;line-height:1.25;color:var(--text)}
+.sr-or-emptyb{margin:10px 0 0;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;color:var(--text2);max-width:58ch}
+.sr-or-acts{margin:24px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px}
+.sr-or-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 24px;border-radius:999px;
+  background:var(--gold);color:#14100A;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;text-decoration:none;
+  transition:background-color .25s var(--sr-ease)}
+.sr-or-btn:hover{background:var(--gold-lt)}
+.sr-or-link{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--gold);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.sr-or-link:hover{text-decoration:underline;text-underline-offset:4px}
+.sr-or-btn:focus-visible,.sr-or-link:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media(max-width:700px){
+  .sr-or-head{padding-top:28px}
+  .sr-or-empty{padding:26px 20px 24px}
+  .sr-or-btn{width:100%}
+}
+
+/* ── SR-485 · dashboard "Begin here" without the Clearing's card.
+   The row had three tracks (Clearing · Carry on · Start new). The Clearing
+   is now reached from the rail, so it has two: Carry on and Start new. When
+   there is nothing to carry on with, the existing sr-begin-row--2 class
+   (set by buildResume) now means one card, full width. A new class on this
+   row only, so the shared .sr-begin-row rules in saferise-dashboard.css are
+   untouched. ── */
+.sr-begin-row.sr-dash-beginrow{grid-template-columns:repeat(2,minmax(0,1fr))}
+.sr-begin-row.sr-dash-beginrow.sr-begin-row--2{grid-template-columns:minmax(0,1fr)}
+@media(max-width:1100px){
+  .sr-begin-row.sr-dash-beginrow{grid-template-columns:1fr 1fr}
+  .sr-begin-row.sr-dash-beginrow.sr-begin-row--2{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:700px){
+  .sr-begin-row.sr-dash-beginrow,.sr-begin-row.sr-dash-beginrow.sr-begin-row--2{grid-template-columns:minmax(0,1fr)}
+}

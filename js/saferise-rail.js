@@ -43,6 +43,12 @@
   'use strict';
 
   var ICONS = {
+    /* SR-485 · Start Here (internally "orientation"): a compass, since this is
+       where a member gets their bearings */
+    orientation: {
+      round: true,
+      d: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>'
+    },
     dashboard: {
       round: false,
       d: '<path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/>'
@@ -95,10 +101,6 @@
       round: true,
       d: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7"/><path d="M12 17h.01"/>'
     },
-    checkout: {
-      round: true,
-      d: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M12 8v8M8 12h8"/>'
-    },
     legal: {
       /* shield */
       round: true,
@@ -113,6 +115,9 @@
 
   /* order is render order */
   var ROUTES = [
+    /* SR-485 · first, above Dashboard: a first-time member meets it before
+       anything else. "Start Here" is the only name a member sees. */
+    { key: 'orientation', label: 'Start Here' },
     { key: 'dashboard', label: 'Dashboard' },
     { key: 'method',    label: 'Where the method comes from' },
     { key: 'coming',    label: 'What’s coming' },
@@ -120,7 +125,8 @@
     /* SR-453 (PASS-AH §1) · SR-444's seven, labels copied from
        dashboard.html's own ROUTES map, in that map's order */
     { key: 'clearing',  label: 'The Clearing' },
-    { key: 'checkout',  label: 'Add a track' },
+    /* SR-485 · "Add a track" removed. Plans are reached from Account & plan
+       (the member's own) and /plans (the ladder). */
     { key: 'article',   label: 'Article' },
     { key: 'podcast',   label: 'The SafeRise podcast' },
     { key: 'faq',       label: 'FAQ' },
@@ -145,6 +151,7 @@
   /* SR-468 · root-relative, so the rail works from a nested or trailing-slash
      URL (/record/*, /faq/, /clearing/ …), not only from the site root. */
   var PAGES = {
+    orientation: '/start-here',
     dashboard: '/dashboard.html',
     method: '/member-frameworks.html',
     coming: '/member-coming-soon.html',
@@ -157,7 +164,6 @@
     article: '/member-reading.html?r=article',
     podcast: '/member-reading.html?r=podcast',
     clearing: '/member-clearing.html',
-    checkout: '/member-checkout.html',
     /* SR-453 (PASS-AH §1) · legal, for the same reason as account above:
        it is in dashboard.html's PAGES, so without it here a rail click on a
        member page would land on the dashboard with nothing opened */

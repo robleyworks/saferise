@@ -31,7 +31,7 @@
     ['voice', 'Your voice', 'Speak freely. This is your process, not a script.'],
     ['flow', 'Structured flow', 'Built on Recognise, Regulate, Release and Rise.'],
     ['feedback', 'AI feedback', 'Your written record is read back to you in your own words — what you returned to, and what shifted. Only after you finish.'],
-    ['tracking', 'Personal tracking', 'Tagged by state, protocol and theme, so you can see your progress over time.'],
+    ['tracking', 'Personal tracking', 'Tagged by state and protocol, so you can see your progress over time.'],
     ['private', 'Private by design', 'Your voice is never sent anywhere. It becomes text on your own device and the audio is discarded as it goes.'],
     ['integration', 'Real integration', 'Turn moments of strain into lasting change you can actually see.']
   ];

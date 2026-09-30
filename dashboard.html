@@ -169,36 +169,18 @@
     <section class="sr-begin">
       <div class="sr-begin-head">
         <p class="eyebrow">Begin here</p>
-        <p class="sr-begin-note">Three ways in. Any one of them is a whole session.</p>
       </div>
 
-      <div class="sr-begin-row">
+      <div class="sr-begin-row sr-dash-beginrow">
 
-        <!-- 01 · the Clearing — the whole card is the media cover -->
-        <article class="sr-begin-card sr-begin-card--media">
-          <!-- SR-393 · was data-modal="media", routed through the shared
-               openModal()/MODALS controller below. That controller is still
-               shared by six other layers (workshop/oneone/calendar/route/
-               crisis/record/journal/sessions) — media was never one of the
-               cards it shares markup with, so removing just this key and
-               wiring this one button directly to SRMedPlayer.open() (see
-               srClearingOpen below) doesn't touch anything else that uses it. -->
-          <button class="sr-cover" id="srClearingPlay" aria-label="Play the Clearing">
-            <span class="sr-cover-art"></span>
-            <span class="sr-cover-scrim"></span>
-            <span class="sr-cover-play"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></span>
-            <span class="sr-cover-copy">
-              <span class="sr-cover-kick">Settle in</span>
-              <span class="sr-cover-title">The Clearing</span>
-              <span class="sr-cover-sub">Quiet the noise and arrive in a state where the work can land.</span>
-            </span>
-            <span class="sr-cover-rail"><i style="width:34%"></i></span>
-          </button>
-        </article>
-
+        <!-- SR-485 · the Clearing's card (01, the media cover) is removed from the
+             dashboard; the Clearing is reached from the rail (MY-RECORDS-HUB.md L2,
+             revised 30 September). The cards are numbered in the order they show,
+             by numberBeginCards() below, since Carry on shows only when there is
+             something to carry on with. -->
         <!-- 02 · carry on, with the protocol as a banner -->
         <article class="sr-begin-card sr-begin-card--panel sr-begin-card--resume">
-          <p class="sr-begin-no"><b>02</b>Carry on</p>
+          <p class="sr-begin-no"><b>01</b>Carry on</p>
           <h3>Where you left off</h3>
 
           <div class="sr-begin-slot" id="srResumeSlot"></div>
@@ -210,7 +192,7 @@
 
         <!-- 03 · start new -->
         <article class="sr-begin-card sr-begin-card--panel">
-          <p class="sr-begin-no"><b>03</b>Start new</p>
+          <p class="sr-begin-no"><b>02</b>Start new</p>
           <h3>Where would you like to begin?</h3>
           <p class="sr-begin-body">Answer both and one protocol is chosen for you.</p>
 
@@ -1803,7 +1785,6 @@
     coaching:   ['Sessions & workshops', 'The full calendar, booking, and everything you have attended.', '/sessions'],
     account:    ['Account & plan', 'Your plan and billing, preferences, privacy and data export, and closing your account.', '/account'],
     clearing:   ['The Clearing', 'The guided session, with the player and the log that records it.', '/clearing'],
-    checkout:   ['Add a track', 'Checkout. Adds to your plan without touching your existing access.', '/checkout'],
     plans:      ['Plans', 'What each track includes and what it costs. Access is cumulative.', '/plans'],
     article:    ['Article', 'A short written piece from Andre.', '/writing'],
     podcast:    ['The SafeRise podcast', 'Episode player and the back catalogue.', '/podcast'],
@@ -1835,7 +1816,9 @@
     article:   'member-reading.html?r=article',
     podcast:   'member-reading.html?r=podcast',
     clearing:  'member-clearing.html',
-    checkout:  'member-checkout.html'
+    /* SR-485 · Start Here; "Add a track" (checkout) removed from the rail, and
+       anything that routed to it now goes to plans */
+    orientation: '/start-here'
   };
   /* Routes that are now a view in the shell rather than a page. Checked after
      PAGES and before ROUTES, so the rail reaches them without carrying a
@@ -1930,7 +1913,7 @@
      reachable from any link that happens to carry the same text. */
   var TEXTMAP = [
     [/play the clearing/i,'clearing'], [/^read it$/i,'article'], [/what is included/i,'plans'],
-    [/play episode/i,'podcast'], [/^add /i,'checkout'],
+    [/play episode/i,'podcast'], [/^add /i,'plans'],
     [/chosen self/i,'chosen'], [/your decisions/i,'decisions'],
     [/the science|the frameworks|the method|the stories/i,'reading'], [/read the faq|^faq$/i,'faq'],
     [/^account$/i,'account'], [/^billing$/i,'account'], [/^support$/i,'faq'],
@@ -3337,14 +3320,26 @@
        visitor.) */
     var card = slot.closest('.sr-begin-card--panel');
     var row = card && card.closest('.sr-begin-row');
+    /* SR-485 · number the cards that are actually showing, 01 upward */
+    function numberBeginCards(){
+      if(!row) return;
+      var n = 0;
+      Array.prototype.forEach.call(row.querySelectorAll('.sr-begin-card'), function(c){
+        if(c.style.display === 'none') return;
+        var b = c.querySelector('.sr-begin-no b');
+        if(b) b.textContent = ('0' + (++n)).slice(-2);
+      });
+    }
     if(!r || !r.protocol){
       if(card) card.style.display = 'none';
       if(row) row.classList.add('sr-begin-row--2');
       if(act) act.hidden = true;
+      numberBeginCards();
       return;
     }
     if(card) card.style.display = '';
     if(row) row.classList.remove('sr-begin-row--2');
+    numberBeginCards();
     /* SR-191 · the resume card names where you left off, it does not measure it.
        The test is WHAT THE STRING COUNTS, not which page it sits on: a count of
        the member is prohibited on every surface, a count of the library is not.

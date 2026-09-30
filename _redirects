@@ -97,6 +97,8 @@
 /writing              /member-reading.html?r=article   200
 /podcast              /member-reading.html?r=podcast   200
 /clearing             /member-clearing.html       200
+# SR-485 · Start Here, a member's first stop (internally "orientation").
+/start-here           /member-start-here.html     200
 /checkout             /member-checkout.html       200
 /live-sessions        /live-sessions.html         200
 /coming-soon          /coming-soon.html           200

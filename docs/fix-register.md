@@ -23745,3 +23745,81 @@ the race against a real, slow `my_tier` call (simulated only).
 4. If the `my_tier` call fails for a sovereign member, the tier falls back to the
    entitlement (SR-482), so they would see the upsell band. The failure is toward the
    offer, never toward exposure.
+
+## SR-485 — Four rulings on SR-484; Start Here; "Add a track" removed; the Clearing leaves the dashboard
+
+Brief: pasted 2026-09-30. Not pushed. Verified on the local scratch-copy preview, as in
+SR-484.
+
+**Part 1 · rulings on SR-484**
+- **1.1 The mug: not a defect.** "No mug" was written for the My Records photograph only.
+  The standing imagery brief bars coffee-cup *overuse*, not a cup. The upsell image stays.
+- **1.2 "Written or spoken" was false, now fixed.** The JOURNAL rail line on /records now reads
+  "Written, whenever I wanted to." **DIFFERS:** the brief said
+  `claude/MY-RECORDS-HUB.md` was already corrected, but the committed copy still read
+  "Written or spoken". It was corrected here to the brief's wording, with a dated note.
+  The same false claim was on **/plans** (`js/saferise-plans.js`: the Sovereign cell of the
+  Journal comparison row, and the Journal tool tile "Written or spoken (Sovereign)"). Both
+  now read "Written", because N6 covers the whole product. Restore the longer form only
+  when a spoken entry can be saved. `_incoming/plans-mockup.html` still carries it; it
+  is a mockup, not product, and was not changed.
+- **1.3 "And theme" was false, now fixed.** The dialog's PERSONAL TRACKING line now reads "Tagged by
+  state and protocol, so you can see your progress over time." (records_sessions has
+  protocol_id and the two ratings; no theme).
+- **1.4 A failed tier call shows the offer: DELIBERATE, do not "fix".** If `my_tier` fails
+  for a sovereign member, `resolve()` falls back to the entitlement (SR-482) and the
+  member briefly sees the upsell band (SR-484) or the locked Sovereign option. The
+  founder ruled this correct. A sovereign member seeing the offer is an annoyance. A
+  non-sovereign member getting access would be a hole. Failure must stay toward the offer.
+- `assets/coming/band-17.{jpg,webp}` and `band-19.{jpg,webp}` are the founder's
+  replacement track images, committed here. check-track-images passes with them.
+
+**Part 2 · dashboard navigation**
+- **2.1 "Add a track" removed.** Removed from `js/saferise-rail.js`: the ROUTES entry, the
+  PAGES `checkout` key and its icon. Removed from `dashboard.html`: the ROUTES and PAGES
+  `checkout` keys. The in-page text map `/^add /` now routes to `plans`. **There was no
+  dashboard tile** for it; the rail entry was its only surface. **Left alone and
+  reported:** the `/checkout` path itself (`_redirects` → `member-checkout.html`), which
+  other surfaces still reach: SR-470's locked copy (`js/saferise-access.js` lockedCopy),
+  the Sovereign INVITE upsell, the dashboard's locked-track CTA and "See the
+  memberships", and account.html. `member-checkout.html` still calls
+  `SafeRiseRail.render('checkout')`, which now marks no rail item as current.
+- **2.2 Start Here.** New page `member-start-here.html` at **`/start-here`** (`_redirects`
+  200). It is named `member-*` so gen-sitemap's existing exclusion keeps it out, and it
+  is noindex. The rail key is `orientation` and the label "Start Here", first in the
+  rail, above Dashboard, with a new compass icon. The surface code is `sr-or-`, claimed
+  in CLAUDE.md. The page has a kicker, an h1, a one-line lede, and a "Help videos"
+  section holding an empty `<ul>` for the videos plus an empty state: "The videos are
+  still being made." It links to the dashboard and the FAQ. There is no placeholder
+  video, and no help content was invented.
+- **2.3 The Clearing's dashboard card removed.** The media card is removed from Begin here, and
+  the rail entry is kept. **DIFFERS:** the head's "Three ways in. Any one of them is a
+  whole session." became untrue, so it was removed rather than rewritten. The cards are
+  now numbered in the order they show (`numberBeginCards()`), because Carry on appears
+  only when `sr.resume` holds something. Today that means "01 Start new" alone, full
+  width. The row is two columns, or one when Resume is hidden, via the new
+  `.sr-dash-beginrow` in the system CSS; the shared `.sr-begin-row` rules are untouched.
+  **AMBIGUOUS, left in place:** the hero slider's Clearing slide ("CLEARING · Before it all
+  gets started") is a featured slide, not the Begin-here tile. It was not removed.
+  MY-RECORDS-HUB.md L2 is revised and dated to say the Clearing is reached from the rail.
+- **2.4 Article and The SafeRise podcast: held.** Untouched.
+
+**VERIFY**
+N1 pass (rail rendered on dashboard, Start Here, checkout, clearing, coming-soon,
+frameworks, the six framework pages, reading and records: 14 pages, "Start Here" first,
+Dashboard second, no "Add a track") · N2 pass (`member-start-here.html` at 1440, 1024
+and 375: scrollWidth equals the viewport; fresh-tab console clean). The `/start-here`
+rewrite is Netlify-only and was not exercised locally · N3 pass (screenshots) · N4 pass: no
+`checkout` route key, `#route=checkout` or "Add a track" label anywhere except two SR-485
+code comments. `/checkout` links remain by design (above) · N5 pass (no `#srClearingPlay`
+on the dashboard; the rail's The Clearing button navigates to `member-clearing.html`) · N6
+pass: "Written or spoken" in no rendered product text (the /plans page's innerText
+checked; the only remaining hits are the dated doc note and the mockup); "Written,
+whenever I wanted to." on /records · N7 pass ("theme" absent from `saferise-upsell.js`) ·
+N8 pass (no diff line touches either entry) · N9 pass: tests/sv-reading **52/52**, tier
+harness 15/15, settings harness 6/6, check-track-images PASS, check-hand-to-heart PASS.
+check-sitemap shows the same pre-existing mismatch as SR-484 (22 expected; Start Here
+correctly excluded) · N10 screenshots: the rail (dashboard, expanded), Start Here at all
+three widths, the dashboard without the Clearing card.
+
+Not verified: production, a deploy preview, or the `/start-here` redirect itself.

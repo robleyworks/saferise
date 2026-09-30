@@ -53,7 +53,9 @@
     ['The resources behind each protocol', [true, true, true, true]],
     ['The Clearing', [true, true, true, true]],
     ['My Records', [true, true, true, true]],
-    ['Journal', ['Written', 'Written', 'Written', 'Written or spoken']],
+    /* SR-485 · Sovereign's cell also claimed spoken entries. Nothing saves a spoken journal
+       entry yet (MY-RECORDS-HUB.md); restore it only when one can be saved. */
+    ['Journal', ['Written', 'Written', 'Written', 'Written']],
     ['The Chosen Self and Decisions', [true, true, true, true]],
     ['Speak instead of type', [false, false, false, true]],
     ['Sessions in your own voice', [false, false, false, true]],
@@ -68,7 +70,7 @@
     ['Guided Sessions', 'Audio meditations for each protocol', '<circle cx="12" cy="12" r="9"/><path d="M10.2 8.6l5.4 3.4-5.4 3.4z" fill="currentColor" stroke="none"/>'],
     ['How This Works', 'Plain language guidance', '<path d="M6 3.6h8l4 4v12.8H6z"/><path d="M14 3.6v4h4"/><path d="M9 12h6M9 15.4h6"/>'],
     ['In-the-Moment Tools', 'Quick practices when you need them', '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/>'],
-    ['Journal', 'Written or spoken (Sovereign)', '<path d="M4.5 4.4h6a2.5 2.5 0 0 1 2.5 2.5v13a2 2 0 0 0-2-2H4.5z"/><path d="M19.5 4.4h-6A2.5 2.5 0 0 0 11 6.9v13a2 2 0 0 1 2-2h6.5z"/>'],
+    ['Journal', 'Written', '<path d="M4.5 4.4h6a2.5 2.5 0 0 1 2.5 2.5v13a2 2 0 0 0-2-2H4.5z"/><path d="M19.5 4.4h-6A2.5 2.5 0 0 0 11 6.9v13a2 2 0 0 1 2-2h6.5z"/>'],
     ['The Clearing', 'Process what’s ready to be released', '<path d="M3 12h2.5l2-5 3 10 3-8 2 3H21"/>'],
     ['My Records', 'Track your progress over time', '<circle cx="12" cy="8" r="3.4"/><path d="M5.2 20c0-3.5 3-5.8 6.8-5.8S18.8 16.5 18.8 20"/>'],
     ['The Chosen Self', 'Reflection and decision tools', '<path d="M20 4c0 8.5-4.6 12.6-10.4 12.6C6.5 16.6 4 14.2 4 11.2 4 6.6 9.4 4 20 4z"/><path d="M15.5 8.4C11 10.6 8 14.4 7 20"/>'],

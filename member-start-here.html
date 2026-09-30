@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — member-start-here.html · SR-485 · START HERE, at /start-here
+  A member's first stop, and where the help videos will live. The internal
+  word is "orientation" (the rail key, the surface code sr-or-, and the term
+  the org metrics already use); "Start Here" is the only name a member sees.
+  This is the same split as N2.
+
+  The videos are not supplied yet. The page ships with its structure and an
+  honest empty state: no placeholder video, no invented help content. When
+  the videos land, they go in the list inside #srOrVideos, and the empty
+  state is removed in the same commit.
+
+  Named member-*.html so gen-sitemap.js's existing exclusion keeps it out of
+  the sitemap; it is a member page (noindex), like /clearing and /records.
+  Page styling: sr-or- in css/saferise-system.css.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#0A0A0F}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start Here — SafeRise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/saferise-method.css">
+<link rel="stylesheet" href="/css/saferise-rail.css">
+<link rel="stylesheet" href="/css/saferise-system.css">
+</head>
+<body class="sr-or-page">
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="sr-dash-navrail" id="srRail" aria-label="Sections"></nav>
+
+<main id="main" class="shell">
+
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="/dashboard.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Dashboard
+  </a>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<header class="sr-or-head">
+  <p class="sr-or-kick">Your first visit</p>
+  <h1 class="sr-or-h">Start Here</h1>
+  <p class="sr-or-lede">Short videos that show you around SafeRise will live on this page.</p>
+</header>
+
+<section class="sr-or-videos" id="srOrVideos" aria-labelledby="srOrVideosH">
+  <h2 class="sr-or-vh" id="srOrVideosH">Help videos</h2>
+  <!-- The list the videos will fill. Empty until they are supplied. -->
+  <ul class="sr-or-list" hidden></ul>
+  <div class="sr-or-empty">
+    <svg class="sr-or-emptyicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10.5 9.5v5l4-2.5z"/></svg>
+    <p class="sr-or-emptyh">The videos are still being made.</p>
+    <p class="sr-or-emptyb">They will appear here as soon as they are ready. Until then, your dashboard is the place to begin, and the FAQ answers the questions people ask first.</p>
+    <p class="sr-or-acts">
+      <a class="sr-or-btn" href="/dashboard.html">Go to your dashboard</a>
+      <a class="sr-or-link" href="/faq">Read the FAQ</a>
+    </p>
+  </div>
+</section>
+
+</main>
+
+<script src="/js/saferise-auth.js"></script>
+<script src="/js/saferise-access.js"></script>
+<script src="/js/saferise-rail.js"></script>
+<script>SafeRiseRail.render('orientation');</script>
+</body>
+</html>

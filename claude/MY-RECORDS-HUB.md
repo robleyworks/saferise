@@ -15,7 +15,7 @@ Shipped as SR-478 (`1a6778d`).
 | # | Ruling |
 |---|---|
 | **L1** | **One hub, not two destinations.** The Clearing, Chosen Self and Decisions do not become three places; Chosen Self and Decisions become tabs here |
-| **L2** | **The Clearing stays out.** It is a practice you do, not a record you keep. It remains on the dashboard beside Resume and Start New |
+| **L2** | **The Clearing stays out.** It is a practice you do, not a record you keep. It is reached from the rail, not the dashboard *(revised 30 September 2026, SR-485: its dashboard card beside Resume and Start New was removed; the rail entry stays)* |
 | **L3** | **Favourites live here**, in a Saved tab. This resolves MR-35 — saved resources, content and protocols all land in one place |
 | **L4** | **Sovereign sessions get no tab of their own.** They thread through All Sessions, Chosen Self and Decisions like any other run |
 | **L5** | **All Sessions carries a Guided / Sovereign filter.** A filter on one list, never a sixth destination |
@@ -120,8 +120,11 @@ brief. Self-assured and composed, looking out. No mug, no notebook, no table.
 | EVERY SESSION | Guided and Sovereign, newest first. |
 | THE CHOSEN SELF | Statements I spoke. Never a line I did not say. |
 | DECISIONS | The conversations and actions I named for myself. |
-| JOURNAL | Written or spoken, whenever I wanted to. |
+| JOURNAL | Written, whenever I wanted to. |
 | SAVED | What I kept to come back to. |
+
+JOURNAL was "Written or spoken" until 30 September 2026 (SR-485). Nothing saves a
+spoken journal entry yet, so the longer form returns only when one can be saved.
 
 The copy is first person throughout — the member's voice about their own
 record, not the product describing itself. That is the whole style: *"Statements
