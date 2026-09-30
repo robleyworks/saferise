@@ -189,29 +189,18 @@
      control. theme/title are plain strings the caller already resolved
      from its own data (protocol.html reads them from PAGE_PROTOCOL --
      see that file -- not duplicated here). */
-  /* FB-07 (PASS-fix-batch-01.md) · four bars, a restrained "voice speaking"
-     signal. Height is written per-tick as a --v custom property from
-     mount()'s own frame loop (see below), reusing the same aura.read()
-     analyser value --amp already consumes -- one AnalyserNode, two
-     readouts, not a second audio graph per player. */
-  /* SR-472 §1 · the four gold bars were a fraction of the aura level plus
-     a sine wobble, so they moved even on silence. Replaced by the shared
-     visualiser (js/saferise-viz.js), attached in mount() once the audio
-     element is known. */
-  function buildVoice() {
-    var voice = el('div', 'sr-av sr-av--stage');
-    voice.setAttribute('aria-hidden', 'true');
-    return voice;
-  }
-
+  /* FB-07's four "voice speaking" bars were removed by SR-472 §1: they moved
+     on silence. The live visualiser (js/saferise-viz.js) replaces them. */
   function buildOverlay(stage, audio, hasAudio, theme, title) {
     var overlay = el('div', 'sr-ps-overlay');
     var ctrl = el('button', 'sr-ps-ctrl');
     ctrl.type = 'button';
     ctrl.appendChild(el('i'));
     overlay.appendChild(ctrl);
-    var voice = buildVoice();
-    overlay.appendChild(voice);
+    /* SR-472 §1 · the visualiser is no longer in the overlay: the overlay
+       fades to 18% while audio plays, which hid it exactly when it matters.
+       mount() floats it at the foot of the stage instead. */
+    var voice = null;
     if (theme) {
       var themeEl = el('p', 'sr-ps-theme');
       themeEl.textContent = theme;
@@ -345,6 +334,83 @@
     };
   }
 
+  /* SR-472 §2 · captions. The caption file sits beside the audio
+     (…/t1-02-anger-alchemy.vtt), loaded through a <track> on the player's
+     own <audio>, so the browser keeps cue timing in step with playback.
+     The text shows as one line on the stage — no box, no panel. OFF by
+     default; the choice is remembered per member on this device
+     (localStorage 'sr.captions.<member id>'). No caption file: no control.
+     Phase markers: the file's cues with ids phase-recognise, -regulate,
+     -release and -rise are where those lines are spoken; onPhases gets
+     their start times once all four are present in order. */
+  var PHASE_IDS = ['phase-recognise', 'phase-regulate', 'phase-release', 'phase-rise'];
+  function captionKey() {
+    var u = null;
+    try { u = root.SafeRiseAccess && root.SafeRiseAccess.currentUser && root.SafeRiseAccess.currentUser(); } catch (e) {}
+    return 'sr.captions.' + (u && u.id ? u.id : 'anon');
+  }
+  function captionsOn() { try { return root.localStorage.getItem(captionKey()) === 'on'; } catch (e) { return false; } }
+  function setCaptions(on) { try { root.localStorage.setItem(captionKey(), on ? 'on' : 'off'); } catch (e) {} }
+
+  function captions(stage, audio, onPhases) {
+    var src = audio.getAttribute('src') || '';
+    if (!/\.(mp3|m4a)$/i.test(src) || !('TextTrack' in root)) return null;
+    var trackEl = document.createElement('track');
+    trackEl.kind = 'captions';
+    trackEl.srclang = 'en';
+    trackEl.label = 'English';
+    trackEl.src = src.replace(/\.(mp3|m4a)$/i, '.vtt');
+    audio.appendChild(trackEl);
+    var tt = trackEl.track;
+    tt.mode = 'hidden';                          /* load cues; the browser draws nothing */
+
+    var line = el('p', 'sr-ps-caption');
+    line.setAttribute('aria-live', 'off');
+    var btn = el('button', 'sr-ps-ccbtn');
+    btn.type = 'button';
+    btn.textContent = 'Captions';
+    btn.hidden = true;                           /* shown once the file has loaded */
+    stage.appendChild(line);
+    stage.appendChild(btn);
+
+    var on = captionsOn();
+    function paint() {
+      var cue = on && tt.activeCues && tt.activeCues.length ? tt.activeCues[tt.activeCues.length - 1] : null;
+      var text = cue ? cue.text.replace(/<[^>]+>/g, '') : '';
+      if (line.textContent !== text) line.textContent = text;
+      line.hidden = !on;
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.setAttribute('aria-label', on ? 'Hide captions' : 'Show captions');
+    }
+    function onCue() { paint(); }
+    function onClick() { on = !on; setCaptions(on); paint(); }
+    function onLoad() {
+      btn.hidden = false;
+      paint();
+      var marks = PHASE_IDS.map(function (id) {
+        for (var i = 0; i < tt.cues.length; i++) if (tt.cues[i].id === id) return tt.cues[i].startTime;
+        return null;
+      });
+      var ordered = marks.every(function (m, i) { return m !== null && (i === 0 || m > marks[i - 1]); });
+      if (ordered && onPhases) onPhases(marks);
+    }
+    function onError() { btn.hidden = true; line.hidden = true; }
+    tt.addEventListener('cuechange', onCue);
+    btn.addEventListener('click', onClick);
+    trackEl.addEventListener('load', onLoad);
+    trackEl.addEventListener('error', onError);
+    if (trackEl.readyState === 2) onLoad();
+    paint();
+    return {
+      destroy: function () {
+        tt.removeEventListener('cuechange', onCue);
+        trackEl.removeEventListener('load', onLoad);
+        trackEl.removeEventListener('error', onError);
+        btn.removeEventListener('click', onClick);
+      }
+    };
+  }
+
   function mount(stage, audio, opts) {
     opts = opts || {};
 
@@ -435,11 +501,16 @@
        dashboard's Clearing modal (js/sr-medplayer.js, no overlay) gets it. */
     var viz = null;
     if (root.SRViz && hasAudio) {
-      if (!voiceEl) { voiceEl = el('div', 'sr-av sr-av--float'); stage.appendChild(voiceEl); }
+      voiceEl = el('div', 'sr-av sr-av--float');
+      stage.appendChild(voiceEl);
       viz = root.SRViz.attach(audio, voiceEl);
-    } else if (voiceEl) {
-      voiceEl.hidden = true;
     }
+    /* SR-472 §2 · captions and phase markers, from the meditation's own
+       caption file. phaseAt stays null until the file has loaded and holds
+       all four phase cues in order; until then the steps keep their old
+       equal-quarters estimate. */
+    var phaseAt = null;
+    var cc = hasAudio ? captions(stage, audio, function (marks) { phaseAt = marks; }) : null;
 
     /* GALAXY-PLAYER-COMPLETE.md #3 -- the --p driver. Confirmed this file
        already had a working one before this pass (an rAF loop polling
@@ -461,10 +532,21 @@
     }
 
     function applyStepsAndRelease(p) {
-      var idx = Math.min(3, Math.floor(p * 4));
-      var within = (p * 4) - idx;
+      var idx, within;
+      if (phaseAt) {
+        /* SR-472 §2 / MR-24 · the steps follow the spoken phase lines, not
+           equal quarters of the file. Before Recognise begins, no step. */
+        var t = audio.currentTime;
+        idx = -1;
+        for (var k = 0; k < 4; k++) if (t >= phaseAt[k]) idx = k;
+        var end = idx < 3 ? phaseAt[idx + 1] : (audio.duration || t + 1);
+        within = idx < 0 ? 0 : Math.max(0, Math.min(1, (t - phaseAt[idx]) / Math.max(1, end - phaseAt[idx])));
+      } else {
+        idx = Math.min(3, Math.floor(p * 4));
+        within = (p * 4) - idx;
+      }
       if (layers.stepnow) {
-        var name = STEPS[idx];
+        var name = idx < 0 ? '' : STEPS[idx];
         if (layers.stepnow.textContent !== name) layers.stepnow.textContent = name;
       }
       if (stepSegs) {
@@ -555,6 +637,7 @@
     function teardown() {
       stop();
       if (viz) viz.destroy();
+      if (cc) cc.destroy();
       audio.removeEventListener('play', start);
       audio.removeEventListener('pause', stop);
       audio.removeEventListener('timeupdate', onTimeupdate);

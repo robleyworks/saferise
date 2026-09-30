@@ -320,25 +320,29 @@
   text-shadow: 0 2px 22px rgba(0,0,0,.95); margin: 0;
 }
 
-/* ---- FB-07 (PASS-fix-batch-01.md) -- the voice indicator. Four bars,
-   height driven per-frame from the same AnalyserNode reading that already
-   drives --amp (js/saferise-poster.js's aura.read()) -- one analyser, two
-   consumers, not a second audio graph. JS sets --v on each bar via inline
-   style (never a transform, per the governing rule -- height is not a
-   translate or rotate); this file only says how a given --v renders.
-   Static at its resting height when paused (no class toggling needed --
-   --v simply stops being written) and under reduced motion (the .sr-ps-
-   voice bar rule below pins it, same pattern as .sr-ps-aura-inner). */
-.sr-ps-voice {
-  display: flex; align-items: flex-end; justify-content: center; gap: .5cqw;
-  height: 1.6cqw; margin-bottom: .2cqw;
+/* ---- SR-472 §1/§2 -- FB-07's voice bars are gone (they moved on silence);
+   the live visualiser (css/saferise-viz.css .sr-av--float) sits at the foot
+   of the stage. Above it, the caption line: one line of what is being said,
+   no box or panel, legible over the artwork by shadow alone. Its toggle sits
+   in the stage's top-left corner. Neither reads position or time. */
+.sr-ps-caption {
+  position: absolute; left: 8%; right: 8%; bottom: max(52px, 5.4cqw); z-index: 5;
+  margin: 0; text-align: center; pointer-events: none;
+  font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 400;
+  font-size: max(16px, 1.9cqw); line-height: 1.35; color: var(--text);
+  text-shadow: 0 1px 3px rgba(0,0,0,.9), 0 2px 22px rgba(0,0,0,.95);
 }
-.sr-ps-voice i {
-  display: block; width: .34cqw; min-width: 2px; border-radius: 2px;
-  background: rgb(var(--sr-ps-gold-lt));
-  height: calc(18% + var(--v, 0) * 82%);
-  transition: height .12s linear;
+.sr-ps-caption[hidden] { display: none; }
+.sr-ps-ccbtn {
+  position: absolute; top: 14px; left: 14px; z-index: 6;
+  min-height: 32px; padding: 0 14px; border: 0; border-radius: 16px; cursor: pointer;
+  background: rgba(8,8,12,.45); color: var(--text2);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+  font: 700 11px/1 'DM Sans', sans-serif; letter-spacing: .16em; text-transform: uppercase;
 }
+.sr-ps-ccbtn[hidden] { display: none; }
+.sr-ps-ccbtn[aria-pressed="true"] { color: rgb(var(--sr-ps-gold-lt)); box-shadow: inset 0 0 0 1px rgba(var(--sr-ps-gold-lt), .7); }
+.sr-ps-ccbtn:focus-visible { outline: 2px solid rgb(var(--sr-ps-gold-lt)); outline-offset: 2px; }
 
 /* ---- PASS-A2-READABILITY-FINISH.md §1 -- FB-07's elapsed/total readout
    and seekable <input type=range> removed outright: a duration display
@@ -385,14 +389,7 @@
   border-top: 1px solid var(--hair);
 }
 .sr-ps-seg { padding: 9px 10px 8px; display: flex; flex-direction: column; gap: 6px; }
-.sr-ps-seg i {
-  display: block; height: 2px; background: #20202c; border-radius: 2px;
-  overflow: hidden; position: relative;
-}
-.sr-ps-seg i::after {
-  content: ''; position: absolute; inset: 0; width: var(--w, 0%);
-  background: rgb(var(--sr-ps-gold)); transition: width .3s linear;
-}
+/* SR-472 §1 -- the segment fill line (.sr-ps-seg i) is gone: a progress bar. */
 /* PASS-A2-READABILITY-FINISH.md §2 -- --text3 (#6A6874) was still under
    3:1 on the dark stage even at 13px. var() here, not the rgb(var(--sr-
    ps-*)) triples the rest of this file uses, per the brief's own literal
@@ -439,9 +436,4 @@
     animation: none !important;
   }
   .sr-ps-aura-inner { opacity: .18; transform: none; transition: none; }
-  /* FB-07 · the voice indicator is JS-driven (--v), not a CSS animation,
-     so it needs an explicit pin here rather than an animation:none --
-     otherwise it keeps reflecting real audio level under reduced motion,
-     which the brief's own "static under reduced motion" rules out. */
-  .sr-ps-voice i { height: 18% !important; transition: none; }
 }
