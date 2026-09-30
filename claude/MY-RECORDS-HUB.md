@@ -1,10 +1,12 @@
 # My Records — the member's records hub
 
-29 September 2026. Supersedes the five-tab "Your Saved Records" shape in
+29 September 2026, banner section revised 30 September. Supersedes the five-tab
+"Your Saved Records" shape in
 `SafeRise_Sovereign_AI_Your_Saved_Records_Claude_Master_Handover.docx` and the
 separate-destination proposal in `REVIEW-BACKLOG-2026-09-25.md` (MR-42).
 
 Built as ORG-1 / SOV-1, in one schema pass with the organizational tables.
+Shipped as SR-478 (`1a6778d`).
 
 ---
 
@@ -18,6 +20,7 @@ Built as ORG-1 / SOV-1, in one schema pass with the organizational tables.
 | **L4** | **Sovereign sessions get no tab of their own.** They thread through All Sessions, Chosen Self and Decisions like any other run |
 | **L5** | **All Sessions carries a Guided / Sovereign filter.** A filter on one list, never a sixth destination |
 | **L6** | **The hub is named "My Records".** One name, no subtitle. "The Lab" is not used |
+| **L7** | **The banner rail is the five tabs.** Not a separate set of phrases. What the rail names, the page has |
 
 ---
 
@@ -39,18 +42,22 @@ The page title, the nav label and every reference say **My Records**.
 
 ## The five tabs
 
-| Tab | Holds | Device key it adopts |
+| Tab | Holds | Device store, as built |
 |---|---|---|
-| **All Sessions** | Every protocol run, guided and Sovereign, newest first | `sr.record.runs` |
-| **The Chosen Self** | Statements spoken in Rise — only what the member actually said | `sr.record.chosen` |
-| **Decisions** | What they named as needing a decision, conversation or action | `sr.record.decisions` |
+| **All Sessions** | Every protocol run, guided and Sovereign, newest first | `sr.sv.records` |
+| **The Chosen Self** | Statements spoken in Rise — only what the member actually said | `sr.sv.records` Rise lines, plus `sr.record.chosen` |
+| **Decisions** | What they named as needing a decision, conversation or action | `sr.decision.<protocolId>`, plus `sr.record.decisions` |
 | **Journal** | Written entries, including ones started from a resource | `sr.journal.entries` |
-| **Saved** | Favourited resources, content and protocols | new |
+| **Saved** | Favourited resources, content and protocols | `sr.saved`, plus the dashboard heart's `sr-saved-v1` |
 
 The handover's fifth tab was "Logs". Journal and Saved replace it.
 
 `records_saved` is **one** table typed by target. Do not build three stores for
-three kinds of favourite.
+three kinds of favourite. Two stores currently back the Saved tab because the
+dashboard heart predates it; merging them onto `sr.saved` is an open item.
+
+There is no writer for guided runs, so the Guided filter says so honestly rather
+than showing fabricated rows.
 
 ---
 
@@ -66,8 +73,8 @@ rather than around what happened to them.
 So:
 
 - **All Sessions** — a Sovereign run is a session like any other. One row in
-  the same list. Opening it shows the per-phase transcript, the framework
-  reading and the pre/post ratings together.
+  the same list. Opening it shows the per-phase transcript, the AI feedback
+  and the pre/post ratings together.
 - **The Chosen Self** — statements spoken in Rise land here, attributed to the
   session they came from.
 - **Decisions** — what they named at the bridge question lands here, with the
@@ -76,32 +83,59 @@ So:
 ## The filter (L5)
 
 Inside All Sessions: Guided / Sovereign. Sovereign sessions are the ones
-carrying a transcript and a reading, so members will want to find them — but
+carrying a transcript and AI feedback, so members will want to find them — but
 that is a filter on one list.
 
 ---
 
-## The page banner
+## The page banner — founder-approved 30 September
 
 Full page width, 2400 × 806, same ratio as the Sovereign banner so the two
-read as one system. Copy in the left third, subject right of centre, a
-six-item rail across the bottom.
+read as one system. Copy in the left third, a pull quote at the right, and the
+five-item rail across the bottom on its own dark ground.
 
-Kicker · SAME YOU. WRITTEN DOWN.
-Headline · **My Records**
-Subhead · *Everything I have said, chosen and decided.*
+Photograph: `assets/records/mr-banner.webp`, with a `.jpg` beside it. Two
+subjects at a window in late sun, city beyond — a different shoot, setting and
+wardrobe from the Sovereign banner. Both present, per the standing imagery
+brief. Self-assured and composed, looking out. No mug, no notebook, no table.
 
-Body · This is where the work accumulates. Sessions run, statements spoken in
-Rise, decisions named, entries written, and everything saved to come back to.
-**Nothing here was written for me.**
+**Kicker** · WHAT I AM BUILDING
 
-Rail · EVERY SESSION · MY OWN WORDS · WHAT I DECIDED · MY JOURNAL · SAVED ·
-MINE ALONE
+**Headline** · My Records
 
-The subject must be a different person, setting and wardrobe from the
-Sovereign banner — the two sit one click apart and must not read as the same
-shoot. No mug. A closed notebook, not an open one: this page is about what has
-already been done.
+**Subhead** · *You are not the same person who started.*
+
+**Body** ·
+> Statements spoken in Rise. Decisions named. Where you started and where you
+> finished, in your own words.
+>
+> Read back far enough and you can see the distance.
+
+**Pull quote**, right-aligned, italic · *Proof, in my own words.*
+
+**Rail**, five items, each the tab it opens (L7):
+
+| Label | Line |
+|---|---|
+| EVERY SESSION | Guided and Sovereign, newest first. |
+| THE CHOSEN SELF | Statements I spoke. Never a line I did not say. |
+| DECISIONS | The conversations and actions I named for myself. |
+| JOURNAL | Written or spoken, whenever I wanted to. |
+| SAVED | What I kept to come back to. |
+
+The copy is first person throughout — the member's voice about their own
+record, not the product describing itself. That is the whole style: *"Statements
+I spoke. Never a line I did not say."* is the member saying it, which is what
+makes the promise land.
+
+### What this replaces
+
+The earlier draft in this document had a six-item rail of separate phrases
+(MY OWN WORDS, WHAT I DECIDED, MINE ALONE) that did not match the tabs, a
+kicker of SAME YOU. WRITTEN DOWN., and third-person body copy. Superseded.
+
+The earlier "a closed notebook, not an open one" note is also withdrawn — it
+conflicts with the standing rule that no notebooks appear in SafeRise imagery.
 
 ---
 
@@ -114,6 +148,8 @@ already been done.
   what is on the first. The conflict rule is decided in ORG-1, not discovered
   later.
 - **No employer sees any of this**, in any form. Enforced in row-level
-  security, not in the interface.
+  security, not in the interface. Verified in
+  `SCHEMA-VERIFICATION-PART-B.md`: an org_admin and an exec_viewer both return
+  zero rows against an employee's records, against a passing control.
 - SafeRise never adds a statement the member did not speak. The surface says
-  so, and the framework reading is bound by the same rule.
+  so, and the AI feedback is bound by the same rule.
