@@ -23823,3 +23823,104 @@ correctly excluded) · N10 screenshots: the rail (dashboard, expanded), Start He
 three widths, the dashboard without the Clearing card.
 
 Not verified: production, a deploy preview, or the `/start-here` redirect itself.
+
+## SR-486 — One page top for every public page (sr-pt-); the nav's border becomes a ring
+
+Brief: "Five parts", Part 1 (pasted 2026-09-30). Not pushed. Verified on the local
+scratch-copy preview. Parts 2–5 are SR-487 to SR-490.
+
+**Root cause fixed, not the numbers.** Every converted page's opening block is now one
+component in `css/saferise-system.css`, `sr-pt-` (claimed in CLAUDE.md). It has four
+archetypes as variants: `--a` full bleed with copy over the art, `--b` copy and art on
+one line, `--c` contained band with copy below, `--d` copy only. The per-page hero
+rules it replaces are removed from the pages' `<style>` blocks and from the system CSS:
+`.chero`, the livehero set, `.pg/.pghead/.pglead` (coming-soon, live-sessions, about,
+method), `.sr-mt-mast`, `.sr-org-hero*`, `.sr-pl-hero*` and the fixed `--sr-pl-hero-h`,
+the whole `.sr-home .hero/.heroart/.heroin/.filmhero/.filmcopy/.filmfooter` set, and
+`.sr-adv-hd`. The legal pages' inline `padding:120px` wrapper is replaced too.
+
+**Standard as built:** 30px gutter at every width · `var(--wrap)` 1180px · page top 132px at
+≥1024 · artwork cap 440px · 40px art↔copy · 40px block→next section.
+- **Below 1024:** page top **112px**, artwork cap **360px**. Reasoning: the nav stays one row
+  (79px) down to about 768, so 112 keeps a band of air proportionate to the smaller
+  screen (33px vs 53px, roughly the same share of the viewport). 360 keeps the
+  artwork-to-viewport ratio at 1024×768 close to 440 at 1440×900, so the first
+  section still clears the fold (measured: organisations 531, plans 512, index 570,
+  all under 768).
+- **DIFFERS, the nav:** the brief puts the nav at about 60px, but it measures **79px** at
+  1440, so the founder's 132 leaves 53px of air, not 72. Below about 768 the nav wraps to
+  181px (at 560–767) or 235px (≤480, SR-385's minimal wrap), so **no fixed page top can
+  clear it.** The fix: a page carrying `.sr-pt` gets `position:sticky` on `.nav`, scoped
+  with `body:has(.sr-pt)`. The nav takes its own height in the flow, and the page top
+  is the nav plus fixed air: 79+53=132, 79+33=112, and 235+33=268 at 375. Pages
+  without `.sr-pt` (the three excluded track pages among them) keep the fixed nav.
+  `#srNav` (saferise-nav.js's mount) is `display:contents` so sticky works.
+- **Found while measuring:** the legal family, organisations and getting-help never reset
+  the browser's default 8px body margin. It was invisible under a fixed nav, but pushed
+  a sticky one and the gutter 8px in. `body:has(.sr-pt){margin:0}`.
+- **The cap is a ceiling:** `--c` bands keep 16:7 and `--b` keeps 4:3 below the cap, so a
+  375px band is 136px tall, not 360. `--a` fills its cap edge to edge. When the copy is
+  taller than the cap (narrow screens), the copy runs on below and the artwork fades into
+  the ground rather than growing past the cap.
+- **Legal pages (`.sr-pt-body`):** their reading column now starts on the page top's left
+  edge (same wrap and gutter, 680px measure) instead of a centred 680px column 220px in
+  from the h1. getting-help's 720px `.sr-adv` column is aligned the same way.
+- **getting-help has no nav:** its top is `calc(79px + air)`, so 132/112/112. At 375 that
+  is deliberately not the 268 the wrapped-nav pages get; a crisis page's heading should
+  not sit a third of the way down a phone.
+- **Type:** one scale for every page top: Cinzel kicker, Cormorant 300 h1 (max 24ch), and a
+  DM Sans lead. Pages' own hero type is gone with their hero rules. The index quote and
+  play control are now left-aligned (archetype A), no longer centred.
+
+**Converted (13):** A index, organisations, plans · C coming-soon, live-sessions · D about,
+method, legal, terms, privacy, refunds, accessibility, getting-help.
+**AMBIGUOUS, skipped and reported: protocol.html (B) and resource.html (D).** Neither loads
+`saferise-system.css`, and both use their own static `.bnav`, not the shared `.nav`.
+Both are also embedded in the dashboard iframe. The system CSS pads every `<section>`
+globally (`section{padding-block:clamp(72px,9vw,128px)}`), so loading it to get the
+component would restyle the player and the reader. The component is ready for them
+(`--b` is built) once the founder rules on bringing them onto the shared nav.
+**Not listed and not touched:** anxiety-reset.html (a legacy standalone page, still
+carrying `.pghead`).
+
+**.nav border:** `border-bottom:1px solid var(--hair)` → `box-shadow:inset 0 -1px 0
+var(--hair)`, the same token, so Midnight renders a warm 9% hairline and Sunrise
+`#8492B4` (measured: `rgb(132,146,180) 0 -1px 0 inset`, border 0px). It applies to every
+page with the shared nav, including the three excluded track pages, whose files are
+untouched.
+
+**VERIFY 1** (iframes at the stated widths, 900px tall; top = viewport to the first element
+of the page top; a2c = artwork to the first line of copy)
+
+| page | arch | 1440 top / a2c | 1024 top / a2c | 375 top / a2c |
+|---|---|---|---|---|
+| index | A | 131 / 40 | 111 / 40 | 267 / 40 |
+| organisations | A | 131 / 40 | 111 / 40 | 267 / 40 |
+| plans | A | 132 / 40 | 112 / 40 | 268 / 40 |
+| coming-soon | C | 132 / 40 | 112 / 40 | 268 / 40 |
+| live-sessions | C | 132 / 40 | 112 / 40 | 268 / 40 |
+| about | D | 132 / – | 112 / – | 268 / – |
+| method | D | 132 / – | 112 / – | 268 / – |
+| legal, terms, privacy, refunds, accessibility | D | 133 / – | 113 / – | 269 / – |
+| getting-help (no nav) | D | 132 / – | 112 / – | 112 / – |
+
+P1 **pass** (every nav page within 2px at each width; getting-help at 375 is the stated
+exception) · block→next 40 on every page (method 38: its underlay's own −2px) ·
+P2 **pass** (gutter 30px, copy left 158/30/30 on every page) · P3 **pass** (nothing under
+the nav at any width, Midnight and Sunrise) · P4 **pass**: tallest artwork **440px** (A
+and C at 1440); 360 at 1024; C 136 at 375 · P5 **pass** (first section's top / first h2 at
+1440×900: organisations 611/730, plans 612/684; at 1024×768: organisations 531/651,
+plans 512/568; screenshots) · P6 **pass** (no sideways scroll at 375, either theme) ·
+P7 **partial**: `.chero`, `.livehero` and `.pghead` are gone from every converted page.
+`.sr-pr-hero` remains in for-organisations.html and pricing.html; those are Part 2
+(SR-487). **`.sr-mt-reghead` is kept, DIFFERS:** it is not method.html's page top, but
+the small register heading inside the lineage section (peer / clinical /
+interpretive). The page top was `.sr-mt-mast`, now converted. Removing
+`.sr-mt-reghead` would strip three section labels. `.pghead` remains in
+anxiety-reset.html (not in scope) and in audit/ JSON · P8 **pass** (zero lines in the three
+track pages) · P9 **pass** (no `border:` in the component; `.nav` has none) · P10
+screenshots: A organisations and C coming-soon at 1440 and 375, D terms at 375 and about
+at 1440. There is no B page.
+
+Also: the three throwaway contact sheets in `_incoming/` (sheet2, sheet-downloads,
+sheet-org-dash-home) deleted; they were untracked.

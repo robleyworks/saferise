@@ -152,10 +152,8 @@ h1{font-family:'Cormorant Garamond',serif;font-weight:300;
 h1 em{font-style:italic;color:var(--gold-lt)}
 .herolead{font-size:clamp(17px,1.6vw,20px);line-height:1.62;color:var(--text2);
   max-width:50ch;margin:24px 0 0}
-.herorule{border-left:2px solid var(--gold);padding-left:20px;margin:30px 0 0;
-  max-width:46ch}
-.herorule p{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;
-  color:var(--text);line-height:1.5}
+
+
 
 /* ═══════════ doors ═══════════ */
 .doorswrap{position:relative;z-index:2;padding-bottom:64px}
@@ -331,12 +329,11 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 
 /* SR-336 · footer CSS moved to css/saferise-footer.css */
 
-.pg{padding:118px 0 0}
-.pghead{padding:54px 0 40px}
-.pghead h1{font-family:'Cormorant Garamond',serif;font-weight:300;
-  font-size:clamp(36px,5vw,62px);line-height:1.06;letter-spacing:-.022em;max-width:18ch;margin:24px 0 0}
-.pghead h1 em{font-style:italic;color:var(--gold-lt)}
-.pglead{font-size:clamp(17px,1.6vw,20px);line-height:1.62;color:var(--text2);max-width:56ch;margin:22px 0 0}
+
+
+
+
+
 .sec2{padding:64px 0;border-top:1px solid var(--hair)}
 .sec2--alt{background:var(--bg2)}
 .sh{max-width:64ch;margin-bottom:28px}
@@ -767,13 +764,14 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   </div>
 </nav>
 <main id="main">
-<section class="pg"><div class="wrap pghead">
-  <p class="eyebrow">Where this came from</p>
-  <h1>A lot of what runs your life is being decided by <em>the part of you that watches for danger.</em></h1>
-  <div class="herorule"><p>That&#8217;s like letting the bouncer at the front door run an entire club.</p></div>
-  <p class="pglead">You have felt it decide something before you did. The room that closed.
+<!-- SR-486 · the page top (sr-pt-, archetype D: copy only). It replaces the page's own inline top rule. -->
+<header class="sr-pt sr-pt--d"><div class="sr-pt-in"><div class="sr-pt-copy">
+  <p class="sr-pt-kick">Where this came from</p>
+  <h1 class="sr-pt-h">A lot of what runs your life is being decided by <em>the part of you that watches for danger.</em></h1>
+  <div class="sr-pt-rule"><p>That&#8217;s like letting the bouncer at the front door run an entire club.</p></div>
+  <p class="sr-pt-lead">You have felt it decide something before you did. The room that closed.
     The reply you regretted on the way home. The person you never quite let in.</p>
-</div></section>
+</div></div></header>
 
 <section class="sec2"><div class="wrap">
   <div class="sh"><p class="eyebrow">The bouncer</p>

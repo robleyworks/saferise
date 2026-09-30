@@ -86,15 +86,22 @@
       (lazy ? ' loading="lazy" decoding="async"' : ' fetchpriority="high"') + '></picture>';
   }
 
+  /* SR-486 · the page top is the shared sr-pt- component (archetype A: full
+     bleed, copy over the artwork), capped at 440px so the membership band
+     reaches the fold. Rendered just before #srPlans, not inside it:
+     #srPlans h1/p{margin:0} would otherwise flatten the component's rhythm by
+     ID specificity. The "Same method. Further possibilities." rail is the
+     component's aside. */
   function rHero() {
-    return '<header class="sr-pl-hero">' +
-      picture('assets/plans/hero.webp', 'assets/plans/hero.jpg', 1700, 734, 'sr-pl-heroimg', '', false) +
-      '<div class="sr-pl-wrap sr-pl-herogrid"><div>' +
-        '<p class="sr-pl-kick">Plans</p>' +
-        '<h1>Build more capacity where life asks the most of you.</h1>' +
-        '<p class="sr-pl-herocopy">Regulation gives you back access to internal resources that become harder to reach when a triggered state is governing you.</p>' +
-        '<p class="sr-pl-herocopy">With more command of attention, you can perceive more clearly, judge more soundly, and respond with greater authenticity to who you are, what you value, and what you genuinely desire.</p>' +
-      '</div><p class="sr-pl-rail">Same<br>method.<br>Further<br>possibilities.<span aria-hidden="true"></span></p></div>' +
+    return '<header class="sr-pt sr-pt--a" id="srPlansTop">' +
+      '<picture class="sr-pt-art"><source type="image/webp" srcset="assets/plans/hero.webp">' +
+        '<img src="assets/plans/hero.jpg" width="1700" height="734" alt="" fetchpriority="high"></picture>' +
+      '<div class="sr-pt-in"><div class="sr-pt-copy">' +
+        '<p class="sr-pt-kick">Plans</p>' +
+        '<h1 class="sr-pt-h">Build more capacity where life asks the most of you.</h1>' +
+        '<p class="sr-pt-lead">Regulation gives you back access to internal resources that become harder to reach when a triggered state is governing you.</p>' +
+        '<p class="sr-pt-lead">With more command of attention, you can perceive more clearly, judge more soundly, and respond with greater authenticity to who you are, what you value, and what you genuinely desire.</p>' +
+      '</div><p class="sr-pt-aside sr-pl-rail">Same<br>method.<br>Further<br>possibilities.<span aria-hidden="true"></span></p></div>' +
     '</header>';
   }
 
@@ -237,7 +244,10 @@
     var mount = typeof opts.mount === 'string' ? document.getElementById(opts.mount)
       : (opts.mount || document.getElementById('srPlans'));
     if (!mount) return;
-    mount.innerHTML = rHero() + rMembership() + rLibrary() + rTools() + rClose();
+    var oldTop = document.getElementById('srPlansTop');
+    if (oldTop) oldTop.parentNode.removeChild(oldTop);
+    mount.insertAdjacentHTML('beforebegin', rHero());
+    mount.innerHTML = rMembership() + rLibrary() + rTools() + rClose();
     bindToggle(mount);
     /* SR-484 · /plans#sr-pl-tier-sovereign (the dashboard's Sovereign dialog) must
        land on that card. The cards are rendered here, after the browser has

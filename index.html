@@ -115,7 +115,7 @@ section{padding:100px 0;border-top:1px solid var(--border);background:var(--bg);
 section:nth-child(even){background:var(--bg2);}
 
 /* HERO */
-.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;padding:140px 60px 80px;max-width:1100px;margin:0 auto;background:var(--bg);}
+
 .eyebrow{font-size:13px;letter-spacing:5px;color:var(--primary);text-transform:uppercase;font-weight:600;margin-bottom:24px;display:block;}
 .hero-title{font-family:'Cinzel',serif;font-size:clamp(44px,6vw,80px);font-weight:400;line-height:1;margin-bottom:8px;}
 .hero-title span{color:var(--primary);display:block;}
@@ -280,7 +280,7 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
 
 @media(max-width:768px){
   .container{padding:0 20px;}
-  .hero,.two-col,.steps-grid,.experts-grid,.tiers{grid-template-columns:1fr;}
+  .two-col,.steps-grid,.experts-grid,.tiers{grid-template-columns:1fr;}
   .proto-grid{grid-template-columns:1fr;}
   .proto-item.open{grid-column:span 1;}
   .proto-item.open .proto-expand{grid-template-columns:1fr;}
@@ -1261,25 +1261,22 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
 <div id="main-content">
 <div class="sr-home" id="main">
 
-<section class="hero filmhero">
-  <div class="heroart" aria-hidden="true">
-    <img src="assets/home/hero-film.webp" alt="">
-    <div class="filmgrain"></div>
-  </div>
-
-  <div class="wrap heroin filmcopy">
-    <p class="eyebrow">SafeRise</p>
-    <h1>&ldquo;My unregulated nervous system narrowed my choices for years. <em>Long enough that it became my personality, and affected my&nbsp;life.&rdquo;</em></h1>
-  </div>
-
-  <button class="filmplay" id="filmPlay" type="button" aria-label="Play SafeRise lived-experience film">
-    <span class="playring"><span class="playtri"></span></span>
-  </button>
-
-  <div class="wrap filmfooter filmfooter-solo">
-    
-  </div>
-</section>
+<!-- SR-486 · the page top (sr-pt-, archetype A: full bleed, copy over the
+     artwork). Was .hero.filmhero at 690–760px with the copy centred; the artwork
+     is now capped so the doors below reach the fold. The play control, the grain
+     and the scroll drift (below, heroImg) are kept. -->
+<header class="sr-pt sr-pt--a">
+  <picture class="sr-pt-art" aria-hidden="true"><source type="image/webp" srcset="assets/home/hero-film.webp"><img src="assets/home/hero-film.jpg" alt=""><span class="filmgrain"></span></picture>
+  <div class="sr-pt-in"><div class="sr-pt-copy">
+    <p class="sr-pt-kick">SafeRise</p>
+    <h1 class="sr-pt-h">&ldquo;My unregulated nervous system narrowed my choices for years. <em>Long enough that it became my personality, and affected my&nbsp;life.&rdquo;</em></h1>
+    <div class="sr-pt-acts">
+      <button class="filmplay" id="filmPlay" type="button" aria-label="Play SafeRise lived-experience film">
+        <span class="playring"><span class="playtri"></span></span>
+      </button>
+    </div>
+  </div></div>
+</header>
 <section class="routersec" id="router">
   <div class="wrap doorswrap">
     <div class="routerhead"><div><p class="eyebrow router-eyebrow">getting authorship back</p><h2 class="router-question">Discover how much your life can grow <em>by getting your choices&nbsp;back.</em></h2></div><p class="routernote">Different state. Different response.<br>Different outcome. Free to start.</p></div>
@@ -1776,7 +1773,7 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
     els.forEach(function(el){io.observe(el);});
   }else{els.forEach(function(el){el.classList.add('is-visible');});}
 
-  var heroImg=document.querySelector('.sr-home .filmhero .heroart img');
+  var heroImg=document.querySelector('.sr-home .sr-pt-art img');   /* SR-486 */
   var ticking=false;
   function moveHero(){
     var y=window.scrollY||0;

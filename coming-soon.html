@@ -303,12 +303,11 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 
 /* SR-336 · footer CSS moved to css/saferise-footer.css */
 
-.pg{padding:118px 0 0}
-.pghead{padding:54px 0 40px}
-.pghead h1{font-family:'Cormorant Garamond',serif;font-weight:300;
-  font-size:clamp(36px,5vw,62px);line-height:1.06;letter-spacing:-.022em;max-width:18ch;margin:24px 0 0}
-.pghead h1 em{font-style:italic;color:var(--gold-lt)}
-.pglead{font-size:clamp(17px,1.6vw,20px);line-height:1.62;color:var(--text2);max-width:56ch;margin:22px 0 0}
+
+
+
+
+
 .sec2{padding:64px 0;border-top:1px solid var(--hair)}
 .sec2--alt{background:var(--bg2)}
 .sh{max-width:64ch;margin-bottom:28px}
@@ -438,22 +437,14 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 
 
 /* ═══ hero with a full-width image behind the text ═══ */
-.chero{position:relative;min-height:600px;display:flex;align-items:flex-end;
-  overflow:hidden;border-bottom:1px solid var(--hair)}
-.chero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  object-position:center 42%;filter:saturate(.55) contrast(1.05);opacity:.42;transform:scale(1.03)}
-.chero::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 88%,transparent) 34%,
-    color-mix(in srgb,var(--bg) 46%,transparent) 66%,color-mix(in srgb,var(--bg) 74%,transparent) 100%),
-    linear-gradient(180deg,color-mix(in srgb,var(--bg) 14%,transparent),var(--bg) 93%)}
-.chero .inner{position:relative;z-index:2;padding:132px 30px 84px;max-width:860px}
-.chero h1{font-family:'Cormorant Garamond',serif;font-weight:300;
-  font-size:clamp(42px,6.4vw,80px);line-height:1;letter-spacing:-.032em;
-  margin:22px 0;max-width:13ch}
-.chero h1 em{font-style:italic;color:var(--gold-lt)}
-.chero .lead{font-family:'DM Sans',sans-serif;font-size:17.5px;line-height:1.7;
-  color:var(--text2);max-width:62ch}
-.chero .lead + .lead{margin-top:14px}
+
+
+
+
+
+
+
+
 
 /* ═══ attention → awareness → authorship ═══ */
 .archgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
@@ -665,19 +656,23 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 </nav>
 <main id="main">
 
-<section class="chero">
-  <img src="assets/coming/coming-hero.webp" alt="">
-  <div class="wrap inner">
-    <p class="eyebrow">What&#8217;s coming</p>
-    <h1>Bring more of your life <em>under your own design.</em></h1>
-    <p class="lead">How you think, how you feel, what you expect, what you notice, what
-      you do next &#8212; none of that was chosen. It was installed, and it has been
-      running your life since.</p>
-    <p class="lead">Learn to reach it in one place and you can reach it everywhere: your
-      body, your money, your closeness, your work, your sense of what is even possible
-      for you.</p>
+<!-- SR-486 · the page top (sr-pt-, archetype C: a contained band, copy below).
+     It replaces the page's own hero rule (full-width image behind the copy, inline top). -->
+<header class="sr-pt sr-pt--c">
+  <div class="sr-pt-in">
+    <picture class="sr-pt-art"><source type="image/webp" srcset="assets/coming/coming-hero.webp"><img src="assets/coming/coming-hero.jpg" alt=""></picture>
+    <div class="sr-pt-copy">
+      <p class="sr-pt-kick">What&#8217;s coming</p>
+      <h1 class="sr-pt-h">Bring more of your life <em>under your own design.</em></h1>
+      <p class="sr-pt-lead">How you think, how you feel, what you expect, what you notice, what
+        you do next &#8212; none of that was chosen. It was installed, and it has been
+        running your life since.</p>
+      <p class="sr-pt-lead">Learn to reach it in one place and you can reach it everywhere: your
+        body, your money, your closeness, your work, your sense of what is even possible
+        for you.</p>
+    </div>
   </div>
-</section>
+</header>
 
 <section class="sec2 sec2--alt"><div class="wrap">
   <div class="archgrid">

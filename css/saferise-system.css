@@ -3352,8 +3352,7 @@ body.sr-breath .sr-player.is-next .audio-play{
    ═════════════════════════════════════════════════════════════ */
 
 .sr-tp .sr-adv{max-width:720px;margin:0 auto;padding:0 24px}
-.sr-tp .sr-adv-hd{padding:72px 0 8px}
-.sr-tp .sr-adv-hd h1{margin:0 0 18px;font:400 clamp(30px,4vw,46px)/1.14 'Cinzel',serif;color:var(--text)}
+/* SR-486 · .sr-adv-hd (the old 72px top) replaced by the sr-pt- page top */
 
 /* The immediate-danger block leads the page and must read as the
    most urgent thing on it without shouting. Left rule, not a
@@ -3374,7 +3373,6 @@ body.sr-breath .sr-player.is-next .audio-play{
 
 .sr-tp .sr-adv-close{margin:56px 0 0;padding-top:28px;border-top:1px solid var(--hair)}
 @media(max-width:760px){
-  .sr-tp .sr-adv-hd{padding-top:48px}
   .sr-tp .sr-adv h2{margin-top:40px}
 }
 
@@ -3656,7 +3654,10 @@ body.sr-breath .sr-player.is-next .audio-play{
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;
   background:color-mix(in srgb,var(--bg) 88%,transparent);
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--hair);transition:background-color 1.4s ease}
+  /* SR-486 · was border-bottom:1px solid var(--hair), a border at the top of
+     every page. It is now an inset ring on the same token, so it reads the same
+     in Midnight (a warm 9% hairline) and Sunrise (#8492B4). */
+  box-shadow:inset 0 -1px 0 var(--hair);transition:background-color 1.4s ease}
 .navin{max-width:var(--wrap);margin:0 auto;padding:17px 30px;
   display:flex;align-items:center;gap:34px}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text)}
@@ -3800,17 +3801,11 @@ body.sr-breath .sr-player.is-next .audio-play{
   transition:background-color 1.4s ease,border-color 1.4s ease,color 1.4s ease}
 .sr-home .door, .sr-home .cta, .sr-home .navcta{transition:background-color 1.4s ease,border-color 1.4s ease,
   color 1.4s ease,transform .45s var(--ease),box-shadow .45s var(--ease)}
-.sr-home .hero{position:relative;max-width:none;margin:0;padding:124px 0 0;overflow:hidden}
-.sr-home .heroart{position:absolute;inset:0;z-index:0}
-.sr-home .heroart img{width:100%;height:100%;object-fit:cover;object-position:center 42%;
-  opacity:.5;filter:saturate(.7) contrast(1.02)}
-.sr-home .heroart::after{content:'';position:absolute;inset:0;
-  background:
-    linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 55%,transparent) 34%,
-      color-mix(in srgb,var(--bg) 82%,transparent) 74%,var(--bg) 100%),
-    linear-gradient(90deg,color-mix(in srgb,var(--bg) 90%,transparent) 0%,
-      color-mix(in srgb,var(--bg) 40%,transparent) 52%,transparent 100%)}
-.sr-home .heroin{position:relative;z-index:2;padding:78px 0 54px}
+
+
+
+
+
 .sr-home .eyebrow{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;
   letter-spacing:.3em;text-transform:uppercase;color:var(--gold);
   display:flex;align-items:center;gap:13px}
@@ -3975,9 +3970,9 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home .pcname{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:21px;
   line-height:1.2}
 @keyframes pcroll{from{transform:translateX(0)}to{transform:translateX(var(--w))}}
-.sr-home .hero-follow{margin-top:13px}
-.sr-home .hero{padding-bottom:54px}
-.sr-home .heroin{padding-bottom:32px}
+
+
+
 .sr-home .costsec{padding:88px 0 84px;background:var(--bg2);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
 .sr-home .costgrid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr);gap:64px;align-items:center}
 .sr-home .costcopy h2, .sr-home .homeclose h2{
@@ -4045,19 +4040,17 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home{background:
   radial-gradient(1200px 760px at 82% 7%,rgba(58,78,115,.08),transparent 65%),
   var(--bg)}
-.sr-home .hero{min-height:760px;display:flex;flex-direction:column;justify-content:flex-end}
-.sr-home .heroart img{transform:scale(1.045);animation:heroDrift 18s ease-in-out infinite alternate;will-change:transform}
+
+
 @keyframes heroDrift{from{transform:scale(1.045) translate3d(0,0,0)}to{transform:scale(1.085) translate3d(-1.4%,.6%,0)}}
-.sr-home .heroart::after{background:
-  linear-gradient(180deg,color-mix(in srgb,var(--bg) 14%,transparent) 0%,color-mix(in srgb,var(--bg) 43%,transparent) 36%,color-mix(in srgb,var(--bg) 86%,transparent) 82%,var(--bg) 100%),
-  linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 88%,transparent) 36%,color-mix(in srgb,var(--bg) 36%,transparent) 72%,transparent 100%)}
-.sr-home .heroin{padding-top:104px}
+
+
 .sr-home .herolead{max-width:52ch}
-.sr-home .hero-signal{margin-top:30px;display:flex;align-items:center;gap:6px;width:max-content}
-.sr-home .hero-signal span{display:block;width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:.42;animation:signal 1.8s ease-in-out infinite}
-.sr-home .hero-signal span:nth-child(2){animation-delay:.18s}
-.sr-home .hero-signal span:nth-child(3){animation-delay:.36s}
-.sr-home .hero-signal small{margin-left:9px;font-family:'DM Sans',sans-serif;font-size:8px;letter-spacing:.23em;color:var(--text3)}
+
+
+
+
+
 @keyframes signal{0%,100%{transform:scale(.8);opacity:.25}50%{transform:scale(1.4);opacity:.9}}
 .sr-home .costsec{position:relative;overflow:hidden}
 .sr-home .costsec::before{content:'';position:absolute;inset:0;pointer-events:none;
@@ -4113,12 +4106,12 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home .reveal:nth-child(3){transition-delay:.16s}
 .sr-home .reveal:nth-child(4){transition-delay:.24s}
 @media(prefers-reduced-motion:reduce){
-.sr-home .heroart img, .sr-home .hero-signal span{animation:none}
+
 .sr-home .reveal{opacity:1;transform:none;transition:none}
 }
 @media(max-width:900px){
-.sr-home .hero{min-height:auto}
-.sr-home .heroart img{object-position:62% center}
+
+
 .sr-home .consequence-thread{grid-template-columns:1fr 1fr}
 .sr-home .ct-line{display:none}
 .sr-home .router-intro-in{grid-template-columns:1fr;gap:16px}
@@ -4127,19 +4120,13 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home .consequence-thread{grid-template-columns:1fr}
 .sr-home .door{min-height:0}
 }
-.sr-home .hero{min-height:690px}
-.sr-home .heroin{max-width:760px;padding-top:94px;padding-bottom:44px}
-.sr-home .hero h1{max-width:15ch}
-.sr-home .hero-positioning{
-  margin-top:26px;max-width:66ch;padding:18px 20px;
-  border-left:2px solid var(--gold);
-  background:linear-gradient(90deg,rgba(212,168,67,.06),transparent 78%)
-}
-.sr-home .hero-positioning p{
-  font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.5;color:var(--text)
-}
-.sr-home .hero-positioning strong{font-weight:500;color:var(--gold-lt)}
-.sr-home .hero-signal{display:none!important}
+
+
+
+
+
+
+
 .sr-home .costsec{padding-top:74px;padding-bottom:70px}
 .sr-home .costgrid{gap:52px}
 .sr-home .costcases{margin-top:42px}
@@ -4170,38 +4157,28 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home .costsec + .routersec{border-top:0}
 .sr-home .homeclose{padding-top:72px}
 @media(max-width:900px){
-.sr-home .hero{min-height:auto}
-.sr-home .hero-positioning{max-width:100%}
+
+
 .sr-home .router-question{font-size:34px}
 }
-.sr-home .filmhero{
-  position:relative;min-height:720px;padding:0 0 72px;display:flex;flex-direction:column;
-  justify-content:flex-end;overflow:hidden;border-bottom:1px solid var(--hair)
-}
-.sr-home .filmhero .heroart{inset:0}
-.sr-home .filmhero .heroart img{
-  width:100%;height:100%;object-fit:cover;object-position:center 36%;
-  opacity:1;filter:none;transform:scale(1.02);animation:filmDrift 18s ease-in-out infinite alternate
-}
+
+
+
 @keyframes filmDrift{from{transform:scale(1.02)}to{transform:scale(1.055) translate3d(-.8%,.3%,0)}}
-.sr-home .filmhero .heroart::after{
-  background:
-    linear-gradient(90deg,rgba(10,10,15,.92) 0%,rgba(10,10,15,.80) 34%,rgba(10,10,15,.46) 59%,rgba(10,10,15,.24) 100%),
-    linear-gradient(180deg,rgba(10,10,15,.24) 0%,rgba(10,10,15,.20) 48%,rgba(10,10,15,.92) 100%)
-}
+
 .sr-home .filmgrain{
   position:absolute;inset:0;opacity:.12;mix-blend-mode:soft-light;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E")
 }
-.sr-home .filmcopy{position:relative;z-index:3;width:100%;padding-top:155px;padding-bottom:0}
-.sr-home .filmcopy h1 em{display:block}
+
+
 .sr-home .router-question em{display:block}
-.sr-home .filmcopy h1{max-width:13ch;font-size:clamp(32px,3.7vw,52px)}
+
 .sr-home .filmlead{max-width:62ch!important;font-family:'DM Sans',sans-serif!important;font-size:15.5px!important;line-height:1.7!important}
 .sr-home .filmlead strong{color:var(--gold-lt);font-weight:600}
 .sr-home .filmdesc{max-width:62ch;margin:14px auto 0;font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.6;color:var(--text3)}
 .sr-home .filmdesc strong{color:var(--gold-lt);font-weight:600}
-.sr-home .filmfooter-solo{position:relative;z-index:3;display:flex;justify-content:center;padding-top:0}
+
 .sr-home .filmplay{
   position:relative;left:auto;top:auto;bottom:auto;transform:none;z-index:3;
   align-self:center;margin:38px 0 0;
@@ -4216,11 +4193,13 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 }
 .sr-home .filmplay:hover .playring{transform:scale(1.06);background:rgba(212,168,67,.16);box-shadow:0 0 0 20px rgba(212,168,67,.06),0 22px 70px rgba(0,0,0,.4)}
 .sr-home .playtri{width:0;height:0;border-top:11px solid transparent;border-bottom:11px solid transparent;border-left:17px solid var(--gold-lt);margin-left:5px}
+/* SR-486 · in the page top's action row, the row sets the spacing */
+.sr-home .sr-pt .filmplay{margin:0}
 .sr-home .playmeta{display:flex;flex-direction:column;gap:5px;text-align:left;text-shadow:0 2px 18px #000}
 .sr-home .playmeta strong{font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
 .sr-home .playmeta small{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--text2)}
-.sr-home .filmfooter>p{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:var(--text2);max-width:36ch}
-.sr-home .filmfooter .herorule{margin:0}
+
+
 .sr-home .routersec{padding-top:68px}
 .sr-home .router-eyebrow{margin-bottom:14px}
 .sr-home .router-question{margin:0 0 30px;font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4vw,52px);font-weight:300;letter-spacing:-.02em;text-transform:none}
@@ -4248,16 +4227,16 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home .timelinebar i{display:block;width:16%;height:100%;background:var(--gold)}
 .sr-home .timecurrent{color:var(--gold-lt)}
 @media(max-width:900px){
-.sr-home .filmhero{min-height:760px;padding-bottom:56px}
-.sr-home .filmcopy{padding-top:140px;padding-bottom:0}
-.sr-home .filmcopy h1{max-width:11ch}
+
+
+
 .sr-home .filmchapters{grid-template-columns:1fr 1fr}
 .sr-home .filmchapters>div:nth-child(2){border-right:0}
 .sr-home .filmchapters>div:nth-child(-n+2){border-bottom:1px solid var(--hair)}
 }
 @media(max-width:620px){
-.sr-home .filmhero{min-height:700px}
-.sr-home .filmcopy{padding-top:128px;padding-bottom:0}
+
+
 .sr-home .filmlead{font-size:14px!important}
 .sr-home .filmdesc{font-size:12.5px}
 .sr-home .filmchapters{grid-template-columns:1fr}
@@ -4265,12 +4244,10 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 }
 @media(max-width:820px){
 .sr-home .playring{width:68px;height:68px}
-.sr-home .filmfooter-solo{padding-top:0}
+
 .sr-home .filmplay{gap:13px;margin-top:28px}
 }
-@media(prefers-reduced-motion:reduce){
-.sr-home .filmhero .heroart img{animation:none}
-}
+
 .sr-home .panelnote{
   margin-top:20px;padding:18px 0 0;border-top:1px solid var(--hair2)
 }
@@ -4290,13 +4267,7 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 .sr-home .panel .panelin{align-self:stretch;display:flex;flex-direction:column;justify-content:center}
 .sr-home .panel .paneldo{margin-top:22px}
 .sr-home .step:last-of-type{padding-bottom:78px}
-.sr-home .filmhero .heroart img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center center;
-  transform:scale(1.01);
-}
+
 @keyframes filmDrift{
   from{transform:scale(1.01) translate3d(0,0,0)}
   to{transform:scale(1.035) translate3d(-.45%,.15%,0)}
@@ -4526,15 +4497,12 @@ body[data-open="t1"] .sr-home #step-t1, body[data-open="t2"] .sr-home #step-t2, 
 }
 .sr-router-body{font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;color:var(--text2);max-width:62ch;margin:0 0 26px}
 .sr-router-lead{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:var(--gold-lt);margin:0 0 26px}
-.sr-home .heroin.filmcopy{text-align:center;max-width:none}
-.sr-home .heroin.filmcopy .eyebrow{justify-content:center}
-.sr-home .heroin.filmcopy .eyebrow::before{display:none}
-.sr-home .heroin.filmcopy h1{margin-left:auto;margin-right:auto;max-width:30ch}
-.sr-home .heroin.filmcopy .herolead{margin-left:auto;margin-right:auto;max-width:66ch}
-@media(max-width:820px){
-.sr-home .heroin.filmcopy h1{max-width:30ch}
-.sr-home .heroin.filmcopy{padding-left:30px;padding-right:30px}
-}
+
+
+
+
+
+
 
 
 /* --- SR: nav touch targets to 44px minimum (WCAG 2.5.8) --- */
@@ -4950,58 +4918,9 @@ section[id^="sr-org-"]{scroll-margin-top:124px}
   transition:border-color .3s,box-shadow .3s,transform .3s}
 .sr-org-bezel:hover{border-color:var(--gold-dim);box-shadow:inset 0 1px 0 rgba(245,237,218,.045),0 24px 65px rgba(0,0,0,.3);transform:translateY(-2px)}
 
-/* -- hero (B3) -- underlay against the REAL fixed nav (~81px, SR-384) */
-/* FB-13 · display:grid, was here originally -- swapped for flex. Grid's
-   own justify-items:normal (stretch) combined with .sr-org-hero-copy's
-   max-width and .sr-org-wrap's margin:0 auto resolved the item's used
-   margin-left to a flat 0 in testing (confirmed live via getComputedStyle
-   and by walking the stylesheet's own matched rules, not assumed) --
-   a real stretch/auto-margin interaction quirk, not this rule's fault.
-   Flexbox's own margin:auto centering is the well-established, reliable
-   version of the same thing and needs no other change below. */
-.sr-org-hero{position:relative;overflow:hidden;min-height:88svh;display:flex;
-  align-items:center;padding:calc(81px + 40px) 0 74px}
-.sr-org-hero-img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
-.sr-org-hero-scrim{position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(96deg,rgba(10,12,20,.96) 0%,rgba(10,12,20,.9) 38%,rgba(10,12,20,.6) 68%,rgba(10,12,20,.3) 100%),
-    linear-gradient(0deg,var(--bg) 0%,transparent 44%)}
-/* FB-13 (PASS-fix-batch-01.md) · this element carries both .sr-org-wrap
-   (max-width:1180px; margin:0 auto -- the page's own content-edge class,
-   centred within the full-width hero the same way it centres every
-   section below) and .sr-org-hero-copy (max-width:640px, meant as a text
-   measure). The narrower max-width was winning on the WRAP itself, so the
-   640px box got auto-centred inside the hero instead of the 1180px one
-   -- measured live at 400px in from the hero, versus 130px for the nav
-   and every section below (the ~270px gap the brief reports). The 640px
-   cap wasn't doing anything .sr-org-hero-lead's own max-width:56ch and
-   .sr-org-hero-note's own max-width:52ch weren't already doing on the
-   elements that actually need a measure limit -- h1 wraps naturally at
-   its own font-size regardless -- so it's dropped here rather than
-   patched, and the wrap centres at the same 1180px as every other
-   section. A flex item's default main-axis sizing is fit-content, not
-   the block-level stretch-to-container a plain .sr-org-wrap gets in
-   normal flow elsewhere on this page -- confirmed live (margin-left
-   resolved to a real centred value once .sr-org-hero switched to flex,
-   but against this element's own narrower fit-content width, not its
-   1180px cap, landing short of the nav/every section's own 130px).
-   width:100% restores the stretch so the max-width cap is what actually
-   governs the box, matching every other .sr-org-wrap on the page. */
-.sr-org-hero-copy{width:100%}
-/* FB-13 · the label-to-what-it-labels/group-to-group spacing rhythm,
-   reusing this page's own already-established values rather than adding
-   new ones: 8px (.sr-org-head h2's own margin-top, this page's "small"),
-   24px (.sr-org-capacity-grid's own rule-to-numeral padding, "medium"),
-   44px (.sr-org-pull's own margin-top, "large"). */
-.sr-org-hero-copy h1{font-size:clamp(2.2rem,4.6vw,3.6rem);line-height:1.04;letter-spacing:-.02em;margin:8px 0 24px}
-.sr-org-hero-lead{color:var(--text2)!important;font-size:1.05rem;line-height:1.6;max-width:56ch}
+/* -- hero (B3) -- SR-486 · replaced by the sr-pt- page top (archetype A);
+   the 88svh hero, its scrim and copy rules are gone. The action row stays. */
 .sr-org-actions{display:flex;flex-wrap:wrap;gap:18px;margin-top:44px}
-/* SR-436 (PASS-J-ORG-BASE §5a) · 24 -> 44: the note is a third statement
-   in the hero, not a caption on the buttons, so it takes FB-13's "large"
-   (group to group) step, not "medium" (label to what it labels).
-   Written p.sr-org-hero-note: as a bare class it lost to .sr-org-page
-   p{margin:0} (0,1,1 > 0,1,0), so the old 24px never applied either —
-   the note had been sitting flush against the buttons. */
-p.sr-org-hero-note{margin-top:44px;color:var(--text3)!important;font-size:var(--fs-caption);max-width:52ch}
 
 /* -- sections -- padding read from method.html's own .sr-mt-sec (SR-384) */
 /* PASS-org-layout.md §5 · was a 6vh-based clamp (40-66px on a real
@@ -5673,7 +5592,6 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 
 /* -- 390px -- */
 @media(max-width:600px){
-  .sr-org-hero-copy h1{font-size:2rem}
   .sr-org-capacity-grid{grid-template-columns:1fr;gap:var(--sr-org-s4);padding-top:0}
   .sr-org-capacity-grid::before{display:none}
   .sr-org-capacity-grid article{padding-top:var(--sr-org-s3)}
@@ -6225,11 +6143,9 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
   --sr-pl-body:'Source Sans 3',system-ui,-apple-system,sans-serif;
   /* the spacing scale: one scale, applied once */
   --sr-pl-gap-sec:160px; --sr-pl-gap-lift:72px; --sr-pl-gap-head:48px; --sr-pl-gap-block:24px; --sr-pl-gut:80px;
-  /* fixed hero heights: the copy plus the fixed site nav (79px) above it */
-  --sr-pl-hero-h:700px;
   background:var(--sr-pl-bg);overflow-x:hidden}
-@media(max-width:1100px){.sr-pl-page{--sr-pl-gap-sec:112px;--sr-pl-gap-lift:56px;--sr-pl-gap-head:40px;--sr-pl-gap-block:20px;--sr-pl-gut:48px;--sr-pl-hero-h:640px}}
-@media(max-width:640px){.sr-pl-page{--sr-pl-gap-sec:80px;--sr-pl-gap-lift:44px;--sr-pl-gap-head:32px;--sr-pl-gap-block:20px;--sr-pl-gut:16px;--sr-pl-hero-h:760px}}
+@media(max-width:1100px){.sr-pl-page{--sr-pl-gap-sec:112px;--sr-pl-gap-lift:56px;--sr-pl-gap-head:40px;--sr-pl-gap-block:20px;--sr-pl-gut:48px}}
+@media(max-width:640px){.sr-pl-page{--sr-pl-gap-sec:80px;--sr-pl-gap-lift:44px;--sr-pl-gap-head:32px;--sr-pl-gap-block:20px;--sr-pl-gut:16px}}
 #srPlans{color:var(--sr-pl-fg);font-family:var(--sr-pl-body);font-weight:300;-webkit-font-smoothing:antialiased}
 #srPlans h1,#srPlans h2,#srPlans h3,#srPlans p{margin:0}
 #srPlans h2{font-family:var(--sr-pl-display);font-weight:300;font-size:clamp(30px,3.6vw,46px);line-height:1.08;text-wrap:balance;color:var(--sr-pl-fg)}
@@ -6239,23 +6155,17 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
 #srPlans .sr-pl-lede{margin-top:14px;color:var(--sr-pl-fg-3);font-size:17px;line-height:1.6;max-width:62ch}
 .sr-pl-kick{font-family:var(--sr-pl-kicker);font-weight:500;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--sr-pl-gold)}
 
-/* hero: full-bleed, fixed height per breakpoint, left-weighted scrim */
-.sr-pl-hero{position:relative;height:var(--sr-pl-hero-h);display:flex;align-items:center;isolation:isolate;overflow:hidden}
-.sr-pl-heroimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 50%;z-index:-2}
-.sr-pl-hero::after{content:'';position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(95deg,rgba(7,7,11,.93) 0%,rgba(7,7,11,.86) 26%,rgba(7,7,11,.45) 46%,rgba(7,7,11,.12) 62%,rgba(7,7,11,.35) 100%)}
-.sr-pl-herogrid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:center;width:100%;padding-block:120px 52px}
-#srPlans .sr-pl-hero h1{font-family:var(--sr-pl-display);font-weight:300;font-size:clamp(34px,4.6vw,58px);line-height:1.04;margin-top:18px;max-width:14ch;text-wrap:balance;color:var(--sr-pl-fg)}
-#srPlans .sr-pl-herocopy{margin-top:20px;max-width:44ch;color:var(--sr-pl-fg-2);font-size:16px;line-height:1.68}
+/* hero · SR-486: the plans page top is the shared sr-pt- component
+   (archetype A), rendered by js/saferise-plans.js just before #srPlans. The
+   fixed 700/640/760px heights, the .sr-pl-hero scrim and the hero type rules
+   are gone. What stays is this page's own photograph focus and the rail
+   ("Same method. Further possibilities."), which the component carries as
+   its aside. */
+.sr-pl-page .sr-pt-art img{object-position:62% 50%}
 .sr-pl-rail{font-family:var(--sr-pl-display);font-size:15px;letter-spacing:.16em;line-height:1.9;text-transform:uppercase;color:var(--sr-pl-fg-2)}
 .sr-pl-rail span{display:block;width:44px;height:1px;background:var(--sr-pl-gold-soft);margin-top:18px}
-@media(max-width:900px){.sr-pl-herogrid{grid-template-columns:1fr}.sr-pl-rail{display:none}}
-@media(max-width:640px){
-  .sr-pl-hero{align-items:flex-end}
-  .sr-pl-heroimg{object-position:30% 50%}
-  .sr-pl-hero::after{background:linear-gradient(180deg,rgba(7,7,11,.35) 0%,rgba(7,7,11,.78) 38%,rgba(7,7,11,.93) 62%)}
-  .sr-pl-herogrid{padding-block:0 40px}
-}
+@media(max-width:900px){.sr-pl-rail{display:none}}
+@media(max-width:640px){.sr-pl-page .sr-pt-art img{object-position:30% 50%}}
 
 /* membership band: sits close under the hero */
 /* The system CSS pads every <section> (clamp(72px,9vw,128px)); each sr-pl-
@@ -6837,3 +6747,116 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
 @media(max-width:700px){
   .sr-begin-row.sr-dash-beginrow,.sr-begin-row.sr-dash-beginrow.sr-begin-row--2{grid-template-columns:minmax(0,1fr)}
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   sr-pt- · THE PAGE TOP — one component for every public page's
+   opening block (SR-486). Before this, seven hero rules set their own top
+   padding (16–132px), gutter (0–30px) and width (56ch to none), and four of
+   them lived in their own page's <style>. Nothing decided the top centrally.
+   This does.
+
+   THE STANDARD (founder-approved, from coming-soon.html):
+     gutter        30px at every width (the .wrap value)
+     container     var(--wrap), 1180px
+     page top      132px from the viewport top at ≥1024px
+     artwork cap   440px at ≥1024px
+     art ↔ copy    40px, every archetype
+     block → next  40px, every page
+   Below 1024px: page top 112px, artwork cap 360px (see SR-486).
+
+   THE NAV. On a page carrying .sr-pt the nav is sticky, not fixed. It takes
+   its own height in the flow, so the page top is the nav's height plus a
+   fixed band of air: 53px at ≥1024 (79 + 53 = 132), 33px below (79 + 33 =
+   112). Under 768px the nav wraps to two or three rows (181–235px at 375). A
+   fixed nav would cover any fixed page top there. A sticky one cannot,
+   because the air is always measured from wherever the nav ends. Scoped with
+   :has(), so pages without .sr-pt (the track landing pages among them) keep
+   the fixed nav exactly as before. #srNav (js/saferise-nav.js's mount) is
+   display:contents, so the nav's containing block is the page, not a
+   nav-sized wrapper.
+
+   FOUR ARCHETYPES, one component; only the artwork height differs:
+     --a  full bleed, copy over the artwork
+     --b  copy left, artwork right, on one line
+     --c  contained band, copy below
+     --d  copy only
+   No borders. No durations, timers or progress. Theme tokens (plain var),
+   except the copy over a photograph (--a), which is fixed light because the
+   photograph is the ground in either theme.
+   ═══════════════════════════════════════════════════════════════ */
+/* the browser's default 8px body margin: invisible under a fixed nav, but a
+   sticky one sits inside it, so it moved the page top down and the gutter in on
+   the pages that never reset it (legal family, organisations, getting-help) */
+body:has(.sr-pt){margin:0}
+body:has(.sr-pt) .nav{position:sticky}
+body:has(.sr-pt) #srNav{display:contents}
+.sr-pt{--sr-pt-air:53px;--sr-pt-cap:440px;--sr-pt-gap:40px;
+  position:relative;padding:var(--sr-pt-air) 0 var(--sr-pt-gap);margin:0}
+@media(max-width:1023px){.sr-pt{--sr-pt-air:33px;--sr-pt-cap:360px}}
+.sr-pt-in{position:relative;max-width:var(--wrap,1180px);margin:0 auto;padding:0 30px;box-sizing:border-box}
+.sr-pt-art{display:block;position:relative;overflow:hidden;height:var(--sr-pt-cap);max-height:var(--sr-pt-cap)}
+.sr-pt-art img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 42%}
+
+/* the copy — one type scale for every page top */
+.sr-pt-copy{max-width:760px}
+/* the block begins and ends on its own edges: no inherited first/last margin */
+.sr-pt .sr-pt-copy > :first-child{margin-top:0}
+.sr-pt .sr-pt-copy > :last-child{margin-bottom:0}
+.sr-pt .sr-pt-kick{margin:0;font-family:'Cinzel',serif;font-weight:500;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+.sr-pt .sr-pt-h{margin:14px 0 0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(34px,4.4vw,58px);
+  line-height:1.06;letter-spacing:-.01em;color:var(--text);text-wrap:balance;max-width:24ch}
+.sr-pt .sr-pt-h em{font-style:italic;color:var(--gold-lt,var(--gold))}
+.sr-pt .sr-pt-lead{margin:18px 0 0;font-family:'DM Sans',sans-serif;font-size:clamp(16px,1.35vw,18px);line-height:1.65;color:var(--text2);max-width:58ch}
+.sr-pt .sr-pt-lead + .sr-pt-lead{margin-top:12px}
+.sr-pt .sr-pt-rule{margin:24px 0 0;padding-left:20px;box-shadow:inset 2px 0 0 var(--gold)}
+.sr-pt .sr-pt-rule p{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;line-height:1.5;color:var(--text)}
+.sr-pt .sr-pt-acts{margin:26px 0 0;display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center}
+.sr-pt .sr-pt-note{margin:22px 0 0;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;color:var(--text3);max-width:56ch}
+
+/* an aside at the right of the copy (the plans rail) */
+.sr-pt .sr-pt-in:has(> .sr-pt-aside){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--sr-pt-gap);align-items:start}
+.sr-pt .sr-pt-aside{margin:0;align-self:center}
+
+/* --a · full bleed, copy over the artwork. The artwork spans the viewport
+   and stops at its cap. The copy starts 40px inside it; when the copy is
+   taller than the cap (narrow screens), it runs on below onto the page
+   ground, and the artwork fades into that ground rather than growing. */
+.sr-pt--a{isolation:isolate}
+.sr-pt--a .sr-pt-art{position:absolute;left:0;right:0;top:var(--sr-pt-air);z-index:-1;
+  -webkit-mask-image:linear-gradient(180deg,#000 72%,transparent);mask-image:linear-gradient(180deg,#000 72%,transparent)}
+.sr-pt--a .sr-pt-art::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(95deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.78) 45%,rgba(8,8,12,.3) 75%,rgba(8,8,12,.32) 100%)}
+.sr-pt--a .sr-pt-in{min-height:var(--sr-pt-cap);padding-top:var(--sr-pt-gap);display:flex;flex-direction:column;justify-content:flex-start}
+.sr-pt--a .sr-pt-h{color:#F5EDD8}
+.sr-pt--a .sr-pt-h em{color:#E8C877}
+.sr-pt--a .sr-pt-kick{color:#D4A843}
+.sr-pt--a .sr-pt-lead{color:#D2CDC4;max-width:48ch}
+.sr-pt--a .sr-pt-note{color:#A9A4B0}
+@media(max-width:767px){
+  .sr-pt--a .sr-pt-art::after{background:linear-gradient(180deg,rgba(8,8,12,.62) 0%,rgba(8,8,12,.8) 60%,rgba(8,8,12,.9) 100%)}
+}
+
+/* --b · copy left, artwork right, on one line */
+.sr-pt--b .sr-pt-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--sr-pt-gap);align-items:center}
+/* the cap is a ceiling, not a size: the artwork keeps a ratio and stops at the cap */
+.sr-pt--b .sr-pt-art{height:auto;aspect-ratio:4/3;border-radius:16px;box-shadow:0 18px 44px -24px rgba(0,0,0,.8)}
+@media(max-width:767px){.sr-pt--b .sr-pt-in{grid-template-columns:minmax(0,1fr)}.sr-pt--b .sr-pt-art{order:-1}}
+
+/* --c · contained band, copy below */
+.sr-pt--c .sr-pt-art{height:auto;aspect-ratio:16/7;border-radius:16px;box-shadow:0 18px 44px -24px rgba(0,0,0,.8)}
+.sr-pt--c .sr-pt-copy{margin-top:var(--sr-pt-gap)}
+
+/* --d · copy only: begins exactly where the others' artwork does */
+/* .sr-pt-body · the reading column that follows a copy-only top on the
+   legal pages (legal, terms, privacy, refunds, accessibility). It uses the
+   same wrap and gutter, so the text starts on the page top's own left edge
+   instead of a centred 680px column sitting 220px in from the h1. Reading
+   measure unchanged. */
+.sr-pt-body{max-width:var(--wrap,1180px);margin:0 auto;padding:0 30px 100px;box-sizing:border-box}
+.sr-pt-body > *{max-width:680px}
+.sr-pt-body > :first-child{margin-top:0}
+/* getting-help.html: a page with no nav still starts where a nav page does. */
+body:not(:has(.nav)) .sr-pt{padding-top:calc(79px + var(--sr-pt-air))}
+/* getting-help's column (.sr-adv), on the page top's wrap like the legal pages */
+.sr-tp .sr-adv.sr-pt-body{max-width:var(--wrap,1180px);padding:0 30px 100px}
+.sr-tp .sr-adv.sr-pt-body > *{max-width:720px}

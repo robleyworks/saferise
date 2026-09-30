@@ -34,10 +34,14 @@
 <script src="js/saferise-nav.js"></script>
 <script>SafeRiseNav.render('legal.html');</script>
 
-<main class="sr-tp-shell" id="main">
-<div style="max-width:680px;margin:0 auto;padding:120px 20px 100px">
-
-<h1>Terms and privacy</h1>
+<main id="main">
+<!-- SR-486 · the page top (sr-pt-, archetype D: copy only). The inline
+     120px top padding and the centred 680px column are gone; the text follows
+     on the page top's own wrap (.sr-pt-body). -->
+<header class="sr-pt sr-pt--d"><div class="sr-pt-in"><div class="sr-pt-copy">
+<h1 class="sr-pt-h">Terms and privacy</h1>
+</div></div></header>
+<div class="sr-pt-body">
 <p class="section-body">Four documents, kept separate so each one can be read on its own. The shortest answer to the question most people arrive with: your voice is never sent anywhere, and what you write stays on your device unless you turn on AI feedback for a Sovereign session.</p>
 
 <div style="display:flow-root;box-shadow:inset 0 -1px 0 var(--hair)">

@@ -304,12 +304,11 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 /* SR-336 · flat-row footer CSS removed — superseded by the grouped
    version below, then moved to css/saferise-footer.css */
 
-.pg{padding:118px 0 0}
-.pghead{padding:54px 0 40px}
-.pghead h1{font-family:'Cormorant Garamond',serif;font-weight:300;
-  font-size:clamp(36px,5vw,62px);line-height:1.06;letter-spacing:-.022em;max-width:18ch;margin:24px 0 0}
-.pghead h1 em{font-style:italic;color:var(--gold-lt)}
-.pglead{font-size:clamp(17px,1.6vw,20px);line-height:1.62;color:var(--text2);max-width:56ch;margin:22px 0 0}
+
+
+
+
+
 .sec2{padding:64px 0;border-top:1px solid var(--hair)}
 .sec2--alt{background:var(--bg2)}
 .sh{max-width:64ch;margin-bottom:28px}
@@ -406,13 +405,13 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 
 
 /* ═══════════ v2 method image + diagram treatment ═══════════ */
-.methodhero{position:relative;overflow:hidden}
+
 .methodheroart{position:absolute;inset:0;z-index:0}
 .methodheroart img{width:100%;height:100%;object-fit:cover;object-position:center 48%;filter:saturate(.58) contrast(1.04);opacity:.48}
 .methodheroart::after{content:'';position:absolute;inset:0;background:
   linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 91%,transparent) 42%,color-mix(in srgb,var(--bg) 42%,transparent) 76%,var(--bg) 100%),
   linear-gradient(180deg,var(--bg) 0%,transparent 34%,color-mix(in srgb,var(--bg) 82%,transparent) 78%,var(--bg) 100%)}
-.methodhero .pghead{position:relative;z-index:2;min-height:570px;display:flex;flex-direction:column;justify-content:center}
+
 .methoddiagram{margin-top:34px;border:1px solid var(--hair);border-radius:20px;background:var(--bg3);overflow:hidden}
 .mdhead{padding:15px 20px;border-bottom:1px solid var(--hair);font-family:'DM Sans',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.2em;color:var(--gold)}
 .mdpaths{display:grid;grid-template-columns:1fr 1fr}
@@ -445,7 +444,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .wave{height:2px;background:linear-gradient(90deg,var(--gold-dim),var(--gold),var(--gold-dim));position:relative}
 .wave.up::after,.wave.down::after{content:'';position:absolute;right:0;top:-4px;width:9px;height:9px;border-radius:50%;background:var(--gold)}
 .breathvisual>p{font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text2);margin-top:20px}
-@media(max-width:860px){.mdpaths,.statevisual,.foursteps{grid-template-columns:1fr}.mdpath+.mdpath{border-left:0;border-top:1px solid var(--hair)}.breathline{grid-template-columns:1fr}.methodhero .pghead{min-height:620px}}
+@media(max-width:860px){.mdpaths,.statevisual,.foursteps{grid-template-columns:1fr}.mdpath+.mdpath{border-left:0;border-top:1px solid var(--hair)}.breathline{grid-template-columns:1fr}}
 
 
 /* dropdown — bridge the gap so the cursor can travel to the menu */
@@ -494,12 +493,12 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
  background:var(--page);color:var(--body);font:16px/1.7 'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
  max-width:1060px;margin:0 auto;padding:0 clamp(20px,5vw,48px)}
 
-.sr-mt-mast{padding:clamp(48px,7vh,86px) 0 clamp(30px,4vh,44px)}
+
 .sr-mt-eyebrow{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.34em;color:var(--label);margin:0 0 14px;display:flex;align-items:center;gap:14px}
 .sr-mt-eyebrow::before{content:"";width:32px;height:1px;background:var(--label)}
-.sr-mt-mast h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,5.6vw,58px);line-height:1.02;letter-spacing:-.022em;color:var(--head);margin:0 0 16px}
-.sr-mt-mast h1 em{font-style:italic;color:var(--gold)}
-.sr-mt-stand{font-size:17px;line-height:1.6;max-width:40rem;color:#A9A6AD;margin:0}
+
+
+
 
 /* four steps */
 .sr-mt-steps{list-style:none;margin:0;padding:0;max-width:36rem}
@@ -719,7 +718,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .sr-mt-four .sr-mt-ic{width:26px;height:26px}
 .sr-mt-four .sr-mt-ic svg{width:22px;height:22px}
 
-.sr-mt-mast{padding-bottom:clamp(26px,4vh,40px);position:relative;z-index:2}
+
 .sr-mt-underlay{position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;width:100vw;
  margin-top:-2px;margin-bottom:clamp(30px,5vh,54px);overflow:hidden;
  height:clamp(190px,26vw,330px)}
@@ -766,13 +765,17 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
   </div>
 </nav>
 <main id="main">
-<div class="sr-mt-wrap">
-<header class="sr-mt-mast">
-<p class="sr-mt-eyebrow">THE METHOD</p>
-<h1>Attention is a power source<br>&mdash; and it is <em>finite.</em></h1>
-<p class="sr-mt-stand">Whatever you put it on is what becomes real to you. Keep it there long enough, and it
+<!-- SR-486 · the page top (sr-pt-, archetype D: copy only), moved out of
+     .sr-mt-wrap so it sits on the same 1180px wrap and 30px gutter as every other
+     page. Was .sr-mt-mast. The underlay photograph below is the page's first
+     band, not part of its top. -->
+<header class="sr-pt sr-pt--d"><div class="sr-pt-in"><div class="sr-pt-copy">
+<p class="sr-pt-kick">The method</p>
+<h1 class="sr-pt-h">Attention is a power source<br>&mdash; and it is <em>finite.</em></h1>
+<p class="sr-pt-lead">Whatever you put it on is what becomes real to you. Keep it there long enough, and it
 grows. SafeRise is about regaining authorship of where it goes, beginning with nervous system
-regulation.</p></header><div class="sr-mt-underlay">
+regulation.</p></div></div></header>
+<div class="sr-mt-wrap"><div class="sr-mt-underlay">
   <img src="assets/home/film-poster.jpg" alt="">
   <span class="sr-mt-ufade"></span>
 </div>
