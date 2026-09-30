@@ -23126,3 +23126,63 @@ transcription, the AI reading, on by default).
 - **Pre-existing, not touched:** `resource.html?track=2&protocol=99` falls back
   to Track 01 / 01 while only the Track 02 store is loaded, renders an empty
   reader and throws in `renderMain`.
+
+## SR-472 — Audio visualiser, captions, transitions and latency (SR-471 items 5–9)
+
+- **§1 Visualiser.** One component, `js/saferise-viz.js` + `css/saferise-viz.css`
+  (surface `sr-av-`, claimed in CLAUDE.md): nine #7FB59B bars, each a recent real
+  output level from one shared AnalyserNode per `<audio>`; still on silence, at rest
+  when paused; never reads time. An element is routed through Web Audio only after
+  its context is confirmed running, so a suspended context leaves playback untouched
+  and the bars remove themselves; no Web Audio, no bars. On: the galaxy meditation
+  player (replacing FB-07's four gold bars, which moved on silence via a sine
+  wobble), The Clearing (dashboard modal and `member-clearing.html`), resource
+  guidance (replacing `#wave`, 44 static sine-shaped bars), the Sovereign spoken
+  questions. The galaxy aura reads the same tap. The galaxy step bar's fill line
+  (time elapsed per quarter — a progress bar) is removed; the step names stay.
+  Verified with real audio on all four (output routed to a zero gain for the test,
+  so nothing was audible): bars at rest through leading silence, rising with the
+  voice, at rest on pause/end; no timing text anywhere. Reduced motion: bars stay at
+  rest (same rule as the Sovereign waveform).
+- **§2 Captions.** 28 WebVTT files, `assets/audio/meditation/*.vtt`, from the existing
+  audio: pause-based segmentation (speech-band energy over the bed), each segment
+  transcribed on-device by the vendored moonshine-tiny model (no download, no
+  credits), 0.35s transcription padding (without it, ends were clipped). **Machine
+  drafts, not proofread** — each file says so. Spot-check: most cues right; some
+  mishearings remain ("Whether pass is through a room" for "weather passes"), and
+  US spellings from the model ("labor", "centered"); only the four phase words were
+  normalised to British spelling. Player: `<track>` on the player's own audio, one
+  caption line on the galaxy stage (no box), Captions toggle, off by default,
+  remembered per member on the device (`sr.captions.<member id>`). Verified on
+  Abandonment Wound and Trust & Betrayal (line = active cue 110/111 samples; the
+  miss is a cue boundary) and The Clearing modal (preference carried across pages).
+  Not on `member-clearing.html` (no stage to carry a caption line).
+- **MR-24.** Phase markers CAN be derived from the captions, but only where the
+  script speaks the phase ("Recognise.", "First, we recognise…", "We rise into…").
+  All four found, in order, in 10 of 27 protocol meditations (t1-02, t1-04, t1-05,
+  t1-07, t1-08, t2-03, t2-06, t2-07, t2-09, t3-10) — all 40 marker cues checked by
+  hand as genuine phase lines; there the steps follow them (cue ids `phase-*`). The
+  other 17 never name all four (Anxiety Reset names none) and keep the old
+  equal-quarters estimate: MR-24 is resolved for 10, not for 17.
+- **§3 White flash [MR-22].** Reproduced by screenshot: the dashboard frame on
+  `about:blank` renders solid white. SR-464 D4's premise was wrong — the page's
+  `<meta name=color-scheme content=dark>` makes an unset frame scheme resolve dark,
+  so it still mismatched `about:blank`. Fix: `color-scheme:light` on the frame
+  element (screenshot: dark). Standalone pages already paint `#0B0B11` from the first
+  frame. **Jump:** a separate defect — the old select transition (smooth scroll, then
+  sections collapsing, then a translateY glide) registered a layout shift of 0.742;
+  gone with §4 (0 shifts after). Found and not fixed: with Sovereign enabled, its
+  mode toggle is inserted above the player mid-parse (56px); the flag is off in
+  production.
+- **§4 Carousel transition removed** from `openProtocol()`: the `shifting` fade, the
+  smooth scroll, the 460ms wait and the carousel glide, plus their CSS (`shifting`,
+  `srRise`). Carousel drift/scroll code untouched (diff is one hunk, inside
+  `openProtocol`).
+- **§5 Latency** (local stand-in; paint timings unavailable while the pane was hidden,
+  so navigation timing): click → frame navigation start 488–508ms → 2ms; protocol
+  click → interactive 1747 → 226ms cold, 707 → 126ms warm; transfer 2117 → 1167 KB.
+  Resource pages ~180 → 146–167ms (unchanged in substance). Top causes: (1) the 460ms
+  transition wait — fixed; (2) protocol.html loading all three track content stores
+  (~1.3 MB) to read one — fixed, loads only its own (output identical on 5 URLs);
+  (3) **structural, not attempted:** every protocol/resource change reloads a whole
+  document in the iframe, re-parsing its scripts and content store each time.
