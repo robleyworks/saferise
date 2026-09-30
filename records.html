@@ -45,23 +45,25 @@
      claude/MY-RECORDS-HUB.md (30 September), replacing SR-478's placeholder copy.
      The copy is HTML over the photograph, never baked into it, so it reflows. The
      frame keeps the photograph's ratio and grows when the copy needs more room.
-     L7 · the rail is the five tabs, and each item opens its tab. -->
-<header class="sr-mr-banner" aria-labelledby="srMrTitle">
-  <div class="sr-mr-bannerframe">
-    <picture class="sr-mr-bannerart">
+     L7 · the rail is the five tabs, and each item opens its tab.
+     SR-489 · on the shared member banner (sr-bn-); the rail's buttons keep
+     their own sr-mr- item styling. -->
+<header class="sr-bn" aria-labelledby="srMrTitle">
+  <div class="sr-bn-frame">
+    <picture class="sr-bn-art">
       <source srcset="/assets/records/mr-banner.webp" type="image/webp">
       <img src="/assets/records/mr-banner.jpg" alt="" width="2400" height="806" decoding="async">
     </picture>
-    <div class="sr-mr-bannercopy">
-      <p class="sr-mr-kick">What I am building</p>
-      <h1 id="srMrTitle">My Records</h1>
-      <p class="sr-mr-sub">You are not the same person who started.</p>
-      <p class="sr-mr-body">Statements spoken in Rise. Decisions named. Where you started and where you finished, in your own words.</p>
-      <p class="sr-mr-body">Read back far enough and you can see the distance.</p>
+    <div class="sr-bn-copy">
+      <p class="sr-bn-kick">What I am building</p>
+      <h1 class="sr-bn-h" id="srMrTitle">My Records</h1>
+      <p class="sr-bn-sub">You are not the same person who started.</p>
+      <p class="sr-bn-body">Statements spoken in Rise. Decisions named. Where you started and where you finished, in your own words.</p>
+      <p class="sr-bn-body">Read back far enough and you can see the distance.</p>
     </div>
-    <p class="sr-mr-pull">Proof, in my own words.</p>
+    <p class="sr-bn-pull">Proof, in my own words.</p>
   </div>
-  <ul class="sr-mr-rail" aria-label="My Records sections">
+  <ul class="sr-bn-rail sr-mr-rail" aria-label="My Records sections">
     <li><button type="button" class="sr-mr-railitem" data-mr-rail="sessions" aria-controls="sr-mr-p-sessions"><svg class="sr-mr-railicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="sr-mr-raillabel">Every Session</span><span class="sr-mr-railline">Guided and Sovereign, newest first.</span></button></li>
     <li><button type="button" class="sr-mr-railitem" data-mr-rail="chosen" aria-controls="sr-mr-p-chosen"><svg class="sr-mr-railicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="4"/></svg><span class="sr-mr-raillabel">The Chosen Self</span><span class="sr-mr-railline">Statements I spoke. Never a line I did not say.</span></button></li>
     <li><button type="button" class="sr-mr-railitem" data-mr-rail="decisions" aria-controls="sr-mr-p-decisions"><svg class="sr-mr-railicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3v7a4 4 0 0 0 4 4h8"/><path d="M15 10l4 4-4 4"/></svg><span class="sr-mr-raillabel">Decisions</span><span class="sr-mr-railline">The conversations and actions I named for myself.</span></button></li>

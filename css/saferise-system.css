@@ -6483,39 +6483,15 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
 .sr-mr-page{overflow-x:hidden}
 .sr-mr-vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* the banner — 2400×806 (SR-484). The photograph is a <picture> behind the
-   copy. The frame keeps the photograph's ratio and grows past it when the copy
-   needs more room, so the copy is always over the photograph at every width,
-   never beneath it. The copy is on the left, the pull quote at the right, and
-   the rail (the five tabs, L7) sits below on its own dark ground. The colours
-   are fixed rather than themed, because the ground is the photograph whichever
-   reading mode is on. */
-.sr-mr-banner{margin-top:8px;border-radius:16px;overflow:hidden;background:#0C0B11;
-  box-shadow:0 18px 44px -24px rgba(0,0,0,.8)}
-.sr-mr-bannerframe{position:relative;isolation:isolate;aspect-ratio:2400/806;
-  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px;padding:48px}
-.sr-mr-bannerart{position:absolute;inset:0;z-index:-2;display:block}
-.sr-mr-bannerart img{width:100%;height:100%;object-fit:cover;object-position:62% 30%;display:block}
-.sr-mr-bannerframe::after{content:'';position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(95deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.74) 30%,rgba(8,8,12,.12) 58%,rgba(8,8,12,.28) 100%),
-             linear-gradient(0deg,rgba(8,8,12,.62) 0%,rgba(8,8,12,0) 38%)}
-.sr-mr-bannercopy{max-width:40ch;align-self:center}
-.sr-mr-kick{font-family:'Cinzel',serif;font-weight:500;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin:0}
-.sr-mr-banner h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,4.2vw,60px);line-height:1.02;color:#F5EDD8;margin:14px 0 0}
-/* .sr-mr-sub is also the section wrapper inside an opened session (records.js).
-   That collision dates from SR-478. The unscoped rule is kept exactly as it was, so
-   opened sessions render unchanged. Only the banner's own colour is scoped. */
+/* the banner · SR-489: on the shared member banner, sr-bn- (the frame, plate,
+   copy and pull quote rules that lived here are that component's now).
+   .sr-mr-sub is also the section wrapper inside an opened session
+   (records.js); that collision dates from SR-478, and the unscoped rule is
+   kept exactly as it was so opened sessions render unchanged. */
 .sr-mr-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,1.7vw,23px);color:#D8D2C4;margin:10px 0 0}
-.sr-mr-bannercopy .sr-mr-sub{color:#E4DDCC}
-.sr-mr-body{font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;color:#D2CDC4;margin:16px 0 0;max-width:44ch}
-.sr-mr-body + .sr-mr-body{margin-top:10px}
-.sr-mr-pull{margin:0;max-width:24ch;text-align:right;justify-self:end;font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:clamp(20px,1.9vw,27px);line-height:1.25;color:#F5EDD8;text-shadow:0 1px 18px rgba(8,8,12,.7)}
-.sr-mr-pull::after{content:'';display:block;width:44px;height:1px;margin:12px 0 0 auto;background:var(--gold)}
 
-/* the rail — five buttons, each opens its tab */
-.sr-mr-rail{margin:0;padding:6px 32px 10px;list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px 8px;
-  background:#0C0B11;box-shadow:inset 0 1px 0 rgba(245,237,216,.1)}
+/* the rail — five buttons, each opens its tab. The container is sr-bn-rail. */
+.sr-bn-rail.sr-mr-rail li{padding:0}
 .sr-mr-railitem{appearance:none;background:transparent;border-style:none;cursor:pointer;width:100%;height:100%;text-align:left;
   display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;row-gap:4px;padding:14px 12px;border-radius:10px;color:inherit;
   transition:background-color .25s var(--sr-ease)}
@@ -6525,20 +6501,6 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
 .sr-mr-railicon{grid-row:1 / span 2;width:18px;height:18px;margin-top:1px;fill:none;stroke:var(--gold);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .sr-mr-raillabel{font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#E4DDCC;line-height:1.5}
 .sr-mr-railline{font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.5;color:#A9A4B0}
-@media(max-width:1100px){
-  .sr-mr-bannerframe{grid-template-columns:minmax(0,1fr);align-items:start;padding:40px 32px}
-  .sr-mr-bannerart img{object-position:68% 30%}
-  .sr-mr-bannerframe::after{background:linear-gradient(95deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.78) 45%,rgba(8,8,12,.35) 75%,rgba(8,8,12,.45) 100%)}
-  .sr-mr-pull{max-width:none}
-  .sr-mr-rail{grid-template-columns:repeat(3,minmax(0,1fr));padding:6px 16px 10px}
-}
-@media(max-width:700px){
-  .sr-mr-bannerframe{padding:32px 22px 28px;aspect-ratio:auto;min-height:420px}
-  .sr-mr-bannerart img{object-position:74% 25%}
-  .sr-mr-bannerframe::after{background:linear-gradient(180deg,rgba(8,8,12,.72) 0%,rgba(8,8,12,.82) 55%,rgba(8,8,12,.9) 100%)}
-  .sr-mr-rail{grid-template-columns:minmax(0,1fr);padding:4px 10px 10px}
-}
-
 /* the tab row, directly beneath the banner */
 .sr-mr-hub{margin-top:0;padding-bottom:64px}
 .sr-mr-tabs{display:flex;flex-wrap:wrap;gap:4px 8px;margin-top:0;padding:10px 0 0;box-shadow:inset 0 -1px 0 var(--hair)}
@@ -6704,10 +6666,6 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
    timers, no progress.
    ═══════════════════════════════════════════════════════════════ */
 .sr-or-page{overflow-x:hidden}
-.sr-or-head{padding:40px 0 8px;max-width:720px}
-.sr-or-kick{margin:0;font-family:'Cinzel',serif;font-weight:500;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
-.sr-or-head .sr-or-h{margin:14px 0 0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(40px,4.6vw,64px);line-height:1.02;color:var(--text)}
-.sr-or-lede{margin:16px 0 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(19px,1.8vw,24px);line-height:1.4;color:var(--text2);max-width:40ch}
 /* the system CSS pads every <section>; this one states its own */
 .sr-or-videos{padding:36px 0 72px;max-width:860px}
 .sr-or-vh{margin:0 0 16px;font-family:'Cinzel',serif;font-weight:500;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--text3)}
@@ -6726,7 +6684,6 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
 .sr-or-link:hover{text-decoration:underline;text-underline-offset:4px}
 .sr-or-btn:focus-visible,.sr-or-link:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 @media(max-width:700px){
-  .sr-or-head{padding-top:28px}
   .sr-or-empty{padding:26px 20px 24px}
   .sr-or-btn{width:100%}
 }

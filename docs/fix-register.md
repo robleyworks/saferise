@@ -24018,3 +24018,47 @@ Brief: "Five parts", Part 3. Not pushed.
   1440/1024/375 (the scrim darkens the bottom-right under the pull quote); no sideways
   scroll at any width · O6 screenshots: destination, Articles and Shorter form at 1440,
   Articles at 375.
+
+## SR-489 — The remaining member banners on one component (sr-bn-)
+
+Brief: "Five parts", Part 4. Not pushed.
+
+- **FAQ / Help** (`member-reading.html`, `/faq`): opens with `sr-bn` on
+  `assets/dashboard/banner-faq.{webp,jpg}` (committed here), with DASHBOARD-BANNERS.md §5's
+  copy set in HTML, word for word, rail included. The page title is now "Help and FAQ".
+  Its header comment is updated for the FAQ-only page (SR-488).
+- **Consolidated onto `sr-bn-`:** `/records` (its SR-484 banner block is removed from the
+  system CSS; the rail's five buttons keep their `sr-mr-railitem` styling, and the
+  `.sr-mr-sub` collision rule is kept for opened sessions); Out Loud (SR-488); and, as
+  `sr-bn--plain`, Start Here (`.sr-or-head`, `.sr-or-kick`, `.sr-or-h` and `.sr-or-lede`
+  removed), member-checkout and member-clearing (their `sr-fw-mast sr-mi-mast` headers,
+  same words, now inside `.sr-mi-page` so they start on the content's edge).
+- **Not removed, and why (D3):**
+  - `sr-mi-mast` + `sr-fw-mast` stay on **member-frameworks.html and member-coming-soon.html**.
+    The founder ruled these two index pages get no banner, so they are not on the banner
+    component; their existing copy header is left exactly as it was.
+  - `sr-fw-mast` stays on the **six framework detail pages** (heartmath, jung, kross, mate,
+    porges, watts). There it is the page layout itself (copy plus a 200px side column),
+    with the framework pager. Merging it into a banner would redesign those pages, which
+    no brief has asked for.
+  - The `.sr-mi-mast` and `.sr-fw-mast` rules in `saferise-method.css` therefore stay.
+- **Live practice: AMBIGUOUS, skipped.** No member page is called Live practice. The
+  candidates are the public `live-sessions.html` (its founder hero copy was just set on
+  the page top in SR-486), the dashboard's "When self-guided is not enough" sessions
+  section (a section, not a page), and the dashboard's `#vSessions` layer, which is
+  switched off (`SR_DEAD_VIEWS_ENABLED = false`). Setting §4's copy over the wrong one
+  would overwrite founder copy. Which surface is it?
+- **Not in this pass, as briefed:** Ask SafeRise and Build next. Their plates stay
+  uncommitted in `assets/dashboard/` for their own passes.
+- `assets/sessions/live-premium-1to1.{webp,jpg}` (the founder's portrait replacement,
+  1086×1448) is committed here. live-sessions.html's `?v=` is bumped 453 → 489, because
+  `/assets/*` is served immutable for a year and returning visitors would otherwise
+  keep the old landscape. It renders `object-fit:cover` in its 260×532 card.
+- **VERIFY 4:** D1 pass: one banner component (`sr-bn`), on the FAQ, /records, Out Loud,
+  and `--plain` on Start Here, checkout and clearing · D2 pass: frameworks and coming-soon
+  carry no `sr-bn` and no pager · D3 as above · D4 pass: all eight pages at 1440/1024/375,
+  one h1 each, clean consoles. There is one sideways scroll: member-frameworks at 375 is
+  379px wide, from a `.sr-fw-reg--clin` chip. **It predates this pass**: the same page
+  with the pre-pass rail and CSS measures 379 too. It is not fixed here (a founder-ruled
+  index page, out of scope); worth a one-line fix · D5 screenshots: FAQ, /records and
+  checkout at 1440; FAQ at 375.

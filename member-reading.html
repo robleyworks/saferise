@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <!--
-  SAFERISE — member-reading.html · SR-444 (PASS-X.md §2)
-  One template, three payloads: ?r=faq (default), ?r=article, ?r=podcast
-  (#hash also works). Structure is identical; only the contents rail
-  differs. Desktop: contents rail left, answers right. Below 820px the rail
+  SAFERISE — member-reading.html · SR-444 (PASS-X.md §2) · Help and FAQ, at /faq
+  Was one template for three payloads (faq, article, podcast). Article and the
+  podcast moved to SafeRise Out Loud (/out-loud) in SR-488, so this is the FAQ
+  only. Desktop: contents rail left, answers right. Below 820px the rail
   becomes a horizontal scroller above the answers (css/saferise-system.css,
   .sr-mi-read / .sr-mi-toc).
 
-  article and podcast render "Nothing published yet" until content exists.
-  No copy is invented for them: the h1 and lede are the dashboard's own
-  ROUTES entries for those two routes.
+  SR-489 · the page opens with the shared member banner (sr-bn-) on the
+  founder's banner-faq plate, with DASHBOARD-BANNERS.md §5's copy set in HTML.
 
   FAQ answers are written from the brief's substance and from the pages it
   names as sources — refunds.html (stopping), organisations.html and
@@ -24,7 +23,7 @@
 <style>html,body{background:#0A0A0F}</style>
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SafeRise — Reading</title>
+<title>SafeRise — Help and FAQ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -50,10 +49,25 @@
   </div>
 </div>
 
-<header class="sr-fw-mast sr-mi-mast" style="display:block">
-  <span class="eyebrow">Reading</span>
-  <h1 id="srReadTitle">Questions people ask</h1>
-  <p class="sr-fw-stance" id="srReadLede">Where an answer has a limit, the limit is stated rather than smoothed over.</p>
+<header class="sr-bn" aria-labelledby="srReadTitle">
+  <div class="sr-bn-frame">
+    <picture class="sr-bn-art"><source type="image/webp" srcset="/assets/dashboard/banner-faq.webp"><img src="/assets/dashboard/banner-faq.jpg" alt="" width="2400" height="806"></picture>
+    <div class="sr-bn-copy">
+      <p class="sr-bn-kick">WHEN YOU NEED CLARITY.</p>
+      <h1 class="sr-bn-h" id="srReadTitle">Questions are part of the process.</h1>
+      <p class="sr-bn-sub">You do not have to figure out the platform while you are trying to use it.</p>
+      <p class="sr-bn-body">How the method works. What each feature does. What stays private. Where to go when something does not behave the way you expected.</p>
+      <p class="sr-bn-body">Start with the question you actually have.</p>
+    </div>
+    <p class="sr-bn-pull">Clear enough to keep moving.</p>
+  </div>
+  <ul class="sr-bn-rail" aria-label="Help and FAQ">
+    <li><span class="sr-bn-raill">GETTING STARTED</span><span class="sr-bn-railt">Accounts, access and first steps.</span></li>
+    <li><span class="sr-bn-raill">THE METHOD</span><span class="sr-bn-railt">Recognise, Regulate, Release, Rise.</span></li>
+    <li><span class="sr-bn-raill">YOUR PRIVACY</span><span class="sr-bn-railt">What is yours and what stays yours.</span></li>
+    <li><span class="sr-bn-raill">FEATURES</span><span class="sr-bn-railt">Guided, Sovereign and My Records.</span></li>
+    <li><span class="sr-bn-raill">TROUBLESHOOTING</span><span class="sr-bn-railt">When something is not working.</span></li>
+  </ul>
 </header>
 
 <div class="sr-mi-page">
@@ -64,8 +78,7 @@
 </div>
 
 <!-- The faq payload. Kept as markup rather than a JS string so it reads
-     without script and is easy to edit. article/podcast render in place of
-     it. -->
+     without script and is easy to edit. -->
 <template id="srReadFaq">
   <section class="sr-mi-readsec" id="evidence">
     <h2>What the evidence shows</h2>
@@ -100,21 +113,15 @@
 <script>
 (function () {
   'use strict';
-  /* article and podcast: h1 and lede are the dashboard's ROUTES copy for
-     those routes, not new writing. */
   var PAYLOADS = {
     faq:     { title: 'Questions people ask', lede: 'Where an answer has a limit, the limit is stated rather than smoothed over.', tpl: 'srReadFaq' }
   };
   /* SR-488 · article and podcast moved to Out Loud (/out-loud); /writing and
      /podcast 301 there. This template now serves the FAQ only. */
-  /* /faq, /writing and /podcast are 200 rewrites: the browser keeps the
-     clean path and never sees the ?r=, so the path is read first. */
   var key = 'faq', P = PAYLOADS[key];
   var body = document.getElementById('srReadBody'), toc = document.getElementById('srReadToc');
 
-  document.title = 'SafeRise — ' + P.title;
-  document.getElementById('srReadTitle').textContent = P.title;
-  document.getElementById('srReadLede').textContent = P.lede;
+  document.title = 'SafeRise — Help and FAQ';
 
   if (!P.tpl) {
     toc.hidden = true;
@@ -143,9 +150,7 @@
 <script src="/js/saferise-access.js"></script>
 <script src="/js/saferise-rail.js"></script>
 <script>
-  /* SR-453 (PASS-AH §1) · light the rail button for the payload on show
-     (same reading as the PATHS/?r= logic above; 'reading' matched no button) */
-  SafeRiseRail.render('faq');   /* SR-488 · FAQ only now */
+  SafeRiseRail.render('faq');   /* SR-488 · the FAQ only now */
 </script>
 </body>
 </html>
