@@ -845,9 +845,13 @@
     PERMISSION: function () {
       var facts = [
         /* SR-469 D2 · the four facts, as ruled. The second and third changed:
-           the written record is now read by an AI (R14), and it can be switched off. */
+           the written record is now read by an AI (R14), and it can be switched off.
+           SR-482 · fact 2 now says where the record goes. "Is read by an AI" could
+           reasonably be read as happening on the device, and this screen is where
+           consent happens, before the browser asks. It now matches privacy.html: the
+           record leaves the device, Anthropic reads it, and it is never used for training. */
         ['voice', 'Your voice is turned into text on this device. The recording itself is never sent anywhere.'],
-        ['record', 'The written record is read by an AI, which gives you back what it found in your own words.'],
+        ['record', 'The written record leaves this device to be read by Anthropic, our model provider. It gives you back what it found in your own words, and it is never used to train anything.'],
         ['edit', 'You can read, edit or delete any part of it, and you can switch AI feedback off.'],
         ['shield', 'Nobody at your organisation can see any of it. Not a summary, not a statement, not a word.']
       ];

@@ -23531,3 +23531,55 @@ untouched. A partial pass is not a pass, and nothing here counts as a T-check pa
   the timing. Add T4: every line of the reading points at something actually said, with
   no invented statement, motive or diagnosis. If all of it passes, the flag flip (Part 2,
   T8–T10) is one line plus the header comment.
+
+## SR-482 — Sovereign: the tier wired to the interface, fact 2 names Anthropic; flag HELD off
+
+Brief: SOVEREIGN: WIRE THE TIER, THEN TURN IT ON (pasted by the founder, 2026-09-30).
+Parts 1 and 2 applied and verified locally. **Part 3 not applied, so
+`SR_FLAGS.sovereign` stays `false`.** Reason below.
+
+- **Part 3: disagreement with the register, which outranks the brief.** SR-469 and
+  `docs/SOV-4-PREVIEW-HANDOVER.md` §2 say the flag flips "only after §0 and §1 pass" on a
+  deploy preview. SR-481 records that §1 was not run, and nothing since records it
+  passing: no status code, no round-trip time, no T4 check that the reading is bound to
+  what was said. The brief's own Part 3 condition ("Only after Parts 1 and 2 verify") is
+  met. The register's condition is not. Flipping the flag is a one-line change, plus the
+  header comment, once the founder records the §1 results, or rules explicitly that the
+  register condition is waived.
+- **Part 1 (MATCH):** `js/saferise-sovereign.js` PERMISSION fact 2 and
+  `js/saferise-sovereign-settings.js`'s "on" line are replaced verbatim. The SR-469 D2
+  comment now says why fact 2 changed. Facts 1, 3 and 4 and the "off" line are untouched.
+- **Part 2 (MATCH):** `srAuth.plan()` added. The tier comes from `POST /rest/v1/rpc/my_tier`,
+  asked alongside the entitlement check inside `checkEntitlement()` (so also on sign-in and
+  on `refreshEntitlement`). It is cached in memory only, like `entitled()`. An answer
+  outside the four tiers, an HTTP error, a network error or an empty answer all give null,
+  and nothing throws. The cache is cleared on sign-out and whenever there is no user.
+  `resolve()` in `js/saferise-access.js` needed **no change**, confirmed. One visible
+  difference: `my_tier()` answers `'free'` (not null) for a member with no tier, so
+  `resolve().source` now reads `'plan'` where it used to read `'entitlement'`. The tier is
+  unchanged. Nothing reads `.source` today (grep).
+- **0006:** written to `supabase/migrations/0006_revoke_execute_gaps.sql` from the brief's
+  list. **Not applied from here.** Its header says it was applied to production by the
+  founder. No database was touched. `claude/SCHEMA-APPLIED-TO-PRODUCTION.md` is not in
+  the repo (claude.ai Project only), so 0006 was written from the brief alone, not checked
+  against that record.
+- **VERIFY:** V1 pass (signed out: protocol, index, dashboard and account consoles clean;
+  zero Supabase requests; harness: `plan()` null, no `my_tier` call) · V2 pass (no tier:
+  free, or standard if entitled) · V3 pass (`plan()='sovereign'`: `voice:true
+  reading:true`) · V4 pass (500, network error, null and `'gold'`: plan null, falls back to
+  the entitlement, no throw) · V5 pass (neither old string anywhere outside the register) ·
+  V6 pass (privacy.html l.43/77 "sent", l.126 Anthropic, l.43/159 "never used to train
+  anything") · **V7 not met — flag held, above** · V8 pass (written, not applied) · V9
+  pass (tests/sv-reading 52/52, plus a scratch harness for plan()/resolve() at 15/15, with
+  stubbed fetch on a non-dev hostname; the harness is not committed) · V10 pass,
+  **local only**: localhost with `?sovereign=1`. The toggle and the new PERMISSION screen
+  were screenshotted. The production flag was not exercised, because it is off. The
+  preview ran from a scratch copy, because macOS refuses the repo folder to the preview's
+  python.
+- **Seen, not changed (founder):** (1) `SafeRiseSovereignSettings.mount` gates on the flag
+  only, not the tier, so once the flag is on **every signed-in member** (free included)
+  sees "AI feedback after Sovereign sessions: on" on /account. Suggest gating it on
+  `SafeRiseAccess.can('reading')`. (2) With the flag on, non-sovereign members see the
+  Sovereign toggle and an upsell (SR-470 3.3, "offered, not hidden"). That is correct per
+  SR-470, but it contradicts the earlier go-live brief's T9 ("a free-tier member does NOT
+  [see it]"). One of the two needs ruling.

@@ -80,6 +80,7 @@
   var session = readSession();     // {access_token, refresh_token}
   var entitledCache = false;       // memory-only — see header comment
   var statusCache = null;          // memory-only: {subscription_status, entitled_until} or null
+  var tierCache = null;            // memory-only, same reason as entitledCache — SR-482
   var listeners = [];
 
   function notify() { listeners.forEach(function (fn) { try { fn(); } catch (e) {} }); }
@@ -141,9 +142,26 @@
      RLS restricts to `where id = auth.uid()` regardless of what id we ask
      for here. Absence of a row (a brand-new signup mid-trigger, or a
      network failure) reads as not entitled — fails closed, not open. */
+  /* SR-482 · the member's tier, for js/saferise-access.js storedTier(). Asks
+     the my_tier() RPC rather than selecting members.tier: it is granted to
+     authenticated only, answers about auth.uid() and nobody else, and resolves
+     anything unknown to 'free' server-side. Never throws — any failure, or an
+     answer outside the four tiers, leaves null, and resolve() falls back to the
+     entitlement exactly as it did before plan() existed. */
+  var TIERS = ['free', 'standard', 'premium', 'sovereign'];
+  function checkTier() {
+    if (!currentUser()) { tierCache = null; return Promise.resolve(null); }
+    return fetch(SUPABASE_URL + '/rest/v1/rpc/my_tier', {
+      method: 'POST', headers: authHeaders(), body: '{}'
+    }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (t) { tierCache = TIERS.indexOf(t) >= 0 ? t : null; return tierCache; })
+      .catch(function () { tierCache = null; return null; });
+  }
+
   function checkEntitlement() {
     var u = currentUser();
-    if (!u) { entitledCache = false; statusCache = null; notify(); return Promise.resolve(false); }
+    if (!u) { entitledCache = false; statusCache = null; tierCache = null; notify(); return Promise.resolve(false); }
+    var tierDone = checkTier();
     return fetch(SUPABASE_URL + '/rest/v1/members?select=entitled,subscription_status,entitled_until&id=eq.' + encodeURIComponent(u.id), {
       headers: authHeaders()
     }).then(function (r) { return r.ok ? r.json() : []; })
@@ -153,10 +171,9 @@
         statusCache = row
           ? { subscription_status: row.subscription_status || null, entitled_until: row.entitled_until || null }
           : null;
-        notify();
-        return entitledCache;
+        return tierDone.then(function () { notify(); return entitledCache; });
       })
-      .catch(function () { entitledCache = false; statusCache = null; notify(); return false; });
+      .catch(function () { entitledCache = false; statusCache = null; return tierDone.then(function () { notify(); return false; }); });
   }
 
   function logSignupEvent(userId) {
@@ -202,7 +219,7 @@
       : Promise.resolve();
     return done.then(function () {
       session = null; writeSession(null);
-      entitledCache = false;
+      entitledCache = false; tierCache = null;
       notify();
     });
   }
@@ -307,6 +324,9 @@
     accessToken: function () { return currentUser() && session ? session.access_token : null; },
     entitled: function () { return entitledCache; },
     status: function () { return statusCache; }, // {subscription_status, entitled_until} or null — memory-only, same as entitled()
+    /* SR-482 · 'free' | 'standard' | 'premium' | 'sovereign', or null (signed
+       out, not yet asked, or the call failed). Read by js/saferise-access.js. */
+    plan: function () { return currentUser() ? tierCache : null; },
     refreshEntitlement: checkEntitlement,
     signIn: signIn,
     signUp: signUp,

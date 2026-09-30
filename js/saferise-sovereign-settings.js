@@ -27,7 +27,7 @@
       el.innerHTML =
         '<p class="sr-tp-body"><strong style="color:var(--text)">AI feedback after Sovereign sessions:</strong> ' + (on ? 'on' : 'off') + '</p>' +
         '<p class="sr-tp-body" style="margin-top:6px">' + (on
-          ? 'After a Sovereign session, the written record is read by an AI, which gives you back what it found in your own words. Your voice is never sent anywhere.'
+          ? 'After a Sovereign session, the written record leaves this device to be read by Anthropic, our model provider, and comes back to you in your own words. It is never used to train anything. Your voice is never sent anywhere.'
           : 'No AI feedback is made. Your sessions, transcripts and ratings are still saved on this device, and your earlier feedback stays where it is.') + '</p>' +
         '<p style="margin-top:12px"><button type="button" class="sr-tp-pill" aria-pressed="' + on + '">' + (on ? 'Switch AI feedback off' : 'Switch AI feedback on') + '</button></p>';
       el.querySelector('button').addEventListener('click', function () { set(user, !isOn(user)); paint(); });
