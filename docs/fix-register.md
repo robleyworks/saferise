@@ -23472,3 +23472,23 @@ Claude Haiku 4.5**. `SR_FLAGS.sovereign` stays `false`.
   `[EMAIL PROVIDER]`, `[LEGAL BASIS — see note]` (new).
 - **Not in this pass:** the flag; ZDR (the after-ZDR §7 line is in the brief, a one-line
   change); the B2B DPA; `SOVEREIGN-ARCHITECTURE-DECISIONS.md` (claude.ai Project only).
+
+## SR-480 — SR-479 follow-up: the inference_geo 400 reverted; copy made true for global routing; G2
+
+- **Reverted:** `inference_geo` is supported on Claude 4.6 and later only; on Haiku 4.5 it
+  returns a 400 (founder-confirmed in Anthropic's docs), so SR-479's pin would have failed
+  every AI feedback request. Removed from `netlify/functions/lib/provider.js` (a comment
+  records why, without the parameter name) and from `tests/sv-reading/tests.js`, which is
+  now byte-identical to its pre-SR-479 state — 52/52 pass.
+- **Copy (routing is global):** privacy.html §5 row "Anthropic (United States)" → "(outside
+  the EEA)"; §6 exception now "…processed by Anthropic, our model provider, on
+  infrastructure outside the European Economic Area. Your account data does not leave
+  Frankfurt."; §6 second-transfer sentence "in the United States" → "outside the EEA".
+  `[TRANSFER MECHANISM — see note]` and its review note checked byte-identical.
+- **G2 (founder-approved wording):** privacy.html §4 "why nothing you write is ever
+  transmitted" → "why nothing you type is ever transmitted".
+- **VERIFY G re-run:** G1 pass · G2 pass · G3 pass · G4 pass (375/1024/1440, no sideways
+  scroll; console clean on direct loads) · G5 pass (row "Anthropic (outside the EEA)";
+  table 291/291px at 375) · G6 pass · G7 pass (flag `false`) · G8 pass (52/52 unchanged;
+  `inference_geo` in no request, test or code) · G9 screenshots taken · G10 pass ("United
+  States" absent from the three pages; "Frankfurt" only for account and usage data).

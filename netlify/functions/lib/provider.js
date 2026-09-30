@@ -33,11 +33,10 @@
           max_tokens: 1500,
           system: contract.SYSTEM,
           messages: [{ role: 'user', content: contract.userMessage(payload) }],
-          output_config: { format: { type: 'json_schema', schema: contract.SCHEMA } },
-          /* SR-479 · processing pinned to the United States, so the location is
-             known and matches privacy.html §6 rather than "wherever capacity is".
-             The API offers us | global only; there is no EU option. */
-          inference_geo: 'us'
+          output_config: { format: { type: 'json_schema', schema: contract.SCHEMA } }
+          /* SR-480 · no geography pin on this request: the API supports it on
+             Claude 4.6 and later only, and on Haiku 4.5 it returns a 400.
+             Routing is global; privacy.html says "outside the EEA". */
         },
         read: function (data) {
           if (!data || data.stop_reason === 'refusal' || data.stop_reason === 'max_tokens') return null;
