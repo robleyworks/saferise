@@ -2217,6 +2217,13 @@ seedArrivalState();calcDelta();
   document.addEventListener('click', function(e){
     var cue = e.target.closest('[data-sr-open="cue"]');
     if(cue){ e.preventDefault(); post('open-cue', cueCard()); return; }
+    /* SR-471 · The Decision was a plain link: inside the dashboard it loaded
+       resource.html WITHOUT ?embed=1 into this scrolling="no" frame, so the
+       page never reported its height and the frame kept this page's height —
+       everything below that line was cut off. It now goes through the shell
+       like every other resource, which loads it embedded. */
+    var dec = e.target.closest('.decision-link');
+    if(dec){ e.preventDefault(); post('open-resource', {name: 'The Decision'}); return; }
     var go = e.target.closest('.res .go, .resource-item, [data-resource]');
     if(go){
       var row  = go.closest('.res') || go;
