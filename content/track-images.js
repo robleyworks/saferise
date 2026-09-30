@@ -69,9 +69,11 @@ var TRACK_IMAGES = {
     name: 'Sex & Intimacy',
     band: 'assets/coming/band-10.webp', bandJpg: 'assets/coming/band-10.jpg'
   },
-  'entrepreneurs-journey': {
-    name: 'Entrepreneur’s Journey',
-    band: 'assets/coming/band-15.webp', bandJpg: 'assets/coming/band-15.jpg'
+  /* SR-473 · Life & Load replaces a retired track (the old
+     band-15 is no longer referenced by any track). */
+  'life-and-load': {
+    name: 'Life & Load',
+    band: 'assets/coming/band-19.webp', bandJpg: 'assets/coming/band-19.jpg'
   },
   'money-shift': {
     name: 'Money Shift',

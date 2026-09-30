@@ -88,8 +88,8 @@
        coming-soon.html. */
     { name: 'Sex & Intimacy', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
       slug: 'sex-and-intimacy', img: planImage('sex-and-intimacy'), alt: 'Sex & Intimacy' },
-    { name: 'Entrepreneur\u2019s Journey', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      slug: 'entrepreneurs-journey', img: planImage('entrepreneurs-journey'), alt: 'Entrepreneur\u2019s Journey' },
+    { name: 'Life & Load', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
+      slug: 'life-and-load', img: planImage('life-and-load'), alt: 'Life & Load' },
     { name: 'Money Shift', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
       slug: 'money-shift', img: planImage('money-shift'), alt: 'Money Shift' },
     { name: 'Addiction Recovery', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
