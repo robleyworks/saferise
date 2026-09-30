@@ -29,6 +29,13 @@ Disallow: /docs/
 Disallow: /pass/
 Disallow: /mock/
 Disallow: /scripts/
+# SR-491 · blocked at the edge in _redirects as well; listed here too.
+Disallow: /claude/
+Disallow: /supabase/
+Disallow: /audit/
+Disallow: /archive/
+Disallow: /_incoming/
+Disallow: /tools/
 
 # Query-string duplicates of clean protocol URLs
 Disallow: /protocol?

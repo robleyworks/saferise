@@ -1,0 +1,31 @@
+# SafeRise — Netlify configuration
+#
+# SR-491, 30 September 2026. Added to unblock three consecutive production
+# deploys that failed with "Exposed secrets detected" from 4:25 AM onward,
+# immediately after the Sovereign environment variables were imported.
+#
+# WHY THE SCANNER FIRES, AND WHY IT IS WRONG HERE
+# Netlify's secrets scanner takes the VALUE of every environment variable
+# set on the site and searches the build output for it. Two of the values
+# imported for netlify/functions/sv-reading.mjs are, by design, also
+# hard-coded in js/saferise-auth.js (lines 32-33), which is published:
+#
+#   SR_SUPABASE_URL       https://mynjjgtjytzyfsuqqlhg.supabase.co
+#   SR_SUPABASE_ANON_KEY  sb_publishable_...
+#
+# Both are meant to be in the browser. The publishable key is Supabase's
+# public client key; it carries no privileges of its own, and every table
+# it can reach is governed by row-level security (verified by query in
+# claude/SCHEMA-VERIFICATION-PART-B.md). The scanner cannot tell a
+# deliberately public key from a leaked one, so it is told here.
+#
+# WHAT IS NOT OMITTED, DELIBERATELY
+# SR_READING_API_KEY, SR_READING_ID_SALT, SR_READING_ENDPOINT and
+# SR_READING_MODEL stay under the scanner. Those are genuine secrets and
+# must never appear in the build output. If the scanner ever fires on one
+# of them, that is a real leak and the build SHOULD fail. Do not widen the
+# list below to make a build pass without first establishing which value
+# matched and why.
+
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "SR_SUPABASE_URL,SR_SUPABASE_ANON_KEY"
