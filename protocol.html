@@ -785,9 +785,33 @@ body,.sr-book,.sr-book-offer,.sr-book-dates,.sr-gate-in{transition:background-co
      the specific gap SR-127 named). This page has no reader/RESOURCE_CONTENT
      code of its own yet — these make the data available for whichever track's
      protocol is resolved above, ready for that reader to be built. -->
-<script src="/content/t1-resources.js"></script>
-<script src="/content/t2-resources.js"></script>
-<script src="/content/t3-resources.js"></script>
+<!-- SR-472 §5 · only the resolved track's store loads, not all three.
+     Measured before: ~1.3 MB of content parsed and run on every protocol
+     open (t1 662 KB, t2 323 KB, t3 357 KB) when only one track's is ever
+     read — nothing on this page reads another track's store (the Cue Card,
+     srResolveSet and the library all take the page's own track). Same
+     build-free pattern resource.html already uses: a synchronous
+     document.write() during parse, so the store is present before the
+     resolution script below runs, exactly as a static tag would be. The
+     track is found the way PAGE_PROTOCOL finds it: slug (?slug= or the
+     /protocols/{slug} path, looked up in TRACKS, already loaded above),
+     else ?track=, else Track 01 (the page's own default). -->
+<script>
+(function () {
+  function q(n) { var m = new RegExp('[?&]' + n + '=([^&]+)').exec(location.search); return m ? decodeURIComponent(m[1]) : ''; }
+  var n = 1, slug = q('slug');
+  if (!slug) { var pm = /^\/protocols\/([a-z0-9-]+)\/?$/.exec(location.pathname); if (pm) slug = pm[1]; }
+  if (slug && typeof TRACKS !== 'undefined') {
+    Object.keys(TRACKS).forEach(function (k) {
+      (TRACKS[k].protocols || []).forEach(function (r) { if (r[r.length - 2] === slug) n = +k; });
+    });
+  } else if (/^[123]$/.test(q('track'))) {
+    n = +q('track');
+  }
+  if (!(n >= 1 && n <= 3)) n = 1;
+  document.write('<scr' + 'ipt src="/content/t' + n + '-resources.js"></scr' + 'ipt>');
+})();
+</script>
 <!-- PASS-protocol-access, Section A · srResolveSet(), the same resolver
      resource.html already uses. Never loaded on this page before this
      pass, which is why the resource library below was static markup
