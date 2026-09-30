@@ -23978,3 +23978,43 @@ Brief: "Five parts", Part 2. Not pushed.
   `_redirects`, but **pricing.html is kept** (X4) · X4 above · X5: **no figure changed**
   (the documents are missing) · X6 pass: 131/131/111/267 at 1440/1024/1023/375,
   art→copy 40, gutter 30, no sideways scroll (table in SR-486).
+
+## SR-488 — SafeRise Out Loud: one destination, three sections (N3)
+
+Brief: "Five parts", Part 3. Not pushed.
+
+- **Rail:** "Article" and "The SafeRise podcast" → one entry, **Out Loud** (`outloud`, a
+  new microphone-and-signal icon), at `/out-loud` → `member-out-loud.html`. It is
+  `member-*`, so it stays off the sitemap, and it is noindex. The dashboard's
+  ROUTES/PAGES and in-page text map (`read it`, `play episode`) point to it.
+  `_redirects`: `/writing` 301 → `/out-loud?s=articles`, `/podcast` 301 → `/out-loud`.
+  `member-reading.html` now serves the FAQ only.
+- **The page:** a tab row (The podcast · Articles · Shorter form; `?s=articles|shorter`, Back
+  restores). The banner is the destination's (Out Loud plate) while the podcast is open.
+  Opening Articles or Shorter form swaps in that section's own plate and copy as a
+  shorter band. Each section shows an honest empty state ("No episodes yet." /
+  "Nothing published yet."); no episode, article or clip is invented.
+- **The banner component, `sr-bn-`** (new, claimed in CLAUDE.md; Part 4 consolidates onto
+  it): the plate is a `<picture>` (webp, then jpg, `alt=""`); the copy is HTML over it,
+  nothing baked in; the pull quote sits at the right with a short gold rule; the rail is
+  below on its own dark ground.
+  **Section band height:** 2400:520 against the destination's 2400:806 (about 65%) where
+  the ratio governs. Where the copy sets the height (≤1100px), the destination keeps a
+  floor (480px, and 640px at ≤700), so a band carrying the same copy is always the
+  shorter. Measured frame heights, destination / Articles / Shorter form: 1440
+  434/350/318 · 1100 480/363/337 · 1024 480/357/331 · 768 480/347/285 · 375
+  640/386/385. Nothing is clipped at any width.
+- **Copy:** DASHBOARD-BANNERS.md §7 (Out Loud), §3 (Articles) and §2 (Shorter form), word
+  for word, including the rails. "Out Loud" is italic gold and "SafeRise" ivory, as
+  specified. **For the founder:** the rails are static labels, not links. Several name
+  things that do not exist yet: PEOPLE, THEMES, CLIPS, JOIN IN (Out Loud); SAVE, SHARE
+  (Shorter form); the Articles categories. Nothing breaks, but a member may read them as
+  navigation.
+- N3 added to `claude/NAMING-DECISIONS.md`, as DASHBOARD-BANNERS.md asks.
+- **VERIFY 3:** O1 pass: one rail entry; "Article" and "The SafeRise podcast" are gone from
+  the rail and the dashboard maps · O2 pass: all three sections reachable by tab and
+  by URL, each with its plate · O3 pass (heights above) · O4 pass: transcribed verbatim
+  from the document, not compared by script · O5 pass: legible over the plates at
+  1440/1024/375 (the scrim darkens the bottom-right under the pull quote); no sideways
+  scroll at any width · O6 screenshots: destination, Articles and Shorter form at 1440,
+  Articles at 375.

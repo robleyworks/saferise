@@ -47,6 +47,22 @@ Not a summary. Not a report. Not an analysis. Not insights. Not coaching.
 
 ---
 
+## N3 · "SafeRise Out Loud"
+
+Founder-ruled, 30 September 2026 (recorded from `DASHBOARD-BANNERS.md`, built as
+SR-488). **SafeRise Out Loud is the name for all of it: the podcast, articles
+and short form.** It is not three pages. It is one destination with three sections
+inside it: the podcast, Articles, Shorter form.
+
+- The rail carries one entry, **Out Loud**. "Article" and "The SafeRise podcast"
+  are retired as names and as rail entries.
+- The route is `/out-loud`. `/writing` and `/podcast` 301 to their sections.
+- A section keeps its own banner and copy, shown as a shorter band inside the
+  destination, so it reads as moving within one place rather than arriving
+  somewhere new.
+
+---
+
 ## Why this matters more than it looks
 
 Two names for one thing is the failure mode both of these rulings exist to

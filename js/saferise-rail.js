@@ -89,13 +89,11 @@
       round: true,
       d: '<path d="M6 3.5h11a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6z"/><path d="M9 3.5v17"/><path d="M12 8h3.5"/>'
     },
-    article: {
+    /* SR-488 · Out Loud (podcast, articles and short form together): a
+       microphone with the sound going out from it */
+    outloud: {
       round: true,
-      d: '<path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h4"/>'
-    },
-    podcast: {
-      round: true,
-      d: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/>'
+      d: '<rect x="9.5" y="3" width="5" height="10" rx="2.5"/><path d="M6.5 10.5a5.5 5.5 0 0 0 11 0"/><path d="M12 16v4"/><path d="M3.5 7.5a10 10 0 0 0 0 7M20.5 7.5a10 10 0 0 1 0 7"/>'
     },
     faq: {
       round: true,
@@ -127,8 +125,8 @@
     { key: 'clearing',  label: 'The Clearing' },
     /* SR-485 · "Add a track" removed. Plans are reached from Account & plan
        (the member's own) and /plans (the ladder). */
-    { key: 'article',   label: 'Article' },
-    { key: 'podcast',   label: 'The SafeRise podcast' },
+    /* SR-488 · one entry for the podcast, articles and short form (N3) */
+    { key: 'outloud',   label: 'Out Loud' },
     { key: 'faq',       label: 'FAQ' },
     /* SR-478 · The Chosen Self and Decisions are tabs of My Records now
        (MY-RECORDS-HUB.md L1): one rail entry, not two destinations. */
@@ -161,8 +159,7 @@
        dashboard.html#route= (whose resolver ignores PAGES keys). */
     records: '/records',
     faq: '/member-reading.html?r=faq',
-    article: '/member-reading.html?r=article',
-    podcast: '/member-reading.html?r=podcast',
+    outloud: '/out-loud',
     clearing: '/member-clearing.html',
     /* SR-453 (PASS-AH §1) · legal, for the same reason as account above:
        it is in dashboard.html's PAGES, so without it here a rail click on a

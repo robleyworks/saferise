@@ -94,8 +94,11 @@
 /member-record.html   r=chosen     /records?tab=chosen     301
 /member-record.html   /records?tab=chosen         301
 /faq                  /member-reading.html?r=faq       200
-/writing              /member-reading.html?r=article   200
-/podcast              /member-reading.html?r=podcast   200
+# SR-488 · Out Loud replaces Article and the podcast: one destination, three
+# sections. The two old paths land on their section.
+/out-loud             /member-out-loud.html            200
+/writing              /out-loud?s=articles             301
+/podcast              /out-loud                        301
 /clearing             /member-clearing.html       200
 # SR-485 · Start Here, a member's first stop (internally "orientation").
 /start-here           /member-start-here.html     200

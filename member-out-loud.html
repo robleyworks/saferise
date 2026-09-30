@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — member-out-loud.html · SR-488 · SAFERISE OUT LOUD, at /out-loud
+  claude/DASHBOARD-BANNERS.md N3: Out Loud is the name for the podcast,
+  the articles and the short form together. It is one destination with three
+  sections, not three pages. It replaces the rail's "Article" and "The SafeRise
+  podcast" entries (both served by member-reading.html before).
+
+  The banner is the destination's (Out Loud, full height) while the podcast
+  section is open. Opening Articles or Shorter form swaps in that section's own
+  plate and copy as a shorter band (sr-bn--band), so it reads as moving within
+  one place. Every word of banner copy is DASHBOARD-BANNERS.md's, set in HTML
+  over the clean plates.
+
+  Nothing is published in any section yet, so each shows an honest empty
+  state. No episodes, articles or clips are invented.
+  Page styling: sr-bn- and sr-ol- in css/saferise-system.css.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#0A0A0F}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRise Out Loud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/saferise-method.css">
+<link rel="stylesheet" href="/css/saferise-rail.css">
+<link rel="stylesheet" href="/css/saferise-system.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="sr-dash-navrail" id="srRail" aria-label="Sections"></nav>
+
+<main id="main" class="shell">
+
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="/dashboard.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Dashboard
+  </a>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<!-- The banner. Rendered here for the destination; the script below swaps it
+     for the section that is open. -->
+<header class="sr-bn" id="srOlBanner" aria-labelledby="srOlTitle">
+  <div class="sr-bn-frame">
+    <picture class="sr-bn-art"><source type="image/webp" srcset="/assets/dashboard/banner-out-loud.webp"><img src="/assets/dashboard/banner-out-loud.jpg" alt="" width="2400" height="806"></picture>
+    <div class="sr-bn-copy">
+      <p class="sr-bn-kick">CONVERSATIONS THAT GO SOMEWHERE</p>
+      <h1 class="sr-bn-h" id="srOlTitle">SafeRise <em>Out Loud</em></h1>
+      <p class="sr-bn-sub">Say the thing underneath the thing.</p>
+      <p class="sr-bn-body">Conversations about pressure, relationships, identity, work, desire, responsibility and the private experiences people often carry without language.</p>
+      <p class="sr-bn-body">Not interviews for performance. Conversations for recognition.</p>
+    </div>
+    <p class="sr-bn-pull">Real conversations. A more human tomorrow.</p>
+  </div>
+  <ul class="sr-bn-rail" aria-label="Out Loud">
+    <li><span class="sr-bn-raill">LATEST EPISODE</span><span class="sr-bn-railt">Start with the newest conversation.</span></li>
+    <li><span class="sr-bn-raill">PEOPLE</span><span class="sr-bn-railt">Guests and perspectives.</span></li>
+    <li><span class="sr-bn-raill">THEMES</span><span class="sr-bn-railt">Find the conversations that meet you.</span></li>
+    <li><span class="sr-bn-raill">CLIPS</span><span class="sr-bn-railt">Short moments worth keeping.</span></li>
+    <li><span class="sr-bn-raill">JOIN IN</span><span class="sr-bn-railt">Questions from the SafeRise community.</span></li>
+  </ul>
+</header>
+
+<div class="sr-ol-hub" id="srOlHub">
+  <div class="sr-ol-tabs" role="tablist" aria-label="SafeRise Out Loud">
+    <button type="button" role="tab" id="sr-ol-t-podcast" aria-controls="sr-ol-p-podcast" data-ol-tab="podcast" aria-selected="true">The podcast</button>
+    <button type="button" role="tab" id="sr-ol-t-articles" aria-controls="sr-ol-p-articles" data-ol-tab="articles" aria-selected="false" tabindex="-1">Articles</button>
+    <button type="button" role="tab" id="sr-ol-t-shorter" aria-controls="sr-ol-p-shorter" data-ol-tab="shorter" aria-selected="false" tabindex="-1">Shorter form</button>
+  </div>
+  <section class="sr-ol-panel" role="tabpanel" id="sr-ol-p-podcast" aria-labelledby="sr-ol-t-podcast">
+    <div class="sr-ol-empty"><p class="sr-ol-emptyh">No episodes yet.</p><p class="sr-ol-emptyb">The first conversations will appear here when they are published.</p></div>
+  </section>
+  <section class="sr-ol-panel" role="tabpanel" id="sr-ol-p-articles" aria-labelledby="sr-ol-t-articles" hidden>
+    <div class="sr-ol-empty"><p class="sr-ol-emptyh">Nothing published yet.</p><p class="sr-ol-emptyb">Articles will appear here when they are published.</p></div>
+  </section>
+  <section class="sr-ol-panel" role="tabpanel" id="sr-ol-p-shorter" aria-labelledby="sr-ol-t-shorter" hidden>
+    <div class="sr-ol-empty"><p class="sr-ol-emptyh">Nothing published yet.</p><p class="sr-ol-emptyb">Short pieces will appear here when they are published.</p></div>
+  </section>
+</div>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+  /* DASHBOARD-BANNERS.md, word for word. The podcast section carries the
+     destination's banner; the other two carry their own, as a shorter band. */
+  var BANNERS = {
+    podcast: {
+      band: false, plate: 'banner-out-loud',
+      kick: 'CONVERSATIONS THAT GO SOMEWHERE',
+      h: 'SafeRise <em>Out Loud</em>',
+      sub: 'Say the thing underneath the thing.',
+      body: ['Conversations about pressure, relationships, identity, work, desire, responsibility and the private experiences people often carry without language.',
+             'Not interviews for performance. Conversations for recognition.'],
+      pull: 'Real conversations. A more human tomorrow.',
+      rail: [['LATEST EPISODE', 'Start with the newest conversation.'], ['PEOPLE', 'Guests and perspectives.'],
+             ['THEMES', 'Find the conversations that meet you.'], ['CLIPS', 'Short moments worth keeping.'],
+             ['JOIN IN', 'Questions from the SafeRise community.']]
+    },
+    articles: {
+      band: true, plate: 'banner-articles',
+      kick: 'READ A LITTLE FURTHER.',
+      h: 'Some things need more than a caption.',
+      sub: 'Ideas worth staying with for longer than a scroll.',
+      body: ['Essays, observations and practical thinking around the states, patterns and situations SafeRise is built for. Read what helps. Leave what does not.'],
+      pull: 'Take your time with this one.',
+      rail: [['LATEST.', ''], ['METHOD.', ''], ['RELATIONSHIPS.', ''], ['WORK &amp; LEADERSHIP.', ''], ['LIFE &amp; LOAD.', '']]
+    },
+    shorter: {
+      band: true, plate: 'banner-shorter-form',
+      kick: 'SHORTER FORM',
+      h: 'A thought worth carrying with you.',
+      sub: '',
+      body: ['Short observations, clips and reminders from across SafeRise.',
+             'Not everything needs a full protocol. Sometimes one sentence is enough to interrupt the pattern and give you another place to stand.'],
+      pull: 'Small enough to take with you.',
+      rail: [['WATCH', 'Short video.'], ['LISTEN', 'Audio and excerpts.'], ['READ', 'Short observations.'],
+             ['SAVE', 'Keep what lands.'], ['SHARE', 'Send something useful.']]
+    }
+  };
+  var TABS = ['podcast', 'articles', 'shorter'];
+  var PARAM = { podcast: '', articles: 'articles', shorter: 'shorter' };
+  var banner = document.getElementById('srOlBanner');
+  var hub = document.getElementById('srOlHub');
+
+  function bannerHTML(b) {
+    return '<div class="sr-bn-frame">' +
+        '<picture class="sr-bn-art"><source type="image/webp" srcset="/assets/dashboard/' + b.plate + '.webp">' +
+        '<img src="/assets/dashboard/' + b.plate + '.jpg" alt="" width="2400" height="806"></picture>' +
+        '<div class="sr-bn-copy"><p class="sr-bn-kick">' + b.kick + '</p>' +
+          '<h1 class="sr-bn-h" id="srOlTitle">' + b.h + '</h1>' +
+          (b.sub ? '<p class="sr-bn-sub">' + b.sub + '</p>' : '') +
+          b.body.map(function (p) { return '<p class="sr-bn-body">' + p + '</p>'; }).join('') +
+        '</div><p class="sr-bn-pull">' + b.pull + '</p></div>' +
+      '<ul class="sr-bn-rail" aria-label="' + (b.band ? 'In this section' : 'Out Loud') + '">' + b.rail.map(function (r) {
+        return '<li><span class="sr-bn-raill">' + r[0] + '</span>' + (r[1] ? '<span class="sr-bn-railt">' + r[1] + '</span>' : '') + '</li>';
+      }).join('') + '</ul>';
+  }
+
+  function show(tab, push) {
+    if (TABS.indexOf(tab) < 0) tab = 'podcast';
+    var b = BANNERS[tab];
+    banner.className = 'sr-bn' + (b.band ? ' sr-bn--band' : '');
+    banner.innerHTML = bannerHTML(b);
+    TABS.forEach(function (t) {
+      var btn = hub.querySelector('[data-ol-tab="' + t + '"]'), on = t === tab;
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+      btn.tabIndex = on ? 0 : -1;
+      document.getElementById('sr-ol-p-' + t).hidden = !on;
+    });
+    document.title = tab === 'podcast' ? 'SafeRise Out Loud' : 'SafeRise Out Loud — ' + (tab === 'articles' ? 'Articles' : 'Shorter form');
+    if (push) history.pushState({ tab: tab }, '', location.pathname + (PARAM[tab] ? '?s=' + PARAM[tab] : ''));
+  }
+  function fromUrl() {
+    var m = /[?&]s=(articles|shorter)\b/.exec(location.search);
+    return m ? m[1] : 'podcast';
+  }
+
+  hub.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-ol-tab]');
+    if (b) show(b.getAttribute('data-ol-tab'), true);
+  });
+  hub.addEventListener('keydown', function (e) {
+    var b = e.target.closest('[data-ol-tab]');
+    if (!b || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
+    e.preventDefault();
+    var i = TABS.indexOf(b.getAttribute('data-ol-tab'));
+    var next = TABS[(i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    show(next, true);
+    hub.querySelector('[data-ol-tab="' + next + '"]').focus();
+  });
+  window.addEventListener('popstate', function () { show(fromUrl(), false); });
+  var first = fromUrl();
+  if (first !== 'podcast') show(first, false);
+})();
+</script>
+<script src="/js/saferise-auth.js"></script>
+<script src="/js/saferise-access.js"></script>
+<script src="/js/saferise-rail.js"></script>
+<script>SafeRiseRail.render('outloud');</script>
+</body>
+</html>

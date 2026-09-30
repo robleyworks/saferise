@@ -1786,8 +1786,7 @@
     account:    ['Account & plan', 'Your plan and billing, preferences, privacy and data export, and closing your account.', '/account'],
     clearing:   ['The Clearing', 'The guided session, with the player and the log that records it.', '/clearing'],
     plans:      ['Plans', 'What each track includes and what it costs. Access is cumulative.', '/plans'],
-    article:    ['Article', 'A short written piece from Andre.', '/writing'],
-    podcast:    ['The SafeRise podcast', 'Episode player and the back catalogue.', '/podcast'],
+    outloud:    ['SafeRise Out Loud', 'The podcast, articles and shorter form, in one place.', '/out-loud'],
     reading:    ['Understanding SafeRise', 'The science, the frameworks and the method.', '/about'],
     faq:        ['FAQ', 'What the evidence shows, whether your journal is private, what to do mid-episode, and what happens if you stop.', '/faq'],
     records:    ['My Records', 'Every session, the statements you spoke, your decisions, your journal and what you saved.', '/records'],
@@ -1813,8 +1812,8 @@
     chosen:    '/records?tab=chosen',
     decisions: '/records?tab=decisions',
     faq:       'member-reading.html?r=faq',
-    article:   'member-reading.html?r=article',
-    podcast:   'member-reading.html?r=podcast',
+    /* SR-488 · Article and the podcast are one destination, Out Loud */
+    outloud:   '/out-loud',
     clearing:  'member-clearing.html',
     /* SR-485 · Start Here; "Add a track" (checkout) removed from the rail, and
        anything that routed to it now goes to plans */
@@ -1912,8 +1911,8 @@
      'browse your library' (library). A row left behind here keeps a dead route
      reachable from any link that happens to carry the same text. */
   var TEXTMAP = [
-    [/play the clearing/i,'clearing'], [/^read it$/i,'article'], [/what is included/i,'plans'],
-    [/play episode/i,'podcast'], [/^add /i,'plans'],
+    [/play the clearing/i,'clearing'], [/^read it$/i,'outloud'], [/what is included/i,'plans'],
+    [/play episode/i,'outloud'], [/^add /i,'plans'],
     [/chosen self/i,'chosen'], [/your decisions/i,'decisions'],
     [/the science|the frameworks|the method|the stories/i,'reading'], [/read the faq|^faq$/i,'faq'],
     [/^account$/i,'account'], [/^billing$/i,'account'], [/^support$/i,'faq'],
