@@ -346,6 +346,11 @@
       panel.hidden = !on;
       if (on) panel.innerHTML = RENDER[t]();
     });
+    /* SR-484 · the banner rail names the same five tabs (L7); the open one is marked */
+    Array.prototype.forEach.call(document.querySelectorAll('[data-mr-rail]'), function (r) {
+      if (r.getAttribute('data-mr-rail') === state.tab) r.setAttribute('aria-current', 'true');
+      else r.removeAttribute('aria-current');
+    });
   }
 
   /* ═══ tabs: no page load; ?tab= in the address so Back restores it ═══ */
@@ -441,6 +446,15 @@
       onClick(e);
     });
     root.addEventListener('keydown', onKey);
+    /* SR-484 · a rail item selects its tab, the same as the tab row, then brings
+       the tab row into view and moves focus to the tab it opened */
+    document.addEventListener('click', function (e) {
+      var r = e.target.closest('[data-mr-rail]');
+      if (!r) return;
+      go(r.getAttribute('data-mr-rail'), true);
+      var tb = root.querySelector('[data-tabbtn="' + state.tab + '"]');
+      if (tb) { tb.focus({ preventScroll: true }); tb.scrollIntoView({ block: 'nearest' }); }
+    });
     global.addEventListener('popstate', function () { go(tabFromUrl(), false); });
     state.tab = tabFromUrl();
     history.replaceState({ tab: state.tab }, '', location.pathname + location.search + location.hash);

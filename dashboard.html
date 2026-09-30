@@ -913,6 +913,10 @@
   }
 })();
 </script>
+<!-- SR-484 · the Sovereign upsell band (sr-su-). It is built only when the
+     member's tier is not sovereign, so a sovereign member's markup has none of it. -->
+<script src="js/saferise-upsell.js"></script>
+<script>SafeRiseUpsell.mount();</script>
 <script src="js/saferise-rail.js"></script>
 <script>
 (function(){

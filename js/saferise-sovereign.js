@@ -459,7 +459,7 @@
     if (sov) {
       var a = guided.querySelector('audio');
       if (a && !a.paused) a.pause();
-      go('INVITE');
+      go(tierSettled ? 'INVITE' : 'HOLD');
     } else {
       teardown(); view = 'INVITE';
       root.innerHTML = '';
@@ -675,6 +675,28 @@
     return !!(global.SafeRiseAccess && typeof global.SafeRiseAccess.can === 'function' && global.SafeRiseAccess.can(cap));
   }
 
+  /* SR-484 · the tier arrives over the network (srAuth.plan(), the my_tier call),
+     after the page is up. Until SafeRiseAccess.ready settles, the tier is unknown,
+     not "free". A member who clicks Sovereign in that first moment is shown the
+     HOLD stage, which is the INVITE stage's own empty ground: no copy, no spinner,
+     no timer. They are never shown the upgrade offer for a tier they may own. When
+     the answer lands, the surface settles into whichever INVITE is true. It also
+     repaints if the tier changes later while the member is still on INVITE (a
+     sign-in, or a refreshed entitlement), rather than having read it once. */
+  var tierSettled = !(global.SafeRiseAccess && global.SafeRiseAccess.ready &&
+    typeof global.SafeRiseAccess.ready.then === 'function');
+  function onTierSettled() {
+    tierSettled = true;
+    if (!root.hidden && (view === 'HOLD' || view === 'INVITE')) go('INVITE');
+  }
+  if (!tierSettled) global.SafeRiseAccess.ready.then(onTierSettled, onTierSettled);
+  if (global.SafeRiseAccess && typeof global.SafeRiseAccess.onChange === 'function') {
+    global.SafeRiseAccess.onChange(function () {
+      /* only when the answer actually changed, so a routine refresh never moves focus */
+      if (tierSettled && !root.hidden && view === 'INVITE' && root.getAttribute('data-sv-voice') !== String(tierCan('voice'))) go('INVITE');
+    });
+  }
+
   function recordFromSession(s, readingState) {
     return {
       id: 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
@@ -815,6 +837,11 @@
   }
 
   var SCREENS = {
+    /* SR-484 · the tier is not known yet; see onTierSettled */
+    HOLD: function () {
+      return '<div class="sr-sv-stage sr-sv-stage--invite" aria-busy="true">' +
+        '<h2 class="sr-sv-h sr-sv-vh" tabindex="-1">Sovereign</h2></div>';
+    },
     INVITE: function () {
       /* SR-470 3.3 · offered, not hidden. Without the Sovereign tier the
          practice is still described, with the way to it — and the member's
@@ -1000,6 +1027,7 @@
     var key = PHASES.indexOf(v) > -1 ? 'PHASE' : v;
     root.innerHTML = SCREENS[key]();
     root.setAttribute('data-sv-view', v);
+    if (v === 'INVITE') root.setAttribute('data-sv-voice', String(tierCan('voice')));
     var h = root.querySelector('.sr-sv-h');
     if (h) h.focus({ preventScroll: true });
     var d = root.querySelector('.sr-sv-words');
@@ -1029,6 +1057,7 @@
 
   /* INVITE → (PERMISSION, once) → microphone → (MODEL, if not cached) → PRE_STATE */
   function beginFlow() {
+    if (!tierSettled) { go('HOLD'); return; }                 // SR-484 · never decide on an unknown tier
     if (!tierCan('voice')) { go('INVITE'); return; }        // SR-470 · the offer, not the flow
     if (!STT) { showFail('unavailable'); return; }
     var why = STT.probe();

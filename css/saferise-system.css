@@ -6573,35 +6573,61 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
 .sr-mr-page{overflow-x:hidden}
 .sr-mr-vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* the banner — 2400×806; the photograph is not yet supplied, so a toned
-   placeholder reserves the frame. Copy in the left third, rail at the foot. */
-.sr-mr-banner{position:relative;aspect-ratio:2400/806;border-radius:16px;overflow:hidden;isolation:isolate;
-  margin-top:8px;display:grid;grid-template-columns:minmax(0,1fr);align-content:center}
-.sr-mr-bannerart{position:absolute;inset:0;z-index:-2;
-  background:radial-gradient(60% 90% at 66% 45%,#2a2433 0%,#15131c 55%,#0c0b11 100%)}
-.sr-mr-banner::after{content:'';position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(95deg,rgba(8,8,12,.92) 0%,rgba(8,8,12,.7) 30%,rgba(8,8,12,.1) 58%,rgba(8,8,12,.3) 100%)}
-.sr-mr-bannercopy{max-width:36%;min-width:300px;padding:0 0 64px 48px}
+/* the banner — 2400×806 (SR-484). The photograph is a <picture> behind the
+   copy. The frame keeps the photograph's ratio and grows past it when the copy
+   needs more room, so the copy is always over the photograph at every width,
+   never beneath it. The copy is on the left, the pull quote at the right, and
+   the rail (the five tabs, L7) sits below on its own dark ground. The colours
+   are fixed rather than themed, because the ground is the photograph whichever
+   reading mode is on. */
+.sr-mr-banner{margin-top:8px;border-radius:16px;overflow:hidden;background:#0C0B11;
+  box-shadow:0 18px 44px -24px rgba(0,0,0,.8)}
+.sr-mr-bannerframe{position:relative;isolation:isolate;aspect-ratio:2400/806;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px;padding:48px}
+.sr-mr-bannerart{position:absolute;inset:0;z-index:-2;display:block}
+.sr-mr-bannerart img{width:100%;height:100%;object-fit:cover;object-position:62% 30%;display:block}
+.sr-mr-bannerframe::after{content:'';position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(95deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.74) 30%,rgba(8,8,12,.12) 58%,rgba(8,8,12,.28) 100%),
+             linear-gradient(0deg,rgba(8,8,12,.62) 0%,rgba(8,8,12,0) 38%)}
+.sr-mr-bannercopy{max-width:40ch;align-self:center}
 .sr-mr-kick{font-family:'Cinzel',serif;font-weight:500;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin:0}
 .sr-mr-banner h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,4.2vw,60px);line-height:1.02;color:#F5EDD8;margin:14px 0 0}
+/* .sr-mr-sub is also the section wrapper inside an opened session (records.js).
+   That collision dates from SR-478. The unscoped rule is kept exactly as it was, so
+   opened sessions render unchanged. Only the banner's own colour is scoped. */
 .sr-mr-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,1.7vw,23px);color:#D8D2C4;margin:10px 0 0}
-.sr-mr-body{font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;color:#B9B4C2;margin:16px 0 0;max-width:44ch}
-.sr-mr-body strong{color:#F5EDD8;font-weight:500}
-.sr-mr-rail{position:absolute;left:0;right:0;bottom:0;margin:0;padding:14px 48px;list-style:none;
-  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;
-  box-shadow:inset 0 1px 0 rgba(245,237,216,.12);background:rgba(8,8,12,.45)}
-.sr-mr-rail li{font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#C9C4B8}
+.sr-mr-bannercopy .sr-mr-sub{color:#E4DDCC}
+.sr-mr-body{font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;color:#D2CDC4;margin:16px 0 0;max-width:44ch}
+.sr-mr-body + .sr-mr-body{margin-top:10px}
+.sr-mr-pull{margin:0;max-width:24ch;text-align:right;justify-self:end;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(20px,1.9vw,27px);line-height:1.25;color:#F5EDD8;text-shadow:0 1px 18px rgba(8,8,12,.7)}
+.sr-mr-pull::after{content:'';display:block;width:44px;height:1px;margin:12px 0 0 auto;background:var(--gold)}
+
+/* the rail — five buttons, each opens its tab */
+.sr-mr-rail{margin:0;padding:6px 32px 10px;list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px 8px;
+  background:#0C0B11;box-shadow:inset 0 1px 0 rgba(245,237,216,.1)}
+.sr-mr-railitem{appearance:none;background:transparent;border-style:none;cursor:pointer;width:100%;height:100%;text-align:left;
+  display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;row-gap:4px;padding:14px 12px;border-radius:10px;color:inherit;
+  transition:background-color .25s var(--sr-ease)}
+.sr-mr-railitem:hover{background:rgba(245,237,216,.04)}
+.sr-mr-railitem:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.sr-mr-railitem[aria-current=true]{box-shadow:inset 0 -2px 0 var(--gold)}
+.sr-mr-railicon{grid-row:1 / span 2;width:18px;height:18px;margin-top:1px;fill:none;stroke:var(--gold);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sr-mr-raillabel{font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#E4DDCC;line-height:1.5}
+.sr-mr-railline{font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.5;color:#A9A4B0}
 @media(max-width:1100px){
-  .sr-mr-banner{aspect-ratio:auto;display:block}
-  .sr-mr-bannerart{position:relative;inset:auto;display:block;aspect-ratio:2400/806}
-  .sr-mr-banner::after{inset:0 0 auto 0;height:auto;aspect-ratio:2400/806}
-  .sr-mr-bannercopy{max-width:none;min-width:0;padding:28px 24px 8px;background:var(--bg2)}
-  .sr-mr-banner h1,.sr-mr-body strong{color:var(--text)}
-  .sr-mr-sub{color:var(--text2)} .sr-mr-body{color:var(--text2)}
-  .sr-mr-rail{position:static;grid-template-columns:repeat(3,minmax(0,1fr));padding:16px 24px 20px;background:var(--bg2)}
-  .sr-mr-rail li{color:var(--text3)}
+  .sr-mr-bannerframe{grid-template-columns:minmax(0,1fr);align-items:start;padding:40px 32px}
+  .sr-mr-bannerart img{object-position:68% 30%}
+  .sr-mr-bannerframe::after{background:linear-gradient(95deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.78) 45%,rgba(8,8,12,.35) 75%,rgba(8,8,12,.45) 100%)}
+  .sr-mr-pull{max-width:none}
+  .sr-mr-rail{grid-template-columns:repeat(3,minmax(0,1fr));padding:6px 16px 10px}
 }
-@media(max-width:560px){.sr-mr-rail{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+  .sr-mr-bannerframe{padding:32px 22px 28px;aspect-ratio:auto;min-height:420px}
+  .sr-mr-bannerart img{object-position:74% 25%}
+  .sr-mr-bannerframe::after{background:linear-gradient(180deg,rgba(8,8,12,.72) 0%,rgba(8,8,12,.82) 55%,rgba(8,8,12,.9) 100%)}
+  .sr-mr-rail{grid-template-columns:minmax(0,1fr);padding:4px 10px 10px}
+}
 
 /* the tab row, directly beneath the banner */
 .sr-mr-hub{margin-top:0;padding-bottom:64px}
@@ -6681,3 +6707,80 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
 .sr-mr-emptyh{margin:0;font-family:'Cormorant Garamond',serif;font-size:24px;line-height:1.25;color:var(--text)}
 .sr-mr-emptyb{margin:10px 0 0;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;color:var(--text2);max-width:58ch}
 .sr-mr-empty p:last-child:not(.sr-mr-emptyb){margin:20px 0 0}
+
+/* ═══════════════════════════════════════════════════════════════
+   sr-su- · the Sovereign upsell band and its dialog, dashboard.html
+   (js/saferise-upsell.js) — SR-484 Part B. Built only for members
+   without the Sovereign tier. The copy is HTML over the photograph,
+   in the left two-thirds, with the pull quote at the right. The frame
+   keeps the photograph's 3:1 ratio and grows when the copy needs more
+   room. No borders: inset ring or shadow only. The colours are fixed
+   rather than themed, because the ground is the photograph.
+   ═══════════════════════════════════════════════════════════════ */
+/* no overflow:hidden on the band itself: it would zero the ratio's content minimum
+   and clip the copy instead of letting the frame grow. The art and scrim clip to
+   the radius instead. */
+.sr-su-band{position:relative;isolation:isolate;border-radius:18px;margin:56px 0 0;padding:52px 56px;
+  aspect-ratio:2400/800;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);align-items:center;gap:32px;
+  background:#0C0B11;box-shadow:0 18px 44px -24px rgba(0,0,0,.8)}
+.sr-su-art{position:absolute;inset:0;z-index:-2;display:block;border-radius:inherit;overflow:hidden}
+.sr-su-art img{width:100%;height:100%;object-fit:cover;object-position:70% 35%;display:block}
+.sr-su-band::after{content:'';position:absolute;inset:0;z-index:-1;border-radius:inherit;
+  background:linear-gradient(95deg,rgba(8,8,12,.92) 0%,rgba(8,8,12,.8) 34%,rgba(8,8,12,.3) 62%,rgba(8,8,12,.35) 100%),
+             linear-gradient(0deg,rgba(8,8,12,.55) 0%,rgba(8,8,12,0) 40%)}
+.sr-su-copy{max-width:52ch}
+.sr-su-eyebrow{margin:0;font-family:'Cinzel',serif;font-weight:500;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#A9A4B0}
+.sr-su-kick{margin:10px 0 0;font-family:'Cinzel',serif;font-weight:500;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold)}
+.sr-su-band .sr-su-h{margin:12px 0 0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(40px,4.4vw,62px);line-height:1.02;color:#F5EDD8;letter-spacing:0}
+.sr-su-sub{margin:10px 0 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(19px,1.8vw,24px);line-height:1.3;color:#E4DDCC}
+.sr-su-body{margin:16px 0 0;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;color:#D2CDC4;max-width:52ch}
+.sr-su-close{margin:14px 0 0;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;color:#D2CDC4}
+.sr-su-gold{color:var(--gold);font-weight:500}
+.sr-su-acts{margin:24px 0 0}
+.sr-su-btn{appearance:none;border-style:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 26px;
+  border-radius:999px;background:var(--gold);color:#14100A;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;letter-spacing:.02em;
+  text-decoration:none;box-shadow:0 10px 28px -14px rgba(212,168,67,.7);transition:background-color .25s var(--sr-ease)}
+.sr-su-btn:hover{background:var(--gold-lt)}
+.sr-su-btn:focus-visible,.sr-su-plain:focus-visible,.sr-su-x:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.sr-su-pull{margin:0;justify-self:end;align-self:end;max-width:21ch;text-align:right;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(20px,1.9vw,27px);line-height:1.25;color:#F5EDD8;text-shadow:0 1px 18px rgba(8,8,12,.75)}
+.sr-su-pull::after{content:'';display:block;width:44px;height:1px;margin:12px 0 0 auto;background:var(--gold)}
+@media(max-width:1100px){
+  .sr-su-band{grid-template-columns:minmax(0,1fr);padding:44px 36px;align-items:start}
+  .sr-su-art img{object-position:78% 30%}
+  .sr-su-band::after{background:linear-gradient(95deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.8) 50%,rgba(8,8,12,.45) 80%,rgba(8,8,12,.55) 100%)}
+  .sr-su-pull{max-width:none}
+}
+@media(max-width:700px){
+  .sr-su-band{aspect-ratio:auto;padding:34px 22px 30px;margin-top:40px;border-radius:14px}
+  .sr-su-art img{object-position:80% 25%}
+  .sr-su-band::after{background:linear-gradient(180deg,rgba(8,8,12,.74) 0%,rgba(8,8,12,.84) 55%,rgba(8,8,12,.9) 100%)}
+  .sr-su-btn{width:100%}
+}
+
+/* the dialog — a real <dialog>, opened with showModal() */
+.sr-su-dialog{border-style:none;padding:0;margin:auto;width:min(880px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;
+  border-radius:18px;background:#121118;color:#F5EDD8;box-shadow:inset 0 0 0 1px rgba(245,237,216,.09),0 40px 90px -30px rgba(0,0,0,.9)}
+.sr-su-dialog::backdrop{background:rgba(6,6,10,.72)}
+.sr-su-dlgin{padding:36px 40px 32px}
+.sr-su-dlghead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.sr-su-dialog .sr-su-dlgh{margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(30px,3vw,40px);line-height:1.1;color:#F5EDD8}
+.sr-su-x{appearance:none;border-style:none;cursor:pointer;flex:none;width:44px;height:44px;border-radius:999px;display:grid;place-items:center;
+  background:rgba(245,237,216,.06);color:#D2CDC4;box-shadow:inset 0 0 0 1px rgba(245,237,216,.1)}
+.sr-su-x svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.sr-su-x:hover{background:rgba(245,237,216,.1)}
+.sr-su-points{list-style:none;margin:28px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.sr-su-point{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px;row-gap:6px;padding:20px 20px 22px;border-radius:14px;
+  background:rgba(245,237,216,.03);box-shadow:inset 0 0 0 1px rgba(245,237,216,.07)}
+.sr-su-icon{grid-row:1 / span 2;width:22px;height:22px;margin-top:1px;fill:none;stroke:var(--gold);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sr-su-plabel{font-family:'Cinzel',serif;font-weight:500;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#E4DDCC;line-height:1.6}
+.sr-su-pline{font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.6;color:#B9B4C2}
+.sr-su-dlgfoot{margin:28px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.sr-su-plain{appearance:none;border-style:none;background:transparent;cursor:pointer;min-height:46px;padding:0 10px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:#B9B4C2}
+.sr-su-plain:hover{color:#F5EDD8}
+@media(max-width:700px){
+  .sr-su-dlgin{padding:26px 20px 24px}
+  .sr-su-points{grid-template-columns:minmax(0,1fr)}
+  .sr-su-dlgfoot .sr-su-btn{width:100%}
+}

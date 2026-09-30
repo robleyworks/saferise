@@ -41,18 +41,32 @@
   </div>
 </div>
 
-<!-- The banner. 2400×806, the Sovereign banner's ratio. The photograph is not
-     yet supplied: a toned placeholder reserves the exact space. -->
+<!-- The banner. 2400×806. SR-484 · the founder-approved copy from
+     claude/MY-RECORDS-HUB.md (30 September), replacing SR-478's placeholder copy.
+     The copy is HTML over the photograph, never baked into it, so it reflows. The
+     frame keeps the photograph's ratio and grows when the copy needs more room.
+     L7 · the rail is the five tabs, and each item opens its tab. -->
 <header class="sr-mr-banner" aria-labelledby="srMrTitle">
-  <div class="sr-mr-bannerart" aria-hidden="true"></div>
-  <div class="sr-mr-bannercopy">
-    <p class="sr-mr-kick">Same you. Written down.</p>
-    <h1 id="srMrTitle">My Records</h1>
-    <p class="sr-mr-sub">Everything I have said, chosen and decided.</p>
-    <p class="sr-mr-body">This is where the work accumulates. Sessions run, statements spoken in Rise, decisions named, entries written, and everything saved to come back to. <strong>Nothing here was written for me.</strong></p>
+  <div class="sr-mr-bannerframe">
+    <picture class="sr-mr-bannerart">
+      <source srcset="/assets/records/mr-banner.webp" type="image/webp">
+      <img src="/assets/records/mr-banner.jpg" alt="" width="2400" height="806" decoding="async">
+    </picture>
+    <div class="sr-mr-bannercopy">
+      <p class="sr-mr-kick">What I am building</p>
+      <h1 id="srMrTitle">My Records</h1>
+      <p class="sr-mr-sub">You are not the same person who started.</p>
+      <p class="sr-mr-body">Statements spoken in Rise. Decisions named. Where you started and where you finished, in your own words.</p>
+      <p class="sr-mr-body">Read back far enough and you can see the distance.</p>
+    </div>
+    <p class="sr-mr-pull">Proof, in my own words.</p>
   </div>
-  <ul class="sr-mr-rail" aria-label="What My Records holds">
-    <li>Every session</li><li>My own words</li><li>What I decided</li><li>My journal</li><li>Saved</li><li>Mine alone</li>
+  <ul class="sr-mr-rail" aria-label="My Records sections">
+    <li><button type="button" class="sr-mr-railitem" data-mr-rail="sessions" aria-controls="sr-mr-p-sessions"><svg class="sr-mr-railicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="sr-mr-raillabel">Every Session</span><span class="sr-mr-railline">Guided and Sovereign, newest first.</span></button></li>
+    <li><button type="button" class="sr-mr-railitem" data-mr-rail="chosen" aria-controls="sr-mr-p-chosen"><svg class="sr-mr-railicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="4"/></svg><span class="sr-mr-raillabel">The Chosen Self</span><span class="sr-mr-railline">Statements I spoke. Never a line I did not say.</span></button></li>
+    <li><button type="button" class="sr-mr-railitem" data-mr-rail="decisions" aria-controls="sr-mr-p-decisions"><svg class="sr-mr-railicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3v7a4 4 0 0 0 4 4h8"/><path d="M15 10l4 4-4 4"/></svg><span class="sr-mr-raillabel">Decisions</span><span class="sr-mr-railline">The conversations and actions I named for myself.</span></button></li>
+    <li><button type="button" class="sr-mr-railitem" data-mr-rail="journal" aria-controls="sr-mr-p-journal"><svg class="sr-mr-railicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 20l1-4L16 6l3 3L9 19z"/><path d="M14 8l3 3"/></svg><span class="sr-mr-raillabel">Journal</span><span class="sr-mr-railline">Written or spoken, whenever I wanted to.</span></button></li>
+    <li><button type="button" class="sr-mr-railitem" data-mr-rail="saved" aria-controls="sr-mr-p-saved"><svg class="sr-mr-railicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 3h10v18l-5-4-5 4z"/></svg><span class="sr-mr-raillabel">Saved</span><span class="sr-mr-railline">What I kept to come back to.</span></button></li>
   </ul>
 </header>
 

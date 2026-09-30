@@ -104,7 +104,7 @@
 
   function rMembership() {
     var cards = TIERS.map(function (t) {
-      return '<article class="sr-pl-card' + (t.popular ? ' sr-pl-card--pop' : '') + '">' +
+      return '<article class="sr-pl-card' + (t.popular ? ' sr-pl-card--pop' : '') + '" id="sr-pl-tier-' + t.key + '">' +
         (t.popular ? '<span class="sr-pl-pop">Most popular</span>' : '') +
         '<div class="sr-pl-cardhead"><p class="sr-pl-tier">' + esc(t.name) + '</p><p class="sr-pl-tag">' + esc(t.tag) + '</p></div>' +
         '<p class="sr-pl-price"><span class="sr-pl-amt" data-m="' + esc(t.monthly) + '" data-a="' + esc(t.annual) + '">' + esc(t.monthly) + '</span>' +
@@ -237,6 +237,16 @@
     if (!mount) return;
     mount.innerHTML = rHero() + rMembership() + rLibrary() + rTools() + rClose();
     bindToggle(mount);
+    /* SR-484 · /plans#sr-pl-tier-sovereign (the dashboard's Sovereign dialog) must
+       land on that card. The cards are rendered here, after the browser has
+       already tried the hash, so it is applied once more now that they exist. */
+    var m = /^#(sr-pl-tier-(?:free|standard|premium|sovereign))$/.exec(global.location.hash || '');
+    var card = m && document.getElementById(m[1]);
+    if (card) {
+      card.scrollIntoView({ block: 'center' });
+      /* again once the images above it have their height, or it lands short */
+      if (document.readyState !== 'complete') global.addEventListener('load', function () { card.scrollIntoView({ block: 'center' }); }, { once: true });
+    }
   }
 
   global.SafeRisePlans = { render: render, TIERS: TIERS };

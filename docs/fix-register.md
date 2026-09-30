@@ -23642,3 +23642,106 @@ held". Not pushed.
   sovereign member who clicks before `srAuth.ready` resolves (the `my_tier` call in
   flight) would see the upsell until they toggle again. The window is one round trip
   after load; it is not repainted on `onChange`.
+
+## SR-484 — My Records banner (founder copy, L7 rail); Sovereign upsell band; the tier race
+
+Brief: three parts, pasted 2026-09-30. Not pushed. Verified on a local preview served from
+a scratch copy (macOS keeps the preview's python out of the repo folder). Tiers were
+simulated with `?srtier=`, which works on localhost only.
+
+**Part A — My Records banner** (`records.html`, `js/saferise-records.js`, `sr-mr-` in
+the system CSS)
+- The photograph is wired as a `<picture>` (webp first, then jpg, `alt=""`), replacing the
+  toned placeholder. The copy is taken verbatim from `claude/MY-RECORDS-HUB.md`, as
+  revised 30 September: kicker, headline, subhead, both body paragraphs, and the pull
+  quote as a new element (right side, italic, short gold rule).
+- The copy is HTML over the photograph at every width. The frame keeps 2400/806 and
+  grows past it when the copy needs room. At ≤1100 and ≤700 the scrim is heavier and
+  the crop is repositioned. The type scale is unchanged (body 15px, h1 clamp).
+- Rail (L7): five `<button>`s, each the tab it opens: `data-mr-rail` → `go(tab)`, the same
+  as the tab row. Focus moves to the opened tab, and `aria-current` marks the open one.
+  Grid: 5 columns, then 3 at ≤1100, then **1 at ≤700** (stacks, does not squash).
+  - **DIFFERS:** "each keeps its icon": the SR-478 rail had no icons. Line icons were
+    added (gold stroke, same idiom as the Sovereign surface).
+  - **Collision found:** `.sr-mr-sub` was both the banner subhead and the section wrapper
+    inside an opened session (records.js l.174/186). This dates from SR-478. The unscoped
+    rule is kept byte-identical, so opened sessions render unchanged, and only the
+    banner's colour is scoped.
+- M1 pass (1440/1024/375: scrollWidth equals the viewport; fresh-tab console clean) · M2
+  pass in Chromium (webp served). The jpg fallback was checked by removing the `<source>`
+  (it loads the jpg at 2400px), **not** in a browser without webp · M3 pass
+  (screenshots, no scrim change needed beyond the above) · M4 pass (all five: tab
+  selected, panel shown, `?tab=` set, focus on the tab, `aria-current` set; the tab row
+  updates the rail too) · M5 pass (1 column at 375) · M6 pass: a case-sensitive grep of
+  the diff returns zero. A case-insensitive grep hits only the approved pull quote,
+  "Proof, in my own words." · M7 screenshots taken at all three widths.
+
+**Part B — Sovereign upsell band** (`js/saferise-upsell.js` new; `sr-su-` claimed in
+CLAUDE.md; `dashboard.html` loads it; `js/saferise-plans.js`)
+- Built by JS after `SafeRiseAccess.ready`, only when `SafeRiseAccess.resolve().tier !==
+  'sovereign'`. For a sovereign member no band and no dialog exist in the DOM. No
+  second tier check, no `SR_FLAGS`. It is inserted after `#srJourney`, inside `.shell`,
+  at the content width like every other dashboard section, not edge to edge.
+- The copy is the brief's, verbatim. "Guided" and "Sovereign" are gold in the closing
+  lines. The pull quote sits on the right. There is no rail on the band.
+- The dialog is a real `<dialog>` opened with `showModal()`. Focus goes to its close
+  button, Tab and Shift+Tab wrap, and Escape closes it. The close button, "Not now" and
+  the backdrop also close it, and focus returns to the trigger. Six points, 2 columns
+  (1 at ≤700). "Upgrade to Sovereign" → `/plans#sr-pl-tier-sovereign`.
+- **Plans page, needed for "the Sovereign tier in view":** the tier cards had no ids. Each
+  card now gets `id="sr-pl-tier-<key>"`, and `render()` scrolls a matching hash into view
+  after it builds the cards (and again on `load`, when the images above have their
+  height). No other plans change.
+- **Copy corrections, for the mockup:** "AUTOMATIC INSIGHTS" → AI FEEDBACK (N2) ·
+  "summarised by AI" removed (N2) · "Your recordings are yours. Secure storage, full
+  control." replaced by the PRIVATE BY DESIGN line. It was untrue: no recording is
+  stored, and the audio is discarded during transcription.
+- S1 pass (1440/1024/375: no sideways scroll; fresh-tab console clean) · S2 pass (sovereign:
+  0 `.sr-su-band`, 0 `#srSuDialog`, neither string in the DOM) · S3 pass (free, standard
+  and premium: band plus dialog) · S4 pass (screenshots at all three widths) · S5 pass
+  (keyboard: Tab from the preceding link reaches the button; Enter opens, modal;
+  Tab → Upgrade → Not now → close button (wraps); Shift+Tab wraps back; Escape closes,
+  focus on the trigger; Enter on the close button and on "Not now" closes, focus on the
+  trigger) · S6 pass (same run) · S7 pass (zero hits in the diff) · S8 pass: no `border:`
+  declaration in either block. UA dialog and button borders are removed with
+  `border-style:none`, the file's existing idiom. The rings are inset `box-shadow`. ·
+  S9 screenshots taken: band at 1440/1024/375, dialog at 1440/1024/375.
+- Found and fixed while verifying: `overflow:hidden` on the band zeroed the aspect-ratio
+  box's content minimum and clipped the button at 1440. The band now clips only its art
+  and scrim.
+
+**Part C — the tier race** (`js/saferise-sovereign.js`)
+- `tierSettled` is false until `SafeRiseAccess.ready` settles. Clicking Sovereign before
+  then shows the new HOLD view: the invite stage's own empty ground, `aria-busy`, a
+  visually hidden heading, no copy, no spinner, no timer. When `ready` settles, HOLD or
+  INVITE repaints to the true INVITE. `SafeRiseAccess.onChange` repaints INVITE only when
+  the voice answer actually changed (`data-sv-voice`), so a routine refresh never moves
+  focus. `beginFlow()` also refuses to decide on an unknown tier.
+- R1 pass (a scratch copy of protocol.html with `ready` held and `resolve()` reporting free
+  until released: click → HOLD, no /checkout link, no Begin; release as sovereign → INVITE
+  with Begin) · R2 pass (the same, released as free → the upgrade screen; also the plain
+  page with `srtier=free`) · R3 pass locally (5 fresh loads, clicked at 0–600 ms: INVITE
+  with Begin on the first click, Begin → PERMISSION every time) · R4 pass (no
+  progress, progressbar or timer element; no duration copy).
+
+**Suite:** tests/sv-reading **52/52** · tier harness (SR-482) 15/15 · settings harness
+(SR-483) 6/6 · check-track-images PASS · check-hand-to-heart PASS · check-sitemap
+reports a mismatch that **predates this pass** (6 missing, 30 unexpected, all
+`/protocols/*` and older pages; this pass adds no page). `tools/check.py` is a
+playwright line-break tool that needs a file argument, not a suite member, so it was
+not run.
+
+**Not verified:** anything on production or a deploy preview; a browser without webp;
+the race against a real, slow `my_tier` call (simulated only).
+
+**For the founder (seen, not changed):**
+1. The upsell photograph shows a mug. MY-RECORDS-HUB.md rules out a mug for the Records
+   photograph; if that is the standing imagery rule, this image breaks it.
+2. The Records rail says JOURNAL is "Written or spoken". Nothing writes a spoken entry to
+   the journal today; a Sovereign session lands in All Sessions. The copy is
+   founder-approved and verbatim, so the claim needs checking.
+3. The dialog's PERSONAL TRACKING says "Tagged by state, protocol and theme". Theme
+   tagging is not visible in `/records` today.
+4. If the `my_tier` call fails for a sovereign member, the tier falls back to the
+   entitlement (SR-482), so they would see the upsell band. The failure is toward the
+   offer, never toward exposure.
