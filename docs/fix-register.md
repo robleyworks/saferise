@@ -23314,3 +23314,52 @@ reference, and it carries the blurred library placeholders).
   periods), not the four TIER-1 assumed. The annual totals (€192 / €300 / €396) ride on the
   Start buttons as `data-annual-total` for checkout; they are never displayed. No checkout
   work done.
+
+## SR-477 — SR-475 Part B: schema — organisations, seats, contracts, member tier, My Records, aggregates
+
+Four migrations, committed as written; **not applied to production, and no Supabase
+branch was used or created** (the connector could not confirm a branch's cost; the
+founder-supplied branch ref was a placeholder).
+`supabase/migrations/0002_platform_role_and_member_tier.sql`, `0003_organizations.sql`,
+`0004_records.sql`, `0005_org_aggregates.sql`.
+
+- **Verification — external, reported by the founder, not run by this pass:** performed
+  on a local Postgres with a Supabase auth stub; all VB checks passed, including VB3 and
+  VB4 (org_admin and exec_viewer reading an employee's `records_*` → zero rows) with a
+  passing control. The reference record is `claude/SCHEMA-VERIFICATION-PART-B.md` in the
+  founder's claude.ai Project — **it is not in this repository and this pass has not seen
+  it.** Nothing in this entry is independently verified here.
+- **VB1 — existing shape:** `public.members` (4 rows in production when read) — `id uuid`
+  PK → `auth.users(id)` on delete cascade; `email`, `created_at`, `entitled`,
+  `paddle_customer_id`, `paddle_subscription_id`, `subscription_status`,
+  `entitled_until`; RLS own-row select/update; entitlement columns guarded by
+  `protect_member_entitlement_columns()`. New tables reference people by
+  `auth.users(id)`, never through `members`.
+- **B2 member tier:** on `members` beside the subscription columns — `tier`
+  (free|standard|premium|sovereign) and `billing_period` (monthly|annual: the eight
+  consumer products), both server-managed via the existing paywall trigger.
+  `my_tier()` resolves missing/NULL/unknown to `free`.
+- **saferise_admin:** a platform role — membership of `platform_admins` (service role
+  only), asked through `is_saferise_admin()`; not a row in `organization_members`.
+- **Seat rules in the database:** `enforce_seat_limit()` locks the organisation row and
+  refuses an assignment past `seat_limit` (invited/active/suspended count); release keeps
+  the user; only an ACTIVE seat in an organisation with an ACTIVE contract resolves
+  entitlements (`my_org_entitlements()`); activation reads contract status, never
+  invoices; an entitlement to a protocol absent from `content_protocols` resolves to
+  nothing (the catalogue is empty until the application seeds it).
+- **B5 RLS:** every `records_*` table has one owner-only policy and nothing else; the
+  administration layer is scoped per role as briefed. The service role bypasses RLS by
+  Supabase design.
+- **B6 aggregates:** `org_metrics(org)` — functions, not views, no `user_id`; below
+  `platform_settings.min_cohort_size` a figure returns `suppressed`; unset threshold
+  suppresses everything (fail closed). Change it with an upsert on `platform_settings`.
+- **VB9 conflict rule:** a record is `(user_id, client_id)`; import is an upsert on that
+  pair (idempotent); devices union, never delete each other's records; same record →
+  later `updated_at` wins; deletion is sticky (a deleted AI feedback block stays deleted);
+  resume pointer → later `updated_at` wins. Enforced by `records_guard()`.
+- **Open, not blocking:** (1) the migrations issue no table GRANTs and rely on Supabase's
+  default public-schema privileges — confirm before the live apply that no blanket grant
+  is wider than intended; (2) `org_metrics` returns zero rows to a non-member rather than
+  raising — intended, recorded.
+- **Not covered:** orientation completion (no record exists to measure); live-session
+  bookings (`sr.sessions.booked`) have no table.
