@@ -1135,6 +1135,9 @@ var qTrackEarly = /[?&]track=([123])\b/.exec(location.search);
 var SR_TRACK_NUM = qTrackEarly ? qTrackEarly[1] : '1';
 document.write('<scr' + 'ipt src="content/t' + SR_TRACK_NUM + '-resources.js"></scr' + 'ipt>');
 </script>
+<!-- SR-471 · the protocol names (TRACKS), so the page's title, heading and
+     lede name the protocol being read instead of the static Anxiety Reset. -->
+<script src="content/tracks.js"></script>
 <script src="js/saferise-resources.js"></script>
 <script src="js/saferise-decision.js"></script>
 <!-- SR-394 · the shape diagrams (fan/ladder/dial etc.), supplied verbatim.
@@ -1163,6 +1166,22 @@ var ACTIVE_PROTOCOL = qProto ? ('0' + qProto[1]).slice(-2) : '01';
    null cleanly — fall back to Track 01 / protocol 01 in that case too. */
 var RESOURCES = (ACTIVE_TRACK === SR_TRACK_NUM) ? window.SafeRiseResources.resolveSet(ACTIVE_TRACK, ACTIVE_PROTOCOL) : null;
 if (!RESOURCES) { ACTIVE_TRACK = '1'; ACTIVE_PROTOCOL = '01'; RESOURCES = window.SafeRiseResources.resolveSet('1', '01') || []; }
+
+/* SR-471 · the title, heading and lede were static Anxiety Reset markup on
+   every protocol, though the resources beneath were right. Resolved here from
+   the protocol actually being read (after the fallback above, so a fallback
+   to Anxiety Reset is also named as Anxiety Reset). The static markup stays
+   as the no-script default. */
+(function () {
+  var T = window.TRACKS && TRACKS[+ACTIVE_TRACK];
+  var row = T && T.protocols && T.protocols.filter(function (r) { return r[0] === ACTIVE_PROTOCOL; })[0];
+  if (!row) return;
+  var h1 = document.querySelector('#cover .sectitle'), lede = document.querySelector('#cover .lede');
+  if (h1) h1.textContent = row[2];
+  if (lede && row[3]) lede.textContent = row[3];
+  var short = String(row[2]).replace(/^The\s+/, '').replace(/\s+Protocol$/, '');
+  document.title = 'SafeRise \u2014 ' + short + ' \u00b7 Resource Reader';
+})();
 
 /* PASS-protocol-access, Section B · the gate. Same protocolId shape
    protocol.html already gates on (t{track}-p{protocol}), so Track 01
