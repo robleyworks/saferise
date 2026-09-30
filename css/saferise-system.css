@@ -6615,3 +6615,22 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
    protocol.html's standalone Cue Card is styled in css/saferise-cue.css:
    that page does not load this file. */
 .sr-crisis-art img.sr-dash-cuegeneric{object-position:34% 30%}
+
+/* ── SR-473 §3 · About, the right-hand column of the first argument band
+   (the 01/02/03 side list, .tript--side, and the photograph under it).
+   It read cluttered: 54px from the left column, 30px from the page edge at
+   1024, headings at 1.22 leading 9px above their text, blocks 22/24px apart.
+   These match the method page's right column (72px between columns) and
+   open the column's own leading and block spacing. Scoped to this band:
+   .tript--side exists only in about.html, once, and :has() keeps the gap
+   change off the page's other argument bands. The page's style block is
+   earlier in the cascade; this file loads last. */
+@media(min-width:901px){
+  .argrow:has(.tript--side){column-gap:72px}
+  .argrow:has(.tript--side)>:last-child{padding-right:clamp(0px,3vw,32px)}
+}
+.tript--side .tri{padding:30px 0 32px;column-gap:28px}
+.tript--side .trik{margin-bottom:16px}
+.tript--side .tri h3{line-height:1.35;margin-bottom:12px}
+.tript--side .tri p:last-child{line-height:1.8}
+.argrow:has(.tript--side) .slot{margin-top:48px}
