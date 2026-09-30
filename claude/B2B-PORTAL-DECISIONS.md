@@ -92,6 +92,10 @@ See `SCHEMA-APPLIED-TO-PRODUCTION.md`.
 | **B6** | **A 30-day proof of concept, converting to a full-year licence.** One contract record moving from PoC to licence. Activation runs off contract status, not payment status (B3), so the conversion needs no payment event to unlock access |
 | **B7** | **At most two PoCs are free. Every other PoC is paid.** This preserves the two-unpaid-pilot cap in `GTM-PRICING-HANDOVER.md` §2 and shortens its six-week box to 30 days. The named-testimonial and usage-summary trade still applies to the free two. Any "usage summary" is the suppressed aggregate from `org_metrics()` — never individual usage, and never a figure resting on fewer than five distinct members |
 | **B8** | **Sovereign is sold to organisations.** The privacy policy is to be updated before any Sovereign seat is sold. Founder-ruled against the recommendation to hold Sovereign for B2B until zero data retention is granted — recorded here so the reasoning is not lost, not to reopen it |
+| **B9** | **The employee holds the AI feedback switch.** An organisation may buy the Sovereign capability; only the seat holder may turn AI feedback on, and only they may turn it off. No organisational role may set it, default it on, or see that it is on. This is not only a privacy rule — the Article 9 legal basis depends on it (see below). If it is ever relaxed, the legal basis fails with it |
+| **B10** | **Sovereign seats carry a session allowance, stated in the contract.** An annual per-seat price against unbounded inference is an open liability. The allowance is a contract term the buyer sees, never a limit discovered in a bill. The number is not yet set |
+| **B11** | **The AI feedback default is set by how the seat was acquired.** Consumer Sovereign: ON by default — R14 stands, the member went looking for the feature and paid for it. Employer-provisioned seat: **OFF until the employee turns it on** — they were handed a seat and chose nothing. This is what makes explicit consent available in the employment case; a default-on setting is not consent |
+| **B12** | **The switch is surfaced prominently on an employer-provisioned account.** The employee should not have to go looking for it. Founder-ruled: put it somewhere prevalent when they sign in to the organisation portal. Constraint, because it bears on B11: it is an offer, not a nudge — nothing pre-selected, no pressure wording, no penalty for dismissing it, and dismissing it must be as easy as accepting. A prompt engineered to produce a yes is not freely given consent, and would undo the basis it exists to collect. Per B9 the employer is never told the outcome |
 
 ### The per-seat contradiction, resolved
 
@@ -116,29 +120,38 @@ separate, open contradiction and needs resolving in the deck, not here.
 
 ### Open — must be settled before a Sovereign seat is sold
 
-**1 · Who holds the AI feedback switch.** Row-level security already stops an
-employer *reading* a record. It does not answer whether an org_admin can *enable*
-AI feedback on an employee's behalf. Proposed rule, pending founder ruling:
+**1 · Who holds the switch — SETTLED (B9).** The employee. Recorded above.
 
-> The employee holds the switch. An organisation may buy the Sovereign
-> capability; only the seat holder may turn AI feedback on, and only they may
-> turn it off. No organisational role can set it, default it on, or see that it
-> is on.
+**2 · The legal basis — SPLIT (SR-496). Employment case answered; consumer case
+open.** `privacy.html` carries two rows now, because the product behaves
+differently by acquisition path (B11).
 
-Without this written down, an employer could buy a feature that transmits an
-employee's words to a third party without that employee choosing it.
+| Account | Default | Basis claimed |
+|---|---|---|
+| Subscribed yourself | AI feedback **on** | Article 6(1)(b), performance of contract. **No consent is claimed** |
+| Employer-provided seat | AI feedback **off** | Article 6(1)(b), plus Article 9(2)(a) explicit consent — the act of turning it on |
 
-**2 · The legal basis is harder in B2B than B2C.** `[LEGAL BASIS]` is still an
-open placeholder in `privacy.html` for the Sovereign session record. In an
-employment context consent is the weakest available basis, because a regulator
-treats consent given to an employer as not freely given by default. B8 says the
-privacy policy will be updated; this is the specific question it has to answer,
-and it is a lawyer's question, not a writer's.
+**The employment case is answered.** Consent to an employer is ordinarily weak
+because it is not freely given. That objection does not reach a switch the
+employer cannot touch (B9) and that starts off (B11). B12's prompt must stay a
+neutral offer or it undoes this.
 
-**3 · A per-seat session allowance.** Sovereign carries real per-session
-inference cost. An annual per-seat price against unbounded use is an open
-liability. The consumer tier has a per-member allowance; the organisational
-plan needs one, stated in the contract rather than discovered in a bill.
+**The consumer case is not answered, and the row does not pretend otherwise.**
+A setting on by default is not explicit consent — Recital 32, and the CJEU in
+Planet49. So for a self-subscribed member the Article 9 position rests on
+Article 9 **not being engaged**: SafeRise never asks about health, and a
+transcript is whatever the member chose to say. Arguable. Not settled.
+
+**This is now the most consequential open legal question in the product.** If a
+lawyer finds Article 9 is engaged, consumer Sovereign must become opt-in too
+and R14 changes. Nothing here may be described as legally reviewed until that
+answer comes back.
+
+**3 · A per-seat session allowance — RULED (B10), number open.** Founder-ruled
+30 September: the allowance belongs in the contract. What it is has not been
+set, and cannot be set responsibly until per-session inference cost is measured
+against a real Sovereign session rather than estimated. That measurement is a
+prerequisite for pricing the Sovereign plan at all.
 
 **4 · Zero data retention is not granted.** Applied for, not returned. Until it
 is, no material may say the Sovereign record is not retained — the honest line
