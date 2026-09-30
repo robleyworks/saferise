@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--
+  SAFERISE — records.html · SR-478 (SR-475 Part C) · MY RECORDS, at /records
+  claude/MY-RECORDS-HUB.md (L1–L6) · claude/NAMING-DECISIONS.md (N1, N2).
+  Replaces member-record.html, which served /record/chosen-self and
+  /record/decisions as two single-list pages; both now 301 here with their
+  tab selected (_redirects). Device-first: js/saferise-records.js reads the
+  stores already on this device and sends nothing anywhere.
+  Page styling: sr-mr- in css/saferise-system.css.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<style>html,body{background:#0A0A0F}</style>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Records — SafeRise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/saferise-method.css">
+<link rel="stylesheet" href="/css/saferise-rail.css">
+<link rel="stylesheet" href="/css/saferise-system.css">
+</head>
+<body class="sr-mr-page">
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="sr-dash-navrail" id="srRail" aria-label="Sections"></nav>
+
+<main id="main" class="shell">
+
+<div class="sr-fw-backbar">
+  <a class="sr-fw-back" href="/dashboard.html">
+    <svg viewBox="0 0 14 9"><path d="M13 4.5H1M4.5 1 1 4.5 4.5 8"/></svg>
+    Dashboard
+  </a>
+  <div class="sr-fw-barspacer sr-theme sr-theme--bar" role="group" aria-label="Reading mode">
+    <button id="srThemeMid" class="on" data-theme="midnight">Midnight</button>
+    <button id="srThemeSun" data-theme="sunrise">Sunrise</button>
+  </div>
+</div>
+
+<!-- The banner. 2400×806, the Sovereign banner's ratio. The photograph is not
+     yet supplied: a toned placeholder reserves the exact space. -->
+<header class="sr-mr-banner" aria-labelledby="srMrTitle">
+  <div class="sr-mr-bannerart" aria-hidden="true"></div>
+  <div class="sr-mr-bannercopy">
+    <p class="sr-mr-kick">Same you. Written down.</p>
+    <h1 id="srMrTitle">My Records</h1>
+    <p class="sr-mr-sub">Everything I have said, chosen and decided.</p>
+    <p class="sr-mr-body">This is where the work accumulates. Sessions run, statements spoken in Rise, decisions named, entries written, and everything saved to come back to. <strong>Nothing here was written for me.</strong></p>
+  </div>
+  <ul class="sr-mr-rail" aria-label="What My Records holds">
+    <li>Every session</li><li>My own words</li><li>What I decided</li><li>My journal</li><li>Saved</li><li>Mine alone</li>
+  </ul>
+</header>
+
+<div class="sr-mr-hub" id="srMrHub">
+  <div class="sr-mr-tabs" role="tablist" aria-label="My Records">
+    <button type="button" role="tab" id="sr-mr-t-sessions" aria-controls="sr-mr-p-sessions" data-tabbtn="sessions" aria-selected="true">All Sessions</button>
+    <button type="button" role="tab" id="sr-mr-t-chosen" aria-controls="sr-mr-p-chosen" data-tabbtn="chosen" aria-selected="false" tabindex="-1">The Chosen Self</button>
+    <button type="button" role="tab" id="sr-mr-t-decisions" aria-controls="sr-mr-p-decisions" data-tabbtn="decisions" aria-selected="false" tabindex="-1">Decisions</button>
+    <button type="button" role="tab" id="sr-mr-t-journal" aria-controls="sr-mr-p-journal" data-tabbtn="journal" aria-selected="false" tabindex="-1">Journal</button>
+    <button type="button" role="tab" id="sr-mr-t-saved" aria-controls="sr-mr-p-saved" data-tabbtn="saved" aria-selected="false" tabindex="-1">Saved</button>
+  </div>
+  <section class="sr-mr-panel" role="tabpanel" id="sr-mr-p-sessions" aria-labelledby="sr-mr-t-sessions" data-panel="sessions"></section>
+  <section class="sr-mr-panel" role="tabpanel" id="sr-mr-p-chosen" aria-labelledby="sr-mr-t-chosen" data-panel="chosen" hidden></section>
+  <section class="sr-mr-panel" role="tabpanel" id="sr-mr-p-decisions" aria-labelledby="sr-mr-t-decisions" data-panel="decisions" hidden></section>
+  <section class="sr-mr-panel" role="tabpanel" id="sr-mr-p-journal" aria-labelledby="sr-mr-t-journal" data-panel="journal" hidden></section>
+  <section class="sr-mr-panel" role="tabpanel" id="sr-mr-p-saved" aria-labelledby="sr-mr-t-saved" data-panel="saved" hidden></section>
+  <p class="sr-mr-device">Kept on this device. Nothing here is sent anywhere, and no employer sees any of it.</p>
+</div>
+
+</main>
+
+<script src="/content/tracks.js"></script>
+<script src="/js/saferise-decision.js"></script>
+<script src="/js/saferise-records.js"></script>
+<script>SafeRiseRecords.mount(document.getElementById('srMrHub'));</script>
+<script src="/js/saferise-auth.js"></script>
+<script src="/js/saferise-access.js"></script>
+<script src="/js/saferise-rail.js"></script>
+<script>SafeRiseRail.render('records');</script>
+</body>
+</html>

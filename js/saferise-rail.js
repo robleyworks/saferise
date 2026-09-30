@@ -77,14 +77,11 @@
       round: true,
       d: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/>'
     },
-    chosen: {
+    records: {
+      /* SR-478 · My Records — a closed notebook (the hub is what has
+         already been done). Replaces the separate chosen/decisions icons. */
       round: true,
-      d: '<path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/>'
-    },
-    decisions: {
-      /* signpost */
-      round: true,
-      d: '<path d="M12 3v18"/><path d="M5 6h11l2 2-2 2H5z"/><path d="M19 13H8l-2 2 2 2h11z"/>'
+      d: '<path d="M6 3.5h11a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6z"/><path d="M9 3.5v17"/><path d="M12 8h3.5"/>'
     },
     article: {
       round: true,
@@ -127,8 +124,9 @@
     { key: 'article',   label: 'Article' },
     { key: 'podcast',   label: 'The SafeRise podcast' },
     { key: 'faq',       label: 'FAQ' },
-    { key: 'chosen',    label: 'The Chosen Self' },
-    { key: 'decisions', label: 'Your Decisions' }
+    /* SR-478 · The Chosen Self and Decisions are tabs of My Records now
+       (MY-RECORDS-HUB.md L1): one rail entry, not two destinations. */
+    { key: 'records',   label: 'My Records' }
   ];
   var FOOT_ROUTES = [
     { key: 'account', label: 'Account &amp; plan' },
@@ -154,8 +152,7 @@
     /* SR-444 (PASS-X §5) · the four member templates, mirrored from
        dashboard.html's PAGES so a rail click never falls through to
        dashboard.html#route= (whose resolver ignores PAGES keys). */
-    chosen: '/member-record.html?r=chosen',
-    decisions: '/member-record.html?r=decisions',
+    records: '/records',
     faq: '/member-reading.html?r=faq',
     article: '/member-reading.html?r=article',
     podcast: '/member-reading.html?r=podcast',

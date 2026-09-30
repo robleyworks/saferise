@@ -1805,8 +1805,9 @@
     podcast:    ['The SafeRise podcast', 'Episode player and the back catalogue.', '/podcast'],
     reading:    ['Understanding SafeRise', 'The science, the frameworks and the method.', '/about'],
     faq:        ['FAQ', 'What the evidence shows, whether your journal is private, what to do mid-episode, and what happens if you stop.', '/faq'],
-    chosen:     ['The Chosen Self', 'The identity you keep choosing, in your own words.', '/record/chosen-self'],
-    decisions:  ['Your Decisions', 'The choices you made once the pattern was no longer making them.', '/record/decisions'],
+    records:    ['My Records', 'Every session, the statements you spoke, your decisions, your journal and what you saved.', '/records'],
+    chosen:     ['The Chosen Self', 'The identity you keep choosing, in your own words.', '/records?tab=chosen'],
+    decisions:  ['Decisions', 'The choices you made once the pattern was no longer making them.', '/records?tab=decisions'],
     legal:      ['Terms and privacy', 'Including how your record is stored, what is never used for training, and how to export or delete it.', '/legal']
   };
   // Routes that now have a real page of their own. Checked before ROUTES so the
@@ -1821,8 +1822,11 @@
     legal:   'legal.html',
     /* SR-444 (PASS-X §5) · the four member templates. Query strings are
        fine here: openRoute() does window.location.href = PAGES[key]. */
-    chosen:    'member-record.html?r=chosen',
-    decisions: 'member-record.html?r=decisions',
+    /* SR-478 · My Records (/records) replaces member-record.html; the two
+       identity cards open it on their own tab. */
+    records:   '/records',
+    chosen:    '/records?tab=chosen',
+    decisions: '/records?tab=decisions',
     faq:       'member-reading.html?r=faq',
     article:   'member-reading.html?r=article',
     podcast:   'member-reading.html?r=podcast',

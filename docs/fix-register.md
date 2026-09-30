@@ -23363,3 +23363,66 @@ founder-supplied branch ref was a placeholder).
   raising — intended, recorded.
 - **Not covered:** orientation completion (no record exists to measure); live-session
   bookings (`sr.sessions.booked`) have no table.
+
+## SR-478 — SR-475 Part C: My Records, /records
+
+Built to `claude/MY-RECORDS-HUB.md` (L1–L6) and `claude/NAMING-DECISIONS.md` (both
+committed with this pass). Device-first, tested signed out, per the founder's ruling:
+Part B is not applied, so there is nothing on the server to read.
+
+- **Route (N1):** `/records` → `records.html` (200). `/record/chosen-self` and
+  `/record/decisions` 301 to `/records?tab=chosen|decisions`; `member-record.html`
+  (with or without `?r=`) 301s the same way. **member-record.html is replaced, not
+  converted:** it was a single-list template with a `<base href="/">` workaround; the hub
+  is five tabs and a banner. Deleted; its routes redirect. The brief's `/my-records`
+  was corrected by the founder to `/records`.
+- **Tabs:** All Sessions · The Chosen Self · Decisions · Journal · Saved — `?tab=` in
+  the address, switched without a page load, restored by Back. Guided / Sovereign is a
+  filter inside All Sessions, not a tab (L5). The rail's two entries (The Chosen Self,
+  Your Decisions) became one, "My Records"; the dashboard's identity cards open their tab.
+- **Banner:** the hub doc's copy (kicker, headline, subhead, body, six-item rail). The
+  photograph is not supplied: a toned placeholder reserves the 2400×806 frame.
+- **The corrected key list — MY-RECORDS-HUB.md's table is out of date:**
+  All Sessions `sr.sv.records` (Sovereign records; **no guided-run store exists** —
+  `sr.record.runs` has no writer, so the Guided filter says so plainly and points to
+  the Journal) · The Chosen Self `sr.sv.records` Rise transcript lines **and**
+  `sr.record.chosen` · Decisions `sr.decision.<protocolId>` **and**
+  `sr.record.decisions` · Journal `sr.journal.entries` · Saved `sr.saved` (new, one
+  store typed protocol|resource|content) **and** `sr-saved-v1`.
+  DIFFERS from the founder's list, adapted rather than silently: (1)
+  `sr.record.chosen` and `sr.record.decisions` are live — members wrote into them on
+  the old /record/* pages, and after the redirect this hub is the only place those
+  entries can be read, so both tabs read them (labelled "Written by you") and keep the
+  old pages' "write an entry" ability; (2) saving already exists — the dashboard
+  heart writes `sr-saved-v1` ('track:no'); Saved reads it as protocols beside
+  `sr.saved`. Recommended next: move the dashboard heart onto `sr.saved` so there is
+  one store. Nothing yet saves a resource or content item.
+- **Store:** every read and write goes through `js/saferise-decision.js`'s existing
+  Store, now exported — not a fourth helper.
+- **The seam:** `SafeRiseRecords.Source` — one function per tab, each returning from
+  the device today; the server read goes there, scoped to the signed-in member. No sync
+  built.
+- **Edit and delete:** transcript lines, individual AI feedback blocks (a deleted block's
+  lens is remembered, as the Sovereign session does), whole sessions, journal entries,
+  written statements and decisions; saved items removable. Verified with test records,
+  surviving reload; test records removed afterwards.
+- **VERIFY C (all run locally, signed out, on the stand-in server):**
+  C1 pass — renders at 375 / 1024 / 1440, no console errors · C2 pass — the dashboard
+  rail's "My Records", one click · C3 pass — no page-body sideways scroll at any width
+  (the shared bottom rail scrolls itself, as on every member page) · C4 pass — tab
+  switches change `?tab=` only (same document), Back steps through them · C5 pass —
+  every tab its own empty state on an empty account, no skeletons, no invented content ·
+  C6 pass — zero Lab / AI reading / synthesis / Your Saved Records in the diff · C7 pass —
+  zero SpeechRecognition / webkitSpeechRecognition · C8 pass — no `border:`
+  declaration in the new CSS (button and field resets use `border-style:none`) ·
+  C9 pass — no progress, meter, time text or duration renders · C10 — screenshots taken
+  at all three widths and of the empty state · C11 pass on the stand-in's copy of the
+  rules; **Netlify's own `_redirects` handling is unverified until a deploy preview.**
+- **Also fixed on the way:** journal dates ('YYYY-MM-DD') showed the previous day west of
+  Greenwich — now read as a local day. The system CSS's padding on every `<section>` is
+  overridden for the hub's sections.
+- **Sitemap:** `scripts/gen-sitemap.js` now excludes `records` (noindex, member page).
+  `tools/check-sitemap.py` still reports the pre-existing mismatch (6 expected-but-missing,
+  30 unexpected — the protocol slugs and others), unchanged by this pass.
+- **Not done here:** the device-to-server migration and its recording-fake verification
+  (SR-475 C5) — the founder ruled no sync in this pass.

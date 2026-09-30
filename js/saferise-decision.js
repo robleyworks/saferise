@@ -302,5 +302,8 @@
     });
   }
 
-  global.SafeRiseDecision = { render: render, classify: classify };
+  /* SR-478 · Store and the field list are exported for My Records
+     (js/saferise-records.js), which reads these worksheets and every other
+     device store through this one helper rather than a fourth copy. */
+  global.SafeRiseDecision = { render: render, classify: classify, Store: Store, FIELD_GROUPS: FIELD_GROUPS };
 })(window);

@@ -11,7 +11,9 @@ const ORIGIN = 'https://thesaferiseprotocol.com';
    index of four links for the member rail, each document already listed
    here on its own. Without this the next regeneration would add /legal
    back to the sitemap against its own noindex tag. */
-const EXCLUDE = /^(dashboard|account|signup|login|member-|404|pass|mock)|^for-organisations$|^legal$/;
+/* SR-478 · records excluded (exact match): My Records is a member page,
+   noindex, replacing member-record.html, which member- already excluded. */
+const EXCLUDE = /^(dashboard|account|signup|login|member-|404|pass|mock)|^for-organisations$|^legal$|^records$/;
 
 const pages = fs.readdirSync('.')
   .filter(f => f.endsWith('.html'))
