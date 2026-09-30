@@ -23492,3 +23492,42 @@ Claude Haiku 4.5**. `SR_FLAGS.sovereign` stays `false`.
   table 291/291px at 375) · G6 pass · G7 pass (flag `false`) · G8 pass (52/52 unchanged;
   `inference_geo` in no request, test or code) · G9 screenshots taken · G10 pass ("United
   States" absent from the three pages; "Frankfurt" only for account and usage data).
+
+## SR-481 — Sovereign go-live: Part 1 not run from this environment; flag stays off
+
+Brief: SOVEREIGN GO LIVE (pasted by the founder, 2026-09-30). **Result: Part 1 not run,
+so Part 2 not attempted.** `SR_FLAGS.sovereign` stays `false`; `js/saferise-flags.js`
+untouched. A partial pass is not a pass, and nothing here counts as a T-check pass.
+
+- **Blocked, reported — not skipped silently:**
+  1. *The pull request.* `gh` is not authenticated in this environment, so no PR can be
+     opened here. The brief also says "Do not push", and a PR needs a pushed branch —
+     treated as AMBIGUOUS; nothing pushed.
+  2. *The signed-in session.* T1–T7 need a sovereign-tier member signed in on a
+     `deploy-preview-N--…netlify.app` host. That is not a local development host, so the
+     agent may not type a password there. The founder signs in.
+  3. *The microphone.* T2–T5 need someone speaking. The agent cannot, and faking the
+     input stream would not be a "real session" as the brief asks.
+  4. *Local fallback.* The static preview (`tools/serve.py`) would not start (macOS
+     refused python access to the file: `Operation not permitted`). There is no `node`,
+     so the unit tests were not re-run. Their last recorded result is 52/52 (SR-480), and
+     no code has changed since.
+- **Static pre-checks (the code only — these do NOT satisfy the brief's live checks):**
+  - *T1 wording.* The PERMISSION screen (`js/saferise-sovereign.js` ~l.845) carries the
+    four SR-469 D2 facts. None claims that nothing leaves the device. Fact 1 limits "never
+    sent anywhere" to the recording, which matches privacy.html l.41/l.89. **Difference
+    for the founder:** fact 2 says the record "is read by an AI". It does not say the
+    record is *sent* off the device, which privacy.html l.43/l.77 does say. Not changed
+    here, because the D2 wording is founder-ruled.
+  - *T6.* With AI feedback off, the code makes no request (l.1174, E1). This still needs
+    confirming live, in the network tab.
+  - *T7.* A `withheld/limit` response maps to a plain-language line (l.702). The server
+    returns 429 per SOV-4 handover §1.7. This still needs confirming live.
+- **Seen in passing, not changed:** the Sovereign screens' eyebrow "Sovereign practice"
+  (l.824/834/898) is product chrome. It falls under the prohibited-vocabulary rule, in
+  both its current and its proposed narrowed scope.
+- **To run it (founder):** open a PR from a branch. On the preview, follow
+  `docs/SOV-4-PREVIEW-HANDOVER.md` §1, which covers T2/T3/T5/T6/T7 as V2/V3/V5/V6 plus
+  the timing. Add T4: every line of the reading points at something actually said, with
+  no invented statement, motive or diagnosis. If all of it passes, the flag flip (Part 2,
+  T8–T10) is one line plus the header comment.
