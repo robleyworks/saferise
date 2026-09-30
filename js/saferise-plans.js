@@ -1,330 +1,233 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   SafeRise — /plans render module · SR-386 (PASS-plans-final.md)
+   SafeRise — /plans render module · SR-476 (SR-475 Part A)
 
-   Rebuilds plans.html from pass/mock-plans-final.html, merging the old
-   /plans (rich content, stale €19/€29/€39 ladder) and /pricing (correct
-   prices, no traffic, thin content) into one page. Same pattern as
-   js/saferise-track.js and js/saferise-organisations-equivalent work this
-   session: one render() call, everything read from content/tracks.js —
-   no price, protocol title, state tag or track name is a literal in this
-   file except the five tracks that have no data record at all (see the
-   core-library section below).
+   Rebuilt to the founder's approved mockup (_incoming/plans-mockup.html,
+   SR-475). The mockup carries the measurements; the brief carries the rules
+   (no borders, no counts except the tier scope row, zero layout shift, one
+   spacing scale). Where they differ the difference is recorded in the
+   SR-476 register entry. Styling: css/saferise-system.css, sr-pl-.
+
+   Sections, top to bottom: hero · membership band (header + billing toggle,
+   the four cards, the comparison) · the protocol library · tools and
+   resources · closing band · the closing line.
+
+   Data:
+     tiers and the comparison ....... declared once below (TIERS, ROWS)
+     the protocol library ........... read, never typed: the live tracks from
+                                      content/tracks.js (TRACKS, status
+                                      'live'), then every in-development track
+                                      in content/dev-protocols.js order
+                                      (DEV_PROTOCOLS); names and images from
+                                      content/track-images.js
+   The mockup's six library tiles were blurred placeholders and are not used.
 
    USAGE — plans.html:
-     1. <div id="srPlans"></div> inside <main>
-     2. content/tracks.js loaded first (PRICING, SHARED, TRACKS)
-     3. <script src="js/saferise-plans.js"></script>
-     4. <script>SafeRisePlans.render();</script>
+     <div id="srPlans"></div> inside <main>; content/tracks.js,
+     content/dev-protocols.js and content/track-images.js load first;
+     then this file and SafeRisePlans.render().
    ═══════════════════════════════════════════════════════════════════════ */
 (function (global, document) {
   'use strict';
 
-  function cardTitle(s) { return String(s).replace(/^The\s+/, '').replace(/\s+Protocol$/, ''); }
   function esc(s) {
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  /* SR-386 §4 · the core-library cards. The three live tracks read their
-     name from TRACKS[id].name and their accent from the REAL system
-     --t1/--t2/--t3 tokens (css/saferise-system.css) — not the mock's own
-     standalone preview colours (--t1:#D4A843 etc in mock-plans-final.html),
-     which exist only because the mock is a self-contained static file with
-     no access to the live token set and would visibly disagree with how
-     t1/t2/t3 are coloured everywhere else on the site (nav dropdown, track
-     pages). The five in-development tracks have no TRACKS[] record at all
-     except id 4 (Elevation Series, visible:false) — coming-soon.html
-     hardcodes the other four the same way this does, for the same reason:
-     nothing to read from. Images are coming-soon.html's own per-track band
-     photos, confirmed by direct comparison of that page's own kicker/name
-     pairs to its <img src> attributes (band-01=Elevation, band-03=Strength
-     & Return, band-04=Embodied Nutrition, band-08=Executive Presence).
-     Colours are the mock's own inline --ca/--cglow values, carried over
-     unchanged per the brief's own instruction ("report them — they are not
-     yet system tokens"). "Sleep & Recovery" was the brief's own fifth named
-     track when SR-386 shipped it, and matched no track anywhere in
-     coming-soon.html, tracks.js or any nav at the time — flagged in the
-     SR-386 register entry rather than guessed at, and given the hatch
-     placeholder rather than a wrong photo. SR-430 (PASS-G-IMAGERY…) found
-     this stale: coming-soon.html now carries a Sleep & Recovery card
-     (band-09.webp, "NIGHT & RECOVERY"), and assets/coming/band-09.webp
-     exists — wired below instead of the hatch. */
-  /* SR-448 (PASS-AF §3) · card images come from content/track-images.js
-     (the one registry), never from a path typed here. /plans asks for the
-     'panel' shape; trackImage() falls back to that track's own band when
-     it has no panel (the road-map tracks) and returns null — card renders
-     without an image, and the console says why — if the registry is
-     missing. content/track-images.js loads before this file (plans.html). */
-  function planImage(slug) {
-    return typeof trackImage === 'function' ? trackImage(slug, 'panel') : null;
+  /* The four memberships. The annual state changes ONLY the displayed price
+     (a monthly figure, billed annually). annualTotal is what checkout will
+     charge for a year; it is carried on the CTA for checkout and never shown
+     on the page. Checkout does not yet exist for any of this (SR-470 §4). */
+  var TIERS = [
+    { key: 'free',      name: 'Free',      tag: 'Get a feel for the method.', monthly: '€0',  annual: '€0',  per: '',        annualTotal: null, cta: 'Create an account', ghost: true, href: 'signup.html' },
+    { key: 'standard',  name: 'Standard',  tag: 'Go deeper.',                 monthly: '€19', annual: '€16', per: '/ month', annualTotal: '€192', cta: 'Start', href: 'signup.html' },
+    { key: 'premium',   name: 'Premium',   tag: 'Access everything.',         monthly: '€29', annual: '€25', per: '/ month', annualTotal: '€300', cta: 'Start', href: 'signup.html', popular: true },
+    { key: 'sovereign', name: 'Sovereign', tag: 'Use your own voice.',        monthly: '€39', annual: '€33', per: '/ month', annualTotal: '€396', cta: 'Start', href: 'signup.html' }
+  ];
+
+  /* The comparison, row order and wording exactly as the mockup. true = gold
+     tick, false = em dash, a string = that text. "3 tracks max" is the one
+     count this site allows (founder ruling, SR-475). */
+  var ROWS = [
+    ['What you can practise', ['The first track, in full', '3 tracks max', 'Every track, as it releases', 'Every track, as it releases']],
+    ['Guided sessions', [true, true, true, true]],
+    ['The resources behind each protocol', [true, true, true, true]],
+    ['The Clearing', [true, true, true, true]],
+    ['My Records', [true, true, true, true]],
+    ['Journal', ['Written', 'Written', 'Written', 'Written or spoken']],
+    ['The Chosen Self and Decisions', [true, true, true, true]],
+    ['Speak instead of type', [false, false, false, true]],
+    ['Sessions in your own voice', [false, false, false, true]],
+    ['Transcription on your device', [false, false, false, true]],
+    ['AI feedback — what you said and how you moved', [false, false, false, true]],
+    ['New tracks the day they open', [false, false, true, true]],
+    ['Live sessions and workshops', ['Bookable', 'Bookable', 'Bookable', 'Bookable']],
+    ['Card required', ['No', 'Yes', 'Yes', 'Yes']]
+  ];
+
+  var TOOLS = [
+    ['Guided Sessions', 'Audio meditations for each protocol', '<circle cx="12" cy="12" r="9"/><path d="M10.2 8.6l5.4 3.4-5.4 3.4z" fill="currentColor" stroke="none"/>'],
+    ['How This Works', 'Plain language guidance', '<path d="M6 3.6h8l4 4v12.8H6z"/><path d="M14 3.6v4h4"/><path d="M9 12h6M9 15.4h6"/>'],
+    ['In-the-Moment Tools', 'Quick practices when you need them', '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/>'],
+    ['Journal', 'Written or spoken (Sovereign)', '<path d="M4.5 4.4h6a2.5 2.5 0 0 1 2.5 2.5v13a2 2 0 0 0-2-2H4.5z"/><path d="M19.5 4.4h-6A2.5 2.5 0 0 0 11 6.9v13a2 2 0 0 1 2-2h6.5z"/>'],
+    ['The Clearing', 'Process what’s ready to be released', '<path d="M3 12h2.5l2-5 3 10 3-8 2 3H21"/>'],
+    ['My Records', 'Track your progress over time', '<circle cx="12" cy="8" r="3.4"/><path d="M5.2 20c0-3.5 3-5.8 6.8-5.8S18.8 16.5 18.8 20"/>'],
+    ['The Chosen Self', 'Reflection and decision tools', '<path d="M20 4c0 8.5-4.6 12.6-10.4 12.6C6.5 16.6 4 14.2 4 11.2 4 6.6 9.4 4 20 4z"/><path d="M15.5 8.4C11 10.6 8 14.4 7 20"/>'],
+    ['Safe Practice', 'Guidance for pacing and care', '<path d="M12 3.2l8 3.4v6c0 4.4-3.3 7.8-8 8.4-4.7-.6-8-4-8-8.4v-6z"/><path d="M8.8 12.2l2.3 2.3 4.2-4.6"/>']
+  ];
+
+  var TICK = '<svg viewBox="0 0 24 24" role="img" aria-label="Included"><path d="M4.5 12.6l5 5 10-11"/></svg>';
+  var DASH = '<span aria-label="Not included">&mdash;</span>';
+
+  function picture(webp, jpg, w, h, cls, alt, lazy) {
+    return '<picture>' + (webp ? '<source type="image/webp" srcset="' + esc(webp) + '">' : '') +
+      '<img class="' + cls + '" src="' + esc(jpg || webp) + '" width="' + w + '" height="' + h + '" alt="' + esc(alt || '') + '"' +
+      (lazy ? ' loading="lazy" decoding="async"' : ' fetchpriority="high"') + '></picture>';
   }
-  var CORE_LIVE = [
-    { id: 1, kicker: 'Capacity', ca: 'var(--t1)', cglow: 'rgba(201,123,90,.22)',
-      slug: 'personal-transformation', img: planImage('personal-transformation'), alt: 'Personal Transformation' },
-    { id: 3, kicker: 'Application', ca: 'var(--t3)', cglow: 'rgba(110,144,128,.22)',
-      slug: 'professional-performance', img: planImage('professional-performance'), alt: 'Professional Performance' },
-    { id: 2, kicker: 'Application', ca: 'var(--t2)', cglow: 'rgba(122,143,168,.22)',
-      slug: 'relationship-healing', img: planImage('relationship-healing'), alt: 'Relationship Healing' }
-  ];
-  var CORE_DEV = [
-    { name: 'Executive Presence', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      slug: 'executive-presence', img: planImage('executive-presence'), alt: 'Executive Presence' },
-    { name: 'Sleep & Recovery', kicker: 'Substrate', ca: '#7B87A8', cglow: 'rgba(123,135,168,.20)',
-      slug: 'sleep-and-recovery', img: planImage('sleep-and-recovery'), alt: 'Sleep & Recovery' },
-    { name: 'Embodied Nutrition', kicker: 'Substrate', ca: '#8FA37B', cglow: 'rgba(143,163,123,.20)',
-      slug: 'embodied-nutrition', img: planImage('embodied-nutrition'), alt: 'Embodied Nutrition' },
-    { name: 'Strength & Return', kicker: 'Substrate', ca: '#C08A5E', cglow: 'rgba(192,138,94,.20)',
-      slug: 'strength-and-return', img: planImage('strength-and-return'), alt: 'Strength & Return' },
-    { name: 'Elevation Series', kicker: 'Beyond', ca: '#AEB7CE', cglow: 'rgba(174,183,206,.20)',
-      slug: 'elevation-series', img: planImage('elevation-series'), alt: 'Elevation Series' },
-    /* SR-447 (PASS-AE §4) · the four road-map tracks the plans page was
-       missing. Layer from docs/SUBSTRATE-CAPACITY-MODEL.md §3, the only
-       record of it: all four sit in APPLICATION ("Money" and "Intimacy" there
-       are Money Shift and Sex & Intimacy) — the same scheme this page already
-       uses (Relationship Healing is 'Application' in CORE_LIVE above).
-       Colours: this page's existing colours are per track, not per layer, so
-       there is no layer value to reuse; these carry the one existing
-       in-development Application value (Executive Presence's) rather than
-       invented ones. Per-track colours are Andre's call. Order follows
-       coming-soon.html. */
-    { name: 'Sex & Intimacy', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      slug: 'sex-and-intimacy', img: planImage('sex-and-intimacy'), alt: 'Sex & Intimacy' },
-    { name: 'Life & Load', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      slug: 'life-and-load', img: planImage('life-and-load'), alt: 'Life & Load' },
-    { name: 'Money Shift', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      slug: 'money-shift', img: planImage('money-shift'), alt: 'Money Shift' },
-    { name: 'Addiction Recovery', kicker: 'Application', ca: '#B9A17A', cglow: 'rgba(185,161,122,.20)',
-      slug: 'addiction-recovery', img: planImage('addiction-recovery'), alt: 'Addiction Recovery' }
-  ];
-
-  /* SR-386 §5 (rTP) · four stages, three real SHARED.resources each,
-     regrouped from the mock's own mixed real/invented list (Guided
-     Experience, Breathwork, Perspectives, Capacity Check and Protocol
-     Guide are not resource types this platform ships — grepped directly).
-     11 of SHARED.resources' 12 entries are universal; the twelfth,
-     "Raising It" (case/raising), ships on Track 03 only (its own comment:
-     "Track 03 only") and is left out of this cross-track summary rather
-     than implied as something every protocol carries. */
-  var STAGES = [
-    { num: '01', name: 'Regulate', h3: 'When the state has already taken hold.',
-      lede: 'Start where your system actually is. These resources create enough regulation and internal resource for attention and reflection to become available again.',
-      keys: ['meditation', 'crisiscard', 'companion'] },
-    { num: '02', name: 'Understand', h3: 'When you need to know what just happened.',
-      lede: 'Regulation creates room. These resources help you use that room to examine the pattern, the meaning you made and what captured your attention.',
-      keys: ['guide', 'practice', 'advisory'] },
-    { num: '03', name: 'Integrate', h3: 'When the moment has passed but the learning should not.',
-      lede: 'Turn an experience into something you can see, name and return to — without turning it into a score.',
-      keys: ['record', 'accountability', 'decision'] },
-    { num: '04', name: 'Use it in real life', h3: 'When the work has to leave the screen with you.',
-      lede: 'Condensed, practical supports for returning to the method when there is no time for the full experience.',
-      keys: ['disclosure', 'repair'] }
-  ];
-
-  var ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" ' +
-    'stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 13c2.6-5 5.2-5 7.8 0s5.2 5 7.8 0"/>' +
-    '<path d="M2.5 18h19"/></svg>';
-
-  var TRACK_ICON = {
-    1: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20c.7-3.6 3.3-5.4 6.5-5.4S17.8 16.4 18.5 20"/></svg>',
-    2: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="9" r="2.8"/><circle cx="15.5" cy="9" r="2.8"/><path d="M3.5 19c.6-3 2.4-4.4 5-4.4M20.5 19c-.6-3-2.4-4.4-5-4.4"/></svg>',
-    3: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l5-5 3.5 3.5L20 8"/><path d="M15.5 8H20v4.5"/></svg>'
-  };
-  var TRACK_KICKER = { 1: '--t1', 2: '--t2', 3: '--t3' };
-  var TRACK_GLOW = { 1: 'rgba(201,123,90,.11)', 2: 'rgba(122,143,168,.11)', 3: 'rgba(110,144,128,.11)' };
-  /* SR-464 C2 [PR-14] · the library sections' underlay photographs
-     (2400x1000, from the founder's panel set), replacing SR-448's 1400x380
-     journey bands here. Like those bands they stay outside
-     content/track-images.js: an underlay is decorative, per-page art, not a
-     track image the registry's shapes describe. Before this pass the photo
-     sat at z-index -3, beneath the opaque .sr-pl-ph-fill hatch (-2), so the
-     sections rendered as empty placeholders. */
-  var TRACK_BAND = {
-    1: { src: 'assets/plans/panel-t1.webp', alt: 'Personal Transformation' },
-    2: { src: 'assets/plans/panel-t2.webp', alt: 'Relationship Healing' },
-    3: { src: 'assets/plans/panel-t3.webp', alt: 'Professional Performance' }
-  };
 
   function rHero() {
-    return '<header class="sr-pl-hero rv">' +
-      '<div class="sr-pl-ph-fill"></div><div class="sr-pl-ph-scrim"></div>' +
-      '<div class="wrap">' +
-      '<p class="eyebrow">Plans</p>' +
-      '<h1>Build more capacity where life asks the most of you.</h1>' +
-      '<p class="sr-pl-lede">Regulation gives you back access to internal resources that become harder to reach when a triggered state is governing you.</p>' +
-      '<p class="sr-pl-lede">With more command of attention, you can perceive more clearly, judge more soundly, and respond with greater authenticity to who you are, what you value, and what you genuinely desire.</p>' +
-      '</div></header>';
+    return '<header class="sr-pl-hero">' +
+      picture('assets/plans/hero.webp', 'assets/plans/hero.jpg', 1700, 734, 'sr-pl-heroimg', '', false) +
+      '<div class="sr-pl-wrap sr-pl-herogrid"><div>' +
+        '<p class="sr-pl-kick">Plans</p>' +
+        '<h1>Build more capacity where life asks the most of you.</h1>' +
+        '<p class="sr-pl-herocopy">Regulation gives you back access to internal resources that become harder to reach when a triggered state is governing you.</p>' +
+        '<p class="sr-pl-herocopy">With more command of attention, you can perceive more clearly, judge more soundly, and respond with greater authenticity to who you are, what you value, and what you genuinely desire.</p>' +
+      '</div><p class="sr-pl-rail">Same<br>method.<br>Further<br>possibilities.<span aria-hidden="true"></span></p></div>' +
+    '</header>';
   }
 
-  /* SR-470 (TIER-1) · the four-step ladder, founder-set, all prices monthly.
-     Scope in words, never counts (standing rule). The Sovereign card names all
-     three parts of what it is, and makes no zero-retention claim: the written
-     record is read by an AI (SR-469 wording). Free's price comes from the
-     pricing record; the rest are the founder's ladder, which has no keys in
-     content/tracks.js yet. */
-  function rPlans() {
-    var t1 = PRICING.t1, t2 = PRICING.t2;
-    function card(o) {
-      return '<article class="sr-pl-plan' + (o.paid ? ' sr-pl-plan-paid' : '') + '">' +
-        '<p class="sr-pl-tag">' + o.tag + '</p>' +
-        '<p class="sr-pl-price' + (o.free ? ' sr-pl-free' : '') + '">' + esc(o.price) + '<small>' + o.per + '</small></p>' +
-        '<h3>' + o.scope + '</h3>' +
-        o.body.map(function (b) { return '<p class="sr-pl-d">' + b + '</p>'; }).join('') +
-        '<a class="sr-pl-cta' + (o.paid ? ' sr-pl-cta-solid' : '') + '" href="signup.html">' + o.cta + '</a>' +
+  function cell(v) {
+    if (v === true) return '<span class="sr-pl-cmptick">' + TICK + '</span>';
+    if (v === false) return '<span class="sr-pl-cmpdash">' + DASH + '</span>';
+    return '<span class="sr-pl-cmptext">' + esc(v) + '</span>';
+  }
+
+  function rMembership() {
+    var cards = TIERS.map(function (t) {
+      return '<article class="sr-pl-card' + (t.popular ? ' sr-pl-card--pop' : '') + '">' +
+        (t.popular ? '<span class="sr-pl-pop">Most popular</span>' : '') +
+        '<div class="sr-pl-cardhead"><p class="sr-pl-tier">' + esc(t.name) + '</p><p class="sr-pl-tag">' + esc(t.tag) + '</p></div>' +
+        '<p class="sr-pl-price"><span class="sr-pl-amt" data-m="' + esc(t.monthly) + '" data-a="' + esc(t.annual) + '">' + esc(t.monthly) + '</span>' +
+          '<span class="sr-pl-per">' + esc(t.per) + '</span></p>' +
+        '<a class="sr-pl-cta' + (t.ghost ? ' sr-pl-cta--ghost' : '') + '" href="' + esc(t.href) + '" data-tier="' + t.key + '"' +
+          (t.annualTotal ? ' data-annual-total="' + esc(t.annualTotal) + '"' : '') + '>' + esc(t.cta) + '</a>' +
       '</article>';
-    }
-    return '<section id="plans"><div class="wrap">' +
-      '<div class="sr-pl-shead rv"><div><p class="eyebrow">What it costs</p>' +
-      '<h2>The first track is free.<br>Four ways in.</h2></div>' +
-      '<p>You make an account and Personal Transformation is yours — not a trial, not a sample, not a countdown. Every price is monthly; cancel whenever.</p></div>' +
-      '<div class="sr-pl-plans sr-pl-plans-4 rv">' +
-        card({ tag: 'Free', free: true, price: t1.amount, per: 'with an account', scope: 'The first track, in full',
-          body: ['<b>Personal Transformation.</b> Fear, anger, overwhelm, grief, insecurity and shutdown — a protocol for each state, each with the full resource set.', 'No card required.'],
-          cta: 'Create an account' }) +
-        card({ tag: 'Standard', paid: true, price: t2.amount, per: 'a month', scope: 'The tracks released so far',
-          body: ['<b>Personal Transformation, Relationship Healing and Professional Performance.</b>'],
-          cta: 'Start' }) +
-        card({ tag: 'Premium', paid: true, price: '€29', per: 'a month', scope: 'Every track, as it releases',
-          body: ['<b>Everything in Standard,</b> and each new track the day it opens.'],
-          cta: 'Start' }) +
-        card({ tag: 'Sovereign', paid: true, price: '€39', per: 'a month', scope: 'Every track, and your own voice',
-          body: ['<b>Everything in Premium, and:</b>',
-            'Speak instead of type — sessions, journal, statements, decisions, ratings.',
-            'Transcription that never leaves your device; the audio is discarded as it is transcribed.',
-            'AI feedback. An AI reading of your own words: what you returned to, what shifted, and how you moved through Recognise, Regulate, Release and Rise.'],
-          cta: 'Start' }) +
-      '</div></div></section>';
+    }).join('');
+
+    /* Wide screens: one row per feature — its label on a line of its own,
+       then four cells on the cards' own grid, so every column sits under its
+       card. The Premium wash is one layer down the full height. */
+    var grid = '<div class="sr-pl-cmp" role="table" aria-label="What each membership includes">' +
+      '<div class="sr-pl-cmphead" role="row">' + TIERS.map(function (t) { return '<span role="columnheader">' + esc(t.name) + '</span>'; }).join('') + '</div>' +
+      ROWS.map(function (r) {
+        return '<div class="sr-pl-cmprow" role="row"><span class="sr-pl-cmplabel" role="rowheader">' + esc(r[0]) + '</span>' +
+          r[1].map(function (v) { return '<span class="sr-pl-cmpcell" role="cell">' + cell(v) + '</span>'; }).join('') + '</div>';
+      }).join('') + '</div>';
+
+    /* Narrow screens: one block per tier, on the same grid as the cards. */
+    var stacked = '<div class="sr-pl-tierlist">' + TIERS.map(function (t, i) {
+      return '<section class="sr-pl-tierblock' + (t.popular ? ' sr-pl-tierblock--pop' : '') + '" aria-label="' + esc(t.name) + ' includes">' +
+        '<p class="sr-pl-tier">' + esc(t.name) + '</p><dl>' +
+        ROWS.map(function (r) { return '<div><dt>' + esc(r[0]) + '</dt><dd>' + cell(r[1][i]) + '</dd></div>'; }).join('') +
+        '</dl></section>';
+    }).join('') + '</div>';
+
+    return '<section class="sr-pl-band" aria-labelledby="srPlMemH"><div class="sr-pl-wrap">' +
+      '<div class="sr-pl-planhead"><div>' +
+        '<h2 id="srPlMemH">Choose your membership</h2>' +
+        '<p class="sr-pl-lede">Same method. More access. A private space to do the work in your own time, in your own way.</p>' +
+      '</div><div class="sr-pl-toggle" role="group" aria-label="Billing period">' +
+        '<button type="button" data-billing="monthly" aria-pressed="true"><span class="sr-pl-tl" data-text="Pay monthly">Pay monthly</span></button>' +
+        '<button type="button" data-billing="annual" aria-pressed="false"><span class="sr-pl-tl" data-text="Pay annually">Pay annually</span><small>Save up to 15%</small></button>' +
+      '</div></div>' +
+      '<div class="sr-pl-cards">' + cards + '</div>' +
+      grid + stacked +
+    '</div></section>';
   }
 
-  function rTrackSection(id) {
-    var t = TRACKS[id];
-    var band = TRACK_BAND[id];
-    var name = t.name, split = name.split(' ');
-    var first = split.shift(), rest = split.join(' ');
-    var rows = t.protocols.map(function (p) {
-      var title = cardTitle(p[2]);
-      var state = p[p.length - 1];
-      var desc = p[4];
-      return '<li tabindex="0"><em>' + p[0] + '</em><div class="sr-pl-t"><b>' + esc(title) + '</b>' +
-        '<i>' + esc(state) + '</i><span>' + esc(desc) + '</span></div></li>';
-    }).join('');
-    /* SR-470 · no protocol count in plan copy (standing rule). */
-    var meta = id === 1 ? '<b>Free with an account</b>' : '<b>Standard and above</b>';
-    return '<div class="sr-pl-tsec" style="--tc:var(' + TRACK_KICKER[id] + ');--tglow:' + TRACK_GLOW[id] + '">' +
-      '<div class="sr-pl-ph-fill"></div><div class="sr-pl-ph-scrim"></div>' +
-      (band ? '<img src="' + band.src + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.5" aria-hidden="true">' : '') +
-      '<div class="wrap"><div class="sr-pl-tinner rv">' +
-      '<div><div class="sr-pl-thead">' + TRACK_ICON[id] + 'Track 0' + id + '</div>' +
-      '<h3 class="sr-pl-ttitle">' + esc(first) + '<i>' + esc(rest) + '</i></h3>' +
-      '<p class="sr-pl-tq">' + esc(id === 1 ? 'What happens inside me?' : id === 2 ? 'What keeps happening between us?' : 'What changes when the stakes rise?') + '</p>' +
-      '<p class="sr-pl-tmeta">' + meta + '</p></div>' +
-      '<div><ul class="sr-pl-list">' + rows + '</ul></div>' +
-      '</div></div></div>';
+  function slugOf(name) {
+    return String(name).toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+  /* Track images come from content/track-images.js, never a typed path
+     (SR-448; tools/check-track-images.py reads this helper). 'panel' falls
+     back to the track's own band where it has no panel — the road-map
+     tracks — inside trackImage() itself. */
+  function planImage(slug) { return typeof trackImage === 'function' ? trackImage(slug, 'panel') : null; }
+  function imgFor(slug) {
+    var rec = (typeof TRACK_IMAGES === 'object' && TRACK_IMAGES) ? TRACK_IMAGES[slug] : null;
+    var webp = planImage(slug), jpg = null;
+    if (rec) Object.keys(rec).forEach(function (k) { if (rec[k] === webp && rec[k + 'Jpg']) jpg = rec[k + 'Jpg']; });
+    return { webp: webp, jpg: jpg };
+  }
+  /* The library, read from the data: live tracks first (content/tracks.js),
+     then the in-development tracks in content/dev-protocols.js order. */
+  function libraryTracks() {
+    var out = [];
+    if (typeof TRACKS === 'object' && TRACKS) {
+      Object.keys(TRACKS).forEach(function (k) {
+        var t = TRACKS[k];
+        if (t && t.status === 'live') { var s = slugOf(t.name); out.push({ name: t.name, href: s + '.html', img: imgFor(s) }); }
+      });
+    }
+    if (typeof DEV_PROTOCOLS === 'object' && DEV_PROTOCOLS) {
+      Object.keys(DEV_PROTOCOLS).forEach(function (s) {
+        var rec = (typeof TRACK_IMAGES === 'object' && TRACK_IMAGES) ? TRACK_IMAGES[s] : null;
+        out.push({ name: rec && rec.name ? rec.name : s, href: 'coming-soon.html', img: imgFor(s) });
+      });
+    }
+    return out;
   }
 
   function rLibrary() {
-    return '<section id="library"><div class="wrap">' +
-      '<div class="sr-pl-shead rv"><div><p class="eyebrow">The library</p>' +
-      '<h2>Every state has<br>a way through it.</h2></div>' +
-      '<p>Each protocol is written for one situation rather than for calm in general. The state you arrive in decides which one you open.</p></div></div>' +
-      rTrackSection(1) + rTrackSection(2) + rTrackSection(3) +
-      '<div class="wrap"><p class="sr-pl-hint">Hover a protocol to read what it is for</p></div>' +
-      '</section>';
-  }
-
-  function rCoreCard(c) {
-    var img = c.img ? '<img src="' + c.img + '" alt="' + esc(c.alt) + '">' : '';
-    return '<div class="sr-pl-core" tabindex="0" style="--ca:' + c.ca + ';--cglow:' + c.cglow + '">' +
-      '<div class="sr-pl-ctimg">' + img + '</div><div class="sr-pl-ctscrim"></div>' +
-      '<em>' + esc(c.kicker) + '</em><b>' + esc(c.name) + '</b>' +
-      (c.dev ? '<i>In development</i>' : '') +
-      '</div>';
-  }
-
-  function rCore() {
-    var cards = CORE_LIVE.map(function (c) {
-      return rCoreCard({ name: TRACKS[c.id].name, kicker: c.kicker, ca: c.ca, cglow: c.cglow, img: c.img, alt: c.alt });
-    }).concat(CORE_DEV.map(function (c) {
-      return rCoreCard({ name: c.name, kicker: c.kicker, ca: c.ca, cglow: c.cglow, img: c.img, alt: c.alt, dev: true });
-    })).join('');
-    return '<section id="core"><div class="wrap">' +
-      '<div class="sr-pl-shead rv"><div><p class="eyebrow">The core library</p>' +
-      '<h2>Every track,<br>as it releases.</h2></div>' +
-      '<p>Premium and Sovereign open every track as it releases: when a new one opens it is simply there, at no change to what you already pay.</p></div>' +
-      '<div class="sr-pl-coregrid rv">' + cards + '</div>' +
-      '</div></section>';
-  }
-
-  function rStage(stage) {
-    var cards = stage.keys.map(function (key) {
-      var r = SHARED.resources.filter(function (row) { return row[4] === key; })[0];
-      if (!r) return '';
-      return '<div class="sr-pl-rc"><h4>' + esc(r[1]) + '</h4><p>' + esc(r[3]) + '</p></div>';
+    var tiles = libraryTracks().map(function (t) {
+      return '<a class="sr-pl-track" href="' + esc(t.href) + '">' +
+        (t.img.webp ? picture(t.img.webp, t.img.jpg, 640, 480, 'sr-pl-thumb', '', true) : '') +
+        '<span class="sr-pl-tname">' + esc(t.name) + '</span><span class="sr-pl-arrow" aria-hidden="true">&rarr;</span></a>';
     }).join('');
-    return '<div class="sr-pl-rstage rv">' +
-      '<div class="sr-pl-rleft"><div class="sr-pl-ic">' + ICON + '<em>' + stage.num + '</em></div>' +
-      '<p class="sr-pl-rname">' + esc(stage.name) + '</p>' +
-      '<h3>' + esc(stage.h3) + '</h3>' +
-      '<p class="sr-pl-rlede">' + esc(stage.lede) + '</p></div>' +
-      '<div class="sr-pl-rcards">' + cards + '</div></div>';
+    return '<section class="sr-pl-sec" aria-labelledby="srPlLibH"><div class="sr-pl-wrap">' +
+      '<div class="sr-pl-rowhead"><div><h2 id="srPlLibH">Explore the Protocol Library</h2>' +
+        '<p class="sr-pl-lede">A growing collection of guided protocols, each designed for a specific area of life.</p></div>' +
+        '<a class="sr-pl-more" href="index.html#router">View all protocols &rarr;</a></div>' +
+      '<div class="sr-pl-tracks">' + tiles + '</div>' +
+    '</div></section>';
   }
 
-  function rInside() {
-    return '<section id="inside"><div class="wrap">' +
-      '<div class="sr-pl-shead rv"><div><p class="eyebrow">Inside every protocol</p>' +
-      '<h2>A complete session,<br>and what surrounds it.</h2></div>' +
-      '<p>What you need changes depending on where you are in the moment. Every protocol carries support for regulation, understanding, integration and real-life use — all built around the same specific state.</p></div>' +
-      STAGES.map(rStage).join('') +
-      '<p class="sr-pl-hint" style="margin-top:34px">One state can need regulation in the body, understanding in the mind, reflection afterwards and language for the next real conversation</p>' +
-      '</div></section>';
+  function rTools() {
+    return '<section class="sr-pl-sec" aria-labelledby="srPlToolsH"><div class="sr-pl-wrap">' +
+      '<div class="sr-pl-rowhead"><div><h2 id="srPlToolsH">Tools and resources included</h2>' +
+        '<p class="sr-pl-lede">Every protocol is supported by practical resources to help you understand, integrate and apply the work.</p></div>' +
+        '<a class="sr-pl-more" href="resource.html">View all resources &rarr;</a></div>' +
+      '<div class="sr-pl-tools">' + TOOLS.map(function (t) {
+        return '<div class="sr-pl-tool"><span class="sr-pl-ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">' + t[2] + '</svg></span>' +
+          '<p class="sr-pl-tn">' + esc(t[0]) + '</p><p class="sr-pl-td">' + esc(t[1]) + '</p></div>';
+      }).join('') + '</div>' +
+    '</div></section>';
   }
 
-  function rLive() {
-    var p1 = PRICING.premium1, p3 = PRICING.premium3;
-    var wp = PRICING.workshopPersonal, wr = PRICING.workshopRelationship;
-    return '<section id="live"><div class="wrap">' +
-      '<div class="sr-pl-shead rv"><div><p class="eyebrow">When self-guided is not enough</p>' +
-      '<h2>Work with<br>someone directly.</h2></div>' +
-      '<p>Separate from membership. Choose it when you want someone in the room with you — not because the library is incomplete.</p></div>' +
-      '<div class="sr-pl-live rv">' +
-        '<article class="sr-pl-livecard"><div class="sr-pl-ph-fill"></div><div class="sr-pl-ph-scrim"></div>' +
-          '<h3>Premium 1:1</h3>' +
-          '<p class="sr-pl-p">' + esc(p1.amount) + ' a session · ' + esc(p3.amount) + ' for three</p>' +
-          '<p>An hour, one to one, on whatever you are actually in. Not the protocols read aloud — those are self-guided by design. This is the thing they cannot do.</p>' +
-          '<a href="live-sessions.html">Enquire →</a></article>' +
-        '<article class="sr-pl-livecard"><div class="sr-pl-ph-fill"></div><div class="sr-pl-ph-scrim"></div>' +
-          '<h3>Guided workshops</h3>' +
-          '<p class="sr-pl-p">' + esc(wp.amount) + ' ' + esc(wp.per) + ' · ' + esc(wr.amount) + ' ' + esc(wr.per) + '</p>' +
-          '<p>Ninety minutes, remote, in a group. Someone takes you through it rather than you taking yourself through it.</p>' +
-          '<a href="live-sessions.html">See upcoming dates →</a></article>' +
-        '<article class="sr-pl-livecard"><div class="sr-pl-ph-fill"></div><div class="sr-pl-ph-scrim"></div>' +
-          '<h3>Retreats</h3>' +
-          '<p class="sr-pl-p">Dates and pricing on enquiry</p>' +
-          '<p>In person, over a few days. Cost depends on where and how long, so there is no useful number to put here.</p>' +
-          '<a href="mailto:contact@thesaferiseprotocol.com">Ask about retreats →</a></article>' +
-      '</div>' +
-      '<div class="sr-pl-orgstrip rv"><div class="sr-pl-ph-fill"></div><div class="sr-pl-ph-scrim"></div>' +
-        '<div><h3>Bringing this into an organisation</h3>' +
-        '<p>Programmes delivered to your teams, and platform access for employees.</p></div>' +
-        '<a href="organisations.html">For teams and organisations →</a>' +
-      '</div></div></section>';
+  function rClose() {
+    return '<section class="sr-pl-close" aria-labelledby="srPlCloseH">' +
+      picture('assets/plans/closing-band.webp', 'assets/plans/closing-band.jpg', 1400, 824, 'sr-pl-closeimg', '', true) +
+      '<div class="sr-pl-wrap sr-pl-closegrid"><div>' +
+        '<p class="sr-pl-kick">Not sure where to start?</p>' +
+        '<h2 id="srPlCloseH">Take a closer look.</h2>' +
+        '<p class="sr-pl-closecopy">Explore every track, protocol and resource before you choose a plan.</p>' +
+      '</div><a class="sr-pl-browse" href="index.html#router">Browse the library &rarr;</a></div>' +
+    '</section>' +
+    '<p class="sr-pl-endline">Real change has a place to land.</p>';
   }
 
-  /* SR-470 6.4 (PR-16) · the "What the price is for" section is removed: the
-     founder did not write it and questioned why it was there, and this pass
-     does not rewrite it. */
-
-  function bindReveal() {
-    var els = [].slice.call(document.querySelectorAll('.sr-pl-page .rv'));
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (reduced.matches || !('IntersectionObserver' in window)) {
-      els.forEach(function (e) { e.classList.add('in'); });
-      return;
+  /* The billing toggle. Only the four prices change; each price box reserves
+     the width of its widest figure, so nothing moves. */
+  function bindToggle(root) {
+    var btns = [].slice.call(root.querySelectorAll('.sr-pl-toggle button'));
+    var amts = [].slice.call(root.querySelectorAll('.sr-pl-amt'));
+    function set(period) {
+      btns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-billing') === period ? 'true' : 'false'); });
+      amts.forEach(function (a) { a.textContent = period === 'annual' ? a.getAttribute('data-a') : a.getAttribute('data-m'); });
+      root.setAttribute('data-billing', period);
     }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
-      });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: .06 });
-    els.forEach(function (e, i) { e.style.transitionDelay = (Math.min(i, 6) * 70) + 'ms'; io.observe(e); });
+    btns.forEach(function (b) { b.addEventListener('click', function () { set(b.getAttribute('data-billing')); }); });
+    set('monthly');
   }
 
   function render(opts) {
@@ -332,9 +235,9 @@
     var mount = typeof opts.mount === 'string' ? document.getElementById(opts.mount)
       : (opts.mount || document.getElementById('srPlans'));
     if (!mount) return;
-    mount.innerHTML = rHero() + rPlans() + rLibrary() + rCore() + rInside() + rLive();
-    bindReveal();
+    mount.innerHTML = rHero() + rMembership() + rLibrary() + rTools() + rClose();
+    bindToggle(mount);
   }
 
-  global.SafeRisePlans = { render: render };
+  global.SafeRisePlans = { render: render, TIERS: TIERS };
 })(window, document);

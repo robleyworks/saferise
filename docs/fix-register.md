@@ -23267,3 +23267,50 @@ SR-474 (plans rebuild) was superseded by SR-475 before it ran; its content is Pa
   `method-lab` (frameworks page) is a research-laboratory photograph, not the
   records hub — left. "Not a summary" (the privacy fact) and "not a summary of it"
   (ratings) do not name the feature — left.
+
+## SR-476 — SR-475 Part A: /plans rebuilt to the approved mockup
+
+Built to `_incoming/plans-mockup.html` (the mockup itself is not committed — it is a
+reference, and it carries the blurred library placeholders).
+- **Installed:** `assets/plans/hero.{jpg,webp}` (1700×734), `assets/plans/closing-band.{jpg,webp}`
+  (1400×824) — the page's own `assets/plans/` convention; `.webp` encoded here (Pillow).
+- **Structure:** hero · membership band (header + billing toggle, four cards, comparison) ·
+  protocol library · tools and resources · closing band · closing line. The old sections
+  (core library, stages, live sessions, the SR-386 CSS block) are gone.
+- **Where the mockup and the brief differed** (mockup on measurements, brief on rules):
+  (1) the mockup's table has a 27% label column, so its tier columns cannot sit under the
+  four full-width cards — VA2 requires alignment, so each row carries its label on its own
+  line above four cells on the cards' own grid (measured offset 0px at 1440 and 1024);
+  (2) the mockup scrolls the table sideways on phones (`min-width:820px`) — below 1000px
+  the page shows one block per tier instead, on the cards' grid; (3) card inner spacing
+  uses the brief's block scale (24/20/20) instead of the mockup's 14px, with tier name and
+  tagline kept together as one block; (4) the hero is a fixed height per breakpoint —
+  700/640/760px — sized to the copy plus the site's fixed nav, where the mockup used a
+  `min-height` that grows; (5) the system CSS pads every `<section>`
+  (`clamp(72px,9vw,128px)`); each sr-pl- section now sets its own padding so the scale is
+  the only spacing.
+- **Library:** read, not typed — live tracks from `content/tracks.js` (status live), then
+  every track in `content/dev-protocols.js` order, names and images via
+  `content/track-images.js`. DIFFERS: the brief says "from dev-protocols.js", which holds
+  only the in-development tracks; the live three lead the row as in the mockup. VA4: with
+  `dev-protocols.js` temporarily reordered and one track removed, the page followed
+  (Money Shift first, Addiction Recovery gone); file restored from git.
+  `tools/check-track-images.py`: pass.
+- **Links with no exact destination** (no all-protocols or all-resources page exists):
+  "View all protocols →" and "Browse the library →" go to `index.html#router` (the home
+  page's track chooser); "View all resources →" goes to `resource.html`. Founder to
+  confirm or name the pages.
+- **Verified at 1440 / 1024 / 375:** toggle changes only the four prices (€0 €16 €25 €33
+  and back), 0 of 728 elements moved (the pressed label's bold width is reserved — it had
+  moved the toggle 2.7px); cards equal height (278 / 270 / 270px); table columns 0px from
+  their cards, Premium wash exactly the Premium column; stacked per tier at 375, no
+  sideways scroll at any width; spacing — between sections 160/112/80, band top 72/56/44,
+  heading to content 48/40/32, inside cards 24/20/20, gutter 80/48/16; no border on any
+  element in the page content; the only count is "3 tracks max".
+- **Not touched, reported:** the page's own site nav and footer (shared boilerplate) still
+  use `border` lines; on a phone the nav wraps to 235px. The Sunrise toggle recolours the
+  nav and footer only — the page's content keeps the mockup's dark tokens.
+- **A10, report only:** annual billing means eight checkout products (four tiers × two
+  periods), not the four TIER-1 assumed. The annual totals (€192 / €300 / €396) ride on the
+  Start buttons as `data-annual-total` for checkout; they are never displayed. No checkout
+  work done.
