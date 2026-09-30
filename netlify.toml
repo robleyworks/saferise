@@ -1,31 +1,49 @@
 # SafeRise — Netlify configuration
 #
-# SR-491, 30 September 2026. Added to unblock three consecutive production
-# deploys that failed with "Exposed secrets detected" from 4:25 AM onward,
-# immediately after the Sovereign environment variables were imported.
+# SR-493, 30 September 2026. Supersedes the SR-491 version of this file, which
+# omitted the wrong two variables and did not fix the build.
 #
-# WHY THE SCANNER FIRES, AND WHY IT IS WRONG HERE
-# Netlify's secrets scanner takes the VALUE of every environment variable
-# set on the site and searches the build output for it. Two of the values
-# imported for netlify/functions/sv-reading.mjs are, by design, also
-# hard-coded in js/saferise-auth.js (lines 32-33), which is published:
+# ═══ WHY THE SECRETS SCANNER FIRES ═══
+# Netlify takes the VALUE of every environment variable set on this site and
+# searches the deploy output for it. A match fails the build. It cannot tell a
+# deliberately public value from a leaked one, so each must be named here.
 #
-#   SR_SUPABASE_URL       https://mynjjgtjytzyfsuqqlhg.supabase.co
-#   SR_SUPABASE_ANON_KEY  sb_publishable_...
+# The publish directory is the repository ROOT, so docs/, tests/, claude/ and
+# netlify/ are all part of the deploy output and are all scanned. The `404!`
+# rules in `_redirects` stop those paths being SERVED; they do not stop them
+# being PUBLISHED. That is why ordinary prose in a working document can fail a
+# production build.
 #
-# Both are meant to be in the browser. The publishable key is Supabase's
-# public client key; it carries no privileges of its own, and every table
-# it can reach is governed by row-level security (verified by query in
-# claude/SCHEMA-VERIFICATION-PART-B.md). The scanner cannot tell a
-# deliberately public key from a leaked one, so it is told here.
+# ═══ WHAT IS OMITTED, AND WHY EACH ONE IS SAFE ═══
 #
-# WHAT IS NOT OMITTED, DELIBERATELY
-# SR_READING_API_KEY, SR_READING_ID_SALT, SR_READING_ENDPOINT and
-# SR_READING_MODEL stay under the scanner. Those are genuine secrets and
-# must never appear in the build output. If the scanner ever fires on one
-# of them, that is a real leak and the build SHOULD fail. Do not widen the
-# list below to make a build pass without first establishing which value
-# matched and why.
+#   SR_SUPABASE_URL        the project URL, and SR_SUPABASE_ANON_KEY, the
+#   SR_SUPABASE_ANON_KEY   Supabase publishable client key. Both are hard-coded
+#                          in js/saferise-auth.js (lines 32-33) because they
+#                          belong in the browser. The publishable key carries no
+#                          privileges of its own; every table it reaches is
+#                          governed by row-level security, verified by query in
+#                          claude/SCHEMA-VERIFICATION-PART-B.md.
+#
+#   SR_READING_API_STYLE   the wire format name ('anthropic'). Appears in
+#                          netlify/functions/lib/provider.js, the unit tests and
+#                          a working document.
+#   SR_READING_ENDPOINT    the provider's public API URL. Named in docs.
+#   SR_READING_MODEL       the model name. Named in docs.
+#   SR_READING_TIMEOUT_MS  a number of milliseconds.
+#
+# None of those four is a credential. They are configuration held in the
+# environment so it can be changed without a deploy, not because it is secret.
+#
+# ═══ WHAT IS DELIBERATELY NOT OMITTED ═══
+#
+#   SR_READING_API_KEY     the provider credential
+#   SR_READING_ID_SALT     the per-member hashing salt
+#
+# Those two stay under the scanner. Neither has ever been flagged, which is the
+# evidence that no real secret is reaching the deploy output. If the scanner
+# ever names one of them, that is a genuine leak: stop, rotate the key, and find
+# how it got into the output. Do NOT add it to the list below to make a build
+# pass. The list is for values that are public by design — nothing else.
 
 [build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "SR_SUPABASE_URL,SR_SUPABASE_ANON_KEY"
+  SECRETS_SCAN_OMIT_KEYS = "SR_SUPABASE_URL,SR_SUPABASE_ANON_KEY,SR_READING_API_STYLE,SR_READING_ENDPOINT,SR_READING_MODEL,SR_READING_TIMEOUT_MS"
