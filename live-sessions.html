@@ -381,7 +381,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
     linear-gradient(160deg,var(--bg3),var(--bg2));
   display:grid;place-items:center;text-align:center;padding:26px}
 .slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.slot--wide{aspect-ratio:16/6;margin-top:30px}
+
 .slot--band{aspect-ratio:1400/380;margin-top:26px}
 .slot--sq{aspect-ratio:1/1}
 .slot--port{aspect-ratio:3/4}
@@ -431,17 +431,10 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 .formatnote strong{color:var(--text);font-weight:500}
 
 /* make image use contextual, not decorative */
-.lvsec>.wrap>.slot--wide{
-  aspect-ratio:16/5.3;
-  max-height:440px;
-  margin-bottom:6px;
-}
-.lvsec>.wrap>.slot--wide img{filter:saturate(.72) contrast(1.03)}
-.lvsec>.wrap>.slot--wide::after{
-  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,rgba(10,10,15,.05),rgba(10,10,15,.50))
-}
-.lvsec>.wrap>.slot--wide span{z-index:2}
+
+
+
+
 
 /* format chips */
 .formatchips{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 2px}
@@ -539,7 +532,7 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
 <!-- SR-486 · the page top (sr-pt-, archetype C: a contained band, copy below).
      It replaces the page's own hero rule (photograph behind the copy, inline top). -->
 <header class="sr-pt sr-pt--c">
-  <div class="sr-pt-in">
+  <div class="sr-pt-in"><div class="sr-pt-frame">
     <picture class="sr-pt-art"><source type="image/webp" srcset="assets/sessions/live-hero-remote.webp?v=453"><img src="assets/sessions/live-hero-remote.jpg?v=453" alt=""></picture>
     <div class="sr-pt-copy">
   <p class="sr-pt-kick">Live sessions</p>
@@ -554,14 +547,19 @@ body[data-open="t3"] #step-t3{display:block;animation:rise .7s var(--ease) both}
     <p><strong>Remote by default.</strong> In-person delivery is reserved for retreats, festivals, conferences and other hosted live events. Bringing this into a workplace? <a class="ctaalt" href="organisations.html">See organisations &#8594;</a></p>
   </div>
     </div>
-  </div>
+  </div></div>
 </header>
 
 <section class="sec2 lvsec" id="lv-me"><div class="wrap">
-  <div class="slot slot--wide" style="padding:0"><picture><source type="image/webp" srcset="assets/sessions/calendar.webp?v=453"><img src="assets/sessions/calendar.jpg?v=453" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></picture><span style="position:absolute;top:12px;left:14px;z-index:3;font-family:'Cormorant Garamond',serif;font-size:26px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.9)">17</span></div>
-  <div class="sh" style="margin-top:38px"><p class="eyebrow">For me</p>
-    <h2>Stay where you are. <em>Bring someone into the process.</em></h2>
-    <p>There is no clinic to travel to and no room you need to enter. Premium 1:1 and public workshops happen live by video, so support can meet the moment while it is still relevant.</p>
+  <!-- SR-500 · the "For me" band: copy over the calendar photograph (sr-ov-, the
+       same frame, inset and scrim as this page's top). The credline and format
+       chips stay below it. -->
+  <div class="sr-ov">
+    <picture class="sr-ov-art"><source type="image/webp" srcset="assets/sessions/calendar.webp?v=453"><img src="assets/sessions/calendar.jpg?v=453" alt=""></picture><span style="position:absolute;top:12px;left:14px;z-index:3;font-family:'Cormorant Garamond',serif;font-size:26px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.9)">17</span>
+    <div class="sr-ov-copy"><p class="sr-ov-kick">For me</p>
+      <h2 class="sr-ov-h">Stay where you are. <em>Bring someone into the process.</em></h2>
+      <p class="sr-ov-body">There is no clinic to travel to and no room you need to enter. Premium 1:1 and public workshops happen live by video, so support can meet the moment while it is still relevant.</p>
+    </div>
   </div>
   <div class="credline"><span>Every session, held by a trained practitioner.</span>
     <strong>Meditation Coach &#183; Certified Somatic Coach &#183; Certified Jungian Practitioner</strong></div>

@@ -114,15 +114,19 @@
 /member-record.html   r=decisions  /records?tab=decisions  301
 /member-record.html   r=chosen     /records?tab=chosen     301
 /member-record.html   /records?tab=chosen         301
-/faq                  /member-reading.html?r=faq       200
+# SR-500 · Support (was FAQ) lives at /support; /faq 301s to it.
+/support              /member-reading.html             200
+/faq                  /support                         301
 # SR-488 · Out Loud replaces Article and the podcast: one destination, three
 # sections. The two old paths land on their section.
 /out-loud             /member-out-loud.html            200
 /writing              /out-loud?s=articles             301
 /podcast              /out-loud                        301
 /clearing             /member-clearing.html       200
-# SR-485 · Start Here, a member's first stop (internally "orientation").
-/start-here           /member-start-here.html     200
+# SR-485 · a member's first stop (internally "orientation"). SR-500 · renamed
+# Best Practice (was Start Here): /best-practice, and /start-here 301s to it.
+/best-practice        /member-start-here.html     200
+/start-here           /best-practice              301
 /checkout             /member-checkout.html       200
 /live-sessions        /live-sessions.html         200
 /coming-soon          /coming-soon.html           200

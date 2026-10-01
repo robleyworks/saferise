@@ -24201,3 +24201,121 @@ local scratch-copy preview.
   screenshot shows none · Ab pass: no resume point: 2 cards, note hidden; with
   `sr.resume` set: 3 cards, note shown · Ac pass: Clearing · 02 Start new without a resume
   point; Clearing · 02 Carry on · 03 Start new with one · console clean.
+
+## SR-500 — The rail (the Part 1 SR-498 never received); archetype C overlaid; the "For me" band
+
+Brief: Part 1 · B · C · D (pasted 2026-09-30). Not pushed. Verified on the local
+scratch-copy preview.
+
+**Part 1 · the rail.** The Clearing card was confirmed present (`#srClearingPlay`) before the
+entry was removed.
+- `js/saferise-rail.js` ROUTES, in this order with these labels: Dashboard · Best Practice
+  (`orientation`) · The science (`method`) · Out Loud · What's coming · My Records ·
+  Support (`faq`) · Sessions & workshops. **The `clearing` entry is removed.** Its icon and
+  PAGES key stay, so `member-clearing.html` still lights its own page;
+  `member-clearing.html` and `/clearing` are untouched.
+- `dashboard.html` ROUTES: the same eight keys, labels and order come first. `dashboard`
+  and `orientation` are added; neither is ever read from that map (openRoute sends
+  dashboard home and PAGES catches orientation), and both are listed so the maps agree.
+  The non-rail keys follow (account, clearing, plans, reading, chosen, decisions, legal).
+  `clearing` stays there as an in-page destination, used by the "play the clearing" text
+  route.
+- Routes: `/best-practice` → member-start-here.html (200), `/start-here` 301 → it;
+  `/support` → member-reading.html (200), `/faq` 301 → it. Rail PAGES, dashboard PAGES
+  and links updated. **Filenames are kept** (member-start-here.html,
+  member-reading.html); the route is what a member sees, and the redirect map is
+  correct for both. **Sitemap generation needs no change:** both pages are `member-*`, which
+  the generator already excludes; check-sitemap still expects 22 pages, as before.
+- Renames: "Start Here" → Best Practice (title, h1, header comment, the CSS/CLAUDE.md
+  surface notes). "Where the method comes from" → The science (rail; dashboard ROUTES;
+  member-frameworks.html's title and eyebrow; the back-link on all six framework
+  pages). "FAQ" → Support (rail; the Support page's title, document.title and banner rail
+  label; Best Practice's link, now "Go to Support" at /support; the dashboard's button,
+  now "Visit Support", with its text route extended to match).
+  - **DIFFERS:** the six framework detail pages' titles and eyebrows never carried the
+    phrase. Their titles are the framework names and their eyebrows "Framework 0X of 06",
+    so only their back-links changed.
+  - The dashboard footer listed both "FAQ" and "Support" links to the same place. The
+    "FAQ" link is removed rather than renamed into a duplicate.
+  - **For the founder:** member-frameworks.html now reads eyebrow "The science" directly
+    over its h2 "The science we stand on".
+- "FAQ" is left where it names something else: the public pages' FAQ sections and the
+  FAQPage schema. Those are not this destination.
+
+**Part B · archetype C overlaid (both pages).** coming-soon and live-sessions both
+change, so C is one archetype on two pages. The mechanism is sr-bn-'s, through a new
+shared frame, `sr-ov-` (claimed in CLAUDE.md):
+- `.sr-pt--c .sr-pt-frame` is `position:relative`, 16:7, with a 40px inset (SR-486's
+  art↔copy value). The art is absolute (`inset:0`) behind the copy. The copy is a grid
+  child, set at the foot of the band.
+- At ≤1100 the ratio becomes `min-height:var(--sr-pt-cap)`, and at ≤700 the inset is
+  32/22/28, so the copy sets the height and nothing clips.
+- The scrim is sr-bn-'s gradient set, unchanged, at each breakpoint. Copy over the
+  plate is fixed light, so it reads the same in Midnight and Sunrise.
+- No overflow on the frame (SR-484's lesson); the art and scrim clip to the radius.
+- The old `.sr-pt--c .sr-pt-art{aspect-ratio:16/7…}` and `.sr-pt--c .sr-pt-copy{margin-top}`
+  rules are replaced.
+- **Crop:** live-hero-remote keeps the component's centre 42% focus. coming-hero (3.2:1,
+  losing about 28% of its width to 16:7) put its subject mid-band, under the copy, so it
+  takes `.sr-pt-art--r`, biased to **5% 42%** (the subject lands about two-thirds across,
+  clear of the copy). At ≤700 the band turns portrait and the focus returns to **50%**.
+- **DIFFERS, the cap:** at 16:7 the band is 490px at 1440, and live-sessions' copy needs
+  600px. Both are above SR-486's 440 cap. The brief fixes the plates at 16:7, and capping
+  the frame would clip the copy, so the frame grows with its copy, as sr-bn does. The
+  start offset, which the brief protects, is unchanged.
+
+| page | 1440 | 1024 | 1023 | 375 |
+|---|---|---|---|---|
+| coming-soon: art start / band height | 132 / 490 | 132 / 440 | 112 / 360 | 268 / 495 |
+| live-sessions: art start / band height | 132 / 600 | 132 / 535 | 112 / 535 | 268 / 685 |
+
+First section top (fold): coming-soon 662 at 1440×900 and 612 at 1024×768;
+live-sessions 772 and 707. At 375 live-sessions' first section starts below the fold
+(993); that was not a requirement.
+
+**Part C · the "For me" band.** The calendar photograph and the "For me" copy are now one
+`.sr-ov` band: the same frame, inset and scrim as the page top, and the same 16:7 ratio
+(490 at 1440, 360 below 1100). The eyebrow, h2 and paragraph are unchanged words. The
+photograph's decorative "17" overlay is kept as it was. `.credline` and `.formatchips`
+stay below the band, unchanged. The `.slot--wide` rules (only this band used them) are
+removed from the page's style block.
+
+**Part D · AMBIGUOUS, skipped and reported.** Found by its copy: the copy is in
+`#srJCols` (`.sr-dash-jcols` > `.sr-dash-jcol`, with `.sr-dash-jtag` / `.sr-dash-jname`
+/ `.sr-dash-jvalue` / `.sr-dash-jbody`), inside `.sr-dash-jpanel` in `#srJourney`.
+**The angled panels are the photograph** (`#srJBand img`, `assets/journey/t1–t3-band.webp`,
+1400×380, three angled photos in one image). The copy is not on the panels: it sits in
+three straight columns **beneath** the band. There is **no arrow control** and no panel
+foot. Insetting columns that do not touch a diagonal would not do what the ruling
+describes. One thing worth knowing: the columns are not equally inset today. The first
+has `padding-left:0`, on the "ALIGNMENT — last word" rule's text line, and the second
+and third have 30px after their divider. No change made. Did the founder mean these
+columns, or a mockup where the copy sits on the panels?
+
+**VERIFY**
+- P1a: only historical comments, plus "start here" as instructions rather than the page
+  name (the dashboard triptych tags "01 · Start here" (Part D's own copy), index.html's
+  "START HERE" resource categories and "WHEN ANGER IS HIGH — START HERE", and
+  member-watts' reading note "Start here."). Renaming those to Best Practice would
+  change their meaning. "Where the method comes from": zero outside comments.
+- P1b: `_redirects` as listed (Netlify-only; the 301s were not exercised locally).
+- P1c pass (eight entries, this order, no Clearing; on the dashboard, "Sessions &
+  workshops" is hidden by the existing switched-off sessions view, as before).
+- P1d pass (key, label and position agree for all eight).
+- P1e pass (the card is present and opens the player, SR-498/499).
+- Ba pass (both pages, copy over art at 1440/1024/1023/375).
+- Bb pass (start offsets in the table, matching SR-486).
+- Bc pass (kicker gold and copy ivory computed in both themes; copy fully inside the
+  frame at every width; screenshots).
+- Bd pass (no sideways scroll).
+- Be pass: the other twelve page tops re-measured (index, organisations, plans, about,
+  method, legal, terms, privacy, refunds, accessibility, getting-help, the private
+  sheet) — identical to SR-486's table at 1440/1023/375. No markup changed on them; the
+  CSS change is scoped to `.sr-pt--c` and `.sr-ov`.
+- Bf pass (above).
+- Ca pass · Cb pass (credline and chips below, unchanged) · Cc pass.
+- D not run.
+
+**Suite:** tests/sv-reading 52/52 · tier harness 15/15 · settings harness 6/6 ·
+check-track-images PASS · check-hand-to-heart PASS · check-sitemap: the same pre-existing
+mismatch (22 expected).

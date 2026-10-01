@@ -6658,8 +6658,8 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   sr-or- · START HERE, /start-here (member-start-here.html) — SR-485.
-   "Orientation" internally; "Start Here" is all a member sees. The help
+   sr-or- · BEST PRACTICE, /best-practice (member-start-here.html) — SR-485,
+   renamed SR-500. "Orientation" internally; "Best Practice" is all a member sees. The help
    videos are not supplied yet, so the page is its structure plus an honest
    empty state. Theme tokens throughout (plain var), so Midnight and Sunrise
    carry through. No borders: inset ring or shadow only. No durations, no
@@ -6783,8 +6783,21 @@ body:has(.sr-pt) #srNav{display:contents}
 @media(max-width:767px){.sr-pt--b .sr-pt-in{grid-template-columns:minmax(0,1fr)}.sr-pt--b .sr-pt-art{order:-1}}
 
 /* --c · contained band, copy below */
-.sr-pt--c .sr-pt-art{height:auto;aspect-ratio:16/7;border-radius:16px;box-shadow:0 18px 44px -24px rgba(0,0,0,.8)}
-.sr-pt--c .sr-pt-copy{margin-top:var(--sr-pt-gap)}
+/* SR-500 · founder-ruled 30 September: archetype C puts the copy OVER the
+   artwork, inside a contained band. The mechanism is sr-bn-'s, shared with the
+   live-sessions "For me" band through the sr-ov- frame below: the frame is
+   position:relative with an aspect-ratio and an interior inset, the artwork is
+   absolute (inset:0) behind it, and the copy is a grid child inside the inset.
+   Below 1100px the ratio gives way to a min-height and the copy sets the height,
+   so nothing clips. The artwork still starts where SR-486 measured it; only the
+   copy moved inside. */
+.sr-pt--c .sr-pt-copy{margin-top:0;max-width:640px}
+.sr-pt--c .sr-pt-h{color:#F5EDD8}
+.sr-pt--c .sr-pt-h em{color:#E8C877}
+.sr-pt--c .sr-pt-copy p.sr-pt-kick{color:#D4A843}
+.sr-pt--c .sr-pt-copy p{color:#D2CDC4}
+.sr-pt--c .sr-pt-copy strong{color:#F5EDD8}
+.sr-pt--c .sr-pt-copy a{color:#E8C877}
 
 /* --d · copy only: begins exactly where the others' artwork does */
 /* .sr-pt-body · the reading column that follows a copy-only top on the
@@ -6812,7 +6825,7 @@ body:not(:has(.nav)) .sr-pt{padding-top:calc(79px + var(--sr-pt-air))}
                      Shorter form). Same plate, same words, less height:
                      2400:520, about 65%. It reads as moving within one place
                      rather than arriving somewhere new.
-     .sr-bn--plain   no plate: the copy on the page ground (Start Here and the
+     .sr-bn--plain   no plate: the copy on the page ground (Best Practice and the
                      other copy-only member heads)
    The frame keeps its ratio and grows only when the copy needs more room.
    Colours over a plate are fixed, because the photograph is the ground in
@@ -6888,3 +6901,46 @@ body:not(:has(.nav)) .sr-pt{padding-top:calc(79px + var(--sr-pt-air))}
 .sr-ol-empty{padding:28px 26px;border-radius:14px;background:var(--bg2);box-shadow:inset 0 0 0 1px var(--hair)}
 .sr-ol-emptyh{margin:0;font-family:'Cormorant Garamond',serif;font-size:24px;line-height:1.25;color:var(--text)}
 .sr-ol-emptyb{margin:10px 0 0;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;color:var(--text2);max-width:58ch}
+
+/* ═══════════════════════════════════════════════════════════════
+   sr-ov- · THE OVERLAY FRAME: copy over artwork inside a contained band
+   (SR-500). One frame for archetype C's page top (.sr-pt--c .sr-pt-frame) and
+   the live-sessions "For me" band (.sr-ov), so the ratio, inset and scrim are
+   literally the same rules. The scrim is sr-bn-'s gradient set, not a new
+   value, so a light frame cannot wash the copy out in either theme (the copy
+   is fixed light because the photograph is the ground). The inset is SR-486's
+   40px art-to-copy standard. No overflow on the frame itself: on an
+   aspect-ratio box it would zero the content minimum and clip the copy, so
+   the art and the scrim clip to the radius instead. No borders.
+   ═══════════════════════════════════════════════════════════════ */
+.sr-pt--c .sr-pt-frame,.sr-ov{position:relative;isolation:isolate;aspect-ratio:16/7;display:grid;grid-template-columns:minmax(0,1fr);
+  align-content:end;padding:40px;border-radius:16px;box-shadow:0 18px 44px -24px rgba(0,0,0,.8)}
+.sr-pt--c .sr-pt-frame > .sr-pt-art,.sr-ov-art{position:absolute;inset:0;z-index:-2;display:block;height:auto;max-height:none;
+  border-radius:inherit;overflow:hidden}
+.sr-pt--c .sr-pt-frame > .sr-pt-art img,.sr-ov-art img{display:block;width:100%;height:100%;object-fit:cover}
+.sr-pt--c .sr-pt-frame::after,.sr-ov::after{content:'';position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(55% 60% at 100% 100%,rgba(8,8,12,.72) 0%,rgba(8,8,12,0) 72%),
+             linear-gradient(95deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.74) 32%,rgba(8,8,12,.14) 60%,rgba(8,8,12,.3) 100%),
+             linear-gradient(0deg,rgba(8,8,12,.62) 0%,rgba(8,8,12,0) 42%)}
+/* --r · the subject sits right of centre in the band, clear of the copy.
+   coming-hero is 3840×1200 (3.2:1) and loses about 28% of its width to 16:7.
+   At centre focus the subject lands mid-band, under the copy. Biased to 5%,
+   the crop keeps the left of the plate and the subject (at the plate's
+   centre) lands at about two-thirds across. Under 700px the band is portrait,
+   so the focus returns to centre. */
+.sr-pt--c .sr-pt-frame > .sr-pt-art--r img{object-position:5% 42%}
+@media(max-width:700px){.sr-pt--c .sr-pt-frame > .sr-pt-art--r img{object-position:50% 42%}}
+/* the For me band's copy, set like the page top's */
+.sr-ov-copy{max-width:640px}
+.sr-ov .sr-ov-kick{margin:0;font-family:'Cinzel',serif;font-weight:500;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#D4A843}
+.sr-ov .sr-ov-h{margin:14px 0 0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(28px,3.2vw,44px);line-height:1.08;color:#F5EDD8;max-width:22ch}
+.sr-ov .sr-ov-h em{font-style:italic;color:#E8C877}
+.sr-ov .sr-ov-body{margin:14px 0 0;font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.65;color:#D2CDC4;max-width:56ch}
+@media(max-width:1100px){
+  .sr-pt--c .sr-pt-frame,.sr-ov{aspect-ratio:auto;min-height:var(--sr-pt-cap,360px);padding:40px 32px}
+  .sr-pt--c .sr-pt-frame::after,.sr-ov::after{background:linear-gradient(95deg,rgba(8,8,12,.9) 0%,rgba(8,8,12,.8) 48%,rgba(8,8,12,.4) 78%,rgba(8,8,12,.5) 100%)}
+}
+@media(max-width:700px){
+  .sr-pt--c .sr-pt-frame,.sr-ov{padding:32px 22px 28px}
+  .sr-pt--c .sr-pt-frame::after,.sr-ov::after{background:linear-gradient(180deg,rgba(8,8,12,.72) 0%,rgba(8,8,12,.84) 55%,rgba(8,8,12,.92) 100%)}
+}

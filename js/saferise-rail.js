@@ -43,7 +43,7 @@
   'use strict';
 
   var ICONS = {
-    /* SR-485 · Start Here (internally "orientation"): a compass, since this is
+    /* SR-485 · Best Practice (internally "orientation"; was "Start Here"): a compass, since this is
        where a member gets their bearings */
     orientation: {
       round: true,
@@ -113,24 +113,22 @@
 
   /* order is render order */
   var ROUTES = [
-    /* SR-485 · first, above Dashboard: a first-time member meets it before
-       anything else. "Start Here" is the only name a member sees. */
-    { key: 'orientation', label: 'Start Here' },
-    { key: 'dashboard', label: 'Dashboard' },
-    { key: 'method',    label: 'Where the method comes from' },
-    { key: 'coming',    label: 'What’s coming' },
-    { key: 'coaching',  label: 'Sessions &amp; workshops' },
-    /* SR-453 (PASS-AH §1) · SR-444's seven, labels copied from
-       dashboard.html's own ROUTES map, in that map's order */
-    { key: 'clearing',  label: 'The Clearing' },
-    /* SR-485 · "Add a track" removed. Plans are reached from Account & plan
-       (the member's own) and /plans (the ladder). */
-    /* SR-488 · one entry for the podcast, articles and short form (N3) */
-    { key: 'outloud',   label: 'Out Loud' },
-    { key: 'faq',       label: 'FAQ' },
-    /* SR-478 · The Chosen Self and Decisions are tabs of My Records now
-       (MY-RECORDS-HUB.md L1): one rail entry, not two destinations. */
-    { key: 'records',   label: 'My Records' }
+    /* SR-500 · the founder's order and labels (30 September). This list is the
+       source of truth; dashboard.html's ROUTES map carries the same keys,
+       labels and order. Renames: "Start Here" → Best Practice, "Where the
+       method comes from" → The science, "FAQ" → Support (the keys are
+       unchanged). The Clearing has no rail entry: it is reached from its
+       dashboard card (SR-498/499) and /clearing. "Add a track" went in SR-485;
+       Article and the podcast became Out Loud in SR-488; The Chosen Self and
+       Decisions are tabs of My Records (SR-478). */
+    { key: 'dashboard',   label: 'Dashboard' },
+    { key: 'orientation', label: 'Best Practice' },
+    { key: 'method',      label: 'The science' },
+    { key: 'outloud',     label: 'Out Loud' },
+    { key: 'coming',      label: 'What’s coming' },
+    { key: 'records',     label: 'My Records' },
+    { key: 'faq',         label: 'Support' },
+    { key: 'coaching',    label: 'Sessions &amp; workshops' }
   ];
   var FOOT_ROUTES = [
     { key: 'account', label: 'Account &amp; plan' },
@@ -149,7 +147,7 @@
   /* SR-468 · root-relative, so the rail works from a nested or trailing-slash
      URL (/record/*, /faq/, /clearing/ …), not only from the site root. */
   var PAGES = {
-    orientation: '/start-here',
+    orientation: '/best-practice',   /* SR-500 · was /start-here */
     dashboard: '/dashboard.html',
     method: '/member-frameworks.html',
     coming: '/member-coming-soon.html',
@@ -158,7 +156,7 @@
        dashboard.html's PAGES so a rail click never falls through to
        dashboard.html#route= (whose resolver ignores PAGES keys). */
     records: '/records',
-    faq: '/member-reading.html?r=faq',
+    faq: '/support',   /* SR-500 · Support; was /member-reading.html?r=faq */
     outloud: '/out-loud',
     clearing: '/member-clearing.html',
     /* SR-453 (PASS-AH §1) · legal, for the same reason as account above:
