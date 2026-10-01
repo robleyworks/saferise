@@ -119,18 +119,43 @@ must agree with the reconciled privacy pages. A Sovereign session record with AI
 feedback on does not stay on the device. Whatever sits behind that rail item is
 held to the same standard as `privacy.html`.
 
-### 6 · Build next → `banner-build-next`
+### 6 · Build next → `banner-build-next` — NOW PART OF WHAT'S COMING
+
+**Founder-ruled 1 October.** Build next is not a page of its own. It merges into
+**What's coming** (`member-coming-soon.html`), whose page top becomes this
+banner and whose tab control is this rail. The nine track cards live inside the
+VOTE NOW tab, because they are what a member votes on.
+
+Copy revised 1 October — this supersedes the 30 September version.
 
 | | |
 |---|---|
 | Kicker | WHAT SHOULD WE BUILD NEXT? |
 | Headline | Help shape what comes next. |
-| Subhead | You use the platform. Your friction matters. |
-| Body | Vote on ideas already being considered, suggest something missing and see what has moved into development.<br><br>Popular does not automatically mean next — but every signal helps us make better decisions. |
+| Subhead | *The protocols you needed and didn't find matter.* |
+| Body | Vote on the tracks already being considered, suggest one that's missing, and see what has moved into development.<br><br>Popular does not automatically mean next — but every signal helps us make better decisions. |
 | Pull quote | *Built closer to the people using it.* |
-| Rail | VOTE NOW — Ideas currently under consideration. · SUGGEST — Tell us what is missing. · IN REVIEW — What we are exploring. · BUILDING — What has moved into development. · SHIPPED — What members helped shape. |
+| Rail | VOTE NOW — Tracks under consideration. · SUGGEST — Tell us what is missing. · IN REVIEW — What we are exploring. · BUILDING — What has moved into development. · SHIPPED — What members helped shape. |
 
 Subject: woman in an unfinished floor of a building, lake beyond.
+
+**What changed, and why.** "You use the platform. Your friction matters." is
+withdrawn — *friction* covered everything from a missing track to a slow page,
+so a member could not tell what was being asked of them. "Ideas" becomes
+"tracks" wherever it means a track; the SUGGEST and IN REVIEW rail lines are
+unchanged, because a member's submission is a proposal, not yet a track.
+
+**The share card.** "New tracks, coming soon." is this page's `og:description`
+and the subtitle on the share card a member sends by email or social. It is not
+placed on the page itself: the banner headline, the VOTE NOW tab and its rail
+line already label that content three times over. On a share card it does work
+nothing else does — it tells a recipient who may not know SafeRise what they are
+looking at.
+
+**The removed page top.** `member-coming-soon.html` opened with "Coming soon ·
+Nine tracks, already being written." That is replaced by the banner above. It
+also stated a track count, which the standing rule forbids in product copy —
+do not reintroduce it anywhere.
 
 ### 7 · SafeRise Out Loud → `banner-out-loud`
 
