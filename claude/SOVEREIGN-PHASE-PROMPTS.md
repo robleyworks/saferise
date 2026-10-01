@@ -10,8 +10,8 @@ guided voice says at that step — from *"here is what is happening to you"* int
 *"here is what to say"* — in the founder's own language and order. No new
 vocabulary.
 
-**Status.** The Clearing and Track 01 are written. Tracks 02 and 03 are twenty
-further protocols in the same file and follow in the same form.
+**Status.** Complete. Thirty-one protocols — the Clearing, Track 01, Track 02 and
+Track 03 — one hundred and twenty-four prompts.
 
 ---
 
@@ -433,9 +433,619 @@ And one thing already here.
 
 ---
 
-## Still to write
+---
 
-Track 02, ten protocols: Speak · Repair · Rebuild · Release · Open · Level ·
-Clarify · Appreciate · Meet · (tenth). Track 03, ten protocols. All are in the
-same recording-scripts file, in the same four-phase form, and follow the rules
-at the head of this document.
+# Track 02 · Relationship Healing
+
+## T2-01 · Speak
+
+**Recognise** — Find where it is in your body, before any of the words. Nothing
+behind it yet. Now name the state. One word.
+Not the conversation. The state you'd be walking in with.
+
+**Regulate** — Four counts in. Six counts out. Longer out than in. Attention
+into the centre of your chest. A hand there if it helps.
+The throat is worth some attention here. This state closes it, and a closed
+throat changes your voice before you've said anything. Let the jaw come apart
+slightly. Let the tongue drop off the roof of the mouth.
+
+**Release** — Two things are running. Some of it is preparation — genuinely. But
+past the second version it stops being preparation and becomes an argument
+rehearsed with someone who isn't in the room. And notice which way it goes: in
+every draft, you have the better lines.
+Put down the rehearsing.
+And the question: not what's wrong with me that I can't just have a conversation
+— that returns nothing, and plenty of people find this hard for reasons that
+make sense. **What was this for?**
+
+**Rise** — Step outside it. See yourself from across the room. Someone sitting
+there, about to say something difficult, breathing four and six. Speak to them
+as *you*. *You have something to say. You are allowed to say it badly.*
+Now something concrete. Not the whole conversation — you don't control most of
+it, and rehearsing their half is what we just put down. **Only your first
+sentence.** Where you'll be. What you'll be doing with your hands. The actual
+words you'll open with.
+And one thing already here.
+
+## T2-02 · Repair
+
+**Recognise** — Find where it is in your body, before any of the words. The
+break has an edge on both sides. Now name the state. One word.
+They have an account too, and theirs will not match yours, and that on its own
+is not evidence of anything. We're not touching either account. Only the state.
+
+**Regulate** — Four counts in. Six counts out. Longer out than in.
+Attention into the centre of your chest — including the part that aches. We're
+not going around it. A hand there if it helps.
+This state pulls toward the phone. Toward sending something, or checking whether
+they've sent something. Not yet.
+
+**Release** — Two things are running. One of them feels like getting clear. What
+it's actually doing is preparing a case — and **a case needs someone to lose.**
+Put down the case.
+And the question: not what's wrong with me that this keeps happening — that
+returns nothing you can use. **What was this for?** Something in you moved fast
+when the rupture happened, and it moved to protect something. Understanding what
+it was protecting doesn't excuse anyone and doesn't settle who was right. Leave
+the question there.
+
+**Rise** — Step outside it. See yourself from across the room. Someone sitting
+there with something unresolved, breathing four and six. Speak to them as *you*.
+*Something broke, and you want it back. That's all this is so far.*
+Now stay outside a moment longer, and stand somewhere else — where they were
+standing. Same room, same evening, seen from their side. What landed, from
+there. What they didn't know that you did. Not agreeing with them. Just standing
+where they stood, briefly.
+And one thing already here.
+
+## T2-03 · Rebuild
+
+**Recognise** — Where is it sitting? Chest and stomach, usually, at the same
+time. Something hot and something dropping. The jaw. A restlessness that has
+nowhere to put itself. One word.
+What happened, happened. This doesn't touch it.
+
+**Regulate** — Four counts in. Six out. Longer out than in. Attention into the
+middle of your chest. A hand there if it helps.
+Sleep's probably gone. That's what this state does — it doesn't stand down at
+night, because it's decided nights are when things get past you.
+
+**Release** — Two things running, and the first one is not up for discussion.
+The second is going back through everything else. Every conversation, every
+trip, every ordinary Tuesday — re-read, looking for what you missed.
+Does it ever come out clean? It doesn't. Every pass finds something, because
+anything can be read two ways once you're reading for it. You could go through
+five years and never reach the end.
+The betrayal stays. Put down the re-reading. That's not deciding you were wrong.
+
+**Rise** — Step outside it. Someone across the room, breathing four and six,
+holding something heavy and holding it steadily. Speak to them as *you*. *You
+were right about what happened. And nothing has to be settled today unless it
+does.* Both halves — the second one is the one people skip.
+Now forward, and small. Not the conversation where it's resolved; you don't
+control that half, and it may not be available at all. Today. Somewhere
+specific, doing something ordinary.
+And one thing already here.
+
+## T2-04 · Release
+
+**Recognise** — Where does it sit? Chest, tight rather than hot. Jaw. Something
+in the shoulders. A heaviness that's been there so long it stopped registering
+as a feeling and started registering as a fact about your life. One word.
+Nobody is auditing it, and nothing here says you've kept it unfairly.
+
+**Regulate** — Four in. Six out. Attention into the middle of your chest.
+Unclench the jaw. Open the hands if they've closed. This one holds quietly, and
+it holds for years.
+
+**Release** — So — two things. It doesn't come out level. It isn't built to. **A
+tally you're keeping about someone who isn't keeping one back will never
+balance**, and some part of you has been waiting for it to.
+The grievance stays. Every item on it stays. Put down the keeping.
+Which isn't forgiving anyone. Nobody's asking. It's stopping an accounting that
+was never going to be settled by more accounting.
+And the question: not what's wrong with me that I can't let this go — **what was
+this for?**
+
+**Rise** — Step back. Someone over there, breathing four and six, who has been
+reasonable for a very long time. Speak to them as *you*. *You kept a fair
+account. And it was never going to be paid.*
+Now — you can see where your attention's been. On a ledger, mostly, for years.
+So put it somewhere by choice. One thing you'll actually do: stop absorbing, or
+decline. Small enough that you'll do it this week, feeling exactly as you do
+now. Say it once to yourself.
+And one thing already here that the list has nothing to do with.
+
+## T2-05 · Open
+
+**Recognise** — Where is it? Chest, often — not tight exactly. More like
+something held slightly apart. Throat. A stillness through the middle of you
+that isn't calm. One word.
+You described a state, and something in you did the describing. Those aren't the
+same thing.
+
+**Regulate** — Four in. Six out. Attention into the middle of your chest.
+A hand there if you want one. Your own warmth, at the place that's been held
+apart.
+
+**Release** — Two things going on. The second is the managing, and it's so
+practised you've stopped noticing you're doing it.
+The distance can stay exactly as it is. Put down the managing — just for the
+next few minutes, in a room where nobody's coming closer.
+And the question: not what's wrong with me that I can't just be open — that one
+arrives from outside and it's never helped anyone. **What was this for?**
+Something in you decided that a certain amount of closeness is where it stops
+being safe.
+
+**Rise** — Step back a little. Someone over there with a hand on their chest,
+breathing four and six. Speak to them as *you*. *You're not cold. You're
+guarded. Those are different things.*
+Now one thing, and make it smaller than you think. Not opening up. Not the
+conversation. Something almost invisible — staying in the room a minute longer.
+Answering the actual question instead of the near one. Not making the joke.
+Small enough that you'll actually do it, guarded.
+And one thing already here.
+
+## T2-06 · Level
+
+**Recognise** — Where does it sit? Chest. Throat, sometimes — the place where
+the thing you didn't say is. A tightness that comes up sharply when it happens
+again. One word.
+Being right and being settled are two separate projects. You can have both —
+just not in the same minute.
+
+**Regulate** — Four in. Six out. Attention into the middle of your chest.
+Unclench the jaw. Let the shoulders come down.
+
+**Release** — Two things. One of them you're winning. **A case that unanswerable
+can't be raised without a fight, so it doesn't get raised. It just gets
+bigger.**
+The observation stays. Put down the collecting.
+And the question: not why am I the one who has to put up with this — **what was
+this for?** Something in you is very good at noticing when things aren't even.
+That's a skill, learned somewhere it mattered a great deal to know.
+
+**Rise** — Step back. Someone across the room, breathing four and six, holding
+an accurate observation. Speak to them as *you*. *You're not imagining it. And
+you don't need a case to say it.*
+That second part is the whole thing. **A case needs someone to lose. A sentence
+doesn't.**
+So — one sentence. Not the argument. The plain observation, said once, without
+the eleven supporting instances behind it. What are the actual words. Where are
+you when you say them.
+And one thing already here.
+
+## T2-07 · Clarify
+
+**Recognise** — Where is it? Heat, usually — face, chest. Something fast. Hands.
+The particular quality of being very certain very quickly. One word.
+You described a state, and something in you did the describing. Those aren't the
+same thing, and it's the second one we're using for the next few minutes.
+
+**Regulate** — Four in. Six out. Attention into the middle of your chest.
+Open the hands. Feet down.
+
+**Release** — Two things. One of them feels like clarity, and it has one
+reliable feature: **it never reduces anything.** The reaction stays exactly
+where it was, and now there's a person attached to it.
+So put down the placing. Keep the reaction — it's yours and it's information.
+And the useful question here isn't what's wrong with them. It isn't what's wrong
+with me either. **What was this for?** When a reaction outruns the event, the
+extra is carrying something.
+
+**Rise** — Step back. Someone over there, breathing four and six, who
+overreacted and noticed. Speak to them as *you*. *Something in that was about
+you. That's a finding, not a fault.*
+Now one thing you'll do with it. Not an apology unless one is owed — and if one
+is, that's separate work. Something for next time. The pause before the
+certainty. Asking instead of concluding. Saying *that landed bigger than it
+should have* out loud.
+And one thing already here.
+
+## T2-08 · Appreciate
+
+**Recognise** — One word, and we're not going hunting for it. No need to find
+where it sits; in this state that's hard, and not finding it belongs to the
+state rather than to you.
+Here's the thing worth knowing. **Flatness isn't selective.** It doesn't turn
+down the bad and leave the good — it turns everything down together. The good
+things are still there. They're just arriving quietly.
+
+**Regulate** — Contact before counting.
+A hand on your chest, or hold your own arm. Let it stay.
+Now the breath. **Longer out than in.** Count it if you can.
+
+**Release** — Two things, and the second is the one that stings. *They went to
+all that effort. Other people would be thrilled. What is wrong with me.* That's
+a reproach, running underneath, and it doesn't lift the flatness. It adds to it.
+Put down the reproach. Keep the flatness — it isn't doing any harm on its own.
+And the question: not what's wrong with me that I can't feel this — **what was
+this for?** Turning everything down is what a system does when it needs to.
+
+**Rise** — Step back a little. Someone over there, breathing four and six. Not
+in any trouble. Speak to them as *you*. *You're flat. It isn't the same as not
+caring.*
+Now one specific good thing. Not a list, and don't try to feel anything about
+it. Just name one that's factually true. Somebody did something. Something went
+right. Something is still here.
+**You don't have to feel it for it to be true.** That's the whole move.
+
+## T2-09 · Meet
+
+**Recognise** — Where is it? If you're the one moving toward — chest, high and
+fast, something urgent in the hands. If you're the one moving away — a stillness,
+a flattening, something behind the eyes. The distance between you constant.
+One word. And notice what it left out. Them. What they do. What they always do.
+
+**Regulate** — Four in. Six out. Attention into the middle of your chest. A hand
+there, feet down.
+If you're the pursuer, this will feel like doing nothing while something is
+unresolved. If you're the withdrawer, it'll feel like an unusually easy few
+minutes. **Both are the pattern, showing up in the practice.**
+
+**Release** — Two things. Each is a reasonable response to the other one. And
+together they make the gap bigger, reliably, every single time.
+Neither of you is doing it wrong. You're both doing the thing that works on a
+threat, at someone who isn't one.
+Put down the manoeuvring. **Just yours** — you can't put down theirs, and trying
+is another move.
+And the question: not why do they always do this, which has never once produced
+a change. **What was this for?**
+
+**Rise** — Step back. Someone across the room, breathing four and six, halfway
+through a pattern that has two people in it. Speak to them as *you*. *You're not
+the problem. And your half is the only half you've got.*
+Now one move that isn't the usual one. Not a strategy, and not something
+designed to make them do something. *I've gone quiet and it isn't about you.*
+Small enough that you'll do it, feeling exactly like this.
+And one thing already here.
+
+## T2-10 · Close
+
+**Recognise** — One word, and we're not going looking. You don't have to find
+where it sits. That's often hard here, and not finding it is the state, not a
+failure of attention.
+Two things are stacked here. There's what's happened. And there's you, in a
+state about it. **Only one of those moves today.**
+
+**Regulate** — Contact first.
+A hand on your chest, or hold your own arm.
+Now, **longer out than in**. Count it if you can.
+
+**Release** — There's the ending. That happened, and it stays happened.
+And there's the going back through it. The point it turned. The thing you should
+have said. The version where you both did something differently and it held.
+Does that one ever finish? It doesn't reopen anything. It just runs, and it
+costs the day, and it lands you back at the start each time.
+The ending stays. Put down the going back through. And be clear what that isn't
+— it isn't deciding it didn't matter.
+
+**Rise** — Step back, if you can. Someone sitting there with a hand on their
+chest, in the middle of something that hasn't finished being hard. Speak to them
+as *you*. *This is a lot. You're still here.* No correction in that.
+Now one thing later that's yours to decide. Small enough to be certain of. Not a
+step toward moving on. Not a step toward anything. Standing up. Going outside.
+Eating something. **Just something that's yours**, on a day when almost nothing
+is.
+
+---
+
+# Track 03 · Professional Performance
+
+## T3-01 · Steady
+
+**Recognise** — Find where it is in your body, before any of the words. Held,
+not fraying. Now name the state. One word.
+It's just a state.
+
+**Regulate** — Four counts in. Six counts out. Longer out than in.
+**Nobody can see you doing this.** It works with your eyes open, in a lift, at a
+table.
+Attention into the centre of your chest. Press your feet into the floor; feel it
+push back.
+Now the throat and jaw. This state closes both, and a closed throat changes your
+voice before you've said anything. Let the teeth come apart.
+
+**Release** — Two things are running. One is the version you keep running. It's
+the bad one. It's always the bad one.
+That isn't preparation, and it isn't caution either. Every pass through it puts
+your body back at the start, and it's using the attention you're going to need
+in the room.
+Let the state stand — it's here and it's appropriate. Put down the pre-playing.
+And the question: not what's wrong with me that I still get like this. **What
+was this for?**
+
+**Rise** — Step outside it. See yourself from across the room. Someone waiting
+to go in, breathing four and six, feet on the floor. Speak to them as *you*.
+*You are keyed up, and you are ready. Those are both true.*
+Now something small. Not the whole thing going well — you don't control most of
+it, and that's the version we just put down. **The first thirty seconds.**
+Walking in. Where you'll stand. What your hands do. The actual first sentence.
+And one thing already here.
+
+## T3-02 · Navigate
+
+**Recognise** — Where is it? Jaw. Shoulders. A tightness across the chest that
+arrives when their name comes up. Something in the stomach before a meeting
+they're in. One word.
+Your read of them isn't available to work on. The state in your jaw is.
+
+**Regulate** — Four counts in. Six out. Longer out than in. Attention into the
+middle of your chest.
+Unclench the jaw. Let the shoulders come down. This works at a desk, in a lift,
+in the moments before you go in. Nobody can see you doing it.
+
+**Release** — Two things are running, and you're winning one of them.
+**A case that complete makes ordinary collaboration harder**, because every
+neutral exchange gets read as evidence for or against it.
+The conflict stays. Put down the case.
+And the question: not why are they like this — that's never produced a change in
+anybody. **What was this for?** Something in you went on alert around this
+person and hasn't come off it.
+
+**Rise** — Step outside it. Someone at a desk, breathing four and six, in a
+situation they didn't choose. Speak to them as *you*. *You don't have to like
+them. You have to be able to work.* Different jobs, and only one of them is
+required.
+Now forward, and specific. Not the meeting where you're vindicated — you don't
+control that and it may never come. **The next actual exchange.** Where are you.
+What's the first thing out of your mouth.
+And one thing already here.
+
+## T3-03 · Dissolve
+
+**Recognise** — Where does it sit? Chest, unsteady rather than tight. Stomach. A
+tightness in the throat just before you speak in a room where it matters. One
+word.
+There's an opinion attached, and it presents itself as something you've finally
+noticed rather than something you're feeling.
+The opinion is in the room. You're the one who noticed it was in the room.
+
+**Regulate** — Four counts in. Six out. Attention into the middle of your chest.
+Press your feet into the floor. Feel it push back. The state is unsteady. The
+floor isn't.
+Nothing to be good at here. Nobody's marking it.
+
+**Release** — Two things. One runs whether or not anything happened, finds
+something every time, and **has never once returned a verdict of fine.**
+Put down the auditing.
+And the question — not what's wrong with me. That's what the auditing has been
+asking all day; asking it again in here would just be running the loop with
+better lighting. **What was this for?** Watching yourself closely in a room is a
+skill. It was learned somewhere.
+
+**Rise** — Step outside it. Someone at a desk, feet on the floor, breathing four
+and six. Speak to them as *you*. *You're unsteady today. That's a state, and
+you've worked in it before.*
+From out here there's a person, and there's an opinion about the person. **Two
+objects. From inside they were one.**
+Now — once you can see where your attention is sitting, you can move it on
+purpose. Where does it go today. What's the work in front of you.
+And one thing already here.
+
+## T3-04 · Loosen
+
+**Recognise** — Where is it? Chest, tight and high. Jaw. Shoulders up. A
+specific restlessness in the hands that wants to go back and change something.
+One word.
+Nobody has said anything yet. Knowing which one you're in changes what you're
+arguing with.
+
+**Regulate** — Four counts in. Six out. Longer out than in. Attention into the
+middle of your chest.
+If you're at the thing right now — **hands off it. Physically.** Away from the
+keyboard or the page. Jaw apart. Shoulders down.
+
+**Release** — Two things. What is the last pass going to find that the previous
+three didn't? Nothing. That's the answer, you know it, and it doesn't stop the
+next pass.
+Because it isn't looking for anything. **It's looking for permission to stop,
+and it can't issue one** — there's no condition it could meet that would count
+as finished.
+Keep the standard. Put down the re-checking.
+And the question: not why can't I just be satisfied with something — **what was
+this for?**
+
+**Rise** — Step outside it. Someone at a desk, hands off the work, breathing
+four and six. Speak to them as *you*. *It's good enough to leave, and you can't
+tell from in here.*
+That second half is the useful one. **Nobody can assess their own work from
+inside a fourth pass.** That's not a failure of judgement — it's a limit of
+position.
+Now one thing, and make it **a decision rather than an improvement**. Send it.
+Hand it over. Say the note's done.
+And one thing already here.
+
+## T3-05 · Perform
+
+**Recognise** — Find where it is in your body, before any of the words. A second
+time, slightly offset. Watching itself. Now name the state. One word.
+Part of your attention has turned around and is watching you perform. That's not
+a character flaw and it isn't vanity. It's the state doing something protective,
+and it's the thing costing you most.
+
+**Regulate** — Four counts in. Six counts out. Longer out than in.
+**If you're mid-thing, one long out-breath is a complete use of this step. That
+is not a lesser version.**
+Attention into the centre of your chest. Press your feet into the floor.
+And something specific to this one: put your attention on one thing outside you.
+The material. The instrument. The person you're actually talking to.
+
+**Release** — Two things are running, and here's why one has to go.
+**Attention is finite.** Every bit of it pointed at yourself is a bit that isn't
+on the thing you're doing — so the monitoring makes the performance worse, which
+gives the monitoring more to report, which takes more attention. That's the
+loop. It doesn't end on its own.
+Let the state be here. Shaking hands are not a verdict, and nobody can hear your
+heart. Put down the monitoring.
+
+**Rise** — Step outside it. See yourself from across the room — properly
+outside, not the half-turned watching from a moment ago. Someone in the middle
+of doing a hard thing, breathing four and six. Speak to them as *you*. *You are
+shaking, and you are doing it anyway.*
+Now something small. Not the version where you're relaxed and brilliant — that
+isn't available on demand and building it would be a lie. **The next bit. Just
+the next bit.** Where your attention goes when you start.
+And one thing already here.
+
+## T3-06 · Stand
+
+**Recognise** — Where does it sit? Chest, unsteady rather than tight. A
+watchfulness behind the eyes. Something in the throat just before you say
+something in a group. One word.
+Two things here, welded together. There's a reading — *I'm not one of them*. And
+there's a state, running in your chest.
+
+**Regulate** — Four counts in. Six out. Longer out than in. Attention into the
+middle of your chest.
+Press your feet into the floor. **Whatever the room is, the floor is holding you
+the same as everyone else's.**
+Let the throat open. Jaw apart, tongue down.
+
+**Release** — Two things. One is the editing — the half-second before you speak.
+Holding back the reference nobody in this room will get. Deciding which version
+of yourself is admissible here.
+That's running constantly, and so long you'd struggle to say what the unedited
+version sounds like.
+And here's the cost nobody mentions: **the edited version is the one they're
+forming a view of.** It's careful, it's appropriate, and it isn't you.
+Put down the editing.
+
+**Rise** — Step outside it. Someone at a desk, feet on the floor, breathing four
+and six. Speak to them as *you*. *You might not fit here. You're still the one
+doing the work.* Both can be true, and one of them is entirely within your hands.
+Now one thing, and make it small. Not *being yourself*, whatever that means.
+**One specific unedited thing.** The actual opinion rather than the acceptable
+version of it. The reference you'd normally hold back.
+And one thing already here.
+
+## T3-07 · Cross
+
+**Recognise** — Where is it sitting? Chest, unsteady rather than tight. Stomach.
+Something that arrives on a Sunday evening and again on Monday morning. Sleep
+that goes light rather than short. One word.
+You described a state, and something in you did the describing. Those are two
+different things — and the second one is what makes the rest of this possible.
+
+**Regulate** — Four counts in. Six out. Longer out than in. Attention into the
+middle of your chest.
+Press your feet into the floor. You're standing somewhere, whatever else is
+unresolved.
+
+**Release** — Two things are running. One is the forecasting. The one where you
+go and it works. The one where you go and it doesn't. The one where you stay and
+it gets better. The one where you stay and you're still here in three years.
+None of them can settle it, because **they're all forecasts** — and no amount of
+running one produces information you didn't have when you started.
+The situation stays. Put down the running.
+And the question — not why can't I just make a decision. **You're not
+indecisive.**
+
+**Rise** — Step outside it. Someone at a desk, feet on the floor, holding
+something unresolved. Speak to them as *you*. *You might have until Friday. You
+might have a year. Either way, this is the state you'd be deciding from.*
+And if there's no deadline on it — notice that **not deciding is a decision too,
+taken daily, by default.**
+Now something bigger than today. Where are you, what's in your hands, and what's
+the first move that's actually yours to make.
+And one thing already here.
+
+## T3-08 · Decide
+
+**Recognise** — One word, and we're not going hunting for it. You don't have to
+find where it sits; that's often hard here, and not finding it belongs to the
+state rather than to any failure of yours.
+And here's the thing people get wrong about this one. **It isn't that the
+decisions are hard. Most of them are trivial.**
+
+**Regulate** — Contact first. Counting can wait.
+A hand on your chest, or hold your own arm — whichever is nearer. Let it stay
+there. Warmth and pressure gets through when finer things don't.
+Now the breath, and it doesn't have to be four and six today. **Longer out than
+in. That's the only part that matters.** Count it if you can. Don't if you can't.
+
+**Release** — Two things are going on. There's the volume — genuinely a lot of
+decisions, most of them routed to you by other people, and that's real.
+And there's the re-deciding. Going back over one you already made. Reopening the
+thing that was settled on Tuesday. Holding four of them in the air at once
+because none feels finished enough to put down.
+That's the expensive one. **Each pass costs what the original decision cost.**
+Put it down.
+
+**Rise** — Step back a little. Someone at a desk with a hand on their chest,
+breathing four and six. Speak to them as *you*. *You haven't run out of
+judgement. You've run out of today's.* Different things, and only one of them is
+a problem.
+Now one decision. Just one, and make it **the smallest available** — not the
+important one. The one that's been sitting there for three days because it's too
+small to be worth the effort.
+And one thing already here.
+
+## T3-09 · Refill
+
+**Recognise** — One word. We're not going looking. You don't need to find where
+it sits; that's often hard here, and not finding it is part of what this is.
+And one thing worth knowing. **This isn't tiredness. Tiredness lifts after a
+weekend.**
+
+**Regulate** — Contact first. Counting can wait.
+A hand on your chest, or hold your own arm — whichever is nearer. Let it stay
+there.
+Now the breath, and it doesn't have to be four and six today. **Longer out than
+in. That's all this step needs.** Nothing to achieve here. Nobody's checking.
+
+**Release** — Two things are going on, and only one of them is the load.
+There's what's actually being asked of you. Real, probably unreasonable, and
+largely not yours to change from a chair.
+And there's the pushing through. Carrying on as though the tank weren't empty.
+**Adding the effort of appearing fine to the effort of the work.** Getting up
+tomorrow and doing it again on the assumption that stopping isn't available.
+That costs more than the work does. Put it down.
+
+**Rise** — Step back, if you can. Someone sitting there with a hand on their
+chest, still going. Speak to them as *you*. *You're not failing at this. You're
+out.* Different things, and almost everyone in this state believes the first one.
+Now one thing, and make it smaller than you think it should be — measured
+against the size of what you're carrying, not against what you'd normally
+manage.
+And before you come back: something in you got you here today. Not the part
+that's exhausted. The part that showed up anyway.
+
+## T3-10 · Unlock
+
+**Recognise** — Where is it? Chest, tight in a low way. Jaw. Something behind
+the eyes. Shoulders that have crept up over the last hour without any input from
+you. One word.
+There are two states available for this kind of work, and you can only be in one
+at a time. **One is narrow and pushing. The other is wide and receiving.**
+
+**Regulate** — Four counts in. Six out. Longer out than in. Attention into the
+middle of your chest.
+**Hands off it.** Away from the keyboard, the page, the instrument. Let the
+shoulders come down. Unclench the jaw.
+And something specific to this one: **let your eyes go soft** — look at the
+whole room rather than at anything in it. Wide rather than narrow.
+
+**Release** — Two things are going on, and it's not a moral point. **The forcing
+narrows you.** And what you're reaching for only shows up in the wide state —
+the one that takes things in sideways, notices what's next to the thing,
+connects two items that weren't filed together.
+So the harder you push, the further you get from the only condition it arrives
+in. That's why the shower works and the desk doesn't.
+The block stays. Put down the forcing.
+
+**Rise** — Step outside it. Someone at a desk, hands off the work, eyes soft,
+breathing four and six. Speak to them as *you*. *You're not blocked. You're
+narrow.* Different problems — one of them has no solution, the other has
+several, and none of them involve trying harder.
+Now put your attention somewhere on purpose, and **not on the thing that won't
+come.** Something you're doing rather than producing — the physical part. Where
+are you, what's in your hands.
+And one thing already here.
+
+---
+
+## Complete
+
+Thirty-one protocols. The Clearing, Track 01, Track 02 and Track 03 — one
+hundred and twenty-four prompts, each derived from its own recording script.
