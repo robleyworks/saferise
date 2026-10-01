@@ -24319,3 +24319,82 @@ columns, or a mockup where the copy sits on the panels?
 **Suite:** tests/sv-reading 52/52 · tier harness 15/15 · settings harness 6/6 ·
 check-track-images PASS · check-hand-to-heart PASS · check-sitemap: the same pre-existing
 mismatch (22 expected).
+
+## SR-501 — The journey triptych redesigned to the mockup; the duplicated "The science"
+
+Brief: Parts E and F (pasted 2026-09-30). Not pushed. Verified on the local scratch-copy
+preview.
+
+**Part E · the triptych.** `#srJourney > .sr-dash-jpanel` now holds one container,
+`.sr-dash-jtri` (it keeps id `srJCols`, which renderJourney fills). The band photograph,
+`.sr-dash-jrule` and the straight columns are gone, along with the BAND map and the
+`#srJBand` / `jBand` code.
+- **Three angled panels:** each is one `<a class="sr-dash-jtri-panel sr-dash-jtri--1|2|3">`
+  with its own photograph behind it (`.sr-dash-jtri-art`, absolute) and a bottom-up
+  scrim. The copy (`.sr-dash-jtri-copy`) is set over the photograph at the foot, with the
+  circular arrow beneath. The dividing edges lean right at the top: `clip-path`
+  polygons, each panel overlapping the last by the slant less a 10px gap. The slant is
+  64px, and 40px below 1280px.
+- **Copy:** JOURNEY's own, through the reused `.sr-dash-jtag / jname / jvalue / jbody`
+  (`jnote` / `jmeta` too). **No difference** from the brief's three lines for Track 01
+  ("01 · Start here / Experience / Change your state, now." etc. The caps are CSS). Tracks
+  02 and 03 keep their own values ("Change the state in the room.", "Turn repair into a
+  record.", and so on), as built. The body paragraphs are unchanged.
+- **Colour:** per panel, not per track (tracks 02/03 used to tint panel 01 with their track
+  accent). 01 gold `#D4A843`, 02 ivory `#F5EDD8`, 03 muted ivory `#B9B2A2` (a dimmer
+  step, not a new hue). The tag, the italic value, the note's bar and the arrow share it.
+- **Arrows:** a 46px circle drawn with an **inset ring**, `box-shadow: inset 0 0 0 1.5px`
+  in the panel's colour. It is not a border, and keeps the same silhouette.
+- **Control:** the whole panel is the one link; the arrow is its visual affordance and is
+  `aria-hidden`. Nothing interactive is nested inside. The accessible name is the panel's
+  own name, via `aria-labelledby` → its `.sr-dash-jname` ("Experience", "Log & Journal",
+  "Go Deeper"). **Destinations (the brief named none; chosen and reported):**
+  - Experience → `#srLibrary` (Your protocols, where a session starts)
+  - Log & Journal → `/records?tab=journal`
+  - Go Deeper → `#srFoldRes` (What every protocol opens); a click also opens that fold
+  These are one map, `JPANEL_HREF`, beside the art. The dashboard's global text-route
+  click handler now skips `.sr-dash-jtri`; it would otherwise have caught the panels' `#`
+  links, and Go Deeper's text matches its "the frameworks" route.
+- **Focus:** `clip-path` cuts an outline, so the visible ring sits on the arrow, as a
+  two-step shadow ring (`0 0 0 3px` ground, `0 0 0 5px` panel colour, not a border), and
+  the name underlines.
+- **No borders:** the reused classes' borders are overridden inside the panels: the value's
+  `border-bottom` and the note's `border-left` become inset shadows. The card's `.sr-dash-panel`
+  border becomes an inset ring, scoped to `#srJourney .sr-dash-jpanel`, which also drops
+  the padded-panel rule so the panels run edge to edge.
+- **Equal insets:** every panel's copy sits slant+4px from its own left edge (68px, 44px
+  below 1280) and 32px off its foot, so the copy clears the incoming diagonal at any
+  height. The arrows share one baseline (all three arrow bottoms equal at 1440 and 1024).
+- **PLACEHOLDER ART:** one swap point, `JPANEL_ART` in dashboard.html, with three entries:
+  `assets/journey/t1-band.webp` (01), `assets/journey/t2-band.webp` (02),
+  `assets/journey/t3-band.webp` (03). These are per-track 1400×380 bands standing in for
+  per-panel art, so they are upscaled and cropped hard in a tall panel. The commission
+  note (panel 2: a man on his phone, never a notebook) is recorded beside the map.
+  **Worth knowing:** t1-band is itself a three-scene triptych that already shows a woman
+  with headphones, a man on his phone, and a man reading a tablet. Cropping its thirds
+  would be a closer stand-in until the commission lands.
+- **Responsive:** below **1024px** (`max-width:1023px`) the panels stack, `clip-path`
+  is off (the diagonals become horizontal edges), each keeps its copy over its own
+  photograph, and the photograph shows above the copy (top padding 180px, 140px at
+  ≤700). Found and fixed while verifying: at 375 the stacked panels collapsed to 164px
+  and the copy overflowed their tops, because `flex:1 1 0` was carried into the column.
+  Stacked panels are `flex:none`.
+- **For the founder:** at exactly 1024 the angled layout leaves a 167px text column (the
+  dashboard's rail plus three panels plus equal insets). It is legible but tight. If the
+  founder would rather the panels stack from 1100, that is a one-number change.
+
+**VERIFY E:** Ea pass (three angled panels at 1440 and 1024, each with its own image) · Eb
+pass (copy over its own art; tag colours gold/ivory/muted computed identically in
+Midnight and Sunrise; legibility screenshots in both) · Ec pass (computed borders in
+`#srJourney`: none at 1440/1024/1023/768/375, both themes; the focus ring is a
+box-shadow) · Ed pass (one link per panel, zero interactive descendants, names
+"Experience" / "Log & Journal" / "Go Deeper"; Tab from the preceding control reaches
+all three in order; Enter on Go Deeper lands at #srFoldRes with the fold open) · Ee pass
+(stacked at 1023/768/375; no clipping, no sideways scroll) · Ef pass (paths above) · Eg
+screenshots at 1440 (Midnight, plus focus), 1024 (Sunrise) and 375.
+
+**Part F:** member-frameworks.html's eyebrow "The science" is removed, leaving a comment.
+The page now shows the phrase once, in the h2 "The science we stand on". The `<title>`
+("SafeRise — The science") and the rail entry are unchanged. **The six detail pages have
+no duplication:** each says "The science" once, in its back-link. Their titles are the
+framework names and their eyebrows "Framework 0X of 06". Fa pass · Fb pass · Fc pass.

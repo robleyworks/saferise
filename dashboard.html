@@ -339,11 +339,13 @@
   </section>
 
   <!-- ═══ THE JOURNEY WITHIN EACH PROTOCOL ═══
-       Structure lifted from the Personal Transformation page (.journey / .jcols / .jopt).
-       Content, band and the Optional Support row all follow the track selected above.
-       NEEDS ART — all four band photographs are placeholders at a fixed
-       1400 x 380 so every track sits at the same height. Drop real files into
-       the BAND map in the script to replace them one track at a time. ═══ -->
+       SR-501 · redesigned to the founder's mockup: three angled panels side by
+       side, each its own photograph, with that panel's copy set over it near the
+       foot and a circular arrow under the copy. Each panel is one link (the arrow
+       is its affordance). The copy follows the track selected above, as before.
+       NEEDS ART — the per-panel photographs are not commissioned yet. Each panel's
+       image is one entry in JPANEL_ART in the script below, so the artwork is a
+       swap, not a rebuild. ═══ -->
   <section class="sr-dash-sec" id="srJourney">
     <!-- header sits outside the panel, matching Your Library and Understanding SafeRise -->
     <div class="sr-dash-sechead">
@@ -352,9 +354,7 @@
       <p class="note" id="srJNote"></p>
     </div>
     <div class="sr-dash-panel sr-dash-jpanel">
-      <div class="sr-dash-jband" id="srJBand"></div>
-      <div class="sr-dash-jrule"></div>
-      <div class="sr-dash-jcols" id="srJCols"></div>
+      <div class="sr-dash-jtri" id="srJCols"></div>
     </div>
   </section>
 
@@ -1047,9 +1047,18 @@
   // The three parts are the same shape in every track — Experience, Log, Go Deeper.
   // What changes is who is in the room, what the Experience actually is, and what
   // sits in the Go Deeper library for that track.
-  // SWAP when the band photographs exist — all four at 1400 x 380:
-  //   assets/journey/t1-band.webp · t2-band.jpg · t3-band.jpg · t4-band.jpg
-  var BAND = { 1:'assets/journey/t1-band.webp', 2:'assets/journey/t2-band.webp', 3:'assets/journey/t3-band.webp' };
+  /* SR-501 · ONE SWAP POINT PER PANEL. The three panel photographs are not
+     commissioned yet, so these are PLACEHOLDERS: the per-track band images, one
+     per panel. Repoint an entry here when the real artwork lands; nothing in
+     the layout changes. Founder-ruled for the commission: panel 2's subject is
+     a man on his phone (what logging in SafeRise looks like), never a notebook. */
+  var JPANEL_ART = [
+    'assets/journey/t1-band.webp',   // 01 · Experience
+    'assets/journey/t2-band.webp',   // 02 · Log & Journal
+    'assets/journey/t3-band.webp'    // 03 · Go Deeper
+  ];
+  /* where each panel leads; the panel's accessible name is its own name */
+  var JPANEL_HREF = ['#srLibrary', '/records?tab=journal', '#srFoldRes'];
 
   var JOURNEY = {
     1:{note:'Personal Transformation · run alone', title:'Experience it. Record what shifts.<br>Go deeper when you\u2019re ready.',
@@ -1090,25 +1099,35 @@
   };
 
   var jNote  = document.getElementById('srJNote');
-  var jBand  = document.getElementById('srJBand');
   var jCols  = document.getElementById('srJCols');
 
   function renderJourney(n){
     var j = JOURNEY[n];
     jNote.textContent = j.note;
-    jBand.innerHTML = BAND[n]
-      ? '<img src="'+BAND[n]+'" alt="Three moments in one practice: the guided session, logging what shifted, and reading deeper">'
-      : '<div class="sr-dash-jplaceholder '+j.band+'"><span>Experience<b>band photograph pending</b></span><span>Log &amp; Journal<b>band photograph pending</b></span><span>Go Deeper<b>band photograph pending</b></span></div>';
-    jCols.innerHTML = j.cols.map(function(c){
-      return '<div class="sr-dash-jcol">'+
-        '<p class="sr-dash-jtag" style="color:'+c.tagcol+'">'+c.tag+'</p>'+
-        '<p class="sr-dash-jname">'+c.name+'</p>'+
-        '<p class="sr-dash-jvalue"'+(c.valcol?' style="color:'+c.valcol+'"':'')+'>'+c.value+'</p>'+
-        c.body.map(function(t){return '<p class="sr-dash-jbody">'+t+'</p>';}).join('')+
-        (c.note ? '<p class="sr-dash-jnote">'+c.note+'</p>' : '')+
-        (c.meta ? '<p class="sr-dash-jmeta">'+c.meta+'</p>' : '')+'</div>';
+    /* SR-501 · per-panel colour, not per-track: 01 gold, 02 ivory, 03 a muted
+       ivory (sr-dash-jtri--1/2/3 in the system CSS). The copy is JOURNEY's own. */
+    jCols.innerHTML = j.cols.map(function(c, i){
+      var id = 'srJName' + (i + 1);
+      return '<a class="sr-dash-jtri-panel sr-dash-jtri--' + (i + 1) + '" href="' + JPANEL_HREF[i] + '"' +
+          ' aria-labelledby="' + id + '">' +
+        '<span class="sr-dash-jtri-art" aria-hidden="true"><img src="' + JPANEL_ART[i] + '" alt="" loading="lazy" decoding="async"></span>' +
+        '<span class="sr-dash-jtri-copy">' +
+          '<span class="sr-dash-jtag">' + c.tag + '</span>' +
+          '<span class="sr-dash-jname" id="' + id + '">' + c.name + '</span>' +
+          '<span class="sr-dash-jvalue">' + c.value + '</span>' +
+          c.body.map(function(t){ return '<span class="sr-dash-jbody">' + t + '</span>'; }).join('') +
+          (c.note ? '<span class="sr-dash-jnote">' + c.note + '</span>' : '') +
+          (c.meta ? '<span class="sr-dash-jmeta">' + c.meta + '</span>' : '') +
+          '<span class="sr-dash-jtri-arrow" aria-hidden="true"><svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></span>' +
+        '</span></a>';
     }).join('');
   }
+  /* Go Deeper leads to "What every protocol opens": open that fold on the way */
+  jCols.addEventListener('click', function(e){
+    var a = e.target.closest('a[href="#srFoldRes"]');
+    var btn = a && document.getElementById('srResBtn');
+    if(btn && btn.getAttribute('aria-expanded') !== 'true') btn.click();
+  });
 
   var row  = document.getElementById('srCarRow');
   var vp   = document.getElementById('srCarViewport');
@@ -1957,6 +1976,7 @@
     if(el.classList.contains('sr-dash-foldbtn') || el.closest('.sr-dash-foldbtn')) return;
     if(el.classList.contains('sr-dash-carbtn') || el.id === 'srSumGen' || el.id === 'srProtoBack') return;
     if(el.classList.contains('sr-slotopt') || el.classList.contains('sr-dash-hero-play')) return;
+    if(el.closest('.sr-dash-jtri')) return;   /* SR-501 · the journey panels are real links */
     if(el.id === 'srThemeMid' || el.id === 'srThemeSun') return;
     var t = (el.textContent || '').trim();
     for(var i = 0; i < TEXTMAP.length; i++){
