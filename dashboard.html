@@ -339,13 +339,15 @@
   </section>
 
   <!-- ═══ THE JOURNEY WITHIN EACH PROTOCOL ═══
-       SR-501 · redesigned to the founder's mockup: three angled panels side by
-       side, each its own photograph, with that panel's copy set over it near the
-       foot and a circular arrow under the copy. Each panel is one link (the arrow
-       is its affordance). The copy follows the track selected above, as before.
-       NEEDS ART — the per-panel photographs are not commissioned yet. Each panel's
-       image is one entry in JPANEL_ART in the script below, so the artwork is a
-       swap, not a rebuild. ═══ -->
+       SR-511 · SR-501 reversed, founder-ruled. SR-501 turned this section into
+       three angled, individually linked photo panels with the copy set over each
+       one. It was briefed as an appearance change and was not meant to become
+       three links, so it goes back to the shape it had at 5620533: ONE band
+       photograph across the top — the same per-track band the track landing
+       pages use (saferise-track.js rStates(), assets/journey/t{n}-band.webp at
+       1400x380) — a rule beneath it, then the three columns of copy in their own
+       row below the image. Nothing here is a link. The copy is JOURNEY's own and
+       follows the track selected above, as it always has. ═══ -->
   <section class="sr-dash-sec" id="srJourney">
     <!-- header sits outside the panel, matching Your Library and Understanding SafeRise -->
     <div class="sr-dash-sechead">
@@ -354,7 +356,9 @@
       <p class="note" id="srJNote"></p>
     </div>
     <div class="sr-dash-panel sr-dash-jpanel">
-      <div class="sr-dash-jtri" id="srJCols"></div>
+      <div class="sr-dash-jband" id="srJBand"></div>
+      <div class="sr-dash-jrule"></div>
+      <div class="sr-dash-jcols" id="srJCols"></div>
     </div>
   </section>
 
@@ -1047,30 +1051,23 @@
   // The three parts are the same shape in every track — Experience, Log, Go Deeper.
   // What changes is who is in the room, what the Experience actually is, and what
   // sits in the Go Deeper library for that track.
-  /* SR-501 · ONE SWAP POINT PER PANEL. The three panel photographs are not
-     commissioned yet, so these are PLACEHOLDERS: the per-track band images, one
-     per panel. Repoint an entry here when the real artwork lands; nothing in
-     the layout changes. Founder-ruled for the commission: panel 2's subject is
-     a man on his phone (what logging in SafeRise looks like), never a notebook. */
-  var JPANEL_ART = [
-    'assets/journey/t1-band.webp',   // 01 · Experience
-    'assets/journey/t2-band.webp',   // 02 · Log & Journal
-    'assets/journey/t3-band.webp'    // 03 · Go Deeper
-  ];
-  /* where each panel leads; the panel's accessible name is its own name */
-  var JPANEL_HREF = ['#srLibrary', '/records?tab=journal', '#srFoldRes'];
+  /* SR-511 · ONE BAND PER TRACK, at 1400 x 380, so every track sits at the
+     same height. The same asset the track landing pages use, so the dashboard
+     and /t/{track} show the member the same photograph. Repoint an entry here
+     when real artwork lands; nothing in the layout changes. */
+  var BAND = { 1:'assets/journey/t1-band.webp', 2:'assets/journey/t2-band.webp', 3:'assets/journey/t3-band.webp' };
 
   var JOURNEY = {
     1:{note:'Personal Transformation · run alone', title:'Experience it. Record what shifts.<br>Go deeper when you\u2019re ready.',
-       sub:'Three parts, held inside one continuous practice.',
+       sub:'Attention becomes awareness. Awareness becomes authorship.',
        band:'p1',
        cols:[
         {tag:'01 · Start here', tagcol:'var(--gold)', name:'Experience', value:'Change your state, now.', valcol:'var(--gold-lt)',
-         body:['The guided meditation for the protocol you are running, voiced start to finish. Breathwork and Somatic Release sit alongside it for the days you will not sit down, and the Cue Card carries the four-line version for when it is actually happening.']},
+         body:['Choose your guided protocols for the state you\u2019re in, voiced start to finish. Metacognitive meditation, Breathwork, Shadow Work and Somatic Release \u2014 the body first, because nothing decided from a braced system holds.']},
         {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn change into a record.',
-         body:['Rate your state before and after, note the practice you used, and write what surfaced. Progress Tracking holds the numbers, the Progress Journal holds your words, and together they build the record that shows the route back getting shorter.']},
+         body:['Progress Tracking holds your before and after. The Progress Journal holds what surfaced \u2014 proof the route back is getting shorter. On Sovereign, speak it and AI feedback reads your own words back.']},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Integrate. Choose.', valcol:'var(--teal)',
-         body:['How This Works explains the mechanism and names the frameworks each step rests on, and the Attention Advisory says plainly where self-guided practice stops.'],
+         body:['Discover the mechanisms and the peer-reviewed frameworks under each step \u2014 including HeartMath\u2019s heart-coherence finding \u2014 and one resource for each kind of moment: addressing the issue, accountability, disclosure, support.'],
          note:'Individuation sits here: insight and shadow integration move into The Decision.'}],},
 
     2:{note:'Relationship Healing · run facing each other', title:'Practise it together. Record it separately.<br>Go deeper when you\u2019re both ready.',
@@ -1078,11 +1075,11 @@
        band:'p2',
        cols:[
         {tag:'01 · Start here', tagcol:'var(--sr-track02)', name:'Experience', value:'Change the state in the room.', valcol:'var(--sr-track02)',
-         body:['The Session Guide runs the four steps with both of you present, one reading aloud. Run the Capacity check first — on yourself and on them — and use the Invitation to Repair as the script for opening it when they are not in the room yet.']},
+         body:['This situation-specific Session Guide runs four steps with both or one of you present; the Invitation to Repair opens it when you\u2019re solo. Capacity check first\u2014repair attempted from a braced system rarely lands.']},
         {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn repair into a record.',
-         body:['Each of you logs separately and neither reads the other. Note what ruptured, what got said, and how long contact took to return — repair arriving faster is the measure, not whether rupture happened at all.']},
+         body:['Log separately; neither of you reads the other. The speed of returning to safe contact is your metric\u2014not the absence of friction. On Sovereign, speak it and AI feedback reads your words back into My Records.']},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Repair. Choose.', valcol:'var(--teal)',
-         body:['The same library, with the full session script, the Disclosure &amp; Support guide for explaining this to people outside the relationship, and third-party invitation scripts for when someone else has to be brought in.'],
+         body:['Unpack the mechanisms behind repair\u2014including HeartMath\u2019s heart-coherence finding. Access situational resources: the complete session script, Disclosure &amp; Support, and non-adversarial invitation scripts.'],
          note:'Repair sits here: what the pattern does to the two of you, and what changes it.'}],},
 
     3:{note:'Professional Performance · before or after the room', title:'Run it before the room. Record what held.<br>Go deeper between them.',
@@ -1090,47 +1087,38 @@
        band:'p3',
        cols:[
         {tag:'01 · Start here', tagcol:'var(--sr-track03)', name:'Experience', value:'Change your state before it costs you.', valcol:'var(--sr-track03)',
-         body:['The guided meditation for the protocol you are running, sized for before the room or after it, with short forms for the gap between meetings and a four-line Cue Card you can read at a desk without anyone noticing.']},
+         body:['Run the situation-specific protocol before you engage a client or colleague, or after \u2014 so you\u2019ve resourced your capacity for clarity, judgment and choice. A Cue Card discreet enough for a desk when it\u2019s happening.']},
         {tag:'02 · Every time', tagcol:'var(--text2)', name:'Log &amp; Journal', value:'Turn performance into a record.',
-         body:['Log the situation, what was actually at stake, and whether presence or rehearsal won. Across a quarter the record shows which kind of room still gets you fastest, and whether the activation before it is easing.']},
+         body:['Track what was at stake and whether presence or reactive rehearsal drove the outcome. Across a quarter the record shows which rooms still get you fastest. On Sovereign, speak it and AI feedback reads your words back.']},
         {tag:'03 · Optional depth', tagcol:'var(--teal)', name:'Go Deeper', value:'Understand. Recover. Choose.', valcol:'var(--teal)',
-         body:['The same library, sized for a working day — the mechanism and its sources, meditation scripts, somatic practices between meetings, and the Disclosure guide for explaining a practice to people at work.'],
+         body:['Understand the mechanics of high-pressure leadership\u2014including HeartMath\u2019s heart-coherence finding. Access somatic reset micro-practices, desk Cue Cards, and the Disclosure Guide for framing your practice in corporate environments.'],
          note:'Recovery sits here: ambition, burnout, and decisions you are too depleted to make well.'}],}
   };
 
   var jNote  = document.getElementById('srJNote');
+  var jBand  = document.getElementById('srJBand');
   var jCols  = document.getElementById('srJCols');
 
   function renderJourney(n){
     var j = JOURNEY[n];
     jNote.textContent = j.note;
-    /* SR-502 · colour follows the TRACK, from JOURNEY's own tagcol / valcol,
-       as before SR-501 (which wrongly fixed a per-panel palette). The tag and
-       the arrow take tagcol (the arrow through --sr-jt-c); the italic value
-       takes valcol, and with none it falls back to .sr-dash-jvalue's own
-       var(--text2), as it always did. The copy is JOURNEY's own. */
-    jCols.innerHTML = j.cols.map(function(c, i){
-      var id = 'srJName' + (i + 1);
-      return '<a class="sr-dash-jtri-panel sr-dash-jtri--' + (i + 1) + '" href="' + JPANEL_HREF[i] + '"' +
-          ' aria-labelledby="' + id + '" style="--sr-jt-c:' + c.tagcol + '">' +
-        '<span class="sr-dash-jtri-art" aria-hidden="true"><img src="' + JPANEL_ART[i] + '" alt="" loading="lazy" decoding="async"></span>' +
-        '<span class="sr-dash-jtri-copy">' +
-          '<span class="sr-dash-jtag" style="color:' + c.tagcol + '">' + c.tag + '</span>' +
-          '<span class="sr-dash-jname" id="' + id + '">' + c.name + '</span>' +
-          '<span class="sr-dash-jvalue"' + (c.valcol ? ' style="color:' + c.valcol + '"' : '') + '>' + c.value + '</span>' +
-          c.body.map(function(t){ return '<span class="sr-dash-jbody">' + t + '</span>'; }).join('') +
-          (c.note ? '<span class="sr-dash-jnote">' + c.note + '</span>' : '') +
-          (c.meta ? '<span class="sr-dash-jmeta">' + c.meta + '</span>' : '') +
-          '<span class="sr-dash-jtri-arrow" aria-hidden="true"><svg viewBox="0 0 20 12"><path d="M1 6h17M13 1l5 5-5 5"/></svg></span>' +
-        '</span></a>';
+    jBand.innerHTML = BAND[n]
+      ? '<img src="'+BAND[n]+'" alt="Three moments in one practice: the guided session, logging what shifted, and reading deeper">'
+      : '<div class="sr-dash-jplaceholder '+j.band+'"><span>Experience<b>band photograph pending</b></span><span>Log &amp; Journal<b>band photograph pending</b></span><span>Go Deeper<b>band photograph pending</b></span></div>';
+    /* SR-502 · colour follows the TRACK, from JOURNEY's own tagcol / valcol.
+       The tag takes tagcol; the italic value takes valcol, and with none it
+       falls back to .sr-dash-jvalue's own var(--text2), as it always did.
+       SR-511 · plain columns again — no anchor, no arrow, nothing clickable. */
+    jCols.innerHTML = j.cols.map(function(c){
+      return '<div class="sr-dash-jcol">'+
+        '<p class="sr-dash-jtag" style="color:'+c.tagcol+'">'+c.tag+'</p>'+
+        '<p class="sr-dash-jname">'+c.name+'</p>'+
+        '<p class="sr-dash-jvalue"'+(c.valcol?' style="color:'+c.valcol+'"':'')+'>'+c.value+'</p>'+
+        c.body.map(function(t){return '<p class="sr-dash-jbody">'+t+'</p>';}).join('')+
+        (c.note ? '<p class="sr-dash-jnote">'+c.note+'</p>' : '')+
+        (c.meta ? '<p class="sr-dash-jmeta">'+c.meta+'</p>' : '')+'</div>';
     }).join('');
   }
-  /* Go Deeper leads to "What every protocol opens": open that fold on the way */
-  jCols.addEventListener('click', function(e){
-    var a = e.target.closest('a[href="#srFoldRes"]');
-    var btn = a && document.getElementById('srResBtn');
-    if(btn && btn.getAttribute('aria-expanded') !== 'true') btn.click();
-  });
 
   var row  = document.getElementById('srCarRow');
   var vp   = document.getElementById('srCarViewport');
@@ -1979,7 +1967,6 @@
     if(el.classList.contains('sr-dash-foldbtn') || el.closest('.sr-dash-foldbtn')) return;
     if(el.classList.contains('sr-dash-carbtn') || el.id === 'srSumGen' || el.id === 'srProtoBack') return;
     if(el.classList.contains('sr-slotopt') || el.classList.contains('sr-dash-hero-play')) return;
-    if(el.closest('.sr-dash-jtri')) return;   /* SR-501 · the journey panels are real links */
     if(el.id === 'srThemeMid' || el.id === 'srThemeSun') return;
     var t = (el.textContent || '').trim();
     for(var i = 0; i < TEXTMAP.length; i++){
