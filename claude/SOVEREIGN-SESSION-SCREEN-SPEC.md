@@ -17,10 +17,11 @@ for each phase, a way to move between phases, and a way to go back.
 
 ## 2 · The sound bed
 
-**S1 · The bed is the one from that protocol's own guided meditation.** The
-files are mixed and mastered and exist; the founder supplies the filenames and
-the protocol each belongs to as a separate handover. Until that lands, build
-against a single swap point per protocol so the mapping is data, not markup.
+**S1 · The bed is the one from that protocol's own guided meditation.** Closed
+1 October — the handover landed and is verified in
+`SOVEREIGN-SOUND-BED-DECISIONS.md`, which carries the protocol-to-asset mapping.
+Twenty unique assets cover all thirty protocols. The path lives in the data
+module, never in markup.
 
 **S2 · It starts on the member's own tap to begin, not on page load.** Browsers
 block audio without a user gesture, so autoplay is not available — and it should
@@ -30,6 +31,24 @@ in a shared space, is its own problem.
 **S3 · The member can turn it off, at any point, without leaving the session.**
 Off stays off for that session. Whether the preference persists across sessions
 is open.
+
+**S4 · The bed plays as supplied, and it does not loop.** Founder-ruled
+1 October. The files keep their 3 s fade in and 8 s fade out, and a bed shorter
+than the session simply ends.
+
+Recorded as a disagreement, because the rule it brushes against is load-bearing
+elsewhere. These beds are cut to the recorded voice, so the fade-out arrives at a
+fixed clock time in a session that has no clock, and a member still in Release at
+9:52 hears the music go. Measured, the last six seconds of t1-07 fall to −36 dB,
+so it reads as an ending rather than as the music thinning. That is a pacing
+signal on a practice surface, which M1 and M2 otherwise refuse, and it is why the
+alternative was to loop.
+
+Overruled, and the build follows the ruling. **What the player must not do is
+compound it: the end of the bed is not an event.** No auto-advance, no phase
+change, no state change, nothing appearing or disappearing, no unprompted offer to
+restart it, no console or UI acknowledgement. The music stops and the session
+carries on exactly as it was. Whatever the audio does, nothing on screen marks it.
 
 ## 3 · The prompts
 
@@ -181,10 +200,14 @@ either way (B9).
 
 ## 6 · Open
 
-- **The audio handover** — filenames and the protocol each bed belongs to.
-- **The remaining prompts** — eleven protocols are in the recording scripts
-  alongside the Clearing; the rest of the library follows as those scripts are
-  written.
+- ~~**The audio handover**~~ — closed 1 October. See S1 and
+  `SOVEREIGN-SOUND-BED-DECISIONS.md`.
+- ~~**The remaining prompts**~~ — closed 1 October. All thirty sets are written
+  in `SOVEREIGN-PHASE-PROMPTS.md`; T0-00 has none, since the Clearing remains
+  guided.
+- **Bed bitrate.** 192 kbps is right for a solo listening asset and more than a
+  bed under a member's own speech needs. Worth settling before the files go in,
+  because re-encoding later leaves another permanent copy in git history.
 - **Whether the bed-off preference persists** across sessions or resets each
   time.
 - **The spoken "next"** — whether it is built at launch or the tap is enough.

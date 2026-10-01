@@ -18,13 +18,10 @@ The repo wants `assets/audio/meditation/<code>-<slug>.mp3`, registered in `conte
 | t3-03 | imposter-dissolution | Imposter Dissolution | `MASTER_T3-03_Imposter-Dissolution.mp3` |
 | t3-06 | belonging-gap | Belonging Gap | `MASTER_T3-06_Belonging-Gap.mp3` |
 
-**Overwhelm ships female only.** `MEDITATION` holds one `src` per key. SR-431
-(PASS-J.md A1-3) · this used to say the male take waits on "the member-toggled male/female
-architecture from the 9 September handover" — that architecture was descoped on 18 Sep
-(LG-198) and reaffirmed 22 Sep: **launch ships one voice; the toggle is a post-beta roadmap
-item.** The outcome is unchanged — `MASTER_T1-03m_Overwhelm-Threshold-Male.mp3` stays on the
-Desktop, installing it now would add 19 MB to the repo permanently for a file nothing can
-reach — but the reason is "one voice ships," not "waiting for the toggle."
+**Overwhelm ships female only.** `MEDITATION` holds one `src` per key, and the male take
+(`MASTER_T1-03m_Overwhelm-Threshold-Male.mp3`) stays on the Desktop until the member-toggled
+male/female architecture from the 9 September handover exists. Installing it now would add 19 MB
+to the repo permanently for a file nothing can reach.
 
 ## Rules this follows
 
@@ -136,17 +133,11 @@ until all 31 are registered, and go `false` the moment they are.
 
 ## 3 · Commit
 
-SR-431 (PASS-J.md A1-1, A1-2) · `git push origin main` removed from this section — the
-standing rule on this project is commit locally, never push from a pass; Andre pushes from
-Terminal when he chooses to. The sample message below also no longer says `SR-393` — that
-ID belongs to the t1-01/t3-05 install from August, and two commits already carry it; use
-whichever SR ID the pass actually running this document has allocated.
-
 ```bash
 cd ~/Documents/GitHub/saferise
 git add assets/audio/meditation content/meditation.js protocol.html
 git status --short
-git commit -m "SR-xxx · Register the remaining seven meditations, retire the audio placeholder
+git commit -m "SR-393 · Register the remaining seven meditations, retire the audio placeholder
 
 Completes the library at 31 of 31. eyebrow and sub are copied from the
 protocol records in tracks.js; tracks.js stays the source of truth for
@@ -157,6 +148,7 @@ the Clearing fallback is no longer needed and would mask a missing file.
 
 t1-03 ships the female take only - MEDITATION holds one src per key, and
 the male take waits on the member-toggled voice architecture."
+git push origin main
 ```
 
 **Run this from a normal Terminal, not through the Claude device bridge.** Git crashes with a bus
@@ -169,7 +161,7 @@ git update-index --assume-unchanged .claude/launch.json .well-known/security.txt
 git add assets/audio/meditation content/meditation.js protocol.html
 rm -f .git/index.lock
 TREE=$(git write-tree)
-C=$(git commit-tree "$TREE" -p "$(git rev-parse HEAD)" -m "SR-xxx · Register the remaining seven meditations")
+C=$(git commit-tree "$TREE" -p "$(git rev-parse HEAD)" -m "SR-393 · Register the remaining seven meditations")
 git update-ref HEAD "$C"
 git update-index --no-assume-unchanged .claude/launch.json .well-known/security.txt AGENTS.md CLAUDE.md
 ```
@@ -180,13 +172,6 @@ Terminal either way: the bridge shell has its own home directory and cannot see 
 credentials.
 
 ## 4 · After this
-
-**True-peak ceiling is −1.0 dBTP — SR-431, 23 September 2026 (PASS-J.md E1).** The spec
-said ≤ −1.8; `t1-07`, the library's own reference master, measures −1.1 and already
-shipped. A spec its own reference fails is not a spec. −1.0 dBTP is the hard ceiling;
-−1.8 dBTP remains the preferred landing zone for new masters. This is also what makes
-`t3-06` Belonging Gap (peak −0.4 dBFS, measured 23 Sep) a hold rather than a preference —
-it clears neither number, not just the tighter one.
 
 **Four masters are expected to be replaced.** `t1-09` Insecurity and `t2-02` Rupture are built from
 takes being re-rendered; `t3-07` Career Transition and `t3-10` Creative Flow are the seam-forced

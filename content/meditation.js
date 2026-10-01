@@ -225,6 +225,27 @@ var MEDITATION = {
     title:   'Imposter Dissolution',
     sub:     'Stop believing you only got here by luck.',
     src:     MEDITATION_BASE + 't3-03-imposter-dissolution.mp3'
+  },
+  't1-03': {
+    key:     't1-03',
+    eyebrow: 'Reduce Load',
+    title:   'Overwhelm Threshold',
+    sub:     'Reduce overload, regain your footing, and create space to think clearly.',
+    src:     MEDITATION_BASE + 't1-03-overwhelm-threshold.mp3'
+  },
+  't1-06': {
+    key:     't1-06',
+    eyebrow: 'Integrate',
+    title:   'Grief Integration',
+    sub:     'Make room for the loss, and carry forward what still matters.',
+    src:     MEDITATION_BASE + 't1-06-grief-integration.mp3'
+  },
+  't3-06': {
+    key:     't3-06',
+    eyebrow: 'Stand',
+    title:   'Belonging Gap',
+    sub:     'Say the thing in the room you were going to keep to yourself.',
+    src:     MEDITATION_BASE + 't3-06-belonging-gap.mp3'
   }
 };
 
