@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <!--
-  SAFERISE — /coming-soon (MEMBER) — the seven tracks still being written
+  SAFERISE — /coming-soon (MEMBER) — What's coming
+
+  SR-504 · Build next merged in (claude/DASHBOARD-BANNERS.md §6). The page top
+  is the Build next banner (sr-bn-); its rail is the page's tablist (sr-wc-):
+  VOTE NOW · SUGGEST · IN REVIEW · BUILDING · SHIPPED. The track cards below
+  sit inside VOTE NOW, markup unchanged — only their container moved. Each
+  card gains a share control, added by script (N7). The comment that follows
+  predates the merge and still describes the cards themselves.
 
   SR-333. Member-surface counterpart to the public coming-soon.html: same
   seven tracks, same copy for each (title, the "ask" question, the fuller
@@ -33,6 +40,22 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SafeRise — What&#8217;s coming</title>
+<!-- SR-504 · N7, the share card. "New tracks, coming soon." is founder-ruled
+     for the share card only and is NOT placed on the page: the banner
+     headline, the VOTE NOW tab and its rail line already say it three times.
+     On a card it tells a recipient who may not know SafeRise what they are
+     looking at. og:image is the page's own banner plate (2400 × 806). -->
+<meta name="description" content="New tracks, coming soon.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SafeRise">
+<meta property="og:title" content="SafeRise — What&#8217;s coming">
+<meta property="og:description" content="New tracks, coming soon.">
+<meta property="og:url" content="https://thesaferiseprotocol.com/member-coming-soon.html">
+<meta property="og:image" content="https://thesaferiseprotocol.com/assets/dashboard/banner-build-next.jpg">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="806">
+<meta property="og:image:alt" content="A woman standing on an unfinished floor of a building, a lake beyond.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -199,13 +222,33 @@
   </div>
 </div>
 
-<header class="sr-fw-mast sr-mi-mast" style="display:block">
-  <span class="eyebrow">Coming soon</span>
-  <h1>Nine tracks,<br>already being written</h1>
-  <p class="sr-fw-stance">Each one goes somewhere the first three do not — into work, money,
-    intimacy, recovery, and what comes after survival stops being the only thing asking for
-    your attention. Same method, same four steps, a different room in the same house.</p>
+<!-- SR-504 · N1. The page top is the Build next banner (claude/DASHBOARD-BANNERS.md
+     §6), copy set in HTML over the clean plate. It replaces the old mast
+     ("Coming soon · Nine tracks, already being written"), which stated a track
+     count — forbidden by the standing rule; do not reintroduce one.
+     N2. The banner's rail is the page's tablist: five tabs, one panel each. -->
+<header class="sr-bn" aria-labelledby="srWcTitle">
+  <div class="sr-bn-frame">
+    <picture class="sr-bn-art"><source type="image/webp" srcset="assets/dashboard/banner-build-next.webp"><img src="assets/dashboard/banner-build-next.jpg" alt="" width="2400" height="806"></picture>
+    <div class="sr-bn-copy">
+      <p class="sr-bn-kick">WHAT SHOULD WE BUILD NEXT?</p>
+      <h1 class="sr-bn-h" id="srWcTitle">Help shape what comes next.</h1>
+      <p class="sr-bn-sub">The protocols you needed and didn&#8217;t find matter.</p>
+      <p class="sr-bn-body">Vote on the tracks already being considered, suggest one that&#8217;s missing, and see what has moved into development.</p>
+      <p class="sr-bn-body">Popular does not automatically mean next — but every signal helps us make better decisions.</p>
+    </div>
+    <p class="sr-bn-pull">Built closer to the people using it.</p>
+  </div>
+  <div class="sr-bn-rail sr-wc-rail" role="tablist" aria-label="What&#8217;s coming" id="srWcTabs">
+    <button type="button" role="tab" class="sr-wc-tab" id="sr-wc-t-vote" aria-controls="sr-wc-p-vote" data-wc-tab="vote" aria-selected="true"><span class="sr-bn-raill">Vote now</span><span class="sr-bn-railt">Tracks under consideration.</span></button>
+    <button type="button" role="tab" class="sr-wc-tab" id="sr-wc-t-suggest" aria-controls="sr-wc-p-suggest" data-wc-tab="suggest" aria-selected="false" tabindex="-1"><span class="sr-bn-raill">Suggest</span><span class="sr-bn-railt">Tell us what is missing.</span></button>
+    <button type="button" role="tab" class="sr-wc-tab" id="sr-wc-t-review" aria-controls="sr-wc-p-review" data-wc-tab="review" aria-selected="false" tabindex="-1"><span class="sr-bn-raill">In review</span><span class="sr-bn-railt">What we are exploring.</span></button>
+    <button type="button" role="tab" class="sr-wc-tab" id="sr-wc-t-building" aria-controls="sr-wc-p-building" data-wc-tab="building" aria-selected="false" tabindex="-1"><span class="sr-bn-raill">Building</span><span class="sr-bn-railt">What has moved into development.</span></button>
+    <button type="button" role="tab" class="sr-wc-tab" id="sr-wc-t-shipped" aria-controls="sr-wc-p-shipped" data-wc-tab="shipped" aria-selected="false" tabindex="-1"><span class="sr-bn-raill">Shipped</span><span class="sr-bn-railt">What members helped shape.</span></button>
+  </div>
 </header>
+
+<section class="sr-wc-panel" role="tabpanel" id="sr-wc-p-vote" aria-labelledby="sr-wc-t-vote">
 
 <!-- PASS-member-comingsoon-parity · Andre’s ruling: this page takes
      the public sr-cs- card treatment. Markup swap only, per that
@@ -400,6 +443,22 @@
     recognise the pattern forming around it, understand the belief giving it meaning, regulate
     the state it creates, and recover greater choice.</p>
 </div>
+</section>
+
+<!-- Nothing is open or published in these four yet, so each says so. No
+     proposals, reviews or builds are invented. -->
+<section class="sr-wc-panel" role="tabpanel" id="sr-wc-p-suggest" aria-labelledby="sr-wc-t-suggest" hidden>
+  <div class="sr-wc-empty"><p class="sr-wc-emptyh">Not open yet.</p><p class="sr-wc-emptyb">Suggestions will open here.</p></div>
+</section>
+<section class="sr-wc-panel" role="tabpanel" id="sr-wc-p-review" aria-labelledby="sr-wc-t-review" hidden>
+  <div class="sr-wc-empty"><p class="sr-wc-emptyh">Nothing here yet.</p><p class="sr-wc-emptyb">What we are exploring will appear here.</p></div>
+</section>
+<section class="sr-wc-panel" role="tabpanel" id="sr-wc-p-building" aria-labelledby="sr-wc-t-building" hidden>
+  <div class="sr-wc-empty"><p class="sr-wc-emptyh">Nothing here yet.</p><p class="sr-wc-emptyb">What has moved into development will appear here.</p></div>
+</section>
+<section class="sr-wc-panel" role="tabpanel" id="sr-wc-p-shipped" aria-labelledby="sr-wc-t-shipped" hidden>
+  <div class="sr-wc-empty"><p class="sr-wc-emptyh">Nothing here yet.</p><p class="sr-wc-emptyb">What members helped shape will appear here.</p></div>
+</section>
 
 <footer class="sr-fw-foot">
   <p>SafeRise Protocol is an independent practice created by Andre Robley.
@@ -409,6 +468,114 @@
 
 </main>
 
+<script>
+(function () {
+  'use strict';
+  /* SR-504 · N2, the tabs. The banner rail is the tablist; ?s= keeps the open
+     tab in the address so a link or Back lands on it. */
+  var TABS = ['vote', 'suggest', 'review', 'building', 'shipped'];
+  var rail = document.getElementById('srWcTabs');
+
+  function show(tab, push) {
+    if (TABS.indexOf(tab) < 0) tab = 'vote';
+    TABS.forEach(function (t) {
+      var btn = rail.querySelector('[data-wc-tab="' + t + '"]'), on = t === tab;
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+      btn.tabIndex = on ? 0 : -1;
+      document.getElementById('sr-wc-p-' + t).hidden = !on;
+    });
+    if (push) history.pushState({ tab: tab }, '', location.pathname + (tab === 'vote' ? '' : '?s=' + tab));
+  }
+  function fromUrl() {
+    var m = /[?&]s=(suggest|review|building|shipped)\b/.exec(location.search);
+    return m ? m[1] : 'vote';
+  }
+  rail.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-wc-tab]');
+    if (b) show(b.getAttribute('data-wc-tab'), true);
+  });
+  rail.addEventListener('keydown', function (e) {
+    var b = e.target.closest('[data-wc-tab]'), i, next;
+    if (!b) return;
+    i = TABS.indexOf(b.getAttribute('data-wc-tab'));
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = TABS[(i + 1) % TABS.length];
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = TABS[(i + TABS.length - 1) % TABS.length];
+    else if (e.key === 'Home') next = TABS[0];
+    else if (e.key === 'End') next = TABS[TABS.length - 1];
+    else return;
+    e.preventDefault();
+    show(next, true);
+    rail.querySelector('[data-wc-tab="' + next + '"]').focus();
+  });
+  window.addEventListener('popstate', function () { show(fromUrl(), false); });
+
+  /* N7, sharing. One control per upcoming track, appended to the card's side
+     so the card markup itself stays the verbatim copy of coming-soon.html's.
+     Copy link is first because it always works. Email is a mailto:. SOCIAL
+     holds the share intents for the platforms the founder names — plain
+     links, no SDK, nothing loaded from another origin (the CSP in _headers
+     would block it anyway). Empty until those platforms are named. */
+  var SOCIAL = [];
+  var LINE = 'New tracks, coming soon.';
+  /* The shared link is the canonical address (og:url), not location — a
+     preview deploy's host must never end up in someone else's inbox. */
+  var BASE = document.querySelector('meta[property="og:url"]').content;
+
+  function copy(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy') ? resolve() : reject(); } catch (err) { reject(err); }
+      document.body.removeChild(ta);
+    });
+  }
+
+  document.querySelectorAll('#sr-wc-p-vote .tb').forEach(function (card) {
+    var img = card.querySelector('[data-track-img]'), side = card.querySelector('.sr-cs-side');
+    var nameEl = card.querySelector('.sr-cs-name'), name2 = card.querySelector('.sr-cs-name2');
+    if (!img || !side || !nameEl || !name2) return;
+    var slug = img.getAttribute('data-track-img');
+    var name = (nameEl.firstChild.textContent + ' ' + name2.textContent).replace(/\s+/g, ' ').trim();
+    var url = BASE + '#' + slug;
+    card.id = slug;
+
+    var box = document.createElement('div');
+    box.className = 'sr-wc-share';
+    box.setAttribute('role', 'group');
+    box.setAttribute('aria-label', 'Share ' + name);
+    var html = '<span class="sr-wc-sharel" aria-hidden="true">Share</span>' +
+      '<button type="button" class="sr-wc-sharebtn sr-wc-sharebtn--primary" data-wc-copy>Copy link</button>' +
+      '<a class="sr-wc-sharebtn" href="mailto:?subject=' + encodeURIComponent('SafeRise — ' + name) +
+        '&amp;body=' + encodeURIComponent(LINE + '\n\n' + name + '\n' + url) + '">Email</a>';
+    SOCIAL.forEach(function (s) {
+      html += '<a class="sr-wc-sharebtn" href="' + s.href(url, name + ' — ' + LINE).replace(/&/g, '&amp;') +
+        '" target="_blank" rel="noopener noreferrer">' + s.label + '</a>';
+    });
+    html += '<span class="sr-wc-sharemsg" role="status" aria-live="polite"></span>';
+    box.innerHTML = html;
+    side.appendChild(box);
+
+    var msg = box.querySelector('.sr-wc-sharemsg');
+    box.querySelector('[data-wc-copy]').addEventListener('click', function () {
+      copy(url).then(function () { msg.textContent = 'Link copied.'; },
+                     function () { msg.textContent = url; });
+      setTimeout(function () { msg.textContent = ''; }, 4000);
+    });
+  });
+
+  /* A shared link (#<track>) opens VOTE NOW at that card. */
+  var first = fromUrl();
+  if (location.hash && document.getElementById(location.hash.slice(1))) first = 'vote';
+  if (first !== 'vote') show(first, false);
+  else if (location.hash) {
+    var target = document.getElementById(location.hash.slice(1));
+    if (target) target.scrollIntoView();
+  }
+})();
+</script>
 <script src="js/saferise-auth.js"></script>
 <script src="js/saferise-access.js"></script>
 <script src="js/saferise-rail.js"></script>

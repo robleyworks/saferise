@@ -24442,3 +24442,56 @@ JOURNEY already carries founder-authored colour per column per track (`tagcol` /
   Contrast on the scrim ground: Midnight gold 10.2, gold-lt 12.1, text2 7.0, teal 6.0,
   track02 6.6, track03 9.4; Sunrise gold 14.3, gold-lt 16.1, text2 15.1 (teal and the
   track tokens are unchanged by theme).
+
+## SR-504 — What's coming: Build next banner, five-tab rail, per-track sharing (N1 · N2 · N7)
+
+**Cause: founder's amended N1/N2/N7** (pasted 2026-10-01), building what SR-503
+recorded in `claude/DASHBOARD-BANNERS.md` §6. Not committed.
+
+- **N1 · banner.** `member-coming-soon.html`'s page top is now the shared member
+  banner (`sr-bn-`) on `assets/dashboard/banner-build-next.{webp,jpg}` (both already
+  tracked). Copy word for word from the amended N1. **Removed, in full:**
+  - eyebrow: "Coming soon"
+  - h1: "Nine tracks, / already being written"
+  - stance: "Each one goes somewhere the first three do not — into work, money,
+    intimacy, recovery, and what comes after survival stops being the only thing
+    asking for your attention. Same method, same four steps, a different room in
+    the same house."
+  - There was no pull quote in the old page top; the "pull quote" was this stance
+    line.
+  - **The h1 stated a track count, which the standing rule forbids.** Not
+    reintroduced anywhere on this page. **Still present:** the public
+    `coming-soon.html:708` h2, "Nine tracks, *already being written.*" This pass
+    did not change it, because it is outside N1's scope.
+- **N2 · tabs.** The banner's rail is the tablist: a `role=tablist` on `.sr-bn-rail`
+  holding five `role=tab` buttons (VOTE NOW · SUGGEST · IN REVIEW · BUILDING ·
+  SHIPPED, each with its rail line). There is no second tab row.
+  - Keyboard: arrows, Home and End. `?s=` in the URL, so Back works.
+  - The nine `sr-cs-` cards sit inside VOTE NOW with their markup byte-unchanged.
+  - The closing `.sr-mi-claim` moved into VOTE NOW with them, since it is about
+    the tracks.
+  - The other four panels show honest empty states. Nothing is invented.
+- **N7 · sharing.** A share control is appended by script to each card's
+  `.sr-cs-side`, so the card source stays the verbatim copy of `coming-soon.html`.
+  - Order: Copy link (default and primary), then Email (`mailto:`), then a `SOCIAL`
+    list of plain intent links.
+  - **`SOCIAL` is empty:** the founder has not yet named the platforms.
+  - No SDK and no other-origin script.
+  - The link is the canonical
+    `https://thesaferiseprotocol.com/member-coming-soon.html#<track-slug>`, taken
+    from `og:url` rather than `location`, so a preview host is never shared.
+  - When the clipboard is unavailable, the link is shown so it can be copied by
+    hand.
+- **Share card:**
+
+  | Tag | Value |
+  |---|---|
+  | `og:title` | "SafeRise — What's coming" |
+  | `og:description` and `meta description` | "New tracks, coming soon." |
+  | `og:image` | `https://thesaferiseprotocol.com/assets/dashboard/banner-build-next.jpg` (2400×806, with alt text) |
+  | `og:url` | the canonical address above |
+  | `twitter:card` | `summary_large_image` |
+
+  "New tracks, coming soon." is **not** on the page.
+- New surface code `sr-wc-` claimed in CLAUDE.md. Its CSS is in
+  `css/saferise-system.css`, after `sr-ol-`.
