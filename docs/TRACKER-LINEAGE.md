@@ -4,9 +4,12 @@ Short note so the v31/v32 mix-up of 18 September is not repeated.
 
 ## Current
 
-**`docs/tracker-v34.html`** — 18 Sep 2026, 273 rows, 66 open gates.
-Built on v32. Nothing from v32 was dropped and no status went backwards; verified
-mechanically before it shipped.
+**`docs/tracker-v42.html`** — 1 Oct 2026, 338 rows, 72 open gates, 55% weighted.
+Built on v41. Verified mechanically before it shipped: no row dropped, no status
+moved backwards, no duplicate id, ceiling raised from LG-359 to LG-367.
+
+This note was itself stale — it still named v34 as current while the repo held
+v41. Update it in the same pass as the tracker.
 
 ## The chain
 
@@ -16,7 +19,10 @@ mechanically before it shipped.
 | v31 | 14 Sep | 247 | 43% | in repo |
 | **v32** | 14 Sep | 253 | 51% | **was NOT in the repo** — added LG-273 to LG-278 and marked 22 items complete |
 | v33 | — | — | — | **does not exist.** Built from v31 by mistake and deleted |
-| **v34** | 18 Sep | 273 | 50% | current. New rows start at LG-279 |
+| **v34** | 18 Sep | 273 | 50% | new rows start at LG-279 |
+| v35–v40 | 19–25 Sep | — | — | in repo |
+| **v41** | 25 Sep | 330 | 55% | adds LG-348 to LG-359 |
+| **v42** | 1 Oct | 338 | 55% | current. Adds LG-360 to LG-367. New rows start at LG-368 |
 
 ## What went wrong, and the three rules that come out of it
 
@@ -49,3 +55,19 @@ That, and not dilution, is why the figure appeared to fall from 51% to 43%.
 - `git status` run through the desktop bridge against this repo returns empty even for files
   that are demonstrably on disk — the mount cannot reliably read working-tree contents. Verify
   staging in a local terminal, not through the bridge.
+
+## v42, and why the percentage did not move
+
+338 rows against v41's 330, and the weighted figure stayed at 55%. That is
+correct rather than a fault: four rows advanced to done (LG-213, LG-282, LG-283,
+LG-312) and eight were added, of which three are open gates. Closing three gates
+and opening three leaves the open-gate count at 72 either side.
+
+**A percentage that does not move is not evidence that nothing happened.** The
+guided meditation library completed and the homepage film was delivered in the
+same pass. Read the rows.
+
+**Two gate flags were changed by accident and restored** — LG-213 and LG-299 were
+briefly written as gates when v41 had them at 0. Caught by comparing gate counts
+before and after rather than by eye. Any rebuild should do the same check: gate
+rows and open gates both, not just the row total.
