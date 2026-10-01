@@ -1104,17 +1104,20 @@
   function renderJourney(n){
     var j = JOURNEY[n];
     jNote.textContent = j.note;
-    /* SR-501 · per-panel colour, not per-track: 01 gold, 02 ivory, 03 a muted
-       ivory (sr-dash-jtri--1/2/3 in the system CSS). The copy is JOURNEY's own. */
+    /* SR-502 · colour follows the TRACK, from JOURNEY's own tagcol / valcol,
+       as before SR-501 (which wrongly fixed a per-panel palette). The tag and
+       the arrow take tagcol (the arrow through --sr-jt-c); the italic value
+       takes valcol, and with none it falls back to .sr-dash-jvalue's own
+       var(--text2), as it always did. The copy is JOURNEY's own. */
     jCols.innerHTML = j.cols.map(function(c, i){
       var id = 'srJName' + (i + 1);
       return '<a class="sr-dash-jtri-panel sr-dash-jtri--' + (i + 1) + '" href="' + JPANEL_HREF[i] + '"' +
-          ' aria-labelledby="' + id + '">' +
+          ' aria-labelledby="' + id + '" style="--sr-jt-c:' + c.tagcol + '">' +
         '<span class="sr-dash-jtri-art" aria-hidden="true"><img src="' + JPANEL_ART[i] + '" alt="" loading="lazy" decoding="async"></span>' +
         '<span class="sr-dash-jtri-copy">' +
-          '<span class="sr-dash-jtag">' + c.tag + '</span>' +
+          '<span class="sr-dash-jtag" style="color:' + c.tagcol + '">' + c.tag + '</span>' +
           '<span class="sr-dash-jname" id="' + id + '">' + c.name + '</span>' +
-          '<span class="sr-dash-jvalue">' + c.value + '</span>' +
+          '<span class="sr-dash-jvalue"' + (c.valcol ? ' style="color:' + c.valcol + '"' : '') + '>' + c.value + '</span>' +
           c.body.map(function(t){ return '<span class="sr-dash-jbody">' + t + '</span>'; }).join('') +
           (c.note ? '<span class="sr-dash-jnote">' + c.note + '</span>' : '') +
           (c.meta ? '<span class="sr-dash-jmeta">' + c.meta + '</span>' : '') +

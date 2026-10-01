@@ -24398,3 +24398,47 @@ The page now shows the phrase once, in the h2 "The science we stand on". The `<t
 ("SafeRise — The science") and the rail entry are unchanged. **The six detail pages have
 no duplication:** each says "The science" once, in its back-link. Their titles are the
 framework names and their eyebrows "Framework 0X of 06". Fa pass · Fb pass · Fc pass.
+
+## SR-502 — Journey triptych: track colours restored (reverses SR-501's per-panel palette)
+
+**Cause: the founder's Part H** (pasted 2026-09-30). The instruction behind SR-501's
+palette was wrong: `--teal:#4E9AA6` is a real token (css/saferise-dashboard.css), and
+JOURNEY already carries founder-authored colour per column per track (`tagcol` /
+`valcol`). This is a deliberate reversal, not drift. Not pushed.
+
+- **H1:** the per-panel palette is removed. `--sr-jt-c` is no longer set to
+  `#D4A843 / #F5EDD8 / #B9B2A2` on `.sr-dash-jtri--1/2/3`. renderJourney now sets, from
+  the active track's JOURNEY entry:
+  - the tag: `style="color:<tagcol>"`, exactly as before SR-501;
+  - the italic value: `style="color:<valcol>"`, only when valcol exists;
+  - the arrow: `--sr-jt-c:<tagcol>` on the panel, which the arrow's ring and glyph read.
+- **H2:** with no valcol (column 02 on every track) the value takes `.sr-dash-jvalue`'s own
+  `var(--text2)`, the pre-SR-501 fallback. SR-501's colour override on the value is
+  removed, so nothing substitutes.
+- **H3:** the arrow keeps its inset-ring construction (`box-shadow: inset 0 0 0 1.5px
+  var(--sr-jt-c)`, no border). Only the colour source changed.
+- Also returned to pre-SR-501 sources:
+  - the note's bar is a fixed `rgba(78,154,166,.6)` (SR-501 had tied it to the panel
+    colour); now an inset shadow, not the old border;
+  - the panel name is `var(--text)`, not a hard-coded `#F5EDD8`.
+- **VERIFY H** (local preview):
+  - **Ha** pass: switching the track rail changes the colours. Track 1 = gold · text2 · teal.
+  - **Hb** pass: no `#D4A843`, `#F5EDD8` or `#B9B2A2` in the `sr-dash-jtri` CSS block or in
+    renderJourney.
+  - **Hc** pass: zero computed borders in `#srJourney` for every track, both themes.
+    Contrast was measured against the scrim's ground at the copy (≈ rgb(13,13,18)); the
+    lowest is 6.0:1 (teal), all above 4.5:1.
+  - **Hd** — resolved colours, tag / value / arrow, per track × panel:
+
+| | Panel 01 | Panel 02 | Panel 03 |
+|---|---|---|---|
+| **Midnight · T1** | gold `#E0B658` / gold-lt `#ECC96A` / gold | text2 `#9C9AA4` / text2 (fallback) / text2 | teal `#4E9AA6` / teal / teal |
+| **Midnight · T2** | track02 `#E87090` / `#E87090` / `#E87090` | text2 / text2 / text2 | teal / teal / teal |
+| **Midnight · T3** | track03 `#38C8BE` / `#38C8BE` / `#38C8BE` | text2 / text2 / text2 | teal / teal / teal |
+| **Sunrise · T1** | `#FFD894` / `#FFE8B6` / `#FFD894` | text2 `#DDE3F0` / `#DDE3F0` / `#DDE3F0` | teal `#4E9AA6` / teal / teal |
+| **Sunrise · T2** | `#E87090` (all three) | `#DDE3F0` (all three) | teal (all three) |
+| **Sunrise · T3** | `#38C8BE` (all three) | `#DDE3F0` (all three) | teal (all three) |
+
+  Contrast on the scrim ground: Midnight gold 10.2, gold-lt 12.1, text2 7.0, teal 6.0,
+  track02 6.6, track03 9.4; Sunrise gold 14.3, gold-lt 16.1, text2 15.1 (teal and the
+  track tokens are unchanged by theme).

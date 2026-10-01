@@ -6953,9 +6953,10 @@ body:not(:has(.nav)) .sr-pt{padding-top:calc(79px + var(--sr-pt-air))}
    top. Each panel is one link (the arrow is its affordance); its accessible
    name is its own name. The copy is JOURNEY's, as before (.sr-dash-jtag /
    jname / jvalue / jbody reused).
-   COLOUR per panel (the mockup's blue has no token, so none is added):
-   01 gold, 02 ivory, 03 a muted ivory. The tag, the italic value and the
-   arrow share it.
+   COLOUR follows the track (SR-502, reversing SR-501's per-panel palette):
+   JOURNEY's tagcol colours the tag and the arrow (via --sr-jt-c, set on the
+   panel), valcol the italic value; with no valcol the value keeps
+   .sr-dash-jvalue's own var(--text2).
    NO BORDERS: the arrow is an inset ring, not an outline; the value's rule and
    the note's bar are inset shadows; the card edge is an inset ring.
    GEOMETRY: every panel has the same insets (left = the slant + 4px, so the
@@ -6968,13 +6969,13 @@ body:not(:has(.nav)) .sr-pt{padding-top:calc(79px + var(--sr-pt-air))}
    (0 var(--pad)) is overridden here, scoped to this section */
 #srJourney .sr-dash-jpanel{border-style:none;box-shadow:inset 0 0 0 1px var(--hair);padding:0;overflow:hidden}
 .sr-dash-jtri{--sr-jt-slant:64px;--sr-jt-gap:10px;display:flex;min-height:620px}
-.sr-dash-jtri-panel{--sr-jt-c:#D4A843;position:relative;isolation:isolate;flex:1 1 0;min-width:0;display:flex;flex-direction:column;
+.sr-dash-jtri-panel{position:relative;isolation:isolate;flex:1 1 0;min-width:0;display:flex;flex-direction:column;
   justify-content:flex-end;text-decoration:none;color:inherit;
   padding:40px calc(var(--sr-jt-slant) + 24px) 32px calc(var(--sr-jt-slant) + 4px)}
-.sr-dash-jtri--1{--sr-jt-c:#D4A843;clip-path:polygon(0 0,100% 0,calc(100% - var(--sr-jt-slant)) 100%,0 100%)}
-.sr-dash-jtri--2{--sr-jt-c:#F5EDD8;clip-path:polygon(var(--sr-jt-slant) 0,100% 0,calc(100% - var(--sr-jt-slant)) 100%,0 100%);
+.sr-dash-jtri--1{clip-path:polygon(0 0,100% 0,calc(100% - var(--sr-jt-slant)) 100%,0 100%)}
+.sr-dash-jtri--2{clip-path:polygon(var(--sr-jt-slant) 0,100% 0,calc(100% - var(--sr-jt-slant)) 100%,0 100%);
   margin-left:calc(var(--sr-jt-gap) - var(--sr-jt-slant))}
-.sr-dash-jtri--3{--sr-jt-c:#B9B2A2;clip-path:polygon(var(--sr-jt-slant) 0,100% 0,100% 100%,0 100%);
+.sr-dash-jtri--3{clip-path:polygon(var(--sr-jt-slant) 0,100% 0,100% 100%,0 100%);
   margin-left:calc(var(--sr-jt-gap) - var(--sr-jt-slant))}
 .sr-dash-jtri-art{position:absolute;inset:0;z-index:-2;display:block}
 .sr-dash-jtri-art img{width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block;transition:transform .6s var(--sr-ease)}
@@ -6982,13 +6983,13 @@ body:not(:has(.nav)) .sr-pt{padding-top:calc(79px + var(--sr-pt-air))}
   background:linear-gradient(0deg,rgba(8,8,12,.95) 0%,rgba(8,8,12,.88) 42%,rgba(8,8,12,.4) 72%,rgba(8,8,12,.16) 100%)}
 .sr-dash-jtri-panel:hover .sr-dash-jtri-art img{transform:scale(1.03)}
 .sr-dash-jtri-copy{display:flex;flex-direction:column}
-.sr-dash-jtri .sr-dash-jtag{display:block;margin-bottom:12px;color:var(--sr-jt-c)}
-.sr-dash-jtri .sr-dash-jname{display:block;color:#F5EDD8}
-.sr-dash-jtri .sr-dash-jvalue{display:block;color:var(--sr-jt-c);border-style:none;padding-bottom:16px;margin-bottom:16px;
+.sr-dash-jtri .sr-dash-jtag{display:block;margin-bottom:12px}
+.sr-dash-jtri .sr-dash-jname{display:block;color:var(--text)}
+.sr-dash-jtri .sr-dash-jvalue{display:block;border-style:none;padding-bottom:16px;margin-bottom:16px;
   box-shadow:inset 0 -1px 0 rgba(245,237,216,.14)}
 .sr-dash-jtri .sr-dash-jbody{display:block;font-size:15px;line-height:1.65;color:#D2CDC4}
 .sr-dash-jtri .sr-dash-jbody + .sr-dash-jbody{margin-top:10px}
-.sr-dash-jtri .sr-dash-jnote{display:block;border-style:none;padding-left:14px;box-shadow:inset 2px 0 0 var(--sr-jt-c);color:#C9C2B4;font-size:15px}
+.sr-dash-jtri .sr-dash-jnote{display:block;border-style:none;padding-left:14px;box-shadow:inset 2px 0 0 rgba(78,154,166,.6);color:#C9C2B4;font-size:15px}
 .sr-dash-jtri .sr-dash-jmeta{display:block;color:#A9A4B0}
 .sr-dash-jtri-arrow{margin-top:22px;width:46px;height:46px;flex:none;border-radius:50%;display:grid;place-items:center;color:var(--sr-jt-c);
   box-shadow:inset 0 0 0 1.5px var(--sr-jt-c);transition:background-color .3s var(--sr-ease),box-shadow .3s var(--sr-ease)}
