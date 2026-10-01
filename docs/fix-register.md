@@ -24175,3 +24175,29 @@ HOME"). This is a deliberate reversal of SR-485 (`22dee73`) in part, not drift. 
   **partial**: the card is present; the rail entry is **not** gone, because Part 1 was not
   received. Both halves are therefore reachable, and the pairing rule's failure case (no
   card, no rail) cannot occur.
+
+## SR-499 — Two defects in SR-498: the Clearing card's fill bar, and the "Three ways in" note
+
+Brief: "PART A · two defects in SR-498" (pasted 2026-09-30). Not pushed. Verified on the
+local scratch-copy preview.
+
+- **A1 · the bar is removed.** `<span class="sr-cover-rail"><i style="width:34%"></i></span>` is
+  deleted from the Clearing card (dashboard.html, formerly l.199). It is removed, not set
+  to 0% or hidden. It was a fixed 34% fill reading as a progress bar on a practice
+  surface, which the standing rule forbids; it outranks SR-498's "byte-identical"
+  instruction. **No other card uses `.sr-cover-rail`.** The only other references were its
+  two rules in `css/saferise-dashboard.css` (`.sr-cover-rail` and `.sr-cover-rail i`).
+  Nothing else used them, so they are removed too. A historical code comment at
+  dashboard.html ~l.1490 still names the class. It already records that the class was
+  only ever on this card, and is left.
+- **A2 · the note now matches the row.** The markup keeps "Three ways in. Any one of them is
+  a whole session." `numberBeginCards()`, which already counts the cards that show, sets
+  `note.hidden = n !== 3`. The note shows only when three cards render. It is not
+  rewritten as "Two ways in", and it returns by itself once a resume point exists. With no
+  script, all three cards render (Carry on is hidden only by script), so the note is
+  true there too.
+- **VERIFY A:** Aa pass: no element inside `#srClearingPlay` has an inline width style, a
+  rail/bar/meter/progress class, a `<progress>`/`<meter>`, or `role="progressbar"`; the
+  screenshot shows none · Ab pass: no resume point: 2 cards, note hidden; with
+  `sr.resume` set: 3 cards, note shown · Ac pass: Clearing · 02 Start new without a resume
+  point; Clearing · 02 Carry on · 03 Start new with one · console clean.

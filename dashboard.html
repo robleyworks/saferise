@@ -196,7 +196,6 @@
               <span class="sr-cover-title">The Clearing</span>
               <span class="sr-cover-sub">Quiet the noise and arrive in a state where the work can land.</span>
             </span>
-            <span class="sr-cover-rail"><i style="width:34%"></i></span>
           </button>
         </article>
 
@@ -3354,6 +3353,11 @@
         var b = c.querySelector('.sr-begin-no b');
         if(b) b.textContent = ('0' + n).slice(-2);
       });
+      /* SR-499 · "Three ways in" is only true when three cards render. Carry on
+         is conditional (SR-464 D1), so the note shows only then; it is not
+         rewritten for two, and returns by itself once a resume point exists. */
+      var note = document.querySelector('.sr-begin-note');
+      if(note) note.hidden = n !== 3;
     }
     if(!r || !r.protocol){
       if(card) card.style.display = 'none';
