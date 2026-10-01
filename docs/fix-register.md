@@ -24132,3 +24132,46 @@ closest is /records' "Kept on this device", which is about storage and is true.
 harness 6/6 · check-track-images PASS · check-hand-to-heart PASS · check-sitemap shows the
 same pre-existing mismatch (22 expected; the new member-* pages and the private sheet are
 correctly excluded).
+
+## SR-498 — REVERSAL of SR-485 in part: the Clearing returns to the dashboard home
+
+**Cause: founder ruling, 30 September** ("PART 2 · THE CLEARING RETURNS TO THE DASHBOARD
+HOME"). This is a deliberate reversal of SR-485 (`22dee73`) in part, not drift. Not pushed.
+
+- **Restored from `22dee73^`, verbatim:** the Clearing's media card as the first card of
+  Begin here: `<article class="sr-begin-card sr-begin-card--media">` with `<button
+  class="sr-cover" id="srClearingPlay" aria-label="Play the Clearing">`, its SR-393
+  comment on srClearingOpen's scoping, its art, kicker, title and sub. P2b: the card block
+  is **byte-identical** to the parent. Also restored: the head note "Three ways in. Any one
+  of them is a whole session.", the row's original class (`sr-dash-beginrow` dropped),
+  Carry on's markup number 02 and Start new's 03.
+- **Removed (clearing-related SR-485 hunks only):** the `.sr-dash-beginrow` block in the
+  system CSS, which existed only to lay out the two-card row. SR-485's
+  `js/saferise-upsell.js` hunk was the "and theme" copy fix (SR-485 ruling 1.3), not a
+  clearing hunk, so it stays. Nothing else from SR-485 is touched.
+- **DIFFERS, numbering:** SR-485's `numberBeginCards()` is kept. Carry on renders only when
+  `sr.resume` holds a protocol (SR-464 D1), and today nothing writes `sr.resume`, so
+  every member sees two cards. Pre-SR-485 that showed as Clearing then "03" (a gap). Kept
+  as it was, the function also mis-numbered: the Clearing card has no visible number,
+  it was skipped, and Carry on came out as 01. **Fixed:** every showing card takes a
+  number. Result: with something to resume, Clearing (01, unlabelled, as originally)
+  · 02 Carry on · 03 Start new; with nothing to resume, Clearing · 02 Start new.
+- **Part 1 was not in the brief received.** Only "PART 2" was pasted. Its ordering rule
+  says Part 1 removes the Clearing's rail entry, but that text, and anything else
+  Part 1 contains, never arrived, so **the rail entry is untouched** (`js/saferise-rail.js`
+  still has `clearing`). That is the safe half of the pair: the Clearing is reachable
+  from both the card and the rail, never from neither.
+- `claude/MY-RECORDS-HUB.md` L2 is revised back: the Clearing is the first card of Begin
+  here, with the dated reversal noted.
+- **For the founder (left byte-identical as instructed):** the restored card carries
+  `<span class="sr-cover-rail"><i style="width:34%"></i></span>`, a fixed 34% bar on the
+  cover, which reads as a progress indicator on a practice surface. The note "Three ways in"
+  is true only when Carry on is showing, which today is never.
+- **VERIFY P2:** P2a **partial**: the order is Clearing first, then 02, then 03 with something
+  to resume; three cards render only then, because Carry on is conditional by SR-464 D1
+  · P2b pass (byte-identical) · P2c pass: `#srClearingPlay` opens the media player
+  (one backdrop, "The Clearing"), no other modal opens, no console errors · P2d pass:
+  no sideways scroll at 1440/1024/375, with and without a resume pointer · P2e
+  **partial**: the card is present; the rail entry is **not** gone, because Part 1 was not
+  received. Both halves are therefore reachable, and the pairing rule's failure case (no
+  card, no rail) cannot occur.

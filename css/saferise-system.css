@@ -6688,23 +6688,6 @@ p.sr-org-f8guard{margin:var(--sr-org-s6) 0 0;padding:14px 16px;border-radius:4px
   .sr-or-btn{width:100%}
 }
 
-/* ── SR-485 · dashboard "Begin here" without the Clearing's card.
-   The row had three tracks (Clearing · Carry on · Start new). The Clearing
-   is now reached from the rail, so it has two: Carry on and Start new. When
-   there is nothing to carry on with, the existing sr-begin-row--2 class
-   (set by buildResume) now means one card, full width. A new class on this
-   row only, so the shared .sr-begin-row rules in saferise-dashboard.css are
-   untouched. ── */
-.sr-begin-row.sr-dash-beginrow{grid-template-columns:repeat(2,minmax(0,1fr))}
-.sr-begin-row.sr-dash-beginrow.sr-begin-row--2{grid-template-columns:minmax(0,1fr)}
-@media(max-width:1100px){
-  .sr-begin-row.sr-dash-beginrow{grid-template-columns:1fr 1fr}
-  .sr-begin-row.sr-dash-beginrow.sr-begin-row--2{grid-template-columns:minmax(0,1fr)}
-}
-@media(max-width:700px){
-  .sr-begin-row.sr-dash-beginrow,.sr-begin-row.sr-dash-beginrow.sr-begin-row--2{grid-template-columns:minmax(0,1fr)}
-}
-
 /* ═══════════════════════════════════════════════════════════════
    sr-pt- · THE PAGE TOP — one component for every public page's
    opening block (SR-486). Before this, seven hero rules set their own top

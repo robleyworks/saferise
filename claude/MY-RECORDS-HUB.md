@@ -15,7 +15,7 @@ Shipped as SR-478 (`1a6778d`).
 | # | Ruling |
 |---|---|
 | **L1** | **One hub, not two destinations.** The Clearing, Chosen Self and Decisions do not become three places; Chosen Self and Decisions become tabs here |
-| **L2** | **The Clearing stays out.** It is a practice you do, not a record you keep. It is reached from the rail, not the dashboard *(revised 30 September 2026, SR-485: its dashboard card beside Resume and Start New was removed; the rail entry stays)* |
+| **L2** | **The Clearing stays out.** It is a practice you do, not a record you keep. It remains on the dashboard as the first card of Begin here, before Resume and Start New *(SR-485 removed that card on 30 September 2026; SR-498 restored it the same day by founder ruling. The rail entry is unchanged)* |
 | **L3** | **Favourites live here**, in a Saved tab. This resolves MR-35 — saved resources, content and protocols all land in one place |
 | **L4** | **Sovereign sessions get no tab of their own.** They thread through All Sessions, Chosen Self and Decisions like any other run |
 | **L5** | **All Sessions carries a Guided / Sovereign filter.** A filter on one list, never a sixth destination |
