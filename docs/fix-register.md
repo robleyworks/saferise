@@ -24700,3 +24700,49 @@ rhythm". Rewritten, since both claims stopped being true.
   buttons and the film section follows directly.
 - The organisations hero stays **left**-aligned. SR-519's centring is scoped to `.sr-home` and does
   not reach this page.
+
+## SR-523 · the homepage hero photograph
+
+Founder ruling, 2 October: a new photograph behind the homepage hero copy.
+
+### The asset
+
+`assets/home/hero-office.jpg` (203 KB) and `.webp` (54 KB), a **new filename rather than a
+replacement of `hero-film.*`**. `_headers` serves `/assets/*` with
+`max-age=31536000, immutable`, so overwriting a path in place would leave returning visitors on the
+old photograph for up to a year. `hero-film.jpg` / `.webp` are now unreferenced but were left in
+the repo; nothing else pointed at them (`index.html:1272` was the only use).
+
+The supplied frame was 1920×1088. **400px cropped from the left**, giving 1520×1088: with the copy
+centred by SR-519, the subject at her original position sat directly behind the headline. The crop
+moves her left of the text block, and the room's depth fills the right.
+
+### Two framing changes, which must agree
+
+`index.html:1775` — SR-486's scroll drift writes `object-position` **inline** on load:
+`heroImg.style.objectPosition = 'center calc(42% + …)'`. An inline write beats any stylesheet rule,
+so the 42% in that script, not the CSS, was what actually framed the hero. **This is why an earlier
+attempt to re-frame it from CSS alone had no effect.** Now `calc(4% + …)`; the drift itself is
+unchanged.
+
+`css/saferise-system.css` — `.sr-home .sr-pt--a .sr-pt-art img{object-position:center 4%}`, which
+is what paints before the script runs.
+
+4% rather than the shared 42% because this photograph puts her head near the top of the frame: at
+42% the 440px band opened below her eyes. At 4% her whole head is in, with headroom. At full drift
+(+8%) the crown just reaches the top edge, by which point the hero is already leaving the viewport.
+
+### The scrim
+
+The shared `.sr-pt--a` scrim is a 95deg wash — `.9` opaque on the left, `.3` on the right — built
+for copy set left. SR-519 centred this page's copy, which left the headline sitting across the
+light half with the dark half empty. Replaced, scoped to `.sr-home`, by a vertical wash plus a soft
+centre vignette: it reads the same from either side, holds the headline, and leaves her face and
+the room legible rather than flattened.
+
+Both rules are scoped to `.sr-home`. `organisations.html` and `proposal-7kq3m9x2.html` share
+`.sr-pt--a` and keep the framing and scrim they were built with.
+
+- **Checked:** headless renders at 1440, 1024 and 390 against the committed files, confirming the
+  served image is `hero-office.webp`, the inline position resolves to `center calc(4%)`, her head
+  is whole and clear of the headline at all three, and the copy stays legible.

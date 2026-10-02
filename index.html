@@ -1269,7 +1269,7 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
      is now capped so the doors below reach the fold. The play control, the grain
      and the scroll drift (below, heroImg) are kept. -->
 <header class="sr-pt sr-pt--a">
-  <picture class="sr-pt-art" aria-hidden="true"><source type="image/webp" srcset="assets/home/hero-film.webp"><img src="assets/home/hero-film.jpg" alt=""><span class="filmgrain"></span></picture>
+  <picture class="sr-pt-art" aria-hidden="true"><source type="image/webp" srcset="assets/home/hero-office.webp"><img src="assets/home/hero-office.jpg" alt=""><span class="filmgrain"></span></picture>
   <div class="sr-pt-in"><div class="sr-pt-copy">
     <p class="sr-pt-kick">SafeRise</p>
     <h1 class="sr-pt-h">&ldquo;My unregulated nervous system narrowed my choices for years. <em>Long enough that it became my personality, and affected my&nbsp;life.&rdquo;</em></h1>
@@ -1767,7 +1767,12 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
   var ticking=false;
   function moveHero(){
     var y=window.scrollY||0;
-    if(heroImg) heroImg.style.objectPosition='center calc(42% + '+Math.min(8,y*.01)+'%)';
+    /* SR-523 · 4%, not 42%. This inline write beats any stylesheet rule, so
+       the framing of the homepage hero lives HERE as well as in the CSS, and
+       both have to agree. The new photograph has her head near the top of the
+       frame; at 42% the band opened below her eyes. The drift itself is
+       SR-486's and is unchanged. */
+    if(heroImg) heroImg.style.objectPosition='center calc(4% + '+Math.min(8,y*.01)+'%)';
     ticking=false;
   }
   window.addEventListener('scroll',function(){
