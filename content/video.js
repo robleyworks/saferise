@@ -33,7 +33,7 @@
 
 /* Fill once R2 public access is on — see the header. No trailing path beyond
    /video/; the filenames below are appended to it. */
-var VIDEO_BASE = '<MEDIA_BASE>/video/';
+var VIDEO_BASE = 'https://pub-e32a7ff66acf4a05aeb1655ca41ae1ab.r2.dev/video/';
 
 /* Poster and caption paths are root-relative, for the reason SR-468 made
    MEDITATION_BASE root-relative: on a nested route a relative path resolves
