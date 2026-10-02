@@ -25,8 +25,7 @@ if (typeof window.SR_FLAGS.sovereign !== 'boolean') window.SR_FLAGS.sovereign = 
    decides whether the buttons are offered, so turning the flag off hides the
    controls and turning the server row off makes them fail closed. Both must
    be off before the payment rail goes live.
-   SHIPS FALSE. The surface is only correct once 0007 is applied: before that
-   every control would offer a change and then fail. Order: deploy with this
-   off (nothing changes for anyone), apply 0007, then flip this to true in a
-   commit of its own. */
-if (typeof window.SR_FLAGS.tierSelfSelect !== 'boolean') window.SR_FLAGS.tierSelfSelect = false;
+   Shipped false until 0007 was applied, because before that every control
+   would offer a change and then fail. 0007 and 0008 are live on SafeRise EU
+   (2 October 2026), so it is now on. */
+if (typeof window.SR_FLAGS.tierSelfSelect !== 'boolean') window.SR_FLAGS.tierSelfSelect = true;
