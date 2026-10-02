@@ -451,8 +451,25 @@ body .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color
 .sr-dash-jplaceholder.p2{background:linear-gradient(120deg,#140d11,#2a161f 48%,#4d2735 80%,#100b0e)}
 .sr-dash-jplaceholder.p3{background:linear-gradient(120deg,#0b1114,#172830 48%,#2a4750 80%,#0a0f12)}
 .sr-dash-jplaceholder.p4{background:linear-gradient(120deg,#100d1e,#1f1a3a 48%,#3a3163 80%,#0d0a16)}
+/* SR-517 · the name and its value line move OFF the column and ON TO the band,
+   one translucent block per third. No border anywhere on them - the separation
+   is a wash plus a blur, per the standing rule. Below 760 the band is too small
+   to carry type, so the overlay hides and the column shows the pair instead;
+   only one of the two is ever visible. */
+.sr-dash-jlabels{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:end;pointer-events:none;z-index:2}
+.sr-dash-jlabel{margin:0 18px 20px;padding:15px 19px 16px;border-radius:3px;
+  background:rgba(10,10,14,.56);backdrop-filter:blur(9px) saturate(.92);-webkit-backdrop-filter:blur(9px) saturate(.92);
+  box-shadow:0 1px 0 rgba(255,255,255,.05) inset}
+.sr-dash-jlabel .sr-dash-jname{margin-bottom:5px}
+.sr-dash-jlabel .sr-dash-jvalue{padding-bottom:0;margin-bottom:0;border-bottom:0;font-size:17.5px}
+.sr-dash-jcol > .sr-dash-jname,.sr-dash-jcol > .sr-dash-jvalue{display:none}
+@media(max-width:760px){
+  .sr-dash-jlabels{display:none}
+  .sr-dash-jcol > .sr-dash-jname,.sr-dash-jcol > .sr-dash-jvalue{display:block}
+}
 .sr-dash-jcols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:0}
-.sr-dash-jcol{padding:0 30px;border-left:1px solid var(--hair);display:flex;flex-direction:column}
+.sr-dash-jcol{padding:0 36px;border-left:1px solid var(--hair);display:flex;flex-direction:column}
 .sr-dash-jcol:first-child{padding-left:0;border-left:0}
 .sr-dash-jcol:last-child{padding-right:0}
 .sr-dash-jtag{font-size:13px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
@@ -632,7 +649,7 @@ body.reading #srLibrary{margin-top:22px}
 .sr-dash-jcols,
 .sr-dash-proto-main{ padding-left:var(--pad); padding-right:var(--pad); }
 .sr-dash-strip{ margin:0 }
-.sr-dash-jcols{ padding:30px 0 0 }
+.sr-dash-jcols{ padding:34px var(--pad) 36px }
 .sr-dash-jcol:first-child{ padding-left:0 }
 .sr-dash-jcol:last-child{ padding-right:0 }
 .sr-dash-carhead{ padding-left:0; padding-right:0 }
@@ -770,7 +787,7 @@ body.reading #srLibrary{margin-top:22px}
   .sr-dash-railico{width:17px;height:17px}
   .sr-dash-railmeta{display:none}
   .sr-dash-carwrap{padding-left:0}
-  .sr-dash-jcols{grid-template-columns:1fr;gap:30px;padding:30px 0 0}
+  .sr-dash-jcols{grid-template-columns:1fr;gap:30px;padding:30px var(--pad) 32px}
   .sr-dash-jcol{padding:0;border-left:0;border-top:1px solid var(--hair);padding-top:26px}
   .sr-dash-jcol:first-child{border-top:0;padding-top:0}
 }

@@ -1099,19 +1099,30 @@
   var jBand  = document.getElementById('srJBand');
   var jCols  = document.getElementById('srJCols');
 
+  /* SR-517 · the tag line (01 - START HERE and the rest) is dropped from the
+     render; JOURNEY keeps tag and tagcol because tagcol still colours the
+     overlay's value line. The name and the value move on to the band as one
+     translucent block per third, and the column below carries the body only.
+     Both are emitted every time - CSS decides which is visible, so there is
+     no width branch in JS. */
   function renderJourney(n){
     var j = JOURNEY[n];
     jNote.textContent = j.note;
-    jBand.innerHTML = BAND[n]
+
+    var labels = j.cols.map(function(c){
+      return '<div class="sr-dash-jlabel">'+
+        '<p class="sr-dash-jname">'+c.name+'</p>'+
+        '<p class="sr-dash-jvalue"'+(c.valcol?' style="color:'+c.valcol+'"':'')+'>'+c.value+'</p>'+
+      '</div>';
+    }).join('');
+
+    jBand.innerHTML = (BAND[n]
       ? '<img src="'+BAND[n]+'" alt="Three moments in one practice: the guided session, logging what shifted, and reading deeper">'
-      : '<div class="sr-dash-jplaceholder '+j.band+'"><span>Experience<b>band photograph pending</b></span><span>Log &amp; Journal<b>band photograph pending</b></span><span>Go Deeper<b>band photograph pending</b></span></div>';
-    /* SR-502 · colour follows the TRACK, from JOURNEY's own tagcol / valcol.
-       The tag takes tagcol; the italic value takes valcol, and with none it
-       falls back to .sr-dash-jvalue's own var(--text2), as it always did.
-       SR-511 · plain columns again — no anchor, no arrow, nothing clickable. */
+      : '<div class="sr-dash-jplaceholder '+j.band+'"><span>Experience<b>band photograph pending</b></span><span>Log &amp; Journal<b>band photograph pending</b></span><span>Go Deeper<b>band photograph pending</b></span></div>')
+      + '<div class="sr-dash-jlabels">'+labels+'</div>';
+
     jCols.innerHTML = j.cols.map(function(c){
       return '<div class="sr-dash-jcol">'+
-        '<p class="sr-dash-jtag" style="color:'+c.tagcol+'">'+c.tag+'</p>'+
         '<p class="sr-dash-jname">'+c.name+'</p>'+
         '<p class="sr-dash-jvalue"'+(c.valcol?' style="color:'+c.valcol+'"':'')+'>'+c.value+'</p>'+
         c.body.map(function(t){return '<p class="sr-dash-jbody">'+t+'</p>';}).join('')+
