@@ -248,34 +248,87 @@
     return '<svg class="sr-sv-ico" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" aria-hidden="true">' + ICON[name] + '</svg>';
   }
 
-  /* ── Soundbed · generated, no file, no track name, no duration ─────────── */
+  /* ── Soundbed · SR-520 · the protocol's own bed, per D3 ────────────
+     D3 (SOVEREIGN-SOUND-BED-DECISIONS.md, 1 October) rules that the beds
+     ship as supplied — the real file, its own fades intact. What stood here
+     before synthesised four seconds of brown noise and looped it: twenty bed
+     files sat in the repo, content/beds.js was loaded on this page, and BEDS
+     was referenced nowhere in the codebase.
+
+     NO LOOP. Each bed carries its own eight-second fade out; looping would
+     pump that fade against its own head on every pass. When the file ends it
+     ends — `ended` is deliberately left unwired, so nothing restarts and
+     nothing is announced. The session is not timed by the bed, and the bed is
+     never named, never counted down, and never shown with a duration.
+
+     THE PATH COMES FROM content/beds.js AND NOWHERE ELSE — that file's own
+     rule, so the move to object storage stays a one-constant change.
+     PAGE_PROTOCOL gives 't1-p01'; BEDS is keyed 't1-01'.
+
+     The bed is under the session, not in front of it: it sits well below the
+     spoken prompt, and it is not fetched at all until it is switched on. */
   var Soundbed = (function () {
-    var ac = null, gain = null, src = null, want = LocalStore.get(KEYS.soundbed, false) === true, live = false;
+    var VOL = 0.17, RAMP = 900;
+    var el = null, want = LocalStore.get(KEYS.soundbed, false) === true;
+    var live = false, resolved = false, src = null, ramp = null;
+
+    function bed() {
+      if (resolved) return src;
+      resolved = true;
+      var beds = window.BEDS;
+      var id = String((typeof PAGE_PROTOCOL !== 'undefined' && PAGE_PROTOCOL && PAGE_PROTOCOL.protocolId) || '');
+      var key = id.replace('-p', '-');
+      src = (beds && key && beds[key] && beds[key].src) || null;
+      return src;
+    }
+
     function build() {
-      var AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return false;
-      ac = new AC();
-      var len = ac.sampleRate * 4, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0), last = 0;
-      for (var n = 0; n < len; n++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[n] = last * 3.2; }
-      src = ac.createBufferSource(); src.buffer = buf; src.loop = true;
-      var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 420;
-      gain = ac.createGain(); gain.gain.value = 0;
-      src.connect(lp); lp.connect(gain); gain.connect(ac.destination);
-      src.start();
+      if (el) return true;
+      if (!bed()) return false;
+      el = new Audio();
+      el.preload = 'none';           /* nothing is fetched until it is on */
+      el.src = src;
+      el.loop = false;               /* D3 · the fade is the ending */
+      el.volume = 0;
+      /* `ended` is intentionally not wired. The bed finishing is not an
+         event the session reacts to. */
       return true;
     }
-    function fade(to) { if (gain) { gain.gain.cancelScheduledValues(ac.currentTime); gain.gain.setTargetAtTime(to, ac.currentTime, 0.6); } }
+
+    /* A short ramp on the toggle only, so switching it on mid-session does
+       not click in. The file's own fades are untouched. */
+    function to(target, done) {
+      if (ramp) { clearInterval(ramp); ramp = null; }
+      if (!el) return;
+      var from = el.volume, t0 = Date.now();
+      ramp = setInterval(function () {
+        var k = Math.min(1, (Date.now() - t0) / RAMP);
+        try { el.volume = from + (target - from) * k; } catch (e) {}
+        if (k >= 1) { clearInterval(ramp); ramp = null; if (done) done(); }
+      }, 40);
+    }
+
     return {
+      available: function () { return !!bed(); },
       on: function () { return want; },
-      toggle: function () { want = !want; LocalStore.set(KEYS.soundbed, want); if (want) this.resume(); else this.pause(); return want; },
+      toggle: function () {
+        want = !want; LocalStore.set(KEYS.soundbed, want);
+        if (want) this.resume(); else this.pause();
+        return want;
+      },
       resume: function () {
         if (!want) return;
-        if (!ac && !build()) return;
-        if (ac.state === 'suspended') ac.resume();
-        if (!live) { gain.gain.value = 0; fade(0.09); }
-        live = true;
+        if (!build()) return;
+        var p;
+        try { p = el.play(); } catch (e) { return; }
+        if (p && p.catch) p.catch(function () {});
+        if (!live) { live = true; to(VOL); }
       },
-      pause: function () { if (ac && live) { live = false; ac.suspend(); } }
+      pause: function () {
+        if (!el || !live) return;
+        live = false;
+        to(0, function () { try { el.pause(); } catch (e) {} });
+      }
     };
   })();
 
@@ -417,7 +470,12 @@
   }
   /* While SafeRise's own prompt is playing, capture is held so the prompt's
      words ("…from one to ten") can never be read as the member's rating. */
-  Voice.onChange(function (p) { if (engine) engine.hold(!!p); });
+  var promptHeld = false;
+  Voice.onChange(function (p) {
+    if (engine) engine.hold(!!p);
+    promptHeld = !!p;
+    domSay();
+  });
 
   function dropEngine() {
     if (engine) engine.destroy();
@@ -515,7 +573,37 @@
       '<span class="sr-av--inline" data-sv-viz="' + k + '"></span></span>';
   }
 
+  /* ── SR-520 · the rating screens say whether they are hearing you ─────
+     Both rating screens carried a static dot and the words "Say the number",
+     and nothing else: .sr-sv-listen — the one element domVoice() drives —
+     rendered only on the PHASE screens, via micLine(). So a member speaking a
+     number got no feedback of any kind, whether or not the engine heard it.
+
+     It also told them nothing about the one window where the microphone is
+     open and deliberately deaf. While SafeRise's own question is playing,
+     js/saferise-sovereign-stt.js holds capture and discards every block, so
+     the prompt's own words ("…from one to ten") can never be read as the
+     member's rating. The browser shows its recording indicator throughout.
+     sv-prestate.mp3 runs about eight seconds, so a member who answers over
+     the question is speaking into a mic that is on and keeping nothing.
+     The screen now says so, and says when it is listening. */
+  function sayInner() {
+    if (micLost || Mic.status !== 'on') return 'Tap the number.';
+    if (promptHeld) {
+      return '<span class="sr-sv-gdot sr-sv-gdot--wait" aria-hidden="true"></span>' +
+             'Listening once the question finishes — or tap the number now.';
+    }
+    return '<span class="sr-sv-gdot" aria-hidden="true"></span>Say the number, or tap it.' +
+           '<span class="sr-sv-listen"' + (voice ? '' : ' hidden') + '>Listening</span>';
+  }
+  function sayLine() { return '<p class="sr-sv-say" role="status">' + sayInner() + '</p>'; }
+  function domSay() {
+    var el = root.querySelector('.sr-sv-say');
+    if (el) el.innerHTML = sayInner();
+  }
+
   function soundbedBtn() {
+    if (!Soundbed.available()) return '';   /* SR-520 · no bed for this protocol, no control */
     var on = Soundbed.on();
     return '<button type="button" class="sr-sv-bed" data-sv="soundbed" aria-pressed="' + on + '">' +
            '<span class="sr-sv-bedpip" aria-hidden="true"></span>Soundbed ' + (on ? 'on' : 'off') + '</button>';
@@ -940,7 +1028,7 @@
         '<p class="sr-sv-label">Where you are starting</p>' + replayBtn('pre') +
         '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">How activated does your system feel right now?</h2>' +
         scale('pre', pre) +
-        '<p class="sr-sv-say"><span class="sr-sv-gdot" aria-hidden="true"></span>Say the number, or tap it.</p>' +
+        sayLine() +
         '<p class="sr-sv-quiet">You can correct this at any point during the session.</p>' +
         '<div class="sr-sv-acts"><button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="begin"' + (pre ? '' : ' disabled') + '>Begin</button></div>' +
         '<div class="sr-sv-foot"><span>' + soundbedBtn() + '</span>' +
@@ -980,7 +1068,7 @@
         '<h2 class="sr-sv-h sr-sv-h--34" tabindex="-1">And how activated does your system feel now?</h2>' +
         scale('post', post) +
         '<p class="sr-sv-began sr-sv-began--big">You began at <span class="sr-sv-chip">' + machine.preState() + '</span></p>' +
-        '<p class="sr-sv-say"><span class="sr-sv-gdot" aria-hidden="true"></span>Say the number, or tap it.</p>' +
+        sayLine() +
         '<div class="sr-sv-acts"><button type="button" class="sr-sv-btn sr-sv-btn--pri" data-sv="close"' + (post ? '' : ' disabled') + '>Close the session</button></div>' +
         '<div class="sr-sv-foot"><span class="sr-sv-footpair">' + soundbedBtn() + readingToggle() + '</span>' +
         '<span class="sr-sv-footr sr-sv-footr--430">Nothing has been written up yet. You are rating your own state, not a summary of it.</span></div>' +

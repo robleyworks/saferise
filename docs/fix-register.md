@@ -24542,3 +24542,105 @@ Brief: `PASS-FILMS-AND-R2.md` (Desktop, `SafeRise Film04 Mix/web/`). One commit 
   - **Part 6 not run.** It waits on R2 and a deploy. The local preview also cannot start in this
     environment (the runner cannot read under `~/Documents`), so nothing was rendered in a browser this pass.
     The checks were a JS parse, and HTML tag and comment balance against HEAD.
+
+---
+
+## SR-519 · the homepage hero reads centred
+
+Founder ruling, 2 October: the top of the homepage is centre-aligned.
+
+`css/saferise-system.css`, after the `.sr-pt--a` colour overrides. Four rules, all scoped to
+`.sr-home` — the wrapper at `index.html:1265` — so `organisations.html` and
+`proposal-7kq3m9x2.html`, which share `.sr-pt--a`, keep the left-aligned hero they were designed
+with:
+
+```css
+.sr-home .sr-pt--a .sr-pt-copy{margin-inline:auto;text-align:center}
+.sr-home .sr-pt--a .sr-pt-h{margin-inline:auto}
+.sr-home .sr-pt--a .sr-pt-lead{margin-inline:auto}
+.sr-home .sr-pt--a .sr-pt-acts{justify-content:center}
+```
+
+`.sr-pt-copy` (760px), `.sr-pt-h` (24ch) and `.sr-pt-lead` (48ch) each carry their own max-width,
+so `text-align` alone leaves the block sitting left. `.sr-pt-acts` is a flex row and centres on its
+main axis, which also centres `#filmPlay` — it lives inside that row.
+
+- **This is the brief's "SR-517 centres `.sr-pt-acts`", renumbered.** SR-517 is already the
+  dashboard journey band. The previous pass was right to flag the collision and right not to guess.
+- **Not a layout bug.** The founder's screenshot showed content at 403/1366 = 29.5% from the left;
+  a render of committed `index.html` at 2732px puts it at 806/2732 = 29.5%. The window was zoomed
+  out. `Cmd+0` restores it. The centring above is a separate, wanted change.
+- Needs a re-check at 1440 / 1024 / 390.
+
+## SR-520 · Sovereign · the real sound beds, and a rating screen that says whether it is hearing you
+
+Two defects, both reported by the founder, both in the Sovereign session.
+
+### 1 · the soundbed was synthesised noise
+
+`js/saferise-sovereign.js` built four seconds of brown noise, low-passed at 420 Hz, and looped it
+at gain 0.09. Its own comment said so: *"Soundbed · generated, no file, no track name, no
+duration"*. Meanwhile all twenty bed files were present under `assets/audio/beds/`,
+`content/beds.js` carried the thirty-protocol mapping and was loaded on `protocol.html` at line
+836 — and `grep -rn "BEDS\["` returned nothing codebase-wide. The mapping was never read.
+
+This predates **D3** (`claude/SOVEREIGN-SOUND-BED-DECISIONS.md`, 1 October), which overruled the
+no-timer objection and ruled that the beds ship as supplied, fades intact.
+
+Replaced with an `<audio>` element reading `BEDS[key].src`:
+
+- **The path comes from `content/beds.js` and nowhere else** — that file's own rule, so the later
+  move to object storage stays a one-constant change.
+- **`PAGE_PROTOCOL` gives `t1-p01`; `BEDS` is keyed `t1-01`.** The key is
+  `String(protocolId).replace('-p', '-')`. Verified: all 30 protocol ids map to a bed, and all 30
+  resolved paths exist on disk.
+- **No loop.** `el.loop = false`. Each bed carries an eight-second fade out; looping pumps that
+  fade against its own head every pass.
+- **`ended` is deliberately unwired**, per D3. The bed finishing is not an event the session reacts
+  to — nothing restarts, nothing is announced.
+- **Nothing is fetched until it is switched on** (`preload = 'none'`).
+- A 900 ms ramp on the toggle only, so switching on mid-session does not click in. The file's own
+  fades are untouched.
+- `soundbedBtn()` now returns `''` when no bed resolves, rather than offering a control over
+  silence.
+
+### 2 · the rating screens gave no feedback at all, and hid a deaf window
+
+The founder: *"when sovereign asks me to state a number to measure my state, it is not accepting
+audio number selection."*
+
+What is **not** wrong, each checked: `parseRating` (`:184`) is correct and **is** called, at `:383`
+inside `onFinal`; `startMachine()` starts the engine tagged `PRE_STATE` before the screen opens;
+`STATES`/`PHASES` agree with the guard; script order on `protocol.html` is correct; the vendored
+moonshine-tiny model and both WASM/JS runtime files are present and git-tracked; a model that
+failed to load would have thrown a visible `showFail('load')` screen, not a silent one. The
+founder confirmed the browser shows a **red recording indicator**, and that spoken words **do**
+appear as transcript on the PHASE screens. So the microphone opens and the recogniser works.
+
+Two real faults remained:
+
+- **`.sr-sv-listen` — the one element `domVoice()` drives — rendered only on the PHASE screens**,
+  via `micLine()`. Both rating screens carried a static `.sr-sv-gdot` and the words "Say the
+  number, or tap it." and nothing else. A member speaking a number got no feedback whether or not
+  they were heard. *(An earlier instruction to the founder to "watch the pip" on that screen was
+  therefore an invalid test. Owned at the time.)*
+- **The screens said nothing about the window where the microphone is open and deliberately deaf.**
+  `js/saferise-sovereign-stt.js:293`: while SafeRise's own question plays, capture is `held` and
+  **every block is discarded**, so the prompt's own words ("…from one to ten") can never be read as
+  the member's rating. That hold is correct and stays. But `assets/audio/sovereign/sv-prestate.mp3`
+  is 120 KB — roughly **eight seconds** — and the browser shows its recording indicator for all of
+  it. A member who answers over the question is speaking into a live mic that keeps nothing, with
+  no way to know.
+
+`sayLine()` / `sayInner()` / `domSay()` replace the two static lines. The line now reports three
+states: microphone lost (tap only); **held** — *"Listening once the question finishes — or tap the
+number now"*, with the dot hollow and gold instead of sage; and listening, with the live
+`.sr-sv-listen` span. `Voice.onChange` already fired for the hold; it now also sets `promptHeld`
+and repaints the line.
+
+- **Checked:** `node --check` on `js/saferise-sovereign.js`; the 30-key bed mapping and every
+  resolved file path; the two say-line call sites.
+- **Not checked in a browser.** No preview could be started in this environment, and a Sovereign
+  session needs the mic plus a 53 MB one-time model download. The held-state line is the thing to
+  watch on the founder's next session: if the spoken number lands once the question has finished,
+  the deaf window was the whole fault.
