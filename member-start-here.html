@@ -63,19 +63,82 @@
   <p class="sr-bn-sub">Eight short orientation modules to build your confidence, apply the method and get the most from SafeRise.</p>
 </div></div></header>
 
+<!-- SR-525 · the eight orientation modules, built to the placeholder contract
+     in claude/VIDEO-ORIENTATION-MODULES.md §5: each module renders its title,
+     its one-line description, its form and its expected length, and in place of
+     the player the honest line that it has not been made yet. §5 is explicit
+     that a placeholder "never renders a broken player, a dead play button, or a
+     thumbnail implying something is there", so these carry no cover art and no
+     play control — see the note to the founder. Each card carries its ORV id so
+     a video can be dropped in later without touching the markup around it.
+     This replaces the single blanket empty state ("The videos are still being
+     made"), which §5 names as the thing it supersedes.
+     No dates, no "coming soon", no ordering language implying a schedule. -->
 <section class="sr-or-videos" id="srOrVideos" aria-labelledby="srOrVideosH">
-  <h2 class="sr-or-vh" id="srOrVideosH">Help videos</h2>
-  <!-- The list the videos will fill. Empty until they are supplied. -->
-  <ul class="sr-or-list" hidden></ul>
-  <div class="sr-or-empty">
-    <svg class="sr-or-emptyicon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10.5 9.5v5l4-2.5z"/></svg>
-    <p class="sr-or-emptyh">The videos are still being made.</p>
-    <p class="sr-or-emptyb">They will appear here as soon as they are ready. Until then, your dashboard is the place to begin, and Support answers the questions people ask first.</p>
-    <p class="sr-or-acts">
-      <a class="sr-or-btn" href="/dashboard.html">Go to your dashboard</a>
-      <a class="sr-or-link" href="/support">Go to Support</a>
-    </p>
-  </div>
+  <h2 class="sr-or-vh" id="srOrVideosH">The eight modules</h2>
+  <ul class="sr-or-list sr-or-list--mods">
+    <li class="sr-or-mod" data-orv="ORV-01">
+      <p class="sr-or-modnum">01</p>
+      <h3 class="sr-or-modh">Who can see this</h3>
+      <p class="sr-or-modb">What an employer can and cannot see when your seat was provisioned for you.</p>
+      <p class="sr-or-modmeta"><span class="sr-or-modform">Film</span><span class="sr-or-moddot" aria-hidden="true"></span><span>2–3 min</span></p>
+      <p class="sr-or-modstate">Not made yet.</p>
+    </li>
+    <li class="sr-or-mod" data-orv="ORV-02">
+      <p class="sr-or-modnum">02</p>
+      <h3 class="sr-or-modh">What this is, and what it isn’t</h3>
+      <p class="sr-or-modb">Where SafeRise sits, and what it is not setting out to be.</p>
+      <p class="sr-or-modmeta"><span class="sr-or-modform">Film</span><span class="sr-or-moddot" aria-hidden="true"></span><span>2–3 min</span></p>
+      <p class="sr-or-modstate">Not made yet.</p>
+    </li>
+    <li class="sr-or-mod" data-orv="ORV-03">
+      <p class="sr-or-modnum">03</p>
+      <h3 class="sr-or-modh">How a protocol works, start to finish</h3>
+      <p class="sr-or-modb">One session from opening it to closing it, including the two ratings.</p>
+      <p class="sr-or-modmeta"><span class="sr-or-modform">Walkthrough</span><span class="sr-or-moddot" aria-hidden="true"></span><span>≤90 s</span></p>
+      <p class="sr-or-modstate">Not made yet.</p>
+    </li>
+    <li class="sr-or-mod" data-orv="ORV-04">
+      <p class="sr-or-modnum">04</p>
+      <h3 class="sr-or-modh">The four phases</h3>
+      <p class="sr-or-modb">Recognise, Regulate, Release and Rise, in one pass rather than four.</p>
+      <p class="sr-or-modmeta"><span class="sr-or-modform">Film</span><span class="sr-or-moddot" aria-hidden="true"></span><span>2–3 min</span></p>
+      <p class="sr-or-modstate">Not made yet.</p>
+    </li>
+    <li class="sr-or-mod" data-orv="ORV-05">
+      <p class="sr-or-modnum">05</p>
+      <h3 class="sr-or-modh">When it’s harder than you expected</h3>
+      <p class="sr-or-modb">What to do when a session does not go the way you thought it would.</p>
+      <p class="sr-or-modmeta"><span class="sr-or-modform">Film</span><span class="sr-or-moddot" aria-hidden="true"></span><span>2–3 min</span></p>
+      <p class="sr-or-modstate">Not made yet.</p>
+    </li>
+    <li class="sr-or-mod" data-orv="ORV-06">
+      <p class="sr-or-modnum">06</p>
+      <h3 class="sr-or-modh">Triggers — before, during, after</h3>
+      <p class="sr-or-modb">The whole arc of a trigger, treated as one thing rather than three.</p>
+      <p class="sr-or-modmeta"><span class="sr-or-modform">Film</span><span class="sr-or-moddot" aria-hidden="true"></span><span>2–3 min</span></p>
+      <p class="sr-or-modstate">Not made yet.</p>
+    </li>
+    <li class="sr-or-mod" data-orv="ORV-07">
+      <p class="sr-or-modnum">07</p>
+      <h3 class="sr-or-modh">My Records</h3>
+      <p class="sr-or-modb">Where your own writing goes, and what you can do with it later.</p>
+      <p class="sr-or-modmeta"><span class="sr-or-modform">Walkthrough</span><span class="sr-or-moddot" aria-hidden="true"></span><span>≤90 s</span></p>
+      <p class="sr-or-modstate">Not made yet.</p>
+    </li>
+    <li class="sr-or-mod" data-orv="ORV-08">
+      <p class="sr-or-modnum">08</p>
+      <h3 class="sr-or-modh">AI feedback: your switch</h3>
+      <p class="sr-or-modb">What happens when the switch is on, what happens when it is off.</p>
+      <p class="sr-or-modmeta"><span class="sr-or-modform">Walkthrough</span><span class="sr-or-moddot" aria-hidden="true"></span><span>≤90 s</span></p>
+      <p class="sr-or-modstate">Not made yet.</p>
+    </li>
+  </ul>
+  <p class="sr-or-foot">Each one lands here as it is finished. Until then your dashboard is the place to begin, and Support answers the questions people ask first.</p>
+  <p class="sr-or-acts">
+    <a class="sr-or-btn" href="/dashboard.html">Go to your dashboard</a>
+    <a class="sr-or-link" href="/support">Go to Support</a>
+  </p>
 </section>
 
 </main>
