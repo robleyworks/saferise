@@ -1224,6 +1224,9 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
 <script src="content/t3-resources.js"></script>
 
 <script src="content/track-images.js"></script>
+<!-- SR-518 · the film constants and player -->
+<script src="/content/video.js"></script>
+<script src="/js/saferise-film.js"></script>
 </head>
 <body>
 
@@ -1647,28 +1650,15 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
 </section>
 <div class="filmmodal" id="filmModal" aria-hidden="true">
   <div class="filmmodalback" data-close-film></div>
-  <div class="filmframe" role="dialog" aria-modal="true" aria-label="SafeRise lived-experience film preview">
+  <div class="filmframe" role="dialog" aria-modal="true" aria-label="SafeRise — the film">
     <button class="filmclose" type="button" data-close-film aria-label="Close film">×</button>
-    <div class="filmpreview">
-      <img src="assets/home/film-poster.webp" alt="">
-      <div class="previewshade"></div>
-      <div class="previewcenter">
-        <span class="previewlabel">A film in production</span>
-        <h2>What dysregulation changed for me.</h2>
-        <p>A short documentary, currently being made.</p>
-      </div>
-    </div>
-    <div class="filmchapters">
-      <div><span>01</span><strong>Anxiety</strong><small>Scanning for a problem that never resolves</small></div>
-      <div><span>02</span><strong>Relationship rupture</strong><small>Building the next argument before speaking</small></div>
-      <div><span>03</span><strong>Feedback pressure</strong><small>Hearing threat before hearing the message</small></div>
-      <div><span>04</span><strong>Emotional overwhelm</strong><small>Losing access to the next clear choice</small></div>
-    </div>
-    <div class="filmtimeline">
-      <span class="timecurrent">0:00</span>
-      <div class="timelinebar"><i></i></div>
-      <span>1:04</span>
-    </div>
+    <!-- SR-518 · the film itself (js/saferise-film.js, from content/video.js).
+         Replaces the "film in production" preview, the four chapter stubs and
+         the static 0:00 / 1:04 bar: the film exists, it is 0:58, and the native
+         controls carry the real scrubber and duration. The chapters were
+         dropped, not rewritten: they did not match the cut, and the as-cut
+         script they would be rewritten against is not in the repo. -->
+    <div class="sr-fm" data-sr-film="home"></div>
   </div>
 </div>
 </div>
@@ -1792,11 +1782,17 @@ footer{padding:60px;text-align:center;background:var(--bg2);}
       filmModal.classList.add('open');
       filmModal.setAttribute('aria-hidden','false');
       document.body.style.overflow='hidden';
+      /* SR-518 · the press on #filmPlay is the press: the film starts here,
+         so nothing is fetched before it and no second press is asked for. */
+      var f=window.SafeRiseFilm && SafeRiseFilm.mount(filmModal.querySelector('[data-sr-film]'));
+      if(f) f.play();
     }
     function closeFilm(){
       filmModal.classList.remove('open');
       filmModal.setAttribute('aria-hidden','true');
       document.body.style.overflow='';
+      var f=window.SafeRiseFilm && SafeRiseFilm.mount(filmModal.querySelector('[data-sr-film]'));
+      if(f) f.pause();
     }
     filmPlay.addEventListener('click',openFilm);
     filmModal.querySelectorAll('[data-close-film]').forEach(function(el){el.addEventListener('click',closeFilm);});
