@@ -24644,3 +24644,59 @@ and repaints the line.
   session needs the mic plus a 53 MB one-time model download. The held-state line is the thing to
   watch on the founder's next session: if the spoken number lands once the question has finished,
   the deaf window was the whole fault.
+
+## SR-521 · the founder's corrected posters, and VIDEO_BASE filled
+
+Both posters replaced with the founder's corrected key art (the earlier pair had wrong website
+screenshots rendered into the devices). Normalised to the existing spec: the supplied frames were
+1671×941 and 1670×942 — just off 16:9 — so each was centre-cropped to exact ratio and resampled to
+1920×1080, progressive JPEG, 4:2:2. 328 KB and 333 KB against the 316 KB and 292 KB replaced.
+
+`content/video.js` · `VIDEO_BASE` now carries the bucket's public origin in place of the
+`<MEDIA_BASE>` placeholder. That placeholder was the string `js/saferise-film.js` tested for before
+it would attach a source, so this is the last of the three gates.
+
+- **Verified against R2, not assumed.** All four objects return 200 with `content-type video/mp4`,
+  and their durations and frame sizes are the delivered cuts: film04 58.212s at 1920×1080 and
+  58.208s at 1280×720; organisations 102.292s at both. Checked through the browser, because neither
+  the cloud container nor the device shell can reach any Cloudflare host — both answer `000`. That
+  is the sandbox's egress allowlist and is unrelated to R2 being on.
+- The uploaded encodes are **not** byte-identical to the masters rendered this session — the 1080p
+  files are larger and the 720p files smaller — so they were re-encoded elsewhere. The cuts match.
+- **The play circle's centre now lands on the laptop screen** in both posters, not on clear ground.
+  No baked headline type is near it (both headlines sit upper-right), so the 44px floor from SR-520
+  is comfortably clear. It reads differently from the posters it replaces.
+- **Still flagged, applied as instructed.** The organisations poster's card grid shows two
+  clinical-hold sectors: **Protective Readiness** ("Vigilance Without Carryover", R11) and
+  **Emergency Response** ("Come Down Safely", I02). Security Operations (I12) is not in frame. This
+  poster is the first paint of `#sr-org-film`.
+
+## SR-522 · organisations.html · the operating-layer section removed
+
+Founder ruling, 2 October. Two separate removals:
+
+1. **The hero's standfirst note** — `<p class="sr-pt-note">Private access for each person. Shared
+   sessions for the team. Nothing individual reported to leadership.</p>`. It was the last child of
+   `.sr-pt-copy`; the hero now ends on `.sr-pt-acts`.
+2. **The whole of `#sr-org-capacity`** — "The operating layer / One capability, trained the same way
+   every time", the four numbered steps (Recognise, Regulate, Release, Rise) and the closing pull
+   quote.
+
+Checked before cutting: `#sr-org-capacity` was referenced nowhere else — no in-page nav, no JS, no
+anchor. The page's only `href="#sr-org…"` is the hero's "Explore industries" → `#sr-org-explorer`,
+untouched. `.sr-org-section-alt` is a background tint only (`css/saferise-system.css:4910`), so
+dropping an `-alt` section costs nothing but the tint; `#sr-org-film` is now the first section and
+sits on the plain ground.
+
+`.sr-org-capacity-grid` and `.sr-org-pull` rules remain in the stylesheet, and the four steps still
+appear as a one-line summary inside `#sr-org-model`'s diagram panel — that panel is a different
+section and was not part of the ruling.
+
+The `#sr-org-film` comment said the film sat "after #sr-org-capacity … keeping the alternating
+rhythm". Rewritten, since both claims stopped being true.
+
+- **Checked:** tag balance against the edited file (section 12/12, div 166/166, header 2/2,
+  article 22/22, comments 15/15); a headless render at 1440 confirming the hero ends on its two
+  buttons and the film section follows directly.
+- The organisations hero stays **left**-aligned. SR-519's centring is scoped to `.sr-home` and does
+  not reach this page.
