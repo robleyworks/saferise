@@ -138,5 +138,63 @@
   });
 })();
 </script>
+<script src="/js/saferise-flags.js"></script>
+<script>
+/* SR-516 · tier self-select, for testing. Only when SR_FLAGS.tierSelfSelect is
+   on: each panel gets its own control, labelled by direction against the tier
+   resolve() reports, and a click asks the server (srAuth.setPlan → set_my_tier)
+   — the page never decides the tier itself. With the flag off nothing below
+   runs and the page is exactly as before. The server switch is the real gate:
+   with it off every control fails closed and says so. */
+(function () {
+  if (!window.SR_FLAGS || !SR_FLAGS.tierSelfSelect) return;
+  if (!window.SafeRiseAccess || !SafeRiseAccess.resolve || !window.srAuth || !srAuth.setPlan) return;
+  var panels = [].slice.call(document.querySelectorAll('.sr-mi-tiers [data-sr-tier]'));
+  var base = panels.map(function (p) { var e = p.querySelector('.eyebrow'); return e ? e.textContent : ''; });
+  var why = document.getElementById('srUpgradeWhy');
+  var note = document.createElement('p');
+  note.className = 'sr-mi-small';
+  note.setAttribute('role', 'status');
+  var busy = false;
+
+  function render() {
+    var r = SafeRiseAccess.resolve();
+    panels.forEach(function (p, i) {
+      var t = p.getAttribute('data-sr-tier'), rank = SafeRiseAccess.TIERS.indexOf(t);
+      var e = p.querySelector('.eyebrow');
+      if (e) e.textContent = base[i] + (t === r.tier ? ' · your plan' : '');
+      var b = p.querySelector('.sr-mi-btn');
+      var current = t === r.tier;
+      b.disabled = busy || current;
+      b.textContent = current ? 'Your current plan' : rank > r.rank ? 'Upgrade' : 'Switch to this';
+    });
+  }
+
+  Promise.resolve(SafeRiseAccess.ready).catch(function () {}).then(function () {
+    if (!srAuth.user()) return;   // signed out: nothing to change, page as before
+    panels.forEach(function (p) {
+      var row = document.createElement('div');
+      row.className = 'sr-mi-row';
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'sr-mi-btn';
+      b.addEventListener('click', function () {
+        if (busy) return;
+        busy = true; note.textContent = ''; render();
+        srAuth.setPlan(p.getAttribute('data-sr-tier'))
+          .catch(function (err) { note.textContent = 'That did not go through: ' + (err && err.message ? err.message : 'no answer from the server') + '. Your plan is unchanged.'; })
+          .then(function () { busy = false; render(); });
+      });
+      row.appendChild(b);
+      p.appendChild(row);
+    });
+    if (why) {
+      why.appendChild(document.createTextNode(' For now you can move between plans here to test them; nothing is charged.'));
+      why.parentNode.insertBefore(note, why.nextSibling);
+    }
+    render();
+  });
+})();
+</script>
 </body>
 </html>

@@ -176,6 +176,26 @@
       .catch(function () { entitledCache = false; statusCache = null; return tierDone.then(function () { notify(); return false; }); });
   }
 
+  /* SR-516 · tier self-select, for testing (supabase/migrations/0007). Asks
+     set_my_tier() to move this member's own tier, then re-reads entitlement
+     and tier from the server — tierCache is never written from the argument,
+     only from what my_tier() answers afterwards. A rejected call (the server
+     switch off, signed out, an unknown tier) changes nothing locally and
+     rejects with the server's message. Memory-only, like everything above:
+     nothing about the tier goes to localStorage. */
+  function setPlan(tier) {
+    if (!currentUser()) return Promise.reject(new Error('not signed in'));
+    return fetch(SUPABASE_URL + '/rest/v1/rpc/set_my_tier', {
+      method: 'POST', headers: authHeaders(), body: JSON.stringify({ p_tier: tier })
+    }).then(function (r) {
+      return r.json().catch(function () { return null; }).then(function (json) {
+        if (!r.ok) throw new Error((json && (json.message || json.error)) || ('request failed: ' + r.status));
+        tierCache = null;
+        return checkEntitlement().then(function () { return tierCache; });
+      });
+    });
+  }
+
   function logSignupEvent(userId) {
     return fetch(SUPABASE_URL + '/rest/v1/usage_events', {
       method: 'POST', headers: authHeaders({ 'Prefer': 'return=minimal' }),
@@ -327,6 +347,9 @@
     /* SR-482 · 'free' | 'standard' | 'premium' | 'sovereign', or null (signed
        out, not yet asked, or the call failed). Read by js/saferise-access.js. */
     plan: function () { return currentUser() ? tierCache : null; },
+    /* SR-516 · testing only — see setPlan(). Resolves to the tier the server
+       now reports; notify() has already run by then. */
+    setPlan: setPlan,
     refreshEntitlement: checkEntitlement,
     signIn: signIn,
     signUp: signUp,

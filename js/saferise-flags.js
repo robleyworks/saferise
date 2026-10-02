@@ -17,3 +17,16 @@
    Set it back to false to withdraw the surface for everyone. */
 window.SR_FLAGS = window.SR_FLAGS || {};
 if (typeof window.SR_FLAGS.sovereign !== 'boolean') window.SR_FLAGS.sovereign = true;
+
+/* tierSelfSelect — SR-516. The member-checkout tier controls transact against
+   set_my_tier() (supabase/migrations/0007) instead of a payment. Pre-launch
+   only, for testing upgrade and downgrade across the ladder. The SERVER
+   switch (test_switches.tier_self_select) is the real gate; this flag only
+   decides whether the buttons are offered, so turning the flag off hides the
+   controls and turning the server row off makes them fail closed. Both must
+   be off before the payment rail goes live.
+   SHIPS FALSE. The surface is only correct once 0007 is applied: before that
+   every control would offer a change and then fail. Order: deploy with this
+   off (nothing changes for anyone), apply 0007, then flip this to true in a
+   commit of its own. */
+if (typeof window.SR_FLAGS.tierSelfSelect !== 'boolean') window.SR_FLAGS.tierSelfSelect = false;
