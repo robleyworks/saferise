@@ -24495,3 +24495,50 @@ recorded in `claude/DASHBOARD-BANNERS.md` §6. Not committed.
   "New tracks, coming soon." is **not** on the page.
 - New surface code `sr-wc-` claimed in CLAUDE.md. Its CSS is in
   `css/saferise-system.css`, after `sr-ol-`.
+
+## SR-518 — The two films: R2-hosted constants, one player, homepage modal swap, organisations film
+
+Brief: `PASS-FILMS-AND-R2.md` (Desktop, `SafeRise Film04 Mix/web/`). One commit per part, not pushed.
+
+- **Part 2 · `content/video.js`.** `VIDEO_BASE` + `FILMS.home` / `FILMS.organisations`, in `beds.js`'s shape.
+  `VIDEO_BASE` is committed as the literal `<MEDIA_BASE>/video/`. Andre fills it with the r2.dev URL, then
+  `https://media.thesaferiseprotocol.com`. Posters and captions are root-relative (SR-468).
+- **Part 3 · `js/saferise-film.js`, surface `sr-fm-` (claimed in CLAUDE.md).**
+  - `preload="none"` and **no source at all until play is pressed**, so no video bytes move before then.
+  - **Source selection is in JS, at the press: 720p below 820px, 1080p otherwise.** Two same-type
+    `<source>`s are not chosen by size (the browser takes the first playable one), and `<source media>`
+    support is recent, so leaving it to the browser would send phones the 1080p file.
+  - `playsinline`. No autoplay. Native `controls` are added on first play. A captions `<track>` is wired.
+  - While the base is still the placeholder, nothing is requested. On a load error the player returns to
+    its poster state.
+- **Part 4 · placement.**
+  - **`index.html`: a swap, not a build.** `#filmModal` holds the player, and `#filmPlay`'s press starts it.
+    - Removed the placeholder copy ("A film in production" and both lines under it).
+    - Removed the static `0:00 / 1:04` bar. The cut is 0:58, and the native controls show the real length.
+    - **`.filmchapters` dropped, not rewritten.** The stubs did not match the cut, and the as-cut script is
+      not in the repo (see below).
+    - The frame and close control lost their borders. The close control moved above the frame, clear of
+      the poster's upper-right headline.
+  - **`organisations.html`:** `#sr-org-film` sits between `#sr-org-capacity` and `#sr-org-model`, not `-alt`.
+    The poster repeats the page h1. At this depth it reads as a reprise; above the fold it would be a defect.
+  - **The play circle scales with the frame (`clamp(40px, 11cqw, 84px)`).**
+    - Measured on the Film 04 poster: the nearest baked type (the F of FOR EVERYDAY LIFE) is 7% of the
+      width from centre. A fixed 62–84px circle would sit on it at phone widths.
+    - On a 334px modal there are 22.7px of a 23.4px clearance.
+    - **The 40px floor is below the 44px touch-target convention.** That is the trade-off for not touching
+      the type.
+    - The organisations poster clears at every width.
+- **Part 5 · `privacy.html`.** A Cloudflare (R2) row is added to the **§5** provider table. The brief said §7,
+  but §7 is retention. The page's "Last updated: 23 October 2026" is a future date and was not changed.
+- **DIFFERS / outstanding**
+  - **Not in the repo:** `claude/R2-MIGRATION-RUNBOOK.md`, `claude/VIDEO-FILM04-SCRIPT-AS-CUT.md`,
+    `claude/VIDEO-FILM05-ORG-SCRIPT.md`, `claude/VIDEO-FILM04-TIMECODE-AUDIT.md`. Nor anywhere on the Desktop.
+  - **Captions are outstanding:** `assets/video/saferise-film04.vtt` and `saferise-organisations.vtt` do not
+    exist. They need their own pass, once the script files above exist.
+  - The brief says "SR-517 centres `.sr-pt-acts`". In this repo SR-517 is the dashboard journey band
+    (`9a65106`), and nothing centres `.sr-pt-acts`. The hero needs a re-check at 1440 / 1024 / 390 whenever
+    that centring lands.
+  - The hero's own `.playring` still has a 1px border. It is out of this pass's scope and was not changed.
+  - **Part 6 not run.** It waits on R2 and a deploy. The local preview also cannot start in this
+    environment (the runner cannot read under `~/Documents`), so nothing was rendered in a browser this pass.
+    The checks were a JS parse, and HTML tag and comment balance against HEAD.
