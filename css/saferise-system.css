@@ -5249,15 +5249,30 @@ p.sr-org-vertical-note{margin-top:32px;color:var(--text2)!important;font-size:.9
 /* ── B1 · the model (replaces the three-card layer stack) ── */
 .sr-org-diagram{display:grid;grid-template-columns:1.06fr .94fr;gap:40px;align-items:center;margin-top:16px}
 .sr-org-diagram svg{display:block;width:100%;height:auto;overflow:visible}
-.sr-org-wedge{fill:rgb(var(--c));fill-opacity:.10;stroke:rgb(var(--c));stroke-opacity:.26;stroke-width:1;
+/* SR-524 · the three-layer wedges carried too little colour to read as
+   layers and their labels were set at 11px inside a 740-unit viewBox that
+   renders near 600px wide — about 9px on screen. Fills, strokes and the
+   resting opacity are all lifted, and both label sizes go up. */
+.sr-org-wedge{fill:rgb(var(--c));fill-opacity:.20;stroke:rgb(var(--c));stroke-opacity:.55;stroke-width:1.2;
   transition:fill-opacity .55s var(--ease),stroke-opacity .55s}
 .sr-org-sheen{fill:url(#sr-org-sh);stroke:none;mix-blend-mode:screen;opacity:.4;pointer-events:none}
-.sr-org-conn{stroke:rgb(var(--c));stroke-opacity:.38;stroke-width:1.2;transition:stroke-opacity .55s}
-.sr-org-wlab{font:500 11px 'DM Sans',sans-serif;letter-spacing:.26em}
-.sr-org-wsub{font:italic 13px 'Cormorant Garamond',serif;fill:var(--text3)}
-.sr-org-wsec .sr-org-wedge,.sr-org-wsec .sr-org-conn,.sr-org-wsec .sr-org-wlab,.sr-org-wsec .sr-org-wsub{opacity:.5;
+.sr-org-conn{stroke:rgb(var(--c));stroke-opacity:.62;stroke-width:1.2;transition:stroke-opacity .55s}
+.sr-org-wlab{font:500 15px 'DM Sans',sans-serif;letter-spacing:.22em}
+.sr-org-wsub{font:italic 17px 'Cormorant Garamond',serif;fill:var(--text2,#C9C4B8)}
+.sr-org-wsec .sr-org-wedge,.sr-org-wsec .sr-org-conn,.sr-org-wsec .sr-org-wlab,.sr-org-wsec .sr-org-wsub{opacity:.74;
   transition:opacity .55s var(--ease),fill-opacity .55s,stroke-opacity .55s}
-.sr-org-wsec.on .sr-org-wedge{fill-opacity:.24;stroke-opacity:.78}
+.sr-org-wsec.on .sr-org-wedge{fill-opacity:.36;stroke-opacity:.92}
+/* SR-524 · Sunrise needs more again. The wedges are translucent colour over
+   a mid-slate ground there, so the same opacities that read on Midnight go
+   flat — the application wedge in particular sank into the background. The
+   labels take a bone fill rather than their own layer colour, which has too
+   little separation from that ground. */
+[data-theme="sunrise"] .sr-org-wedge{fill-opacity:.34;stroke-opacity:.85}
+[data-theme="sunrise"] .sr-org-wsec .sr-org-wedge,[data-theme="sunrise"] .sr-org-wsec .sr-org-conn,
+[data-theme="sunrise"] .sr-org-wsec .sr-org-wlab,[data-theme="sunrise"] .sr-org-wsec .sr-org-wsub{opacity:.88}
+[data-theme="sunrise"] .sr-org-wsec.on .sr-org-wedge{fill-opacity:.48;stroke-opacity:1}
+[data-theme="sunrise"] .sr-org-wlab{fill:#F5EDD8!important}
+[data-theme="sunrise"] .sr-org-wsub{fill:rgba(245,237,216,.78)}
 .sr-org-wsec.on .sr-org-wedge,.sr-org-wsec.on .sr-org-conn,.sr-org-wsec.on .sr-org-wlab,.sr-org-wsec.on .sr-org-wsub{opacity:1}
 .sr-org-hubspin{fill:none;stroke:var(--gold);stroke-opacity:.28;stroke-dasharray:3 10;
   transform-origin:600px 470px;animation:srOrgSpin 48s linear infinite}
