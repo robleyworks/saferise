@@ -7043,3 +7043,33 @@ body:not(:has(.nav)) .sr-pt{padding-top:calc(79px + var(--sr-pt-air))}
 @media(max-width:700px){
   .sr-dash-jtri-panel{padding:140px 22px 24px;min-height:0}
 }
+
+/* ═══ SR-518 · sr-fm- · the marketing-film player (js/saferise-film.js) ═══
+   One component for the homepage film modal and the organisations film. A
+   16:9 frame at 16px radius; the poster is composed key art with its own type,
+   so it is shown whole (contain), never cropped, and nothing sits on it but the
+   centred play control. No borders: the frame's edge is an inset ring drawn
+   ABOVE the video (::after), since an inset shadow on the frame itself would
+   paint beneath it. The play control is a bezel-and-shadow circle in the
+   existing play-ring idiom. Native controls take over once playing. */
+.sr-fm{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#05060a;
+  box-shadow:0 30px 90px rgba(0,0,0,.5)}
+.sr-fm::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+.sr-fm-video{display:block;width:100%;height:100%;object-fit:contain;background:#05060a}
+.sr-fm-play{position:absolute;left:50%;top:50%;z-index:2;transform:translate(-50%,-50%);
+  width:84px;height:84px;padding:0;border:0;border-radius:50%;cursor:pointer;display:grid;place-items:center;
+  background:rgba(8,9,13,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:inset 0 0 0 1px rgba(232,200,119,.7),0 0 0 12px rgba(212,168,67,.06),0 18px 60px rgba(0,0,0,.4);
+  transition:transform .4s var(--ease,ease),background .4s var(--ease,ease),box-shadow .4s var(--ease,ease)}
+.sr-fm-play svg{width:30px;height:30px;margin-left:4px;fill:var(--gold-lt,#E8C877)}
+.sr-fm-play:hover{transform:translate(-50%,-50%) scale(1.06);background:rgba(212,168,67,.16);
+  box-shadow:inset 0 0 0 1px rgba(232,200,119,.85),0 0 0 18px rgba(212,168,67,.07),0 22px 70px rgba(0,0,0,.45)}
+.sr-fm-play:focus-visible{outline:none;
+  box-shadow:inset 0 0 0 1px rgba(232,200,119,.85),0 0 0 3px rgba(8,9,13,.9),0 0 0 6px var(--gold-lt,#E8C877)}
+.sr-fm--on .sr-fm-play{display:none}
+@media(max-width:600px){
+  .sr-fm{border-radius:12px}
+  .sr-fm-play{width:62px;height:62px}
+  .sr-fm-play svg{width:24px;height:24px;margin-left:3px}
+}
